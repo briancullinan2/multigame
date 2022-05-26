@@ -166,12 +166,6 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get -y install libcurl4-openssl-dev mesa-common-dev libxxf86dga-dev libxrandr-dev libxxf86vm-dev libasound-dev libsdl2-dev
         fi
-        wget https://github.com/briancullinan/q3lcc/releases/download/latest/q3lcc-linux-x86_64.zip
-        unzip q3lcc-linux-x86_64.zip -d ../
-        wget https://github.com/briancullinan/q3asm/releases/download/latest/q3asm-linux-x86_64.zip
-        unzip q3asm-linux-x86_64.zip -d ../
-        chmod a+x ../*
-        pwd
 
     - uses: actions/checkout@v2
       with:
