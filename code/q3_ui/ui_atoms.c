@@ -11,7 +11,7 @@ uiStatic_t		uis;
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
 
 // these are here so the functions in q_shared.c can link
-#ifndef UI_HARD_LINKED
+#ifndef BUILD_GAME_STATIC
 
 void QDECL Com_Error( int level, const char *fmt, ... ) {
 	va_list		argptr;
@@ -144,6 +144,8 @@ void UI_ForceMenuOff (void)
 	trap_Cvar_Set( "cl_paused", "0" );
 }
 
+#ifndef BUILD_GAME_STATIC
+
 /*
 =================
 UI_LerpColor
@@ -163,6 +165,8 @@ void UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t)
 			c[i] = 1.0;
 	}
 }
+
+#endif
 
 /*
 =================

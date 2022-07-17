@@ -8,11 +8,18 @@
 
 #include "cg_local.h"
 
+#ifdef BUILD_GAME_STATIC
 static dllSyscall_t syscall = (dllSyscall_t)-1;
 
 DLLEXPORT void dllEntry( dllSyscall_t syscallptr ) {
 	syscall = syscallptr;
 }
+
+#else
+#define syscall CL_DllSyscall
+#define PASSFLOAT CGPASSFLOAT
+#endif
+
 
 
 int PASSFLOAT( float x ) {

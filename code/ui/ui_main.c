@@ -145,7 +145,12 @@ void _UI_KeyEvent( int key, qboolean down );
 void _UI_MouseEvent( int dx, int dy );
 void _UI_Refresh( int realtime );
 qboolean _UI_IsFullscreen( void );
-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
+#ifdef BUILD_GAME_STATIC
+intptr_t UI_Call( int command, int arg0, int arg1, int arg2 )
+#else
+DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
+#endif
+{
   switch ( command ) {
 	  case UI_GETAPIVERSION:
 		  return UI_API_VERSION;
@@ -932,9 +937,11 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 
 	ui_new.integer = 1;
 
+#ifndef BUILD_GAME_STATIC
 	if (reset) {
 		Menu_Reset();
 	}
+#endif
 
 	while ( 1 ) {
 		if (!trap_PC_ReadToken(handle, &token))

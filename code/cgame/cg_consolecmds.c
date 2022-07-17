@@ -120,8 +120,10 @@ static void CG_LoadHud_f( void) {
 	const char *hudSet;
   memset(buff, 0, sizeof(buff));
 
+#ifndef BUILD_GAME_STATIC
 	String_Init();
 	Menu_Reset();
+#endif
 	
 	trap_Cvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
 	hudSet = buff;

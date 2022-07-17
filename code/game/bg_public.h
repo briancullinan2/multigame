@@ -745,6 +745,13 @@ qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 
 // custom functions
 
+// custom functions
+#ifdef BUILD_GAME_STATIC
+intptr_t CG_Call( int command, int arg0, int arg1, int arg2 );
+intptr_t G_Call( int command, int arg0, int arg1, int arg2 );
+intptr_t UI_Call( int command, int arg0, int arg1, int arg2 );
+#endif
+
 int BG_sprintf( char *buf, const char *format, ... );
 int ED_vsprintf( char *buffer, const char *fmt, va_list argptr );
 

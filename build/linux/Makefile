@@ -32,6 +32,13 @@ ifndef BUILD_GAME_QVM
 BUILD_GAME_QVM = 0
 endif
 
+BUILD_GAME_STATIC ?= 1
+ifeq ($(BUILD_GAME_STATIC),1)
+  BASE_CFLAGS += -DBUILD_GAME_STATIC
+else
+unexport BUILD_GAME_STATIC
+endif
+
 ifeq ($(COMPILE_PLATFORM),cygwin)
   PLATFORM=mingw32
 endif

@@ -669,9 +669,15 @@ char *Q_CleanStr( char *string );
 
 //=============================================
 
+#ifndef BUILD_GAME_STATIC
 typedef intptr_t (*syscall_t)( intptr_t *parms );
 typedef intptr_t (QDECL *dllSyscall_t)( intptr_t callNum, ... );
 typedef void (QDECL *dllEntry_t)( dllSyscall_t syscallptr );
+#else
+intptr_t UI_DllSyscall( intptr_t callNum, ... );
+intptr_t CL_DllSyscall( intptr_t callNum, ... );
+intptr_t SV_DllSyscall( intptr_t callNum, ... );
+#endif
 
 //=============================================
 
@@ -683,7 +689,12 @@ char* QDECL va( const char *format, ... );
 // key / value info strings
 //
 char *Info_ValueForKey( const char *s, const char *key );
+#ifdef BUILD_GAME_STATIC
+#define Info_SetValueForKey( buf, key, value ) Info_SetValueForKey_s( (buf), MAX_INFO_STRING, (key), (value) )
+qboolean Info_SetValueForKey_s( char *s, int slen, const char *key, const char *value );
+#else
 qboolean Info_SetValueForKey( char *s, const char *key, const char *value );
+#endif
 qboolean Info_SetValueForKey_Big( char *s, const char *key, const char *value );
 qboolean Info_Validate( const char *s );
 qboolean Info_ValidateKeyValue( const char *s );
