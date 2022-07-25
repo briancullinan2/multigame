@@ -416,6 +416,10 @@ void trap_startCamera(int camNum, int time) {
 	syscall(CG_STARTCAMERA, time);
 }
 
+void trap_stopCamera(int camNum) {
+	syscall(CG_STOPCAMERA, camNum);
+}
+
 qboolean trap_getCameraInfo( int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov) {
 	return syscall( CG_GETCAMERAINFO, time, origin, angles, fov );
 }
