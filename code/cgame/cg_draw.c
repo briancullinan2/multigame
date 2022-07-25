@@ -2580,11 +2580,10 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		return;
 	}
 
-/*
 	if (cg.cameraMode) {
 		return;
 	}
-*/
+
 	if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 		CG_DrawSpectator();
 		CG_DrawCrosshair();
@@ -2897,4 +2896,22 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 	// draw status bar and other floating elements
  	CG_Draw2D( stereoView );
+
+	if (black_bars)
+		CG_BlackBars();
+}
+
+/*
+=================
+CG_Fade
+=================
+*/
+void CG_Fade( int a, int time, int duration ) {
+	cgs.scrFadeAlpha = (float)a / 255.0f;
+	cgs.scrFadeStartTime = time;
+	cgs.scrFadeDuration = duration;
+	if (cgs.scrFadeStartTime + cgs.scrFadeDuration <= cg.time) {
+		cgs.scrFadeAlphaCurrent = cgs.scrFadeAlpha;
+	}
+	return;
 }

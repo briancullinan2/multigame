@@ -665,7 +665,8 @@ typedef struct {
 	float		xyspeed;
 	int			nextOrbitTime;
 
-	//qboolean cameraMode;		// if rendering from a loaded camera
+	qboolean cameraMode;		// if rendering from a loaded camera
+	int      currentCamera;
 
 	// development tool
 	refEntity_t		testModelEntity;
@@ -1124,6 +1125,10 @@ typedef struct {
 	char acceptVoice[MAX_NAME_LENGTH];
 #endif
 
+	float	scrFadeAlpha, scrFadeAlphaCurrent;
+	int		scrFadeStartTime;
+	int		scrFadeDuration;
+
 	// media
 	cgMedia_t		media;
 
@@ -1147,6 +1152,11 @@ typedef struct {
 } cgs_t;
 
 //==============================================================================
+
+//#ifdef USE_SINGLEPLAYER // entity
+extern	int player_stop;
+extern	int black_bars;
+//#endif
 
 extern	cgs_t			cgs;
 extern	cg_t			cg;
@@ -1376,6 +1386,8 @@ void CG_AddLagometerSnapshotInfo( snapshot_t *snap );
 void CG_CenterPrint( const char *str, int y, int charWidth );
 void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t headAngles );
 void CG_DrawActive( stereoFrame_t stereoView );
+void CG_Fade( int a, int time, int duration );
+
 void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean force2D );
 void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team );
 void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y, int ownerDraw, int ownerDrawFlags, int align, float special, float scale, vec4_t color, qhandle_t shader, int textStyle);
@@ -1495,6 +1507,7 @@ void	CG_AddLocalEntities( void );
 //
 // cg_effects.c
 //
+void CG_BlackBars(void);
 localEntity_t *CG_SmokePuff( const vec3_t p, 
 				   const vec3_t vel, 
 				   float radius,
@@ -1865,10 +1878,11 @@ void trap_CIN_SetExtents (int handle, int x, int y, int w, int h);
 void		trap_SnapVector( float *v );
 
 qboolean	trap_loadCamera(const char *name);
-void		trap_startCamera(int time);
-qboolean	trap_getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
-
+void		trap_startCamera(int camNum, int time);
+qboolean	trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov);
+void		CG_StartCamera(const char *name, qboolean startBlack );
 qboolean	trap_GetEntityToken( char *buffer, int bufferSize );
+void trap_stopCamera(int camNum);
 
 void	CG_ClearParticles (void);
 void	CG_AddParticles (void);

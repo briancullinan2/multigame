@@ -9,6 +9,11 @@
 
 static	pmove_t		cg_pmove;
 
+//#ifdef USE_SINGLEPLAYER // entity
+int player_stop = 0;
+int black_bars = 0;
+//#endif
+
 static	int			cg_numSolidEntities;
 static	centity_t	*cg_solidEntities[MAX_ENTITIES_IN_SNAPSHOT];
 static	int			cg_numTriggerEntities;
@@ -1141,6 +1146,15 @@ void CG_PredictPlayerState( void ) {
 		if ( cg_pmove.pmove_fixed ) {
 			cg_pmove.cmd.serverTime = ((cg_pmove.cmd.serverTime + cg_pmove.pmove_msec-1) / cg_pmove.pmove_msec) * cg_pmove.pmove_msec;
 		}
+		if (cgs.scrFadeAlphaCurrent) {
+			cg_pmove.cmd.buttons = 0;
+			cg_pmove.cmd.forwardmove = 0;
+			cg_pmove.cmd.rightmove = 0;
+			cg_pmove.cmd.upmove = 0;
+			if (cg_pmove.cmd.serverTime - cg.predictedPlayerState.commandTime > 1)
+				cg_pmove.cmd.serverTime = cg.predictedPlayerState.commandTime + 1;
+		}
+
 #if 0
 		if ( !cg_optimizePrediction.integer ) {
 			Pmove (&cg_pmove);
