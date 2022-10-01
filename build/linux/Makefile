@@ -25,7 +25,7 @@ endif
 -include Makefile.local
 
 ifndef MOD
-MOD=baseq3a
+MOD=multigame
 endif
 
 ifeq ($(COMPILE_PLATFORM),cygwin)
@@ -228,7 +228,7 @@ TARGET_QVMS = \
   $(B)/$(MOD)/vm/qagame.qvm \
   $(B)/$(MOD)/vm/ui.qvm
 
-TARGETS += $(TARGET_QVMS) pak8a.pk3
+TARGETS += $(TARGET_QVMS) xxx-multigame.pk3
 else
 TARGETS += \
   $(B)/$(MOD)/cgame$(SHLIBNAME) \
@@ -604,7 +604,7 @@ distclean: clean
 	@rm -rf $(BUILD_DIR)
 
 
-pak8a.pk3: $(TARGET_QVMS)
+xxx-multigame.pk3: $(TARGET_QVMS)
 	$(echo_cmd) "ZIPPING $<"
 	$(Q)cd $(B)/$(MOD) && \
 		$(ZIP) ../../../xxx-multigame.pk3 vm/*.qvm && \
