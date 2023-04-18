@@ -1,6 +1,6 @@
 QA_SRC = \
  g_main $(QADIR)/g_syscalls.asm \
- bg_misc bg_lib bg_pmove bg_slidemove \
+ bg_misc bg_lib bg_pmove bg_slidemove bg_tracemap \
  q_math q_shared \
  ai_dmnet ai_dmq3 ai_team ai_main ai_chat ai_cmd ai_vcmd \
  g_active g_arenas g_bot g_client g_cmds g_combat g_items g_mem g_misc \
@@ -9,8 +9,8 @@ QA_SRC = \
 
 CG_SRC = \
  cg_main $(CGDIR)/cg_syscalls.asm \
- cg_consolecmds cg_draw cg_drawtools cg_effects cg_ents cg_event cg_info \
- cg_localents cg_marks cg_players cg_playerstate cg_predict cg_scoreboard \
+ cg_atmospheric cg_consolecmds cg_draw cg_drawtools cg_effects cg_ents cg_event cg_info \
+ cg_localents cg_marks cg_players cg_playerstate cg_polybus cg_predict cg_scoreboard \
  cg_servercmds cg_snapshot cg_view cg_weapons \
  bg_slidemove bg_pmove bg_lib bg_misc \
  q_math q_shared \
