@@ -66,8 +66,8 @@ jobs:
         make release -j 8 ARCH=${{ matrix.arch }} CC=${{ matrix.cc }} \
           PLATFORM=mingw32
         cd ../../
-        mv build/linux/build/release-mingw32-*/baseq3a/*.dll bin/
-        #mv build/linux/build/release-mingw32-*/baseq3a/*.pdb bin/
+        mv build/linux/build/release-mingw32-*/multigame/*.dll bin/
+        #mv build/linux/build/release-mingw32-*/multigame/*.pdb bin/
 
     - uses: actions/upload-artifact@v2
       if: matrix.cc == 'gcc' && matrix.config == 'Release'
@@ -146,11 +146,11 @@ jobs:
           - arch: x86
             use_sdl: USE_SDL=0
             platform: linux
-            copy_target: /build/release-*/baseq3a/*.so
+            copy_target: /build/release-*/multigame/*.so
           - arch: x86_64
             use_sdl: USE_SDL=1
             platform: linux
-            copy_target: /build/release-*/baseq3a/*.so
+            copy_target: /build/release-*/multigame/*.so
           - arch: bytecode
             platform: qvms
             copy_target: /*.pk3
@@ -230,7 +230,7 @@ jobs:
           cd build/linux
           make release -j 4 ARCH=${{ matrix.arch }} CC=${{ matrix.cc }}
           cd ../../
-          mv build/linux/build/release-linux-arm64/baseq3a/*.so bin/
+          mv build/linux/build/release-linux-arm64/multigame/*.so bin/
 
     - uses: actions/upload-artifact@v2
       if: false
@@ -268,7 +268,7 @@ jobs:
         cd build/linux
         make release -j 4 CC=${{ matrix.cc }} INSTALL=ginstall 
         cd ../../
-        mv build/linux/build/release-darwin-x86_64/baseq3a/*.dylib bin/
+        mv build/linux/build/release-darwin-x86_64/multigame/*.dylib bin/
 
     - uses: actions/upload-artifact@v2
       if: matrix.cc == 'clang' && matrix.config == 'Release'
