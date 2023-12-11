@@ -3,3 +3,4 @@
 /build/release*
 /.vscode
 /build/*/Makefile.local
+*/**/.DS_Store
