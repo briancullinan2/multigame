@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// runes enable little popup powerups in random places on the map, over 60 different effects
+//#define USE_RUNES 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

@@ -479,6 +479,10 @@ static consoleCommand_t	commands[] = {
 	{ "viewpos", CG_Viewpos_f },
 	{ "+scores", CG_ScoresDown_f },
 	{ "-scores", CG_ScoresUp_f },
+#ifdef USE_RUNES
+  { "+runes", CG_RunesDown_f },
+  { "-runes", CG_RunesUp_f },
+#endif
 	{ "+zoom", CG_ZoomDown_f },
 	{ "-zoom", CG_ZoomUp_f },
 	{ "sizeup", CG_SizeUp_f },

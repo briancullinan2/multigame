@@ -382,6 +382,10 @@ static int CG_CheckArmor( int damage ) {
 	int take, asave;
 
 	if ( cg.predictedPlayerState.powerups[ PW_BATTLESUIT ] )
+#ifdef USE_RUNES
+  if ( cg_entities[cg.snap->ps.clientNum].items[ITEM_PW_MIN + RUNE_RESIST] )
+    return;
+#endif
 		return;
 
 	if ( cg.predictedPlayerState.clientNum != cg.snap->ps.clientNum || cg.snap->ps.pm_flags & PMF_FOLLOW ) {
@@ -444,16 +448,29 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 	}
 
 	// powerups prediction
-	if ( item->giType == IT_POWERUP && item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT ) {
+	if ( item->giType == IT_POWERUP && ((item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT) 
+#ifdef USE_RUNES
+    || (item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM)
+#endif
+  )) {
 		// round timing to seconds to make multiple powerup timers count in sync
 		if ( !cg.predictedPlayerState.powerups[ item->giTag ] ) {
 			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
-			if ( item->giTag == PW_HASTE ) {
+			if ( item->giTag == PW_HASTE 
+#ifdef USE_RUNES
+        || item->giTag == RUNE_HASTE
+#endif
+      ) {
 				cg.predictedPlayerState.speed *= 1.3f;
 			}
 		}
 		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;
+#ifdef USE_RUNES
+    if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+      cg_entities[cg.snap->ps.clientNum].rune = ITEM_PW_MIN + item->giTag;
+    }
+#endif
 	}	
 
 	// holdable prediction
@@ -514,6 +531,14 @@ static void CG_TouchItem( centity_t *cent ) {
 			return;
 	}
 
+#ifdef USE_RUNES
+  // can only pick up one rune at a time
+  if(cg_entities[cg.snap->ps.clientNum].rune
+    && item->giType == IT_POWERUP
+    && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+    return;
+  }
+#endif
 	// grab it
 	BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
 

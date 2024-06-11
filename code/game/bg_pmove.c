@@ -171,7 +171,11 @@ static void PM_Friction( void ) {
 		vel[0] = 0;
 		vel[1] = 0;		// allow sinking underwater
 		// FIXME: still have z friction underwater?
-		if ( pm->ps->pm_type == PM_SPECTATOR || pm->ps->powerups[ PW_FLIGHT ] )
+		if ( pm->ps->pm_type == PM_SPECTATOR || items[ITEM_PW_MIN + PW_FLIGHT] 
+#ifdef USE_RUNES
+      || items[ITEM_PW_MIN + RUNE_FLIGHT] 
+#endif
+    )
 			vel[2] = 0.0f; // no slow-sinking/raising movements
 		return;
 	}
@@ -195,7 +199,11 @@ static void PM_Friction( void ) {
 	}
 
 	// apply flying friction
-	if ( pm->ps->powerups[PW_FLIGHT]) {
+	if ( items[ITEM_PW_MIN + PW_FLIGHT]
+#ifdef USE_RUNES
+    || items[ITEM_PW_MIN + RUNE_FLIGHT]
+#endif
+  ) {
 		drop += speed*pm_flightfriction*pml.frametime;
 	}
 
@@ -1695,7 +1703,11 @@ static void PM_Weapon( void ) {
   }
   else
 #endif
-	if ( pm->ps->powerups[PW_HASTE] ) {
+	if ( items[ITEM_PW_MIN + PW_HASTE] 
+#ifdef USE_RUNES
+    || items[ITEM_PW_MIN + RUNE_HASTE]
+#endif
+  ) {
 		addTime /= 1.3;
 	}
 
@@ -1977,7 +1989,11 @@ void PmoveSingle (pmove_t *pmove) {
 		PM_InvulnerabilityMove();
 	} else
 #endif
-	if ( pm->ps->powerups[PW_FLIGHT] ) {
+	if ( items[ITEM_PW_MIN + PW_FLIGHT] 
+#ifdef USE_RUNES
+    || items[ITEM_PW_MIN + RUNE_FLIGHT]
+#endif
+  ) {
 		// flight powerup doesn't allow jump and has different friction
 		PM_FlyMove();
 	} else if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
@@ -2015,7 +2031,11 @@ void PmoveSingle (pmove_t *pmove) {
 	// entering / leaving water splashes
 	PM_WaterEvents();
 
-	if ( pm->ps->powerups[PW_FLIGHT] && !pml.groundPlane ) {
+	if ( (items[ITEM_PW_MIN + PW_FLIGHT]
+#ifdef USE_RUNES
+    || items[ITEM_PW_MIN + RUNE_FLIGHT]
+#endif
+  ) && !pml.groundPlane ) {
 		// don't snap velocity in free-fly or we will be not able to stop via flight friction
 		return;
 	}

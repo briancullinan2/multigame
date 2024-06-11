@@ -160,6 +160,9 @@ struct gentity_s {
 	team_t		fteam;
 
 	tag_t		tag;
+#ifdef USE_RUNES
+  int     rune;
+#endif
 };
 
 

@@ -279,6 +279,96 @@ typedef enum {
 	PW_AMMOREGEN,
 	PW_INVULNERABILITY,
 
+#ifdef USE_RUNES
+  // 1 - 4
+  RUNE_STRENGTH,     // black
+  RUNE_REGEN,        // hell
+  RUNE_RESIST,       // elder
+  RUNE_HASTE,        // earth
+  
+  // 5 - 8
+  RUNE_ENVIRO,       // black
+  RUNE_FLIGHT,       // hell
+  RUNE_BERSERK,      // elder
+  RUNE_RECALL,       // earth
+  
+  // 9 - 12
+  RUNE_ELECTRIC,     // black
+  RUNE_CLOAK,        // hell
+  RUNE_DIVINE,       // elder
+  RUNE_DEATH,        // earth
+  
+  // 13 - 16
+  RUNE_HOLO,         // black
+  RUNE_ORB,          // hell
+  RUNE_BLINK,        // elder
+  RUNE_CAMO,         // earth
+  
+  // 17 - 20
+  RUNE_JUMP,         // black
+  RUNE_ACTION,       // hell
+  RUNE_VAMPIRE,      // elder
+  RUNE_SHIELD,       // earth
+  
+  // 21 - 24
+  RUNE_HEALTH,       // black
+  RUNE_RADIO,        // hell
+  RUNE_SWITCH,       // elder
+  RUNE_ICETRAP,      // earth
+  
+  // 25 - 28
+  RUNE_GRAVITY,      // black
+  RUNE_TELE,         // hell
+  RUNE_IMPACT,       // elder
+  RUNE_VENGEANCE,    // earth
+  
+  // 29 - 32
+  RUNE_SHUBHAT,      // black
+  RUNE_REPULSION,    // hell
+  RUNE_PHASING,      // elder
+  RUNE_SHAMBLER,     // earth
+  
+  // 33 - 36
+  RUNE_DUALRECALL,   // black
+  RUNE_WEIRDNESS,    // hell
+  RUNE_PHOENIX,      // elder
+  RUNE_SPIKECLOUD,   // earth
+  
+  // 37 - 40
+  RUNE_FIREWALK,     // black
+  RUNE_GRAPPLE,      // hell
+  RUNE_ATHLETIC,     // elder
+  RUNE_LUMBERJACK,   // earth
+  
+  // 41 - 44
+  RUNE_HOUNGAN,      // black
+  RUNE_PIERCING,     // hell
+  RUNE_PRESERVE,     // elder
+  RUNE_ZENMONK,      // earth
+  
+  // 45 - 48
+  RUNE_TORCH,        // black
+  RUNE_PACKRAT,      // hell
+  RUNE_ARMOR,        // elder
+  RUNE_QUAD,         // earth
+  
+  // 49 - 52
+  RUNE_JACK,         // black
+  RUNE_BLUEGOO,      // hell
+  RUNE_BLIZZARD,     // elder
+  RUNE_THOR,         // earth
+  
+  // 53 - 56
+  RUNE_SNIPER,       // black
+  RUNE_ANTIPACK,     // hell
+  RUNE_ANTITELE,     // elder
+  RUNE_CLUSTER,      // earth
+  
+  // 57 - 59
+  RUNE_TORNADO,      // black 
+  RUNE_REQUIEM,      // hell
+  RUNE_LITHIUM,      // elder
+#endif
 	PW_NUM_POWERUPS
 
 } powerup_t;
@@ -650,6 +740,9 @@ extern	int		bg_numItems;
 gitem_t	*BG_FindItem( const char *pickupName );
 gitem_t	*BG_FindItemForWeapon( weapon_t weapon );
 gitem_t	*BG_FindItemForPowerup( powerup_t pw );
+#ifdef USE_RUNES
+gitem_t	*BG_FindItemForRune( int r );
+#endif
 gitem_t	*BG_FindItemForHoldable( holdable_t pw );
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
 

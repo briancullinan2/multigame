@@ -295,6 +295,21 @@ void Cmd_Give_f( gentity_t *ent )
 
 	// spawn a specific item right on the player
 	if ( !give_all ) {
+#ifdef USE_RUNES
+    char	arg[MAX_TOKEN_CHARS];
+    trap_Argv( 1, arg, sizeof( arg ) );
+    if(	Q_stricmp(arg, "rune") == 0 ) {
+      name = ConcatArgs(2);
+      it = BG_FindItemForRune(atoi(name));
+      if(!it) {
+        Com_Printf("Unknown rune: %s\n", name);
+        return;
+      }
+      if(ent->rune)
+        ent->items[ent->rune] = 0;
+      ent->rune = 0;
+    } else
+#endif
 		it = BG_FindItem (name);
 		if (!it) {
 			return;
@@ -1768,7 +1783,30 @@ static void Cmd_SetViewpos_f( gentity_t *ent ) {
 }
 
 
+#ifdef USE_RUNES
+void Cmd_DropRune_f(gentity_t *ent) {
+  int contents;
+  contents = trap_PointContents( ent->r.currentOrigin, -1 );
+  if (contents & CONTENTS_NODROP)
+    return;
 
+  if(ent->rune && ent->items[ent->rune]) {
+    dropWeapon( ent, BG_FindItemForRune(ent->rune - ITEM_PW_MIN - RUNE_STRENGTH + 1), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->items[ent->rune] = 0;
+    ent->rune = 0;
+  }
+}
+#endif
+
+#ifdef USE_RUNES
+  if((g_dropWeapon.integer & 8)
+    && ent->rune && ent->items[ent->rune]) {
+    dropWeapon( ent, BG_FindItemForRune(ent->rune - ITEM_PW_MIN - RUNE_STRENGTH + 1), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->items[ent->rune] = 0;
+    ent->rune = 0;
+    return;
+  }
+#endif
 /*
 =================
 Cmd_Stats_f
@@ -1792,6 +1830,65 @@ static void Cmd_Stats_f( gentity_t *ent ) {
 }
 
 
+#ifdef USE_RUNES
+gitem_t	*BG_FindItemForRune( int r );
+
+static void Cmd_Rune_f( gentity_t *ent ) {
+  char		buffer[MAX_TOKEN_CHARS];
+  vec3_t		dir, delta;
+  int i, r;
+  int v = random() * 4;
+  gentity_t	*e;
+  gitem_t *item;
+  float nearestDist = 100000;
+  float dist;
+  vec3_t nearest;
+
+  // select the item location nearest the player
+  for (i = 0; i < level.num_entities; i++) {
+    e = &g_entities[i];
+    if(!e->inuse || e->client || !e->item) {
+      continue;
+    }
+    VectorSubtract( e->s.origin, ent->s.pos.trBase, delta );
+    dist = VectorLength( delta );
+    if(dist < nearestDist && dist > 0) {
+      VectorCopy(e->s.origin, nearest);
+      nearestDist = dist;
+    }
+  }
+  if(nearestDist == 100000) {
+    Com_Printf("Error: couldn't find good spawn location\n");
+  } else {
+    Com_Printf("Launching rune: %f: %f, %f, %f\n", 
+      nearestDist, nearest[0], nearest[1], nearest[2]);
+  }
+  nearest[2] += 4;
+  if(v == 0)
+    VectorSet(dir, .5, .5, 2.0);
+  else if(v == 1)
+    VectorSet(dir, -.5, .5, 2.0);
+  else if(v == 2)
+    VectorSet(dir, .5, -.5, 2.0);
+  else
+    VectorSet(dir, -.5, -.5, 2.0);
+  VectorMA( nearest, 10, dir, nearest );
+  VectorNormalize( dir );
+
+  trap_Argv( 1, buffer, sizeof( buffer ) );
+	r = atof( buffer );
+  item = BG_FindItemForRune( r );
+  if(!r || !item) {
+    Com_Printf("Unknown rune: \"%s\"\n", buffer);
+    return;
+  }
+
+  // pop the rune out of that location
+  RegisterItem( item );
+  e = LaunchItem( item, nearest, dir, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  G_AddEvent( e, EV_ITEM_RESPAWN, 0 );
+}
+#endif
 /*
 =================
 ClientCommand
@@ -1905,6 +2002,12 @@ void ClientCommand( int clientNum ) {
 		Cmd_GameCommand_f( ent );
 	else if (Q_stricmp (cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f( ent );
+#ifdef USE_RUNES
+  else if (Q_stricmp (cmd, "rune") == 0)
+    Cmd_Rune_f( ent );
+  else if (Q_stricmp (cmd, "droprune") == 0)
+    Cmd_DropRune_f( ent );
+#endif
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
 	else

@@ -125,6 +125,10 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 	if ( !other->client ) {
 		return;
 	}
+#ifdef USE_RUNES
+  if(other->items[ITEM_PW_MIN + RUNE_FLIGHT])
+    return;
+#endif
 
 	BG_TouchJumpPad( &other->client->ps, &self->s );
 }

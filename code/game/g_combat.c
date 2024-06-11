@@ -88,6 +88,13 @@ void TossClientItems( gentity_t *self ) {
 		// for pickup prediction
 		drop->s.time2 = item->quantity;
 	}
+#ifdef USE_RUNES
+  if(self->rune && self->items[self->rune]) {
+    dropWeapon( self, BG_FindItemForRune(self->rune - ITEM_PW_MIN - RUNE_STRENGTH + 1), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    self->items[self->rune] = 0;
+    self->rune = 0;
+  }
+#endif
 
 	// drop all the powerups if not in teamplay
 	if ( g_gametype.integer != GT_TEAM ) {
@@ -618,6 +625,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	// remove powerups
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
+#ifdef USE_RUNES
+  self->rune = 0;
+#endif
 
 	// never gib in a nodrop
 	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP) && g_blood.integer) || meansOfDeath == MOD_SUICIDE) {
@@ -953,8 +963,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 	// battlesuit protects from all radius damage (but takes knockback)
 	// and protects 50% against all damage
-	if ( client && client->ps.powerups[PW_BATTLESUIT] ) {
 		G_AddEvent( targ, EV_POWERUP_BATTLESUIT, 0 );
+#ifdef USE_RUNES
+    || targ->items[ITEM_PW_MIN + RUNE_RESIST]
+#endif
+  )) {
 		if ( ( dflags & DAMAGE_RADIUS ) || ( mod == MOD_FALLING ) ) {
 			return;
 		}

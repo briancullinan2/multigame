@@ -2594,7 +2594,12 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawCrosshairNames();
 	} else {
 		// don't draw any status if dead or the scoreboard is being explicitly shown
-		if ( !cg.showScores && cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
+		if (!cg.showScores && cg.snap->ps.stats[STAT_HEALTH] > 0
+#ifdef USE_RUNES
+				&& !cg.showRunes
+#endif
+		)
+		{
 
 #ifdef MISSIONPACK
 			if ( cg_drawStatus.integer ) {
@@ -2652,9 +2657,15 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 	}
 
 	// don't draw center string if scoreboard is up
+#ifdef USE_RUNES
+	cg.runesBoardShowing = CG_DrawRunesboard();
+	if (!cg.runesBoardShowing)
+#endif
+	{
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if ( !cg.scoreBoardShowing ) {
 		CG_DrawCenterString();
+	}
 	}
 
 	if ( cgs.score_catched ) {

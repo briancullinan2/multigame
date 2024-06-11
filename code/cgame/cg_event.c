@@ -98,6 +98,9 @@ static void CG_Obituary( entityState_t *ent ) {
 	strcat( targetName, S_COLOR_WHITE );
 
 	following = cg.snap->ps.pm_flags & PMF_FOLLOW;
+#ifdef USE_RUNES
+  cg_entities[target].rune = 0;
+#endif
 
 	message2 = "";
 
@@ -801,6 +804,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 				trap_S_StartSound (NULL, es->number, CHAN_AUTO,	trap_S_RegisterSound( item->pickup_sound, qfalse ) );
 			}
 
+#ifdef USE_RUNES
+        if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+          cg_entities[es->number].rune = ITEM_PW_MIN + item->giTag;
+        }
+#endif
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
 				CG_ItemPickup( index );
@@ -842,6 +850,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
 				CG_ItemPickup( index );
+#ifdef USE_RUNES
+          || item->giTag == RUNE_HASTE
+#endif
+        ) {
+        }
 			}
 
 			if ( ce ) {
@@ -1194,6 +1207,25 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			cg.powerupTime = cg.time;
 		}
 		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.protectSound );
+#ifdef USE_RUNES
+//Com_Printf("powerup: %i -> %i -> %i\n", es->eventParm, es->otherEntityNum, es->time);
+    if(es->eventParm >= RUNE_STRENGTH && es->eventParm <= RUNE_LITHIUM
+      && cg_entities[es->otherEntityNum].rune != ITEM_PW_MIN + es->eventParm) {
+      gitem_t *item;
+      item = BG_FindItemForRune(es->eventParm - RUNE_STRENGTH + 1);
+      CG_RegisterItemVisuals( ITEM_INDEX(item) );
+      cg_entities[es->otherEntityNum].rune = ITEM_PW_MIN + es->eventParm;
+    }
+    /*
+      if(cg.snap->ps.powerups[index] == 0) {
+        cg_entities[cent->currentState.otherEntityNum].rune = 0
+      } else {
+        
+      }
+      cg_entities[cent->currentState.otherEntityNum].rune = ITEM_PW_MIN + item->giTag;
+    }
+    */
+#endif
 		break;
 
 	case EV_POWERUP_REGEN:

@@ -88,6 +88,9 @@ void P_WorldEffects( gentity_t *ent ) {
 	waterlevel = ent->waterlevel;
 
 	envirosuit = ent->client->ps.powerups[PW_BATTLESUIT] > level.time;
+#ifdef USE_RUNES
+  envirosuit |= ent->items[ITEM_PW_MIN + RUNE_RESIST] > level.time;
+#endif
 
 	//
 	// check for drowning
@@ -394,6 +397,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		else if ( client->ps.powerups[PW_REGEN] ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH];
 		}
+#ifdef USE_RUNES
+    else if ( ent->items[ITEM_PW_MIN + RUNE_REGEN] ) {
+      maxHealth = client->ps.stats[STAT_MAX_HEALTH];
+    }
+#endif
 		else {
 			maxHealth = 0;
 		}
@@ -412,7 +420,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
 			}
 #else
-		if ( client->ps.powerups[PW_REGEN] ) {
+		if ( ent->items[ITEM_PW_MIN + PW_REGEN] 
+#ifdef USE_RUNES
+      || ent->items[ITEM_PW_MIN + RUNE_REGEN]
+#endif
+    ) {
 			if ( ent->health < client->ps.stats[STAT_MAX_HEALTH]) {
 				ent->health += 15;
 				if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] * 1.1 ) {
@@ -828,7 +840,11 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	else
 #endif
-	if ( client->ps.powerups[PW_HASTE] ) {
+	if ( ent->items[ITEM_PW_MIN + PW_HASTE] 
+#ifdef USE_RUNES
+    || ent->items[ITEM_PW_MIN + RUNE_HASTE]
+#endif
+  ) {
 		client->ps.speed *= 1.3;
 	}
 
@@ -1109,6 +1125,12 @@ void ClientEndFrame( gentity_t *ent ) {
 			client->ps.powerups[ i ] = 0;
 		}
 	}
+#ifdef USE_RUNES
+  // keep rune switch on?
+  if(ent->items[ent->rune]) {
+    ent->items[ent->rune] = level.time + 100000;
+  }
+#endif
 
 #ifdef MISSIONPACK
 	// set powerup for player animation

@@ -201,6 +201,9 @@ typedef struct centity_s {
 	// exact interpolated position of entity on this frame
 	vec3_t			lerpOrigin;
 	vec3_t			lerpAngles;
+#ifdef USE_RUNES
+  int       rune;
+#endif
 } centity_t;
 
 
@@ -438,6 +441,11 @@ typedef struct {
 	qhandle_t		models[MAX_ITEM_MODELS];
 	qhandle_t		icon;
 	qhandle_t		icon_df;
+#ifdef USE_RUNES
+  qhandle_t		altShader1;
+  qhandle_t		altShader2;
+  qhandle_t		altShader3;
+#endif
 } itemInfo_t;
 
 
@@ -557,6 +565,11 @@ typedef struct {
 	qboolean	showScores;
 	qboolean	scoreBoardShowing;
 	int			scoreFadeTime;
+#ifdef USE_RUNES
+  qboolean	showRunes;
+  qboolean  runesBoardShowing;
+  int			runesFadeTime;
+#endif
 	char		killerName[MAX_NAME_LENGTH+32];
 	int			killerTime;
 	char			spectatorList[MAX_STRING_CHARS];		// list of names
