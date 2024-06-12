@@ -1,0 +1,7 @@
+/build/linux/build
+/build/debug*
+/build/release*
+/.vscode
+/build/*/Makefile.local
+*/**/.DS_Store
+.DS_Store
