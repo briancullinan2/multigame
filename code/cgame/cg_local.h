@@ -665,7 +665,8 @@ typedef struct {
 	float		xyspeed;
 	int			nextOrbitTime;
 
-	//qboolean cameraMode;		// if rendering from a loaded camera
+	qboolean cameraMode;		// if rendering from a loaded camera
+	int      currentCamera;
 
 	// development tool
 	refEntity_t		testModelEntity;
@@ -1229,6 +1230,8 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 void CG_DrawRect( float x, float y, float width, float height, float size, const float *color );
 void CG_DrawSides(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom(float x, float y, float w, float h, float size);
+void CG_Fade( int a, int time, int duration );
+void CG_DrawFlashFade( void );
 
 #define USE_NEW_FONT_RENDERER
 
@@ -1380,6 +1383,9 @@ void	CG_AddLocalEntities( void );
 //
 // cg_effects.c
 //
+#ifdef USE_SINGLEPLAYER // entity
+void CG_BlackBars(void);
+#endif
 localEntity_t *CG_SmokePuff( const vec3_t p, 
 				   const vec3_t vel, 
 				   float radius,
@@ -1656,10 +1662,12 @@ void trap_CIN_SetExtents (int handle, int x, int y, int w, int h);
 void		trap_SnapVector( float *v );
 
 qboolean	trap_loadCamera(const char *name);
-void		trap_startCamera(int time);
-qboolean	trap_getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
-
+void		trap_startCamera(int camNum, int time);
+qboolean	trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov);
+void		CG_StartCamera(const char *name, qboolean startBlack );
 qboolean	trap_GetEntityToken( char *buffer, int bufferSize );
+void trap_stopCamera(int camNum);
+
 
 void	CG_ClearParticles (void);
 void	CG_AddParticles (void);

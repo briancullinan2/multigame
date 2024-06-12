@@ -144,11 +144,11 @@ typedef enum {
 	// 1.32
 	CG_FS_SEEK,
 
-/*
+	// camera extensions
 	CG_LOADCAMERA,
 	CG_STARTCAMERA,
+	CG_STOPCAMERA,
 	CG_GETCAMERAINFO,
-*/
 
 	CG_MEMSET = 100,
 	CG_MEMCPY,
