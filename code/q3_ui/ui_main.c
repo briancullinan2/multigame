@@ -12,6 +12,7 @@ USER INTERFACE MAIN
 #include "ui_local.h"
 
 
+#ifndef MISSIONPACK
 /*
 ================
 vmMain
@@ -20,7 +21,13 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .qvm file
 ================
 */
-DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1 ) {
+static char	breadcrumb[MAX_STRING_CHARS];
+#ifdef BUILD_GAME_STATIC
+intptr_t UI_Call( int command, int arg0, int arg1, int arg2 )
+#else
+DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
+#endif
+{
 	switch ( command ) {
 	case UI_GETAPIVERSION:
 		return UI_API_VERSION;
@@ -65,6 +72,7 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1 ) {
 
 	return -1;
 }
+#endif
 
 
 /*
@@ -79,6 +87,10 @@ typedef struct {
 	char		*defaultString;
 	int			cvarFlags;
 } cvarTable_t;
+
+
+#ifndef MISSIONPACK
+
 
 #define DECLARE_UI_CVAR
 	#include "ui_cvar.h"
@@ -96,6 +108,8 @@ static cvarTable_t		cvarTable[] = {
 // bk001129 - made static to avoid aliasing
 static int cvarTableSize = sizeof(cvarTable) / sizeof(cvarTable[0]);
 
+static int breadcrumbModificationCount = -1;
+static int lazyloadModificationCount = -1;
 
 /*
 =================
@@ -109,6 +123,9 @@ void UI_RegisterCvars( void ) {
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
 	}
+
+	breadcrumbModificationCount = ui_breadCrumb.modificationCount;
+	lazyloadModificationCount = ui_lazyLoad.modificationCount;
 }
 
 /*
@@ -124,6 +141,7 @@ void UI_UpdateCvars( void ) {
 		trap_Cvar_Update( cv->vmCvar );
 	}
 }
+#endif
 
 
 /*

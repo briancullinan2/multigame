@@ -385,6 +385,8 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/bg_misc.o \
   $(B)/$(MOD)/cgame/bg_pmove.o \
   $(B)/$(MOD)/cgame/bg_slidemove.o \
+  $(B)/$(MOD)/cgame/bg_tracemap.o \
+  $(B)/$(MOD)/cgame/cg_atmospheric.o \
   $(B)/$(MOD)/cgame/cg_consolecmds.o \
   $(B)/$(MOD)/cgame/cg_draw.o \
   $(B)/$(MOD)/cgame/cg_drawtools.o \
@@ -396,12 +398,16 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/cg_marks.o \
   $(B)/$(MOD)/cgame/cg_players.o \
   $(B)/$(MOD)/cgame/cg_playerstate.o \
+  $(B)/$(MOD)/cgame/cg_polybus.o \
   $(B)/$(MOD)/cgame/cg_predict.o \
   $(B)/$(MOD)/cgame/cg_scoreboard.o \
   $(B)/$(MOD)/cgame/cg_servercmds.o \
   $(B)/$(MOD)/cgame/cg_snapshot.o \
   $(B)/$(MOD)/cgame/cg_view.o \
   $(B)/$(MOD)/cgame/cg_weapons.o \
+  $(B)/$(MOD)/cgame/cg_weaporder.o \
+  $(B)/$(MOD)/cgame/cg_timer.o \
+  $(B)/$(MOD)/cgame/cg_portal.o \
   \
   $(B)/$(MOD)/cgame/q_math.o \
   $(B)/$(MOD)/cgame/q_shared.o
@@ -607,8 +613,8 @@ xxx-multigame.pk3: $(TARGET_QVMS)
 		$(ZIP) ../../../xxx-multigame.pk3 vm/*.qvm && \
 		$(ZIP) -u ../../../xxx-multigame.pk3 vm/*.map && \
 		$(ZIP) -u ../../../xxx-multigame.pk3 vm/*.jts
-	$(Q)cd ../../assets/xxx-multigame.pk3dir && \
-		$(ZIP) -u ../../build/linux/xxx-multigame.pk3 ./*
+	$(Q)cd ../../assets && \
+		$(ZIP) -u ../build/linux/xxx-multigame.pk3 ./*
 
 
 #############################################################################

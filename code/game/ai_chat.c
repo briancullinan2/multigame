@@ -45,7 +45,7 @@
 BotNumActivePlayers
 ==================
 */
-int BotNumActivePlayers(void) {
+static int BotNumActivePlayers(void) {
 	int i, num;
 	char buf[MAX_INFO_STRING];
 
