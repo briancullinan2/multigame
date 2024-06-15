@@ -481,6 +481,11 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		G_ModelIndex( SP_PODIUM_MODEL );
 	}
 
+#ifdef USE_PORTALS
+	G_ModelIndex( "models/portal/portal_blue.md3" );
+	G_ModelIndex( "models/portal/portal_red.md3" );
+#endif
+
 	if ( trap_Cvar_VariableIntegerValue( "bot_enable" ) ) {
 		BotAISetup( restart );
 		BotAILoadMap( restart );
@@ -923,7 +928,7 @@ void MoveClientToIntermission( gentity_t *ent ) {
 	client->ps.pm_type = PM_INTERMISSION;
 
 	// clean up powerup info
-	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
+	memset( ent->items, 0, sizeof( ent->items ) );
 
 	client->ps.eFlags = ( client->ps.eFlags & ~EF_PERSISTANT ) | ( client->ps.eFlags & EF_PERSISTANT );
 
@@ -993,7 +998,7 @@ void BeginIntermission( void ) {
 		AdjustTournamentScores();
 	}
 
-	level.intermissiontime = level.time;
+	level.intermissiontime = level.time;  
 	FindIntermissionPoint();
 
 	// move all clients to the intermission point
@@ -1006,6 +1011,10 @@ void BeginIntermission( void ) {
 		if ( client->health <= 0 ) {
 			respawn( client );
 		}
+    
+    // optimize bandwidth
+    client->r.svFlags |= SVF_SINGLECLIENT;
+    client->r.svFlags &= ~SVF_BROADCAST;
 
 		MoveClientToIntermission( client );
 	}
@@ -1476,7 +1485,7 @@ static void G_WarmupEnd( void )
 		client->ps.stats[STAT_CLIENTS_READY] = 0;
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 
-		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
+		memset( &level.gentities[i].items, 0, sizeof( level.gentities[i].items ) );
 
 		ClientUserinfoChanged( i ); // set max.health etc.
 

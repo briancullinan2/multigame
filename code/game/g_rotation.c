@@ -190,7 +190,7 @@ __rescan:
 		reqIndex = 1;
 
 	trap_Cvar_Set( SV_ROTATION, va( "%i", reqIndex ) );
-	//trap_Cvar_Set( "g_restarted", "1" );
+	trap_Cvar_Set( "g_restarted", "1" );
 	G_LoadMap( map );
 
 	return qtrue;

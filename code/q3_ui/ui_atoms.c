@@ -8,6 +8,7 @@
 #include "ui_local.h"
 
 uiStatic_t		uis;
+#if !defined(MISSIONPACK)
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
 
 #ifndef BUILD_GAME_STATIC
@@ -70,6 +71,57 @@ UI_StartDemoLoop
 void UI_StartDemoLoop( void ) {
 	trap_Cmd_ExecuteText( EXEC_APPEND, "d1\n" );
 }
+#endif
+
+static char breadcrumb[MAX_QPATH];
+const char *FilterBreadCrumb( const char *menutitle ) {
+	int i, j;
+	int count = strlen(menutitle);
+	if(count > MAX_QPATH - 1) {
+		count = MAX_QPATH - 1;
+	}
+	j = 0;
+	breadcrumb[j] = 0;
+	for ( i = 0; i < count; i++ ) {
+		if( (menutitle[i] >= 'a' && menutitle[i] <= 'z')
+			|| (menutitle[i] >= 'A' && menutitle[i] <= 'Z')
+			|| (menutitle[i] >= '0' && menutitle[i] <= '9')
+		) {
+			breadcrumb[j] = menutitle[i];
+			j++;
+		}
+	}
+	breadcrumb[j] = 0;
+	return breadcrumb;
+}
+
+
+const char *UI_GetBreadCrumb( void ) {
+	int i;
+	menucommon_s	*itemptr;
+	menuframework_s *menu = uis.activemenu;
+	for (i=0; i<menu->nitems; i++) {
+		itemptr = (menucommon_s*)menu->items[i];
+		if(itemptr->type == MTYPE_BTEXT) {
+			return FilterBreadCrumb(((menutext_s*)itemptr)->string);
+		}
+	}
+	if(uis.menusp == 1) {
+		return "MAINMENU";
+	}
+	return NULL;
+}
+
+static int breadcrumbModificationCount = -1;
+static int lazyloadModificationCount = -1;
+
+void UI_SetBreadCrumb( void ) {
+	const char *breadcrumb = UI_GetBreadCrumb();
+	if(breadcrumb) {
+		trap_Cvar_Set("ui_breadCrumb", breadcrumb);
+		breadcrumbModificationCount++; // so we don't trigger again
+	}
+}
 
 /*
 =================
@@ -100,6 +152,7 @@ void UI_PushMenu( menuframework_s *menu )
 	}
 
 	uis.activemenu = menu;
+	UI_SetBreadCrumb();
 
 	// default cursor position
 	menu->cursor      = 0;
@@ -141,6 +194,7 @@ void UI_PopMenu (void)
 	if (uis.menusp) {
 		uis.activemenu = uis.stack[uis.menusp-1];
 		uis.firstdraw = qtrue;
+		UI_SetBreadCrumb();
 	}
 	else {
 		UI_ForceMenuOff ();
@@ -811,6 +865,7 @@ void UI_SetActiveMenu( uiMenuCommand_t menu ) {
 	// enusure minumum menu data is cached
 	Menu_Cache();
 
+
 	switch ( menu ) {
 	case UIMENU_NONE:
 		UI_ForceMenuOff();
@@ -833,7 +888,6 @@ void UI_SetActiveMenu( uiMenuCommand_t menu ) {
 		trap_Cvar_Set( "cl_paused", "1" );
 		UI_InGameMenu();
 		return;
-		
 	// bk001204
 	case UIMENU_TEAM:
 	case UIMENU_POSTGAME:
@@ -940,6 +994,7 @@ void UI_MouseEvent( int dx, int dy )
 }
 
 
+#ifndef MISSIONPACK
 char *UI_Argv( int arg ) {
 	static char	buffer[MAX_STRING_CHARS];
 
@@ -956,6 +1011,7 @@ char *UI_Cvar_VariableString( const char *var_name ) {
 
 	return buffer;
 }
+#endif
 
 
 /*
@@ -1003,7 +1059,12 @@ void UI_Cache_f( void ) {
 UI_ConsoleCommand
 =================
 */
-qboolean UI_ConsoleCommand( int realTime ) {
+#ifdef MISSIONPACK
+qboolean UI_ConsoleCommand2( int realTime ) 
+#else
+qboolean UI_ConsoleCommand( int realTime ) 
+#endif
+{
 	char	*cmd;
 
 	uis.frametime = realTime - uis.realtime;
@@ -1058,6 +1119,7 @@ qboolean UI_ConsoleCommand( int realTime ) {
 }
 
 
+#ifndef MISSIONPACK
 /*
 =================
 UI_Shutdown
@@ -1065,6 +1127,7 @@ UI_Shutdown
 */
 void UI_Shutdown( void ) {
 }
+#endif
 
 
 /*
@@ -1085,6 +1148,7 @@ void UI_Init( void ) {
 
 	uis.activemenu = NULL;
 	uis.menusp     = 0;
+	uis.startTime = uis.realtime;
 }
 
 
@@ -1151,6 +1215,7 @@ static void UI_DrawCursor( float x, float y, float w, float h ) {
 }
 
 
+#ifndef MISSIONPACK
 /*
 ================
 UI_FillRect
@@ -1166,6 +1231,7 @@ void UI_FillRect( float x, float y, float width, float height, const float *colo
 
 	trap_R_SetColor( NULL );
 }
+
 
 /*
 ================
@@ -1187,6 +1253,7 @@ void UI_DrawRect( float x, float y, float width, float height, const float *colo
 	trap_R_SetColor( NULL );
 }
 
+
 void UI_SetColor( const float *rgba ) {
 	trap_R_SetColor( rgba );
 }
@@ -1194,6 +1261,7 @@ void UI_SetColor( const float *rgba ) {
 void UI_UpdateScreen( void ) {
 	trap_UpdateScreen();
 }
+#endif
 
 /*
 =================
@@ -1202,6 +1270,8 @@ UI_Refresh
 */
 void UI_Refresh( int realtime )
 {
+	int amount;
+	vec4_t color;
 	uis.frametime = realtime - uis.realtime;
 	uis.realtime  = realtime;
 
@@ -1211,12 +1281,41 @@ void UI_Refresh( int realtime )
 
 	UI_UpdateCvars();
 
+	if(ui_lazyLoad.modificationCount > lazyloadModificationCount)
+	{
+		Menu_Cache();
+
+		lazyloadModificationCount = ui_lazyLoad.modificationCount;
+		if(((menuframework_s *)uis.activemenu)->init) {
+			((menuframework_s *)uis.activemenu)->init();
+		} else {
+		}
+	}
+
+	if(ui_breadCrumb.modificationCount > breadcrumbModificationCount)
+	{
+		breadcrumbModificationCount = ui_breadCrumb.modificationCount;
+		// TODO: UI_SetActiveMenu(UIMENU_MAIN);
+	}
+
 	UI_VideoCheck( realtime );
 	
 	if ( uis.activemenu )
 	{
 		if (uis.activemenu->fullscreen)
 		{
+
+			/*
+			amount = uis.realtime - uis.startTime;
+			if(!uis.startTime || amount < 1500) {
+				color[0] = color[1] = color[2] = 0;
+				color[3] = amount / 1000.0;
+				trap_R_SetColor(color);
+			} else {
+				//trap_R_ClearScene();
+			}
+			*/
+
 			// draw the background
 			trap_R_DrawStretchPic( 0, 0, uis.glconfig.vidWidth, uis.glconfig.vidHeight, 0, 0, 1, 1, uis.menuBackNoLogoShader );
 			if ( uis.activemenu->showlogo ) {
@@ -1257,6 +1356,8 @@ void UI_Refresh( int realtime )
 	}
 }
 
+
+#ifndef MISSIONPACK
 void UI_DrawTextBox (int x, int y, int width, int lines)
 {
 	UI_FillRect( x + BIGCHAR_WIDTH/2, y + BIGCHAR_HEIGHT/2, ( width + 1 ) * BIGCHAR_WIDTH, ( lines + 1 ) * BIGCHAR_HEIGHT, colorBlack );
@@ -1273,3 +1374,4 @@ qboolean UI_CursorInRect (int x, int y, int width, int height)
 
 	return qtrue;
 }
+#endif

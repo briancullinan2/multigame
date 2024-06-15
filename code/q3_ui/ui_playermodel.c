@@ -155,7 +155,7 @@ static void PlayerModel_UpdateModel( void )
 	vec3_t	moveangles;
 
 	memset( &s_playermodel.playerinfo, 0, sizeof(playerInfo_t) );
-	
+
 	viewangles[YAW]   = 180 - 30;
 	viewangles[PITCH] = 0;
 	viewangles[ROLL]  = 0;

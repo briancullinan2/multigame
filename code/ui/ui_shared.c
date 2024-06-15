@@ -56,14 +56,21 @@ itemDef_t *Menu_SetPrevCursorItem(menuDef_t *menu);
 itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu);
 static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y);
 
+#ifdef BUILD_GAME_STATIC
+#define MEM_POOL_SIZE  2048 * 1024
+#else
 #ifdef CGAME
 #define MEM_POOL_SIZE  128 * 1024
 #else
 #define MEM_POOL_SIZE  1024 * 1024
 #endif
+#endif // BUILD_GAME_STATIC
 
 static char		memoryPool[MEM_POOL_SIZE];
-static int		allocPoint, outOfMemory;
+#ifndef USE_CLASSIC_MENU
+static 
+#endif
+int		allocPoint, outOfMemory;
 
 
 /*
@@ -3143,6 +3150,9 @@ static bind_t g_bindings[] =
 	{"+mlook", 			 '/',					-1,		-1, -1},
 	{"centerview", 	 K_END,				-1,		-1, -1},
 	{"+zoom", 			 -1,						-1,		-1, -1},
+#ifdef USE_RUNES
+  {"+runes", 			 -1,						-1,		-1, -1},
+#endif
 	{"weapon 1",		 '1',					-1,		-1, -1},
 	{"weapon 2",		 '2',					-1,		-1, -1},
 	{"weapon 3",		 '3',					-1,		-1, -1},
@@ -3841,13 +3851,13 @@ void Item_OwnerDraw_Paint(itemDef_t *item) {
 	
 		if (item->text) {
 			Item_Text_Paint(item);
-				if (item->text[0]) {
-					// +8 is an offset kludge to properly align owner draw items that have text combined with them
-					DC->ownerDrawItem(item->textRect.x + item->textRect.w + 8, item->window.rect.y, item->window.rect.w, item->window.rect.h, 0, item->textaligny, item->window.ownerDraw, item->window.ownerDrawFlags, item->alignment, item->special, item->textscale, color, item->window.background, item->textStyle );
-				} else {
-					DC->ownerDrawItem(item->textRect.x + item->textRect.w, item->window.rect.y, item->window.rect.w, item->window.rect.h, 0, item->textaligny, item->window.ownerDraw, item->window.ownerDrawFlags, item->alignment, item->special, item->textscale, color, item->window.background, item->textStyle );
-				}
+			if (item->text[0]) {
+				// +8 is an offset kludge to properly align owner draw items that have text combined with them
+				DC->ownerDrawItem(item->textRect.x + item->textRect.w + 8, item->window.rect.y, item->window.rect.w, item->window.rect.h, 0, item->textaligny, item->window.ownerDraw, item->window.ownerDrawFlags, item->alignment, item->special, item->textscale, color, item->window.background, item->textStyle );
 			} else {
+				DC->ownerDrawItem(item->textRect.x + item->textRect.w, item->window.rect.y, item->window.rect.w, item->window.rect.h, 0, item->textaligny, item->window.ownerDraw, item->window.ownerDrawFlags, item->alignment, item->special, item->textscale, color, item->window.background, item->textStyle );
+			}
+		} else {
 			DC->ownerDrawItem(item->window.rect.x, item->window.rect.y, item->window.rect.w, item->window.rect.h, item->textalignx, item->textaligny, item->window.ownerDraw, item->window.ownerDrawFlags, item->alignment, item->special, item->textscale, color, item->window.background, item->textStyle );
 		}
 	}
@@ -4238,7 +4248,7 @@ void Menu_Paint(menuDef_t *menu, qboolean forcePaint) {
 	if (!(menu->window.flags & WINDOW_VISIBLE) &&  !forcePaint) {
 		return;
 	}
-
+  
 	if (menu->window.ownerDrawFlags && DC->ownerDrawVisible && !DC->ownerDrawVisible(menu->window.ownerDrawFlags)) {
 		return;
 	}
@@ -4254,7 +4264,7 @@ void Menu_Paint(menuDef_t *menu, qboolean forcePaint) {
 		DC->drawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, menu->window.background );
 	} else if (menu->window.background) {
 		// this allows a background shader without being full screen
-		//UI_DrawHandlePic(menu->window.rect.x, menu->window.rect.y, menu->window.rect.w, menu->window.rect.h, menu->backgroundShader);
+		//UI_DrawHandlePic2(menu->window.rect.x, menu->window.rect.y, menu->window.rect.w, menu->window.rect.h, menu->backgroundShader);
 	}
 
 	// paint the background and or border
@@ -5611,6 +5621,7 @@ int Menu_Count() {
 
 void Menu_PaintAll() {
 	int i;
+
 	if (captureFunc) {
 		captureFunc(captureData);
 	}
@@ -5626,7 +5637,8 @@ void Menu_PaintAll() {
 }
 
 void Menu_Reset() {
-	menuCount = 0;
+//  Com_Printf("menu reset\n");
+//	menuCount = 0;
 }
 
 displayContextDef_t *Display_GetContext() {
@@ -5776,4 +5788,3 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	}
 	return qfalse;
 }
-

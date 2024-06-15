@@ -129,6 +129,8 @@ UI_CVAR( ui_realWarmUp, "g_warmup", "20", CVAR_ARCHIVE )
 UI_CVAR( ui_realCaptureLimit, "capturelimit", "8", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART )
 UI_CVAR( ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE )
 
-UI_CVAR( ui_developer, "developer", "0", 0 )
+UI_CVAR( ui_breadCrumb, "ui_breadCrumb", "", CVAR_ROM )
+UI_CVAR( ui_lazyLoad, "ui_lazyLoad", "", 0 )
+UI_CVAR( ui_developer, "developer", "", 0 )
 
 #undef UI_CVAR

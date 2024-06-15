@@ -199,6 +199,15 @@ static void CG_Speaker( centity_t *cent ) {
 	cent->miscTime = cg.time + cent->currentState.frame * 100 + cent->currentState.clientNum * 100 * crandom();
 }
 
+
+#ifdef USE_ITEM_TIMERS
+#ifdef USE_GUNNM_TIMER
+static void CG_ItemTimer( entityState_t	*es, const vec3_t origin );
+#else
+void CG_ItemTimer(int client, const vec3_t origin, int startTime, int respawnTime);
+#endif
+#endif
+
 /*
 ==================
 CG_Item
@@ -220,8 +229,22 @@ static void CG_Item( centity_t *cent ) {
 		CG_Error( "Bad item index %i on entity", es->modelindex );
 	}
 
+#ifdef USE_ITEM_TIMERS
+  if(es->frame
+		&& (es->eFlags & EF_NODRAW)
+    && (es->eFlags & EF_TIMER)) {
+#ifdef USE_GUNNM_TIMER
+#error problem
+		CG_ItemTimer(es, cent->lerpOrigin);
+#else
+		CG_ItemTimer( es->number, cent->lerpOrigin, es->time, es->frame * 1000 ); // save bandwidth
+#endif
+		return;
+  }
+#endif
+
 	// if set to invisible, skip
-	if ( !es->modelindex || ( es->eFlags & EF_NODRAW ) || cent->delaySpawn > cg.time ) {
+	if ( !es->modelindex || ( es->eFlags & EF_NODRAW ) || cent->delaySpawn > cg.time) {
 		return;
 	}
 
@@ -234,7 +257,10 @@ static void CG_Item( centity_t *cent ) {
 	}
 
 	item = &bg_itemlist[ es->modelindex ];
-	if ( cg_simpleItems.integer && item->giType != IT_TEAM ) {
+	if ( item->giType != IT_TEAM
+		&& cg_items[es->modelindex].icon_df
+		&& (cg_simpleItems.integer || !cg_items[es->modelindex].models[0])
+	) {
 		memset( &ent, 0, sizeof( ent ) );
 		ent.reType = RT_SPRITE;
 		VectorCopy( cent->lerpOrigin, ent.origin );
@@ -285,6 +311,11 @@ static void CG_Item( centity_t *cent ) {
 
 		cent->lerpOrigin[2] += 8;	// an extra height boost
 	}
+
+  // if model is still 0 don't render the world in it's place
+  if(!cg_items[es->modelindex].models[0]) {
+    return;
+  }
 
 	ent.hModel = cg_items[es->modelindex].models[0];
 
@@ -338,6 +369,18 @@ static void CG_Item( centity_t *cent ) {
 		VectorScale( ent.axis[2], 2, ent.axis[2] );
 		ent.nonNormalizedAxes = qtrue;
 	}
+#endif
+
+#ifdef USE_RUNES
+  if ( item->giType == IT_POWERUP && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM ) {
+    ent.customShader = itemInfo->altShader1;
+    trap_R_AddRefEntityToScene(&ent);
+    if(itemInfo->altShader2) {
+      ent.customShader = itemInfo->altShader2;
+      trap_R_AddRefEntityToScene(&ent);
+    }
+    return;
+  }
 #endif
 
 	// add to refresh list
@@ -404,19 +447,17 @@ CG_Missile
 */
 static void CG_Missile( centity_t *cent ) {
 	refEntity_t			ent;
-	entityState_t		*s1;
 	const weaponInfo_t	*weapon;
 	const clientInfo_t	*ci;
 //	int	col;
 
-	s1 = &cent->currentState;
-	if ( s1->weapon >= WP_NUM_WEAPONS ) {
-		s1->weapon = WP_NONE;
+	if ( cent->currentState.weapon >= WP_NUM_WEAPONS ) {
+		cent->currentState.weapon = WP_NONE;
 	}
-	weapon = &cg_weapons[s1->weapon];
+	weapon = &cg_weapons[cent->currentState.weapon];
 
 	// calculate the axis
-	VectorCopy( s1->angles, cent->lerpAngles);
+	VectorCopy( cent->currentState.angles, cent->lerpAngles);
 
 	// add trails
 	if ( weapon->missileTrailFunc ) 
@@ -469,47 +510,68 @@ static void CG_Missile( centity_t *cent ) {
 		return;
 	}
 
+#ifdef USE_FLAME_THROWER
+  if (cent->currentState.weapon == WP_FLAME_THROWER ) {
+  	ent.reType = RT_SPRITE;
+  	ent.radius = 32;
+  	ent.rotation = 0;
+  	ent.customShader = cgs.media.flameBallShader;
+  	trap_R_AddRefEntityToScene( &ent );
+    return;
+  }
+#endif
+
 	// flicker between two skins
 	ent.skinNum = cg.clientFrame & 1;
 	ent.hModel = weapon->missileModel;
 	ent.renderfx = weapon->missileRenderfx | RF_NOSHADOW;
+  
+#ifdef USE_PORTALS
+  if(cent->currentState.weapon == WP_BFG
+    && cgwp_portalEnable.integer) {
+    if(cent->currentState.powerups & (1 << 4)) {
+      ent.customShader = cgs.media.blueBFG;
+    } else if(cent->currentState.powerups & (1 << 5)) {
+      ent.customShader = cgs.media.redBFG;
+    }
+  }
+#endif
 
 #ifdef MISSIONPACK
 	if ( cent->currentState.weapon == WP_PROX_LAUNCHER ) {
-		if (s1->generic1 == TEAM_BLUE) {
+		if (cent->currentState.generic1 == TEAM_BLUE) {
 			ent.hModel = cgs.media.blueProxMine;
 		}
 	}
 #endif
 
 	// convert direction of travel into axis
-	if ( VectorNormalize2( s1->pos.trDelta, ent.axis[0] ) == 0 ) {
+	if ( VectorNormalize2( cent->currentState.pos.trDelta, ent.axis[0] ) == 0 ) {
 		ent.axis[0][2] = 1;
 	}
 
 	// spin as it moves
-	if ( s1->pos.trType != TR_STATIONARY ) {
+	if ( cent->currentState.pos.trType != TR_STATIONARY ) {
 		RotateAroundDirection( ent.axis, ( cg.time % TMOD_004 ) / 4.0 );
 	} else {
 #ifdef MISSIONPACK
-		if ( s1->weapon == WP_PROX_LAUNCHER ) {
+		if ( cent->currentState.weapon == WP_PROX_LAUNCHER ) {
 			AnglesToAxis( cent->lerpAngles, ent.axis );
 		}
 		else
 #endif
 		{
-			RotateAroundDirection( ent.axis, s1->time );
+			RotateAroundDirection( ent.axis, cent->currentState.time );
 		}
 	}
 
 	// add to refresh list, possibly with quad glow
 
-	s1->powerups &= ~( (1 << PW_INVIS) | (1 << PW_REGEN) );
-	ci = &cgs.clientinfo[ s1->clientNum & MAX_CLIENTS ];
+	ci = &cgs.clientinfo[ cent->currentState.clientNum & MAX_CLIENTS ];
 	if ( ci->infoValid ) {
-		CG_AddRefEntityWithPowerups( &ent, s1, ci->team );
+		CG_AddRefEntityWithPowerups( &ent, cent, ci->team );
 	} else {
-		CG_AddRefEntityWithPowerups( &ent, s1, TEAM_FREE );
+		CG_AddRefEntityWithPowerups( &ent, cent, TEAM_FREE );
 	}
 
 }
@@ -523,17 +585,15 @@ This is called when the grapple is sitting up against the wall
 */
 static void CG_Grapple( centity_t *cent ) {
 	refEntity_t			ent;
-	entityState_t		*s1;
 	const weaponInfo_t		*weapon;
 
-	s1 = &cent->currentState;
-	if ( s1->weapon >= WP_NUM_WEAPONS ) {
-		s1->weapon = WP_NONE;
+	if ( cent->currentState.weapon >= WP_NUM_WEAPONS ) {
+		cent->currentState.weapon = WP_NONE;
 	}
-	weapon = &cg_weapons[s1->weapon];
+	weapon = &cg_weapons[cent->currentState.weapon];
 
 	// calculate the axis
-	VectorCopy( s1->angles, cent->lerpAngles);
+	VectorCopy( cent->currentState.angles, cent->lerpAngles);
 
 #if 0 // FIXME add grapple pull sound here..?
 	// add missile sound
@@ -556,7 +616,7 @@ static void CG_Grapple( centity_t *cent ) {
 	ent.renderfx = weapon->missileRenderfx | RF_NOSHADOW;
 
 	// convert direction of travel into axis
-	if ( VectorNormalize2( s1->pos.trDelta, ent.axis[0] ) == 0 ) {
+	if ( VectorNormalize2( cent->currentState.pos.trDelta, ent.axis[0] ) == 0 ) {
 		ent.axis[0][2] = 1;
 	}
 
@@ -570,9 +630,6 @@ CG_Mover
 */
 static void CG_Mover( const centity_t *cent ) {
 	refEntity_t			ent;
-	const entityState_t	*s1;
-
-	s1 = &cent->currentState;
 
 	// create the render entity
 	memset (&ent, 0, sizeof(ent));
@@ -586,19 +643,19 @@ static void CG_Mover( const centity_t *cent ) {
 	ent.skinNum = ( cg.time >> 6 ) & 1;
 
 	// get the model, either as a bmodel or a modelindex
-	if ( s1->solid == SOLID_BMODEL ) {
-		ent.hModel = cgs.inlineDrawModel[s1->modelindex];
+	if ( cent->currentState.solid == SOLID_BMODEL ) {
+		ent.hModel = cgs.inlineDrawModel[cent->currentState.modelindex];
 	} else {
-		ent.hModel = cgs.gameModels[s1->modelindex];
+		ent.hModel = cgs.gameModels[cent->currentState.modelindex];
 	}
 
 	// add to refresh list
 	trap_R_AddRefEntityToScene(&ent);
 
 	// add the secondary model
-	if ( s1->modelindex2 ) {
+	if ( cent->currentState.modelindex2 ) {
 		ent.skinNum = 0;
-		ent.hModel = cgs.gameModels[ s1->modelindex2 % MAX_MODELS ];
+		ent.hModel = cgs.gameModels[ cent->currentState.modelindex2 % MAX_MODELS ];
 		trap_R_AddRefEntityToScene(&ent);
 	}
 
@@ -613,14 +670,11 @@ Also called as an event
 */
 void CG_Beam( const centity_t *cent ) {
 	refEntity_t			ent;
-	const entityState_t	*s1;
-
-	s1 = &cent->currentState;
 
 	// create the render entity
 	memset (&ent, 0, sizeof(ent));
-	VectorCopy( s1->pos.trBase, ent.origin );
-	VectorCopy( s1->origin2, ent.oldorigin );
+	VectorCopy( cent->currentState.pos.trBase, ent.origin );
+	VectorCopy( cent->currentState.origin2, ent.oldorigin );
 	AxisClear( ent.axis );
 	ent.reType = RT_BEAM;
 
@@ -756,6 +810,12 @@ static void CG_CalcEntityLerpPositions( centity_t *cent ) {
 			cent->nextState.pos.trType = TR_INTERPOLATE;
 		}
 	}
+  
+  //if(cent->currentState.pos.trType == TR_AUTOSPRITE) {
+  //  VectorCopy( cent->currentState.angles, cent->lerpAngles );
+  //  VectorSubtract( vec3_origin, cent->lerpAngles, cent->lerpAngles );
+  //  return;
+  //}
 
 	if ( cent->interpolate && cent->currentState.pos.trType == TR_INTERPOLATE ) {
 		CG_InterpolateEntityPosition( cent );
@@ -787,7 +847,7 @@ static void CG_CalcEntityLerpPositions( centity_t *cent ) {
 CG_TeamBase
 ===============
 */
-static void CG_TeamBase( const centity_t *cent ) {
+static void CG_TeamBase( centity_t *cent ) {
 	refEntity_t model;
 #ifdef MISSIONPACK
 	vec3_t angles;
@@ -935,6 +995,46 @@ static void CG_TeamBase( const centity_t *cent ) {
 #endif
 }
 
+
+#ifdef USE_LASER_SIGHT
+/*
+==================
+CG_LaserSight
+  Creates the laser
+==================
+*/
+
+static void CG_LaserSight( centity_t *cent )  {
+	refEntity_t			ent;
+
+
+	// create the render entity
+	memset (&ent, 0, sizeof(ent));
+	VectorCopy( cent->lerpOrigin, ent.origin);
+	VectorCopy( cent->lerpOrigin, ent.oldorigin);
+
+	if (cent->currentState.eventParm == 1)
+	{
+		ent.reType = RT_SPRITE;
+		ent.radius = 2;
+		ent.rotation = 0;
+		ent.customShader = cgs.media.laserShader;
+		trap_R_AddRefEntityToScene( &ent );
+	}
+	else	{
+		trap_R_AddLightToScene(ent.origin, 200, 1, 1, 1);
+	}
+
+	
+}
+
+#endif
+
+#ifdef USE_PORTALS
+void CG_PersonalPortal(const centity_t *cent);
+#endif
+
+
 /*
 ===============
 CG_AddCEntity
@@ -959,7 +1059,14 @@ static void CG_AddCEntity( centity_t *cent ) {
 		break;
 	case ET_INVISIBLE:
 	case ET_PUSH_TRIGGER:
+		break;
 	case ET_TELEPORT_TRIGGER:
+		if(cent->currentState.modelindex
+		//	&& cent->currentState.clientNum
+			&& (cent->currentState.powerups & ((1 << 4) | (1 << 5)))
+		) {
+      CG_PersonalPortal( cent );
+		}
 		break;
 	case ET_GENERAL:
 		CG_General( cent );
@@ -980,7 +1087,7 @@ static void CG_AddCEntity( centity_t *cent ) {
 		CG_Beam( cent );
 		break;
 	case ET_PORTAL:
-		CG_Portal( cent );
+    CG_Portal( cent );
 		break;
 	case ET_SPEAKER:
 		CG_Speaker( cent );
@@ -991,6 +1098,11 @@ static void CG_AddCEntity( centity_t *cent ) {
 	case ET_TEAM:
 		CG_TeamBase( cent );
 		break;
+#ifdef USE_LASER_SIGHT
+  case ET_LASER:
+		CG_LaserSight( cent );
+		break;
+#endif
 	}
 }
 

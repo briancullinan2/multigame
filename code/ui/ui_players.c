@@ -115,9 +115,11 @@ tryagain:
 		MAKERGB( pi->flashDlightColor, 1, 0.7f, 1 );
 		break;
 
+#ifdef USE_GRAPPLE
 	case WP_GRAPPLING_HOOK:
 		MAKERGB( pi->flashDlightColor, 0.6f, 0.6f, 1 );
 		break;
+#endif
 
 	default:
 		MAKERGB( pi->flashDlightColor, 1, 1, 1 );
@@ -666,7 +668,7 @@ static float	UI_MachinegunSpinAngle2( playerInfo_t *pi ) {
 UI_DrawPlayer
 ===============
 */
-void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time ) {
+void UI_DrawPlayer2( float x, float y, float w, float h, playerInfo_t *pi, int time ) {
 	refdef_t		refdef;
 	refEntity_t		legs;
 	refEntity_t		torso;
@@ -686,9 +688,6 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	}
 
 	// this allows the ui to cache the player model on the main menu
-	if (w == 0 || h == 0) {
-		return;
-	}
 
 	dp_realtime = time;
 
@@ -702,15 +701,19 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 		}
 	}
 
-	UI_AdjustFrom640( &x, &y, &w, &h );
 
-	y -= jumpHeight;
 
 	memset( &refdef, 0, sizeof( refdef ) );
 	memset( &legs, 0, sizeof(legs) );
 	memset( &torso, 0, sizeof(torso) );
 	memset( &head, 0, sizeof(head) );
 
+	refdef.fov_x = (int)(w / 640.0f * 90.0f);
+	xx = w / tan( refdef.fov_x / 360 * M_PI );
+	refdef.fov_y = atan2( h, xx );
+	refdef.fov_y *= ( 360 / M_PI );
+	UI_AdjustFrom6402( &x, &y, &w, &h );
+	y -= jumpHeight;
 	refdef.rdflags = RDF_NOWORLDMODEL;
 
 	AxisClear( refdef.viewaxis );
@@ -720,10 +723,6 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	refdef.width = w;
 	refdef.height = h;
 
-	refdef.fov_x = (int)((float)refdef.width / 640.0f * 90.0f);
-	xx = refdef.width / tan( refdef.fov_x / 360 * M_PI );
-	refdef.fov_y = atan2( refdef.height, xx );
-	refdef.fov_y *= ( 360 / (float)M_PI );
 
 	// calculate distance so the player nearly fills the box
 	len = 0.7 * ( maxs[2] - mins[2] );		
@@ -749,6 +748,7 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	//
 	legs.hModel = pi->legsModel;
 	legs.customSkin = pi->legsSkin;
+	memset( legs.shaderRGBA, 255, sizeof( legs.shaderRGBA ) );
 
 	VectorCopy( origin, legs.origin );
 
@@ -771,6 +771,7 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	}
 
 	torso.customSkin = pi->torsoSkin;
+	memset( torso.shaderRGBA, 255, sizeof( torso.shaderRGBA ) );
 
 	VectorCopy( origin, torso.lightingOrigin );
 
@@ -788,6 +789,8 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 		return;
 	}
 	head.customSkin = pi->headSkin;
+	// for colored skins
+	memset( head.shaderRGBA, 255, sizeof( head.shaderRGBA ) );
 
 	VectorCopy( origin, head.lightingOrigin );
 
@@ -822,7 +825,7 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 		barrel.hModel = pi->barrelModel;
 		angles[YAW] = 0;
 		angles[PITCH] = 0;
-		angles[ROLL] = UI_MachinegunSpinAngle( pi );
+		angles[ROLL] = UI_MachinegunSpinAngle2( pi );
 		if( pi->realWeapon == WP_GAUNTLET || pi->realWeapon == WP_BFG ) {
 			angles[PITCH] = angles[ROLL];
 			angles[ROLL] = 0;
@@ -837,7 +840,7 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	//
 	// add muzzle flash
 	//
-	if ( dp_realtime <= pi->muzzleFlashTime ) {
+	if ( dp_realtime <= pi->muzzleFlashTime && pi->currentWeapon != WP_NONE ) {
 		if ( pi->flashModel ) {
 			memset( &flash, 0, sizeof(flash) );
 			flash.hModel = pi->flashModel;
@@ -1118,10 +1121,10 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 
 /*
 ==========================
-UI_RegisterClientModelname
+UI_RegisterClientModelname2
 ==========================
 */
-qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName, const char *headModelSkinName, const char *teamName ) {
+qboolean UI_RegisterClientModelname2( playerInfo_t *pi, const char *modelSkinName, const char *headModelSkinName, const char *teamName ) {
 	char		modelName[MAX_QPATH];
 	char		skinName[MAX_QPATH];
 	char		headModelName[MAX_QPATH];
@@ -1225,9 +1228,9 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 UI_PlayerInfo_SetModel
 ===============
 */
-void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model, const char *headmodel, char *teamName ) {
+void UI_PlayerInfo_SetModel2( playerInfo_t *pi, const char *model, const char *headmodel, char *teamName ) {
 	memset( pi, 0, sizeof(*pi) );
-	UI_RegisterClientModelname( pi, model, headmodel, teamName );
+	UI_RegisterClientModelname2( pi, model, headmodel, teamName );
 	pi->weapon = WP_MACHINEGUN;
 	pi->currentWeapon = pi->weapon;
 	pi->lastWeapon = pi->weapon;
@@ -1244,7 +1247,7 @@ void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model, const char *he
 UI_PlayerInfo_SetInfo
 ===============
 */
-void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) {
+void UI_PlayerInfo_SetInfo2( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) {
 	int			currentAnim;
 	weapon_t	weaponNum;
 

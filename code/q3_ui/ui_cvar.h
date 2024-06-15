@@ -67,6 +67,9 @@ UI_CVAR( ui_server16, "server16", "", CVAR_ARCHIVE )
 
 UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM )
 
-UI_CVAR( ui_developer, "developer", "0", 0 )
+UI_CVAR( ui_breadCrumb, "ui_breadCrumb", "", CVAR_ROM )
+UI_CVAR( ui_lazyLoad, "ui_lazyLoad", "", 0 )
+UI_CVAR( ui_developer, "developer", "", 0 )
+
 
 #undef UI_CVAR

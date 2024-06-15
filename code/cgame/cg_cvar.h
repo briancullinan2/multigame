@@ -23,7 +23,11 @@ CG_CVAR( cg_drawStatus, "cg_drawStatus", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawTimer, "cg_drawTimer", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawFPS, "cg_drawFPS", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawSnapshot, "cg_drawSnapshot", "0", CVAR_ARCHIVE  )
+#ifdef USE_3D_WEAPONS
+CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "2", CVAR_ARCHIVE )
+#else
 CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "1", CVAR_ARCHIVE )
+#endif
 CG_CVAR( cg_drawIcons, "cg_drawIcons", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAmmoWarning, "cg_drawAmmoWarning", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAttacker, "cg_drawAttacker", "1", CVAR_ARCHIVE )
@@ -77,6 +81,7 @@ CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "0", CVAR_ARCHIVE )
 #else
 CG_CVAR( cg_deferPlayers, "cg_deferPlayers", "1", CVAR_ARCHIVE )
 #endif
+
 CG_CVAR( cg_drawTeamOverlay, "cg_drawTeamOverlay", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_teamOverlayUserinfo, "teamoverlay", "0", CVAR_ROM | CVAR_USERINFO )
 CG_CVAR( cg_stats, "cg_stats", "0", 0 )
@@ -88,6 +93,7 @@ CG_CVAR( cg_noVoiceText, "cg_noVoiceText", "0", CVAR_ARCHIVE )
 #endif
 // the following variables are created in other parts of the system,
 // but we also reference them here
+
 CG_CVAR( cg_buildScript, "com_buildScript", "0", 0 )	// force loading of all possible data amd error on failures
 CG_CVAR( cg_paused, "cl_paused", "0", CVAR_ROM )
 CG_CVAR( cg_blood, "com_blood", "1", CVAR_ARCHIVE )
@@ -105,6 +111,7 @@ CG_CVAR( cg_recordSPDemoName, "ui_recordSPDemoName", "", CVAR_ARCHIVE )
 CG_CVAR( cg_obeliskRespawnDelay, "g_obeliskRespawnDelay", "10", CVAR_SERVERINFO )
 CG_CVAR( cg_hudFiles, "cg_hudFiles", "ui/hud.txt", CVAR_ARCHIVE )
 #endif
+
 CG_CVAR( cg_cameraOrbit, "cg_cameraOrbit", "0", CVAR_CHEAT )
 CG_CVAR( cg_cameraOrbitDelay, "cg_cameraOrbitDelay", "50", CVAR_ARCHIVE )
 CG_CVAR( cg_timescaleFadeEnd, "cg_timescaleFadeEnd", "1", 0 )
@@ -130,6 +137,66 @@ CG_CVAR( cg_deadBodyDarken, "cg_deadBodyDarken", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
-CG_CVAR( cg_developer, "developer", "0", 0 )
+CG_CVAR( cg_developer, "developer", "", 0 )
+#ifdef USE_DAMAGE_PLUMS
+CG_CVAR( cg_damagePlum, "cg_damagePlums", "1", CVAR_USERINFO | CVAR_ARCHIVE)
+#endif
+#ifdef USE_ITEM_TIMERS
+CG_CVAR( cg_itemTimer, "cg_itemTimers", "1", CVAR_USERINFO | CVAR_ARCHIVE)
+#endif
+#ifdef USE_PHYSICS_VARS
+#ifdef MISSIONPACK
+CG_CVAR( cg_scoutFactor, "cg_scoutFactor", "1.5", CVAR_SERVERINFO)
+#endif
+CG_CVAR( cg_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO)
+CG_CVAR( cg_jumpVelocity, "g_jumpVelocity", "270", CVAR_SERVERINFO)
+CG_CVAR( cg_gravity, "g_gravity", "800", CVAR_SERVERINFO)
+CG_CVAR( cg_wallWalk, "g_wallWalk", "0.7", CVAR_SERVERINFO)
+#endif
+#ifdef USE_WEAPON_ORDER
+CG_CVAR( cg_weaponOrder, "cg_weaponOrder", "1/2/3/4/6/8/5/7/9", CVAR_ARCHIVE ) //WarZone
+#endif
+#ifdef USE_WEAPON_CENTER
+CG_CVAR( cg_gunCenter, "cg_gunCenter", "1", CVAR_ARCHIVE )
+#endif
+#ifdef USE_PORTALS
+CG_CVAR( cgwp_portalEnable,  "wp_portalEnable", "1", CVAR_SERVERINFO )
+CG_CVAR( cg_altPortal,       "g_altPortal", "0", CVAR_SERVERINFO )
+#endif
+#ifdef USE_GRAPPLE
+CG_CVAR( cgwp_grappleEnable, "wp_grappleEnable", "1", CVAR_SERVERINFO )
+CG_CVAR( cgwp_grapplePull,  "wp_grapplePull", "700", CVAR_SERVERINFO )
+CG_CVAR( cg_altGrapple,  "g_altGrapple", "1", CVAR_SERVERINFO )
+#endif
+#ifdef USE_WEAPON_VARS
+CG_CVAR( cgwp_gauntCycle, "wp_gauntCycle", "400", CVAR_SERVERINFO )
+CG_CVAR( cgwp_lightCycle, "wp_lightCycle", "50", CVAR_SERVERINFO )
+CG_CVAR( cgwp_shotgunCycle, "wp_shotgunCycle", "1000", CVAR_SERVERINFO )
+CG_CVAR( cgwp_machineCycle, "wp_machineCycle", "100", CVAR_SERVERINFO )
+CG_CVAR( cgwp_grenadeCycle, "wp_grenadeCycle", "800", CVAR_SERVERINFO )
+CG_CVAR( cgwp_rocketCycle, "wp_rocketCycle", "800", CVAR_SERVERINFO )
+CG_CVAR( cgwp_plasmaCycle, "wp_plasmaCycle", "100", CVAR_SERVERINFO )
+CG_CVAR( cgwp_railCycle, "wp_railCycle", "1500", CVAR_SERVERINFO )
+CG_CVAR( cgwp_bfgCycle, "wp_bfgCycle", "200", CVAR_SERVERINFO )
+#ifdef USE_GRAPPLE
+CG_CVAR( cgwp_grappleCycle, "wp_grappleCycle", "400", CVAR_SERVERINFO )
+#endif
+#ifdef MISSIONPACK
+CG_CVAR( cgwp_nailCycle, "wp_nailCycle", "1000", CVAR_SERVERINFO )
+CG_CVAR( cgwp_proxCycle, "wp_proxCycle", "800", CVAR_SERVERINFO )
+CG_CVAR( cgwp_chainCycle, "wp_chainCycle", "30", CVAR_SERVERINFO )
+#endif
+#ifdef USE_FLAME_THROWER
+CG_CVAR( cgwp_flameCycle, "wp_flameCycle", "40", CVAR_SERVERINFO )
+#endif
+#endif
+
+CG_CVAR( cg_atmosphere, "g_atmosphere", "", CVAR_SERVERINFO | CVAR_TEMP )
+CG_CVAR( cg_breadCrumb, "ui_breadCrumb", "", 0 )
+CG_CVAR( cg_lazyLoad, "ui_lazyLoad", "", 0 )
+CG_CVAR( cg_atmosphericEffects, "cg_atmosphericEffects", "1", CVAR_ARCHIVE )
+CG_CVAR( cg_smoothClients, "cg_smoothClients", "0", CVAR_USERINFO | CVAR_ARCHIVE )
+CG_CVAR( cg_customHeight, "r_customHeight", "480", CVAR_ARCHIVE )
+CG_CVAR( cg_customWidth, "r_customWidth", "640", CVAR_ARCHIVE )
 
 #undef CG_CVAR
