@@ -387,6 +387,7 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/bg_slidemove.o \
   $(B)/$(MOD)/cgame/cg_consolecmds.o \
   $(B)/$(MOD)/cgame/cg_draw.o \
+  $(B)/$(MOD)/cgame/cg_newdraw.o \
   $(B)/$(MOD)/cgame/cg_drawtools.o \
   $(B)/$(MOD)/cgame/cg_effects.o \
   $(B)/$(MOD)/cgame/cg_ents.o \
