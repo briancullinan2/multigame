@@ -242,12 +242,12 @@ jobs:
         retention-days: 5
 
   macos-x86:
-    name: ${{ matrix.config }} macOS x86_64
+    name: ${{ matrix.config }} macOS ${{ matrix.arch }}
     runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        arch: [x86_64]
+        arch: [x86_64, aarch64]
         cc: [clang]
         config: [Release]
         include:
@@ -265,10 +265,10 @@ jobs:
     - name: Build
       run: |
         cd build/linux
-        make release -j 4 CC=${{ matrix.cc }} INSTALL=ginstall 
+        make release -j 4 CC=${{ matrix.cc }} ARCH=${{ matrix.arch }} INSTALL=ginstall 
         cd ../../
         mkdir bin
-        mv ./build/linux/build/release-darwin-x86_64/multigame/*.dylib ./bin/
+        mv ./build/linux/build/release-darwin-*/multigame/*.dylib ./bin/
 
     - uses: actions/upload-artifact@v2
       if: matrix.cc == 'clang' && matrix.config == 'Release'
@@ -288,13 +288,14 @@ jobs:
 
       - name: Create binary archives
         run: |
-          7z a -r multigame-full-x86_64.zip         ./macos-x86_64/*
-          7z a -r multigame-full-x86_64.zip         ./linux-x86_64/*
-          7z a -r multigame-full-x86_64.zip         ./windows-mingw-x86_64/*
-          7z a -r multigame-full-x86_64.zip         ./windows-msvc-x86_64/*
-          7z a -r multigame-full-x86_64.zip         ./windows-msvc-arm64/*
-          7z a -r multigame-full-x86_64.zip         ./qvms-bytecode/*
-          cp      ./qvms-bytecode/*.pk3           ./xxx-multigame.pk3
+          7z a -r multigame-full.zip         ./macos-x86_64/*
+          7z a -r multigame-full.zip         ./macos-aarch64/*
+          7z a -r multigame-full.zip         ./linux-x86_64/*
+          7z a -r multigame-full.zip         ./windows-mingw-x86_64/*
+          7z a -r multigame-full.zip         ./windows-msvc-x86_64/*
+          7z a -r multigame-full.zip         ./windows-msvc-arm64/*
+          7z a -r multigame-full.zip         ./qvms-bytecode/*
+          cp   ./qvms-bytecode/*.pk3         ./xxx-multigame.pk3
 
       - name: Create latest build
         uses: ec-/action-automatic-releases@test
@@ -348,6 +349,8 @@ jobs:
           - artifact_dir: macos-x86_64
             artifact_name: quake3e-macos-x86_64.zip
 
+          - artifact_dir: macos-aarch64
+            artifact_name: quake3e-macos-aarch64.zip
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
