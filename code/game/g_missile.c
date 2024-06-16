@@ -895,8 +895,8 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir)
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
 
-	if ( self->items[ITEM_PW_MIN + PW_QUAD] )
-		bolt->items[ITEM_PW_MIN + PW_QUAD] = self->items[ITEM_PW_MIN + PW_QUAD];
+	if ( self->client->ps.powerups[PW_QUAD] )
+		bolt->client->ps.powerups[PW_QUAD] = self->client->ps.powerups[PW_QUAD];
 
 	// missile owner
 	bolt->s.clientNum = self->s.clientNum;
@@ -1021,8 +1021,8 @@ gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
 
-  if ( self->items[ITEM_PW_MIN + PW_QUAD] )
-		bolt->items[ITEM_PW_MIN + PW_QUAD] = self->items[ITEM_PW_MIN + PW_QUAD];
+  if ( self->client->ps.powerups[PW_QUAD] )
+		bolt->client->ps.powerups[PW_QUAD] = self->client->ps.powerups[PW_QUAD];
 
 	// missile owner
 	bolt->s.clientNum = self->s.clientNum;
@@ -1191,8 +1191,8 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
 
-  if ( self->items[ITEM_PW_MIN + PW_QUAD] )
-		bolt->items[ITEM_PW_MIN + PW_QUAD] = self->items[ITEM_PW_MIN + PW_QUAD];
+  if ( self->client->ps.powerups[PW_QUAD] )
+		bolt->client->ps.powerups[PW_QUAD] = self->client->ps.powerups[PW_QUAD];
 
 	// missile owner
 	bolt->s.clientNum = self->s.clientNum;

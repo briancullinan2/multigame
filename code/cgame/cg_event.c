@@ -506,7 +506,7 @@ static void CG_ItemPickup( int itemNum )
 		cg.itemPickupCount++;
 
 	oldItem = itemNum;
-
+	
 	// see if it should be the grabbed weapon
 	if ( bg_itemlist[itemNum].giType == IT_WEAPON ) {
 		// select it immediately
@@ -1263,8 +1263,7 @@ Com_Printf("global item pickup\n");
 
 				case GTS_RED_TAKEN: // CTF: red team took blue flag, 1FCTF: blue team took the neutral flag
 					// if this player picked up the flag then a sound is played in CG_CheckLocalSounds
-					if (cg_entities[cg.snap->ps.clientNum].items[ITEM_PW_MIN + PW_BLUEFLAG]
-            || cg_entities[cg.snap->ps.clientNum].items[ITEM_PW_MIN + PW_NEUTRALFLAG]) {
+					if (cg.snap->ps.powerups[PW_BLUEFLAG] || cg.snap->ps.powerups[PW_NEUTRALFLAG]) {
 					}
 					else {
 						if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
@@ -1287,8 +1286,7 @@ Com_Printf("global item pickup\n");
 					break;
 				case GTS_BLUE_TAKEN: // CTF: blue team took the red flag, 1FCTF red team took the neutral flag
 					// if this player picked up the flag then a sound is played in CG_CheckLocalSounds
-					if (cg_entities[cg.snap->ps.clientNum].items[ITEM_PW_MIN + PW_REDFLAG]
-            || cg_entities[cg.snap->ps.clientNum].items[ITEM_PW_MIN + PW_NEUTRALFLAG]) {
+					if (cg.snap->ps.powerups[PW_REDFLAG] || cg.snap->ps.powerups[PW_NEUTRALFLAG]) {
 					}
 					else {
 						if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
@@ -1374,6 +1372,20 @@ Com_Printf("global item pickup\n");
 	//
 	// powerup events
 	//
+	case EV_POWERUP_QUAD:
+		if ( es->number == cg.snap->ps.clientNum ) {
+			cg.powerupActive = PW_QUAD;
+			cg.powerupTime = cg.time;
+		}
+		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.quadSound );
+		break;
+
+	case EV_POWERUP_BATTLESUIT:
+		if ( es->number == cg.snap->ps.clientNum ) {
+			cg.powerupActive = PW_BATTLESUIT;
+			cg.powerupTime = cg.time;
+		}
+		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.protectSound );
   case EV_POWERUP:
     if ( es->number == cg.snap->ps.clientNum ) {
       cg.powerupActive = es->eventParm;

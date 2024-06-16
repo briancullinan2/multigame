@@ -1074,8 +1074,7 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 				xx = x + w - TINYCHAR_WIDTH;
 			}
 			for (j = 0; j <= PW_NUM_POWERUPS; j++) {
-				if (cg_entities[sortedTeamPlayers[i]].items[ITEM_PW_MIN + j])
-				{
+				if (ci->powerups & (1 << j)) {
 
 					item = BG_FindItemForPowerup( j );
 
@@ -1346,7 +1345,7 @@ static float CG_DrawPowerups( float y ) {
 		if ( !ps->powerups[ i ] ) {
 			continue;
 		}
-		t = cg_entities[cg.clientNum].items[ITEM_PW_MIN + i] - cg.time;
+		t = ps->powerups[ i ] - cg.time;
 		// ZOID--don't draw if the power up has unlimited time (999 seconds)
 		// This is true of the CTF flags
 		if ( t < 0 || t > 999000) {
@@ -1640,6 +1639,26 @@ static void CG_DrawHoldableItem(void)
 	}
 }
 #endif // MISSIONPACK
+
+#ifdef MISSIONPACK
+/*
+===================
+CG_DrawPersistantPowerup
+===================
+*/
+#if 0 // sos001208 - DEAD
+static void CG_DrawPersistantPowerup( void ) { 
+	int		value;
+
+	value = cg.snap->ps.stats[STAT_PERSISTANT_POWERUP];
+	if ( value ) {
+		CG_RegisterItemVisuals( value );
+		CG_DrawPic( 640-ICON_SIZE, (SCREEN_HEIGHT-ICON_SIZE)/2 - ICON_SIZE, ICON_SIZE, ICON_SIZE, cg_items[ value ].icon );
+	}
+}
+#endif
+#endif // MISSIONPACK
+
 
 /*
 ===================
@@ -2139,8 +2158,7 @@ static void CG_ScanForCrosshairEntity( void ) {
 	}
 
 	// if the player is invisible, don't show it
-	if (cg_entities[trace.entityNum].items[ITEM_PW_MIN + PW_INVIS])
-	{
+	if ( cg_entities[ trace.entityNum ].currentState.powerups & ( 1 << PW_INVIS ) ) {
 		return;
 	}
 
@@ -2861,12 +2879,12 @@ void CG_WarmupEvent( void ) {
 
 	cg.killerTime = 0;
 	cg.killerName[0] = '\0';
-
+	
 	cg.damageTime = 0;
 
 	cg.rewardStack = 0;
 	cg.rewardTime = 0;
-
+	
 	cg.weaponSelectTime = cg.time;
 
 	cg.lowAmmoWarning = 0;

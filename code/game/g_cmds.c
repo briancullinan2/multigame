@@ -54,7 +54,7 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 			ping,
 			(level.time - cl->pers.enterTime)/60000,
 			scoreFlags,
-			0 /* g_entities[level.sortedClients[i]].s.powerups */,
+			g_entities[level.sortedClients[i]].s.powerups,
 			accuracy, 
 			cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
 			cl->ps.persistant[PERS_EXCELLENT_COUNT],
@@ -740,7 +740,7 @@ void StopFollowing( gentity_t *ent, qboolean release ) {
 	client->sess.sessionTeam = TEAM_SPECTATOR;	
 	if ( release ) {
 		client->ps.stats[STAT_HEALTH] = ent->health = 1;
-		memset( ent->items, 0, sizeof ( ent->items ) );
+		memset( client->ps.powerups, 0, sizeof ( client->ps.powerups ) );
 	}
 	SetClientViewAngle( ent, client->ps.viewangles );
 
@@ -1870,16 +1870,16 @@ gentity_t *ThrowWeapon( gentity_t *ent );
 
 #ifdef USE_FLAG_DROP
 void Cmd_DropFlag_f(gentity_t *ent) {
-  if(ent->items[ITEM_PW_MIN + PW_REDFLAG]) {
+  if(ent->client->ps.powerups[PW_REDFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-  } else if (ent->items[ITEM_PW_MIN + PW_BLUEFLAG]) {
+  } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-  } else if (ent->items[ITEM_PW_MIN + PW_NEUTRALFLAG]) {
+  } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   }
-  ent->items[ITEM_PW_MIN + PW_REDFLAG] =
-  ent->items[ITEM_PW_MIN + PW_BLUEFLAG] =
-  ent->items[ITEM_PW_MIN + PW_NEUTRALFLAG] = 0;
+  ent->client->ps.powerups[PW_REDFLAG] =
+  ent->client->ps.powerups[PW_BLUEFLAG] =
+  ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
 }
 #endif
 
@@ -1914,16 +1914,16 @@ void Cmd_DropPowerup_f(gentity_t *ent) {
     gentity_t	*drop;
     int i;
     for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
-      if ( ent->items[ITEM_PW_MIN + i ] > level.time ) {
+      if ( ent->client->ps.powerups[i ] > level.time ) {
         drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
         // decide how many seconds it has left
-        drop->count = ( ent->items[ITEM_PW_MIN + i] - level.time ) / 1000;
+        drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
         if ( drop->count < 1 ) {
           drop->count = 1;
         }
         // for pickup prediction
         drop->s.time2 = drop->count;
-        ent->items[ITEM_PW_MIN + i] = 0;
+        ent->client->ps.powerups[i] = 0;
         return;
       }
     }
@@ -2001,19 +2001,19 @@ void Cmd_Drop_f( gentity_t *ent ) {
 
 #ifdef USE_FLAG_DROP
   if((g_dropWeapon.integer & 2)
-    && (ent->items[ITEM_PW_MIN + PW_REDFLAG]
-      || ent->items[ITEM_PW_MIN + PW_BLUEFLAG]
-      || ent->items[ITEM_PW_MIN + PW_NEUTRALFLAG])) {
-    if(ent->items[ITEM_PW_MIN + PW_REDFLAG]) {
+    && (ent->client->ps.powerups[PW_REDFLAG]
+      || ent->client->ps.powerups[PW_BLUEFLAG]
+      || ent->client->ps.powerups[PW_NEUTRALFLAG])) {
+    if(ent->client->ps.powerups[PW_REDFLAG]) {
       dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-    } else if (ent->items[ITEM_PW_MIN + PW_BLUEFLAG]) {
+    } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
       dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-    } else if (ent->items[ITEM_PW_MIN + PW_NEUTRALFLAG]) {
+    } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
       dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
     }
-    ent->items[ITEM_PW_MIN + PW_REDFLAG] =
-    ent->items[ITEM_PW_MIN + PW_BLUEFLAG] =
-    ent->items[ITEM_PW_MIN + PW_NEUTRALFLAG] = 0;
+    ent->client->ps.powerups[PW_REDFLAG] =
+    ent->client->ps.powerups[PW_BLUEFLAG] =
+    ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
     return;
   }
 #endif
@@ -2038,16 +2038,16 @@ void Cmd_Drop_f( gentity_t *ent ) {
     {
       int i;
       for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
-        if ( ent->items[ITEM_PW_MIN + i ] > level.time ) {
+        if ( ent->client->ps.powerups[i ] > level.time ) {
           drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
           // decide how many seconds it has left
-          drop->count = ( ent->items[ITEM_PW_MIN + i] - level.time ) / 1000;
+          drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
           if ( drop->count < 1 ) {
             drop->count = 1;
           }
           // for pickup prediction
           drop->s.time2 = drop->count;
-          ent->items[ITEM_PW_MIN + i] = 0;
+          ent->client->ps.powerups[i] = 0;
           return;
         }
       }
@@ -2132,13 +2132,13 @@ void Cmd_Cloak_f( gentity_t *ent ) {
 	} else if (ent->flags & FL_CLOAK) {
 		msg = "Cloaking OFF\n";
     ent->flags &= ~FL_CLOAK;
-		ent->items[ITEM_PW_MIN + PW_INVIS] = level.time;
+		ent->client->ps.powerups[PW_INVIS] = level.time;
 		// Removes the invisible powerup from the player
 	}        
 	else {
 		msg = "Cloaking ON\n";
     ent->flags |= FL_CLOAK;
-		ent->items[ITEM_PW_MIN + PW_INVIS] = level.time + 1000000000;
+		ent->client->ps.powerups[PW_INVIS] = level.time + 1000000000;
 		// Gives the invisible powerup to the player
 	}
 

@@ -1272,17 +1272,17 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, centity_t *cl ) {
     return;
   }
 #endif
-	if ( cent->items[ITEM_PW_MIN + PW_INVIS] ) {
+	if ( cl->currentState.powerups & ( 1 << PW_INVIS ) ) {
 		gun->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( gun );
 	} else {
 		trap_R_AddRefEntityToScene( gun );
 
-		if ( cent->items[ITEM_PW_MIN + PW_BATTLESUIT] ) {
+		if ( cl->currentState.powerups & ( 1 << PW_BATTLESUIT ) ) {
 			gun->customShader = cgs.media.battleWeaponShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
-		if ( cent->items[ITEM_PW_MIN + PW_QUAD] ) {
+		if ( cl->currentState.powerups & ( 1 << PW_QUAD ) ) {
 			gun->customShader = cgs.media.quadWeaponShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
@@ -2014,7 +2014,7 @@ void CG_FireWeapon( centity_t *cent ) {
 	}
 
 	// play quad sound if needed
-	if ( cent->items[ITEM_PW_MIN + PW_QUAD] ) {
+	if ( cent->currentState.powerups & ( 1 << PW_QUAD ) ) {
 		trap_S_StartSound (NULL, cent->currentState.number, CHAN_ITEM, cgs.media.quadSound );
 	}
 

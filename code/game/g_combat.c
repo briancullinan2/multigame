@@ -71,7 +71,7 @@ void TossClientItems( gentity_t *self ) {
 #ifdef USE_CLOAK_CMD
   if (self->flags & FL_CLOAK) {
   	// remove the invisible powerup if the player is cloaked.
-  	self->items[ITEM_PW_MIN + PW_INVIS] = level.time;
+  	self->client->ps.powerups[PW_INVIS] = level.time;
   } 
 #endif
 
@@ -150,14 +150,14 @@ void TossClientItems( gentity_t *self ) {
 	if ( g_gametype.integer != GT_TEAM ) {
 		angle = 45;
 		for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
-			if ( self->items[ITEM_PW_MIN + i ] > level.time ) {
+			if ( self->client->ps.powerups[ i ] > level.time ) {
 				item = BG_FindItemForPowerup( i );
 				if ( !item ) {
 					continue;
 				}
 				drop = Drop_Item( self, item, angle );
 				// decide how many seconds it has left
-				drop->count = ( self->items[ITEM_PW_MIN + i] - level.time ) / 1000;
+				drop->count = ( self->client->ps.powerups[ i ] - level.time ) / 1000;
 				if ( drop->count < 1 ) {
 					drop->count = 1;
 				}
@@ -423,9 +423,9 @@ void CheckAlmostCapture( gentity_t *self, gentity_t *attacker ) {
 	char		*classname;
 
 	// if this player was carrying a flag
-	if ( self->items[ITEM_PW_MIN + PW_REDFLAG] ||
-		self->items[ITEM_PW_MIN + PW_BLUEFLAG] ||
-		self->items[ITEM_PW_MIN + PW_NEUTRALFLAG] ) {
+	if ( self->client->ps.powerups[PW_REDFLAG] ||
+		self->client->ps.powerups[PW_BLUEFLAG] ||
+		self->client->ps.powerups[PW_NEUTRALFLAG] ) {
 		// get the goal flag this player should have been going for
 		if ( g_gametype.integer == GT_CTF ) {
 			if ( self->client->sess.sessionTeam == TEAM_BLUE ) {
@@ -569,7 +569,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		} else {
 			killerName = "<non-client>";
 		}
-  } else {
+	} else {
 		killer = ENTITYNUM_WORLD;
 		killerName = "<world>";
 	}
@@ -667,18 +667,18 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 #endif
 	) {
 #ifdef MISSIONPACK
-		if ( self->items[ITEM_PW_MIN + PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
+		if ( self->client->ps.powerups[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
-			self->items[ITEM_PW_MIN + PW_NEUTRALFLAG] = 0;
+			self->client->ps.powerups[PW_NEUTRALFLAG] = 0;
 		} else 
 #endif
-		if ( self->items[ITEM_PW_MIN + PW_REDFLAG] ) {		// only happens in standard CTF
+		if ( self->client->ps.powerups[PW_REDFLAG] ) {		// only happens in standard CTF
 			Team_ReturnFlag( TEAM_RED );
-			self->items[ITEM_PW_MIN + PW_REDFLAG] = 0;
+			self->client->ps.powerups[PW_REDFLAG] = 0;
 		}
-		else if ( self->items[ITEM_PW_MIN + PW_BLUEFLAG] ) {	// only happens in standard CTF
+		else if ( self->client->ps.powerups[PW_BLUEFLAG] ) {	// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
-			self->items[ITEM_PW_MIN + PW_BLUEFLAG] = 0;
+			self->client->ps.powerups[PW_BLUEFLAG] = 0;
 		}
 	}
 
@@ -688,13 +688,13 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		TossClientItems( self );
 	}
 	else {
-		if ( self->items[ITEM_PW_MIN + PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
+		if ( self->client->ps.powerups[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
 		}
-		else if ( self->items[ITEM_PW_MIN + PW_REDFLAG] ) {		// only happens in standard CTF
+		else if ( self->client->ps.powerups[PW_REDFLAG] ) {		// only happens in standard CTF
 			Team_ReturnFlag( TEAM_RED );
 		}
-		else if ( self->items[ITEM_PW_MIN + PW_BLUEFLAG] ) {	// only happens in standard CTF
+		else if ( self->client->ps.powerups[PW_BLUEFLAG] ) {	// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
 		}
 	}
@@ -1239,7 +1239,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 	// battlesuit protects from all radius damage (but takes knockback)
 	// and protects 50% against all damage
-	if ( client && (targ->items[ITEM_PW_MIN + PW_BATTLESUIT]
+	if ( client && (client->ps.powerups[PW_BATTLESUIT]
 #ifdef USE_RUNES
     || targ->items[ITEM_PW_MIN + RUNE_RESIST]
 #endif

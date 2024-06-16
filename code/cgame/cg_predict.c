@@ -212,6 +212,7 @@ static void CG_InterpolatePlayerState( qboolean grabAngles ) {
 
 		cmdNum = trap_GetCurrentCmdNumber();
 		trap_GetUserCmd( cmdNum, &cmd );
+
 		PM_UpdateViewAngles( out, &cmd );
 	}
 
@@ -394,7 +395,7 @@ static int CG_CheckArmor( int damage ) {
     return;
 #endif
 
-	if ( cg_entities[cg.snap->ps.clientNum].items[ITEM_PW_MIN + PW_BATTLESUIT] )
+	if ( cg.predictedPlayerState.powerups[ PW_BATTLESUIT ] )
 		return;
 
 	if ( cg.predictedPlayerState.clientNum != cg.snap->ps.clientNum || cg.snap->ps.pm_flags & PMF_FOLLOW ) {
@@ -463,8 +464,8 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 #endif
   )) {
 		// round timing to seconds to make multiple powerup timers count in sync
-		if ( !cg_entities[cg.snap->ps.clientNum].items[ ITEM_PW_MIN + item->giTag ] ) {
-			cg_entities[cg.snap->ps.clientNum].items[ ITEM_PW_MIN + item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
+		if ( !cg.predictedPlayerState.powerups[ item->giTag ] ) {
+			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
 			if ( item->giTag == PW_HASTE 
 #ifdef USE_RUNES
@@ -478,7 +479,7 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 #endif
 			}
 		}
-		cg_entities[cg.snap->ps.clientNum].items[ ITEM_PW_MIN + item->giTag ] += cent->currentState.time2 * 1000;
+		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;
 #ifdef USE_RUNES
     if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
       cg_entities[cg.snap->ps.clientNum].rune = ITEM_PW_MIN + item->giTag;
@@ -686,7 +687,7 @@ static void CG_CheckTimers( void ) {
 	// periodic tasks
 	if ( cg.timeResidual && cg.predictedPlayerState.commandTime >= cg.timeResidual && !cg.thisFrameTeleport ) {
 		cg.timeResidual += 1000;
-		if ( cg_entities[cg.snap->ps.clientNum].items[ ITEM_PW_MIN + PW_REGEN ] ) {
+		if ( cg.predictedPlayerState.powerups[ PW_REGEN ] ) {
 			int maxhealth = cg.predictedPlayerState.stats[ STAT_MAX_HEALTH ];
 			if ( cg.predictedPlayerState.stats[ STAT_HEALTH ] < maxhealth ) {
 				cg.predictedPlayerState.stats[ STAT_HEALTH ] += 15;

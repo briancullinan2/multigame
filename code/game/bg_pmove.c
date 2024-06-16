@@ -181,9 +181,9 @@ static void PM_Friction( void ) {
 		vel[0] = 0;
 		vel[1] = 0;		// allow sinking underwater
 		// FIXME: still have z friction underwater?
-		if ( pm->ps->pm_type == PM_SPECTATOR || items[ITEM_PW_MIN + PW_FLIGHT] 
+		if ( pm->ps->pm_type == PM_SPECTATOR || pm->ps->powerups[ PW_FLIGHT ] 
 #ifdef USE_RUNES
-      || items[ITEM_PW_MIN + RUNE_FLIGHT] 
+      || items[ITEM_PW_MIN + RUNE_FLIGHT]
 #endif
     )
 			vel[2] = 0.0f; // no slow-sinking/raising movements
@@ -209,7 +209,7 @@ static void PM_Friction( void ) {
 	}
 
 	// apply flying friction
-	if ( items[ITEM_PW_MIN + PW_FLIGHT]
+	if ( pm->ps->powerups[PW_FLIGHT]
 #ifdef USE_RUNES
     || items[ITEM_PW_MIN + RUNE_FLIGHT]
 #endif
@@ -1292,7 +1292,7 @@ static void PM_CheckDuck (void)
 {
 	trace_t	trace;
 
-	if ( items[ITEM_PW_MIN + PW_INVULNERABILITY] ) {
+	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
 		if ( pm->ps->pm_flags & PMF_INVULEXPAND ) {
 			// invulnerability sphere has a 42 units radius
 			VectorSet( pm->mins, -42, -42, -42 );
@@ -1376,7 +1376,7 @@ static void PM_Footsteps( void ) {
 
 	if ( pm->ps->groundEntityNum == ENTITYNUM_NONE ) {
 
-		if ( items[ITEM_PW_MIN + PW_INVULNERABILITY] ) {
+		if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
 			PM_ContinueLegsAnim( LEGS_IDLECR );
 		}
 		// airborne leaves position in cycle intact, but doesn't advance
@@ -1653,7 +1653,7 @@ static void PM_Weapon( void ) {
 		}
 		return;
 	}
-  
+
 	// check for fire
 #ifdef USE_ALT_FIRE
 #ifdef USE_GRAPPLE
@@ -1695,7 +1695,6 @@ static void PM_Weapon( void ) {
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
 	}
-
 
 	// start the animation even if out of ammo
 	if ( pm->ps->weapon == WP_GAUNTLET ) {
@@ -1878,7 +1877,7 @@ static void PM_Weapon( void ) {
   }
   else
 #endif
-	if ( items[ITEM_PW_MIN + PW_HASTE] 
+	if ( pm->ps->powerups[PW_HASTE]
 #ifdef USE_RUNES
     || items[ITEM_PW_MIN + RUNE_HASTE]
 #endif
@@ -2273,11 +2272,11 @@ static void PmoveSingle (pmove_t *pmove, int *itms, vec3_t *prtls, vec3_t *dstnt
 #endif
 
 #ifdef MISSIONPACK
-	if ( items[ITEM_PW_MIN + PW_INVULNERABILITY] ) {
+	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
 		PM_InvulnerabilityMove();
 	} else
 #endif
-	if ( items[ITEM_PW_MIN + PW_FLIGHT] 
+	if ( pm->ps->powerups[PW_FLIGHT]
 #ifdef USE_RUNES
     || items[ITEM_PW_MIN + RUNE_FLIGHT]
 #endif
@@ -2327,7 +2326,7 @@ static void PmoveSingle (pmove_t *pmove, int *itms, vec3_t *prtls, vec3_t *dstnt
 	// entering / leaving water splashes
 	PM_WaterEvents();
 
-	if ( (items[ITEM_PW_MIN + PW_FLIGHT]
+	if ( (pm->ps->powerups[PW_FLIGHT]
 #ifdef USE_RUNES
     || items[ITEM_PW_MIN + RUNE_FLIGHT]
 #endif

@@ -446,14 +446,14 @@ void  Svcmd_Freeze_f( void ) {
 	}
   ent = &g_entities[cl - level.clients];
   
-  if(freeze && !ent->items[ITEM_PW_MIN + PW_FROZEN]) {
+  if(freeze && !ent->client->ps.powerups[PW_FROZEN]) {
     G_AddEvent( ent, EV_FROZEN, 0 );
-    ent->items[ITEM_PW_MIN + PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+    ent->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
     cl->ps.pm_type = PM_FROZEN;
     VectorCopy(cl->ps.viewangles, cl->frozen_angles);
-  } else if (!freeze && ent->items[ITEM_PW_MIN + PW_FROZEN]) {
+  } else if (!freeze && ent->client->ps.powerups[PW_FROZEN]) {
     G_AddEvent( ent, EV_UNFROZEN, 0 );
-    ent->items[ITEM_PW_MIN + PW_FROZEN] = 0;
+    ent->client->ps.powerups[PW_FROZEN] = 0;
     SetClientViewAngle(ent, cl->frozen_angles);
   }
 }
@@ -563,3 +563,4 @@ qboolean	ConsoleCommand( void ) {
 
 	return qfalse;
 }
+

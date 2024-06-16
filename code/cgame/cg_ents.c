@@ -447,17 +447,19 @@ CG_Missile
 */
 static void CG_Missile( centity_t *cent ) {
 	refEntity_t			ent;
+	entityState_t		*s1;
 	const weaponInfo_t	*weapon;
 	const clientInfo_t	*ci;
 //	int	col;
 
-	if ( cent->currentState.weapon >= WP_NUM_WEAPONS ) {
-		cent->currentState.weapon = WP_NONE;
+	s1 = &cent->currentState;
+	if ( s1->weapon >= WP_NUM_WEAPONS ) {
+		s1->weapon = WP_NONE;
 	}
-	weapon = &cg_weapons[cent->currentState.weapon];
+	weapon = &cg_weapons[s1->weapon];
 
 	// calculate the axis
-	VectorCopy( cent->currentState.angles, cent->lerpAngles);
+	VectorCopy( s1->angles, cent->lerpAngles);
 
 	// add trails
 	if ( weapon->missileTrailFunc ) 
@@ -539,39 +541,40 @@ static void CG_Missile( centity_t *cent ) {
 
 #ifdef MISSIONPACK
 	if ( cent->currentState.weapon == WP_PROX_LAUNCHER ) {
-		if (cent->currentState.generic1 == TEAM_BLUE) {
+		if (s1->generic1 == TEAM_BLUE) {
 			ent.hModel = cgs.media.blueProxMine;
 		}
 	}
 #endif
 
 	// convert direction of travel into axis
-	if ( VectorNormalize2( cent->currentState.pos.trDelta, ent.axis[0] ) == 0 ) {
+	if ( VectorNormalize2( s1->pos.trDelta, ent.axis[0] ) == 0 ) {
 		ent.axis[0][2] = 1;
 	}
 
 	// spin as it moves
-	if ( cent->currentState.pos.trType != TR_STATIONARY ) {
+	if ( s1->pos.trType != TR_STATIONARY ) {
 		RotateAroundDirection( ent.axis, ( cg.time % TMOD_004 ) / 4.0 );
 	} else {
 #ifdef MISSIONPACK
-		if ( cent->currentState.weapon == WP_PROX_LAUNCHER ) {
+		if ( s1->weapon == WP_PROX_LAUNCHER ) {
 			AnglesToAxis( cent->lerpAngles, ent.axis );
 		}
 		else
 #endif
 		{
-			RotateAroundDirection( ent.axis, cent->currentState.time );
+			RotateAroundDirection( ent.axis, s1->time );
 		}
 	}
 
 	// add to refresh list, possibly with quad glow
 
-	ci = &cgs.clientinfo[ cent->currentState.clientNum & MAX_CLIENTS ];
+	s1->powerups &= ~( (1 << PW_INVIS) | (1 << PW_REGEN) );
+	ci = &cgs.clientinfo[ s1->clientNum & MAX_CLIENTS ];
 	if ( ci->infoValid ) {
-		CG_AddRefEntityWithPowerups( &ent, cent, ci->team );
+		CG_AddRefEntityWithPowerups( &ent, s1, ci->team );
 	} else {
-		CG_AddRefEntityWithPowerups( &ent, cent, TEAM_FREE );
+		CG_AddRefEntityWithPowerups( &ent, s1, TEAM_FREE );
 	}
 
 }
@@ -585,15 +588,17 @@ This is called when the grapple is sitting up against the wall
 */
 static void CG_Grapple( centity_t *cent ) {
 	refEntity_t			ent;
+	entityState_t		*s1;
 	const weaponInfo_t		*weapon;
 
-	if ( cent->currentState.weapon >= WP_NUM_WEAPONS ) {
-		cent->currentState.weapon = WP_NONE;
+	s1 = &cent->currentState;
+	if ( s1->weapon >= WP_NUM_WEAPONS ) {
+		s1->weapon = WP_NONE;
 	}
-	weapon = &cg_weapons[cent->currentState.weapon];
+	weapon = &cg_weapons[s1->weapon];
 
 	// calculate the axis
-	VectorCopy( cent->currentState.angles, cent->lerpAngles);
+	VectorCopy( s1->angles, cent->lerpAngles);
 
 #if 0 // FIXME add grapple pull sound here..?
 	// add missile sound
@@ -616,7 +621,7 @@ static void CG_Grapple( centity_t *cent ) {
 	ent.renderfx = weapon->missileRenderfx | RF_NOSHADOW;
 
 	// convert direction of travel into axis
-	if ( VectorNormalize2( cent->currentState.pos.trDelta, ent.axis[0] ) == 0 ) {
+	if ( VectorNormalize2( s1->pos.trDelta, ent.axis[0] ) == 0 ) {
 		ent.axis[0][2] = 1;
 	}
 
@@ -630,6 +635,9 @@ CG_Mover
 */
 static void CG_Mover( const centity_t *cent ) {
 	refEntity_t			ent;
+	const entityState_t	*s1;
+
+	s1 = &cent->currentState;
 
 	// create the render entity
 	memset (&ent, 0, sizeof(ent));
@@ -643,19 +651,19 @@ static void CG_Mover( const centity_t *cent ) {
 	ent.skinNum = ( cg.time >> 6 ) & 1;
 
 	// get the model, either as a bmodel or a modelindex
-	if ( cent->currentState.solid == SOLID_BMODEL ) {
-		ent.hModel = cgs.inlineDrawModel[cent->currentState.modelindex];
+	if ( s1->solid == SOLID_BMODEL ) {
+		ent.hModel = cgs.inlineDrawModel[s1->modelindex];
 	} else {
-		ent.hModel = cgs.gameModels[cent->currentState.modelindex];
+		ent.hModel = cgs.gameModels[s1->modelindex];
 	}
 
 	// add to refresh list
 	trap_R_AddRefEntityToScene(&ent);
 
 	// add the secondary model
-	if ( cent->currentState.modelindex2 ) {
+	if ( s1->modelindex2 ) {
 		ent.skinNum = 0;
-		ent.hModel = cgs.gameModels[ cent->currentState.modelindex2 % MAX_MODELS ];
+		ent.hModel = cgs.gameModels[ s1->modelindex2 % MAX_MODELS ];
 		trap_R_AddRefEntityToScene(&ent);
 	}
 
@@ -670,11 +678,14 @@ Also called as an event
 */
 void CG_Beam( const centity_t *cent ) {
 	refEntity_t			ent;
+	const entityState_t	*s1;
+
+	s1 = &cent->currentState;
 
 	// create the render entity
 	memset (&ent, 0, sizeof(ent));
-	VectorCopy( cent->currentState.pos.trBase, ent.origin );
-	VectorCopy( cent->currentState.origin2, ent.oldorigin );
+	VectorCopy( s1->pos.trBase, ent.origin );
+	VectorCopy( s1->origin2, ent.oldorigin );
 	AxisClear( ent.axis );
 	ent.reType = RT_BEAM;
 
@@ -847,7 +858,7 @@ static void CG_CalcEntityLerpPositions( centity_t *cent ) {
 CG_TeamBase
 ===============
 */
-static void CG_TeamBase( centity_t *cent ) {
+static void CG_TeamBase( const centity_t *cent ) {
 	refEntity_t model;
 #ifdef MISSIONPACK
 	vec3_t angles;

@@ -2186,11 +2186,11 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 				return qtrue;
 			}
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
-				if (item->giTag == PW_BLUEFLAG && items[ITEM_PW_MIN + PW_NEUTRALFLAG] ) {
+				if (item->giTag == PW_BLUEFLAG  && ps->powerups[PW_NEUTRALFLAG] ) {
 					return qtrue;
 				}
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
-				if (item->giTag == PW_REDFLAG && items[ITEM_PW_MIN + PW_NEUTRALFLAG] ) {
+				if (item->giTag == PW_REDFLAG  && ps->powerups[PW_NEUTRALFLAG] ) {
 					return qtrue;
 				}
 			}
@@ -2203,12 +2203,12 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG ||
 					(item->giTag == PW_REDFLAG && ent->modelindex2) ||
-					(item->giTag == PW_REDFLAG && items[ITEM_PW_MIN + PW_BLUEFLAG]) )
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) )
 					return qtrue;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
 				if (item->giTag == PW_REDFLAG ||
 					(item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
-					(item->giTag == PW_BLUEFLAG && items[ITEM_PW_MIN + PW_REDFLAG]) )
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) )
 					return qtrue;
 			}
 		}

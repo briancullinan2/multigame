@@ -133,7 +133,7 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
   
   // moved from bg_misc
   // flying characters don't hit bounce pads
-  if(other->items[ITEM_PW_MIN + PW_FLIGHT])
+  if(other->client->ps.powerups[PW_FLIGHT])
     return;
 #ifdef USE_RUNES
   if(other->items[ITEM_PW_MIN + RUNE_FLIGHT])
@@ -215,7 +215,7 @@ void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 	if ( activator->client->ps.pm_type != PM_NORMAL ) {
 		return;
 	}
-	if ( activator->items[ITEM_PW_MIN + PW_FLIGHT] ) {
+	if ( activator->client->ps.powerups[PW_FLIGHT] ) {
 		return;
 	}
 

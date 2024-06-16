@@ -928,7 +928,7 @@ void MoveClientToIntermission( gentity_t *ent ) {
 	client->ps.pm_type = PM_INTERMISSION;
 
 	// clean up powerup info
-	memset( ent->items, 0, sizeof( ent->items ) );
+	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 
 	client->ps.eFlags = ( client->ps.eFlags & ~EF_PERSISTANT ) | ( client->ps.eFlags & EF_PERSISTANT );
 
