@@ -1642,6 +1642,10 @@ void hud_weapons(float x, float y, weaponInfo_t *weapon);
 #ifdef USE_WEAPON_ORDER
 extern int weaponOrder[WP_NUM_WEAPONS]; 
 extern int weaponRawOrder[WP_NUM_WEAPONS]; 
+
+int NextWeapon (int curr);
+int PrevWeapon (int curr);
+
 #endif
 
 /*
@@ -1797,12 +1801,6 @@ static qboolean CG_WeaponSelectable( int i ) {
 	return qtrue;
 }
 
-
-#ifdef USE_WEAPON_ORDER
-int NextWeapon (int curr);
-int PrevWeapon (int curr);
-
-#endif
 
 
 /*

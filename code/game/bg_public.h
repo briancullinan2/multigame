@@ -486,19 +486,14 @@ typedef enum {
 	EV_WATER_CLEAR,	// head leaves
 
 	EV_ITEM_PICKUP,			// normal item pickups are predictable
-#ifdef USE_WEAPON_ORDER
-  EV_ITEM_PICKUP2,			// had items
-#endif
+
 	EV_GLOBAL_ITEM_PICKUP,	// powerup / team sounds are broadcast to everyone
   EV_SINGLE_ITEM_PICKUP,
 
 	EV_NOAMMO,
 	EV_CHANGE_WEAPON,
 	EV_FIRE_WEAPON,
-#ifdef USE_ALT_FIRE
-  EV_ALTFIRE_WEAPON,
-  EV_ALTFIRE_BOTH,
-#endif
+
 
 	EV_USE_ITEM,
   /*
@@ -540,9 +535,6 @@ typedef enum {
 	EV_RAILTRAIL,
 	EV_SHOTGUN,
 	EV_BULLET,				// otherEntity is the shooter
-#ifdef USE_LV_DISCHARGE
-  EV_LV_DISCHARGE,
-#endif
 
 	EV_PAIN,
 	EV_DEATH1,
@@ -558,14 +550,9 @@ typedef enum {
 	EV_POWERUP_REGEN,
 
 	EV_GIB_PLAYER,			// gib a previously living player
-#ifdef USE_HEADSHOTS
-  EV_GIB_PLAYER_HEADSHOT,
-  EV_BODY_NOHEAD,
-#endif
+
 	EV_SCOREPLUM,			// score plum
-#ifdef USE_DAMAGE_PLUMS
-  EV_DAMAGEPLUM,			// damage plum
-#endif
+
 
 //#ifdef MISSIONPACK
 	EV_PROXIMITY_MINE_STICK,
@@ -578,11 +565,6 @@ typedef enum {
 	EV_LIGHTNINGBOLT,		// lightning bolt bounced of invulnerability sphere
 //#endif
 
-#ifdef USE_SINGLEPLAYER // entity
-	EV_PLAYERSTOP,
-	EV_EARTHQUAKE,
-#endif
-
 	EV_DEBUG_LINE,
 	EV_STOPLOOPINGSOUND,
 	EV_TAUNT,
@@ -592,6 +574,33 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+	
+#ifdef USE_WEAPON_ORDER
+  EV_ITEM_PICKUP2,			// had items
+#endif
+
+#ifdef USE_ALT_FIRE
+  EV_ALTFIRE_WEAPON,
+  EV_ALTFIRE_BOTH,
+#endif
+
+#ifdef USE_LV_DISCHARGE
+  EV_LV_DISCHARGE,
+#endif
+
+#ifdef USE_HEADSHOTS
+  EV_GIB_PLAYER_HEADSHOT,
+  EV_BODY_NOHEAD,
+#endif
+
+#ifdef USE_DAMAGE_PLUMS
+  EV_DAMAGEPLUM,			// damage plum
+#endif
+
+#ifdef USE_SINGLEPLAYER // entity
+	EV_PLAYERSTOP,
+	EV_EARTHQUAKE,
+#endif
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   EV_FROZEN,
