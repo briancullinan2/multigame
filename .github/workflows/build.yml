@@ -353,13 +353,13 @@ jobs:
             artifact_name: quake3e-macos-aarch64.zip
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
 
       - name: Create archive
         run: 7z a -r ${{ matrix.artifact_name }} ./${{ matrix.artifact_dir }}/*
 
       - name: Upload archive
-        uses: "svenstaro/upload-release-action@v2"
+        uses: "svenstaro/upload-release-action@latest"
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
