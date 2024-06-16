@@ -1701,13 +1701,13 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 	if (info && info->infoValid) {
 		switch (column) {
 			case 0:
-				if ( cg_entities[cg.scores[index].client].items[ITEM_PW_MIN + PW_NEUTRALFLAG] ) {
+				if ( info->powerups & ( 1 << PW_NEUTRALFLAG ) ) {
 					item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
 					*handle = cg_items[ ITEM_INDEX(item) ].icon;
-				} else if ( cg_entities[cg.scores[index].client].items[ITEM_PW_MIN + PW_REDFLAG] ) {
+				} else if ( info->powerups & ( 1 << PW_REDFLAG ) ) {
 					item = BG_FindItemForPowerup( PW_REDFLAG );
 					*handle = cg_items[ ITEM_INDEX(item) ].icon;
-				} else if ( cg_entities[cg.scores[index].client].items[ITEM_PW_MIN + PW_BLUEFLAG] ) {
+				} else if ( info->powerups & ( 1 << PW_BLUEFLAG ) ) {
 					item = BG_FindItemForPowerup( PW_BLUEFLAG );
 					*handle = cg_items[ ITEM_INDEX(item) ].icon;
 				} else {

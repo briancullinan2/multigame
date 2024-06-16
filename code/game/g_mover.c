@@ -1067,7 +1067,6 @@ static void Touch_DoorTriggerSpectator( gentity_t *ent, gentity_t *other, trace_
 	TeleportPlayer( other, origin, NULL );
 }
 
-
 /*
 ================
 Touch_DoorTrigger

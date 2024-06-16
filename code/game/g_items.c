@@ -86,9 +86,9 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	int			i;
 	gclient_t	*client;
 
-	if ( !other->items[ITEM_PW_MIN + ent->item->giTag] ) {
+	if ( !other->client->ps.powerups[ent->item->giTag] ) {
 		// round timing to seconds to make multiple powerup timers count in sync
-		other->items[ITEM_PW_MIN + ent->item->giTag] = level.time - ( level.time % 1000 );
+		other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
 	}
 
 	if ( ent->count ) {
@@ -97,7 +97,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		quantity = ent->item->quantity;
 	}
 
-	other->items[ITEM_PW_MIN + ent->item->giTag] += quantity * 1000;
+	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
   
 #ifdef USE_RUNES
   if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
@@ -367,7 +367,7 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
   	}
   	else
 #endif
-    if ( other->items[ITEM_PW_MIN + PW_HASTE] 
+    if ( other->client->ps.powerups[PW_HASTE] 
 #ifdef USE_RUNES
       || other->items[ITEM_PW_MIN + RUNE_HASTE]
 #endif

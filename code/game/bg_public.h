@@ -553,9 +553,9 @@ typedef enum {
   EV_POWERUP,
   EV_POWERUP1,  // duplexing powerup status
   EV_POWERUP2,
-	//EV_POWERUP_QUAD,
-	//EV_POWERUP_BATTLESUIT,
-	//EV_POWERUP_REGEN,
+	EV_POWERUP_QUAD,
+	EV_POWERUP_BATTLESUIT,
+	EV_POWERUP_REGEN,
 
 	EV_GIB_PLAYER,			// gib a previously living player
 #ifdef USE_HEADSHOTS

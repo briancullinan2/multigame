@@ -117,7 +117,7 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
     s_quadFactor = 2.0;
   } else
 #endif
-	if (ent->items[ITEM_PW_MIN + PW_QUAD] ) {
+	if (ent->client->ps.powerups[PW_QUAD] ) {
 		G_AddEvent( ent, EV_POWERUP, PW_QUAD );
 		s_quadFactor = g_quadfactor.value;
 	} else {
@@ -484,7 +484,7 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 
 #ifdef USE_WEAPON_SPREAD
   //Hal9000 spreadfire
-  if ( ent->items[ITEM_PW_MIN + PW_SPREAD] ) {
+  if ( ent->client->ps.powerups[PW_SPREAD] ) {
 		SpreadFire_Powerup(ent, fire_grenade);
 		return;
 	}
@@ -1258,7 +1258,7 @@ void FireWeapon( gentity_t *ent
   , qboolean altFire 
 #endif
 ) {
-	if ( ent->items[ITEM_PW_MIN + PW_QUAD] ) {
+	if ( ent->client->ps.powerups[PW_QUAD] ) {
 		s_quadFactor = g_quadfactor.value;
 	} else {
 		s_quadFactor = 1.0;
