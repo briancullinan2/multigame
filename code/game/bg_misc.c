@@ -2468,15 +2468,13 @@ const char *eventnames[EV_MAX] = {
   "EV_POWERUP",
   "EV_POWERUP1", // duplexing powerup status
   "EV_POWERUP2",
-	//"EV_POWERUP_QUAD",
-	//"EV_POWERUP_BATTLESUIT",
-	//"EV_POWERUP_REGEN",
+	"EV_POWERUP_QUAD",
+	"EV_POWERUP_BATTLESUIT",
+	"EV_POWERUP_REGEN",
 
 	"EV_GIB_PLAYER",			// gib a previously living player
 	"EV_SCOREPLUM",			// score plum
-#ifdef USE_DAMAGE_PLUMS
-  "EV_DAMAGEPLUM",			// damage plum
-#endif
+
 
 //#ifdef MISSIONPACK
 	"EV_PROXIMITY_MINE_STICK",
@@ -2497,7 +2495,40 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_FOLLOWME",
 	"EV_TAUNT_GETFLAG",
 	"EV_TAUNT_GUARDBASE",
-	"EV_TAUNT_PATROL"
+	"EV_TAUNT_PATROL",
+
+#ifdef USE_WEAPON_ORDER
+  "EV_ITEM_PICKUP2",			// had items
+#endif
+
+#ifdef USE_ALT_FIRE
+  "EV_ALTFIRE_WEAPON",
+  "EV_ALTFIRE_BOTH",
+#endif
+
+#ifdef USE_LV_DISCHARGE
+  "EV_LV_DISCHARGE",
+#endif
+
+#ifdef USE_HEADSHOTS
+  "EV_GIB_PLAYER_HEADSHOT",
+  "EV_BODY_NOHEAD",
+#endif
+
+#ifdef USE_DAMAGE_PLUMS
+  "EV_DAMAGEPLUM",			// damage plum
+#endif
+
+#ifdef USE_SINGLEPLAYER // entity
+	"EV_PLAYERSTOP",
+	"EV_EARTHQUAKE",
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  "EV_FROZEN",
+  "EV_UNFROZEN",
+#endif
+
 
 };
 
