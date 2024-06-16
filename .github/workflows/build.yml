@@ -268,7 +268,7 @@ jobs:
         make release -j 4 CC=${{ matrix.cc }} ARCH=${{ matrix.arch }} INSTALL=ginstall 
         cd ../../
         mkdir bin
-        mv ./build/linux/build/release-darwin-*/multigame/*.dylib ./bin/
+        mv ./build/linux/build/release-darwin-${{ matrix.arch }}/multigame/*.dylib ./bin/
 
     - uses: actions/upload-artifact@v2
       if: matrix.cc == 'clang' && matrix.config == 'Release'
