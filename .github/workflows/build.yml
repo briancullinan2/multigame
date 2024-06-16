@@ -264,11 +264,11 @@ jobs:
 
     - name: Build
       run: |
-        mkdir bin
         cd build/linux
         make release -j 4 CC=${{ matrix.cc }} INSTALL=ginstall 
         cd ../../
-        mv build/linux/build/release-darwin-x86_64/multigame/*.dylib bin/
+        mkdir bin
+        mv ./build/linux/build/release-darwin-x86_64/multigame/*.dylib ./bin/
 
     - uses: actions/upload-artifact@v2
       if: matrix.cc == 'clang' && matrix.config == 'Release'

@@ -270,12 +270,15 @@
     <ClCompile Include="..\..\code\cgame\cg_playerstate.c" />
     <ClCompile Include="..\..\code\cgame\cg_predict.c" />
     <ClCompile Include="..\..\code\cgame\cg_polybus.c" />
+    <ClCompile Include="..\..\code\cgame\cg_portal.c" />
     <ClCompile Include="..\..\code\cgame\cg_scoreboard.c" />
     <ClCompile Include="..\..\code\cgame\cg_servercmds.c" />
     <ClCompile Include="..\..\code\cgame\cg_snapshot.c" />
     <ClCompile Include="..\..\code\cgame\cg_syscalls.c" />
+    <ClCompile Include="..\..\code\cgame\cg_timer.c" />
     <ClCompile Include="..\..\code\cgame\cg_view.c" />
     <ClCompile Include="..\..\code\cgame\cg_weapons.c" />
+    <ClCompile Include="..\..\code\cgame\cg_weaporder.c" />
     <ClCompile Include="..\..\code\game\q_math.c" />
     <ClCompile Include="..\..\code\game\q_shared.c" />
   </ItemGroup>
