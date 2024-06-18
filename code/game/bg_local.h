@@ -51,6 +51,18 @@ extern	float	pm_flightfriction;
 
 extern	int		c_pmove;
 
+#ifdef CGAME
+#ifdef USE_PHYSICS_VARS
+#ifdef MISSIONPACK
+#define g_scoutFactor  cg_scoutFactor
+#endif
+
+#define g_hasteFactor  cg_hasteFactor
+#define g_jumpVelocity cg_jumpVelocity
+#define g_gravity      cg_gravity
+#define g_wallWalk     cg_wallWalk
+#endif // end USE_PHYSICS_VARS
+
 void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 void PM_AddTouchEnt( int entityNum );
 void PM_AddEvent( int newEvent );

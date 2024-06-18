@@ -1206,7 +1206,11 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) 
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+#if defined(USE_PHYSICS_VARS) && (defined(CGAME) || defined(QAGAME))
+    result[2] -= 0.5 * g_gravity.value * deltaTime * deltaTime;
+#else
 		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;		// FIXME: local gravity...
+#endif
 		break;
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trType );
@@ -1249,7 +1253,11 @@ void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorCopy( tr->trDelta, result );
+#if defined(USE_PHYSICS_VARS) && (defined(CGAME) || defined(QAGAME))
+    result[2] -= g_gravity.value * deltaTime;
+#else
 		result[2] -= DEFAULT_GRAVITY * deltaTime;		// FIXME: local gravity...
+#endif
 		break;
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trType );

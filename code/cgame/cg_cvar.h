@@ -131,5 +131,14 @@ CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
+#ifdef USE_PHYSICS_VARS
+#ifdef MISSIONPACK
+CG_CVAR( cg_scoutFactor, "cg_scoutFactor", "1.5", CVAR_SERVERINFO)
+#endif
+CG_CVAR( cg_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO)
+CG_CVAR( cg_jumpVelocity, "g_jumpVelocity", "270", CVAR_SERVERINFO)
+CG_CVAR( cg_gravity, "g_gravity", "800", CVAR_SERVERINFO)
+CG_CVAR( cg_wallWalk, "g_wallWalk", "0.7", CVAR_SERVERINFO)
+#endif
 
 #undef CG_CVAR
