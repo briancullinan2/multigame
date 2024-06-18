@@ -537,7 +537,7 @@ float Q_acos(float c);
 int		Q_rand( int *seed );
 float	Q_random( int *seed );
 float	Q_crandom( int *seed );
-const char	*Q_stristr( const char *s, const char *find);
+char	*Q_stristr( const char *s, const char *find);
 
 #define random()	((rand () & 0x7fff) / ((float)0x7fff))
 #define crandom()	(2.0 * (random() - 0.5))

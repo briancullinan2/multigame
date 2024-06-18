@@ -8,7 +8,6 @@
 #include "ui_local.h"
 
 uiStatic_t		uis;
-#if !defined(MISSIONPACK)
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
 
 #ifndef BUILD_GAME_STATIC

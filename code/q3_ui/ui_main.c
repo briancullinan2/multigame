@@ -71,7 +71,6 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 
 	return -1;
 }
-#endif
 
 
 /*
