@@ -8,10 +8,11 @@
 #include "ui_local.h"
 
 uiStatic_t		uis;
+#if !defined(MISSIONPACK)
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
 
+#ifndef BUILD_GAME_STATIC
 // these are here so the functions in q_shared.c can link
-#ifndef UI_HARD_LINKED
 
 void QDECL Com_Error( int level, const char *fmt, ... ) {
 	va_list		argptr;
@@ -33,6 +34,19 @@ void QDECL Com_Printf( const char *fmt, ... ) {
 	va_end (argptr);
 
 	trap_Print( text );
+}
+
+void QDECL Com_DPrintf( const char *msg, ... ) {
+	va_list		argptr;
+	char		text[1024];
+
+	va_start (argptr, msg);
+	ED_vsprintf (text, msg, argptr);
+	va_end (argptr);
+
+	if(ui_developer.integer) {
+		trap_Print( text );
+	}
 }
 
 #endif
@@ -909,7 +923,7 @@ void UI_MouseEvent( int dx, int dy )
 		if (uis.activemenu->cursor != i)
 		{
 			Menu_SetCursor( uis.activemenu, i );
-			((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor_prev]))->flags &= ~QMF_HASMOUSEFOCUS;
+			((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor_prev]))->flags &= (unsigned int)~QMF_HASMOUSEFOCUS;
 
 			if ( !(((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->flags & QMF_SILENT ) ) {
 				trap_S_StartLocalSound( menu_move_sound, CHAN_LOCAL_SOUND );
@@ -922,7 +936,7 @@ void UI_MouseEvent( int dx, int dy )
 
 	if (uis.activemenu->nitems > 0) {
 		// out of any region
-		((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->flags &= ~QMF_HASMOUSEFOCUS;
+		((menucommon_s*)(uis.activemenu->items[uis.activemenu->cursor]))->flags &= (unsigned int)~QMF_HASMOUSEFOCUS;
 	}
 }
 

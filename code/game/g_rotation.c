@@ -101,7 +101,7 @@ __rescan:
 		if ( tk[0] == '\0' ) 
 			break;
 
-		if ( tk[0] == '$' && tk[1] != '\0' ) // cvar name
+		if ( tk[0] == '$' ) // cvar name
 		{
 			 // save cvar name
 			strcpy( cvar, tk+1 );

@@ -9,11 +9,11 @@
 displayContextDef_t cgDC;
 #endif
 
-int forceModelModificationCount = -1;
-int enemyModelModificationCount  = -1;
-int	enemyColorsModificationCount = -1;
-int teamModelModificationCount  = -1;
-int	teamColorsModificationCount = -1;
+static int forceModelModificationCount = -1;
+static int enemyModelModificationCount  = -1;
+static int enemyColorsModificationCount = -1;
+static int teamModelModificationCount  = -1;
+static int teamColorsModificationCount = -1;
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
@@ -40,8 +40,12 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .q3vm file
 ================
 */
-DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 ) {
-
+#ifdef BUILD_GAME_STATIC
+intptr_t CG_Call( int command, int arg0, int arg1, int arg2 )
+#else
+DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
+#endif
+{
 	switch ( command ) {
 	case CG_INIT:
 		CG_Init( arg0, arg1, arg2 );
@@ -241,7 +245,7 @@ void QDECL CG_Error( const char *msg, ... ) {
 	trap_Error( text );
 }
 
-#ifndef CGAME_HARD_LINKED
+#ifndef BUILD_GAME_STATIC
 // this is only here so the functions in q_shared.c and bg_*.c can link (FIXME)
 
 void QDECL Com_Error( int level, const char *error, ... ) {
@@ -265,6 +269,20 @@ void QDECL Com_Printf( const char *msg, ... ) {
 
 	trap_Print( text );
 }
+
+void QDECL Com_DPrintf( const char *msg, ... ) {
+	va_list		argptr;
+	char		text[1024];
+
+	va_start (argptr, msg);
+	ED_vsprintf (text, msg, argptr);
+	va_end (argptr);
+
+	if(cg_developer.integer) {
+		trap_Print( text );
+	}
+}
+
 
 #endif
 

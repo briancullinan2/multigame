@@ -8,11 +8,16 @@
 #error "Do not use in VM build"
 #endif
 
+#ifndef BUILD_GAME_STATIC
 static dllSyscall_t syscall = (dllSyscall_t)-1;
 
 DLLEXPORT void dllEntry( dllSyscall_t syscallptr ) {
 	syscall = syscallptr;
 }
+#else
+#define syscall SV_DllSyscall
+#define PASSFLOAT GPASSFLOAT
+#endif
 
 int PASSFLOAT( float x ) {
 	float	floatTemp;

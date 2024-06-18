@@ -1105,8 +1105,6 @@ typedef struct {
 	int				teamLastChatPos;
 
 #ifdef MISSIONPACK
-	int cursorX;
-	int cursorY;
 	qboolean eventHandling;
 	qboolean mouseCaptured;
 	qboolean sizingHud;

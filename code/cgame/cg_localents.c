@@ -637,7 +637,7 @@ void CG_AddKamikaze( localEntity_t *le ) {
 		memset(&shockwave, 0, sizeof(shockwave));
 		shockwave.hModel = cgs.media.kamikazeShockWave;
 		shockwave.reType = RT_MODEL;
-		shockwave.shaderTime = re->shaderTime;
+		shockwave.u.shaderTime = re->u.shaderTime;
 		VectorCopy(re->origin, shockwave.origin);
 
 		c = (float)(t - KAMI_SHOCKWAVE_STARTTIME) / (float)(KAMI_SHOCKWAVE_ENDTIME - KAMI_SHOCKWAVE_STARTTIME);
@@ -706,7 +706,7 @@ void CG_AddKamikaze( localEntity_t *le ) {
 		memset(&shockwave, 0, sizeof(shockwave));
 		shockwave.hModel = cgs.media.kamikazeShockWave;
 		shockwave.reType = RT_MODEL;
-		shockwave.shaderTime = re->shaderTime;
+		shockwave.u.shaderTime = re->u.shaderTime;
 		VectorCopy(re->origin, shockwave.origin);
 
 		test[0] = le->angles.trBase[0];

@@ -69,15 +69,13 @@ tryagain:
 	}
 
 	if ( weaponNum == WP_MACHINEGUN || weaponNum == WP_GAUNTLET || weaponNum == WP_BFG ) {
-		strcpy( path, item->world_model[0] );
-		COM_StripExtension( path, path );
-		strcat( path, "_barrel.md3" );
+		COM_StripExtension( item->world_model[0], path, sizeof(path) );
+		Q_strcat( path, sizeof( path ), "_barrel.md3" );
 		pi->barrelModel = trap_R_RegisterModel( path );
 	}
 
-	strcpy( path, item->world_model[0] );
-	COM_StripExtension( path, path );
-	strcat( path, "_flash.md3" );
+	COM_StripExtension( item->world_model[0], path, sizeof(path) );
+	Q_strcat( path, sizeof( path ), "_flash.md3" );
 	pi->flashModel = trap_R_RegisterModel( path );
 
 	switch( weaponNum ) {
@@ -631,7 +629,7 @@ static void UI_PlayerFloatSprite( playerInfo_t *pi, vec3_t origin, qhandle_t sha
 UI_MachinegunSpinAngle
 ======================
 */
-float	UI_MachinegunSpinAngle( playerInfo_t *pi ) {
+static float	UI_MachinegunSpinAngle2( playerInfo_t *pi ) {
 	int		delta;
 	float	angle;
 	float	speed;
@@ -694,10 +692,10 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 
 	dp_realtime = time;
 
-	if ( pi->pendingWeapon != -1 && dp_realtime > pi->weaponTimer ) {
+	if ( pi->pendingWeapon != WP_PENDING && dp_realtime > pi->weaponTimer ) {
 		pi->weapon = pi->pendingWeapon;
 		pi->lastWeapon = pi->pendingWeapon;
-		pi->pendingWeapon = -1;
+		pi->pendingWeapon = WP_PENDING;
 		pi->weaponTimer = 0;
 		if( pi->currentWeapon != pi->weapon ) {
 			trap_S_StartLocalSound( weaponChangeSound, CHAN_LOCAL );
@@ -1183,7 +1181,7 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 		}
 	}
 
-	if (headModelName && headModelName[0] == '*' ) {
+	if (headModelName[0] == '*' ) {
 		Com_sprintf( filename, sizeof( filename ), "models/players/heads/%s/%s.md3", &headModelName[1], &headModelName[1] );
 	}
 	else {
@@ -1233,7 +1231,7 @@ void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model, const char *he
 	pi->weapon = WP_MACHINEGUN;
 	pi->currentWeapon = pi->weapon;
 	pi->lastWeapon = pi->weapon;
-	pi->pendingWeapon = -1;
+	pi->pendingWeapon = WP_PENDING;
 	pi->weaponTimer = 0;
 	pi->chat = qfalse;
 	pi->newModel = qtrue;
@@ -1272,11 +1270,11 @@ void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_
 		pi->torso.yawAngle = viewAngles[YAW];
 		pi->torso.yawing = qfalse;
 
-		if ( weaponNumber != -1 ) {
+		if ( weaponNumber != WP_PENDING ) {
 			pi->weapon = weaponNumber;
 			pi->currentWeapon = weaponNumber;
 			pi->lastWeapon = weaponNumber;
-			pi->pendingWeapon = -1;
+			pi->pendingWeapon = WP_PENDING;
 			pi->weaponTimer = 0;
 			UI_PlayerInfo_SetWeapon( pi, pi->weapon );
 		}
@@ -1285,8 +1283,8 @@ void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_
 	}
 
 	// weapon
-	if ( weaponNumber == -1 ) {
-		pi->pendingWeapon = -1;
+	if ( weaponNumber == WP_PENDING ) {
+		pi->pendingWeapon = WP_PENDING;
 		pi->weaponTimer = 0;
 	}
 	else if ( weaponNumber != WP_NONE ) {

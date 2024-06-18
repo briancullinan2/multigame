@@ -1932,7 +1932,7 @@ static void CG_DrawCenterString( void ) {
 	int		l;
 	int		y;
 #ifdef MISSIONPACK // bk010221 - unused else
-  int h;
+	int x, w, h;
 #endif
 	float	*color;
 
@@ -2103,6 +2103,9 @@ CG_DrawCrosshairNames
 static void CG_DrawCrosshairNames( void ) {
 	float		*color;
 	const char	*name;
+#ifdef MISSIONPACK
+	int w;
+#endif
 
 	if ( !cg_drawCrosshair.integer ) {
 		return;

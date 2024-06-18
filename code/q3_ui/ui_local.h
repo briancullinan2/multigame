@@ -80,6 +80,7 @@ typedef struct _tag_menuframework
 	void *items[MAX_MENUITEMS];
 
 	void (*draw) (void);
+	void (*init) (void);
 	sfxHandle_t (*key) (int key);
 
 	qboolean	wrapAround;
@@ -497,6 +498,7 @@ typedef struct {
 	qboolean			demoversion;
 	qboolean			firstdraw;
 	int					lastVideoCheck;
+	int startTime;
 } uiStatic_t;
 
 extern void			UI_Init( void );

@@ -142,12 +142,9 @@ CG_General
 */
 static void CG_General( const centity_t *cent ) {
 	refEntity_t			ent;
-	const entityState_t	*s1;
-
-	s1 = &cent->currentState;
 
 	// if set to invisible, skip
-	if (!s1->modelindex) {
+	if (!cent->currentState.modelindex) {
 		return;
 	}
 
@@ -155,17 +152,20 @@ static void CG_General( const centity_t *cent ) {
 
 	// set frame
 
-	ent.frame = s1->frame;
+	ent.frame = cent->currentState.frame;
 	ent.oldframe = ent.frame;
 	ent.backlerp = 0;
 
 	VectorCopy( cent->lerpOrigin, ent.origin);
 	VectorCopy( cent->lerpOrigin, ent.oldorigin);
 
-	ent.hModel = cgs.gameModels[s1->modelindex];
+	ent.hModel = cgs.gameModels[cent->currentState.modelindex];
+  if(!ent.hModel) {
+    return;
+  }
 
 	// player model
-	if (s1->number == cg.snap->ps.clientNum) {
+	if (cent->currentState.number == cg.snap->ps.clientNum) {
 		ent.renderfx |= RF_THIRD_PERSON;	// only draw from mirrors
 	}
 

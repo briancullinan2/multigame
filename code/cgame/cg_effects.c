@@ -246,9 +246,9 @@ void CG_KamikazeEffect( vec3_t org ) {
 	re->reType = RT_MODEL;
 
 	if ( intShaderTime )
-		re->intShaderTime = cg.time;
+		re->u.intShaderTime = cg.time;
 	else
-		re->shaderTime = cg.time / 1000.0f;
+		re->u.shaderTime = cg.time / 1000.0f;
 
 	re->hModel = cgs.media.kamikazeEffectModel;
 

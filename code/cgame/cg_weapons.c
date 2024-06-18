@@ -849,13 +849,13 @@ void CG_RegisterItemVisuals( int itemNum ) {
 
 	itemInfo->models[0] = trap_R_RegisterModel( item->world_model[0] );
 
-	itemInfo->icon = trap_R_RegisterShader( item->icon );
+	itemInfo->icon = trap_R_RegisterShaderNoMip( item->icon );
 
 	// try to register depth-fragment shaders
 	if ( cg.clientFrame == 0 && cg.skipDFshaders ) {
 		itemInfo->icon_df = 0;
 	} else {
-		itemInfo->icon_df = trap_R_RegisterShader( va( "%s_df", item->icon ) );
+		itemInfo->icon_df = trap_R_RegisterShaderNoMip( va( "%s_df", item->icon ) );
 	}
 
 	if ( !itemInfo->icon_df ) {

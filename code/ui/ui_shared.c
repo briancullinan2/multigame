@@ -2,6 +2,9 @@
 // string allocation/managment
 
 #include "ui_shared.h"
+#ifdef CGAME
+#include "../cgame/cg_local.h"
+#endif
 
 #define SCROLL_TIME_START					500
 #define SCROLL_TIME_ADJUST				150
@@ -74,7 +77,7 @@ void *UI_Alloc( int size ) {
 	if ( allocPoint + size > MEM_POOL_SIZE ) {
 		outOfMemory = qtrue;
 		if (DC->Print) {
-			DC->Print("UI_Alloc: Failure. Out of memory!\n");
+			DC->Print("UI_Alloc: Failure. Out of memory! %i, %i > %i\n", allocPoint, size, MEM_POOL_SIZE);
 		}
     //DC->trap_Print(S_COLOR_YELLOW"WARNING: UI Out of Memory!\n");
 		return NULL;
@@ -225,6 +228,9 @@ void String_Init() {
 	}
 }
 
+extern int ED_vsprintf( char *buffer, const char *fmt, va_list argptr );
+
+
 /*
 =================
 PC_SourceWarning
@@ -237,7 +243,7 @@ void PC_SourceWarning(int handle, char *format, ...) {
 	static char string[4096];
 
 	va_start (argptr, format);
-	vsprintf (string, format, argptr);
+	ED_vsprintf (string, format, argptr);
 	va_end (argptr);
 
 	filename[0] = '\0';
@@ -259,7 +265,7 @@ void PC_SourceError(int handle, char *format, ...) {
 	static char string[4096];
 
 	va_start (argptr, format);
-	vsprintf (string, format, argptr);
+	ED_vsprintf (string, format, argptr);
 	va_end (argptr);
 
 	filename[0] = '\0';
@@ -745,6 +751,10 @@ void Menu_UpdatePosition(menuDef_t *menu) {
   }
 }
 
+#ifdef CGAME
+extern cgs_t cgs;
+#endif
+
 void Menu_PostParse(menuDef_t *menu) {
 	if (menu == NULL) {
 		return;
@@ -752,8 +762,13 @@ void Menu_PostParse(menuDef_t *menu) {
 	if (menu->fullScreen) {
 		menu->window.rect.x = 0;
 		menu->window.rect.y = 0;
+#ifdef CGAME
+    menu->window.rect.w = cgs.screenXmax;
+    menu->window.rect.h = cgs.screenYmax;
+#else
 		menu->window.rect.w = 640;
 		menu->window.rect.h = 480;
+#endif
 	}
 	Menu_UpdatePosition(menu);
 }
@@ -1091,10 +1106,10 @@ void Menu_TransitionItemByName(menuDef_t *menu, const char *p, rectDef_t rectFro
       item->window.offsetTime = time;
 			memcpy(&item->window.rectClient, &rectFrom, sizeof(rectDef_t));
 			memcpy(&item->window.rectEffects, &rectTo, sizeof(rectDef_t));
-			item->window.rectEffects2.x = abs(rectTo.x - rectFrom.x) / amt;
-			item->window.rectEffects2.y = abs(rectTo.y - rectFrom.y) / amt;
-			item->window.rectEffects2.w = abs(rectTo.w - rectFrom.w) / amt;
-			item->window.rectEffects2.h = abs(rectTo.h - rectFrom.h) / amt;
+			item->window.rectEffects2.x = abs((int)(rectTo.x - rectFrom.x)) / amt;
+			item->window.rectEffects2.y = abs((int)(rectTo.y - rectFrom.y)) / amt;
+			item->window.rectEffects2.w = abs((int)(rectTo.w - rectFrom.w)) / amt;
+			item->window.rectEffects2.h = abs((int)(rectTo.h - rectFrom.h)) / amt;
       Item_UpdatePosition(item);
     }
   }
@@ -2516,7 +2531,7 @@ void  Menus_Activate(menuDef_t *menu) {
 
 }
 
-int Display_VisibleMenuCount() {
+int Display_VisibleMenuCount( void ) {
 	int i, count;
 	count = 0;
 	for (i = 0; i < menuCount; i++) {
