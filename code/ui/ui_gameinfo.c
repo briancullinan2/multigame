@@ -3,6 +3,9 @@
 //
 // gameinfo.c
 //
+#ifndef MISSIONPACK
+#error this file is for mission pack -DMISSIONPACK=1
+#endif
 
 #include "ui_local.h"
 
