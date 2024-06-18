@@ -199,6 +199,15 @@ static void CG_Speaker( centity_t *cent ) {
 	cent->miscTime = cg.time + cent->currentState.frame * 100 + cent->currentState.clientNum * 100 * crandom();
 }
 
+
+#ifdef USE_ITEM_TIMERS
+#ifdef USE_GUNNM_TIMER
+static void CG_ItemTimer( entityState_t	*es, const vec3_t origin );
+#else
+void CG_ItemTimer(int client, const vec3_t origin, int startTime, int respawnTime);
+#endif
+#endif
+
 /*
 ==================
 CG_Item
@@ -219,6 +228,20 @@ static void CG_Item( centity_t *cent ) {
 	if ( es->modelindex >= bg_numItems ) {
 		CG_Error( "Bad item index %i on entity", es->modelindex );
 	}
+
+#ifdef USE_ITEM_TIMERS
+  if(es->frame
+		&& (es->eFlags & EF_NODRAW)
+    && (es->eFlags & EF_TIMER)) {
+#ifdef USE_GUNNM_TIMER
+#error problem
+		CG_ItemTimer(es, cent->lerpOrigin);
+#else
+		CG_ItemTimer( es->number, cent->lerpOrigin, es->time, es->frame * 1000 ); // save bandwidth
+#endif
+		return;
+  }
+#endif
 
 	// if set to invisible, skip
 	if ( !es->modelindex || ( es->eFlags & EF_NODRAW ) || cent->delaySpawn > cg.time ) {

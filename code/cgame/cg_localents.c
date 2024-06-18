@@ -936,6 +936,15 @@ void CG_AddLocalEntities( void ) {
 			CG_AddScorePlum( le );
 			break;
 
+
+/*
+#ifdef USE_ITEM_TIMERS
+    case LE_ITEMTIMER:
+			CG_AddItemTimer( le );
+			break;
+#endif
+*/
+
 #ifdef MISSIONPACK
 		case LE_KAMIKAZE:
 			CG_AddKamikaze( le );
