@@ -445,6 +445,11 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+
+#ifdef USE_DAMAGE_PLUMS
+  EV_DAMAGEPLUM,			// damage plum
+#endif
+
 	EV_MAX
 
 } entity_event_t;

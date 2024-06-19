@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// compile damage plums every time someone gets hit
+#define USE_DAMAGE_PLUMS 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

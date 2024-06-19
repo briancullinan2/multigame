@@ -230,6 +230,9 @@ typedef enum {
 	LE_FADE_RGB,
 	LE_SCALE_FADE,
 	LE_SCOREPLUM,
+#ifdef USE_DAMAGE_PLUMS
+  LE_DAMAGEPLUM,
+#endif
 #ifdef MISSIONPACK
 	LE_KAMIKAZE,
 	LE_INVULIMPACT,
@@ -1401,6 +1404,9 @@ void CG_InvulnerabilityJuiced( vec3_t org );
 void CG_LightningBoltBeam( vec3_t start, vec3_t end );
 #endif
 void CG_ScorePlum( int client, const vec3_t origin, int score );
+#ifdef USE_DAMAGE_PLUMS
+void CG_DamagePlum( int client, const vec3_t origin, int damage );
+#endif
 
 void CG_GibPlayer( const vec3_t playerOrigin );
 void CG_BigExplode( vec3_t playerOrigin );
