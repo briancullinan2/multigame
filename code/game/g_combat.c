@@ -77,8 +77,12 @@ void TossClientItems( gentity_t *self ) {
 		}
 	}
 
-	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
-		self->client->ps.ammo[ weapon ] ) {
+	if ( weapon > WP_MACHINEGUN 
+#ifdef USE_INSTAGIB
+    // don't drop anything in instagib mode
+    && !g_instagib.integer
+#endif
+    && self->client->ps.ammo[ weapon ] ) {
 		// find the item type for this weapon
 		item = BG_FindItemForWeapon( weapon );
 

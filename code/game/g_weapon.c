@@ -469,6 +469,11 @@ void weapon_railgun_fire( gentity_t *ent ) {
 	int			passent;
 	gentity_t	*unlinkedEntities[MAX_RAIL_HITS];
 
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer) {
+    damage = 500 * s_quadFactor;
+  } else
+#endif
 	damage = 100 * s_quadFactor;
 
 	VectorMA( muzzle_origin, 8192.0, forward, end );

@@ -1095,6 +1095,16 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;
+
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer) {
+    client->ps.stats[STAT_WEAPONS] = ( 1 << WP_RAILGUN );
+    // bots don't seem to like -1 as ammo amount, maybe this can be fixed
+    //   during advanced grapple hook tutorial.
+    client->ps.ammo[WP_RAILGUN] = INFINITE;  
+  }
+#endif
+
 	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
 
 	// health will count down towards max_health

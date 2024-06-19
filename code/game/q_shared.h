@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// instagib mode
+#define USE_INSTAGIB 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

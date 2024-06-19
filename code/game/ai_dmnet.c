@@ -1292,6 +1292,10 @@ BotSelectActivateWeapon
 ==================
 */
 int BotSelectActivateWeapon(bot_state_t *bs) {
+#ifdef USE_INSTAGIB
+  if(bot_instagib.integer)
+    return WEAPONINDEX_RAILGUN;
+#endif
 	//
 	if (bs->inventory[INVENTORY_MACHINEGUN] > 0 && bs->inventory[INVENTORY_BULLETS] > 0)
 		return WEAPONINDEX_MACHINEGUN;

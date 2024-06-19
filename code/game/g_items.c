@@ -473,6 +473,11 @@ Touch_Item
 void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int			respawn;
 	qboolean	predict;
+#ifdef USE_INSTAGIB
+	//SCO if ent-item is some sort of team item.
+	if (g_instagib.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
 
 	if (!other->client)
 		return;
@@ -865,6 +870,11 @@ void ClearRegisteredItems( void ) {
 		RegisterItem( BG_FindItem( "Blue Cube" ) );
 	}
 #endif
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer)
+  //register that rail gun
+	  RegisterItem( BG_FindItemForWeapon( WP_RAILGUN ) );
+#endif
 }
 
 /*
@@ -938,6 +948,15 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 	G_SpawnFloat( "random", "0", &ent->random );
 	G_SpawnFloat( "wait", "0", &ent->wait );
 
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer && item->giType != IT_TEAM) {
+		// don't send items to clients
+		ent->r.svFlags = SVF_NOCLIENT;
+		// don't draw items on client
+		ent->s.eFlags |= EF_NODRAW;
+    ent->tag = TAG_DONTSPAWN;
+	} else
+#endif
 	RegisterItem( item );
 
 	if ( G_ItemDisabled( item ) ) {
