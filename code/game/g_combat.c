@@ -298,6 +298,9 @@ char	*modNames[] = {
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
 #endif
+#ifdef USE_HEADSHOTS
+  "MOD_HEADSHOT",
+#endif
 	"MOD_GRAPPLE"
 };
 
@@ -467,6 +470,18 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		killer = ENTITYNUM_WORLD;
 		killerName = "<world>";
 	}
+#ifdef USE_MODES_DEATH
+  if (attacker && attacker->health < 0 ) {
+    meansOfDeath = MOD_FROM_GRAVE;
+  }
+  if (level.time - self->splashTime < 4000
+    && meansOfDeath == MOD_VOID) {
+    attacker = self->splashAttacker;
+    killer = self->splashAttacker->s.number;
+    killerName = self->splashAttacker->client->pers.netname;
+    meansOfDeath = MOD_RING_OUT;
+	}
+#endif
 
 	if ( killer < 0 || killer >= MAX_CLIENTS ) {
 		killer = ENTITYNUM_WORLD;
@@ -500,6 +515,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		if ( attacker == self || OnSameTeam (self, attacker ) ) {
 			AddScore( attacker, self->r.currentOrigin, -1 );
 		} else {
+#ifdef USE_MODES_DEATH
+      if(meansOfDeath == MOD_RING_OUT) {
+        AddScore( self, self->r.currentOrigin, -1 );
+      }
+#endif
 			AddScore( attacker, self->r.currentOrigin, 1 );
 
 			if( meansOfDeath == MOD_GAUNTLET ) {
@@ -538,7 +558,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	Team_FragBonuses(self, inflictor, attacker);
 
 	// if I committed suicide, the flag does not fall, it returns.
-	if (meansOfDeath == MOD_SUICIDE) {
+	if (meansOfDeath == MOD_SUICIDE
+#ifdef USE_MODES_DEATH
+		|| meansOfDeath == MOD_SPECTATE
+#endif
+	) {
 #ifdef MISSIONPACK
 		if ( self->client->ps.powerups[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
@@ -620,7 +644,16 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
 
 	// never gib in a nodrop
-	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP) && g_blood.integer) || meansOfDeath == MOD_SUICIDE) {
+	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP)
+    && g_blood.integer
+#ifdef USE_HEADSHOTS
+    && meansOfDeath != MOD_HEADSHOT
+#endif
+    ) || meansOfDeath == MOD_SUICIDE
+#ifdef USE_MODES_DEATH
+		|| meansOfDeath == MOD_SPECTATE
+#endif
+  ) {
 		// gib death
 		GibEntity( self, killer );
 	} else {
@@ -651,6 +684,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		self->client->ps.torsoAnim = 
 			( ( self->client->ps.torsoAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT ) | anim;
 
+#ifdef USE_HEADSHOTS
+    if(meansOfDeath == MOD_HEADSHOT) {
+      G_AddEvent( self, EV_GIB_PLAYER_HEADSHOT, killer );
+    } else
+#endif
 		G_AddEvent( self, EV_DEATH1 + i, killer );
 
 		// the body can still be gibbed
@@ -903,6 +941,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		VectorScale (dir, g_knockback.value * (float)knockback / mass, kvel);
 		VectorAdd (targ->client->ps.velocity, kvel, targ->client->ps.velocity);
 
+#ifdef USE_MODES_DEATH
+    targ->splashAttacker = attacker;
+    targ->splashTime = level.time;
+#endif
+
 		// set the timer so that the other client can't cancel
 		// out the movement immediately
 		if ( !targ->client->ps.pm_time ) {
@@ -1040,6 +1083,41 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		// set the last client who damaged the target
 		targ->client->lasthurt_client = attacker->s.number;
 		targ->client->lasthurt_mod = mod;
+
+#ifdef USE_HEADSHOTS
+    if (attacker->client && targ && targ->health > 0
+      && inflictor && inflictor->s.weapon == WP_RAILGUN) {
+    	// let's say only railgun can do head shots
+    	if((targ->client->lasthurt_location & LOCATION_HEAD)
+        || (targ->client->lasthurt_location & LOCATION_FACE)) {
+        /*
+        float	z_ratio;
+        float	z_rel;
+        int	height;
+        float	targ_maxs2;
+        targ_maxs2 = targ->r.maxs[2];
+    	
+    		// handling crouching
+    		if(targ->client->ps.pm_flags & PMF_DUCKED){
+    			height = (abs(targ->r.mins[2]) + targ_maxs2)*(0.75);
+    		}
+    		else
+    			height = abs(targ->r.mins[2]) + targ_maxs2; 
+    			
+    		// project the z component of point 
+    		// onto the z component of the model's origin
+    		// this results in the z component from the origin at 0
+    		z_rel = point[2] - targ->r.currentOrigin[2] + abs(targ->r.mins[2]);
+    		z_ratio = z_rel / height;
+    	
+    		if (z_ratio > 0.90) {
+        */
+  			take = 9999; // head shot is a sure kill
+  			targ->client->lasthurt_mod = mod = MOD_HEADSHOT;
+        // }
+    	}
+    }
+#endif
 	}
 
 	// do the damage
