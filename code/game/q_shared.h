@@ -148,6 +148,8 @@
 
 // extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
 #define USE_MODES_DEATH 1
+// enable lightening discharge that kills players in radius when used in water
+#define USE_LV_DISCHARGE 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

@@ -445,6 +445,11 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+
+#ifdef USE_LV_DISCHARGE
+  EV_LV_DISCHARGE,
+#endif
+
 	EV_MAX
 
 } entity_event_t;
@@ -608,6 +613,9 @@ typedef enum {
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
+#ifdef USE_LV_DISCHARGE
+  MOD_LV_DISCHARGE,
+#endif
 #endif
 #ifdef USE_HEADSHOTS
   MOD_HEADSHOT,

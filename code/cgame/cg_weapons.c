@@ -1048,6 +1048,11 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 
 	VectorMA( muzzlePoint, 14, forward, muzzlePoint );
 
+#ifdef USE_LV_DISCHARGE
+  // The SARACEN's Lightning Discharge
+	if (trap_CM_PointContents (muzzlePoint, 0) & MASK_WATER) return;
+#endif
+
 	// project forward by the lightning range
 	VectorMA( muzzlePoint, LIGHTNING_RANGE, forward, endPoint );
 

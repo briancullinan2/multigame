@@ -320,9 +320,21 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_RAILGUN:
 			message = "was railed by";
 			break;
+#ifdef USE_LV_DISCHARGE
+// The SARACEN's Lightning Discharge - START
+    // Classic Quake style obituary - the original and the best!!!
+		case MOD_LIGHTNING:
+			message = "was shafted by";
+			break;
+		case MOD_LV_DISCHARGE:
+			message = "was discharged by";
+			break;
+// The SARACEN's Lightning Discharge - END
+#else
 		case MOD_LIGHTNING:
 			message = "was electrocuted by";
 			break;
+#endif
 		case MOD_BFG:
 		case MOD_BFG_SPLASH:
 			message = "was blasted by";
@@ -579,6 +591,9 @@ void CG_PainEvent( centity_t *cent, int health ) {
 
 #ifdef USE_HEADSHOTS
 void CG_GibPlayerHeadshot( vec3_t playerOrigin );
+#endif
+#ifdef USE_LV_DISCHARGE
+void CG_Lightning_Discharge (vec3_t origin, int msec);
 #endif
 
 /*
@@ -1064,6 +1079,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	case EV_SHOTGUN:
 		CG_ShotgunFire( es );
 		break;
+
+#ifdef USE_LV_DISCHARGE
+// The SARACEN's Lightning Discharge - START
+	case EV_LV_DISCHARGE:
+		CG_Lightning_Discharge (position, es->eventParm);	// eventParm is duration/size
+		break;
+// The SARACEN's Lightning Discharge - END
+#endif
 
 	case EV_GENERAL_SOUND:
 		if ( cgs.gameSounds[ es->eventParm ] ) {

@@ -1363,6 +1363,10 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
 
+#ifdef USE_LV_DISCHARGE
+  "EV_LV_DISCHARGE",
+#endif
+
 };
 
 /*

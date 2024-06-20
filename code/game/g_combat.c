@@ -297,6 +297,9 @@ char	*modNames[] = {
 	"MOD_PROXIMITY_MINE",
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
+#ifdef USE_LV_DISCHARGE
+  "MOD_LV_DISCHARGE",
+#endif
 #endif
 #ifdef USE_HEADSHOTS
   "MOD_HEADSHOT",
@@ -1303,3 +1306,71 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 
 	return hitClient;
 }
+
+
+#ifdef USE_LV_DISCHARGE
+/*
+============
+G_WaterRadiusDamage for The SARACEN's Lightning Discharge
+============
+*/
+qboolean G_WaterRadiusDamage (vec3_t origin, gentity_t *attacker, float damage, float radius,
+					 gentity_t *ignore, int mod)
+{
+	float		points, dist;
+	gentity_t	*ent;
+	int		entityList[MAX_GENTITIES];
+	int		numListedEntities;
+	vec3_t		mins, maxs;
+	vec3_t		v;
+	vec3_t		dir;
+	int		i, e;
+	qboolean	hitClient = qfalse;
+
+	if (!(trap_PointContents (origin, -1) & MASK_WATER)) return qfalse;
+		// if we're not underwater, forget it!
+
+	if (radius < 1) radius = 1;
+
+	for (i = 0 ; i < 3 ; i++)
+	{
+		mins[i] = origin[i] - radius;
+		maxs[i] = origin[i] + radius;
+	}
+
+	numListedEntities = trap_EntitiesInBox (mins, maxs, entityList, MAX_GENTITIES);
+
+	for (e = 0 ; e < numListedEntities ; e++)
+	{
+		ent = &g_entities[entityList[e]];
+
+		if (ent == ignore)			continue;
+		if (!ent->takedamage)		continue;
+
+		// find the distance from the edge of the bounding box
+		for (i = 0 ; i < 3 ; i++)
+		{
+			     if (origin[i] < ent->r.absmin[i]) v[i] = ent->r.absmin[i] - origin[i];
+			else if (origin[i] > ent->r.absmax[i]) v[i] = origin[i] - ent->r.absmax[i];
+			else v[i] = 0;
+		}
+
+		dist = VectorLength(v);
+		if (dist >= radius)			continue;
+
+		points = damage * (1.0 - dist / radius);
+
+		if (CanDamage (ent, origin) && ent->waterlevel) 	// must be in the water, somehow!
+		{
+			if (LogAccuracyHit (ent, attacker)) hitClient = qtrue;
+			VectorSubtract (ent->r.currentOrigin, origin, dir);
+			// push the center of mass higher than the origin so players
+			// get knocked into the air more
+			dir[2] += 24;
+			G_Damage (ent, NULL, attacker, dir, origin, (int)points, DAMAGE_RADIUS, mod);
+		}
+	}
+
+	return hitClient;
+}
+#endif
