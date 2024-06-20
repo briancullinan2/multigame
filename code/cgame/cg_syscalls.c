@@ -247,10 +247,6 @@ void	trap_R_AddPolysToScene( qhandle_t hShader , int numVerts, const polyVert_t 
 	syscall( CG_R_ADDPOLYSTOSCENE, hShader, numVerts, verts, num );
 }
 
-void    trap_R_AddPolyBufferToScene( polyBuffer_t* pPolyBuffer ) {
-	syscall( CG_R_ADDPOLYBUFFERTOSCENE, pPolyBuffer );
-}
-
 int		trap_R_LightForPoint( vec3_t point, vec3_t ambientLight, vec3_t directedLight, vec3_t lightDir ) {
 	return syscall( CG_R_LIGHTFORPOINT, point, ambientLight, directedLight, lightDir );
 }
@@ -446,4 +442,8 @@ void trap_R_AddRefEntityToScene2( const refEntity_t *re ) {
 
 void trap_R_AddLinearLightToScene( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b ) {
 	syscall( dll_trap_R_AddLinearLightToScene, start, end, intensity, r, g, b );
+}
+
+void    trap_R_AddPolyBufferToScene( polyBuffer_t* pPolyBuffer ) {
+	syscall( dll_trap_R_AddPolyBufferToScene, pPolyBuffer );
 }
