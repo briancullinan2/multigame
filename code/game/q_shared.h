@@ -146,6 +146,12 @@
 
 //=============================================================
 
+// unholy trinity mode, start with rocket, rails, lightning
+#define USE_TRINITY 1
+// hot rockets do no self-splash damage, infinite rockets, intagib on direct hits
+#define USE_HOTRPG 1
+// hot BFG better balance, infinite ammo
+#define USE_HOTBFG 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

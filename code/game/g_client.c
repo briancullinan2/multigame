@@ -1097,6 +1097,37 @@ void ClientSpawn(gentity_t *ent) {
 	client->ps.ammo[WP_GAUNTLET] = -1;
 	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
 
+#ifdef USE_TRINITY
+if(g_unholyTrinity.integer) {
+  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_RAILGUN ) | ( 1 << WP_LIGHTNING ) | ( 1 << WP_ROCKET_LAUNCHER );
+  client->ps.ammo[WP_RAILGUN] = INFINITE;  
+  client->ps.ammo[WP_LIGHTNING] = INFINITE;  
+  client->ps.ammo[WP_ROCKET_LAUNCHER] = INFINITE;  
+}
+#endif
+#ifdef USE_HOTRPG
+if(g_hotRockets.integer) {
+  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_ROCKET_LAUNCHER );
+  client->ps.ammo[WP_ROCKET_LAUNCHER] = INFINITE;  
+}
+#endif
+#ifdef USE_HOTBFG
+if(g_hotBFG.integer) {
+  int handicap, max;
+  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_BFG );
+  client->ps.ammo[WP_BFG] = INFINITE;  
+  trap_GetUserinfo( client - level.clients, userinfo, sizeof(userinfo) );
+  handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
+  if( handicap<=0.0f || handicap>100.0f) {
+    handicap = 100.0f;
+  }
+  max = (int)(2 *  handicap);
+  ent->health = max;
+  client->ps.stats[STAT_HEALTH] = max;
+  client->ps.stats[STAT_MAX_HEALTH] = max;
+}
+#endif
+
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
 

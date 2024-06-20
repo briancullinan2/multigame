@@ -258,9 +258,16 @@ void BFG_Fire( gentity_t *ent ) {
 	gentity_t *m;
 
 	m = fire_bfg( ent, muzzle, forward );
-	m->damage *= s_quadFactor;
-	m->splashDamage *= s_quadFactor;
-
+#ifdef USE_HOTBFG
+  if(g_hotBFG.integer) {
+    m->damage *= 1.5;
+  	m->splashRadius *= 2;
+  } else 
+#endif
+  {
+  	m->damage *= s_quadFactor;
+  	m->splashDamage *= s_quadFactor;
+  }
 //	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
@@ -414,9 +421,22 @@ void Weapon_RocketLauncher_Fire (gentity_t *ent) {
 	gentity_t	*m;
 
 	m = fire_rocket (ent, muzzle, forward);
-	m->damage *= s_quadFactor;
-	m->splashDamage *= s_quadFactor;
-
+#ifdef USE_HOTRPG
+  if(g_hotRockets.integer) {
+    m->damage *= g_quadfactor.value;
+  	m->splashDamage *= g_quadfactor.value;
+  } else 
+#endif
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    m->damage *= g_quadfactor.value;
+  	m->splashDamage *= g_quadfactor.value;
+  } else 
+#endif
+  {
+  	m->damage *= s_quadFactor;
+  	m->splashDamage *= s_quadFactor;
+  }
 //	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
@@ -469,6 +489,11 @@ void weapon_railgun_fire( gentity_t *ent ) {
 	int			passent;
 	gentity_t	*unlinkedEntities[MAX_RAIL_HITS];
 
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    damage = 500 * s_quadFactor;
+  } else 
+#endif
 	damage = 100 * s_quadFactor;
 
 	VectorMA( muzzle_origin, 8192.0, forward, end );
@@ -642,7 +667,12 @@ void Weapon_LightningFire( gentity_t *ent ) {
 	gentity_t	*traceEnt, *tent;
 	int			damage, i, passent;
 
-	damage = 8 * s_quadFactor;
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    damage *= g_quadfactor.value;
+  } else 
+#endif
+  damage *= s_quadFactor;
 
 	passent = ent->s.number;
 

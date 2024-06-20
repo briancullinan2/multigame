@@ -79,6 +79,18 @@ void TossClientItems( gentity_t *self ) {
 
 	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
 		self->client->ps.ammo[ weapon ] ) {
+#ifdef USE_TRINITY
+    // don't drop anything in instagib mode
+    && !g_unholyTrinity.integer
+#endif
+#ifdef USE_HOTRPG
+    // don't drop anything in hot-rockets mode
+    && !g_hotRockets.integer
+#endif
+#ifdef USE_HOTBFG
+    // don't drop anything in hot-rockets mode
+    && !g_hotBFG.integer
+#endif
 		// find the item type for this weapon
 		item = BG_FindItemForWeapon( weapon );
 
@@ -965,6 +977,21 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	// calculated after knockback, so rocket jumping works
 	if ( targ == attacker) {
 		damage *= 0.5;
+#ifdef USE_TRINITY
+    if(g_unholyTrinity.integer && targ == attacker) {
+      return;
+    }
+#endif
+#ifdef USE_HOTRPG
+    if(g_hotRockets.integer && targ == attacker) {
+      return;
+    }
+#endif
+#ifdef USE_HOTBFG
+    if(g_hotBFG.integer && targ == attacker) {
+      return;
+    }
+#endif
 	}
 
 	if ( damage < 1 ) {
