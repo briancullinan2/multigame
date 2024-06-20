@@ -146,6 +146,12 @@
 
 //=============================================================
 
+// client side weapon order
+#define USE_WEAPON_ORDER 1
+// draw 3D weapons that rotate slightly
+#define USE_3D_WEAPONS 1
+// allow clients to center the weapons above the hud
+#define USE_WEAPON_CENTER 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

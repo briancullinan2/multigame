@@ -132,4 +132,9 @@ CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
 
+
+#ifdef USE_WEAPON_ORDER
+CG_CVAR( cg_weaponOrder, "cg_weaponOrder", "1/2/3/4/6/8/5/7/9", CVAR_ARCHIVE ) //WarZone
+#endif
+
 #undef CG_CVAR

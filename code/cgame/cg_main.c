@@ -14,6 +14,7 @@ static int enemyModelModificationCount  = -1;
 static int enemyColorsModificationCount = -1;
 static int teamModelModificationCount  = -1;
 static int teamColorsModificationCount = -1;
+static int weaponsOrderModificationCount = -1; //WarZone
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
@@ -133,6 +134,7 @@ void CG_RegisterCvars( void ) {
 	enemyColorsModificationCount = cg_enemyColors.modificationCount;
 	teamModelModificationCount = cg_teamModel.modificationCount;
 	teamColorsModificationCount = cg_teamColors.modificationCount;
+	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
 
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
@@ -160,6 +162,11 @@ void CG_ForceModelChange( void ) {
 	}
 }
 
+
+
+#ifdef USE_WEAPON_ORDER
+void UpdateWeaponOrder (void);
+#endif
 
 /*
 =================
@@ -190,6 +197,15 @@ void CG_UpdateCvars( void ) {
 		// FIXME E3 HACK
 		trap_Cvar_Set( "teamoverlay", "1" );
 	}
+
+#ifdef USE_WEAPON_ORDER
+  //WarZone 
+  if ( weaponsOrderModificationCount != cg_weaponOrder.modificationCount ) 
+  { 
+    UpdateWeaponOrder(); 
+    weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
+  } 
+#endif
 
 	// if model changed
 	if ( forceModelModificationCount != cg_forceModel.modificationCount 

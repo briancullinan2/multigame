@@ -93,4 +93,9 @@ G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
+
+#ifdef USE_WEAPON_ORDER
+G_CVAR( g_supportsWeaponOrder, "g_supportsWeaponOrder", "1", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse ) //WarZone
+#endif
+
 #undef G_CVAR
