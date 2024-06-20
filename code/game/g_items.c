@@ -340,6 +340,37 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 
 	other->health += quantity;
 
+#ifdef USE_LOCAL_DMG
+  if(g_locDamage.integer) {
+    // return speed upon health pickup or more than maximum health, McBain
+    other->client->lasthurt_location = LOCATION_NONE;
+  	other->client->ps.speed += quantity;
+  	if (other->client->ps.speed > g_speed.value) {
+  		other->client->ps.speed = g_speed.value;
+  	}
+
+  	if (other->health >= other->client->ps.stats[STAT_MAX_HEALTH]) {
+  		other->client->ps.speed = g_speed.value;
+  	}
+
+#ifdef MISSIONPACK
+  	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+  		other->client->ps.speed *= 1.5;
+  	}
+  	else
+#endif
+    if ( other->client->ps.powerups[PW_HASTE] 
+#ifdef USE_RUNES
+      || other->items[ITEM_PW_MIN + RUNE_HASTE]
+#endif
+    ) {
+      other->client->ps.speed *= 1.3;
+    }
+
+  	// end McBain
+  }
+#endif
+
 	if (other->health > max ) {
 		other->health = max;
 	}

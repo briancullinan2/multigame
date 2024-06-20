@@ -2848,6 +2848,10 @@ void CG_Player( centity_t *cent ) {
 	//
 	// add the head
 	//
+#ifdef USE_HEADSHOTS
+  if(!cent->pe.noHead)
+  {
+#endif
 	head.hModel = ci->headModel;
 	if (!head.hModel) {
 		return;
@@ -2874,6 +2878,9 @@ void CG_Player( centity_t *cent ) {
 	head.shaderRGBA[3] = 255;
 	
 	CG_AddRefEntityWithPowerups( &head, &cent->currentState, ci->team );
+#ifdef USE_HEADSHOTS
+  }
+#endif
 
 #ifdef MISSIONPACK
 	CG_BreathPuffs(cent, &head);
@@ -2924,6 +2931,10 @@ void CG_ResetPlayerEntity( centity_t *cent ) {
 	cent->pe.torso.yawing = qfalse;
 	cent->pe.torso.pitchAngle = cent->rawAngles[PITCH];
 	cent->pe.torso.pitching = qfalse;
+  
+#ifdef USE_HEADSHOTS
+  cent->pe.noHead = qfalse;
+#endif
 
 	if ( cg_debugPosition.integer ) {
 		CG_Printf("%i ResetPlayerEntity yaw=%f\n", cent->currentState.number, cent->pe.torso.yawAngle );

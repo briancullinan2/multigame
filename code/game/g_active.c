@@ -832,6 +832,18 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.speed *= 1.3;
 	}
 
+#ifdef USE_LOCAL_DMG
+  if(g_locDamage.integer) {
+    if(client->lasthurt_location == LOCATION_LEG) {
+      client->ps.speed *= 0.7;
+    }
+    if(client->lasthurt_location == LOCATION_FOOT) {
+      client->ps.speed *= 0.5;
+    }
+  }
+#endif
+
+
 	// Let go of the hook if we aren't firing
 	if ( client->ps.weapon == WP_GRAPPLING_HOOK &&
 		client->hook && !( ucmd->buttons & BUTTON_ATTACK ) ) {

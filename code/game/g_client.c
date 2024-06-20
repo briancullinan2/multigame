@@ -404,6 +404,12 @@ void CopyToBodyQue( gentity_t *ent ) {
 		body->takedamage = qtrue;
 	}
 
+#ifdef USE_HEADSHOTS
+  if(ent->client->lasthurt_mod == MOD_HEADSHOT)
+	  G_AddEvent( body, EV_BODY_NOHEAD, 0 );
+#endif
+
+
 	VectorCopy ( body->s.pos.trBase, body->r.currentOrigin );
 	trap_LinkEntity( body );
 }
@@ -1099,6 +1105,12 @@ void ClientSpawn(gentity_t *ent) {
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+
+#ifdef USE_LOCAL_DMG
+  // return to normal speed, McBain
+  client->ps.speed = g_speed.value;
+  client->lasthurt_location = LOCATION_NONE;
+#endif
 
 	G_SetOrigin( ent, spawn_origin );
 	VectorCopy( spawn_origin, client->ps.origin );

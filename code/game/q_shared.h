@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// advanged damage changes based on where the player is shot
+#define USE_LOCAL_DMG 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

@@ -1363,6 +1363,12 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
 
+#ifdef USE_HEADSHOTS
+  "EV_GIB_PLAYER_HEADSHOT",
+  "EV_BODY_NOHEAD",
+#endif
+
+
 };
 
 /*

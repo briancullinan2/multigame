@@ -445,6 +445,12 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+
+#ifdef USE_HEADSHOTS
+  EV_GIB_PLAYER_HEADSHOT,
+  EV_BODY_NOHEAD,
+#endif
+
 	EV_MAX
 
 } entity_event_t;
@@ -571,6 +577,26 @@ typedef enum {
 	TEAMTASK_CAMP
 } teamtask_t;
 
+#ifdef USE_LOCAL_DMG
+#define LOCATION_NONE		0x00000000
+
+// Height layers
+#define LOCATION_HEAD		0x00000001 // [F,B,L,R] Top of head
+#define LOCATION_FACE		0x00000002 // [F] Face [B,L,R] Head
+#define LOCATION_SHOULDER	0x00000004 // [L,R] Shoulder [F] Throat, [B] Neck
+#define LOCATION_CHEST		0x00000008 // [F] Chest [B] Back [L,R] Arm
+#define LOCATION_STOMACH	0x00000010 // [L,R] Sides [F] Stomach [B] Lower Back
+#define LOCATION_GROIN		0x00000020 // [F] Groin [B] Butt [L,R] Hip
+#define LOCATION_LEG		0x00000040 // [F,B,L,R] Legs
+#define LOCATION_FOOT		0x00000080 // [F,B,L,R] Bottom of Feet
+
+// Relative direction strike came from
+#define LOCATION_LEFT		0x00000100
+#define LOCATION_RIGHT		0x00000200
+#define LOCATION_FRONT		0x00000400
+#define LOCATION_BACK		0x00000800
+#endif
+
 // means of death
 typedef enum {
 	MOD_UNKNOWN,
@@ -602,6 +628,9 @@ typedef enum {
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
+#endif
+#ifdef USE_HEADSHOTS
+  MOD_HEADSHOT,
 #endif
 	MOD_GRAPPLE
 } meansOfDeath_t;
