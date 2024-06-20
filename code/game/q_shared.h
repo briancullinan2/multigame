@@ -146,6 +146,10 @@
 
 //=============================================================
 
+// enable ladders in map
+#define USE_LADDERS 1
+// adds rotating doors from maps, UrT uses them, so does Quake 2
+#define USE_ROTATING_DOOR 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
