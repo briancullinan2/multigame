@@ -32,7 +32,7 @@ qboolean linearLight = qfalse;
 qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
 void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 void (*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
-void (*trap_R_AddPolyBufferToScene)( polyBuffer_t* pPolyBuffer )
+void (*trap_R_AddPolyBufferToScene)( polyBuffer_t* pPolyBuffer );
 #else
 int dll_com_trapGetValue;
 int dll_trap_R_AddRefEntityToScene2;
@@ -2076,9 +2076,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 		}
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddPolyBufferToScene" ) ) {
 			trap_R_AddPolyBufferToScene = (void*)~atoi( value );
-			trap_Cvar_Set("cg_atmosphericEffects", "1")
+			trap_Cvar_Set("cg_atmosphericEffects", "1");
 		} else {
-			trap_Cvar_Set("cg_atmosphericEffects", "0")
+			trap_Cvar_Set("cg_atmosphericEffects", "0");
 		}
 #else
 		dll_com_trapGetValue = atoi( value );
@@ -2092,9 +2092,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 		}
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddPolyBufferToScene" ) ) {
 			dll_trap_R_AddPolyBufferToScene = atoi( value );
-			trap_Cvar_Set("cg_atmosphericEffects", "1")
+			trap_Cvar_Set("cg_atmosphericEffects", "1");
 		} else {
-			trap_Cvar_Set("cg_atmosphericEffects", "0")
+			trap_Cvar_Set("cg_atmosphericEffects", "0");
 		}
 #endif
 	}
