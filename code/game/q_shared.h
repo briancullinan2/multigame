@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// compile item timers, show how long until power-up respawns
+#define USE_ITEM_TIMERS 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
