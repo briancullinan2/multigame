@@ -178,4 +178,9 @@ G_CVAR( wp_flameRadius,       "wp_flameRadius",       "45",   CVAR_ARCHIVE, 0, q
 
 #endif // end USE_WEAPON_VARS
 
+
+#ifdef USE_WEAPON_ORDER
+G_CVAR( g_supportsWeaponOrder, "g_supportsWeaponOrder", "1", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse ) //WarZone
+#endif
+
 #undef G_CVAR

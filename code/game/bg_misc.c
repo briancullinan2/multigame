@@ -1428,6 +1428,10 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
 
+#ifdef USE_WEAPON_ORDER
+  "EV_ITEM_PICKUP2",			// had items
+#endif
+
 };
 
 /*

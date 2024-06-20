@@ -154,6 +154,12 @@
 #define USE_FLAME_THROWER 1
 // use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
 #define USE_ADVANCED_WEAPONS 1
+// client side weapon order
+#define USE_WEAPON_ORDER 1
+// draw 3D weapons that rotate slightly
+#define USE_3D_WEAPONS 1
+// allow clients to center the weapons above the hud
+#define USE_WEAPON_CENTER 1
 
 typedef unsigned char 		byte;
 
