@@ -158,7 +158,11 @@ void TossClientCubes( gentity_t *self ) {
 		VectorClear( origin ) ;
 	}
 
+#ifdef USE_WEAPON_DROP
+  drop = LaunchItem( item, origin, velocity, FL_DROPPED_ITEM );
+#else
 	drop = LaunchItem( item, origin, velocity );
+#endif
 
 	drop->nextthink = level.time + g_cubeTimeout.integer * 1000;
 	drop->think = G_FreeEntity;

@@ -596,4 +596,19 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("stats");
 	trap_AddCommand ("teamtask");
 	trap_AddCommand ("loaddefered");	// spelled wrong, but not changing for demo
+#ifdef USE_WEAPON_DROP
+  trap_AddCommand ("drop");
+#endif
+#ifdef USE_FLAG_DROP
+  trap_AddCommand ("fdrop");
+#endif
+#ifdef USE_ITEM_DROP
+  trap_AddCommand ("itdrop");
+#endif
+#ifdef USE_POWERUP_DROP
+  trap_AddCommand ("pwdrop");
+#endif
+#ifdef USE_AMMO_DROP
+  trap_AddCommand ("amdrop");
+#endif
 }

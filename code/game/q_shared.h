@@ -146,6 +146,14 @@
 
 //=============================================================
 
+// allow clients to drop weapons, items, and powerups
+#define USE_WEAPON_DROP 1
+#define USE_ITEM_DROP 1
+#define USE_POWERUP_DROP 1
+#define USE_FLAG_DROP 1
+#define USE_AMMO_DROP 1
+#define USE_ARMOR_DROP 1
+#define USE_HEALTH_DROP 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

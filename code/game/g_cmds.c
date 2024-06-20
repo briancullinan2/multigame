@@ -1768,6 +1768,237 @@ static void Cmd_SetViewpos_f( gentity_t *ent ) {
 }
 
 
+gentity_t *dropWeapon( gentity_t *ent, gitem_t *item, float angle, int xr_flags );
+gitem_t	*BG_FindItemForHealth( int amount );
+gitem_t	*BG_FindItemForAmmo( weapon_t weapon );
+gentity_t *ThrowWeapon( gentity_t *ent );
+
+
+#ifdef USE_FLAG_DROP
+void Cmd_DropFlag_f(gentity_t *ent) {
+  if(ent->client->ps.powerups[PW_REDFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  }
+  ent->client->ps.powerups[PW_REDFLAG] =
+  ent->client->ps.powerups[PW_BLUEFLAG] =
+  ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
+}
+#endif
+
+
+
+#ifdef USE_RUNES
+void Cmd_DropRune_f(gentity_t *ent) {
+  int contents;
+  contents = trap_PointContents( ent->r.currentOrigin, -1 );
+  if (contents & CONTENTS_NODROP)
+    return;
+
+  if(ent->rune && ent->items[ent->rune]) {
+    dropWeapon( ent, BG_FindItemForRune(ent->rune - ITEM_PW_MIN - RUNE_STRENGTH + 1), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->items[ent->rune] = 0;
+    ent->rune = 0;
+  }
+}
+#endif
+
+
+#ifdef USE_POWERUP_DROP
+void Cmd_DropPowerup_f(gentity_t *ent) {
+#ifdef MISSIONPACK
+  // if there are persistant power-ups drop those
+  if(ent->client->persistantPowerup) {
+    TossClientPersistantPowerups(ent);
+    return;
+  } else
+#endif
+  {
+    gentity_t	*drop;
+    int i;
+    for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+      if ( ent->client->ps.powerups[i ] > level.time ) {
+        drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+        // decide how many seconds it has left
+        drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
+        if ( drop->count < 1 ) {
+          drop->count = 1;
+        }
+        // for pickup prediction
+        drop->s.time2 = drop->count;
+        ent->client->ps.powerups[i] = 0;
+        return;
+      }
+    }
+  }
+}
+#endif
+
+
+
+#ifdef USE_ITEM_DROP
+void Cmd_DropItem_f(gentity_t *ent) {
+  // check if there are some holdable items to toss
+  if(ent->client->ps.stats[STAT_HOLDABLE_ITEM]) {
+    dropWeapon( ent, &bg_itemlist[ent->client->ps.stats[STAT_HOLDABLE_ITEM]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+    return;
+  }
+}
+#endif
+
+
+#ifdef USE_AMMO_DROP
+void Cmd_DropAmmo_f(gentity_t *ent) {
+  // drop ammo for current weapon, total / default pack size
+  gitem_t *item;
+  int i = ent->s.weapon;
+	if(ent->client->ps.ammo[i] == INFINITE)
+		return;
+  item = BG_FindItemForAmmo(i);
+  if(floor(ent->client->ps.ammo[i] / item->quantity) > 1) {
+    dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->ps.ammo[i] -= item->quantity;
+    return;
+  }
+}
+#endif
+
+
+#ifdef USE_HEALTH_DROP
+void Cmd_DropHealth_f(gentity_t *ent) {
+  gitem_t *item;
+	// TODO: infinite version of health 999 like DOOM?
+	if(ent->health == INFINITE)
+		return;
+	item = BG_FindItemForHealth(25);
+	if(floor(ent->health / item->quantity) > 1) {
+		dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+		ent->health -= item->quantity;
+		return;
+	}
+}
+#endif
+
+
+
+#ifdef USE_WEAPON_DROP
+
+/*
+=================
+Cmd_Drop_f XRAY FMJ
+=================
+*/
+void Cmd_Drop_f( gentity_t *ent ) {
+  gentity_t	*drop;
+  int contents;
+  contents = trap_PointContents( ent->r.currentOrigin, -1 );
+	if (contents & CONTENTS_NODROP)
+    return;
+
+  if(!g_dropWeapon.integer)
+    return;
+
+  if(g_dropWeapon.integer == 1)
+    ThrowWeapon( ent );
+
+#ifdef USE_FLAG_DROP
+  if((g_dropWeapon.integer & 2)
+    && (ent->client->ps.powerups[PW_REDFLAG]
+      || ent->client->ps.powerups[PW_BLUEFLAG]
+      || ent->client->ps.powerups[PW_NEUTRALFLAG])) {
+    if(ent->client->ps.powerups[PW_REDFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    }
+    ent->client->ps.powerups[PW_REDFLAG] =
+    ent->client->ps.powerups[PW_BLUEFLAG] =
+    ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
+    return;
+  }
+#endif
+#ifdef USE_RUNES
+  if((g_dropWeapon.integer & 8)
+    && ent->rune && ent->items[ent->rune]) {
+    dropWeapon( ent, BG_FindItemForRune(ent->rune - ITEM_PW_MIN - RUNE_STRENGTH + 1), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->items[ent->rune] = 0;
+    ent->rune = 0;
+    return;
+  }
+#endif
+#ifdef USE_POWERUP_DROP
+  if(g_dropWeapon.integer & 4) {
+#ifdef MISSIONPACK
+    // if there are persistant power-ups drop those
+    if(ent->client->persistantPowerup) {
+      TossClientPersistantPowerups(ent);
+      return;
+    } else
+#endif
+    {
+      int i;
+      for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+        if ( ent->client->ps.powerups[i ] > level.time ) {
+          drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+          // decide how many seconds it has left
+          drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
+          if ( drop->count < 1 ) {
+            drop->count = 1;
+          }
+          // for pickup prediction
+          drop->s.time2 = drop->count;
+          ent->client->ps.powerups[i] = 0;
+          return;
+        }
+      }
+    }
+  }
+#endif
+#ifdef USE_ITEM_DROP
+  // check if there are some holdable items to toss
+  if(g_dropWeapon.integer & 16
+    && ent->client->ps.stats[STAT_HOLDABLE_ITEM]) {
+    dropWeapon( ent, &bg_itemlist[ent->client->ps.stats[STAT_HOLDABLE_ITEM]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+    return;
+  }
+#endif
+#ifdef USE_AMMO_DROP
+  // drop ammo for current weapon, total / default pack size
+  if(g_dropWeapon.integer & 32) {
+    gitem_t *item;
+    int i = ent->s.weapon;
+    item = BG_FindItemForAmmo(i);
+    if(ent->client->ps.ammo[i] != INFINITE
+			&& floor(ent->client->ps.ammo[i] / item->quantity) > 1) {
+      dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+      ent->client->ps.ammo[i] -= item->quantity;
+      return;
+    }
+  }
+#endif
+  // TODO: fix weapon switch animation
+  drop = ThrowWeapon( ent );
+#ifdef USE_HEALTH_DROP
+  if(!drop && g_dropWeapon.integer & 64) {
+    gitem_t *item;
+    item = BG_FindItemForHealth(25);
+    if(floor(ent->health / item->quantity) > 1) {
+      dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+      ent->health -= item->quantity;
+      return;
+    }
+  }
+#endif
+}
+#endif
+
 
 /*
 =================
@@ -1905,6 +2136,30 @@ void ClientCommand( int clientNum ) {
 		Cmd_GameCommand_f( ent );
 	else if (Q_stricmp (cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f( ent );
+#ifdef USE_WEAPON_DROP
+  else if (Q_stricmp (cmd, "drop") == 0)  // XRAY FMJ
+    Cmd_Drop_f( ent );
+#endif
+#ifdef USE_POWERUP_DROP
+  else if (Q_stricmp (cmd, "droppowerup") == 0)
+    Cmd_DropPowerup_f( ent );
+#endif
+#ifdef USE_FLAG_DROP
+  else if (Q_stricmp (cmd, "dropflag") == 0)
+    Cmd_DropFlag_f( ent );
+#endif
+#ifdef USE_ITEM_DROP
+  else if (Q_stricmp (cmd, "dropitem") == 0)
+    Cmd_DropItem_f( ent );
+#endif
+#ifdef USE_AMMO_DROP // for heavys
+  else if (Q_stricmp (cmd, "dropammo") == 0)
+    Cmd_DropAmmo_f( ent );
+#endif
+#ifdef USE_HEALTH_DROP // for medics
+	else if (Q_stricmp (cmd, "drophealth") == 0)
+		Cmd_DropHealth_f( ent );
+#endif
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
 	else
