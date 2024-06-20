@@ -449,6 +449,11 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+	
+#ifdef USE_WEAPON_ORDER
+  EV_ITEM_PICKUP2,			// had items
+#endif
+
 	EV_MAX
 
 } entity_event_t;
