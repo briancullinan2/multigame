@@ -2583,11 +2583,10 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		return;
 	}
 
-/*
 	if (cg.cameraMode) {
 		return;
 	}
-*/
+
 	if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 		CG_DrawSpectator();
 		CG_DrawCrosshair();
