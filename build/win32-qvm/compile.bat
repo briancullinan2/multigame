@@ -63,6 +63,8 @@ cd vm\cgame
 @if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_snapshot.c
 @if errorlevel 1 goto quit
+%cc1% %cgamedir%\cg_timer.c
+@if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_view.c
 @if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_weapons.c

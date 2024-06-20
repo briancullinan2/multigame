@@ -202,7 +202,7 @@ static void CG_Speaker( centity_t *cent ) {
 
 #ifdef USE_ITEM_TIMERS
 #ifdef USE_GUNNM_TIMER
-static void CG_ItemTimer( entityState_t	*es, const vec3_t origin );
+void CG_ItemTimer( entityState_t	*es, const vec3_t origin );
 #else
 void CG_ItemTimer(int client, const vec3_t origin, int startTime, int respawnTime);
 #endif

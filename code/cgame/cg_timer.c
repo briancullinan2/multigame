@@ -10,7 +10,7 @@ CG_ItemTimer
 ==================
 */
 #ifdef USE_GUNNM_TIMER
-static void CG_ItemTimer( entityState_t	*es, const vec3_t origin ) {
+void CG_ItemTimer( entityState_t	*es, const vec3_t origin ) {
 	refEntity_t		re;
 	vec3_t			angles;
 	float			c, len;
