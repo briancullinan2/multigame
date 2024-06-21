@@ -56,6 +56,7 @@ extern	int		c_pmove;
 #ifdef MISSIONPACK
 #define g_scoutFactor  cg_scoutFactor
 #endif
+#endif
 
 #define g_hasteFactor  cg_hasteFactor
 #define g_jumpVelocity cg_jumpVelocity
