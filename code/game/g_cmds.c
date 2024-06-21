@@ -1974,13 +1974,18 @@ void Cmd_Drop_f( gentity_t *ent ) {
   if(g_dropWeapon.integer & 32) {
     gitem_t *item;
     int i = ent->s.weapon;
-    item = BG_FindItemForAmmo(i);
-    if(ent->client->ps.ammo[i] != INFINITE
-			&& floor(ent->client->ps.ammo[i] / item->quantity) > 1) {
-      dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-      ent->client->ps.ammo[i] -= item->quantity;
-      return;
-    }
+		if(ent->client->ps.ammo[i] != -1 && ent->client->ps.ammo[i] != INFINITE) {
+			item = BG_FindItemForAmmo(i);
+			if(floor(ent->client->ps.ammo[i] / item->quantity) > 0) {
+				dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+				ent->client->ps.ammo[i] -= item->quantity;
+				if(ent->client->ps.ammo[i] == 0) {
+					G_AddEvent( ent, EV_NOAMMO, 0 );
+					ent->client->ps.weaponTime += 500;
+				}
+				return;
+			}
+		}
   }
 #endif
   // TODO: fix weapon switch animation
