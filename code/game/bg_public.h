@@ -613,9 +613,9 @@ typedef enum {
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
+#endif
 #ifdef USE_LV_DISCHARGE
   MOD_LV_DISCHARGE,
-#endif
 #endif
 #ifdef USE_HEADSHOTS
   MOD_HEADSHOT,
