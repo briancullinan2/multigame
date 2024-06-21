@@ -12,6 +12,10 @@ static	vec3_t	muzzle_origin; // for hitscan weapon trace
 
 #define NUM_NAILSHOTS 15
 
+#ifdef USE_LV_DISCHARGE
+qboolean G_WaterRadiusDamage (vec3_t origin, gentity_t *attacker, 
+  float damage, float radius, gentity_t *ignore, int mod);
+#endif
 
 /*
 ===============
@@ -645,6 +649,32 @@ void Weapon_LightningFire( gentity_t *ent ) {
 	damage = 8 * s_quadFactor;
 
 	passent = ent->s.number;
+
+#ifdef USE_LV_DISCHARGE
+  VectorMA( muzzle_origin, LIGHTNING_RANGE, forward, end );
+  // The SARACEN's Lightning Discharge - START
+	if (trap_PointContents (muzzle_origin, -1) & MASK_WATER)
+	{
+		int zaps;
+		gentity_t *tent;
+
+		zaps = ent->client->ps.ammo[WP_LIGHTNING];	// determines size/power of discharge
+		if (!zaps) return;	// prevents any subsequent frames causing second discharge + error
+		zaps++;		// pmove does an ammo[gun]--, so we must compensate
+		SnapVectorTowards (muzzle_origin, ent->s.origin);	// save bandwidth
+
+		tent = G_TempEntity (muzzle_origin, EV_LV_DISCHARGE);
+		tent->s.eventParm = zaps;				// duration / size of explosion graphic
+
+		ent->client->ps.ammo[WP_LIGHTNING] = 0;		// drain ent's lightning count
+		if (G_WaterRadiusDamage (muzzle_origin, ent, damage * zaps,
+					(damage * zaps) + 16, NULL, MOD_LV_DISCHARGE))
+			g_entities[ent->r.ownerNum].client->accuracy_hits++;
+		
+		return;
+	}
+  // The SARACEN's Lightning Discharge - END
+#endif
 
 	for (i = 0; i < 10; i++) {
 		VectorMA( muzzle_origin, LIGHTNING_RANGE, forward, end );
