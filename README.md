@@ -78,6 +78,8 @@ Unofficial Quake III Arena gamecode patch
   * Make "tech-demo" as an example of some game dynamic. Make a Matrix mod that loads the white loading program and jump simulation and UrT subway. Make a space to planet landing sequence with death modes. https://www.youtube.com/watch?v=sLqXFF8mlEU
   * Quake 5 play on the home-worlds of each species, but in a mistakenly massive defeat of stop the Arenas on Vadrigas, they've expanded to each home world.
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
+  * Alice in wonderland mod, pill to make you big or small, flip map upside down as a view mode, 
+  * mirror in front of the view with a 3rd person reflection of which direction the player is facing, forcing player to shoot backwards
   
 
 # Documentation
