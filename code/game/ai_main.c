@@ -171,6 +171,14 @@ qboolean BotAI_GetEntityState( int entityNum, entityState_t *state ) {
 		return qfalse;
 	}
 
+  // go for respawn points to look for enemies
+  if( // ent->inuse && 
+    Q_stricmp(ent->classname, "info_player_deathmatch") == 0) {
+    Com_Printf("getting respawn\n");
+    memcpy( state, &ent->s, sizeof(entityState_t) );
+  	return qtrue;
+  }
+
 	if ( ent->r.svFlags & SVF_NOCLIENT ) {
 		memset( state, 0, sizeof( entityState_t ) );
 		return qfalse;
@@ -1401,6 +1409,7 @@ int BotAIStartFrame(int time) {
 
 	G_CheckBotSpawn();
 
+  trap_Cvar_Update(&bot_instagib);
 	trap_Cvar_Update(&bot_rocketjump);
 	trap_Cvar_Update(&bot_grapple);
 	trap_Cvar_Update(&bot_fastchat);
@@ -1478,7 +1487,8 @@ int BotAIStartFrame(int time) {
 		ent = g_entities;
 		for ( i = 0; i < level.num_entities; i++, s++, ent++ ) {
 			ent = &g_entities[i];
-			if ( !ent->inuse || !ent->r.linked || ent->r.svFlags & SVF_NOCLIENT ) {
+			if ( !ent->inuse || 
+        (!ent->r.linked || (ent->r.svFlags & SVF_NOCLIENT)) ) {
 				if ( *s == qfalse ) {
 					*s = qtrue;
 					trap_BotLibUpdateEntity( i, NULL );

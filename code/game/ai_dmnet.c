@@ -46,6 +46,10 @@ char nodeswitch[MAX_NODESWITCHES+1][144];
 
 #define LOOKAHEAD_DISTANCE			300
 
+#ifdef USE_INSTAGIB
+extern vmCvar_t bot_instagib;
+#endif
+
 /*
 ==================
 BotResetNodeSwitches
