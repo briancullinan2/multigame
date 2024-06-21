@@ -975,8 +975,8 @@ void ClientThink_real( gentity_t *ent ) {
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
 			// forcerespawn is to prevent users from waiting out powerups
-			if ( g_forcerespawn.integer > 0 && 
-				( level.time - client->respawnTime ) > g_forcerespawn.integer * 1000 ) {
+			if ( g_forcerespawn.value > 0 && 
+				( level.time - client->respawnTime ) > g_forcerespawn.value * 1000 ) {
 				respawn( ent );
 				return;
 			}
