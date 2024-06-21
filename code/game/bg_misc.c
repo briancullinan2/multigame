@@ -5,6 +5,14 @@
 #include "q_shared.h"
 #include "bg_public.h"
 
+#ifdef CGAME
+
+#define g_gravity      cg_gravity
+extern vmCvar_t  cg_gravity;
+#else
+extern vmCvar_t  g_gravity;
+#endif // end USE_PHYSICS_VARS
+
 /*QUAKED item_***** ( 0 0 0 ) (-16 -16 -16) (16 16 16) suspended
 DO NOT USE THIS CLASS, IT JUST HOLDS GENERAL INFORMATION.
 The suspended flag will allow items to hang in the air, otherwise they are dropped to the next surface.

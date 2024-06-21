@@ -841,7 +841,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
-				CG_ItemPickup( index );
         if(item->giTag == PW_HASTE
         ) {
 #ifdef USE_PHYSICS_VARS
@@ -850,6 +849,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
           cg.predictedPlayerState.speed *= 1.3f;
 #endif
         }
+				CG_ItemPickup( index );
 			}
 
 			if ( ce ) {

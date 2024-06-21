@@ -32,6 +32,39 @@ int		c_pmove = 0;
 
 static int pm_respawntimer = 0;
 
+#ifdef USE_PHYSICS_VARS
+
+#ifdef CGAME
+#ifdef MISSIONPACK
+#define g_scoutFactor  cg_scoutFactor
+#endif
+#define g_hasteFactor  cg_hasteFactor
+#define g_jumpVelocity cg_jumpVelocity
+#define g_gravity      cg_gravity
+#define g_wallWalk     cg_wallWalk
+
+#ifdef MISSIONPACK
+extern vmCvar_t  cg_scoutFactor;
+#endif
+extern vmCvar_t  cg_hasteFactor;
+extern vmCvar_t  cg_jumpVelocity;
+extern vmCvar_t  cg_gravity;
+extern vmCvar_t  cg_wallWalk;
+
+#else
+
+#ifdef MISSIONPACK
+extern vmCvar_t  g_scoutFactor;
+#endif
+extern vmCvar_t  g_hasteFactor;
+extern vmCvar_t  g_jumpVelocity;
+extern vmCvar_t  g_gravity;
+extern vmCvar_t  g_wallWalk;
+
+#endif
+
+#endif // end USE_PHYSICS_VARS
+
 /*
 ===============
 PM_AddEvent

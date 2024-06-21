@@ -454,6 +454,7 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
         cg.predictedPlayerState.speed *= cg_hasteFactor.value;
 #else
 				cg.predictedPlayerState.speed *= 1.3f;
+#endif
 			}
 		}
 		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;
