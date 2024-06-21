@@ -963,6 +963,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_ScorePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		break;
 
+#ifdef USE_DAMAGE_PLUMS
+	case EV_DAMAGEPLUM:
+		CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
+		break;
+#endif
+
 	//
 	// missile impacts
 	//
