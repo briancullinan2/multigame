@@ -78,7 +78,7 @@ void TossClientItems( gentity_t *self ) {
 	}
 
 	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
-		self->client->ps.ammo[ weapon ] ) {
+		self->client->ps.ammo[ weapon ]
 #ifdef USE_TRINITY
     // don't drop anything in instagib mode
     && !g_unholyTrinity.integer
@@ -91,6 +91,7 @@ void TossClientItems( gentity_t *self ) {
     // don't drop anything in hot-rockets mode
     && !g_hotBFG.integer
 #endif
+	) {
 		// find the item type for this weapon
 		item = BG_FindItemForWeapon( weapon );
 
