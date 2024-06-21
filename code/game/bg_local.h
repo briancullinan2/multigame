@@ -64,6 +64,17 @@ extern	int		c_pmove;
 #define g_wallWalk     cg_wallWalk
 #endif // end USE_PHYSICS_VARS
 
+
+#ifdef USE_PHYSICS_VARS
+#ifdef MISSIONPACK
+extern vmCvar_t  g_scoutFactor;
+#endif
+extern vmCvar_t  g_hasteFactor;
+extern vmCvar_t  g_jumpVelocity;
+extern vmCvar_t  g_gravity;
+extern vmCvar_t  g_wallWalk;
+#endif
+
 void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 void PM_AddTouchEnt( int entityNum );
 void PM_AddEvent( int newEvent );

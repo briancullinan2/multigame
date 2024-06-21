@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// physics variables, usually transfered from server to client
+#define USE_PHYSICS_VARS 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

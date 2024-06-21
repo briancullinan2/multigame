@@ -364,7 +364,12 @@ static qboolean PM_CheckJump( void ) {
 	pm->ps->pm_flags |= PMF_JUMP_HELD;
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
+#ifdef USE_PHYSICS_VARS
+  // TODO: make this a part of gravity boots
+  pm->ps->velocity[2] = g_jumpVelocity.integer;
+#else
 	pm->ps->velocity[2] = JUMP_VELOCITY;
+#endif
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
@@ -1142,7 +1147,12 @@ static void PM_GroundTrace( void ) {
 	}
 	
 	// slopes that are too steep will not be considered onground
-	if ( trace.plane.normal[2] < MIN_WALK_NORMAL ) {
+#ifdef USE_PHYSICS_VARS
+  if ( trace.plane.normal[2] < g_wallWalk.value )
+#else
+  if ( trace.plane.normal[2] < MIN_WALK_NORMAL )
+#endif
+  {
 		if ( pm->debugLevel ) {
 			Com_Printf("%i:steep\n", c_pmove);
 		}
@@ -1687,7 +1697,11 @@ static void PM_Weapon( void ) {
 
 #ifdef MISSIONPACK
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+#ifdef USE_PHYSICS_VARS
+    addTime /= g_scoutFactor.value;
+#else
 		addTime /= 1.5;
+#endif
 	}
 	else
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
@@ -1696,7 +1710,11 @@ static void PM_Weapon( void ) {
   else
 #endif
 	if ( pm->ps->powerups[PW_HASTE] ) {
+#ifdef USE_PHYSICS_VARS
+    addTime /= g_hasteFactor.value;
+#else
 		addTime /= 1.3;
+#endif
 	}
 
 	pm->ps->weaponTime += addTime;

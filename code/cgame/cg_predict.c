@@ -450,6 +450,9 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
 			if ( item->giTag == PW_HASTE ) {
+#ifdef USE_PHYSICS_VARS
+        cg.predictedPlayerState.speed *= cg_hasteFactor.value;
+#else
 				cg.predictedPlayerState.speed *= 1.3f;
 			}
 		}
