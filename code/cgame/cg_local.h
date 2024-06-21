@@ -1123,6 +1123,10 @@ typedef struct {
 	char acceptVoice[MAX_NAME_LENGTH];
 #endif
 
+	float	scrFadeAlpha, scrFadeAlphaCurrent;
+	int		scrFadeStartTime;
+	int		scrFadeDuration;
+
 	// media
 	cgMedia_t		media;
 
@@ -1146,6 +1150,11 @@ typedef struct {
 } cgs_t;
 
 //==============================================================================
+
+#ifdef USE_SINGLEPLAYER // entity
+extern	int player_stop;
+extern	int black_bars;
+#endif
 
 extern	cgs_t			cgs;
 extern	cg_t			cg;

@@ -14,8 +14,8 @@ CG_BlackBars
 */
 void CG_BlackBars(void) {
 	float color[4] = {0,0,0,1};
-	CG_FillRect(0,0,640,50, color);
-	CG_FillRect(0,430,640,50, color);
+	CG_FillRect(cgs.screenXmin,0,cgs.screenXmax - cgs.screenXmin,50, color);
+	CG_FillRect(cgs.screenXmin,cgs.screenYmax-50,cgs.screenXmax - cgs.screenXmin,50, color);
 }
 #endif
 /*

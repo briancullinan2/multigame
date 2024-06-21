@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// add single player features like earthquakes, player stopping, and animated models
+#define USE_SINGLEPLAYER 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
