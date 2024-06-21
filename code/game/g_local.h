@@ -131,6 +131,10 @@ struct gentity_s {
 	int			splashRadius;
 	int			methodOfDeath;
 	int			splashMethodOfDeath;
+#ifdef USE_MODES_DEATH
+  int     splashTime; // for calculating if the last attacker caused ring out
+  gentity_t *splashAttacker;
+#endif
 
 	int			count;
 
