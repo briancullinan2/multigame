@@ -80,7 +80,9 @@ Unofficial Quake III Arena gamecode patch
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
   * Alice in wonderland mod, pill to make you big or small, flip map upside down as a view mode, 
   * mirror in front of the view with a 3rd person reflection of which direction the player is facing, forcing player to shoot backwards
+  * advanced power ups to go with advanced classes where icon in infinite visible, and pressing a key gives the power up for a specific amount of time, like sarge's teleport ability in quake champions
   
+
 
 # Documentation
 
