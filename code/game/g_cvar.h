@@ -93,4 +93,18 @@ G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
+
+#ifdef USE_GRAPPLE
+G_CVAR( wp_grappleEnable,     "wp_grappleEnable", "0",    CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_grapplePull,       "wp_grapplePull",   "700",  CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
+G_CVAR( wp_grappleCycle,      "wp_grappleCycle",  "400",  CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
+G_CVAR( wp_grappleDamage,     "wp_grappleDamage", "300",  CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_grappleSpeed,      "wp_grappleSpeed",  "2000", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_grappleTime,       "wp_grappleDamage", "10.0",   CVAR_ARCHIVE, 0, qfalse, qfalse )
+
+#ifdef USE_ALT_FIRE
+G_CVAR( g_altGrapple,         "g_altGrapple",     "0",  CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
+#endif
+#endif
+
 #undef G_CVAR

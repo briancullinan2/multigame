@@ -582,6 +582,7 @@ void weapon_railgun_fire( gentity_t *ent ) {
 }
 
 
+#ifdef USE_GRAPPLE
 /*
 ======================================================================
 
@@ -623,6 +624,7 @@ void Weapon_HookThink (gentity_t *ent)
 
 	VectorCopy( ent->r.currentOrigin, ent->parent->client->ps.grapplePoint);
 }
+#endif
 
 
 /*
@@ -816,7 +818,10 @@ void FireWeapon( gentity_t *ent ) {
 #endif
 
 	// track shots taken for accuracy tracking.  Grapple is not a weapon and gauntet is just not tracked
-	if( ent->s.weapon != WP_GRAPPLING_HOOK && ent->s.weapon != WP_GAUNTLET ) {
+#ifdef USE_GRAPPLE
+	if( ent->s.weapon != WP_GRAPPLING_HOOK )
+#endif
+	if( ent->s.weapon != WP_GAUNTLET ) {
 #ifdef MISSIONPACK
 		if( ent->s.weapon == WP_NAILGUN ) {
 			ent->client->accuracy_shots += NUM_NAILSHOTS;
@@ -866,9 +871,11 @@ void FireWeapon( gentity_t *ent ) {
 	case WP_BFG:
 		BFG_Fire( ent );
 		break;
+#ifdef USE_GRAPPLE
 	case WP_GRAPPLING_HOOK:
 		Weapon_GrapplingHook_Fire( ent );
 		break;
+#endif
 #ifdef MISSIONPACK
 	case WP_NAILGUN:
 		Weapon_Nailgun_Fire( ent );

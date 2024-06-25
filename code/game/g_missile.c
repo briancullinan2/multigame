@@ -341,7 +341,8 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 	}
 #endif
 
-	if (!strcmp(ent->classname, "hook")) {
+#ifdef USE_GRAPPLE
+  if( ent->s.weapon == WP_GRAPPLING_HOOK ) {
 		gentity_t *nent;
 		vec3_t v;
 
@@ -385,6 +386,8 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 
 		return;
 	}
+
+#endif
 
 	// is it cheaper in bandwidth to just remove this ent and create a new
 	// one, rather than changing the missile into the explosion?
@@ -465,10 +468,12 @@ void G_RunMissile( gentity_t *ent ) {
 	if ( tr.fraction != 1 ) {
 		// never explode or bounce on sky
 		if ( tr.surfaceFlags & SURF_NOIMPACT ) {
+#ifdef USE_GRAPPLE
 			// If grapple, reset owner
 			if (ent->parent && ent->parent->client && ent->parent->client->hook == ent) {
 				ent->parent->client->hook = NULL;
 			}
+#endif
 			G_FreeEntity( ent );
 			return;
 		}

@@ -51,6 +51,13 @@ extern	float	pm_flightfriction;
 
 extern	int		c_pmove;
 
+
+
+#ifdef USE_GRAPPLE
+extern vmCvar_t  g_altGrapple;
+extern vmCvar_t  wp_grapplePull;
+#endif
+
 void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 void PM_AddTouchEnt( int entityNum );
 void PM_AddEvent( int newEvent );

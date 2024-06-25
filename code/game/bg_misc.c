@@ -311,6 +311,7 @@ gitem_t	bg_itemlist[] =
 /* sounds */ ""
 	},
 
+#ifdef USE_GRAPPLE
 /*QUAKED weapon_grapplinghook (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -326,6 +327,7 @@ gitem_t	bg_itemlist[] =
 /* precache */ "",
 /* sounds */ ""
 	},
+#endif
 
 	//
 	// AMMO ITEMS

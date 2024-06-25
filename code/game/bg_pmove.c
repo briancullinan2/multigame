@@ -7,6 +7,22 @@
 #include "bg_public.h"
 #include "bg_local.h"
 
+
+#ifdef USE_GRAPPLE
+
+#ifdef CGAME
+#define g_altGrapple cg_altGrapple
+#define wp_grapplePull cgwp_grapplePull
+
+extern vmCvar_t cgwp_grapplePull;
+extern vmCvar_t cgwp_grappleCycle;
+#else
+extern vmCvar_t wp_grapplePull;
+extern vmCvar_t wp_grappleCycle;
+#endif
+
+#endif
+
 pmove_t		*pm;
 pml_t		pml;
 
@@ -643,6 +659,8 @@ static void PM_AirMove( void ) {
 	PM_StepSlideMove ( qtrue );
 }
 
+
+#ifdef USE_GRAPPLE
 /*
 ===================
 PM_GrappleMove
@@ -662,12 +680,14 @@ static void PM_GrappleMove( void ) {
 	if (vlen <= 100)
 		VectorScale(vel, 10 * vlen, vel);
 	else
-		VectorScale(vel, 800, vel);
+    VectorScale(vel, wp_grapplePull.value, vel);
 
 	VectorCopy(vel, pm->ps->velocity);
 
 	pml.groundPlane = qfalse;
 }
+#endif
+
 
 /*
 ===================
@@ -1604,7 +1624,25 @@ static void PM_Weapon( void ) {
 	}
 
 	// check for fire
-	if ( ! (pm->cmd.buttons & BUTTON_ATTACK) ) {
+#ifdef USE_ALT_FIRE
+#ifdef USE_GRAPPLE
+  // this exits early with weapon time so alt grapple doesn't show weapon firing
+  if(!(pm->cmd.buttons & BUTTON_ATTACK)
+    && g_altGrapple.integer
+    && (pm->cmd.buttons & BUTTON_ALT_ATTACK)) {
+    // don't show fire animation
+    pm->ps->weaponTime = 0;
+		pm->ps->weaponstate = WEAPON_READY;
+  	PM_AddEvent( EV_ALTFIRE_WEAPON );
+    return;
+  } else
+#endif
+#endif // end USE_ALT_FIRE
+	if( !(pm->cmd.buttons & BUTTON_ATTACK) 
+#ifdef USE_ALT_FIRE
+    && !(pm->cmd.buttons & BUTTON_ALT_ATTACK)
+#endif
+  ) {
 		pm->ps->weaponTime = 0;
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
@@ -1669,9 +1707,15 @@ static void PM_Weapon( void ) {
 	case WP_BFG:
 		addTime = 200;
 		break;
+#ifdef USE_GRAPPLE
 	case WP_GRAPPLING_HOOK:
+#ifdef USE_WEAPON_VARS
+    addTime = wp_grappleCycle.integer;
+#else
 		addTime = 400;
+#endif
 		break;
+#endif
 #ifdef MISSIONPACK
 	case WP_NAILGUN:
 		addTime = 1000;
@@ -1685,6 +1729,17 @@ static void PM_Weapon( void ) {
 #endif
 	}
 
+#ifdef USE_ALT_FIRE
+  // Hypo: simple alt-fire example
+  if (pm->cmd.buttons & BUTTON_ALT_ATTACK) {
+#ifdef USE_GRAPPLE
+    if(g_altGrapple.integer) {
+      // do nothing
+    } else
+#endif
+  	addTime /= 2.0;
+  } else
+#endif
 #ifdef MISSIONPACK
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 		addTime /= 1.5;
@@ -1980,11 +2035,15 @@ void PmoveSingle (pmove_t *pmove) {
 	if ( pm->ps->powerups[PW_FLIGHT] ) {
 		// flight powerup doesn't allow jump and has different friction
 		PM_FlyMove();
-	} else if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
+	} else 
+#ifdef USE_GRAPPLE
+  if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
 		PM_GrappleMove();
 		// We can wiggle a bit
 		PM_AirMove();
-	} else if (pm->ps->pm_flags & PMF_TIME_WATERJUMP) {
+	} else 
+#endif
+  if (pm->ps->pm_flags & PMF_TIME_WATERJUMP) {
 		PM_WaterJumpMove();
 	} else if ( pm->waterlevel > 1 ) {
 		// swimming

@@ -132,4 +132,9 @@ CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
 
+#ifdef USE_GRAPPLE
+CG_CVAR( cgwp_grappleEnable, "wp_grappleEnable", "1", CVAR_SERVERINFO )
+CG_CVAR( cgwp_grapplePull,  "wp_grapplePull", "700", CVAR_SERVERINFO )
+CG_CVAR( cg_altGrapple,  "g_altGrapple", "1", CVAR_SERVERINFO )
+#endif
 #undef CG_CVAR

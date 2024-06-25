@@ -685,7 +685,9 @@ void CG_RegisterWeapon( int weaponNum ) {
 
 		break;
 
+#ifdef USE_GRAPPLE
 	case WP_GRAPPLING_HOOK:
+    cgs.media.lightningShader = trap_R_RegisterShader( "lightningBoltNew");
 		MAKERGB( weaponInfo->flashDlightColor, 0.6f, 0.6f, 1.0f );
 		weaponInfo->missileModel = trap_R_RegisterModel( "models/ammo/rocket/rocket.md3" );
 		weaponInfo->missileTrailFunc = CG_GrappleTrail;
@@ -696,6 +698,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		weaponInfo->readySound = trap_S_RegisterSound( "sound/weapons/melee/fsthum.wav", qfalse );
 		weaponInfo->firingSound = trap_S_RegisterSound( "sound/weapons/melee/fstrun.wav", qfalse );
 		break;
+#endif
 
 #ifdef MISSIONPACK
 	case WP_CHAINGUN:
@@ -1262,6 +1265,10 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	weaponNum = cent->currentState.weapon;
 
 	CG_RegisterWeapon( weaponNum );
+#if defined(USE_GRAPPLE) && defined(USE_ALT_FIRE)
+  if(cg_altGrapple.integer)
+    CG_RegisterWeapon( WP_GRAPPLING_HOOK );
+#endif
 	weapon = &cg_weapons[weaponNum];
 
 	// add the weapon
@@ -1340,8 +1347,11 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	}
 
 	// add the flash
-	if ( ( weaponNum == WP_LIGHTNING || weaponNum == WP_GAUNTLET || weaponNum == WP_GRAPPLING_HOOK )
-		&& ( nonPredictedCent->currentState.eFlags & EF_FIRING ) ) 
+	if ( ( weaponNum == WP_LIGHTNING || weaponNum == WP_GAUNTLET 
+#ifdef USE_GRAPPLE
+	|| weaponNum == WP_GRAPPLING_HOOK 
+#endif
+	) && ( nonPredictedCent->currentState.eFlags & EF_FIRING ) ) 
 	{
 		// continuous flash
 	} else {

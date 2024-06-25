@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// enable the grappling hook
+#define USE_GRAPPLE 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

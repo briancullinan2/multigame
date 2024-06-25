@@ -322,7 +322,11 @@ static void CG_AddArmor( const gitem_t *item, int quantity ) {
 
 static void CG_AddAmmo( int weapon, int count )
 {
-	if ( weapon == WP_GAUNTLET || weapon == WP_GRAPPLING_HOOK ) {
+	if ( weapon == WP_GAUNTLET 
+#ifdef USE_GRAPPLE
+		|| weapon == WP_GRAPPLING_HOOK 
+#endif
+	) {
 		cg.predictedPlayerState.ammo[weapon] = -1;
 	} else {
 		cg.predictedPlayerState.ammo[weapon] += count;
@@ -594,6 +598,13 @@ static void CG_TouchTriggerPrediction( void ) {
 		if ( ent->eType == ET_TELEPORT_TRIGGER ) {
 			cg.hyperspace = qtrue;
 		} else if ( ent->eType == ET_PUSH_TRIGGER ) {
+        
+#ifdef USE_GRAPPLE
+      if(cg.predictedPlayerState.weapon == WP_GRAPPLING_HOOK
+        && ent->eFlags & EF_FIRING)
+        continue;
+#endif
+
 			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
 		}
 	}
