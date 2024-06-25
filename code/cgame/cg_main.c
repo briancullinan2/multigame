@@ -837,6 +837,12 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
 #endif
 
+#ifdef USE_FLAME_THROWER
+	if(!cgs.media.flameBallShader) {
+  	cgs.media.flameBallShader = trap_R_RegisterShader( "sprites/flameball" );
+	}
+#endif
+
 	cgs.media.medalImpressive = trap_R_RegisterShaderNoMip( "medal_impressive" );
 	cgs.media.medalExcellent = trap_R_RegisterShaderNoMip( "medal_excellent" );
 	cgs.media.medalGauntlet = trap_R_RegisterShaderNoMip( "medal_gauntlet" );

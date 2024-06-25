@@ -72,6 +72,9 @@ void TossClientItems( gentity_t *self ) {
 #ifdef USE_GRAPPLE
 		|| weapon == WP_GRAPPLING_HOOK 
 #endif
+#ifdef USE_FLAME_THROWER
+		|| weapon == WP_FLAME_THROWER
+#endif
   ) {
 		if ( self->client->ps.weaponstate == WEAPON_DROPPING ) {
 			weapon = self->client->pers.cmd.weapon;
@@ -87,6 +90,10 @@ void TossClientItems( gentity_t *self ) {
 #endif
 #ifdef USE_GRAPPLE
 		&& weapon != WP_GRAPPLING_HOOK 
+#endif
+#ifdef USE_FLAME_THROWER
+		// don't drop flame thrower power-up
+    && weapon != WP_FLAME_THROWER
 #endif
     && self->client->ps.ammo[ weapon ] ) {
 		// find the item type for this weapon
@@ -307,6 +314,9 @@ char	*modNames[] = {
 	"MOD_PROXIMITY_MINE",
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
+#ifdef USE_FLAME_THROWER
+  "MOD_FLAME_THROWER",
+#endif
 #endif
 	"MOD_GRAPPLE"
 };

@@ -818,6 +818,15 @@ void CG_RegisterWeapon( int weaponNum ) {
 		weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/rocket/rockfly.wav", qfalse );
 		break;
 
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+  	weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/plasma/lasfly.wav", qfalse );
+  	MAKERGB( weaponInfo->flashDlightColor, 0.6, 0.6, 1 );
+  	weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/plasma/hyprbf1a.wav", qfalse );
+  	cgs.media.flameExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
+    break; 
+#endif
+
 	 default:
 		MAKERGB( weaponInfo->flashDlightColor, 1, 1, 1 );
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/rocket/rocklf1a.wav", qfalse );
@@ -2039,6 +2048,16 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 
 		radius = 8;
 		break;
+
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+  	mod = cgs.media.dishFlashModel;
+  	shader = cgs.media.flameExplosionShader;
+  	sfx = cgs.media.sfx_plasmaexp;
+  	mark = cgs.media.burnMarkShader;
+  	radius = 16;
+    break;
+#endif
 	}
 
 	if ( sfx ) {

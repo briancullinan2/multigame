@@ -316,7 +316,9 @@ typedef enum {
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
 #endif
-
+#ifdef USE_FLAME_THROWER
+  WP_FLAME_THROWER,
+#endif
 	WP_NUM_WEAPONS,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
 	WP_MAX_WEAPONS = 16
@@ -604,6 +606,9 @@ typedef enum {
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
+#endif
+#ifdef USE_FLAME_THROWER
+  MOD_FLAME_THROWER,
 #endif
 	MOD_GRAPPLE
 } meansOfDeath_t;

@@ -1106,6 +1106,12 @@ void ClientSpawn(gentity_t *ent) {
     client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
   }
 #endif
+#ifdef USE_FLAME_THROWER
+  //Spawn player with flame thrower
+  client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
+  client->ps.ammo[WP_FLAME_THROWER] = 999;
+#endif
+
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;

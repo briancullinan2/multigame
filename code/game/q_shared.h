@@ -150,6 +150,8 @@
 #define USE_WEAPON_VARS 1
 // enable the grappling hook
 #define USE_GRAPPLE 1
+// enable the flame thrower
+#define USE_FLAME_THROWER 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

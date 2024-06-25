@@ -161,4 +161,7 @@ CG_CVAR( cgwp_grappleEnable, "wp_grappleEnable", "1", CVAR_SERVERINFO )
 CG_CVAR( cgwp_grapplePull,  "wp_grapplePull", "700", CVAR_SERVERINFO )
 CG_CVAR( cg_altGrapple,  "g_altGrapple", "1", CVAR_SERVERINFO )
 #endif
+#ifdef USE_FLAME_THROWER
+CG_CVAR( cgwp_flameCycle, "wp_flameCycle", "40", CVAR_SERVERINFO )
+#endif
 #undef CG_CVAR

@@ -23,6 +23,15 @@ extern vmCvar_t wp_grappleCycle;
 
 #endif
 
+#ifdef USE_FLAME_THROWER
+#ifdef CGAME
+#define wp_flameCycle cgwp_flameCycle
+extern vmCvar_t cgwp_flameCycle;
+#else
+extern vmCvar_t wp_flameCycle;
+#endif
+#endif
+
 pmove_t		*pm;
 pml_t		pml;
 
@@ -1780,6 +1789,15 @@ static void PM_Weapon( void ) {
 	case WP_CHAINGUN:
 		addTime = 30;
 		break;
+#endif
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+//#ifdef USE_WEAPON_VARS
+    addTime = wp_flameCycle.integer;
+//#else
+//    addTime = 40;
+//#endif
+    break;
 #endif
 	}
 

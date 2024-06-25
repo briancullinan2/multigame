@@ -563,6 +563,51 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 //=============================================================================
 
 
+#ifdef USE_FLAME_THROWER
+/*
+=================
+fire_flame
+=================
+*/
+gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir) {
+  gentity_t*bolt;
+
+  VectorNormalize (dir);
+
+  bolt = G_Spawn();
+  bolt->classname = "flame";
+  bolt->nextthink = level.time + 1500;
+  bolt->think = G_ExplodeMissile;
+  bolt->s.eType = ET_MISSILE;
+  bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
+  bolt->s.weapon = WP_FLAME_THROWER;
+  bolt->r.ownerNum = self->s.number;
+  bolt->parent = self;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_flameDamage.integer;
+  bolt->splashDamage = wp_flameSplash.integer;
+  bolt->splashRadius = wp_flameRadius.integer;
+#else
+  bolt->damage = 30;
+  bolt->splashDamage = 25;
+  bolt->splashRadius = 45;
+#endif
+  bolt->methodOfDeath = MOD_FLAME_THROWER;
+  bolt->splashMethodOfDeath = MOD_PLASMA_SPLASH;
+  bolt->clipmask = MASK_SHOT;
+
+  bolt->s.pos.trType = TR_LINEAR;
+  bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;// move a bit on the very first frame
+  VectorCopy( start, bolt->s.pos.trBase );
+  VectorScale( dir, 300, bolt->s.pos.trDelta );
+  SnapVector( bolt->s.pos.trDelta );// save net bandwidth
+
+  VectorCopy (start, bolt->r.currentOrigin);
+
+  return bolt;
+}
+#endif
+
 /*
 =================
 fire_grenade

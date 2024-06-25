@@ -734,6 +734,11 @@ typedef struct {
 	qhandle_t	harvesterNeutralModel;
 #endif
 
+#ifdef USE_FLAME_THROWER
+  qhandle_t flameBallShader;
+  qhandle_t flameExplosionShader;
+#endif
+
 	qhandle_t	armorModel;
 	qhandle_t	armorIcon;
 

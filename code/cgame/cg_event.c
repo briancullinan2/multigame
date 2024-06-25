@@ -178,6 +178,11 @@ static void CG_Obituary( entityState_t *ent ) {
 				message = "found his prox mine";
 			}
 			break;
+#ifdef USE_FLAME_THROWER
+    case MOD_FLAME_THROWER:
+      message = "was fried by";
+      break;
+#endif
 #endif
 		default:
 			if ( gender == GENDER_FEMALE )

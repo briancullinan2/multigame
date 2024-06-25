@@ -788,6 +788,24 @@ void weapon_proxlauncher_fire (gentity_t *ent) {
 //======================================================================
 
 
+#ifdef USE_FLAME_THROWER
+gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir);
+
+/*
+=======================================================================
+FLAME_THROWER
+=======================================================================
+*/
+void Weapon_fire_flame (gentity_t *ent ) {
+	gentity_t *m;
+
+	m = fire_flame(ent, muzzle, forward);
+	m->damage *= s_quadFactor;
+	m->splashDamage *= s_quadFactor;
+}
+#endif
+
+
 /*
 ===============
 LogAccuracyHit
@@ -905,6 +923,11 @@ void FireWeapon( gentity_t *ent ) {
 	case WP_GRAPPLING_HOOK:
 		Weapon_GrapplingHook_Fire( ent );
 		break;
+#endif
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER :
+    Weapon_fire_flame( ent );
+    break;
 #endif
 #ifdef MISSIONPACK
 	case WP_NAILGUN:
