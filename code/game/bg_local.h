@@ -52,11 +52,55 @@ extern	float	pm_flightfriction;
 extern	int		c_pmove;
 
 
+#ifdef CGAME
+
+#ifdef USE_GRAPPLE
+#define g_altGrapple cg_altGrapple
+#define wp_grapplePull cgwp_grapplePull
+#endif
+
+#ifdef USE_WEAPON_VARS
+#define wp_gauntCycle   cgwp_gauntCycle
+#define wp_lightCycle   cgwp_lightCycle
+#define wp_shotgunCycle cgwp_shotgunCycle
+#define wp_machineCycle cgwp_machineCycle
+#define wp_grenadeCycle cgwp_grenadeCycle
+#define wp_rocketCycle  cgwp_rocketCycle
+#define wp_plasmaCycle  cgwp_plasmaCycle
+#define wp_railCycle    cgwp_railCycle
+#define wp_bfgCycle     cgwp_bfgCycle
+#define wp_grappleCycle cgwp_grappleCycle
+#define wp_nailCycle    cgwp_nailCycle
+#define wp_proxCycle    cgwp_proxCycle
+#define wp_chainCycle   cgwp_chainCycle
+#define wp_flameCycle   cgwp_flameCycle
+#endif
+
+#endif // end CGAME
+
+
+#ifdef USE_WEAPON_VARS
+extern vmCvar_t  wp_gauntCycle;
+extern vmCvar_t  wp_lightCycle;
+extern vmCvar_t  wp_shotgunCycle;
+extern vmCvar_t  wp_machineCycle;
+extern vmCvar_t  wp_grenadeCycle;
+extern vmCvar_t  wp_rocketCycle;
+extern vmCvar_t  wp_plasmaCycle;
+extern vmCvar_t  wp_railCycle;
+extern vmCvar_t  wp_bfgCycle;
+extern vmCvar_t  wp_grappleCycle;
+extern vmCvar_t  wp_nailCycle;
+extern vmCvar_t  wp_proxCycle;
+extern vmCvar_t  wp_chainCycle;
+extern vmCvar_t  wp_flameCycle;
+#endif
 
 #ifdef USE_GRAPPLE
 extern vmCvar_t  g_altGrapple;
 extern vmCvar_t  wp_grapplePull;
 #endif
+
 
 void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 void PM_AddTouchEnt( int entityNum );

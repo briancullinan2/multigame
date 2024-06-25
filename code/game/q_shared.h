@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// weapon vars allow customizing all weapon behavior
+#define USE_WEAPON_VARS 1
 // enable the grappling hook
 #define USE_GRAPPLE 1
 typedef unsigned char 		byte;

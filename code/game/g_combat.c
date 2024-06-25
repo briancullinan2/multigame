@@ -82,6 +82,9 @@ void TossClientItems( gentity_t *self ) {
 	}
 
 	if ( weapon > WP_MACHINEGUN 
+#ifdef USE_WEAPON_VARS
+		&& self->client->ps.ammo[ weapon ] != INFINITE
+#endif
 #ifdef USE_GRAPPLE
 		&& weapon != WP_GRAPPLING_HOOK 
 #endif
