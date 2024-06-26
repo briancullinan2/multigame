@@ -154,6 +154,8 @@
 #define USE_HOTBFG 1
 // extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
 #define USE_MODES_DEATH 1
+// show special messages and animation for headshots
+#define USE_HEADSHOTS 1
 // enable lightening discharge that kills players in radius when used in water
 #define USE_LV_DISCHARGE 1
 // instagib mode
@@ -221,6 +223,8 @@
 #define USE_LADDERS 1
 // adds rotating doors from maps, UrT uses them, so does Quake 2
 #define USE_ROTATING_DOOR 1
+
+
 // weapon vars allow customizing all weapon behavior
 #define USE_WEAPON_VARS 1
 // enable the grappling hook
@@ -235,6 +239,7 @@
 #define USE_3D_WEAPONS 1
 // allow clients to center the weapons above the hud
 #define USE_WEAPON_CENTER 1
+
 // allow anti gravity boots commands to be used by clients
 #define USE_GRAVITY_BOOTS 1
 // advanced classes applies special properties to players based on model or selection

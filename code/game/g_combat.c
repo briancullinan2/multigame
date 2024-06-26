@@ -653,7 +653,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 #endif
 
 #ifdef USE_GAME_FREEZETAG
-	if(g_freezeTag.integer && meansOfDeath != MOD_TRIGGER_HURT) {
+	if(g_freezeTag.integer && meansOfDeath != MOD_TRIGGER_HURT && meansOfDeath != MOD_VOID) {
 		self->client->ps.pm_type = PM_FROZEN;
 	} else
 #endif
@@ -821,7 +821,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	}
 
 #ifdef USE_GAME_FREEZETAG
-	if(!g_freezeTag.integer && meansOfDeath != MOD_TRIGGER_HURT) {
+	if(!g_freezeTag.integer || meansOfDeath == MOD_TRIGGER_HURT || meansOfDeath == MOD_VOID) {
 #endif
 
 	self->takedamage = qtrue;	// can still be gibbed

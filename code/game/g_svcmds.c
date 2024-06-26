@@ -459,6 +459,7 @@ void  Svcmd_Freeze_f( void ) {
 			ent->health = 100;
 		}
     ent->client->ps.powerups[PW_FROZEN] = 0;
+    cl->ps.pm_type = PM_NORMAL;
     SetClientViewAngle(ent, cl->frozen_angles);
   }
 }
