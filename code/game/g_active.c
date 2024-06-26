@@ -429,6 +429,16 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #endif
 		} else {
 			// count down health when over max
+#ifdef USE_CLOAK_CMD
+      if (ent->flags & FL_CLOAK) {
+        // count down health when cloaked.
+      	ent->health--;
+      	if ( ent->health < 11) {
+      		ent->flags ^= FL_CLOAK;
+      		ent->client->ps.powerups[PW_INVIS] = level.time;
+      	}
+      } else
+#endif
 			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
@@ -838,6 +848,10 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	client->ps.gravity = g_gravity.value;
+#ifdef USE_GRAVITY_BOOTS
+  if (g_enableBoots.integer && ent->flags & FL_BOOTS)    //  umm and this,
+     client->ps.gravity = g_gravity.value * 0.20;        //  yeah... this too
+#endif
 
 	// set speed
 	client->ps.speed = g_speed.value;

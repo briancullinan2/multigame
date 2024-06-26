@@ -23,7 +23,11 @@ CG_CVAR( cg_drawStatus, "cg_drawStatus", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawTimer, "cg_drawTimer", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawFPS, "cg_drawFPS", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawSnapshot, "cg_drawSnapshot", "0", CVAR_ARCHIVE  )
+#ifdef USE_3D_WEAPONS
+CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "2", CVAR_ARCHIVE )
+#else
 CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "1", CVAR_ARCHIVE )
+#endif
 CG_CVAR( cg_drawIcons, "cg_drawIcons", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAmmoWarning, "cg_drawAmmoWarning", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAttacker, "cg_drawAttacker", "1", CVAR_ARCHIVE )
@@ -154,6 +158,9 @@ CG_CVAR( cgwp_chainCycle, "wp_chainCycle", "30", CVAR_SERVERINFO )
 
 #ifdef USE_WEAPON_ORDER
 CG_CVAR( cg_weaponOrder, "cg_weaponOrder", "1/2/3/4/6/8/5/7/9", CVAR_ARCHIVE ) //WarZone
+#endif
+#ifdef USE_WEAPON_CENTER
+CG_CVAR( cg_gunCenter, "cg_gunCenter", "1", CVAR_ARCHIVE )
 #endif
 
 #ifdef USE_GRAPPLE

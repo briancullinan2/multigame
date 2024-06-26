@@ -178,6 +178,18 @@ G_CVAR( wp_flameRadius,       "wp_flameRadius",       "45",   CVAR_ARCHIVE, 0, q
 
 #endif // end USE_WEAPON_VARS
 
+#ifdef USE_BOUNCE_RPG
+G_CVAR( wp_bfgBounce, "wp_bfgBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_plasmaBounce, "wp_plasmaBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_rocketBounce, "wp_rocketBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_CLOAK_CMD
+G_CVAR( g_enableCloak, "g_enableCloak", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+
+#ifdef USE_GRAVITY_BOOTS
+G_CVAR( g_enableBoots, "g_enableBoots", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
 
 #ifdef USE_WEAPON_ORDER
 G_CVAR( g_supportsWeaponOrder, "g_supportsWeaponOrder", "1", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse ) //WarZone

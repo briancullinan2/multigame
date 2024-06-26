@@ -1438,6 +1438,37 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 }
 
 
+#ifdef USE_WEAPON_CENTER
+void CG_CenterGun(float *gen_guny, playerState_t *ps) {
+  switch (ps->weapon)
+	{
+    default:
+		case WP_MACHINEGUN:
+		case WP_SHOTGUN:
+		case WP_LIGHTNING:
+			*gen_guny = cg_gun_y.value + 3 * cg_gunCenter.value;
+			break;
+    case WP_GAUNTLET:
+		case WP_PLASMAGUN:
+#ifdef USE_FLAME_THROWER
+    case WP_FLAME_THROWER:
+#endif
+#ifdef USE_GRAPPLE
+    case WP_GRAPPLING_HOOK:
+#endif
+			*gen_guny = cg_gun_y.value + 4 * cg_gunCenter.value;
+			break;
+    case WP_GRENADE_LAUNCHER:
+		case WP_ROCKET_LAUNCHER:
+		case WP_RAILGUN:
+		case WP_BFG:
+			*gen_guny = cg_gun_y.value + 5 * cg_gunCenter.value;
+			break;
+	}
+}
+#endif
+
+
 /*
 ==============
 CG_AddViewWeapon
@@ -1505,9 +1536,20 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 	// set up gun position
 	CG_CalculateWeaponPosition( hand.origin, angles );
 
-	VectorMA( hand.origin, (cg_gun_x.value+fovOffset[0]), cg.refdef.viewaxis[0], hand.origin );
-	VectorMA( hand.origin, cg_gun_y.value, cg.refdef.viewaxis[1], hand.origin );
-	VectorMA( hand.origin, (cg_gun_z.value+fovOffset[2]), cg.refdef.viewaxis[2], hand.origin );
+#ifdef USE_WEAPON_CENTER
+  if(cg_gunCenter.integer) {
+    float gen_guny;
+    CG_CenterGun(&gen_guny, ps);
+    VectorMA( hand.origin, (cg_gun_x.value+fovOffset[0]), cg.refdef.viewaxis[0], hand.origin );
+  	VectorMA( hand.origin, gen_guny, cg.refdef.viewaxis[1], hand.origin );
+  	VectorMA( hand.origin, (cg_gun_z.value+fovOffset[2]), cg.refdef.viewaxis[2], hand.origin );
+  } else
+#endif
+  {
+  	VectorMA( hand.origin, (cg_gun_x.value+fovOffset[0]), cg.refdef.viewaxis[0], hand.origin );
+  	VectorMA( hand.origin, cg_gun_y.value, cg.refdef.viewaxis[1], hand.origin );
+  	VectorMA( hand.origin, (cg_gun_z.value+fovOffset[2]), cg.refdef.viewaxis[2], hand.origin );
+  }
 
 	AnglesToAxis( angles, hand.axis );
 
@@ -1638,7 +1680,14 @@ void CG_DrawWeaponSelect( void ) {
 		CG_RegisterWeapon( i );
 
 		// draw weapon icon
+#ifdef USE_3D_WEAPONS
+    if(cg_draw3dIcons.integer > 1) {
+      hud_weapons(x, y, &cg_weapons[i]);
+    }
+#endif
+		if(cg_draw3dIcons.integer <= 1 || !cg_weapons[i].weaponModel) {
 		CG_DrawPic( x, y, 32, 32, cg_weapons[i].weaponIcon );
+    }
 
 		// draw selection marker
 		if ( i == cg.weaponSelect ) {
@@ -1791,11 +1840,13 @@ CG_Weapon_f
 */
 void CG_Weapon_f( void ) {
 	int		num;
+  qboolean isRecent;
 
 	if ( !cg.snap ) {
 		return;
 	}
 
+  isRecent = cg.time - cg.weaponSelectTime < 1000;
 	cg.weaponSelectTime = cg.time;
 
 	if ( cg.snap->ps.pm_flags & PMF_FOLLOW || cg.demoPlayback ) {
