@@ -869,6 +869,10 @@ void Laser_Gen( gentity_t *ent, int type )	{
 	}
 
 	ent->client->lasersight = las;
+}
+
+#endif
+
 #ifdef USE_FLAME_THROWER
 gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir);
 
