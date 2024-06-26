@@ -327,13 +327,17 @@ static void CG_AddArmor( const gitem_t *item, int quantity ) {
 
 static void CG_AddAmmo( int weapon, int count )
 {
-	if ( weapon == WP_GAUNTLET || weapon == WP_GRAPPLING_HOOK ) {
-		cg.predictedPlayerState.ammo[weapon] = -1;
+	if ( weapon == WP_GAUNTLET 
+#ifdef USE_GRAPPLE
+		|| weapon == WP_GRAPPLING_HOOK 
+#endif
+	) {
+		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = -1;
 	} else {
-		cg.predictedPlayerState.ammo[weapon] += count;
+		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] += count;
 		if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG ) {
-			if ( cg.predictedPlayerState.ammo[weapon] > AMMO_HARD_LIMIT ) {
-				cg.predictedPlayerState.ammo[weapon] = AMMO_HARD_LIMIT;
+			if ( cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
+				cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
 			}
 		}
 	}
@@ -348,15 +352,15 @@ static void CG_AddWeapon( int weapon, int quantity, qboolean dropped )
 
 	// dropped items and teamplay weapons always have full ammo
 	if ( !dropped && cgs.gametype != GT_TEAM ) {
-		if ( cg.predictedPlayerState.ammo[ weapon ] < quantity ) {
-			quantity = quantity - cg.predictedPlayerState.ammo[ weapon ];
+		if ( cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ] < quantity ) {
+			quantity = quantity - cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ];
 		} else {
 			quantity = 1;
 		}
 	}
 
 	// add the weapon
-	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << weapon );
+	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << (weapon % WP_MAX_WEAPONS) );
 
 	CG_AddAmmo( weapon, quantity );
 }
@@ -479,6 +483,9 @@ CG_TouchItem
 */
 static void CG_TouchItem( centity_t *cent ) {
 	const gitem_t *item;
+#ifdef USE_WEAPON_ORDER
+  qboolean alreadyHad = qfalse;
+#endif
 
 	if ( cg.allowPickupPrediction && cg.allowPickupPrediction > cg.time ) {
 		return;
@@ -524,7 +531,14 @@ static void CG_TouchItem( centity_t *cent ) {
 	}
 
 	// grab it
+#ifdef USE_WEAPON_ORDER
+  if(item->giType == IT_WEAPON) {
+    alreadyHad = cg.snap->ps.stats[STAT_WEAPONS] & (1 << item->giTag);
+  }
+  BG_AddPredictableEventToPlayerstate( alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
+#else
 	BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
+#endif
 
 	// perform prediction
 	CG_PickupPrediction( cent, item );
@@ -542,8 +556,8 @@ static void CG_TouchItem( centity_t *cent ) {
 	// if it's a weapon, give them some predicted ammo so the autoswitch will work
 	if ( item->giType == IT_WEAPON ) {
 		cg.predictedPlayerState.stats[ STAT_WEAPONS ] |= 1 << item->giTag;
-		if ( !cg.predictedPlayerState.ammo[ item->giTag ] ) {
-			cg.predictedPlayerState.ammo[ item->giTag ] = 1;
+		if ( !cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] ) {
+			cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] = 1;
 		}
 	}
 }
@@ -616,6 +630,13 @@ static void CG_TouchTriggerPrediction( void ) {
 		if ( ent->eType == ET_TELEPORT_TRIGGER ) {
 			cg.hyperspace = qtrue;
 		} else if ( ent->eType == ET_PUSH_TRIGGER ) {
+        
+#ifdef USE_GRAPPLE
+      if(cg.predictedPlayerState.weapon == WP_GRAPPLING_HOOK
+        && ent->eFlags & EF_FIRING)
+        continue;
+#endif
+
 			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
 		}
 	}
@@ -860,7 +881,7 @@ static int CG_IsUnacceptableError( playerState_t *ps, playerState_t *pps, qboole
 		}
 	}
 
-	for( i = 0; i < MAX_WEAPONS; i++ ) {
+	for( i = 0; i < WP_MAX_WEAPONS; i++ ) {
 		if( pps->ammo[ i ] != ps->ammo[ i ] ) {
 			if ( cg_showmiss.integer > 1 ) {
 				CG_Printf( "ammo[%i] %i => %i ", i, pps->ammo[ i ], ps->ammo[ i ] );

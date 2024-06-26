@@ -68,6 +68,8 @@ cd vm\cgame
 %cc1% %cgamedir%\cg_view.c
 @if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_weapons.c
+@if errorlevel 1 goto quit
+%cc1% %cgamedir%\cg_weaporder.c
 
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_lib.c

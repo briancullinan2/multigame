@@ -487,6 +487,12 @@ static void CG_Camera_f( void ) {
 void CG_GenerateTracemap( void );
 
 
+#ifdef USE_ADVANCED_WEAPONS
+void PrevClass( void );
+void NextClass( void );
+#endif
+
+
 typedef struct {
 	const char *cmd;
 	void	(*function)(void);
@@ -540,6 +546,12 @@ static consoleCommand_t	commands[] = {
 	{ "scoresDown", CG_scrollScoresDown_f },
 	{ "scoresUp", CG_scrollScoresUp_f },
 #endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	{ "nextclass", NextClass},
+	{ "prevclass", PrevClass},
+#endif
+
 	{ "startOrbit", CG_StartOrbit_f },
 	{ "loaddeferred", CG_LoadDeferredPlayers },
 	{ "camera", CG_Camera_f },
@@ -620,6 +632,19 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("stats");
 	trap_AddCommand ("teamtask");
 	trap_AddCommand ("loaddefered");	// spelled wrong, but not changing for demo
+#ifdef USE_BOUNCE_CMD
+  trap_AddCommand ("rbounce");
+#endif
+#ifdef USE_CLOAK_CMD
+  trap_AddCommand ("cloak");
+#endif
+#ifdef USE_GRAVITY_BOOTS
+  trap_AddCommand ("boots");
+#endif
+#ifdef USE_LASER_SIGHT
+  trap_AddCommand ("laser");
+  trap_AddCommand ("flashlight");
+#endif
 #ifdef USE_WEAPON_DROP
   trap_AddCommand ("drop");
 #endif

@@ -428,6 +428,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\cgame\cg_weaporder.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\q_math.c"
 				>
 			</File>

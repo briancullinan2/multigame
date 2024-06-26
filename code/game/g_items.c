@@ -246,10 +246,13 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 static void Add_Ammo( gentity_t *ent, int weapon, int count )
 {
-	ent->client->ps.ammo[weapon] += count;
-	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
-		ent->client->ps.ammo[weapon] = AMMO_HARD_LIMIT;
+	ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] += count;
+	if ( ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
+		ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
 	}
+#ifdef USE_ADVANCED_WEAPONS
+	ent->client->ammo[ent->client->weaponClass][weapon % WP_MAX_WEAPONS] = ent->client->ps.ammo[weapon % WP_MAX_WEAPONS];
+#endif
 }
 
 
@@ -296,12 +299,17 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 	}
 
 	// add the weapon
-	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << ent->item->giTag );
+	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+#ifdef USE_ADVANCED_WEAPONS
+	other->client->weapons[other->client->weaponClass] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+#endif
 
 	Add_Ammo( other, ent->item->giTag, quantity );
 
+#ifdef USE_GRAPPLE
 	if (ent->item->giTag == WP_GRAPPLING_HOOK)
-		other->client->ps.ammo[ent->item->giTag] = -1; // unlimited ammo
+		other->client->ps.ammo[ent->item->giTag] = INFINITE; // unlimited ammo
+#endif
 
 	// team deathmatch has slow weapon respawns
 	//if ( g_gametype.integer == GT_TEAM ) {
@@ -507,6 +515,10 @@ Touch_Item
 void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int			respawn;
 	qboolean	predict;
+#ifdef USE_WEAPON_ORDER
+  qboolean alreadyHad = qfalse;
+#endif
+
 #ifdef USE_INSTAGIB
 	//SCO if ent-item is some sort of team item.
 	if (g_instagib.integer && ent->item->giType != IT_TEAM)
@@ -546,6 +558,9 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// call the item-specific pickup function
 	switch( ent->item->giType ) {
 	case IT_WEAPON:
+#ifdef USE_WEAPON_ORDER
+    alreadyHad = other->client->ps.stats[STAT_WEAPONS] & (1 << ent->item->giTag);
+#endif
 		respawn = Pickup_Weapon(ent, other);
 		break;
 	case IT_AMMO:
@@ -585,11 +600,21 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 
 	// play the normal pickup sound
+#ifdef USE_WEAPON_ORDER
+  if ( predict ) {
+		G_AddPredictableEvent( other, alreadyHad 
+      ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, ent->s.modelindex );
+	} else {
+		G_AddEvent( other, alreadyHad 
+      ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, ent->s.modelindex );
+	}
+#else
 	if ( predict ) {
 		G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
 	} else {
 		G_AddEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
 	}
+#endif
 
 	// powerup pickups are global broadcasts
 	if ( ent->item->giType == IT_POWERUP || ent->item->giType == IT_TEAM) {
@@ -960,6 +985,9 @@ void ClearRegisteredItems( void ) {
 	// players always start with the base weapon
 	RegisterItem( BG_FindItemForWeapon( WP_MACHINEGUN ) );
 	RegisterItem( BG_FindItemForWeapon( WP_GAUNTLET ) );
+#ifdef USE_FLAME_THROWER
+  RegisterItem( BG_FindItemForWeapon( WP_FLAME_THROWER) );
+#endif
 #ifdef MISSIONPACK
 	if( g_gametype.integer == GT_HARVESTER ) {
 		RegisterItem( BG_FindItem( "Red Cube" ) );

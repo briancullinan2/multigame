@@ -125,6 +125,12 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 	if ( !other->client ) {
 		return;
 	}
+  
+#ifdef USE_GRAPPLE
+  if (other->client && other->client->hook)
+    return;
+#endif
+  
 
 	BG_TouchJumpPad( &other->client->ps, &self->s );
 }

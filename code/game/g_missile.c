@@ -99,7 +99,7 @@ void G_ExplodeMissile( gentity_t *ent ) {
 }
 
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 ================
 ProximityMine_Explode
@@ -276,7 +276,7 @@ G_MissileImpact
 void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 	gentity_t		*other;
 	qboolean		hitClient = qfalse;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	vec3_t			forward, impactpoint, bouncedir;
 	int				eFlags;
 #endif
@@ -295,7 +295,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
   ent->takedamage = qfalse;
 #endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	if ( other->takedamage ) {
 		if ( ent->s.weapon != WP_PROX_LAUNCHER ) {
 			if ( other->client && other->client->invulnerabilityTime > level.time ) {
@@ -335,7 +335,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		}
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	if( ent->s.weapon == WP_PROX_LAUNCHER ) {
 		if( ent->s.pos.trType != TR_GRAVITY ) {
 			return;
@@ -372,7 +372,10 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 	}
 #endif
 
-	if (!strcmp(ent->classname, "hook")) {
+#ifdef USE_GRAPPLE
+
+  //if (!strcmp(ent->classname, "hook")) {
+  if( ent->s.weapon == WP_GRAPPLING_HOOK ) {
 		gentity_t *nent;
 		vec3_t v;
 
@@ -416,6 +419,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 
 		return;
 	}
+
 #ifdef USE_PORTALS
 #define AWAY_FROM_WALL 32.0f
   if(wp_portalEnable.integer && ent->s.weapon == WP_BFG) {
@@ -435,6 +439,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
     G_FreeEntity(ent);
     return;
   }
+#endif
 #endif
 
 	// is it cheaper in bandwidth to just remove this ent and create a new
@@ -507,7 +512,7 @@ void G_RunMissile( gentity_t *ent ) {
 	if ( ent->target_ent ) {
 		passent = ent->target_ent->s.number;
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	// prox mines that left the owner bbox will attach to anything, even the owner
 	else if (ent->s.weapon == WP_PROX_LAUNCHER && ent->count) {
 		passent = ENTITYNUM_NONE;
@@ -534,10 +539,12 @@ void G_RunMissile( gentity_t *ent ) {
 	if ( tr.fraction != 1 ) {
 		// never explode or bounce on sky
 		if ( tr.surfaceFlags & SURF_NOIMPACT ) {
+#ifdef USE_GRAPPLE
 			// If grapple, reset owner
 			if (ent->parent && ent->parent->client && ent->parent->client->hook == ent) {
 				ent->parent->client->hook = NULL;
 			}
+#endif
 			G_FreeEntity( ent );
 			return;
 		}
@@ -546,7 +553,7 @@ void G_RunMissile( gentity_t *ent ) {
 			return;		// exploded
 		}
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	// if the prox mine wasn't yet outside the player body
 	if (ent->s.weapon == WP_PROX_LAUNCHER && !ent->count) {
 		// check if the prox mine is outside the owner bbox
@@ -576,16 +583,32 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	bolt = G_Spawn();
 	bolt->classname = "plasma";
+#ifdef USE_BOUNCE_RPG
+	if (self->flags & FL_ROCKETBOUNCE || wp_plasmaBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		bolt->nextthink = level.time + 2500;
+	} else
+#endif
+#ifdef USE_WEAPON_VARS
+	bolt->nextthink = level.time + wp_plasmaTime.value * 1000.0;
+#else
 	bolt->nextthink = level.time + 10000;
+#endif
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_PLASMAGUN;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
-	bolt->damage = 20;
-	bolt->splashDamage = 15;
+#ifdef USE_WEAPON_VARS
+	bolt->damage = wp_plasmaDamage.integer;
+  bolt->splashDamage = wp_plasmaSplash.integer;
+	bolt->splashRadius = wp_plasmaRadius.integer;
+#else
+  bolt->damage = 20;
+  bolt->splashDamage = 15;
 	bolt->splashRadius = 20;
+#endif
 	bolt->methodOfDeath = MOD_PLASMA;
 	bolt->splashMethodOfDeath = MOD_PLASMA_SPLASH;
 	bolt->clipmask = MASK_SHOT;
@@ -600,7 +623,11 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
 	SnapVector( bolt->s.pos.trBase );			// save net bandwidth
+#ifdef USE_WEAPON_VARS
+	VectorScale( dir, wp_plasmaSpeed.integer, bolt->s.pos.trDelta );
+#else
 	VectorScale( dir, 2000, bolt->s.pos.trDelta );
+#endif
 	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
 
 	VectorCopy (start, bolt->r.currentOrigin);
@@ -610,6 +637,51 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 
 //=============================================================================
 
+
+#ifdef USE_FLAME_THROWER
+/*
+=================
+fire_flame
+=================
+*/
+gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir) {
+  gentity_t*bolt;
+
+  VectorNormalize (dir);
+
+  bolt = G_Spawn();
+  bolt->classname = "flame";
+  bolt->nextthink = level.time + 1500;
+  bolt->think = G_ExplodeMissile;
+  bolt->s.eType = ET_MISSILE;
+  bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
+  bolt->s.weapon = WP_FLAME_THROWER;
+  bolt->r.ownerNum = self->s.number;
+  bolt->parent = self;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_flameDamage.integer;
+  bolt->splashDamage = wp_flameSplash.integer;
+  bolt->splashRadius = wp_flameRadius.integer;
+#else
+  bolt->damage = 30;
+  bolt->splashDamage = 25;
+  bolt->splashRadius = 45;
+#endif
+  bolt->methodOfDeath = MOD_FLAME_THROWER;
+  bolt->splashMethodOfDeath = MOD_PLASMA_SPLASH;
+  bolt->clipmask = MASK_SHOT;
+
+  bolt->s.pos.trType = TR_LINEAR;
+  bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;// move a bit on the very first frame
+  VectorCopy( start, bolt->s.pos.trBase );
+  VectorScale( dir, 300, bolt->s.pos.trDelta );
+  SnapVector( bolt->s.pos.trDelta );// save net bandwidth
+
+  VectorCopy (start, bolt->r.currentOrigin);
+
+  return bolt;
+}
+#endif
 
 /*
 =================
@@ -623,17 +695,29 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	bolt = G_Spawn();
 	bolt->classname = "grenade";
-	bolt->nextthink = level.time + 2500;
-	bolt->think = G_ExplodeMissile;
+  {
+#ifdef USE_WEAPON_VARS
+  	bolt->nextthink = level.time + wp_grenadeTime.value * 1000.0;
+#else
+  	bolt->nextthink = level.time + 2500;
+#endif
+  	bolt->think = G_ExplodeMissile;
+  }
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_GRENADE_LAUNCHER;
 	bolt->s.eFlags = EF_BOUNCE_HALF;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
-	bolt->damage = 100;
-	bolt->splashDamage = 100;
-	bolt->splashRadius = 150;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_grenadeDamage.integer;
+  bolt->splashDamage = wp_grenadeSplash.integer;
+  bolt->splashRadius = wp_grenadeRadius.integer;
+#else
+  bolt->damage = GRENADE_DAMAGE;
+  bolt->splashDamage = GRENADE_DAMAGE;
+  bolt->splashRadius = GRENADE_RADIUS;
+#endif
 	bolt->methodOfDeath = MOD_GRENADE;
 	bolt->splashMethodOfDeath = MOD_GRENADE_SPLASH;
 	bolt->clipmask = MASK_SHOT;
@@ -650,7 +734,11 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.pos.trType = TR_GRAVITY;
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
+#ifdef USE_WEAPON_VARS
+	VectorScale( dir, wp_grenadeSpeed.integer, bolt->s.pos.trDelta );
+#else
 	VectorScale( dir, 700, bolt->s.pos.trDelta );
+#endif
 	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
 
 	VectorCopy (start, bolt->r.currentOrigin);
@@ -724,16 +812,32 @@ gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	bolt = G_Spawn();
 	bolt->classname = "bfg";
+#ifdef USE_BOUNCE_RPG
+	if (self->flags & FL_ROCKETBOUNCE || wp_bfgBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		bolt->nextthink = level.time + 2500;
+	} else
+#endif
+#ifdef USE_WEAPON_VARS
+	bolt->nextthink = level.time + wp_bfgTime.value * 1000.0;
+#else
 	bolt->nextthink = level.time + 10000;
+#endif
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_BFG;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_bfgDamage.integer;
+  bolt->splashDamage = wp_bfgSplash.integer;
+	bolt->splashRadius = wp_bfgRadius.integer;
+#else
 	bolt->damage = 100;
-	bolt->splashDamage = 100;
+  bolt->splashDamage = 100;
 	bolt->splashRadius = 120;
+#endif
 	bolt->methodOfDeath = MOD_BFG;
 	bolt->splashMethodOfDeath = MOD_BFG_SPLASH;
 	bolt->clipmask = MASK_SHOT;
@@ -751,7 +855,11 @@ gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
 	SnapVector( bolt->s.pos.trBase );			// save net bandwidth
+#ifdef USE_WEAPON_VARS
+	VectorScale( dir, wp_bfgSpeed.integer, bolt->s.pos.trDelta );
+#else
 	VectorScale( dir, 2000, bolt->s.pos.trDelta );
+#endif
 	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
 	VectorCopy (start, bolt->r.currentOrigin);
 
@@ -775,14 +883,32 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->classname = "rocket";
 	bolt->nextthink = level.time + 15000;
 	bolt->think = G_ExplodeMissile;
+#ifdef USE_BOUNCE_RPG
+  if (self->flags & FL_ROCKETBOUNCE || wp_rocketBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		// shorter explosion time because of the extra bouncing chaos
+    bolt->nextthink = level.time + 2500;
+	} else
+#endif
+#ifdef USE_WEAPON_VARS
+  bolt->nextthink = level.time + wp_rocketTime.value * 1000.0;
+#else
+  bolt->nextthink = level.time + 15000;
+#endif
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_ROCKET_LAUNCHER;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_rocketDamage.integer;
+  bolt->splashDamage = wp_rocketSplash.integer;
+	bolt->splashRadius = wp_rocketRadius.integer;
+#else
 	bolt->damage = 100;
-	bolt->splashDamage = 100;
+  bolt->splashDamage = 100;
 	bolt->splashRadius = 120;
+#endif
 	bolt->methodOfDeath = MOD_ROCKET;
 	bolt->splashMethodOfDeath = MOD_ROCKET_SPLASH;
 	bolt->clipmask = MASK_SHOT;
@@ -808,6 +934,9 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 }
 
 
+
+#ifdef USE_GRAPPLE
+
 /*
 =================
 fire_grapple
@@ -822,7 +951,11 @@ gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	hook = G_Spawn();
 	hook->classname = "hook";
+#ifdef USE_WEAPON_VARS
+	hook->nextthink = level.time + wp_grappleTime.value * 1000.0;
+#else
 	hook->nextthink = level.time + 10000;
+#endif
 	hook->think = Weapon_HookFree;
 	hook->s.eType = ET_MISSILE;
 	hook->r.svFlags = SVF_USE_CURRENT_ORIGIN;
@@ -848,7 +981,11 @@ gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir) {
 	hook->s.pos.trTime = hooktime;
 	VectorCopy( start, hook->s.pos.trBase );
 	SnapVector( hook->s.pos.trBase );			// save net bandwidth
-	VectorScale( dir, 800, hook->s.pos.trDelta );
+#ifdef USE_WEAPON_VARS
+	VectorScale( dir, wp_grappleSpeed.value, hook->s.pos.trDelta );
+#else
+  VectorScale( dir, 2000.0f, hook->s.pos.trDelta );
+#endif
 	SnapVector( hook->s.pos.trDelta );			// save net bandwidth
 	VectorCopy (start, hook->r.currentOrigin);
 
@@ -857,8 +994,10 @@ gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir) {
 	return hook;
 }
 
+#endif
 
-#ifdef MISSIONPACK
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 =================
 fire_nail
@@ -874,14 +1013,22 @@ gentity_t *fire_nail( gentity_t *self, vec3_t start, vec3_t forward, vec3_t righ
 
 	bolt = G_Spawn();
 	bolt->classname = "nail";
+#ifdef USE_WEAPON_VARS
+	bolt->nextthink = level.time + wp_nailTime.value * 1000.0;
+#else
 	bolt->nextthink = level.time + 10000;
+#endif
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_NAILGUN;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_nailDamage.integer;
+#else
 	bolt->damage = 20;
+#endif
 	bolt->methodOfDeath = MOD_NAIL;
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
@@ -899,7 +1046,11 @@ gentity_t *fire_nail( gentity_t *self, vec3_t start, vec3_t forward, vec3_t righ
 	VectorSubtract( end, start, dir );
 	VectorNormalize( dir );
 
+#ifdef USE_WEAPON_VARS
+	scale = wp_nailSpeed.integer + random() * 1800;
+#else
 	scale = 555 + random() * 1800;
+#endif
 	VectorScale( dir, scale, bolt->s.pos.trDelta );
 	SnapVector( bolt->s.pos.trDelta );
 
@@ -921,7 +1072,12 @@ gentity_t *fire_prox( gentity_t *self, vec3_t start, vec3_t dir ) {
 
 	bolt = G_Spawn();
 	bolt->classname = "prox mine";
+#ifdef USE_WEAPON_VARS
+	// amount of time before stickiness sets in
+	bolt->nextthink = level.time + wp_proxTime.value * 1000.0;
+#else
 	bolt->nextthink = level.time + 3000;
+#endif
 	bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
@@ -929,9 +1085,15 @@ gentity_t *fire_prox( gentity_t *self, vec3_t start, vec3_t dir ) {
 	bolt->s.eFlags = 0;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent = self;
-	bolt->damage = 0;
-	bolt->splashDamage = 100;
-	bolt->splashRadius = 150;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_proxDamage.integer;
+  bolt->splashDamage = wp_proxSplash.integer;
+  bolt->splashRadius = wp_proxRadius.integer;
+#else
+  bolt->damage = 0;
+  bolt->splashDamage = 100;
+  bolt->splashRadius = 150;
+#endif
 	bolt->methodOfDeath = MOD_PROXIMITY_MINE;
 	bolt->splashMethodOfDeath = MOD_PROXIMITY_MINE;
 	bolt->clipmask = MASK_SHOT;
@@ -946,7 +1108,11 @@ gentity_t *fire_prox( gentity_t *self, vec3_t start, vec3_t dir ) {
 	bolt->s.pos.trType = TR_GRAVITY;
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
+#ifdef USE_WEAPON_VARS
+	VectorScale( dir, wp_proxSpeed.integer, bolt->s.pos.trDelta );
+#else
 	VectorScale( dir, 700, bolt->s.pos.trDelta );
+#endif
 	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
 
 	VectorCopy (start, bolt->r.currentOrigin);

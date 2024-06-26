@@ -406,6 +406,7 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/cg_timer.o \
   $(B)/$(MOD)/cgame/cg_view.o \
   $(B)/$(MOD)/cgame/cg_weapons.o \
+  $(B)/$(MOD)/cgame/cg_weaporder.o \
   \
   $(B)/$(MOD)/cgame/q_math.o \
   $(B)/$(MOD)/cgame/q_shared.o

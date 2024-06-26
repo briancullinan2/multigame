@@ -31,6 +31,9 @@ An item fires all of its targets when it is picked up.  If the toucher can't car
 
 gitem_t	bg_itemlist[] = 
 {
+#ifdef USE_ADVANCED_WEAPONS
+#include "./bg_misc.h"
+#else
 	{
 		NULL,
 		NULL,
@@ -319,6 +322,7 @@ gitem_t	bg_itemlist[] =
 /* sounds */ ""
 	},
 
+#ifdef USE_GRAPPLE
 /*QUAKED weapon_grapplinghook (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -334,6 +338,7 @@ gitem_t	bg_itemlist[] =
 /* precache */ "",
 /* sounds */ ""
 	},
+#endif
 
 	//
 	// AMMO ITEMS
@@ -938,6 +943,39 @@ Only in One Flag CTF games
   		30,
   		IT_POWERUP,
   		PW_SPREAD,
+	},
+#endif
+
+#ifdef USE_FLAME_THROWER
+  /*QUAKED weapon_flamethrower (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+  */
+  {
+  	"weapon_flamethrower",
+  	"sound/misc/w_pkup.wav",
+  	{ "models/weapons2/flamethrower/flamethrower.md3",
+  	0, 0, 0},
+  /* icon */	"icons/iconw_flamethrower",
+  /* pickup */	"Flame Thrower",
+  	20,
+  	IT_WEAPON,
+  	WP_FLAME_THROWER,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+
+
+  /*QUAKED ammo_flame (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+  */
+  {
+  	"ammo_flame",
+  	"sound/misc/am_pkup.wav",
+  	{ "models/powerups/ammo/flameaam.md3", 
+  	0, 0, 0},
+  /* icon */"	icons/icona_flamethrower",
+  /* pickup */	"Flame Ammo",
+  	50,
+  	IT_AMMO,
+  	WP_FLAME_THROWER,
   /* precache */ "",
   /* sounds */ ""
   },
@@ -1047,7 +1085,25 @@ gitem_t	*BG_FindItemForWeapon( weapon_t weapon ) {
 		}
 	}
 
-	Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon);
+	//Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon);
+	return NULL;
+}
+
+/*
+===============
+BG_FindItem
+
+===============
+*/
+gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_AMMO && it->giTag == weapon ) {
+			return it;
+		}
+	}
+
 	return NULL;
 }
 
@@ -1121,6 +1177,10 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		return qtrue;	// weapons are always picked up
 
 	case IT_AMMO:
+
+#ifdef USE_ADVANCED_WEAPONS
+// TODO: fix this, add check for class and client array
+#endif
 		if ( ps->ammo[ item->giTag ] >= 200 ) {
 			return qfalse;		// can't hold any more
 		}
@@ -1537,6 +1597,10 @@ const char *eventnames[EV_MAX] = {
 #endif
 
 
+#ifdef USE_WEAPON_ORDER
+  "EV_ITEM_PICKUP2",			// had items
+#endif
+
 };
 
 /*
@@ -1696,6 +1760,7 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
+
 }
 
 /*
