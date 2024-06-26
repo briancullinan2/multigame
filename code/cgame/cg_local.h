@@ -675,7 +675,8 @@ typedef struct {
 	float		xyspeed;
 	int			nextOrbitTime;
 
-	//qboolean cameraMode;		// if rendering from a loaded camera
+	qboolean cameraMode;		// if rendering from a loaded camera
+	int      currentCamera;
 
 	// development tool
 	refEntity_t		testModelEntity;
@@ -696,6 +697,12 @@ typedef struct {
 	int				followClient;
 
 	qboolean		skipDFshaders;
+
+	vec2_t mapcoordsMins;
+	vec2_t mapcoordsMaxs;
+	vec2_t mapcoordsScale;
+	qboolean mapcoordsValid;
+
 } cg_t;
 
 
@@ -1084,6 +1091,7 @@ typedef struct {
 	int				timelimit;
 	int				maxclients;
 	char			mapname[MAX_QPATH];
+	char 			rawmapname[MAX_QPATH];
 	char			redTeam[MAX_QPATH];
 	char			blueTeam[MAX_QPATH];
 
@@ -1143,6 +1151,10 @@ typedef struct {
 	char acceptVoice[MAX_NAME_LENGTH];
 #endif
 
+	float	scrFadeAlpha, scrFadeAlphaCurrent;
+	int		scrFadeStartTime;
+	int		scrFadeDuration;
+
 	// media
 	cgMedia_t		media;
 
@@ -1166,6 +1178,12 @@ typedef struct {
 } cgs_t;
 
 //==============================================================================
+
+
+#ifdef USE_SINGLEPLAYER // entity
+extern	int player_stop;
+extern	int black_bars;
+#endif
 
 extern	cgs_t			cgs;
 extern	cg_t			cg;
@@ -1225,6 +1243,9 @@ void CG_ZoomDown_f( void );
 void CG_ZoomUp_f( void );
 void CG_AddBufferedSound( sfxHandle_t sfx);
 
+qboolean CG_CullPoint( vec3_t pt );
+qboolean CG_CullPointAndRadius( const vec3_t pt, vec_t radius );
+
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback );
 
 
@@ -1253,6 +1274,8 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 void CG_DrawRect( float x, float y, float width, float height, float size, const float *color );
 void CG_DrawSides(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom(float x, float y, float w, float h, float size);
+void CG_Fade( int a, int time, int duration );
+void CG_DrawFlashFade( void );
 
 #define USE_NEW_FONT_RENDERER
 
@@ -1404,6 +1427,9 @@ void	CG_AddLocalEntities( void );
 //
 // cg_effects.c
 //
+#ifdef USE_SINGLEPLAYER // entity
+void CG_BlackBars(void);
+#endif
 localEntity_t *CG_SmokePuff( const vec3_t p, 
 				   const vec3_t vel, 
 				   float radius,
@@ -1485,6 +1511,21 @@ void CG_Respawn( void );
 void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops );
 void CG_CheckChangedPredictableEvents( playerState_t *ps );
 
+
+//
+// cg_atmospheric.c
+//
+void CG_GenerateTracemap( void );
+void CG_EffectParse( const char *effectstr );
+void CG_AddAtmosphericEffects( void );
+
+//
+// cg_polybus.c
+//
+
+polyBuffer_t* CG_PB_FindFreePolyBuffer( qhandle_t shader, int numVerts, int numIndicies );
+void CG_PB_ClearPolyBuffers( void );
+void CG_PB_RenderPolyBuffers( void );
 
 //===============================================
 
@@ -1683,10 +1724,12 @@ void trap_CIN_SetExtents (int handle, int x, int y, int w, int h);
 void		trap_SnapVector( float *v );
 
 qboolean	trap_loadCamera(const char *name);
-void		trap_startCamera(int time);
-qboolean	trap_getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
-
+void		trap_startCamera(int camNum, int time);
+qboolean	trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov);
+void		CG_StartCamera(const char *name, qboolean startBlack );
 qboolean	trap_GetEntityToken( char *buffer, int bufferSize );
+void trap_stopCamera(int camNum);
+
 
 void	CG_ClearParticles (void);
 void	CG_AddParticles (void);
@@ -1709,11 +1752,14 @@ extern  qboolean linearLight;
 #ifdef Q3_VM
 extern void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 extern void	(*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
+extern void	(*trap_R_AddPolyBufferToScene)( polyBuffer_t *pPolyBuffer );
 #else
 qboolean trap_GetValue( char *value, int valueSize, const char *key );
 void trap_R_AddRefEntityToScene2( const refEntity_t *re );
 void trap_R_AddLinearLightToScene( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
+void	trap_R_AddPolyBufferToScene( polyBuffer_t *pPolyBuffer );
 extern int dll_com_trapGetValue;
 extern int dll_trap_R_AddRefEntityToScene2;
 extern int dll_trap_R_AddLinearLightToScene;
+extern int dll_trap_R_AddPolyBufferToScene;
 #endif

@@ -160,5 +160,16 @@ CG_CVAR( cg_healthBar, "cg_healthBar", "1", CVAR_USERINFO | CVAR_TEMP )
 #endif
 
 
+#ifdef USE_PHYSICS_VARS
+#ifdef MISSIONPACK
+CG_CVAR( cg_scoutFactor, "cg_scoutFactor", "1.5", CVAR_SERVERINFO)
+#endif
+CG_CVAR( cg_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO)
+CG_CVAR( cg_jumpVelocity, "g_jumpVelocity", "270", CVAR_SERVERINFO)
+CG_CVAR( cg_gravity, "g_gravity", "800", CVAR_SERVERINFO)
+CG_CVAR( cg_wallWalk, "g_wallWalk", "0.7", CVAR_SERVERINFO)
+#endif
 
+CG_CVAR( cg_atmosphere, "g_atmosphere", "", CVAR_SERVERINFO | CVAR_TEMP )
+CG_CVAR( cg_atmosphericEffects, "cg_atmosphericEffects", "1", CVAR_ARCHIVE )
 #undef CG_CVAR

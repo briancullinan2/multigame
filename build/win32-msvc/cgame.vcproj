@@ -332,7 +332,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_tracemap.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_slidemove.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_atmospheric.c"
 				>
 			</File>
 			<File
@@ -385,6 +393,10 @@
 			</File>
 			<File
 				RelativePath="..\..\code\cgame\cg_predict.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_polybus.c"
 				>
 			</File>
 			<File

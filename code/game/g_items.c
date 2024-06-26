@@ -694,7 +694,12 @@ LaunchItem
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity ) {
+#ifdef USE_WEAPON_DROP
+gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity, int xr_flags )
+#else
+gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity )
+#endif
+{
 	gentity_t	*dropped;
 
 	dropped = G_Spawn();
@@ -720,20 +725,36 @@ gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity ) {
 	VectorCopy( velocity, dropped->s.pos.trDelta );
 
 	dropped->s.eFlags |= EF_BOUNCE_HALF;
+	if ((g_gametype.integer == GT_CTF 
 #ifdef MISSIONPACK
-	if ((g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF)			&& item->giType == IT_TEAM) { // Special case for CTF flags
-#else
-	if (g_gametype.integer == GT_CTF && item->giType == IT_TEAM) { // Special case for CTF flags
+    || g_gametype.integer == GT_1FCTF
 #endif
+  ) && item->giType == IT_TEAM) {// Special case for CTF flags
 		dropped->think = Team_DroppedFlagThink;
-		dropped->nextthink = level.time + 30000;
+#ifdef USE_TEAM_VARS
+    dropped->nextthink = level.time + g_flagReturn.integer;
+#else
+    dropped->nextthink = level.time + DROPPED_TIME;
+#endif
 		Team_CheckDroppedItem( dropped );
 	} else { // auto-remove after 30 seconds
 		dropped->think = G_FreeEntity;
-		dropped->nextthink = level.time + 30000;
+    dropped->nextthink = level.time + DROPPED_TIME;
 	}
 
+#ifdef USE_WEAPON_DROP
+	dropped->flags = xr_flags; // FL_DROPPED_ITEM; // XRAY FMJ FL_THROWN_ITEM
+
+  if( xr_flags & FL_THROWN_ITEM) {
+    dropped->clipmask = MASK_SHOT; // XRAY FMJ
+    dropped->s.pos.trTime = level.time - 100;	// move a bit on the very first frame
+    VectorScale( velocity, 200, dropped->s.pos.trDelta ); // 700
+    SnapVector( dropped->s.pos.trDelta );		// save net bandwidth
+    dropped->physicsBounce = 0.5;
+  }
+#else
 	dropped->flags = FL_DROPPED_ITEM;
+#endif
 
 	trap_LinkEntity (dropped);
 
@@ -759,7 +780,12 @@ gentity_t *Drop_Item( gentity_t *ent, gitem_t *item, float angle ) {
 	VectorScale( velocity, 150, velocity );
 	velocity[2] += 200 + crandom() * 50;
 	
+
+#ifdef USE_WEAPON_DROP
+  return LaunchItem( item, ent->s.pos.trBase, velocity, FL_DROPPED_ITEM );
+#else
 	return LaunchItem( item, ent->s.pos.trBase, velocity );
+#endif
 }
 
 

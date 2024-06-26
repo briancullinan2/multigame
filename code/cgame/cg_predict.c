@@ -9,6 +9,11 @@
 
 static	pmove_t		cg_pmove;
 
+#ifdef USE_SINGLEPLAYER // entity
+int player_stop = 0;
+int black_bars = 0;
+#endif
+
 static	int			cg_numSolidEntities;
 static	centity_t	*cg_solidEntities[MAX_ENTITIES_IN_SNAPSHOT];
 static	int			cg_numTriggerEntities;
@@ -450,7 +455,11 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
 			if ( item->giTag == PW_HASTE ) {
+#ifdef USE_PHYSICS_VARS
+        cg.predictedPlayerState.speed *= cg_hasteFactor.value;
+#else
 				cg.predictedPlayerState.speed *= 1.3f;
+#endif
 			}
 		}
 		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;

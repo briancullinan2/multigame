@@ -203,6 +203,24 @@
 // enable vulnerable rockets that can be shot down
 #define USE_VULN_RPG 1
 
+// allow clients to drop weapons, items, and powerups
+#define USE_WEAPON_DROP 1
+#define USE_ITEM_DROP 1
+#define USE_POWERUP_DROP 1
+#define USE_FLAG_DROP 1
+#define USE_AMMO_DROP 1
+#define USE_ARMOR_DROP 1
+#define USE_HEALTH_DROP 1
+// add single player features like earthquakes, player stopping, and animated models
+#define USE_SINGLEPLAYER 1
+// physics variables, usually transfered from server to client
+#define USE_PHYSICS_VARS 1
+// add single player features like earthquakes, player stopping, and animated models
+#define USE_SINGLEPLAYER 1
+// enable ladders in map
+#define USE_LADDERS 1
+// adds rotating doors from maps, UrT uses them, so does Quake 2
+#define USE_ROTATING_DOOR 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

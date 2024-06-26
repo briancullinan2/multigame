@@ -157,4 +157,17 @@ G_CVAR( wp_rocketVuln, "wp_rocketVuln", "0", 0, 0, qfalse, qfalse )
 #ifdef USE_ACCEL_RPG
 G_CVAR( wp_rocketAccel, "wp_rocketAccel", "0", 0, 0, qfalse, qfalse )
 #endif
+
+#ifdef USE_PHYSICS_VARS
+#ifdef MISSIONPACK
+G_CVAR( g_scoutFactor, "g_scoutFactor", "1.5", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+#endif
+G_CVAR( g_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_jumpVelocity, "g_jumpVelocity", "270", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_wallWalk, "g_wallWalk", "0.7", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+#endif
+
+#ifdef USE_WEAPON_DROP
+G_CVAR( g_dropWeapon, "g_dropWeapon", "65535", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
 #undef G_CVAR

@@ -902,6 +902,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
+        if(item->giTag == PW_HASTE
+        ) {
+#ifdef USE_PHYSICS_VARS
+          cg.predictedPlayerState.speed *= cg_hasteFactor.value;
+#else
+          cg.predictedPlayerState.speed *= 1.3f;
+#endif
+        }
 				CG_ItemPickup( index );
 			}
 
@@ -957,6 +965,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		break;
 
 	//=================================================================
+
+#ifdef USE_SINGLEPLAYER // entity
+	case EV_PLAYERSTOP:
+		player_stop = cg.time + (es->eventParm & 0x7F) * 2000;
+		if (es->eventParm & 0x80) black_bars = 1;
+		break;
+#endif
 
 	//
 	// other events
