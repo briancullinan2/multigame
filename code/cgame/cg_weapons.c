@@ -1892,19 +1892,19 @@ CG_WeaponSelectable
 qboolean CG_WeaponSelectable( int i ) {
 	int weapon = i % WP_MAX_WEAPONS + cg.weaponClass * WP_MAX_WEAPONS;
 	if(weapon >= WP_NUM_WEAPONS) {
-		CG_Printf("hit!\n");
+		//CG_Printf("hit!\n");
 		return qfalse;
 	}
 	if ( !cg.snap->ps.ammo[i % WP_MAX_WEAPONS] ) {
-		CG_Printf("no ammo\n");
+		//CG_Printf("no ammo\n");
 		return qfalse;
 	}
 	if ( ! (cg.snap->ps.stats[ STAT_WEAPONS ] & ( 1 << (i % WP_MAX_WEAPONS) ) ) ) {
-		CG_Printf("no weapon\n");
+		//CG_Printf("no weapon\n");
 		return qfalse;
 	}
 	if(!cg_weapons[weapon].registered || !cg_weapons[weapon].weaponIcon) {
-		CG_Printf("no registration %i\n", weapon);
+		//CG_Printf("no registration %i\n", weapon);
 		return qfalse;
 	}
 

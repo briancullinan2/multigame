@@ -1215,8 +1215,25 @@ void ClientSpawn(gentity_t *ent) {
   }
 #endif
 
+	if(!( qfalse
+#ifdef USE_HOTRPG
+		|| g_hotRockets.integer
+#endif
+#ifdef USE_HOTBFG
+		|| g_hotRockets.integer
+#endif
+#ifdef USE_TRINITY
+		|| g_unholyTrinity.integer
+#endif
+#ifdef USE_INSTAGIB
+		|| g_instagib.integer
+#endif
+	)) {
+
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;
+
+	}
 
 #ifdef USE_INSTAGIB
   if(g_instagib.integer) {
@@ -1296,9 +1313,57 @@ if(g_hotBFG.integer) {
 		if(i * WP_MAX_WEAPONS >= WP_NUM_WEAPONS) {
 			break;
 		}
+
+#ifdef USE_INSTAGIB
+		if(g_instagib.integer) {
+			client->weapons[i] = ( 1 << WP_RAILGUN );
+			client->ammo[i][WP_RAILGUN] = INFINITE;  
+		}
+#endif
+#ifdef USE_TRINITY
+		if(g_unholyTrinity.integer) {
+			client->weapons[i] = ( 1 << WP_RAILGUN ) | ( 1 << WP_LIGHTNING ) | ( 1 << WP_ROCKET_LAUNCHER );
+			client->ammo[i][WP_RAILGUN] = INFINITE;  
+			client->ammo[i][WP_LIGHTNING] = INFINITE;  
+			client->ammo[i][WP_ROCKET_LAUNCHER] = INFINITE;  
+		}
+		#endif
+#ifdef USE_HOTRPG
+		if(g_hotRockets.integer) {
+			client->weapons[i] = ( 1 << WP_ROCKET_LAUNCHER );
+			client->ammo[i][WP_ROCKET_LAUNCHER] = INFINITE;  
+		}
+#endif
+#ifdef USE_HOTBFG
+		if(g_hotBFG.integer) {
+			int handicap, max;
+			client->weapons[i] = ( 1 << WP_BFG );
+			client->ammo[i][WP_BFG] = INFINITE;
+		}
+#endif
+
+		if(!( qfalse
+#ifdef USE_HOTRPG
+			|| g_hotRockets.integer
+#endif
+#ifdef USE_HOTBFG
+			|| g_hotRockets.integer
+#endif
+#ifdef USE_TRINITY
+			|| g_unholyTrinity.integer
+#endif
+#ifdef USE_INSTAGIB
+			|| g_instagib.integer
+#endif
+		)) {
+
+
 		client->weapons[i] |= 3;
 		client->ammo[i][0] = -1;
 		client->ammo[i][1] = -1;
+
+		}
+
 	}
 
 #endif
