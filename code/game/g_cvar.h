@@ -93,4 +93,10 @@ G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
+#ifdef USE_VORTEX_GRENADES
+G_CVAR( g_clusterGrenades, "g_clusterGrenades", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_VORTEX_GRENADES
+G_CVAR( g_vortexGrenades, "g_vortexGrenades", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
 #undef G_CVAR

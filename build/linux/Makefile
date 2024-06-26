@@ -455,6 +455,7 @@ QAOBJ_ = \
   $(B)/$(MOD)/game/g_utils.o \
   $(B)/$(MOD)/game/g_unlagged.o \
   $(B)/$(MOD)/game/g_weapon.o \
+  $(B)/$(MOD)/game/g_weapon2.o \
   \
   $(B)/$(MOD)/game/q_math.o \
   $(B)/$(MOD)/game/q_shared.o

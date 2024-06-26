@@ -379,6 +379,9 @@ static void weapon_supershotgun_fire( gentity_t *ent ) {
 	ShotgunPattern( muzzle_origin, tent->s.origin2, tent->s.eventParm, ent );
 }
 
+#ifdef USE_CLUSTER_GRENADES
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster);
+#endif
 
 /*
 ======================================================================
@@ -395,6 +398,11 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 	forward[2] += 0.2f;
 	VectorNormalize( forward );
 
+#ifdef USE_CLUSTER_GRENADES
+	if(g_clusterGrenades.integer) {
+		m = fire_special_grenade (ent, muzzle, forward, qtrue);
+	} else
+#endif
 	m = fire_grenade (ent, muzzle, forward);
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
@@ -798,6 +806,14 @@ qboolean LogAccuracyHit( gentity_t *target, gentity_t *attacker ) {
 }
 
 
+#ifdef USE_WEAPON_SPREAD
+void SpreadFire_Powerup(gentity_t* ent, gentity_t* (*fireFunc)(gentity_t*, vec3_t, vec3_t) );
+#endif
+#ifdef USE_CLUSTER_GRENADES
+gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir);
+#endif
+
+
 /*
 ===============
 FireWeapon
@@ -852,6 +868,17 @@ void FireWeapon( gentity_t *ent ) {
 		}
 		break;
 	case WP_GRENADE_LAUNCHER:
+#ifdef USE_WEAPON_SPREAD
+  //Hal9000 spreadfire
+  if ( ent->client->ps.powerups[PW_SPREAD] ) {
+#ifdef USE_CLUSTER_GRENADES
+		if(g_clusterGrenades.integer) {
+			SpreadFire_Powerup(ent, fire_cluster_grenade);
+		} else
+#endif
+		SpreadFire_Powerup(ent, fire_grenade);
+	} else
+#endif
 		weapon_grenadelauncher_fire( ent );
 		break;
 	case WP_ROCKET_LAUNCHER:

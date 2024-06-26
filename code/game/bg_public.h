@@ -279,6 +279,10 @@ typedef enum {
 	PW_AMMOREGEN,
 	PW_INVULNERABILITY,
 
+#ifdef USE_WEAPON_SPREAD
+  PW_SPREAD,  //Hal9000 spreadfire
+#endif
+
 	PW_NUM_POWERUPS
 
 } powerup_t;

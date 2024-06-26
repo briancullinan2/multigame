@@ -894,6 +894,25 @@ Only in One Flag CTF games
 /* precache */ "",
 /* sounds */ "sound/weapons/vulcan/wvulwind.wav"
 	},
+
+#ifdef USE_WEAPON_SPREAD
+//Hal9000 spreadfire powerup
+/*QUAKED item_spread (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+  {
+  	"item_spread", 
+  	"sound/items/spread.wav",
+    {"models/powerups/instant/sight.md3", 0, 0, 0 },
+  /* icon */	"icons/spread",  
+  /* pickup */	"Spreadfire",
+  		30,
+  		IT_POWERUP,
+  		PW_SPREAD,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+#endif
+
 #endif
 
 	// end of list marker

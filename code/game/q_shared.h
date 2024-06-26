@@ -146,6 +146,12 @@
 
 //=============================================================
 
+// cluster grenades create offspring every time they hit something
+#define USE_CLUSTER_GRENADES 1
+// spreadfire weapon and powerup mod, sends lots of fire everywhere
+#define USE_WEAPON_SPREAD 1
+// enable vortex grenades that suck players in when they are tossed
+#define USE_VORTEX_GRENADES 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

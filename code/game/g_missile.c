@@ -69,6 +69,27 @@ void G_ExplodeMissile( gentity_t *ent ) {
 		}
 	}
 
+#ifdef USE_CLUSTER_GRENADES
+  // CCH: For cluster grenades
+  if (!strcmp(ent->classname, "cgrenade")) {
+    vec3_t		dir;			// CCH
+    vec3_t    origin;
+    VectorCopy(ent->r.currentOrigin, origin);
+    // move the origin up a little because TR_GRAVITY trajectory dictates 
+    //   that it must hit the floor, and when the grenade lands in a corner
+    //   there is no where for it to bounce to and it wobbles around
+    origin[2] += 4;
+  	VectorSet(dir, .5, .5, 2.0);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	VectorSet(dir, -.5, .5, 2.0);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	VectorSet(dir, .5, -.5, 2.0);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	VectorSet(dir, -.5, -.5, 2.0);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  }
+#endif
+
 	trap_LinkEntity( ent );
 }
 
@@ -416,6 +437,24 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 			}
 		}
 	}
+
+#ifdef USE_CLUSTER_GRENADES
+  // CCH: For cluster grenades
+/*
+  if (!strcmp(ent->classname, "cgrenade")) {
+    vec3_t		dir;			// CCH
+  	VectorSet(dir, 20, 20, 50);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	VectorSet(dir, -20, 20, 50);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	VectorSet(dir, 20, -20, 50);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	VectorSet(dir, -20, -20, 50);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  }
+*/
+#endif
+
 
 	trap_LinkEntity( ent );
 }

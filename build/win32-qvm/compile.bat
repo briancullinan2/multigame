@@ -165,6 +165,8 @@ cd vm\game
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_weapon.c
 @if errorlevel 1 goto quit
+%cc2% %gamedir%\g_weapon2.c
+@if errorlevel 1 goto quit
 %cc2% %gamedir%\q_math.c
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\q_shared.c
