@@ -585,6 +585,17 @@ typedef enum {
 	TEAM_NUM_TEAMS
 } team_t;
 
+
+#ifdef USE_ADVANCED_CLASS
+typedef enum {
+	PCLASS_BFG,
+	PCLASS_LIGHTNING,
+	PCLASS_RAILGUN,
+
+	PCLASS_NUM_CLASSES
+} pclass_t;
+#endif
+
 typedef enum {
 	TAG_NONE = 0,
 	TAG_DONTSPAWN,
@@ -729,6 +740,9 @@ typedef enum {
 	ET_INVISIBLE,
 	ET_GRAPPLE,				// grapple hooked on wall
 	ET_TEAM,
+#ifdef USE_LASER_SIGHT
+  ET_LASER,         // lasersight entity type
+#endif
 
 	ET_EVENTS				// any of the EV_* events can be added freestanding
 							// by setting eType to ET_EVENTS + eventNum

@@ -514,6 +514,12 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	bolt = G_Spawn();
 	bolt->classname = "plasma";
+#ifdef USE_BOUNCE_RPG
+	if (self->flags & FL_ROCKETBOUNCE || wp_plasmaBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		bolt->nextthink = level.time + 2500;
+	} else
+#endif
 #ifdef USE_WEAPON_VARS
 	bolt->nextthink = level.time + wp_plasmaTime.value * 1000.0;
 #else
@@ -686,6 +692,12 @@ gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	bolt = G_Spawn();
 	bolt->classname = "bfg";
+#ifdef USE_BOUNCE_RPG
+	if (self->flags & FL_ROCKETBOUNCE || wp_bfgBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		bolt->nextthink = level.time + 2500;
+	} else
+#endif
 #ifdef USE_WEAPON_VARS
 	bolt->nextthink = level.time + wp_bfgTime.value * 1000.0;
 #else
@@ -749,13 +761,20 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	bolt = G_Spawn();
 	bolt->classname = "rocket";
-	
+	bolt->nextthink = level.time + 15000;
+	bolt->think = G_ExplodeMissile;
+#ifdef USE_BOUNCE_RPG
+  if (self->flags & FL_ROCKETBOUNCE || wp_rocketBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		// shorter explosion time because of the extra bouncing chaos
+    bolt->nextthink = level.time + 2500;
+	} else
+#endif
 #ifdef USE_WEAPON_VARS
   bolt->nextthink = level.time + wp_rocketTime.value * 1000.0;
 #else
   bolt->nextthink = level.time + 15000;
 #endif
-  bolt->think = G_ExplodeMissile;
 	bolt->s.eType = ET_MISSILE;
 	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 	bolt->s.weapon = WP_ROCKET_LAUNCHER;

@@ -608,4 +608,17 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("stats");
 	trap_AddCommand ("teamtask");
 	trap_AddCommand ("loaddefered");	// spelled wrong, but not changing for demo
+#ifdef USE_BOUNCE_CMD
+  trap_AddCommand ("rbounce");
+#endif
+#ifdef USE_CLOAK_CMD
+  trap_AddCommand ("cloak");
+#endif
+#ifdef USE_GRAVITY_BOOTS
+  trap_AddCommand ("boots");
+#endif
+#ifdef USE_LASER_SIGHT
+  trap_AddCommand ("laser");
+  trap_AddCommand ("flashlight");
+#endif
 }

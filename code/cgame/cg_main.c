@@ -864,6 +864,11 @@ static void CG_RegisterGraphics( void ) {
 #ifdef USE_FLAME_THROWER
 	if(!cgs.media.flameBallShader) {
   	cgs.media.flameBallShader = trap_R_RegisterShader( "sprites/flameball" );
+  }
+#endif
+#ifdef USE_LASER_SIGHT
+	if(!cgs.media.laserShader) {
+  	cgs.media.laserShader = trap_R_RegisterShader( "sprites/laser" );
 	}
 #endif
 

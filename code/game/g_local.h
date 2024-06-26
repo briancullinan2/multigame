@@ -31,6 +31,15 @@
 #define FL_NO_BOTS				0x00002000	// spawn point not for bot use
 #define FL_NO_HUMANS			0x00004000	// spawn point just for bots
 #define FL_FORCE_GESTURE		0x00008000	// force gesture on client
+#ifdef USE_BOUNCE_RPG
+#define FL_ROCKETBOUNCE		0x00010000
+#endif
+#ifdef USE_CLOAK_CMD
+#define FL_CLOAK      		0x00020000
+#endif
+#ifdef USE_GRAVITY_BOOTS
+#define FL_BOOTS          0x00080000  // Anti Gravity Boots
+#endif
 
 // movers are things like doors, plats, buttons, etc
 typedef enum {
@@ -240,6 +249,10 @@ typedef struct {
 	int			teamVoted;
 
 	qboolean	inGame;
+#ifdef USE_ADVANCED_CLASS
+  pclass_t	playerclass;	   // The players current class
+  pclass_t	newplayerclass;	   // The class the player will become when it respawns
+#endif
 } clientPersistant_t;
 
 // unlagged
@@ -304,6 +317,10 @@ struct gclient_s {
 
 	qboolean	fireHeld;			// used for hook
 	gentity_t	*hook;				// grapple hook if out
+
+#ifdef USE_LASER_SIGHT
+  gentity_t	*lasersight;			// lasersight OR flashlight if in use
+#endif
 
 	int			switchTeamTime;		// time the player switched teams
 

@@ -160,6 +160,20 @@
 #define USE_3D_WEAPONS 1
 // allow clients to center the weapons above the hud
 #define USE_WEAPON_CENTER 1
+// allow anti gravity boots commands to be used by clients
+#define USE_GRAVITY_BOOTS 1
+// advanced classes applies special properties to players based on model or selection
+#define USE_ADVANCED_CLASS 1
+// laser sight and flash light
+#define USE_LASER_SIGHT 1
+// advanced zoom stops zooming when the key is up and returns to original
+#define USE_ADVANCED_ZOOM 1
+// allow clients to specific bouncing rockets
+#define USE_BOUNCE_CMD 1
+// enable bouncing rpgs from map items or server enabled
+#define USE_BOUNCE_RPG 1
+// enable cloaking command for clients to turn on infinite invisibility
+#define USE_CLOAK_CMD 1
 
 typedef unsigned char 		byte;
 

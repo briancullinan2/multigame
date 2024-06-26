@@ -1809,6 +1809,89 @@ static void Cmd_SetViewpos_f( gentity_t *ent ) {
 
 
 
+#ifdef USE_BOUNCE_CMD
+/*
+=================
+Cmd_RBounce_f
+=================
+*/
+void Cmd_RBounce_f( gentity_t *ent ) {
+
+	char *msg; // message to player
+
+	if (ent->flags & FL_ROCKETBOUNCE) {
+		msg = "Rocket Bounce OFF\n";
+    ent->flags &= ~FL_ROCKETBOUNCE;
+	} else {
+	  msg = "Rocket Bounce ON\n";
+    ent->flags |= FL_ROCKETBOUNCE;
+  }
+	trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_CLOAK_CMD
+/*
+=================
+Cmd_Cloak_f
+=================
+*/
+void Cmd_Cloak_f( gentity_t *ent ) {
+
+	char *msg; // message to player
+
+  
+  if(!g_enableCloak.integer) {
+    msg = "Cloaking not enabled\n";
+	} else if (ent->flags & FL_CLOAK) {
+		msg = "Cloaking OFF\n";
+    ent->flags &= ~FL_CLOAK;
+		ent->client->ps.powerups[PW_INVIS] = level.time;
+		// Removes the invisible powerup from the player
+	}        
+	else {
+		msg = "Cloaking ON\n";
+    ent->flags |= FL_CLOAK;
+		ent->client->ps.powerups[PW_INVIS] = level.time + 1000000000;
+		// Gives the invisible powerup to the player
+	}
+
+	trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_GRAVITY_BOOTS
+/*
+=================
+Cmd_Boots_f          function for turning boots on/off
+=================
+*/
+void Cmd_Boots_f( gentity_t *ent ) {
+  char *msg; // message to player
+
+  if(!g_enableBoots.integer) {
+    msg = "Gravity boots not enabled\n";
+  } else if (ent->flags & FL_BOOTS) {
+    msg = "Anti Gravity boots OFF\n";
+    ent->flags &= ~FL_BOOTS;
+  } else {
+    msg = "Anti Gravity boots ON\n";
+    ent->flags |= FL_BOOTS;
+  }
+
+  trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_LASER_SIGHT
+// in g_weapon.c
+void Laser_Gen( gentity_t *ent, int type );
+#endif
+
+
 /*
 =================
 Cmd_Stats_f
@@ -1980,6 +2063,24 @@ void ClientCommand( int clientNum ) {
 		Cmd_GameCommand_f( ent );
 	else if (Q_stricmp (cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f( ent );
+#ifdef USE_BOUNCE_CMD
+  else if (Q_stricmp (cmd, "rbounce") == 0)
+    Cmd_RBounce_f( ent );
+#endif
+#ifdef USE_CLOAK_CMD
+  else if (Q_stricmp (cmd, "cloak") == 0)
+  	Cmd_Cloak_f( ent );
+#endif
+#ifdef USE_GRAVITY_BOOTS
+  else if (Q_stricmp (cmd, "boots") == 0)
+     Cmd_Boots_f( ent );
+#endif
+#ifdef USE_LASER_SIGHT
+  else if (Q_stricmp (cmd, "laser") == 0)
+		Laser_Gen( ent, 1 );//1=Laser, 2=Flashlight
+	else if (Q_stricmp (cmd, "flashlight") == 0)
+		Laser_Gen( ent, 2 );
+#endif
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
 	else
