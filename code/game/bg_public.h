@@ -522,8 +522,6 @@ typedef enum {
 	EV_EARTHQUAKE,
 #endif
 
-	EV_MAX
-
 #ifdef USE_HEADSHOTS
   EV_GIB_PLAYER_HEADSHOT,
   EV_BODY_NOHEAD,
@@ -540,6 +538,7 @@ typedef enum {
 #ifdef USE_DAMAGE_PLUMS
   EV_DAMAGEPLUM,			// damage plum
 #endif
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   EV_FROZEN,
   EV_UNFROZEN,

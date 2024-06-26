@@ -726,9 +726,10 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
       if(g_altPortal.integer) {
         int oldWeapon = ent->s.weapon;
         ent->s.weapon = WP_BFG;
-		FireWeapon( ent, qtrue );
+				FireWeapon( ent, qtrue );
         ent->s.weapon = oldWeapon;
       } else
+#endif
 #ifdef USE_GRAPPLE
       if(g_altGrapple.integer) {
         int oldWeapon = ent->s.weapon;

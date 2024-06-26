@@ -39,6 +39,7 @@
 #endif
 #ifdef USE_WEAPON_DROP
 #define FL_THROWN_ITEM		0x00040000  // XRAY FMJ weapon throwing
+#endif
 #ifdef USE_GRAVITY_BOOTS
 #define FL_BOOTS          0x00080000  // Anti Gravity Boots
 #endif
@@ -286,6 +287,7 @@ typedef struct {
 #ifdef USE_AIW
 	qboolean reverseControls;
 	qboolean upsidedown;
+#endif
 #ifdef USE_ADVANCED_CLASS
   pclass_t	playerclass;	   // The players current class
   pclass_t	newplayerclass;	   // The class the player will become when it respawns
@@ -383,7 +385,7 @@ struct gclient_s {
   gentity_t *portalSource;
   int       lastPortal;
   gentity_t *lastPortalEnt;
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) && !defined(USE_ADVANCED_WEAPONS)
 	int			portalID;
 #endif
 #endif

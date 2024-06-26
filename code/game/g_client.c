@@ -1266,6 +1266,7 @@ if(g_hotBFG.integer) {
   client->ps.stats[STAT_HEALTH] = max;
   client->ps.stats[STAT_MAX_HEALTH] = max;
 }
+#endif
 #if defined(USE_GRAPPLE)
   if(wp_grappleEnable.integer 
 #ifdef USE_ALT_FIRE

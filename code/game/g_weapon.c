@@ -559,12 +559,12 @@ void weapon_railgun_fire( gentity_t *ent ) {
 #endif
 #ifdef USE_INSTAGIB
   if(g_instagib.integer) {
-#ifdef USE_WEAPON_VARS
-    damage = wp_railDamage.integer * s_quadFactor;
-#else
     damage = 500 * s_quadFactor;
   } else
 #endif
+#ifdef USE_WEAPON_VARS
+	damage = wp_railDamage.integer * s_quadFactor;
+#else
 	damage = 100 * s_quadFactor;
 #endif
 
@@ -682,9 +682,9 @@ void weapon_railgun_fire( gentity_t *ent ) {
 
 }
 
-#ifdef USE_GRAPPLE
 
 #ifdef USE_GRAPPLE
+
 /*
 ======================================================================
 
@@ -726,8 +726,6 @@ void Weapon_HookThink (gentity_t *ent)
 
 	VectorCopy( ent->r.currentOrigin, ent->parent->client->ps.grapplePoint);
 }
-#endif
-
 
 
 #endif
@@ -753,12 +751,12 @@ void Weapon_LightningFire( gentity_t *ent ) {
   if(g_unholyTrinity.integer) {
     damage *= g_quadfactor.value;
   } else 
-#ifdef USE_WEAPON_VARS
-  damage = wp_lightDamage.integer;
-#else
-	damage = 8;
 #endif
-  damage *= s_quadFactor;
+#ifdef USE_WEAPON_VARS
+  damage = wp_lightDamage.integer * s_quadFactor;
+#else
+	damage = 8 * s_quadFactor;
+#endif
 
 	passent = ent->s.number;
 

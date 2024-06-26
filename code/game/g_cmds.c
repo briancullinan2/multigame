@@ -2326,6 +2326,8 @@ void ClientCommand( int clientNum ) {
 #ifdef USE_HEALTH_DROP // for medics
 	else if (Q_stricmp (cmd, "drophealth") == 0)
 		Cmd_DropHealth_f( ent );
+#endif
+
 #ifdef USE_BOUNCE_CMD
   else if (Q_stricmp (cmd, "rbounce") == 0)
     Cmd_RBounce_f( ent );

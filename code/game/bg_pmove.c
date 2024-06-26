@@ -1743,7 +1743,6 @@ static void PM_Weapon( void ) {
   	PM_AddEvent( EV_ALTFIRE_WEAPON );
     return;
   } else
-#endif
 #endif // end USE_ALT_FIRE
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   if(pm->ps->pm_type == PM_FROZEN) {
@@ -2231,7 +2230,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// set the firing flag for continuous beam weapons
 	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] ) {
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ]
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
     && pm->ps->pm_type != PM_FROZEN
 #endif

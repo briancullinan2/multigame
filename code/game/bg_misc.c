@@ -930,6 +930,8 @@ Only in One Flag CTF games
 /* sounds */ "sound/weapons/vulcan/wvulwind.wav"
 	},
 
+#endif
+
 #ifdef USE_WEAPON_SPREAD
 //Hal9000 spreadfire powerup
 /*QUAKED item_spread (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
