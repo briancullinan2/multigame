@@ -888,6 +888,16 @@ void FireWeapon( gentity_t *ent ) {
 		Weapon_Plasmagun_Fire( ent );
 		break;
 	case WP_RAILGUN:
+#ifdef USE_INVULN_RAILS
+    if(g_railThruWalls.integer)
+			fire_special_railgun( ent );
+		else
+#endif
+#ifdef USE_BOUNCE_RAIL
+		if(wp_railBounce.integer) {
+			fire_special_railgun( ent );
+		} else
+#endif
 		weapon_railgun_fire( ent );
 		break;
 	case WP_BFG:

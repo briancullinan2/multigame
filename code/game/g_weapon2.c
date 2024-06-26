@@ -299,3 +299,218 @@ gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 	return fire_special_grenade(self, start, dir, g_clusterGrenades.integer);
 }
 #endif
+
+#ifdef USE_BOUNCE_RAIL
+#define MAX_RAIL_BOUNCE 4 //Luc: Defines the maximum number of bounces
+#endif
+
+/*
+=================
+weapon_railgun_fire
+=================
+*/
+#define	MAX_RAIL_HITS	4
+void fire_special_railgun( gentity_t *ent ) {
+	vec3_t		end;
+#ifdef MISSIONPACK
+	vec3_t impactpoint, bouncedir;
+#endif
+	trace_t		trace;
+	gentity_t	*tent;
+	gentity_t	*traceEnt;
+	int			damage;
+	int			i;
+	int			hits;
+	int			unlinked;
+	int			passent;
+#ifdef USE_BOUNCE_RAIL
+  int bounce; //Luc: Bounce count
+#endif
+	gentity_t	*unlinkedEntities[MAX_RAIL_HITS];
+#ifdef USE_INVULN_RAILS
+  vec3_t		tracefrom;	// SUM
+  vec3_t		lastend;	// SUM
+#endif
+
+	damage = 100 * s_quadFactor;
+
+	VectorMA( muzzle_origin, 8192.0, forward, end );
+#ifdef USE_INVULN_RAILS
+  VectorCopy (muzzle_origin, tracefrom);
+#endif
+
+	// unlagged
+	G_DoTimeShiftFor( ent );
+
+	// trace only against the solids, so the railgun will go through people
+	unlinked = 0;
+	hits = 0;
+	passent = ent->s.number;
+  i = 0;
+
+#ifdef USE_BOUNCE_RAIL
+  bounce = 0; //Luc: start off with no bounces
+  //Luc:
+  do {
+    if (bounce) {
+			// This sets the new angles for the bounce
+      G_BounceProjectile( muzzle , trace.endpos , trace.plane.normal, end);
+			// copy the end position as the new muzzle
+      VectorCopy (trace.endpos , muzzle);
+    }
+#endif
+	do {
+#ifdef USE_INVULN_RAILS
+    if(g_railThruWalls.integer)
+      trap_Trace (&trace, tracefrom, NULL, NULL, end, passent, MASK_SHOT );
+    else
+#endif
+		trap_Trace( &trace, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
+#ifdef USE_INVULN_RAILS
+    // double check we aren't hitting ourselves on the first pass
+    if(IsSelf(trace, ent)) {
+      // do another trace that skips ourselves
+      trap_Trace( &trace, muzzle_origin, NULL, NULL, end, ent->s.number, MASK_SHOT );
+    }
+    i++;
+#endif
+
+		if ( trace.entityNum >= ENTITYNUM_MAX_NORMAL ) {
+#ifdef USE_INVULN_RAILS
+      if(g_railThruWalls.integer) {
+        // SUM break if we hit the sky
+  			if (trace.surfaceFlags & SURF_SKY)
+  				break;
+
+  			// Hypo: break if we traversed length of vector tracefrom
+  			if (trace.fraction == 1.0)
+  				break;
+
+        // save last solid for explosion mark
+        if ( trace.contents & CONTENTS_SOLID ) {
+          VectorCopy (trace.endpos, lastend);
+        }
+        
+  			// otherwise continue tracing thru walls
+  			VectorMA (trace.endpos,1,forward,tracefrom);
+      } else
+#endif
+			break;
+		}
+		traceEnt = &g_entities[ trace.entityNum ];
+		if ( traceEnt->takedamage ) {
+#ifdef MISSIONPACK
+			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
+				if ( G_InvulnerabilityEffect( traceEnt, forward, trace.endpos, impactpoint, bouncedir ) ) {
+					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
+					// snap the endpos to integers to save net bandwidth, but nudged towards the line
+					SnapVectorTowards( trace.endpos, muzzle );
+					// send railgun beam effect
+					tent = G_TempEntity( trace.endpos, EV_RAILTRAIL );
+					// set player number for custom colors on the railtrail
+					tent->s.clientNum = ent->s.clientNum;
+					VectorCopy( muzzle, tent->s.origin2 );
+					// move origin a bit to come closer to the drawn gun muzzle
+					VectorMA( tent->s.origin2, 4, right, tent->s.origin2 );
+					VectorMA( tent->s.origin2, -1, up, tent->s.origin2 );
+					tent->s.eventParm = 255;	// don't make the explosion at the end
+					//
+					VectorCopy( impactpoint, muzzle );
+					// the player can hit him/herself with the bounced rail
+					passent = ENTITYNUM_NONE;
+				}
+			} else
+#endif
+			{
+				if ( LogAccuracyHit( traceEnt, ent ) ) {
+					hits++;
+				}
+				G_Damage( traceEnt, ent, ent, forward, trace.endpos, damage, 0, MOD_RAILGUN );
+			}
+		}
+#ifdef USE_INVULN_RAILS
+    if(!g_railThruWalls.integer)
+#endif
+		if ( trace.contents & CONTENTS_SOLID ) {
+			break;		// we hit something solid enough to stop the beam
+		}
+		// unlink this entity, so the next trace will go past it
+		trap_UnlinkEntity( traceEnt );
+		unlinkedEntities[unlinked] = traceEnt;
+		unlinked++;
+	} while ( unlinked < MAX_RAIL_HITS );
+
+	// unlagged
+	G_UndoTimeShiftFor( ent );
+
+
+	// link back in any entities we unlinked
+	for ( i = 0 ; i < unlinked ; i++ ) {
+		trap_LinkEntity( unlinkedEntities[i] );
+	}
+
+	// the final trace endpos will be the terminal point of the rail trail
+#ifdef USE_INVULN_RAILS
+  if(g_railThruWalls.integer)
+    VectorCopy (lastend, trace.endpos);
+#endif
+
+	// snap the endpos to integers to save net bandwidth, but nudged towards the line
+	SnapVectorTowards( trace.endpos, muzzle_origin );
+
+	// send railgun beam effect
+	tent = G_TempEntity( trace.endpos, EV_RAILTRAIL );
+
+	// set player number for custom colors on the railtrail
+	tent->s.clientNum = ent->s.clientNum;
+
+	VectorCopy( muzzle, tent->s.origin2 );
+	// move origin a bit to come closer to the drawn gun muzzle
+	VectorMA( tent->s.origin2, 4, right, tent->s.origin2 );
+	VectorMA( tent->s.origin2, -1, up, tent->s.origin2 );
+
+	SnapVector( tent->s.origin2 );
+
+	// no explosion at end if SURF_NOIMPACT, but still make the trail
+	if ( trace.surfaceFlags & SURF_NOIMPACT ) {
+#ifdef USE_BOUNCE_RAIL
+   bounce = MAX_RAIL_BOUNCE; //Luc: If hit sky, max out bounces so wont bounce again
+#endif
+		tent->s.eventParm = 255;	// don't make the explosion at the end
+	} else {
+		tent->s.eventParm = DirToByte( trace.plane.normal );
+	}
+	tent->s.clientNum = ent->s.clientNum;
+
+#ifdef USE_INVULN_RAILS
+  //send the effect to everyone since it tunnels through walls
+	if(g_railThruWalls.integer) {
+		tent->r.svFlags |= SVF_BROADCAST;
+	}
+#endif
+
+	// give the shooter a reward sound if they have made two railgun hits in a row
+	if ( hits == 0 ) {
+		// complete miss
+		ent->client->accurateCount = 0;
+	} else {
+		// check for "impressive" reward sound
+		ent->client->accurateCount += hits;
+		if ( ent->client->accurateCount >= 2 ) {
+			ent->client->accurateCount -= 2;
+			ent->client->ps.persistant[PERS_IMPRESSIVE_COUNT]++;
+			// add the sprite over the player's head
+			ent->client->ps.eFlags &= ~EF_AWARDS;
+			ent->client->ps.eFlags |= EF_AWARD_IMPRESSIVE;
+			ent->client->rewardTime = level.time + REWARD_SPRITE_TIME;
+		}
+		ent->client->accuracy_hits++;
+	}
+
+#ifdef USE_BOUNCE_RAIL//Luc: Add a bounce, so it'll bounce only 4 times
+	tent->s.powerups = bounce;
+	bounce++;
+} while (wp_railBounce.integer && bounce <= MAX_RAIL_BOUNCE);
+#endif
+}
+

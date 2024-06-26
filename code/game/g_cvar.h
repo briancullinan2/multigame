@@ -99,4 +99,10 @@ G_CVAR( g_clusterGrenades, "g_clusterGrenades", "0", CVAR_ARCHIVE, 0, qfalse, qf
 #ifdef USE_VORTEX_GRENADES
 G_CVAR( g_vortexGrenades, "g_vortexGrenades", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
+#ifdef USE_INVULN_RAILS
+G_CVAR( g_railThruWalls, "g_railThruWalls", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_BOUNCE_RAIL
+G_CVAR( wp_railBounce, "wp_railBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
 #undef G_CVAR

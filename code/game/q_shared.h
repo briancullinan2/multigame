@@ -152,6 +152,11 @@
 #define USE_WEAPON_SPREAD 1
 // enable vortex grenades that suck players in when they are tossed
 #define USE_VORTEX_GRENADES 1
+// enable bouncing rail guns
+#define USE_BOUNCE_RAIL 1
+// enable rails that go through walls
+//#define USE_INVULN_RAILS 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
