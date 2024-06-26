@@ -76,14 +76,36 @@ PM_StartTorsoAnim
 ===================
 */
 static void PM_StartTorsoAnim( int anim ) {
-	if ( pm->ps->pm_type >= PM_DEAD ) {
+	if ( pm->ps->pm_type >= PM_DEAD 
+#ifdef USE_BIRDS_EYE
+		&&  pm->ps->pm_type != PM_PLATFORM
+		&&  pm->ps->pm_type != PM_BIRDSEYE
+		&&  pm->ps->pm_type != PM_FOLLOWCURSOR
+		&&  pm->ps->pm_type != PM_THIRDPERSON 
+#endif
+
+#ifdef USE_AIW
+		&& pm->ps->pm_type != PM_UPSIDEDOWN
+#endif
+	) {
 		return;
 	}
 	pm->ps->torsoAnim = ( ( pm->ps->torsoAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT )
 		| anim;
 }
 static void PM_StartLegsAnim( int anim ) {
-	if ( pm->ps->pm_type >= PM_DEAD ) {
+	if ( pm->ps->pm_type >= PM_DEAD 
+#ifdef USE_BIRDS_EYE
+		&&  pm->ps->pm_type != PM_PLATFORM
+		&&  pm->ps->pm_type != PM_BIRDSEYE
+		&&  pm->ps->pm_type != PM_FOLLOWCURSOR
+		&&  pm->ps->pm_type != PM_THIRDPERSON
+#endif
+
+#ifdef USE_AIW
+		&& pm->ps->pm_type != PM_UPSIDEDOWN
+#endif
+	) {
 		return;
 	}
 	if ( pm->ps->legsTimer > 0 ) {
@@ -620,6 +642,11 @@ static void PM_AirMove( void ) {
 	wishspeed *= scale;
 
 	// not on ground, so little effect on velocity
+#ifdef USE_BIRDS_EYE
+	if(pm->ps->pm_type == PM_PLATFORM) {
+		PM_Accelerate (wishdir, wishspeed, 5);
+	} else
+#endif
 	PM_Accelerate (wishdir, wishspeed, pm_airaccelerate);
 
 	// we may have a ground plane that is very steep, even
@@ -1905,10 +1932,73 @@ void PmoveSingle (pmove_t *pmove) {
 
 	pml.frametime = pml.msec * 0.001;
 
+#ifdef USE_BIRDS_EYE
+	if(pm->ps->pm_type == PM_FOLLOWCURSOR) {
+		float rad = atan2(SHORT2ANGLE(pm->cmd.angles[YAW]) - 180.0f, 180.0f - SHORT2ANGLE(pm->cmd.angles[PITCH])); // In radians
+		float deg = rad * (180.0f / M_PI);
+		pm->ps->viewangles[PITCH] = 0;
+		pm->ps->viewangles[YAW] = deg;
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+	if(pm->ps->pm_type == PM_BIRDSEYE) {
+		pm->ps->viewangles[PITCH] = 0;
+		pm->ps->viewangles[YAW] = SHORT2ANGLE(pm->cmd.angles[YAW]) - 180;
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+		pm->ps->viewangles[ROLL] = 180 - SHORT2ANGLE(pm->cmd.angles[YAW]);
+	} else
+	if(pm->ps->pm_type == PM_PLATFORM) {
+		// Zygote Start
+		pm->cmd.rightmove = 0; // no strafe ever!
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );	// Update angles from controls!!??
+
+		// This sets my movement direction based on my view angles
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+		pml.forward[0] = 16000;
+		pml.forward[1] = 0;
+		pml.forward[2] = 0;
+
+		if ( pm->cmd.forwardmove < 0 ) {			// Backwards Key Pressed
+			pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN; // Normal Forward Animation
+		} else if ( pm->cmd.forwardmove > 0) {		// Forwards Key Pressed
+			pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN;	// Normal Forward Animation
+		}
+		// Zygote End
+	} else
+#endif
+
+#ifdef USE_AIW
+	if(pm->ps->pm_type == PM_REVERSED) {
+		pm->cmd.rightmove = -pm->cmd.rightmove;
+		//pm.cmd.forwardmove = -pm.cmd.forwardmove;
+
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );
+		pm->ps->viewangles[YAW] = -pm->ps->viewangles[YAW];
+		pm->ps->viewangles[PITCH] = -pm->ps->viewangles[PITCH];
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+	if(pm->ps->pm_type == PM_UPSIDEDOWN) {
+		pm->cmd.angles[ROLL] = SHORT2ANGLE(180);
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+	if(pm->ps->pm_type == PM_REVERSEDUPSIDEDOWN) {
+		pm->cmd.angles[ROLL] = SHORT2ANGLE(180);
+		pm->cmd.rightmove = -pm->cmd.rightmove;
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );
+		pm->ps->viewangles[YAW] = -pm->ps->viewangles[YAW];
+		pm->ps->viewangles[PITCH] = -pm->ps->viewangles[PITCH];
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+#endif
+	{
+
 	// update the viewangles
-	PM_UpdateViewAngles( pm->ps, &pm->cmd );
+  PM_UpdateViewAngles( pm->ps, &pm->cmd );
 
 	AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+
+	}
+
 
 	if ( pm->cmd.upmove < 10 ) {
 		// not holding jump
@@ -1922,7 +2012,20 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN;
 	}
 
-	if ( pm->ps->pm_type >= PM_DEAD ) {
+	if ( pm->ps->pm_type >= PM_DEAD
+#ifdef USE_BIRDS_EYE
+		&&  pm->ps->pm_type != PM_PLATFORM
+		&&  pm->ps->pm_type != PM_BIRDSEYE
+		&&  pm->ps->pm_type != PM_FOLLOWCURSOR
+		&&  pm->ps->pm_type != PM_THIRDPERSON 
+#endif
+
+#ifdef USE_AIW
+		&& pm->ps->pm_type != PM_REVERSED
+		&& pm->ps->pm_type != PM_REVERSEDUPSIDEDOWN
+		&& pm->ps->pm_type != PM_UPSIDEDOWN
+#endif
+	) {
 		pm->cmd.forwardmove = 0;
 		pm->cmd.rightmove = 0;
 		pm->cmd.upmove = 0;

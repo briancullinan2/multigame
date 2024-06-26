@@ -562,7 +562,20 @@ static void CG_TouchTriggerPrediction( void ) {
 
 	spectator = ( cg.predictedPlayerState.pm_type == PM_SPECTATOR );
 
-	if ( cg.predictedPlayerState.pm_type != PM_NORMAL && !spectator ) {
+	if ( cg.predictedPlayerState.pm_type != PM_NORMAL
+#ifdef USE_BIRDS_EYE
+		&& cg.predictedPlayerState.pm_type != PM_BIRDSEYE
+		&& cg.predictedPlayerState.pm_type != PM_FOLLOWCURSOR
+		&& cg.predictedPlayerState.pm_type != PM_PLATFORM
+		&& cg.predictedPlayerState.pm_type != PM_THIRDPERSON
+#endif
+
+#ifdef USE_AIW
+		&& cg.predictedPlayerState.pm_type != PM_UPSIDEDOWN
+		&& cg.predictedPlayerState.pm_type != PM_REVERSED
+		&& cg.predictedPlayerState.pm_type != PM_REVERSEDUPSIDEDOWN
+#endif
+		&& !spectator ) {
 		return;
 	}
 
@@ -1171,6 +1184,58 @@ void CG_PredictPlayerState( void ) {
 			*cg_pmove.ps = cg.savedPmoveStates[ stateIndex ];
 			stateIndex = ( stateIndex + 1 ) % NUM_SAVED_STATES;
 		}
+
+#ifdef USE_BIRDS_EYE
+		// ZYGOTE START
+		if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+			|| cg_birdsEye.integer) {
+			// Copy modified YAW into viewangles
+			//cg_pmove.ps->viewangles[ROLL] = cg_pmove.cmd.angles[PITCH] + cg_pmove.ps->delta_angles[PITCH];
+			cg_pmove.ps->viewangles[PITCH] = -SHORT2ANGLE(cg_pmove.ps->delta_angles[PITCH]);
+			//cg_pmove.ps->delta_angles[ROLL] = cg_pmove.ps->delta_angles[PITCH];
+			cg_pmove.ps->delta_angles[PITCH] = 0;
+		} else 
+		if(cg.predictedPlayerState.pm_type == PM_PLATFORM
+			|| cg_sideview.integer) {
+			short		temp;
+			// Setup temp
+			temp = cg_pmove.cmd.angles[YAW] + cg_pmove.ps->delta_angles[YAW];
+			
+			if ( (temp > -30000) && (temp < 0) ) {
+				cg_pmove.ps->delta_angles[YAW] = -1000 - cg_pmove.cmd.angles[YAW];
+				temp = 0; // RIGHT
+			}
+			if ( (temp < 30000) && (temp > 0) ) {
+				cg_pmove.ps->delta_angles[YAW] = 1000 - cg_pmove.cmd.angles[YAW];
+				temp = 32000; // LEFT
+			}	
+
+			// Copy modified YAW into viewangles
+			cg_pmove.ps->viewangles[YAW] = SHORT2ANGLE(temp);
+		}
+		// ZYGOTE FINISH
+#endif
+
+/*
+#ifdef USE_AIW
+		if(cg.predictedPlayerState.pm_type == PM_REVERSED || cg_reverseControls.integer
+		|| (cg.predictedPlayerState.pm_type == PM_REVERSEDUPSIDEDOWN && cg_upsideDown.integer && cg_reverseControls.integer)) {
+			cg_pmove.cmd.rightmove = -cg_pmove.cmd.rightmove;
+			cg_pmove.cmd.forwardmove = -cg_pmove.cmd.forwardmove;
+			//cg_pmove.ps->delta_angles[PITCH] = -cg_pmove.ps->delta_angles[PITCH];
+			cg_pmove.ps->viewangles[PITCH] = -cg_pmove.ps->viewangles[PITCH];
+			//cg_pmove.ps->delta_angles[YAW] = -cg_pmove.ps->delta_angles[YAW];
+			cg_pmove.ps->viewangles[YAW] = -cg_pmove.ps->viewangles[YAW];
+		}
+
+		if(cg.predictedPlayerState.pm_type == PM_UPSIDEDOWN || cg_upsideDown.integer
+			|| (cg.predictedPlayerState.pm_type == PM_REVERSEDUPSIDEDOWN && cg_upsideDown.integer && cg_reverseControls.integer)) {
+			cg_pmove.ps->viewangles[ROLL] = SHORT2ANGLE(180);
+			cg_pmove.ps->delta_angles[ROLL] = 180;
+		}
+#endif
+*/
 
 		moved = qtrue;
 	}

@@ -113,12 +113,34 @@ movement on the server game.
 
 typedef enum {
 	PM_NORMAL,		// can accelerate and turn
+#ifdef USE_BIRDS_EYE
+	PM_PLATFORM,
+	PM_BIRDSEYE,
+	PM_THIRDPERSON,
+	PM_FOLLOWCURSOR,
+#endif
+
+#ifdef USE_AIW
+	PM_UPSIDEDOWN,
+	PM_REVERSED,
+	PM_REVERSEDUPSIDEDOWN,
+#endif
+
 	PM_NOCLIP,		// noclip movement
 	PM_SPECTATOR,	// still run into walls
 	PM_DEAD,		// no acceleration or turning, but free falling
 	PM_FREEZE,		// stuck in place with no control
 	PM_INTERMISSION,	// no movement or status bar
-	PM_SPINTERMISSION	// no movement or status bar
+	PM_SPINTERMISSION,	// no movement or status bar
+
+	PM_LOOKSPLINE, // control look angle from spline
+	PM_MOVESPLINE, // control movement from spline
+	PM_BOTHSPLINE, // control both from spline
+	PM_LOOKQUARTER,
+	PM_LOOKHALF, // allow for 180 degree freelook from the angle 
+	// specified by camera spline nearest current location
+
+	NUM_PLAYERMOVE,
 } pmtype_t;
 
 typedef enum {
@@ -445,6 +467,11 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+
+#ifdef USE_BIRDS_EYE
+	EV_CURSORSTART,
+#endif
+
 	EV_MAX
 
 } entity_event_t;
@@ -688,6 +715,9 @@ typedef enum {
 	ET_INVISIBLE,
 	ET_GRAPPLE,				// grapple hooked on wall
 	ET_TEAM,
+#ifdef USE_BIRDS_EYE
+	ET_CURSOR,
+#endif
 
 	ET_EVENTS				// any of the EV_* events can be added freestanding
 							// by setting eType to ET_EVENTS + eventNum

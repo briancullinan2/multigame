@@ -436,6 +436,14 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		return;
 	}
 
+#ifdef USE_BIRDS_EYE
+	if(self->client->cursorEnt) {
+		trap_UnlinkEntity(self->client->cursorEnt);
+		G_FreeEntity(self->client->cursorEnt);
+		self->client->cursorEnt = NULL;
+	}
+#endif
+
 	//unlag the client
 	G_UnTimeShiftClient( self );
 

@@ -93,4 +93,14 @@ G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
+
+#ifdef USE_BIRDS_EYE
+G_CVAR( g_birdsEye, "g_birdsEye", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_thirdPerson, "g_thirdPerson", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_sideview, "g_sideview", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+#ifdef USE_AIW
+G_CVAR( g_upsideDown, "g_upsideDown", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+
 #undef G_CVAR

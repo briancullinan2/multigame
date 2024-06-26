@@ -301,6 +301,30 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	client = ent->client;
 
 	if ( client->sess.spectatorState != SPECTATOR_FOLLOW ) {
+#ifdef USE_BIRDS_EYE
+		if (client->pers.thirdPerson || g_thirdPerson.integer) {
+			client->ps.pm_type = PM_THIRDPERSON;
+		} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+		} else if (client->pers.sideView || g_sideview.integer) {
+			client->ps.pm_type = PM_PLATFORM;
+		} else
+#endif
+#ifdef USE_AIW
+		if(client->pers.reverseControls) {
+			client->ps.pm_type = PM_REVERSED;
+		}
+		if(client->pers.upsidedown || g_upsideDown.integer) {
+			client->ps.pm_type = PM_UPSIDEDOWN;
+		}
+		if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+			client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+		}
+#endif
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed = g_speed.value * 1.25f; // faster than normal
 
@@ -489,6 +513,30 @@ void ClientIntermissionThink( gclient_t *client ) {
 	client->ps.eFlags &= ~EF_FIRING;
 
 	// the level will exit when everyone wants to or after timeouts
+#ifdef USE_BIRDS_EYE
+	if (client->pers.thirdPerson || g_thirdPerson.integer) {
+		client->ps.pm_type = PM_THIRDPERSON;
+	} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+	} else if (client->pers.sideView || g_sideview.integer) {
+		client->ps.pm_type = PM_PLATFORM;
+	}
+#endif
+#ifdef USE_AIW
+	if(client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSED;
+	}
+	if(client->pers.upsidedown || g_upsideDown.integer) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+	}
+	if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	}
+#endif
 
 	// swap and latch button actions
 	client->oldbuttons = client->buttons;
@@ -813,7 +861,32 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.pm_type = PM_NOCLIP;
 	} else if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		client->ps.pm_type = PM_DEAD;
-	} else {
+	} else 
+#ifdef USE_BIRDS_EYE
+	if (client->pers.thirdPerson || g_thirdPerson.integer) {
+		client->ps.pm_type = PM_THIRDPERSON;
+	} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+	} else if (client->pers.sideView || g_sideview.integer) {
+		client->ps.pm_type = PM_PLATFORM;
+	} else
+#endif
+#ifdef USE_AIW
+	if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	} else
+	if(client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSED;
+	} else 
+	if(client->pers.upsidedown || g_upsideDown.integer) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+	} else 
+#endif
+	{
 		client->ps.pm_type = PM_NORMAL;
 	}
 
@@ -902,6 +975,7 @@ void ClientThink_real( gentity_t *ent ) {
 
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
+
 #ifdef MISSIONPACK
 		if (level.intermissionQueued != 0 && g_singlePlayer.integer) {
 			if ( level.time - level.intermissionQueued >= 1000  ) {
@@ -918,6 +992,92 @@ void ClientThink_real( gentity_t *ent ) {
 		Pmove (&pm);
 #else
 		Pmove (&pm);
+#endif
+
+#ifdef USE_BIRDS_EYE
+	if(pm.ps->pm_type == PM_FOLLOWCURSOR) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+			
+			if(!ent->client->cursorEnt || ent->client->cursorEnt->r.ownerNum != ent->client->ps.clientNum 
+				|| level.time - ent->client->cursorEnt->eventTime > 1000) {
+				gentity_t *pent;
+				if(ent->client->cursorEnt && ent->client->cursorEnt->r.ownerNum == ent->client->ps.clientNum) {
+					G_FreeEntity(ent->client->cursorEnt);
+				}
+				ent->client->cursorEnt = pent = G_TempEntity( client->ps.origin, EV_CURSORSTART );
+				pent->s.clientNum = client - level.clients;
+				pent->r.singleClient = client - level.clients;
+				pent->r.svFlags |= SVF_SINGLECLIENT;
+				pent->freeAfterEvent = qfalse;
+				pent->s.eType = ET_CURSOR;
+				pent->eventTime = level.time;
+				pent->freetime = level.time + 1000;
+				pent->r.ownerNum = ent->client->ps.clientNum;
+			} else {
+				gentity_t *pent;
+				pent = ent->client->cursorEnt;
+				//pent->eventTime = level.time;
+				//pent->s.event++;
+				//G_AddEvent(pent, EV_EVENT_BITS, 0);
+				pent->s.pos.trBase[0] = SHORT2ANGLE(ucmd->angles[YAW]);
+				pent->s.pos.trBase[1] = SHORT2ANGLE(ucmd->angles[PITCH]);
+				
+				
+				VectorCopy(pent->s.pos.trBase, pent->s.origin);
+			}
+
+			// Copy modified YAW into viewangles
+			ent->client->ps.delta_angles[PITCH] = 0;
+			ent->s.angles[PITCH] = SHORT2ANGLE(1);
+		}
+		// ZYGOTE FINISH
+	} else
+	if(pm.ps->pm_type == PM_BIRDSEYE) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+			// Copy modified YAW into viewangles
+			ent->client->ps.delta_angles[PITCH] = 0;
+			ent->s.angles[PITCH] = SHORT2ANGLE(1);
+		}
+		// ZYGOTE FINISH
+	} else
+	if(pm.ps->pm_type == PM_PLATFORM) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+			short		temp;
+
+			// Setup temp
+			temp = ent->client->pers.cmd.angles[YAW] + ent->client->ps.delta_angles[YAW];		
+			
+			// Some ugly shit, but it works :)
+			if ( (temp > -30000) && (temp < 0) ) {
+				ent->client->ps.delta_angles[YAW] = -1000 - ent->client->pers.cmd.angles[YAW];
+				temp = 0; // RIGHT
+			}
+			if ( (temp < 30000) && (temp > 0) ) {
+				ent->client->ps.delta_angles[YAW] = 1000 - ent->client->pers.cmd.angles[YAW];
+				temp = 32000; // LEFT
+			}	
+
+			// Copy modified YAW into viewangles
+			ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp);
+
+		}
+		// ZYGOTE FINISH
+	}
+#endif
+#ifdef USE_AIW
+	if(pm.ps->pm_type == PM_UPSIDEDOWN) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+
+			// Copy modified YAW into viewangles
+			ent->client->ps.delta_angles[ROLL] = 180;
+			ent->client->ps.viewangles[ROLL] = SHORT2ANGLE(180);
+
+		}
+	}
 #endif
 
 	// save results of pmove

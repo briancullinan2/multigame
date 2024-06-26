@@ -991,6 +991,25 @@ static void CG_AddCEntity( centity_t *cent ) {
 	case ET_TEAM:
 		CG_TeamBase( cent );
 		break;
+#ifdef USE_BIRDS_EYE
+	case ET_CURSOR:
+		cgs.cursorX = cent->currentState.pos.trBase[0];
+		cgs.cursorY = cent->currentState.pos.trBase[1];
+		if(cgs.cursorX < 0) {
+			cgs.cursorX = 640;
+		}
+		if(cgs.cursorX > 640) {
+			cgs.cursorX = 0;
+		}
+		if(cgs.cursorY < 0) {
+			cgs.cursorY = 480;
+		}
+		if(cgs.cursorY > 480) {
+			cgs.cursorY = 0;
+		}
+		//CG_Printf("moving: %fx%f\n", cent->currentState.pos.trDelta[0], cent->currentState.pos.trDelta[1]);
+		break;
+#endif
 	}
 }
 

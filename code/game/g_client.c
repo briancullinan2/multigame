@@ -682,6 +682,67 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	}
 #endif
 
+
+#ifdef USE_BIRDS_EYE
+	s = Info_ValueForKey( userinfo, "cg_thirdperson" );
+	if ( *s && atoi( s ) != 0 ) {
+		// TODO: AIM towards the surface it would hit, through portals
+		client->ps.pm_type = PM_THIRDPERSON;
+		client->pers.thirdPerson = qtrue;
+	} else {
+		client->pers.thirdPerson = qfalse;
+	}
+	s = Info_ValueForKey( userinfo, "cg_birdsEye" );
+	if ( *s && atoi( s ) != 0 ) {
+	G_Printf("setting birds eye\n");
+		client->ps.pm_type = PM_BIRDSEYE;
+		client->pers.birdsEye = qtrue;
+	} else {
+		client->pers.birdsEye = qfalse;
+	}
+
+
+	s = Info_ValueForKey( userinfo, "cg_drawCrosshair" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_FOLLOWCURSOR;
+		client->pers.showCursor = qtrue;
+	} else {
+		client->pers.showCursor = qfalse;
+	}
+
+
+	s = Info_ValueForKey( userinfo, "cg_sideview" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_PLATFORM;
+		client->pers.sideView = qtrue;
+	} else {
+		client->pers.sideView = qfalse;
+	}
+#endif
+
+#ifdef USE_AIW
+	s = Info_ValueForKey( userinfo, "cg_reverseControls" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_REVERSED;
+		client->pers.reverseControls = qtrue;
+	} else {
+		client->pers.reverseControls = qfalse;
+	}
+
+	s = Info_ValueForKey( userinfo, "cg_upsideDown" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+		client->pers.upsidedown = qtrue;
+	} else {
+		client->pers.upsidedown = qfalse;
+	}
+
+	if(client->pers.upsidedown && client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	}
+#endif
+
+
 	// set model
 	Q_strncpyz( model, Info_ValueForKey( userinfo, "model" ), sizeof( model ) );
 	Q_strncpyz( headModel, Info_ValueForKey( userinfo, "headmodel" ), sizeof( headModel ) );

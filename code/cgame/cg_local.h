@@ -771,7 +771,7 @@ typedef struct {
 	qhandle_t	selectShader;
 	qhandle_t	viewBloodShader;
 	qhandle_t	tracerShader;
-	qhandle_t	crosshairShader[NUM_CROSSHAIRS];
+	qhandle_t	crosshairShader[NUM_CROSSHAIRS + 1];
 	qhandle_t	lagometerShader;
 	qhandle_t	backTileShader;
 	qhandle_t	noammoShader;
@@ -1156,6 +1156,9 @@ extern	markPoly_t		cg_markPolys[MAX_MARK_POLYS];
 #define EXTERN_CG_CVAR
 	#include "cg_cvar.h"
 #undef EXTERN_CG_CVAR
+
+
+extern  vmCvar_t    cg_birdsEye;
 
 extern const char		*eventnames[EV_MAX];
 

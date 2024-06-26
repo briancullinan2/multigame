@@ -240,6 +240,17 @@ typedef struct {
 	int			teamVoted;
 
 	qboolean	inGame;
+#ifdef USE_BIRDS_EYE
+	qboolean	birdsEye;
+	qboolean	thirdPerson;
+	qboolean	sideView;
+	qboolean	showCursor;
+#endif
+
+#ifdef USE_AIW
+	qboolean reverseControls;
+	qboolean upsidedown;
+#endif
 } clientPersistant_t;
 
 // unlagged
@@ -273,6 +284,10 @@ struct gclient_s {
 	int			latched_buttons;
 
 	vec3_t		oldOrigin;
+
+#ifdef USE_BIRDS_EYE
+	gentity_t *cursorEnt;
+#endif
 
 	// sum up damage over an entire frame, so
 	// shotgun blasts give a single big kick

@@ -146,6 +146,12 @@
 
 //=============================================================
 
+// enable birds eye view, set by server or client, for use in spray and prey game modes
+#define USE_BIRDS_EYE 1
+// Alice in Wonderland game dynamics like shrinking and growing a player
+#define USE_AIW 1
+
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

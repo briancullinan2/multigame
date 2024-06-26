@@ -2016,9 +2016,28 @@ static void CG_DrawCrosshair( void ) {
 		return;
 	}
 
-	if ( cg.renderingThirdPerson ) {
+	if ( cg.renderingThirdPerson
+#ifdef USE_BIRDS_EYE
+		&& cg.predictedPlayerState.pm_type != PM_BIRDSEYE && cg.predictedPlayerState.pm_type != PM_FOLLOWCURSOR && cg_birdsEye.integer == 0
+#endif
+	) {
 		return;
 	}
+
+
+
+#ifdef USE_BIRDS_EYE
+	if ( cg.predictedPlayerState.pm_type == PM_BIRDSEYE || cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer ) {
+
+		//cgs.cursorX = cg_entities[cg.snap->ps.clientNum].currentState.origin2[0];
+		//cgs.cursorY = cg_entities[cg.snap->ps.clientNum].currentState.origin2[1];
+		//cgs.cursorX = cg_entities[cg.snap->ps.clientNum].currentState.apos.trBase[0];
+		//cgs.cursorY = cg_entities[cg.snap->ps.clientNum].currentState.apos.trBase[1];
+		//CG_Printf("moving: %fx%f\n", cgs.cursorX, cgs.cursorY);
+	}
+#endif
+
+
 
 	// set color based on health
 	if ( cg_crosshairHealth.integer ) {
@@ -2050,8 +2069,15 @@ static void CG_DrawCrosshair( void ) {
 		ca = 0;
 	}
 
-	hShader = cgs.media.crosshairShader[ ca % NUM_CROSSHAIRS ];
+	hShader = cgs.media.crosshairShader[ ca % (NUM_CROSSHAIRS + 1) ];
 
+#ifdef USE_BIRDS_EYE
+	if ( cg.predictedPlayerState.pm_type == PM_BIRDSEYE || cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer ) {
+		trap_R_DrawStretchPic( x + cg.refdef.x + (1.0f - cgs.cursorX / 360.0f) * (cg.refdef.width - w) - cgs.screenXBias,
+			y + cg.refdef.y + cgs.cursorY / 360.0f * (cg.refdef.height - h) - cgs.screenYBias,
+			w, h, 0, 0, 1, 1, hShader );
+	} else
+#endif
 	trap_R_DrawStretchPic( x + cg.refdef.x + 0.5 * (cg.refdef.width - w) - cgs.screenXBias,
 		y + cg.refdef.y + 0.5 * (cg.refdef.height - h) - cgs.screenYBias,
 		w, h, 0, 0, 1, 1, hShader );
@@ -2657,7 +2683,11 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawCenterString();
 	}
 
-	if ( cgs.score_catched ) {
+	if ( cgs.score_catched 
+//#ifdef USE_BIRDS_EYE
+//		|| cg_birdsEye.integer || cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+//#endif
+	) {
 		float x, y, w, h;
 		trap_R_SetColor( NULL );
 		x = cgs.cursorX - 12;

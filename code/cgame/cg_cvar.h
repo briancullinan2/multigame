@@ -28,7 +28,7 @@ CG_CVAR( cg_drawIcons, "cg_drawIcons", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAmmoWarning, "cg_drawAmmoWarning", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAttacker, "cg_drawAttacker", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawSpeed, "cg_drawSpeed", "0", CVAR_ARCHIVE )
-CG_CVAR( cg_drawCrosshair, "cg_drawCrosshair", "4", CVAR_ARCHIVE )
+CG_CVAR( cg_drawCrosshair, "cg_drawCrosshair", "4", CVAR_ARCHIVE | CVAR_USERINFO )
 CG_CVAR( cg_drawCrosshairNames, "cg_drawCrosshairNames", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawRewards, "cg_drawRewards", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawWeaponSelect, "cg_drawWeaponSelect", "1", CVAR_ARCHIVE )
@@ -67,7 +67,7 @@ CG_CVAR( cg_tracerWidth, "cg_tracerwidth", "1", CVAR_CHEAT )
 CG_CVAR( cg_tracerLength, "cg_tracerlength", "100", CVAR_CHEAT )
 CG_CVAR( cg_thirdPersonRange, "cg_thirdPersonRange", "40", CVAR_CHEAT )
 CG_CVAR( cg_thirdPersonAngle, "cg_thirdPersonAngle", "0", CVAR_CHEAT )
-CG_CVAR( cg_thirdPerson, "cg_thirdPerson", "0", 0 )
+CG_CVAR( cg_thirdPerson, "cg_thirdPerson", "0", CVAR_USERINFO | CVAR_SERVERINFO )
 CG_CVAR( cg_teamChatTime, "cg_teamChatTime", "3000", CVAR_ARCHIVE  )
 CG_CVAR( cg_teamChatHeight, "cg_teamChatHeight", "0", CVAR_ARCHIVE  )
 CG_CVAR( cg_forceModel, "cg_forceModel", "0", CVAR_ARCHIVE  )
@@ -131,5 +131,18 @@ CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
+
+#ifdef USE_BIRDS_EYE
+CG_CVAR( cg_birdsEyeRange, "cg_birdsEyeRange", "300", CVAR_CHEAT )
+CG_CVAR( cg_birdsEyeAngle, "cg_birdsEyeAngle", "0", CVAR_CHEAT )
+CG_CVAR( cg_birdsEye, "cg_birdsEye", "0", CVAR_USERINFO )
+CG_CVAR( cg_sideview, "cg_sideview", "0", CVAR_USERINFO )
+#endif
+
+#ifdef USE_AIW
+CG_CVAR( cg_upsideDown, "cg_upsideDown", "0", CVAR_USERINFO )
+CG_CVAR( cg_reverseControls, "cg_reverseControls", "0", CVAR_USERINFO )
+#endif
+
 
 #undef CG_CVAR

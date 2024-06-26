@@ -829,6 +829,12 @@ void FireWeapon( gentity_t *ent ) {
 	}
 
 	// set aiming directions
+#ifdef USE_BIRDS_EYE
+	if(ent->client->ps.pm_type == PM_BIRDSEYE || ent->client->ps.pm_type == PM_FOLLOWCURSOR) {
+		ent->client->ps.viewangles[PITCH] = 0;
+	}
+#endif
+
 	AngleVectors( ent->client->ps.viewangles, forward, right, up );
 
 	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
