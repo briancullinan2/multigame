@@ -72,7 +72,7 @@ G_CVAR( g_listEntity, "g_listEntity", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_unlagged, "g_unlagged", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse, qfalse )
 G_CVAR( g_predictPVS, "g_predictPVS", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 G_CVAR( g_obeliskHealth, "g_obeliskHealth", "2500", 0, 0, qfalse, qfalse )
 G_CVAR( g_obeliskRegenPeriod, "g_obeliskRegenPeriod", "1", 0, 0, qfalse, qfalse )
 G_CVAR( g_obeliskRegenAmount, "g_obeliskRegenAmount", "15", 0, 0, qfalse, qfalse )
@@ -151,7 +151,7 @@ G_CVAR( g_altGrapple,         "g_altGrapple",     "0",  CVAR_ARCHIVE | CVAR_SERV
 #endif
 #endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 
 G_CVAR( wp_nailCycle,         "wp_nailCycle",         "1000", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
 G_CVAR( wp_nailDamage,        "wp_nailDamage",        "20",   CVAR_ARCHIVE, 0, qfalse, qfalse )

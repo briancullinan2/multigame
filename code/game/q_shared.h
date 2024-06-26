@@ -152,6 +152,9 @@
 #define USE_GRAPPLE 1
 // enable the flame thrower
 #define USE_FLAME_THROWER 1
+// use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
+#define USE_ADVANCED_WEAPONS 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

@@ -327,12 +327,12 @@ static void CG_AddAmmo( int weapon, int count )
 		|| weapon == WP_GRAPPLING_HOOK 
 #endif
 	) {
-		cg.predictedPlayerState.ammo[weapon] = -1;
+		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = -1;
 	} else {
-		cg.predictedPlayerState.ammo[weapon] += count;
+		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] += count;
 		if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG ) {
-			if ( cg.predictedPlayerState.ammo[weapon] > AMMO_HARD_LIMIT ) {
-				cg.predictedPlayerState.ammo[weapon] = AMMO_HARD_LIMIT;
+			if ( cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
+				cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
 			}
 		}
 	}
@@ -347,15 +347,15 @@ static void CG_AddWeapon( int weapon, int quantity, qboolean dropped )
 
 	// dropped items and teamplay weapons always have full ammo
 	if ( !dropped && cgs.gametype != GT_TEAM ) {
-		if ( cg.predictedPlayerState.ammo[ weapon ] < quantity ) {
-			quantity = quantity - cg.predictedPlayerState.ammo[ weapon ];
+		if ( cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ] < quantity ) {
+			quantity = quantity - cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ];
 		} else {
 			quantity = 1;
 		}
 	}
 
 	// add the weapon
-	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << weapon );
+	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << (weapon % WP_MAX_WEAPONS) );
 
 	CG_AddAmmo( weapon, quantity );
 }
@@ -537,8 +537,8 @@ static void CG_TouchItem( centity_t *cent ) {
 	// if it's a weapon, give them some predicted ammo so the autoswitch will work
 	if ( item->giType == IT_WEAPON ) {
 		cg.predictedPlayerState.stats[ STAT_WEAPONS ] |= 1 << item->giTag;
-		if ( !cg.predictedPlayerState.ammo[ item->giTag ] ) {
-			cg.predictedPlayerState.ammo[ item->giTag ] = 1;
+		if ( !cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] ) {
+			cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] = 1;
 		}
 	}
 }
@@ -844,7 +844,7 @@ static int CG_IsUnacceptableError( playerState_t *ps, playerState_t *pps, qboole
 		}
 	}
 
-	for( i = 0; i < MAX_WEAPONS; i++ ) {
+	for( i = 0; i < WP_MAX_WEAPONS; i++ ) {
 		if( pps->ammo[ i ] != ps->ammo[ i ] ) {
 			if ( cg_showmiss.integer > 1 ) {
 				CG_Printf( "ammo[%i] %i => %i ", i, pps->ammo[ i ], ps->ammo[ i ] );

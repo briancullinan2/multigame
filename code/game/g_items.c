@@ -246,10 +246,13 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 static void Add_Ammo( gentity_t *ent, int weapon, int count )
 {
-	ent->client->ps.ammo[weapon] += count;
-	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
-		ent->client->ps.ammo[weapon] = AMMO_HARD_LIMIT;
+	ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] += count;
+	if ( ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
+		ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
 	}
+#ifdef USE_ADVANCED_WEAPONS
+	ent->client->ammo[ent->client->weaponClass][weapon % WP_MAX_WEAPONS] = ent->client->ps.ammo[weapon % WP_MAX_WEAPONS];
+#endif
 }
 
 
@@ -296,7 +299,10 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 	}
 
 	// add the weapon
-	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << ent->item->giTag );
+	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+#ifdef USE_ADVANCED_WEAPONS
+	other->client->weapons[other->client->weaponClass] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+#endif
 
 	Add_Ammo( other, ent->item->giTag, quantity );
 

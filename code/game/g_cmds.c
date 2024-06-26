@@ -247,13 +247,47 @@ void Cmd_Give_f( gentity_t *ent )
 			return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
+
+	if (give_all || Q_stricmp(name, "weapons") == 0)
+	{
+		int i, j;
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				gitem_t *it = BG_FindItemForWeapon(i * WP_MAX_WEAPONS + j);
+				if(it && it->icon) {
+					ent->client->weapons[i] |= (1 << j);
+				}
+			}
+		}
+	}
+
+	if (give_all || Q_stricmp(name, "ammo") == 0)
+	{
+		int i, j;
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			for ( j = 0 ; j < WP_MAX_WEAPONS ; j++ ) {
+				gitem_t *it = BG_FindAmmoForWeapon(i * WP_MAX_WEAPONS + j);
+				if(i * WP_MAX_WEAPONS + j == WP_GAUNTLET
+					|| i * WP_MAX_WEAPONS + j == WP_GAUNTLET2
+					|| i * WP_MAX_WEAPONS + j == WP_GRAPPLING_HOOK) {
+					ent->client->ammo[i][j] = -1;
+				} else 
+				if(it && it->icon) {
+					ent->client->ammo[i][j] = 999;
+				}
+			}
+		}
+	}
+#else
+
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
 #ifdef USE_GRAPPLE
-		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - 
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_MAX_WEAPONS) - 1 - 
 			( 1 << WP_GRAPPLING_HOOK ) - ( 1 << WP_NONE );
 #else
-		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - ( 1 << WP_NONE );
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_MAX_WEAPONS) - 1 - ( 1 << WP_NONE );
 #endif
 		if (!give_all)
 			return;
@@ -261,12 +295,14 @@ void Cmd_Give_f( gentity_t *ent )
 
 	if (give_all || Q_stricmp(name, "ammo") == 0)
 	{
-		for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
+		for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
 			ent->client->ps.ammo[i] = 999;
 		}
 		if (!give_all)
 			return;
 	}
+
+#endif
 
 	if (give_all || Q_stricmp(name, "armor") == 0)
 	{
@@ -1872,6 +1908,41 @@ void ClientCommand( int clientNum ) {
 		Cmd_Say_f (ent, qfalse, qtrue);
 		return;
 	}
+
+#ifdef USE_ADVANCED_WEAPONS
+	// cycle classes just like we do with weapons but server side
+	if (Q_stricmp (cmd, "prevclass") == 0) {
+		int i;
+		int prevClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			prevClass--;
+			if(prevClass < 0) {
+				prevClass = WP_MAX_CLASSES - 1;
+			}
+			if(ent->client->weapons[prevClass] > 0) {
+				break;
+			}
+		}
+		ent->s.weapon = ent->client->ps.weapon = WP_MAX_CLASSES - 1 + prevClass * WP_MAX_WEAPONS;
+		ent->client->weaponClass = prevClass;
+	}
+	else if (Q_stricmp (cmd, "nextclass") == 0) {
+		int i;
+		int nextClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			nextClass++;
+			if(nextClass >= WP_MAX_CLASSES) {
+				nextClass = 0;
+			}
+			if(ent->client->weapons[nextClass] > 0) {
+				break;
+			}
+		}
+		ent->s.weapon = ent->client->ps.weapon = 0 + nextClass * WP_MAX_WEAPONS;
+		ent->client->weaponClass = nextClass;
+	}
+	else
+#endif
 
 	if (Q_stricmp (cmd, "give") == 0)
 		Cmd_Give_f (ent);

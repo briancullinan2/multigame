@@ -964,6 +964,10 @@ void ClientSpawn(gentity_t *ent) {
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
 
+#ifdef USE_ADVANCED_WEAPONS
+	int weaponClass;
+#endif
+
 	index = ent - g_entities;
 	client = ent->client;
 
@@ -1086,6 +1090,11 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->ps.clientNum = index;
 
+
+#ifdef USE_ADVANCED_WEAPONS
+	// TODO: make these templates somehow where a conditional evaluates to this if else code
+#endif
+
 	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_MACHINEGUN );
 	if ( g_gametype.integer == GT_TEAM ) {
 		client->ps.ammo[WP_MACHINEGUN] = 50;
@@ -1112,6 +1121,25 @@ void ClientSpawn(gentity_t *ent) {
   client->ps.ammo[WP_FLAME_THROWER] = 999;
 #endif
 
+
+#ifdef USE_ADVANCED_WEAPONS
+	weaponClass = floor(client->ps.weapon / WP_MAX_WEAPONS);
+	client->weapons[weaponClass] = client->ps.stats[STAT_WEAPONS];
+	for(i = 0; i < WP_MAX_WEAPONS; i++) {
+		client->ammo[weaponClass][i] = client->ps.ammo[i];
+	}
+
+	// give the zero weapon (empty/hands) and malee weapon to all the classes
+	for(i = 0; i < WP_MAX_CLASSES; i++) {
+		if(i * WP_MAX_WEAPONS >= WP_NUM_WEAPONS) {
+			break;
+		}
+		client->weapons[i] |= 3;
+		client->ammo[i][0] = -1;
+		client->ammo[i][1] = -1;
+	}
+
+#endif
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
@@ -1156,7 +1184,7 @@ void ClientSpawn(gentity_t *ent) {
 		// select the highest weapon number available, after any
 		// spawn given items have fired
 		client->ps.weapon = 1;
-		for ( i = WP_NUM_WEAPONS - 2 ; i > 0 ; i-- ) {
+		for ( i = WP_MAX_WEAPONS - 1 ; i > 0 ; i-- ) {
 			if ( client->ps.stats[STAT_WEAPONS] & ( 1 << i ) ) {
 				client->ps.weapon = i;
 				break;

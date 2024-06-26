@@ -822,7 +822,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	}
 
 	// let the client system know what our weapon and zoom settings are
-	trap_SetUserCmdValue( cg.weaponSelect, cg.zoomSensitivity );
+	trap_SetUserCmdValue( cg.weaponSelect % WP_MAX_WEAPONS, cg.zoomSensitivity );
 
 	if ( cg.clientFrame == 0 )
 		CG_FirstFrame();

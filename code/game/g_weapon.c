@@ -158,7 +158,7 @@ void SnapVectorTowards( vec3_t v, vec3_t to ) {
 	}
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 #define CHAINGUN_SPREAD		600
 #endif
 #define MACHINEGUN_SPREAD	200
@@ -168,7 +168,7 @@ void SnapVectorTowards( vec3_t v, vec3_t to ) {
 static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 	trace_t		tr;
 	vec3_t		end;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	vec3_t		impactpoint, bouncedir;
 #endif
 	float		r;
@@ -224,7 +224,7 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 		tent->s.otherEntityNum = ent->s.number;
 
 		if ( traceEnt->takedamage ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -241,7 +241,7 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 			else {
 #endif
 				G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_MACHINEGUN );
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			}
 #endif
 		}
@@ -285,7 +285,7 @@ static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *
 	trace_t		tr;
 	int			damage, i, passent;
 	gentity_t	*traceEnt;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	vec3_t		impactpoint, bouncedir;
 #endif
 	vec3_t		tr_start, tr_end;
@@ -310,7 +310,7 @@ static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *
 #else
 			damage = DEFAULT_SHOTGUN_DAMAGE * s_quadFactor;
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
 					G_BounceProjectile( tr_start, impactpoint, bouncedir, tr_end );
@@ -464,7 +464,7 @@ weapon_railgun_fire
 #define	MAX_RAIL_HITS	4
 void weapon_railgun_fire( gentity_t *ent ) {
 	vec3_t		end;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	vec3_t impactpoint, bouncedir;
 #endif
 	trace_t		trace;
@@ -499,7 +499,7 @@ void weapon_railgun_fire( gentity_t *ent ) {
 		}
 		traceEnt = &g_entities[ trace.entityNum ];
 		if ( traceEnt->takedamage ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if ( G_InvulnerabilityEffect( traceEnt, forward, trace.endpos, impactpoint, bouncedir ) ) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -520,14 +520,13 @@ void weapon_railgun_fire( gentity_t *ent ) {
 					passent = ENTITYNUM_NONE;
 				}
 			} else
-#else
+#endif
 			{
 				if ( LogAccuracyHit( traceEnt, ent ) ) {
 					hits++;
 				}
 				G_Damage( traceEnt, ent, ent, forward, trace.endpos, damage, 0, MOD_RAILGUN );
 			}
-#endif
 		}
 		if ( trace.contents & CONTENTS_SOLID ) {
 			break;		// we hit something solid enough to stop the beam
@@ -595,7 +594,6 @@ void weapon_railgun_fire( gentity_t *ent ) {
 
 #ifdef USE_GRAPPLE
 
-
 #ifdef USE_GRAPPLE
 /*
 ======================================================================
@@ -655,7 +653,7 @@ LIGHTNING GUN
 void Weapon_LightningFire( gentity_t *ent ) {
 	trace_t		tr;
 	vec3_t		end;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	vec3_t impactpoint, bouncedir;
 #endif
 	gentity_t	*traceEnt, *tent;
@@ -681,7 +679,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		// unlagged
 		G_UndoTimeShiftFor( ent );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 		// if not the first trace (the lightning bounced of an invulnerability sphere)
 		if (i) {
 			// add bounced off lightning bolt temp entity
@@ -700,7 +698,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		traceEnt = &g_entities[ tr.entityNum ];
 
 		if ( traceEnt->takedamage ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -732,13 +730,14 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		} else if ( !( tr.surfaceFlags & SURF_NOIMPACT ) ) {
 			tent = G_TempEntity( tr.endpos, EV_MISSILE_MISS );
 			tent->s.eventParm = DirToByte( tr.plane.normal );
+			tent->s.weapon = ent->s.weapon;
 		}
 
 		break;
 	}
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 ======================================================================
 
@@ -862,7 +861,7 @@ void FireWeapon( gentity_t *ent ) {
 	if( ent->s.weapon != WP_GRAPPLING_HOOK )
 #endif
 	if( ent->s.weapon != WP_GAUNTLET ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 		if( ent->s.weapon == WP_NAILGUN ) {
 			ent->client->accuracy_shots += NUM_NAILSHOTS;
 		} else {
@@ -880,15 +879,19 @@ void FireWeapon( gentity_t *ent ) {
 
 	// fire the specific weapon
 	switch( ent->s.weapon ) {
+	case WP_GAUNTLET2:
 	case WP_GAUNTLET:
 		Weapon_Gauntlet( ent );
 		break;
+	case WP_LIGHTNING2:
 	case WP_LIGHTNING:
 		Weapon_LightningFire( ent );
 		break;
+	case WP_SHOTGUN2:
 	case WP_SHOTGUN:
 		weapon_supershotgun_fire( ent );
 		break;
+	case WP_MACHINEGUN2:
 	case WP_MACHINEGUN:
 #ifdef USE_WEAPON_VARS
     if ( g_gametype.integer != GT_TEAM ) {
@@ -904,18 +907,23 @@ void FireWeapon( gentity_t *ent ) {
 		}
 #endif
 		break;
+	case WP_GRENADE_LAUNCHER2:
 	case WP_GRENADE_LAUNCHER:
 		weapon_grenadelauncher_fire( ent );
 		break;
+	case WP_ROCKET_LAUNCHER2:
 	case WP_ROCKET_LAUNCHER:
 		Weapon_RocketLauncher_Fire( ent );
 		break;
+	case WP_PLASMAGUN2:
 	case WP_PLASMAGUN:
 		Weapon_Plasmagun_Fire( ent );
 		break;
+	case WP_RAILGUN2:
 	case WP_RAILGUN:
 		weapon_railgun_fire( ent );
 		break;
+	case WP_BFG2:
 	case WP_BFG:
 		BFG_Fire( ent );
 		break;
@@ -929,7 +937,7 @@ void FireWeapon( gentity_t *ent ) {
     Weapon_fire_flame( ent );
     break;
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_NAILGUN:
 		Weapon_Nailgun_Fire( ent );
 		break;

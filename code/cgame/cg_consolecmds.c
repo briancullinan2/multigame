@@ -464,6 +464,12 @@ static void CG_Camera_f( void ) {
 */
 
 
+#ifdef USE_ADVANCED_WEAPONS
+void PrevClass( void );
+void NextClass( void );
+#endif
+
+
 typedef struct {
 	const char *cmd;
 	void	(*function)(void);
@@ -517,6 +523,12 @@ static consoleCommand_t	commands[] = {
 	{ "scoresDown", CG_scrollScoresDown_f },
 	{ "scoresUp", CG_scrollScoresUp_f },
 #endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	{ "nextclass", NextClass},
+	{ "prevclass", PrevClass},
+#endif
+
 	{ "startOrbit", CG_StartOrbit_f },
 	//{ "camera", CG_Camera_f },
 	{ "loaddeferred", CG_LoadDeferredPlayers }	

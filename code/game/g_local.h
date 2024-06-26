@@ -311,12 +311,20 @@ struct gclient_s {
 	// like health / armor countdowns and regeneration
 	int			timeResidual;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	gentity_t	*persistantPowerup;
 	int			portalID;
-	int			ammoTimes[WP_NUM_WEAPONS];
+	int			ammoTimes[WP_MAX_WEAPONS];
 	int			invulnerabilityTime;
 #endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	// MORE STATS for switching weapons, this is transfered to player state
+	int			ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
+	int			weapons[WP_MAX_CLASSES];
+	int			weaponClass;
+#endif
+
 
 	char		*areabits;
 
@@ -556,7 +564,7 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir);
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 gentity_t *fire_nail( gentity_t *self, vec3_t start, vec3_t forward, vec3_t right, vec3_t up );
 gentity_t *fire_prox( gentity_t *self, vec3_t start, vec3_t aimdir );
 #endif

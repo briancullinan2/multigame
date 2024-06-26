@@ -23,6 +23,9 @@ An item fires all of its targets when it is picked up.  If the toucher can't car
 
 gitem_t	bg_itemlist[] = 
 {
+#ifdef USE_ADVANCED_WEAPONS
+#include "./bg_misc.h"
+#else
 	{
 		NULL,
 		NULL,
@@ -934,6 +937,8 @@ Only in One Flag CTF games
   },
 #endif
 
+#endif
+
 	// end of list marker
 	{NULL}
 };
@@ -997,7 +1002,25 @@ gitem_t	*BG_FindItemForWeapon( weapon_t weapon ) {
 		}
 	}
 
-	Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon);
+	//Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon);
+	return NULL;
+}
+
+/*
+===============
+BG_FindItem
+
+===============
+*/
+gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_AMMO && it->giTag == weapon ) {
+			return it;
+		}
+	}
+
 	return NULL;
 }
 
@@ -1071,6 +1094,10 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		return qtrue;	// weapons are always picked up
 
 	case IT_AMMO:
+
+#ifdef USE_ADVANCED_WEAPONS
+// TODO: fix this, add check for class and client array
+#endif
 		if ( ps->ammo[ item->giTag ] >= 200 ) {
 			return qfalse;		// can't hold any more
 		}
@@ -1556,6 +1583,7 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
+
 }
 
 /*

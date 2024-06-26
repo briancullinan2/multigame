@@ -393,6 +393,34 @@ typedef struct {
 // that contains media references necessary to present the
 // weapon and its effects
 typedef struct weaponInfo_s {
+	// moving data to front of struct so everything else remains empty and we can load from a prepopulated array of weaponInfo_s similar to bg_itemlist
+	weapon_t  giTag; // for matching up with items
+	char *readyFile;
+	char *firingFile;
+	int		loopFireSound;
+	char *flashSoundFile[4];
+	float			flashDlight;
+	vec3_t			flashDlightColor;
+	char *missileFile;
+	char *missileModelFile;
+	void			(*missileTrailFunc)( centity_t *, const struct weaponInfo_s *wi );
+	float			missileDlight;
+	vec3_t			missileDlightColor;
+	int				missileRenderfx;
+	void			(*ejectBrassFunc)( centity_t * );
+	float			trailRadius;
+	float			wiTrailTime;
+	char *handsFile;
+	char *weaponFile;
+	char *barrelFile;
+	char *extraShaderFile[4];
+	char *extraModelFile[4];
+	char *extraSoundFile[4];
+	int explosionRadius;
+	int light;
+	vec3_t	lightColor;
+
+
 	qboolean		registered;
 	gitem_t			*item;
 
@@ -403,8 +431,6 @@ typedef struct weaponInfo_s {
 
 	vec3_t			weaponMidpoint;		// so it will rotate centered instead of by tag
 
-	float			flashDlight;
-	vec3_t			flashDlightColor;
 	sfxHandle_t		flashSound[4];		// fast firing weapons randomly choose
 
 	qhandle_t		weaponIcon;
@@ -414,19 +440,14 @@ typedef struct weaponInfo_s {
 
 	qhandle_t		missileModel;
 	sfxHandle_t		missileSound;
-	void			(*missileTrailFunc)( centity_t *, const struct weaponInfo_s *wi );
-	float			missileDlight;
-	vec3_t			missileDlightColor;
-	int				missileRenderfx;
-
-	void			(*ejectBrassFunc)( centity_t * );
-
-	float			trailRadius;
-	float			wiTrailTime;
 
 	sfxHandle_t		readySound;
 	sfxHandle_t		firingSound;
-	qboolean		loopFireSound;
+
+	qhandle_t		extraShader[4];
+	qhandle_t		extraModel[4];
+	sfxHandle_t		extraSound[4];		// fast firing weapons randomly choose
+	
 } weaponInfo_t;
 
 
@@ -529,7 +550,13 @@ typedef struct {
 
 	// input state sent to server
 	int			weaponSelect;
-
+#ifdef USE_ADVANCED_WEAPONS
+	int			weaponClass;
+	int			weaponChange;
+	// MORE STATS for switching weapons, this is transfered to player state
+	//int			ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
+	//int			weapons[WP_MAX_CLASSES];
+#endif
 	// auto rotating items
 	vec3_t		autoAngles;
 	vec3_t		autoAxis[3];
@@ -787,7 +814,7 @@ typedef struct {
 	qhandle_t	plasmaBallShader;
 	qhandle_t	waterBubbleShader;
 	qhandle_t	bloodTrailShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	qhandle_t	nailPuffShader;
 	qhandle_t	blueProxMine;
 #endif
@@ -885,7 +912,7 @@ typedef struct {
 	sfxHandle_t	sfx_railg;
 	sfxHandle_t	sfx_rockexp;
 	sfxHandle_t	sfx_plasmaexp;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	sfxHandle_t	sfx_proxexp;
 	sfxHandle_t	sfx_nghit;
 	sfxHandle_t	sfx_nghitflesh;
@@ -961,7 +988,7 @@ typedef struct {
 	sfxHandle_t flightSound;
 	sfxHandle_t medkitSound;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	sfxHandle_t weaponHoverSound;
 #endif
 
@@ -1154,7 +1181,7 @@ typedef struct {
 extern	cgs_t			cgs;
 extern	cg_t			cg;
 extern	centity_t		cg_entities[MAX_GENTITIES];
-extern	weaponInfo_t	cg_weapons[MAX_WEAPONS];
+extern	weaponInfo_t	cg_weapons[WP_NUM_WEAPONS];
 extern	itemInfo_t		cg_items[MAX_ITEMS];
 extern	markPoly_t		cg_markPolys[MAX_MARK_POLYS];
 

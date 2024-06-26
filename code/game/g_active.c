@@ -439,7 +439,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
 		int w, max, inc, t, i;
     int weapList[]={WP_MACHINEGUN,WP_SHOTGUN,WP_GRENADE_LAUNCHER,WP_ROCKET_LAUNCHER,WP_LIGHTNING,WP_RAILGUN,WP_PLASMAGUN,WP_BFG,WP_NAILGUN,WP_PROX_LAUNCHER,WP_CHAINGUN};
@@ -753,6 +753,9 @@ void ClientThink_real( gentity_t *ent ) {
 	int			oldEventSequence;
 	int			msec;
 	usercmd_t	*ucmd;
+#ifdef USE_ADVANCED_WEAPONS
+	int i;
+#endif
 
 	client = ent->client;
 
@@ -762,6 +765,29 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	// mark the time, so the connection sprite can be removed
 	ucmd = &ent->client->pers.cmd;
+
+#ifdef USE_ADVANCED_WEAPONS
+	//G_Printf("game class: %i\n", weaponClass);
+	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
+	client->ps.stats[STAT_WEAPONS] = client->weapons[client->weaponClass];
+	for(i = 0; i < WP_MAX_WEAPONS; i++) {
+		client->ps.ammo[i] = client->ammo[client->weaponClass][i];
+	}
+		/*G_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
+		client->weaponClass,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 0)) >> 0,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 1)) >> 1,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 2)) >> 2,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 3)) >> 3,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 4)) >> 4,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 5)) >> 5,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 6)) >> 6,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 7)) >> 7,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 8)) >> 8,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 9)) >> 9
+		);*/
+
+#endif
 
 	// sanity check the command time to prevent speedup cheating
 	if ( ucmd->serverTime > level.time + 200 ) {
@@ -955,6 +981,12 @@ void ClientThink_real( gentity_t *ent ) {
 
 	BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
 
+#ifdef USE_ADVANCED_WEAPONS
+	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
+	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
+	client->ammo[client->weaponClass][ client->ps.weapon % WP_MAX_WEAPONS ] = client->ps.ammo[client->ps.weapon % WP_MAX_WEAPONS];
+#endif
+
 	SendPendingPredictableEvents( &ent->client->ps );
 
 #ifdef USE_GRAPPLE
@@ -1124,6 +1156,9 @@ void ClientEndFrame( gentity_t *ent ) {
 	gclient_t	*client;
 	// unlagged
 	int			frames;
+#ifdef USE_ADVANCED_WEAPONS
+	int weaponClass;
+#endif
 
 	if ( !ent->client )
 		return;

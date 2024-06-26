@@ -1491,11 +1491,11 @@ PM_BeginWeaponChange
 ===============
 */
 static void PM_BeginWeaponChange( int weapon ) {
-	if ( weapon <= WP_NONE || weapon >= WP_NUM_WEAPONS ) {
+	if ( weapon <= WP_NONE || weapon >= WP_MAX_WEAPONS ) {
 		return;
 	}
 
-	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 		return;
 	}
 	
@@ -1520,15 +1520,15 @@ static void PM_FinishWeaponChange( void ) {
 	int		weapon;
 
 	weapon = pm->cmd.weapon;
-	if ( weapon < WP_NONE || weapon >= WP_NUM_WEAPONS ) {
+	if ( weapon < WP_NONE || weapon >= WP_MAX_WEAPONS ) {
 		weapon = WP_NONE;
 	}
 
-	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 		weapon = WP_NONE;
 	}
 
-	pm->ps->weapon = weapon;
+	pm->ps->weapon = weapon + floor(pm->ps->weapon / WP_MAX_WEAPONS) * WP_MAX_WEAPONS; // keep weapon class from input
 	pm->ps->weaponstate = WEAPON_RAISING;
 	pm->ps->eFlags &= ~EF_FIRING;
 	pm->ps->weaponTime += 250;
@@ -1607,7 +1607,7 @@ static void PM_Weapon( void ) {
 	// can't change if weapon is firing, but can change
 	// again if lowering or raising
 	if ( pm->ps->weaponTime <= 0 || pm->ps->weaponstate != WEAPON_FIRING ) {
-		if ( pm->ps->weapon != pm->cmd.weapon ) {
+		if ( abs((pm->ps->weapon & 0x1FF) % WP_MAX_WEAPONS) != pm->cmd.weapon ) {
 			PM_BeginWeaponChange( pm->cmd.weapon );
 		}
 	}
@@ -1673,15 +1673,15 @@ static void PM_Weapon( void ) {
 	pm->ps->weaponstate = WEAPON_FIRING;
 
 	// check for out of ammo
-	if ( ! pm->ps->ammo[ pm->ps->weapon ] ) {
+	if ( ! pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] ) {
 		PM_AddEvent( EV_NOAMMO );
 		pm->ps->weaponTime += 500;
 		return;
 	}
 
 	// take an ammo away if not infinite
-	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 && pm->ps->ammo[ pm->ps->weapon ] != INFINITE ) {
-		pm->ps->ammo[ pm->ps->weapon ]--;
+	if ( pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] != -1 && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] != INFINITE ) {
+		pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ]--;
 	}
 
 	// fire weapon
@@ -1691,30 +1691,39 @@ static void PM_Weapon( void ) {
   switch( pm->ps->weapon ) {
   default:
   case WP_GAUNTLET:
+  case WP_GAUNTLET2:
     addTime = wp_gauntCycle.integer;
     break;
   case WP_LIGHTNING:
+  case WP_LIGHTNING2:
     addTime = wp_lightCycle.integer;
     break;
   case WP_SHOTGUN:
+  case WP_SHOTGUN2:
     addTime = wp_shotgunCycle.integer;
     break;
   case WP_MACHINEGUN:
+  case WP_MACHINEGUN2:
     addTime = wp_machineCycle.integer;
     break;
   case WP_GRENADE_LAUNCHER:
+  case WP_GRENADE_LAUNCHER2:
     addTime = wp_grenadeCycle.integer;
     break;
   case WP_ROCKET_LAUNCHER:
+  case WP_ROCKET_LAUNCHER2:
     addTime = wp_rocketCycle.integer;
     break;
   case WP_PLASMAGUN:
+  case WP_PLASMAGUN2:
     addTime = wp_plasmaCycle.integer;
     break;
   case WP_RAILGUN:
+  case WP_RAILGUN2:
     addTime = wp_railCycle.integer;
     break;
   case WP_BFG:
+  case WP_BFG2:
     addTime = wp_bfgCycle.integer;
     break;
 #ifdef USE_GRAPPLE
@@ -1722,7 +1731,7 @@ static void PM_Weapon( void ) {
     addTime = wp_grappleCycle.integer;
     break;
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
   case WP_NAILGUN:
     addTime = wp_nailCycle.integer;
     break;
@@ -1744,30 +1753,39 @@ static void PM_Weapon( void ) {
 	switch( pm->ps->weapon ) {
 	default:
 	case WP_GAUNTLET:
+	case WP_GAUNTLET2:
 		addTime = 400;
 		break;
 	case WP_LIGHTNING:
+	case WP_LIGHTNING2:
 		addTime = 50;
 		break;
 	case WP_SHOTGUN:
+	case WP_SHOTGUN2:
 		addTime = 1000;
 		break;
 	case WP_MACHINEGUN:
+	case WP_MACHINEGUN2:
 		addTime = 100;
 		break;
 	case WP_GRENADE_LAUNCHER:
+	case WP_GRENADE_LAUNCHER2:
 		addTime = 800;
 		break;
 	case WP_ROCKET_LAUNCHER:
+	case WP_ROCKET_LAUNCHER2:
 		addTime = 800;
 		break;
 	case WP_PLASMAGUN:
+	case WP_PLASMAGUN2:
 		addTime = 100;
 		break;
 	case WP_RAILGUN:
+	case WP_RAILGUN2:
 		addTime = 1500;
 		break;
 	case WP_BFG:
+	case WP_BFG2:
 		addTime = 200;
 		break;
 #ifdef USE_GRAPPLE
@@ -1779,7 +1797,7 @@ static void PM_Weapon( void ) {
 #endif
 		break;
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_NAILGUN:
 		addTime = 1000;
 		break;
@@ -1990,7 +2008,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// set the firing flag for continuous beam weapons
 	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] ) {
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] ) {
 		pm->ps->eFlags |= EF_FIRING;
 	} else {
 		pm->ps->eFlags &= ~EF_FIRING;
