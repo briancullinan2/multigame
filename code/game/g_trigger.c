@@ -198,7 +198,11 @@ void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 		return;
 	}
 
-	if ( activator->client->ps.pm_type != PM_NORMAL ) {
+	if ( activator->client->ps.pm_type != PM_NORMAL
+		&& activator->client->ps.pm_type != PM_BIRDSEYE
+		&& activator->client->ps.pm_type != PM_FOLLOWCURSOR
+		&& activator->client->ps.pm_type != PM_THIRDPERSON
+		&& activator->client->ps.pm_type != PM_PLATFORM ) {
 		return;
 	}
 	if ( activator->client->ps.powerups[PW_FLIGHT] ) {
@@ -357,6 +361,14 @@ void hurt_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		dflags = DAMAGE_NO_PROTECTION;
 	else
 		dflags = 0;
+
+#ifdef USE_MODES_DEATH
+  if(other->client && other->client->ps.velocity[2] < -1000
+    && other->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+    //Com_DPrintf("void death: %f\n", other->client->ps.velocity[2]);
+    G_Damage (other, self, self, NULL, NULL, self->damage, dflags, MOD_VOID);
+  } else
+#endif
 	G_Damage (other, self, self, NULL, NULL, self->damage, dflags, MOD_TRIGGER_HURT);
 }
 

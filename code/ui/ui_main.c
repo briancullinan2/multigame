@@ -231,6 +231,7 @@ void AssetCache( void ) {
 	for( n = 0; n < NUM_CROSSHAIRS; n++ ) {
 		uiInfo.uiDC.Assets.crosshairShader[n] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c", 'a' + n ) );
 	}
+	uiInfo.uiDC.Assets.crosshairShader[n] = trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
 
 	uiInfo.newHighScoreSound = trap_S_RegisterSound("sound/feedback/voc_newhighscore.wav", qfalse);
 }
@@ -2607,10 +2608,10 @@ static qboolean UI_Crosshair_HandleKey(int flags, float *special, int key) {
 			uiInfo.currentCrosshair++;
 		}
 
-		if (uiInfo.currentCrosshair >= NUM_CROSSHAIRS) {
+		if (uiInfo.currentCrosshair >= NUM_CROSSHAIRS + 1) {
 			uiInfo.currentCrosshair = 0;
 		} else if (uiInfo.currentCrosshair < 0) {
-			uiInfo.currentCrosshair = NUM_CROSSHAIRS - 1;
+			uiInfo.currentCrosshair = NUM_CROSSHAIRS;
 		}
 		trap_Cvar_Set("cg_drawCrosshair", va("%d", uiInfo.currentCrosshair)); 
 		return qtrue;

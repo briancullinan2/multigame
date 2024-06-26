@@ -160,6 +160,9 @@ typedef struct {
 	float			barrelAngle;
 	int				barrelTime;
 	qboolean		barrelSpinning;
+#ifdef USE_HEADSHOTS
+  qboolean	noHead;
+#endif
 } playerEntity_t;
 
 //=================================================
@@ -230,6 +233,9 @@ typedef enum {
 	LE_FADE_RGB,
 	LE_SCALE_FADE,
 	LE_SCOREPLUM,
+#ifdef USE_DAMAGE_PLUMS
+  LE_DAMAGEPLUM,
+#endif
 #ifdef MISSIONPACK
 	LE_KAMIKAZE,
 	LE_INVULIMPACT,
@@ -385,6 +391,10 @@ typedef struct {
 	vec3_t			headColor;
 	vec3_t			bodyColor;
 	vec3_t			legsColor;
+
+#ifdef USE_RPG_STATS
+
+#endif
 
 } clientInfo_t;
 
@@ -771,7 +781,7 @@ typedef struct {
 	qhandle_t	selectShader;
 	qhandle_t	viewBloodShader;
 	qhandle_t	tracerShader;
-	qhandle_t	crosshairShader[NUM_CROSSHAIRS];
+	qhandle_t	crosshairShader[NUM_CROSSHAIRS + 1];
 	qhandle_t	lagometerShader;
 	qhandle_t	backTileShader;
 	qhandle_t	noammoShader;
@@ -788,6 +798,7 @@ typedef struct {
 #endif
 
 	qhandle_t	numberShaders[11];
+  qhandle_t	timerSlices[4];
 
 	qhandle_t	shadowMarkShader;
 
@@ -828,6 +839,10 @@ typedef struct {
 	qhandle_t	rocketExplosionShader;
 	qhandle_t	grenadeExplosionShader;
 	qhandle_t	bfgExplosionShader;
+#ifdef USE_PORTALS
+  qhandle_t	redBFG;
+  qhandle_t	blueBFG;
+#endif
 	qhandle_t	bloodExplosionShader;
 
 	// special effects models
@@ -1025,6 +1040,12 @@ typedef struct {
 	sfxHandle_t	wstbimpdSound;
 	sfxHandle_t	wstbactvSound;
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  sfxHandle_t frozenSound;
+  qhandle_t	frozenShader;
+	qhandle_t	freezeMarkShader;
+  sfxHandle_t	unfrozenSound;
+#endif
 } cgMedia_t;
 
 
@@ -1156,6 +1177,9 @@ extern	markPoly_t		cg_markPolys[MAX_MARK_POLYS];
 #define EXTERN_CG_CVAR
 	#include "cg_cvar.h"
 #undef EXTERN_CG_CVAR
+
+
+extern  vmCvar_t    cg_birdsEye;
 
 extern const char		*eventnames[EV_MAX];
 
@@ -1401,6 +1425,9 @@ void CG_InvulnerabilityJuiced( vec3_t org );
 void CG_LightningBoltBeam( vec3_t start, vec3_t end );
 #endif
 void CG_ScorePlum( int client, const vec3_t origin, int score );
+#ifdef USE_DAMAGE_PLUMS
+void CG_DamagePlum( int client, const vec3_t origin, int damage );
+#endif
 
 void CG_GibPlayer( const vec3_t playerOrigin );
 void CG_BigExplode( vec3_t playerOrigin );

@@ -32,6 +32,11 @@ int		c_pmove = 0;
 
 static int pm_respawntimer = 0;
 
+#ifdef USE_PORTALS
+extern vmCvar_t wp_portalEnable;
+extern vmCvar_t g_altPortal;
+#endif
+
 /*
 ===============
 PM_AddEvent
@@ -76,14 +81,36 @@ PM_StartTorsoAnim
 ===================
 */
 static void PM_StartTorsoAnim( int anim ) {
-	if ( pm->ps->pm_type >= PM_DEAD ) {
+	if ( pm->ps->pm_type >= PM_DEAD 
+#ifdef USE_BIRDS_EYE
+		&&  pm->ps->pm_type != PM_PLATFORM
+		&&  pm->ps->pm_type != PM_BIRDSEYE
+		&&  pm->ps->pm_type != PM_FOLLOWCURSOR
+		&&  pm->ps->pm_type != PM_THIRDPERSON 
+#endif
+
+#ifdef USE_AIW
+		&& pm->ps->pm_type != PM_UPSIDEDOWN
+#endif
+	) {
 		return;
 	}
 	pm->ps->torsoAnim = ( ( pm->ps->torsoAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT )
 		| anim;
 }
 static void PM_StartLegsAnim( int anim ) {
-	if ( pm->ps->pm_type >= PM_DEAD ) {
+	if ( pm->ps->pm_type >= PM_DEAD 
+#ifdef USE_BIRDS_EYE
+		&&  pm->ps->pm_type != PM_PLATFORM
+		&&  pm->ps->pm_type != PM_BIRDSEYE
+		&&  pm->ps->pm_type != PM_FOLLOWCURSOR
+		&&  pm->ps->pm_type != PM_THIRDPERSON
+#endif
+
+#ifdef USE_AIW
+		&& pm->ps->pm_type != PM_UPSIDEDOWN
+#endif
+	) {
 		return;
 	}
 	if ( pm->ps->legsTimer > 0 ) {
@@ -620,6 +647,11 @@ static void PM_AirMove( void ) {
 	wishspeed *= scale;
 
 	// not on ground, so little effect on velocity
+#ifdef USE_BIRDS_EYE
+	if(pm->ps->pm_type == PM_PLATFORM) {
+		PM_Accelerate (wishdir, wishspeed, 5);
+	} else
+#endif
 	PM_Accelerate (wishdir, wishspeed, pm_airaccelerate);
 
 	// we may have a ground plane that is very steep, even
@@ -1107,6 +1139,14 @@ static void PM_GroundTrace( void ) {
 	pm->trace (&trace, pm->ps->origin, pm->mins, pm->maxs, point, pm->ps->clientNum, pm->tracemask);
 	pml.groundTrace = trace;
 
+#ifdef USE_PORTALS
+	{
+		// find nearest portal from our current trajectory the distance from the portal
+		// rerun the trace from the point of the portal
+	}
+
+
+#endif
 	// do something corrective if the trace starts in a solid...
 	if ( trace.allsolid ) {
 		if ( !PM_CorrectAllSolid(&trace) )
@@ -1604,7 +1644,30 @@ static void PM_Weapon( void ) {
 	}
 
 	// check for fire
-	if ( ! (pm->cmd.buttons & BUTTON_ATTACK) ) {
+#ifdef USE_ALT_FIRE
+#ifdef USE_PORTALS
+  if(!(pm->cmd.buttons & BUTTON_ATTACK)
+    && g_altPortal.integer
+    && (pm->cmd.buttons & BUTTON_ALT_ATTACK)) {
+    // don't show fire animation
+    pm->ps->weaponTime = 0;
+		pm->ps->weaponstate = WEAPON_READY;
+  	PM_AddEvent( EV_ALTFIRE_WEAPON );
+  } else
+#endif
+#endif // end USE_ALT_FIRE
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if(pm->ps->pm_type == PM_FROZEN) {
+    pm->ps->weaponTime = 0;
+		pm->ps->weaponstate = WEAPON_READY;
+		return;
+  } else
+#endif
+	if( !(pm->cmd.buttons & BUTTON_ATTACK) 
+#ifdef USE_ALT_FIRE
+    && !(pm->cmd.buttons & BUTTON_ALT_ATTACK)
+#endif
+  ) {
 		pm->ps->weaponTime = 0;
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
@@ -1633,11 +1696,19 @@ static void PM_Weapon( void ) {
 	}
 
 	// take an ammo away if not infinite
-	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 ) {
+	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 && pm->ps->ammo[ pm->ps->weapon ] != INFINITE ) {
 		pm->ps->ammo[ pm->ps->weapon ]--;
 	}
 
 	// fire weapon
+#ifdef USE_ALT_FIRE
+  if ((pm->cmd.buttons & BUTTON_ALT_ATTACK)
+    && (pm->cmd.buttons & BUTTON_ATTACK))
+    PM_AddEvent( EV_ALTFIRE_BOTH );
+  else if (pm->cmd.buttons & BUTTON_ALT_ATTACK)
+  	PM_AddEvent( EV_ALTFIRE_WEAPON );
+  else if (pm->cmd.buttons & BUTTON_ATTACK)
+#endif
 	PM_AddEvent( EV_FIRE_WEAPON );
 
 	switch( pm->ps->weapon ) {
@@ -1667,6 +1738,11 @@ static void PM_Weapon( void ) {
 		addTime = 1500;
 		break;
 	case WP_BFG:
+#ifdef USE_PORTALS
+    if(wp_portalEnable.integer) {
+      addTime = 1000;
+    } else
+#endif
 		addTime = 200;
 		break;
 	case WP_GRAPPLING_HOOK:
@@ -1685,6 +1761,12 @@ static void PM_Weapon( void ) {
 #endif
 	}
 
+#ifdef USE_PORTALS
+    if(wp_portalEnable.integer
+      && pm->ps->weapon == WP_BFG) {
+      // do nothing to speed
+    } else
+#endif
 #ifdef MISSIONPACK
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 		addTime /= 1.5;
@@ -1799,6 +1881,12 @@ void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 		return;		// no view changes at all
 	}
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if(ps->pm_type == PM_FROZEN) {
+    return; // also no changes at all
+  }
+#endif
+
 	if ( ps->pm_type != PM_SPECTATOR && ps->stats[STAT_HEALTH] <= 0 ) {
 		return;		// no view changes at all
 	}
@@ -1861,7 +1949,11 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// set the firing flag for continuous beam weapons
 	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] ) {
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+    && pm->ps->pm_type != PM_FROZEN
+#endif
+	) {
 		pm->ps->eFlags |= EF_FIRING;
 	} else {
 		pm->ps->eFlags &= ~EF_FIRING;
@@ -1905,10 +1997,73 @@ void PmoveSingle (pmove_t *pmove) {
 
 	pml.frametime = pml.msec * 0.001;
 
+#ifdef USE_BIRDS_EYE
+	if(pm->ps->pm_type == PM_FOLLOWCURSOR) {
+		float rad = atan2(SHORT2ANGLE(pm->cmd.angles[YAW]) - 180.0f, 180.0f - SHORT2ANGLE(pm->cmd.angles[PITCH])); // In radians
+		float deg = rad * (180.0f / M_PI);
+		pm->ps->viewangles[PITCH] = 0;
+		pm->ps->viewangles[YAW] = deg;
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+	if(pm->ps->pm_type == PM_BIRDSEYE) {
+		pm->ps->viewangles[PITCH] = 0;
+		pm->ps->viewangles[YAW] = SHORT2ANGLE(pm->cmd.angles[YAW]) - 180;
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+		pm->ps->viewangles[ROLL] = 180 - SHORT2ANGLE(pm->cmd.angles[YAW]);
+	} else
+	if(pm->ps->pm_type == PM_PLATFORM) {
+		// Zygote Start
+		pm->cmd.rightmove = 0; // no strafe ever!
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );	// Update angles from controls!!??
+
+		// This sets my movement direction based on my view angles
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+		pml.forward[0] = 16000;
+		pml.forward[1] = 0;
+		pml.forward[2] = 0;
+
+		if ( pm->cmd.forwardmove < 0 ) {			// Backwards Key Pressed
+			pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN; // Normal Forward Animation
+		} else if ( pm->cmd.forwardmove > 0) {		// Forwards Key Pressed
+			pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN;	// Normal Forward Animation
+		}
+		// Zygote End
+	} else
+#endif
+
+#ifdef USE_AIW
+	if(pm->ps->pm_type == PM_REVERSED) {
+		pm->cmd.rightmove = -pm->cmd.rightmove;
+		//pm.cmd.forwardmove = -pm.cmd.forwardmove;
+
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );
+		pm->ps->viewangles[YAW] = -pm->ps->viewangles[YAW];
+		pm->ps->viewangles[PITCH] = -pm->ps->viewangles[PITCH];
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+	if(pm->ps->pm_type == PM_UPSIDEDOWN) {
+		pm->cmd.angles[ROLL] = SHORT2ANGLE(180);
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+	if(pm->ps->pm_type == PM_REVERSEDUPSIDEDOWN) {
+		pm->cmd.angles[ROLL] = SHORT2ANGLE(180);
+		pm->cmd.rightmove = -pm->cmd.rightmove;
+		PM_UpdateViewAngles( pm->ps, &pm->cmd );
+		pm->ps->viewangles[YAW] = -pm->ps->viewangles[YAW];
+		pm->ps->viewangles[PITCH] = -pm->ps->viewangles[PITCH];
+		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	} else
+#endif
+	{
+
 	// update the viewangles
-	PM_UpdateViewAngles( pm->ps, &pm->cmd );
+  PM_UpdateViewAngles( pm->ps, &pm->cmd );
 
 	AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+
+	}
+
 
 	if ( pm->cmd.upmove < 10 ) {
 		// not holding jump
@@ -1922,7 +2077,23 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN;
 	}
 
-	if ( pm->ps->pm_type >= PM_DEAD ) {
+	if ( pm->ps->pm_type >= PM_DEAD
+#ifdef USE_BIRDS_EYE
+		&&  pm->ps->pm_type != PM_PLATFORM
+		&&  pm->ps->pm_type != PM_BIRDSEYE
+		&&  pm->ps->pm_type != PM_FOLLOWCURSOR
+		&&  pm->ps->pm_type != PM_THIRDPERSON 
+#endif
+
+#ifdef USE_AIW
+		&& pm->ps->pm_type != PM_REVERSED
+		&& pm->ps->pm_type != PM_REVERSEDUPSIDEDOWN
+		&& pm->ps->pm_type != PM_UPSIDEDOWN
+#endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+    || pm->ps->pm_type == PM_FROZEN
+#endif
+	) {
 		pm->cmd.forwardmove = 0;
 		pm->cmd.rightmove = 0;
 		pm->cmd.upmove = 0;

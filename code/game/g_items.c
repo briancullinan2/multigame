@@ -340,6 +340,37 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 
 	other->health += quantity;
 
+#ifdef USE_LOCAL_DMG
+  if(g_locDamage.integer) {
+    // return speed upon health pickup or more than maximum health, McBain
+    other->client->lasthurt_location = LOCATION_NONE;
+  	other->client->ps.speed += quantity;
+  	if (other->client->ps.speed > g_speed.value) {
+  		other->client->ps.speed = g_speed.value;
+  	}
+
+  	if (other->health >= other->client->ps.stats[STAT_MAX_HEALTH]) {
+  		other->client->ps.speed = g_speed.value;
+  	}
+
+#ifdef MISSIONPACK
+  	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+  		other->client->ps.speed *= 1.5;
+  	}
+  	else
+#endif
+    if ( other->client->ps.powerups[PW_HASTE] 
+#ifdef USE_RUNES
+      || other->items[ITEM_PW_MIN + RUNE_HASTE]
+#endif
+    ) {
+      other->client->ps.speed *= 1.3;
+    }
+
+  	// end McBain
+  }
+#endif
+
 	if (other->health > max ) {
 		other->health = max;
 	}
@@ -424,6 +455,9 @@ void RespawnItem( gentity_t *ent ) {
 
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->s.eFlags &= ~EF_NODRAW;
+#ifdef USE_ITEM_TIMERS
+  ent->s.eFlags &= ~EF_TIMER;
+#endif
 	ent->r.svFlags &= ~SVF_NOCLIENT;
 	trap_LinkEntity( ent );
 
@@ -473,6 +507,27 @@ Touch_Item
 void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int			respawn;
 	qboolean	predict;
+#ifdef USE_INSTAGIB
+	//SCO if ent-item is some sort of team item.
+	if (g_instagib.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
+
+#ifdef USE_TRINITY
+	//SCO if ent-item is some sort of team item.
+	if (g_unholyTrinity.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
+#ifdef USE_HOTRPG
+	//SCO if ent-item is some sort of team item.
+	if (g_hotRockets.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
+#ifdef USE_HOTBFG
+	//SCO if ent-item is some sort of team item.
+	if (g_hotBFG.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
 
 	if (!other->client)
 		return;
@@ -590,9 +645,13 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// picked up items still stay around, they just don't
 	// draw anything.  This allows respawnable items
 	// to be placed on movers.
-	ent->r.svFlags |= SVF_NOCLIENT;
 	ent->s.eFlags |= EF_NODRAW;
 	ent->r.contents = 0;
+#ifdef USE_ITEM_TIMERS
+	ent->r.svFlags |= SVF_BROADCAST;
+#else
+  ent->r.svFlags |= SVF_NOCLIENT;
+#endif
 
 	// ZOID
 	// A negative respawn times means to never respawn this item (but don't 
@@ -601,9 +660,25 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if ( respawn <= 0 ) {
 		ent->nextthink = 0;
 		ent->think = 0;
+#ifdef USE_ITEM_TIMERS
+    ent->s.eFlags &= ~EF_TIMER;
+#endif
 	} else {
 		ent->nextthink = level.time + respawn;
 		ent->think = RespawnItem;
+#ifdef USE_ITEM_TIMERS
+		/* 
+		if ( cg_itemTimer->integer && (
+			(ent->item->giType == IT_ARMOR) ||
+			(ent->item->giType == IT_POWERUP) ||
+			(ent->item->giType == IT_HOLDABLE) ||
+			(ent->item->giType == IT_PERSISTANT_POWERUP))) {
+		*/
+		//}
+    ent->s.eFlags |= EF_TIMER;
+    ent->s.time = level.time;
+    ent->s.frame = respawn / 1000; // save bandwidth
+#endif
 	}
 
 	trap_LinkEntity( ent );
@@ -865,6 +940,23 @@ void ClearRegisteredItems( void ) {
 		RegisterItem( BG_FindItem( "Blue Cube" ) );
 	}
 #endif
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+	  RegisterItem( BG_FindItemForWeapon( WP_RAILGUN ) );
+    RegisterItem( BG_FindItemForWeapon( WP_LIGHTNING ) );
+    RegisterItem( BG_FindItemForWeapon( WP_ROCKET_LAUNCHER ) );
+  }
+#endif
+#ifdef USE_ROTRPG
+  if(g_hotRockets.integer) {
+    RegisterItem( BG_FindItemForWeapon( WP_ROCKET_LAUNCHER ) );
+  }
+#endif
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer)
+  //register that rail gun
+	  RegisterItem( BG_FindItemForWeapon( WP_RAILGUN ) );
+#endif
 }
 
 /*
@@ -938,12 +1030,44 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 	G_SpawnFloat( "random", "0", &ent->random );
 	G_SpawnFloat( "wait", "0", &ent->wait );
 
-	RegisterItem( item );
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer && item->giType != IT_TEAM) {
+		// don't send items to clients
+		ent->r.svFlags = SVF_NOCLIENT;
+		// don't draw items on client
+		ent->s.eFlags |= EF_NODRAW;
+    ent->tag = TAG_DONTSPAWN;
+	}
+#endif
+#ifdef USE_HOTRPG
+  if(g_hotRockets.integer && item->giType != IT_TEAM) {
+		ent->r.svFlags = SVF_NOCLIENT;
+		ent->s.eFlags |= EF_NODRAW;
+    ent->tag = TAG_DONTSPAWN;
+	} else
+#endif
+#ifdef USE_HOTBFG
+  if(g_hotBFG.integer && item->giType != IT_TEAM) {
+		ent->r.svFlags = SVF_NOCLIENT;
+		ent->s.eFlags |= EF_NODRAW;
+    ent->tag = TAG_DONTSPAWN;
+	} else
+#endif
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer && item->giType != IT_TEAM) {
+		ent->r.svFlags = SVF_NOCLIENT;
+		ent->s.eFlags |= EF_NODRAW;
+    ent->tag = TAG_DONTSPAWN;
+	} else
+#endif
+  {
+  	RegisterItem( item );
 
 	if ( G_ItemDisabled( item ) ) {
 		ent->tag = TAG_DONTSPAWN;
 		return;
 	}
+  }
 
 	ent->item = item;
 	// some movers spawn on the second frame, so delay item

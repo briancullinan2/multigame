@@ -31,6 +31,9 @@
 #define FL_NO_BOTS				0x00002000	// spawn point not for bot use
 #define FL_NO_HUMANS			0x00004000	// spawn point just for bots
 #define FL_FORCE_GESTURE		0x00008000	// force gesture on client
+#ifdef USE_BOUNCE_RPG
+#define FL_ROCKETBOUNCE		0x00010000
+#endif
 
 // movers are things like doors, plats, buttons, etc
 typedef enum {
@@ -131,6 +134,10 @@ struct gentity_s {
 	int			splashRadius;
 	int			methodOfDeath;
 	int			splashMethodOfDeath;
+#ifdef USE_MODES_DEATH
+  int     splashTime; // for calculating if the last attacker caused ring out
+  gentity_t *splashAttacker;
+#endif
 
 	int			count;
 
@@ -160,6 +167,10 @@ struct gentity_s {
 	team_t		fteam;
 
 	tag_t		tag;
+#ifdef USE_PORTALS
+	int     items[MAX_ITEMS];
+	int     world;
+#endif
 };
 
 
@@ -240,6 +251,17 @@ typedef struct {
 	int			teamVoted;
 
 	qboolean	inGame;
+#ifdef USE_BIRDS_EYE
+	qboolean	birdsEye;
+	qboolean	thirdPerson;
+	qboolean	sideView;
+	qboolean	showCursor;
+#endif
+
+#ifdef USE_AIW
+	qboolean reverseControls;
+	qboolean upsidedown;
+#endif
 } clientPersistant_t;
 
 // unlagged
@@ -274,6 +296,10 @@ struct gclient_s {
 
 	vec3_t		oldOrigin;
 
+#ifdef USE_BIRDS_EYE
+	gentity_t *cursorEnt;
+#endif
+
 	// sum up damage over an entire frame, so
 	// shotgun blasts give a single big kick
 	int			damage_armor;		// damage absorbed by armor
@@ -291,6 +317,9 @@ struct gclient_s {
 	int			lastkilled_client;	// last client that this client killed
 	int			lasthurt_client;	// last client that damaged this client
 	int			lasthurt_mod;		// type of damage the client did
+#ifdef USE_LOCAL_DMG
+  int		  lasthurt_location;	// Where the client was hit.
+#endif
 
 	// timers
 	int			respawnTime;		// can respawn when time > this, force after g_forcerespwan
@@ -317,6 +346,15 @@ struct gclient_s {
 	int			ammoTimes[WP_NUM_WEAPONS];
 	int			invulnerabilityTime;
 #endif
+#ifdef USE_PORTALS
+  gentity_t *portalDestination;
+  gentity_t *portalSource;
+  int       lastPortal;
+  gentity_t *lastPortalEnt;
+#ifndef MISSIONPACK
+	int			portalID;
+#endif
+#endif
 
 	char		*areabits;
 
@@ -334,6 +372,10 @@ struct gclient_s {
 		int		enemy;
 		int		amount;
 	} damage;
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  vec3_t		frozen_angles;
+#endif
 };
 
 
@@ -426,9 +468,10 @@ typedef struct {
 	gentity_t	*locationHead;			// head of the location list
 	int			bodyQueIndex;			// dead bodies
 	gentity_t	*bodyQue[BODY_QUEUE_SIZE];
-#ifdef MISSIONPACK
+#ifdef USE_PORTALS
 	int			portalSequence;
 #endif
+
 
 	// spawn spots
 	gentity_t	*spawnSpots[NUM_SPAWN_SPOTS];
@@ -554,6 +597,9 @@ gentity_t *fire_blaster (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir);
+#ifdef USE_PORTALS
+gentity_t *fire_portal (gentity_t *self, vec3_t start, vec3_t dir, qboolean altFire);
+#endif
 gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir);
 #ifdef MISSIONPACK
@@ -578,9 +624,14 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 // g_misc.c
 //
 void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles );
+#ifdef USE_PORTALS
+void DropPortalSource( gentity_t *ent, vec3_t isWall );
+void DropPortalDestination( gentity_t *ent, vec3_t isWall );
+#else
 #ifdef MISSIONPACK
 void DropPortalSource( gentity_t *ent );
 void DropPortalDestination( gentity_t *ent );
+#endif
 #endif
 
 
@@ -610,6 +661,9 @@ void BeginIntermission (void);
 void InitBodyQue (void);
 void ClientSpawn( gentity_t *ent );
 void player_die (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
+#ifdef USE_DAMAGE_PLUMS
+void player_pain (gentity_t *self, gentity_t *attacker, int damage);
+#endif
 void AddScore( gentity_t *ent, vec3_t origin, int score );
 void CalculateRanks( void );
 qboolean SpotWouldTelefrag( gentity_t *spot );
@@ -624,7 +678,12 @@ qboolean G_FilterPacket (char *from);
 //
 // g_weapon.c
 //
+#ifdef USE_ALT_FIRE
+void FireWeapon( gentity_t *ent, qboolean altFire );
+#else
 void FireWeapon( gentity_t *ent );
+#endif
+
 #ifdef MISSIONPACK
 void G_StartKamikaze( gentity_t *ent );
 #endif

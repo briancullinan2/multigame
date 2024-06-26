@@ -634,6 +634,28 @@ Only in CTF games
 /* sounds */ ""
 	},
 
+#ifdef USE_PORTALS
+#ifndef MISSIONPACK
+
+/*QUAKED holdable_portal (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+	{
+		"holdable_portal", 
+		"sound/items/holdable.wav",
+        { "models/powerups/holdable/porter.md3",
+		0, 0, 0},
+/* icon */		"icons/portal",
+/* pickup */	"Portal",
+		60,
+		IT_HOLDABLE,
+		HI_PORTAL,
+/* precache */ "",
+/* sounds */ ""
+	},
+
+#endif
+#endif
+
 #ifdef MISSIONPACK
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
@@ -894,6 +916,25 @@ Only in One Flag CTF games
 /* precache */ "",
 /* sounds */ "sound/weapons/vulcan/wvulwind.wav"
 	},
+
+#ifdef USE_WEAPON_SPREAD
+//Hal9000 spreadfire powerup
+/*QUAKED item_spread (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+  {
+  	"item_spread", 
+  	"sound/items/spread.wav",
+    {"models/powerups/instant/sight.md3", 0, 0, 0 },
+  /* icon */	"icons/spread",  
+  /* pickup */	"Spreadfire",
+  		30,
+  		IT_POWERUP,
+  		PW_SPREAD,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+#endif
+
 #endif
 
 	// end of list marker
@@ -1208,6 +1249,34 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) 
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
 		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;		// FIXME: local gravity...
 		break;
+#ifdef USE_ACCEL_RPG
+  case TR_ACCEL:
+    {
+      vec3_t		dir;
+      // time since missile fired in seconds
+      deltaTime = ( atTime - tr->trTime ) * 0.001;
+
+      // the .5*a*t^2 part. trDuration = acceleration,
+      // phase gives the magnitude of the distance
+      // we need to move
+      phase = (tr->trDuration / 2) * (deltaTime * deltaTime);
+
+      // Make dir equal to the velocity of the object
+      VectorCopy (tr->trDelta, dir);
+
+      // Sets the magnitude of vector dir to 1
+      VectorNormalize (dir);
+
+      // Move a distance "phase" in the direction "dir"
+      // from our starting point
+      VectorMA (tr->trBase, phase, dir, result);
+
+      // The u*t part. Adds the velocity of the object
+      // multiplied by the time to the last result.
+      VectorMA (result, deltaTime, tr->trDelta, result);
+    }
+    break;
+#endif
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trType );
 		break;
@@ -1251,6 +1320,23 @@ void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 		VectorCopy( tr->trDelta, result );
 		result[2] -= DEFAULT_GRAVITY * deltaTime;		// FIXME: local gravity...
 		break;
+#ifdef USE_ACCEL_RPG
+  case TR_ACCEL:
+    {
+      vec3_t		dir;
+      // time since missile fired in seconds
+      deltaTime = ( atTime - tr->trTime ) * 0.001;
+
+      // Turn magnitude of acceleration into a vector
+      VectorCopy(tr->trDelta,dir);
+      VectorNormalize (dir);
+      VectorScale (dir, tr->trDuration, dir);
+
+      // u + t * a = v
+      VectorMA (tr->trDelta, deltaTime, dir, result);
+    }
+    break;
+#endif
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trType );
 		break;
@@ -1363,6 +1449,33 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
 
+#ifdef USE_HEADSHOTS
+  "EV_GIB_PLAYER_HEADSHOT",
+  "EV_BODY_NOHEAD",
+#endif
+
+#ifdef USE_LV_DISCHARGE
+  "EV_LV_DISCHARGE",
+#endif
+
+#ifdef USE_BIRDS_EYE
+	"EV_CURSORSTART",
+#endif
+
+#ifdef USE_DAMAGE_PLUMS
+  "EV_DAMAGEPLUM",			// damage plum
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  "EV_FROZEN",
+  "EV_UNFROZEN",
+#endif
+
+#ifdef USE_ALT_FIRE
+  "EV_ALTFIRE_WEAPON",
+  "EV_ALTFIRE_BOTH",
+#endif
+
 };
 
 /*
@@ -1415,7 +1528,11 @@ void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
 	int effectNum;
 
 	// spectators don't use jump pads
-	if ( ps->pm_type != PM_NORMAL ) {
+	if ( ps->pm_type != PM_NORMAL
+		&& ps->pm_type != PM_BIRDSEYE
+		&& ps->pm_type != PM_FOLLOWCURSOR
+		&& ps->pm_type != PM_PLATFORM
+		&& ps->pm_type != PM_THIRDPERSON ) {
 		return;
 	}
 

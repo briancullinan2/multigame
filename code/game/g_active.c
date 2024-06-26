@@ -205,6 +205,120 @@ void ClientImpacts( gentity_t *ent, pmove_t *pm ) {
 
 }
 
+#ifdef USE_PORTALS
+/*
+============
+G_ListPortals
+
+Find all personal portals so they don't affect Pmove physics negatively
+============
+*/
+void	G_ListPortals( gentity_t *ent, vec3_t *sources, vec3_t *destinations
+	, vec3_t *sourcesAngles, vec3_t *destinationsAngles ) {
+	int			i, num;
+	int			touch[MAX_GENTITIES];
+	gentity_t	*hit;
+	vec3_t		mins, maxs;
+	int         count = 0;
+  //vec3_t    velocity;
+	static vec3_t	range = { 80, 80, 104 };
+
+	if ( !ent->client ) {
+		return;
+	}
+
+	// dead clients don't activate triggers!
+	if ( ent->client->ps.stats[STAT_HEALTH] <= 0 ) {
+		return;
+	}
+
+	VectorSubtract( ent->client->ps.origin, range, mins );
+	VectorAdd( ent->client->ps.origin, range, maxs );
+  //VectorCopy(ent->client->ps.velocity, velocity);
+  //VectorScale( velocity, 52, velocity );
+  //VectorSubtract( mins, velocity, mins );
+  //VectorSubtract( maxs, velocity, maxs );
+
+	num = trap_EntitiesInBox( mins, maxs, touch, MAX_GENTITIES );
+
+	// can't use ent->absmin, because that has a one unit pad
+	VectorAdd( ent->client->ps.origin, ent->r.mins, mins );
+	VectorAdd( ent->client->ps.origin, ent->r.maxs, maxs );
+
+	for ( i=0 ; i<num ; i++ ) {
+		hit = &g_entities[touch[i]];
+
+		if ( !hit->touch && !ent->touch ) {
+			continue;
+		}
+		if ( !( hit->r.contents & CONTENTS_TRIGGER ) ) {
+			continue;
+		}
+
+		if ( hit->s.eType != ET_TELEPORT_TRIGGER ) {
+			continue;
+		}
+
+		if ( !trap_EntityContact( mins, maxs, hit ) ) {
+			continue;
+		}
+
+		//pm->
+		if( hit->pos1[0] || hit->pos1[1] || hit->pos1[2] ) {
+			gentity_t *destination;
+			gclient_t *client = &level.clients[hit->r.ownerNum];
+			if(hit == client->portalSource) {
+				destination = client->portalDestination;
+			} else {
+				destination = client->portalSource;
+			}
+
+			if(destination->s.eventParm) {
+				vec3_t angles;
+				ByteToDir( destination->s.eventParm, angles );
+				vectoangles( angles, angles );
+				if(hit->s.eventParm) {
+					vec3_t angles2;
+					ByteToDir( hit->s.eventParm, angles2 );
+					vectoangles( angles2, angles2 );
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(angles2, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(angles, destinationsAngles[count]);
+				} else {
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(vec3_origin, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(angles, destinationsAngles[count]);
+				}
+			} else {
+				if(hit->s.eventParm) {
+					vec3_t angles2;
+					ByteToDir( hit->s.eventParm, angles2 );
+					vectoangles( angles2, angles2 );
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(angles2, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(vec3_origin, destinationsAngles[count]);
+				} else {
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(vec3_origin, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(vec3_origin, destinationsAngles[count]);
+				}
+			}
+
+			count++;
+		}
+	}
+	VectorCopy(vec3_origin, sources[count]);
+	VectorCopy(vec3_origin, destinations[count]);
+	VectorCopy(vec3_origin, sourcesAngles[count]);
+	VectorCopy(vec3_origin, destinationsAngles[count]);
+	//Com_Printf("%i portals detected\n", count);
+}
+#endif
+
 /*
 ============
 G_TouchTriggers
@@ -301,6 +415,30 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	client = ent->client;
 
 	if ( client->sess.spectatorState != SPECTATOR_FOLLOW ) {
+#ifdef USE_BIRDS_EYE
+		if (client->pers.thirdPerson || g_thirdPerson.integer) {
+			client->ps.pm_type = PM_THIRDPERSON;
+		} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+		} else if (client->pers.sideView || g_sideview.integer) {
+			client->ps.pm_type = PM_PLATFORM;
+		} else
+#endif
+#ifdef USE_AIW
+		if(client->pers.reverseControls) {
+			client->ps.pm_type = PM_REVERSED;
+		}
+		if(client->pers.upsidedown || g_upsideDown.integer) {
+			client->ps.pm_type = PM_UPSIDEDOWN;
+		}
+		if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+			client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+		}
+#endif
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed = g_speed.value * 1.25f; // faster than normal
 
@@ -429,6 +567,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #endif
 		} else {
 			// count down health when over max
+#ifdef USE_GAME_FREEZETAG
+			if(!g_freezeTag.integer || ent->health != INFINITE)
+#endif
 			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
@@ -489,6 +630,30 @@ void ClientIntermissionThink( gclient_t *client ) {
 	client->ps.eFlags &= ~EF_FIRING;
 
 	// the level will exit when everyone wants to or after timeouts
+#ifdef USE_BIRDS_EYE
+	if (client->pers.thirdPerson || g_thirdPerson.integer) {
+		client->ps.pm_type = PM_THIRDPERSON;
+	} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+	} else if (client->pers.sideView || g_sideview.integer) {
+		client->ps.pm_type = PM_PLATFORM;
+	}
+#endif
+#ifdef USE_AIW
+	if(client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSED;
+	}
+	if(client->pers.upsidedown || g_upsideDown.integer) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+	}
+	if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	}
+#endif
 
 	// swap and latch button actions
 	client->oldbuttons = client->buttons;
@@ -544,8 +709,28 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			G_Damage (ent, NULL, NULL, NULL, NULL, damage, 0, MOD_FALLING);
 			break;
 
+#ifdef USE_ALT_FIRE
+    case EV_ALTFIRE_BOTH:
+    case EV_ALTFIRE_WEAPON:
+#ifdef USE_PORTALS
+      if(g_altPortal.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_BFG;
+        FireWeapon( ent, qtrue );
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
+      FireWeapon( ent, qtrue );
+
+		if(event != EV_ALTFIRE_BOTH)
+      break;        
+#endif
 		case EV_FIRE_WEAPON:
+#ifdef USE_ALT_FIRE
+			FireWeapon( ent, qfalse );
+#else
 			FireWeapon( ent );
+#endif
 			break;
 
 		case EV_USE_ITEM1:		// teleporter
@@ -576,6 +761,18 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 				ent->client->ps.powerups[ j ] = 0;
 			}
+#ifdef USE_PORTALS
+      if(g_altPortal.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_BFG;
+#ifdef USE_ALT_FIRE
+        FireWeapon( ent, qtrue );
+#else
+        FireWeapon( ent );
+#endif
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
 
 #ifdef MISSIONPACK
 			if ( g_gametype.integer == GT_HARVESTER ) {
@@ -618,14 +815,25 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 		case EV_USE_ITEM4:		// portal
 			if( ent->client->portalID ) {
-				DropPortalSource( ent );
+				DropPortalSource( ent, qfalse );
 			}
 			else {
-				DropPortalDestination( ent );
+				DropPortalDestination( ent, qfalse );
 			}
 			break;
 		case EV_USE_ITEM5:		// invulnerability
 			ent->client->invulnerabilityTime = level.time + 10000;
+			break;
+#endif
+
+#ifdef USE_PORTALS
+		case HI_PORTAL:		// portal
+			if( ent->client->portalID ) {
+				DropPortalSource( ent, qfalse );
+			}
+			else {
+				DropPortalDestination( ent, qfalse );
+			}
 			break;
 #endif
 
@@ -733,6 +941,9 @@ void ClientThink_real( gentity_t *ent ) {
 	int			oldEventSequence;
 	int			msec;
 	usercmd_t	*ucmd;
+#ifdef USE_PORTALS
+	vec3_t sources[32], destinations[32], sourcesAngles[32], destinationsAngles[32];
+#endif
 
 	client = ent->client;
 
@@ -811,9 +1022,41 @@ void ClientThink_real( gentity_t *ent ) {
 
 	if ( client->noclip ) {
 		client->ps.pm_type = PM_NOCLIP;
-	} else if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
+  } else
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( client->ps.powerups[PW_FROZEN] || client->ps.stats[STAT_HEALTH] <= 0 ) {
+    client->ps.pm_type = PM_FROZEN;
+		client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+  } else
+#endif
+  if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		client->ps.pm_type = PM_DEAD;
-	} else {
+	} else 
+#ifdef USE_BIRDS_EYE
+	if (client->pers.thirdPerson || g_thirdPerson.integer) {
+		client->ps.pm_type = PM_THIRDPERSON;
+	} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+	} else if (client->pers.sideView || g_sideview.integer) {
+		client->ps.pm_type = PM_PLATFORM;
+	} else
+#endif
+#ifdef USE_AIW
+	if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	} else
+	if(client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSED;
+	} else 
+	if(client->pers.upsidedown || g_upsideDown.integer) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+	} else 
+#endif
+	{
 		client->ps.pm_type = PM_NORMAL;
 	}
 
@@ -831,6 +1074,28 @@ void ClientThink_real( gentity_t *ent ) {
 	if ( client->ps.powerups[PW_HASTE] ) {
 		client->ps.speed *= 1.3;
 	}
+
+#ifdef USE_LOCAL_DMG
+  if(g_locDamage.integer) {
+    if(client->lasthurt_location == LOCATION_LEG) {
+      client->ps.speed *= 0.7;
+    }
+    if(client->lasthurt_location == LOCATION_FOOT) {
+      client->ps.speed *= 0.5;
+    }
+  }
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if(g_thawTime.integer
+    && ent->client->ps.powerups[PW_FROZEN]
+    && level.time >= ent->client->ps.powerups[PW_FROZEN]
+  ) {
+    G_AddEvent( ent, EV_UNFROZEN, 0 );
+    ent->client->ps.powerups[PW_FROZEN] = 0;
+    SetClientViewAngle(ent, client->frozen_angles);
+  }
+#endif
 
 	// Let go of the hook if we aren't firing
 	if ( client->ps.weapon == WP_GRAPPLING_HOOK &&
@@ -902,6 +1167,9 @@ void ClientThink_real( gentity_t *ent ) {
 
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
+#ifdef USE_PORTALS
+	G_ListPortals( ent, sources, destinations, sourcesAngles, destinationsAngles );
+#endif
 #ifdef MISSIONPACK
 		if (level.intermissionQueued != 0 && g_singlePlayer.integer) {
 			if ( level.time - level.intermissionQueued >= 1000  ) {
@@ -918,6 +1186,92 @@ void ClientThink_real( gentity_t *ent ) {
 		Pmove (&pm);
 #else
 		Pmove (&pm);
+#endif
+
+#ifdef USE_BIRDS_EYE
+	if(pm.ps->pm_type == PM_FOLLOWCURSOR) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+			
+			if(!ent->client->cursorEnt || ent->client->cursorEnt->r.ownerNum != ent->client->ps.clientNum 
+				|| level.time - ent->client->cursorEnt->eventTime > 1000) {
+				gentity_t *pent;
+				if(ent->client->cursorEnt && ent->client->cursorEnt->r.ownerNum == ent->client->ps.clientNum) {
+					G_FreeEntity(ent->client->cursorEnt);
+				}
+				ent->client->cursorEnt = pent = G_TempEntity( client->ps.origin, EV_CURSORSTART );
+				pent->s.clientNum = client - level.clients;
+				pent->r.singleClient = client - level.clients;
+				pent->r.svFlags |= SVF_SINGLECLIENT;
+				pent->freeAfterEvent = qfalse;
+				pent->s.eType = ET_CURSOR;
+				pent->eventTime = level.time;
+				pent->freetime = level.time + 1000;
+				pent->r.ownerNum = ent->client->ps.clientNum;
+			} else {
+				gentity_t *pent;
+				pent = ent->client->cursorEnt;
+				//pent->eventTime = level.time;
+				//pent->s.event++;
+				//G_AddEvent(pent, EV_EVENT_BITS, 0);
+				pent->s.pos.trBase[0] = SHORT2ANGLE(ucmd->angles[YAW]);
+				pent->s.pos.trBase[1] = SHORT2ANGLE(ucmd->angles[PITCH]);
+				
+				
+				VectorCopy(pent->s.pos.trBase, pent->s.origin);
+			}
+
+			// Copy modified YAW into viewangles
+			ent->client->ps.delta_angles[PITCH] = 0;
+			ent->s.angles[PITCH] = SHORT2ANGLE(1);
+		}
+		// ZYGOTE FINISH
+	} else
+	if(pm.ps->pm_type == PM_BIRDSEYE) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+			// Copy modified YAW into viewangles
+			ent->client->ps.delta_angles[PITCH] = 0;
+			ent->s.angles[PITCH] = SHORT2ANGLE(1);
+		}
+		// ZYGOTE FINISH
+	} else
+	if(pm.ps->pm_type == PM_PLATFORM) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+			short		temp;
+
+			// Setup temp
+			temp = ent->client->pers.cmd.angles[YAW] + ent->client->ps.delta_angles[YAW];		
+			
+			// Some ugly shit, but it works :)
+			if ( (temp > -30000) && (temp < 0) ) {
+				ent->client->ps.delta_angles[YAW] = -1000 - ent->client->pers.cmd.angles[YAW];
+				temp = 0; // RIGHT
+			}
+			if ( (temp < 30000) && (temp > 0) ) {
+				ent->client->ps.delta_angles[YAW] = 1000 - ent->client->pers.cmd.angles[YAW];
+				temp = 32000; // LEFT
+			}	
+
+			// Copy modified YAW into viewangles
+			ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp);
+
+		}
+		// ZYGOTE FINISH
+	}
+#endif
+#ifdef USE_AIW
+	if(pm.ps->pm_type == PM_UPSIDEDOWN) {
+		// ZYGOTE START
+		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
+
+			// Copy modified YAW into viewangles
+			ent->client->ps.delta_angles[ROLL] = 180;
+			ent->client->ps.viewangles[ROLL] = SHORT2ANGLE(180);
+
+		}
+	}
 #endif
 
 	// save results of pmove
@@ -971,12 +1325,19 @@ void ClientThink_real( gentity_t *ent ) {
 	client->latched_buttons |= client->buttons & ~client->oldbuttons;
 
 	// check for respawning
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer
+		 || client->ps.stats[STAT_HEALTH] != INFINITE
+		 || client->ps.pm_type != PM_FROZEN
+	) {
+#endif
+
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
 			// forcerespawn is to prevent users from waiting out powerups
-			if ( g_forcerespawn.integer > 0 && 
-				( level.time - client->respawnTime ) > g_forcerespawn.integer * 1000 ) {
+			if ( g_forcerespawn.value > 0 && 
+				( level.time - client->respawnTime ) > g_forcerespawn.value * 1000 ) {
 				respawn( ent );
 				return;
 			}
@@ -988,6 +1349,13 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 		return;
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	} else {
+
+	}
+#endif
+
 
 	// perform once-a-second actions
 	ClientTimerActions( ent, msec );

@@ -125,6 +125,11 @@ static void CG_Obituary( entityState_t *ent ) {
 	case MOD_TARGET_LASER:
 		message = "saw the light";
 		break;
+#ifdef USE_MODES_DEATH
+  case MOD_VOID:
+    message = "fell into the void";
+    break;
+#endif
 	case MOD_TRIGGER_HURT:
 		message = "was in the wrong place";
 		break;
@@ -179,6 +184,24 @@ static void CG_Obituary( entityState_t *ent ) {
 			}
 			break;
 #endif
+#ifdef USE_HEADSHOTS
+    case MOD_HEADSHOT:
+      gender = ci->gender;
+      if(gender==GENDER_FEMALE)
+      message = "got her head blown off by";
+      else{
+      if(gender==GENDER_NEUTER)
+        message = "got its head blown off by";
+      else
+        message = "got his head blown off by";
+      }
+      break;
+#endif
+#ifdef USE_MODES_DEATH
+		case MOD_SPECTATE:
+			message = "left to spectate";
+			break;
+#endif
 		default:
 			if ( gender == GENDER_FEMALE )
 				message = "killed herself";
@@ -206,6 +229,17 @@ static void CG_Obituary( entityState_t *ent ) {
 	if ( attacker == cg.snap->ps.clientNum ) {
 		char	*s;
 
+#ifdef USE_HEADSHOTS
+    if(mod == MOD_HEADSHOT) {
+      if ( cgs.gametype < GT_TEAM ) {
+        s = va("Headshot!\n\nYou fragged %s\n%s place with %i", targetName, 
+		      CG_PlaceString( cg.snap->ps.persistant[PERS_RANK] + 1 ),
+		      cg.snap->ps.persistant[PERS_SCORE] );
+  		} else {
+  			s = va("Headshot!\n\nYou fragged %s", targetName );
+  		}
+    } else
+#endif
 		if ( cgs.gametype < GT_TEAM ) {
 			s = va("You fragged %s\n%s place with %i", targetName, 
 				CG_PlaceString( cg.snap->ps.persistant[PERS_RANK] + 1 ),
@@ -286,9 +320,21 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_RAILGUN:
 			message = "was railed by";
 			break;
+#ifdef USE_LV_DISCHARGE
+// The SARACEN's Lightning Discharge - START
+    // Classic Quake style obituary - the original and the best!!!
+		case MOD_LIGHTNING:
+			message = "was shafted by";
+			break;
+		case MOD_LV_DISCHARGE:
+			message = "was discharged by";
+			break;
+// The SARACEN's Lightning Discharge - END
+#else
 		case MOD_LIGHTNING:
 			message = "was electrocuted by";
 			break;
+#endif
 		case MOD_BFG:
 		case MOD_BFG_SPLASH:
 			message = "was blasted by";
@@ -313,6 +359,15 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_JUICED:
 			message = "was juiced by";
 			break;
+#endif
+#ifdef USE_MODES_DEATH
+    case MOD_FROM_GRAVE:
+      message = "was killed by";
+      message2 = " from the grave";
+      break;
+    case MOD_RING_OUT:
+      message = "was forced out of the ring by";
+      break;
 #endif
 		case MOD_TELEFRAG:
 			message = "tried to invade";
@@ -534,6 +589,12 @@ void CG_PainEvent( centity_t *cent, int health ) {
 }
 
 
+#ifdef USE_HEADSHOTS
+void CG_GibPlayerHeadshot( vec3_t playerOrigin );
+#endif
+#ifdef USE_LV_DISCHARGE
+void CG_Lightning_Discharge (vec3_t origin, int msec);
+#endif
 
 /*
 ==============
@@ -864,6 +925,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.selectSound );
 		break;
 
+#ifdef USE_ALT_FIRE
+  case EV_ALTFIRE_WEAPON:
+#ifdef USE_PORTALS
+    if(cg_altPortal.integer) {
+      break;
+    }
+#endif
+#endif
 	case EV_FIRE_WEAPON:
 		CG_FireWeapon( cent );
 		break;
@@ -963,6 +1032,17 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_ScorePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		break;
 
+#if defined(USE_DAMAGE_PLUMS) || defined(USE_RPG_STATS)
+	case EV_DAMAGEPLUM:
+		if(cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
+			CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
+		}
+		if(cent->currentState.time2) {
+			cgs.clientinfo[cent->currentState.otherEntityNum].health = cent->currentState.time2;
+		}
+		break;
+#endif
+
 	//
 	// missile impacts
 	//
@@ -1018,6 +1098,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	case EV_SHOTGUN:
 		CG_ShotgunFire( es );
 		break;
+
+#ifdef USE_LV_DISCHARGE
+// The SARACEN's Lightning Discharge - START
+	case EV_LV_DISCHARGE:
+		CG_Lightning_Discharge (position, es->eventParm);	// eventParm is duration/size
+		break;
+// The SARACEN's Lightning Discharge - END
+#endif
 
 	case EV_GENERAL_SOUND:
 		if ( cgs.gameSounds[ es->eventParm ] ) {
@@ -1204,6 +1292,24 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.regenSound );
 		break;
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  case EV_FROZEN:
+		if ( es->number == cg.snap->ps.clientNum ) {
+			cg.powerupActive = PW_FROZEN;
+			cg.powerupTime = cg.time;
+		}
+		cgs.clientinfo[es->number].health = 0;
+		cg_entities[es->number].currentState.powerups |= (1 << PW_FROZEN);
+		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.frozenSound );
+		break;
+  case EV_UNFROZEN:
+    // TODO: play unfreeze sound
+    //cg_entities[es->number].items[ITEM_PW_MIN + PW_FROZEN] = 0;
+		cg_entities[es->number].currentState.powerups &= ~(1 << PW_FROZEN);
+    trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.frozenSound );
+    break;
+#endif
+
 	case EV_GIB_PLAYER:
 		// don't play gib sound when using the kamikaze because it interferes
 		// with the kamikaze sound, downside is that the gib sound will also
@@ -1218,6 +1324,17 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_GibPlayer( cent->lerpOrigin );
 		break;
 
+#ifdef USE_HEADSHOTS
+  case EV_GIB_PLAYER_HEADSHOT:
+    trap_S_StartSound( NULL, es->number, CHAN_BODY, cgs.media.gibSound );
+    cent->pe.noHead = qtrue;
+    CG_GibPlayerHeadshot( cent->lerpOrigin );
+    break;
+  case EV_BODY_NOHEAD:
+    cent->pe.noHead = qtrue;
+    break;
+#endif
+
 	case EV_STOPLOOPINGSOUND:
 		trap_S_StopLoopingSound( es->number );
 		es->loopSound = 0;
@@ -1229,6 +1346,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 	case EV_PROXIMITY_MINE_STICK:
 	case EV_PROXIMITY_MINE_TRIGGER:
+		break;
+
+	case EV_CURSORSTART:
+		CG_Printf("Start cursor\n");
 		break;
 
 	default:

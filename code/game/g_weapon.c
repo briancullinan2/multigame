@@ -12,6 +12,16 @@ static	vec3_t	muzzle_origin; // for hitscan weapon trace
 
 #define NUM_NAILSHOTS 15
 
+#ifdef USE_LV_DISCHARGE
+qboolean G_WaterRadiusDamage (vec3_t origin, gentity_t *attacker, 
+  float damage, float radius, gentity_t *ignore, int mod);
+#endif
+
+#ifdef USE_VULN_RPG
+#define IsSelf(x, y) i == 0 \
+  && !(x.surfaceFlags & SURF_NOIMPACT) \
+  && x.entityNum == ent->s.number
+#endif
 
 /*
 ===============
@@ -189,6 +199,16 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 		// unlagged
 		G_DoTimeShiftFor( ent );
 
+#ifdef USE_VULN_RPG
+    if(wp_rocketVuln.integer) {
+      trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ENTITYNUM_NONE, MASK_SHOT );
+      // double check we aren't hitting ourselves on the first pass
+      if(IsSelf(tr, ent)) {
+        // do another trace that skips ourselves
+        trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ent->s.number, MASK_SHOT );
+      }
+    } else
+#endif
 		trap_Trace( &tr, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
 
 		// unlagged
@@ -258,9 +278,16 @@ void BFG_Fire( gentity_t *ent ) {
 	gentity_t *m;
 
 	m = fire_bfg( ent, muzzle, forward );
-	m->damage *= s_quadFactor;
-	m->splashDamage *= s_quadFactor;
-
+#ifdef USE_HOTBFG
+  if(g_hotBFG.integer) {
+    m->damage *= 1.5;
+  	m->splashRadius *= 2;
+  } else 
+#endif
+  {
+  	m->damage *= s_quadFactor;
+  	m->splashDamage *= s_quadFactor;
+  }
 //	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
@@ -379,6 +406,9 @@ static void weapon_supershotgun_fire( gentity_t *ent ) {
 	ShotgunPattern( muzzle_origin, tent->s.origin2, tent->s.eventParm, ent );
 }
 
+#ifdef USE_CLUSTER_GRENADES
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster);
+#endif
 
 /*
 ======================================================================
@@ -395,12 +425,22 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 	forward[2] += 0.2f;
 	VectorNormalize( forward );
 
+#ifdef USE_CLUSTER_GRENADES
+	if(g_clusterGrenades.integer) {
+		m = fire_special_grenade (ent, muzzle, forward, qtrue);
+	} else
+#endif
 	m = fire_grenade (ent, muzzle, forward);
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
 
 //	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
+
+
+#if defined(USE_BOUNCE_RPG) || defined(USE_HOMING_MISSILE) || defined(USE_VULN_RPG) || defined(USE_ACCEL_RPG)
+gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir);
+#endif
 
 /*
 ======================================================================
@@ -413,10 +453,45 @@ ROCKET
 void Weapon_RocketLauncher_Fire (gentity_t *ent) {
 	gentity_t	*m;
 
+#ifdef USE_BOUNCE_RPG
+	if(wp_rocketBounce.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	} else
+#endif
+#ifdef USE_HOMING_MISSILE
+  if(wp_rocketHoming.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	} else
+#endif
+#ifdef USE_VULN_RPG
+  if(wp_rocketVuln.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	} else
+#endif
+#ifdef USE_ACCEL_RPG
+  if(wp_rocketAccel.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	} else
+#endif
+
 	m = fire_rocket (ent, muzzle, forward);
+
+#ifdef USE_HOTRPG
+  if(g_hotRockets.integer) {
+    m->damage *= g_quadfactor.value;
+  	m->splashDamage *= g_quadfactor.value;
+  } else 
+#endif
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    m->damage *= g_quadfactor.value;
+  	m->splashDamage *= g_quadfactor.value;
+  } else 
+#endif
+  {
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
-
+  }
 //	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
@@ -469,6 +544,16 @@ void weapon_railgun_fire( gentity_t *ent ) {
 	int			passent;
 	gentity_t	*unlinkedEntities[MAX_RAIL_HITS];
 
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    damage = 500 * s_quadFactor;
+  } else 
+#endif
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer) {
+    damage = 500 * s_quadFactor;
+  } else
+#endif
 	damage = 100 * s_quadFactor;
 
 	VectorMA( muzzle_origin, 8192.0, forward, end );
@@ -481,6 +566,11 @@ void weapon_railgun_fire( gentity_t *ent ) {
 	hits = 0;
 	passent = ent->s.number;
 	do {
+#ifdef USE_VULN_RPG
+    if(wp_rocketVuln.integer) {
+      passent = ENTITYNUM_NONE;
+    }
+#endif
 		trap_Trace( &trace, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
 		if ( trace.entityNum >= ENTITYNUM_MAX_NORMAL ) {
 			break;
@@ -642,9 +732,40 @@ void Weapon_LightningFire( gentity_t *ent ) {
 	gentity_t	*traceEnt, *tent;
 	int			damage, i, passent;
 
-	damage = 8 * s_quadFactor;
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    damage *= g_quadfactor.value;
+  } else 
+#endif
+  damage *= s_quadFactor;
 
 	passent = ent->s.number;
+
+#ifdef USE_LV_DISCHARGE
+  VectorMA( muzzle_origin, LIGHTNING_RANGE, forward, end );
+  // The SARACEN's Lightning Discharge - START
+	if (trap_PointContents (muzzle_origin, -1) & MASK_WATER)
+	{
+		int zaps;
+		gentity_t *tent;
+
+		zaps = ent->client->ps.ammo[WP_LIGHTNING];	// determines size/power of discharge
+		if (!zaps) return;	// prevents any subsequent frames causing second discharge + error
+		zaps++;		// pmove does an ammo[gun]--, so we must compensate
+		SnapVectorTowards (muzzle_origin, ent->s.origin);	// save bandwidth
+
+		tent = G_TempEntity (muzzle_origin, EV_LV_DISCHARGE);
+		tent->s.eventParm = zaps;				// duration / size of explosion graphic
+
+		ent->client->ps.ammo[WP_LIGHTNING] = 0;		// drain ent's lightning count
+		if (G_WaterRadiusDamage (muzzle_origin, ent, damage * zaps,
+					(damage * zaps) + 16, NULL, MOD_LV_DISCHARGE))
+			g_entities[ent->r.ownerNum].client->accuracy_hits++;
+		
+		return;
+	}
+  // The SARACEN's Lightning Discharge - END
+#endif
 
 	for (i = 0; i < 10; i++) {
 		VectorMA( muzzle_origin, LIGHTNING_RANGE, forward, end );
@@ -652,6 +773,16 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		// unlagged
 		G_DoTimeShiftFor( ent );
 
+#ifdef USE_VULN_RPG
+    if(wp_rocketVuln.integer) {
+      trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ENTITYNUM_NONE, MASK_SHOT );
+      // double check we aren't hitting ourselves on the first pass
+      if(IsSelf(tr, ent)) {
+        // do another trace that skips ourselves
+        trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ent->s.number, MASK_SHOT );
+      }
+    } else
+#endif
 		trap_Trace( &tr, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
 
 		// unlagged
@@ -798,12 +929,25 @@ qboolean LogAccuracyHit( gentity_t *target, gentity_t *attacker ) {
 }
 
 
+#ifdef USE_WEAPON_SPREAD
+void SpreadFire_Powerup(gentity_t* ent, gentity_t* (*fireFunc)(gentity_t*, vec3_t, vec3_t) );
+#endif
+#ifdef USE_CLUSTER_GRENADES
+gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir);
+#endif
+
+
 /*
 ===============
 FireWeapon
 ===============
 */
-void FireWeapon( gentity_t *ent ) {
+#ifdef USE_ALT_FIRE
+void FireWeapon( gentity_t *ent, qboolean altFire ) 
+#else
+void FireWeapon( gentity_t *ent ) 
+#endif
+{
 	if ( ent->client->ps.powerups[PW_QUAD] ) {
 		s_quadFactor = g_quadfactor.value;
 	} else {
@@ -829,6 +973,12 @@ void FireWeapon( gentity_t *ent ) {
 	}
 
 	// set aiming directions
+#ifdef USE_BIRDS_EYE
+	if(ent->client->ps.pm_type == PM_BIRDSEYE || ent->client->ps.pm_type == PM_FOLLOWCURSOR) {
+		ent->client->ps.viewangles[PITCH] = 0;
+	}
+#endif
+
 	AngleVectors( ent->client->ps.viewangles, forward, right, up );
 
 	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
@@ -852,6 +1002,17 @@ void FireWeapon( gentity_t *ent ) {
 		}
 		break;
 	case WP_GRENADE_LAUNCHER:
+#ifdef USE_WEAPON_SPREAD
+  //Hal9000 spreadfire
+  if ( ent->client->ps.powerups[PW_SPREAD] ) {
+#ifdef USE_CLUSTER_GRENADES
+		if(g_clusterGrenades.integer) {
+			SpreadFire_Powerup(ent, fire_cluster_grenade);
+		} else
+#endif
+		SpreadFire_Powerup(ent, fire_grenade);
+	} else
+#endif
 		weapon_grenadelauncher_fire( ent );
 		break;
 	case WP_ROCKET_LAUNCHER:
@@ -861,9 +1022,28 @@ void FireWeapon( gentity_t *ent ) {
 		Weapon_Plasmagun_Fire( ent );
 		break;
 	case WP_RAILGUN:
+#ifdef USE_INVULN_RAILS
+    if(g_railThruWalls.integer)
+			fire_special_railgun( ent );
+		else
+#endif
+#ifdef USE_BOUNCE_RAIL
+		if(wp_railBounce.integer) {
+			fire_special_railgun( ent );
+		} else
+#endif
 		weapon_railgun_fire( ent );
 		break;
 	case WP_BFG:
+#ifdef USE_PORTALS
+    if(wp_portalEnable.integer
+#ifdef USE_ALT_FIRE
+      && !g_altPortal.integer // do both ends with right click, reset each time
+#endif
+    ) {
+			fire_portal( ent, muzzle, forward, altFire );
+    } else
+#endif
 		BFG_Fire( ent );
 		break;
 	case WP_GRAPPLING_HOOK:

@@ -113,12 +113,37 @@ movement on the server game.
 
 typedef enum {
 	PM_NORMAL,		// can accelerate and turn
+#ifdef USE_BIRDS_EYE
+	PM_PLATFORM,
+	PM_BIRDSEYE,
+	PM_THIRDPERSON,
+	PM_FOLLOWCURSOR,
+#endif
+
+#ifdef USE_AIW
+	PM_UPSIDEDOWN,
+	PM_REVERSED,
+	PM_REVERSEDUPSIDEDOWN,
+#endif
+
 	PM_NOCLIP,		// noclip movement
 	PM_SPECTATOR,	// still run into walls
 	PM_DEAD,		// no acceleration or turning, but free falling
 	PM_FREEZE,		// stuck in place with no control
 	PM_INTERMISSION,	// no movement or status bar
-	PM_SPINTERMISSION	// no movement or status bar
+	PM_SPINTERMISSION,	// no movement or status bar
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PM_FROZEN,
+#endif
+
+	PM_LOOKSPLINE, // control look angle from spline
+	PM_MOVESPLINE, // control movement from spline
+	PM_BOTHSPLINE, // control both from spline
+	PM_LOOKQUARTER,
+	PM_LOOKHALF, // allow for 180 degree freelook from the angle 
+	// specified by camera spline nearest current location
+
+	NUM_PLAYERMOVE,
 } pmtype_t;
 
 typedef enum {
@@ -252,6 +277,7 @@ typedef enum {
 #define	EF_AWARD_ASSIST		0x00020000		// draw a assist sprite
 #define EF_AWARD_DENIED		0x00040000		// denied
 #define EF_TEAMVOTED		0x00080000		// already cast a team vote
+#define EF_TIMER        0x00000082		// 
 
 #define EF_PERSISTANT ( EF_CONNECTION | EF_VOTED | EF_TEAMVOTED )
 #define EF_AWARDS ( EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_GAUNTLET | EF_AWARD_ASSIST | EF_AWARD_DEFEND | EF_AWARD_CAP )
@@ -278,6 +304,14 @@ typedef enum {
 	PW_DOUBLER,
 	PW_AMMOREGEN,
 	PW_INVULNERABILITY,
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PW_FROZEN,
+#endif
+
+#ifdef USE_WEAPON_SPREAD
+  PW_SPREAD,  //Hal9000 spreadfire
+#endif
 
 	PW_NUM_POWERUPS
 
@@ -374,6 +408,7 @@ typedef enum {
 	EV_CHANGE_WEAPON,
 	EV_FIRE_WEAPON,
 
+
 	EV_USE_ITEM0,
 	EV_USE_ITEM1,
 	EV_USE_ITEM2,
@@ -445,8 +480,34 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
-	EV_MAX
 
+#ifdef USE_HEADSHOTS
+  EV_GIB_PLAYER_HEADSHOT,
+  EV_BODY_NOHEAD,
+#endif
+
+#ifdef USE_LV_DISCHARGE
+  EV_LV_DISCHARGE,
+#endif
+
+#ifdef USE_BIRDS_EYE
+	EV_CURSORSTART,
+#endif
+
+#ifdef USE_DAMAGE_PLUMS
+  EV_DAMAGEPLUM,			// damage plum
+#endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  EV_FROZEN,
+  EV_UNFROZEN,
+#endif
+
+#ifdef USE_ALT_FIRE
+  EV_ALTFIRE_WEAPON,
+  EV_ALTFIRE_BOTH,
+#endif
+
+	EV_MAX,
 } entity_event_t;
 
 
@@ -571,6 +632,26 @@ typedef enum {
 	TEAMTASK_CAMP
 } teamtask_t;
 
+#ifdef USE_LOCAL_DMG
+#define LOCATION_NONE		0x00000000
+
+// Height layers
+#define LOCATION_HEAD		0x00000001 // [F,B,L,R] Top of head
+#define LOCATION_FACE		0x00000002 // [F] Face [B,L,R] Head
+#define LOCATION_SHOULDER	0x00000004 // [L,R] Shoulder [F] Throat, [B] Neck
+#define LOCATION_CHEST		0x00000008 // [F] Chest [B] Back [L,R] Arm
+#define LOCATION_STOMACH	0x00000010 // [L,R] Sides [F] Stomach [B] Lower Back
+#define LOCATION_GROIN		0x00000020 // [F] Groin [B] Butt [L,R] Hip
+#define LOCATION_LEG		0x00000040 // [F,B,L,R] Legs
+#define LOCATION_FOOT		0x00000080 // [F,B,L,R] Bottom of Feet
+
+// Relative direction strike came from
+#define LOCATION_LEFT		0x00000100
+#define LOCATION_RIGHT		0x00000200
+#define LOCATION_FRONT		0x00000400
+#define LOCATION_BACK		0x00000800
+#endif
+
 // means of death
 typedef enum {
 	MOD_UNKNOWN,
@@ -595,6 +676,12 @@ typedef enum {
 	MOD_FALLING,
 	MOD_SUICIDE,
 	MOD_TARGET_LASER,
+#ifdef USE_MODES_DEATH
+	MOD_SPECTATE,
+  MOD_VOID,
+  MOD_RING_OUT,
+  MOD_FROM_GRAVE,
+#endif
 	MOD_TRIGGER_HURT,
 #ifdef MISSIONPACK
 	MOD_NAIL,
@@ -602,6 +689,12 @@ typedef enum {
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
+#endif
+#ifdef USE_LV_DISCHARGE
+  MOD_LV_DISCHARGE,
+#endif
+#ifdef USE_HEADSHOTS
+  MOD_HEADSHOT,
 #endif
 	MOD_GRAPPLE
 } meansOfDeath_t;
@@ -688,6 +781,9 @@ typedef enum {
 	ET_INVISIBLE,
 	ET_GRAPPLE,				// grapple hooked on wall
 	ET_TEAM,
+#ifdef USE_BIRDS_EYE
+	ET_CURSOR,
+#endif
 
 	ET_EVENTS				// any of the EV_* events can be added freestanding
 							// by setting eType to ET_EVENTS + eventNum

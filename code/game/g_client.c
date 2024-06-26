@@ -404,6 +404,12 @@ void CopyToBodyQue( gentity_t *ent ) {
 		body->takedamage = qtrue;
 	}
 
+#ifdef USE_HEADSHOTS
+  if(ent->client->lasthurt_mod == MOD_HEADSHOT)
+	  G_AddEvent( body, EV_BODY_NOHEAD, 0 );
+#endif
+
+
 	VectorCopy ( body->s.pos.trBase, body->r.currentOrigin );
 	trap_LinkEntity( body );
 }
@@ -440,6 +446,11 @@ respawn
 void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer) {
+		G_Error("Respawn called in freeze tag mode!");
+	}
+#endif
 	if ( ent->health <= 0 )
 		CopyToBodyQue( ent );
 
@@ -681,6 +692,67 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 		client->pers.teamInfo = qfalse;
 	}
 #endif
+
+
+#ifdef USE_BIRDS_EYE
+	s = Info_ValueForKey( userinfo, "cg_thirdperson" );
+	if ( *s && atoi( s ) != 0 ) {
+		// TODO: AIM towards the surface it would hit, through portals
+		client->ps.pm_type = PM_THIRDPERSON;
+		client->pers.thirdPerson = qtrue;
+	} else {
+		client->pers.thirdPerson = qfalse;
+	}
+	s = Info_ValueForKey( userinfo, "cg_birdsEye" );
+	if ( *s && atoi( s ) != 0 ) {
+	G_Printf("setting birds eye\n");
+		client->ps.pm_type = PM_BIRDSEYE;
+		client->pers.birdsEye = qtrue;
+	} else {
+		client->pers.birdsEye = qfalse;
+	}
+
+
+	s = Info_ValueForKey( userinfo, "cg_drawCrosshair" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_FOLLOWCURSOR;
+		client->pers.showCursor = qtrue;
+	} else {
+		client->pers.showCursor = qfalse;
+	}
+
+
+	s = Info_ValueForKey( userinfo, "cg_sideview" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_PLATFORM;
+		client->pers.sideView = qtrue;
+	} else {
+		client->pers.sideView = qfalse;
+	}
+#endif
+
+#ifdef USE_AIW
+	s = Info_ValueForKey( userinfo, "cg_reverseControls" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_REVERSED;
+		client->pers.reverseControls = qtrue;
+	} else {
+		client->pers.reverseControls = qfalse;
+	}
+
+	s = Info_ValueForKey( userinfo, "cg_upsideDown" );
+	if ( *s && atoi( s ) != 0 ) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+		client->pers.upsidedown = qtrue;
+	} else {
+		client->pers.upsidedown = qfalse;
+	}
+
+	if(client->pers.upsidedown && client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	}
+#endif
+
 
 	// set model
 	Q_strncpyz( model, Info_ValueForKey( userinfo, "model" ), sizeof( model ) );
@@ -1076,6 +1148,9 @@ void ClientSpawn(gentity_t *ent) {
 		ent->r.contents = CONTENTS_BODY;
 		ent->clipmask = MASK_PLAYERSOLID;
 	}
+#ifdef USE_DAMAGE_PLUMS
+  ent->pain = player_pain;
+#endif
 	ent->die = player_die;
 	ent->waterlevel = 0;
 	ent->watertype = 0;
@@ -1095,10 +1170,65 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;
+
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer) {
+    client->ps.stats[STAT_WEAPONS] = ( 1 << WP_RAILGUN );
+    // bots don't seem to like -1 as ammo amount, maybe this can be fixed
+    //   during advanced grapple hook tutorial.
+    client->ps.ammo[WP_RAILGUN] = INFINITE;  
+  }
+#endif
+
 	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+#ifdef USE_PORTALS
+  if(wp_portalEnable.integer) {
+    // in alt-fire mode, both ends reset with right click
+    // otherwise, use BFG left and right click for both ends
+    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BFG );
+    client->ps.ammo[WP_BFG] = INFINITE;  
+  }
+#endif
+
+#ifdef USE_TRINITY
+if(g_unholyTrinity.integer) {
+  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_RAILGUN ) | ( 1 << WP_LIGHTNING ) | ( 1 << WP_ROCKET_LAUNCHER );
+  client->ps.ammo[WP_RAILGUN] = INFINITE;  
+  client->ps.ammo[WP_LIGHTNING] = INFINITE;  
+  client->ps.ammo[WP_ROCKET_LAUNCHER] = INFINITE;  
+}
+#endif
+#ifdef USE_HOTRPG
+if(g_hotRockets.integer) {
+  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_ROCKET_LAUNCHER );
+  client->ps.ammo[WP_ROCKET_LAUNCHER] = INFINITE;  
+}
+#endif
+#ifdef USE_HOTBFG
+if(g_hotBFG.integer) {
+  int handicap, max;
+  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_BFG );
+  client->ps.ammo[WP_BFG] = INFINITE;  
+  trap_GetUserinfo( client - level.clients, userinfo, sizeof(userinfo) );
+  handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
+  if( handicap<=0.0f || handicap>100.0f) {
+    handicap = 100.0f;
+  }
+  max = (int)(2 *  handicap);
+  ent->health = max;
+  client->ps.stats[STAT_HEALTH] = max;
+  client->ps.stats[STAT_MAX_HEALTH] = max;
+}
+#endif
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+
+#ifdef USE_LOCAL_DMG
+  // return to normal speed, McBain
+  client->ps.speed = g_speed.value;
+  client->lasthurt_location = LOCATION_NONE;
+#endif
 
 	G_SetOrigin( ent, spawn_origin );
 	VectorCopy( spawn_origin, client->ps.origin );

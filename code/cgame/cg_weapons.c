@@ -813,6 +813,10 @@ void CG_RegisterWeapon( int weaponNum ) {
 		cgs.media.bfgExplosionShader = trap_R_RegisterShader( "bfgExplosion" );
 		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaphits/bfg.md3" );
 		weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/rocket/rockfly.wav", qfalse );
+#ifdef USE_PORTALS
+    cgs.media.redBFG = trap_R_RegisterShader( "textures/portal/redBFG" );
+    cgs.media.blueBFG = trap_R_RegisterShader( "textures/portal/blueBFG" );
+#endif
 		break;
 
 	 default:
@@ -1048,6 +1052,11 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 
 	VectorMA( muzzlePoint, 14, forward, muzzlePoint );
 
+#ifdef USE_LV_DISCHARGE
+  // The SARACEN's Lightning Discharge
+	if (trap_CM_PointContents (muzzlePoint, 0) & MASK_WATER) return;
+#endif
+
 	// project forward by the lightning range
 	VectorMA( muzzlePoint, LIGHTNING_RANGE, forward, endPoint );
 
@@ -1220,6 +1229,16 @@ CG_AddWeaponWithPowerups
 */
 static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 	// add powerup effects
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( powerups & ( 1 << PW_FROZEN ) ) {
+    trap_R_AddRefEntityToScene( gun );
+    gun->customShader = cgs.media.frozenShader;
+    trap_R_AddRefEntityToScene( gun );
+    return;
+  }
+#endif
+
 	if ( powerups & ( 1 << PW_INVIS ) ) {
 		gun->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( gun );
@@ -1262,6 +1281,10 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	weaponNum = cent->currentState.weapon;
 
 	CG_RegisterWeapon( weaponNum );
+#ifdef USE_PORTALS
+  if(cg_altPortal.integer)
+    CG_RegisterWeapon( WP_BFG );
+#endif
 	weapon = &cg_weapons[weaponNum];
 
 	// add the weapon

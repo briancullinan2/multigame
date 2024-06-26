@@ -64,6 +64,7 @@ vmCvar_t bot_testrchat;
 vmCvar_t bot_challenge;
 vmCvar_t bot_predictobstacles;
 vmCvar_t bot_spSkill;
+vmCvar_t bot_instagib;
 
 extern vmCvar_t bot_developer;
 
@@ -1575,6 +1576,11 @@ void BotChooseWeapon(bot_state_t *bs) {
 		trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 	}
 	else {
+#ifdef USE_INSTAGIB
+    if(bot_instagib.integer)
+		  newweaponnum = WP_RAILGUN;
+    else
+#endif
 		newweaponnum = trap_BotChooseBestFightWeapon(bs->ws, bs->inventory);
 		if (bs->weaponnum != newweaponnum) bs->weaponchange_time = FloatTime();
 		bs->weaponnum = newweaponnum;
@@ -2209,6 +2215,13 @@ BotAggression
 ==================
 */
 float BotAggression(bot_state_t *bs) {
+#ifdef USE_INSTAGIB
+  if(bot_instagib.integer) {
+    //if the enemy is located way higher than the bot
+    if (bs->inventory[ENEMY_HEIGHT] > 200) return 0;
+    return 95;
+  }
+#endif
 	//if the bot has quad
 	if (bs->inventory[INVENTORY_QUAD]) {
 		//if the bot is not holding the gauntlet or the enemy is really nearby
@@ -5419,6 +5432,7 @@ void BotSetupDeathmatchAI(void) {
 	trap_Cvar_Register(&bot_challenge, "bot_challenge", "0", 0);
 	trap_Cvar_Register(&bot_predictobstacles, "bot_predictobstacles", "1", 0);
 	trap_Cvar_Register(&bot_spSkill, "g_spSkill", "2", 0);
+  trap_Cvar_Register(&bot_instagib, "g_instagib", "0", 0);
 	//
 	if (gametype == GT_CTF) {
 		if (trap_BotGetLevelItemGoal(-1, "Red Flag", &ctf_redflag) < 0)

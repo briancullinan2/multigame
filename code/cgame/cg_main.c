@@ -93,6 +93,9 @@ itemInfo_t			cg_items[MAX_ITEMS];
 	#include "cg_cvar.h"
 #undef DECLARE_CG_CVAR
 
+
+
+
 typedef struct {
 	vmCvar_t	*vmCvar;
 	const char	*cvarName;
@@ -137,6 +140,8 @@ void CG_RegisterCvars( void ) {
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	trap_Cvar_Register(NULL, "headmodel", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
+	trap_Cvar_Register(NULL, "cg_birdsEye", "0", CVAR_USERINFO | CVAR_TEMP );
+	trap_Cvar_Register(NULL, "cg_thirdPerson", "0", CVAR_USERINFO | CVAR_TEMP );
 	//trap_Cvar_Register(NULL, "team_model", DEFAULT_TEAM_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	//trap_Cvar_Register(NULL, "team_headmodel", DEFAULT_TEAM_HEAD, CVAR_USERINFO | CVAR_ARCHIVE );
 }
@@ -666,6 +671,11 @@ static void CG_RegisterGraphics( void ) {
 	for ( i = 0 ; i < ARRAY_LEN( sb_nums ) ; i++ ) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader( sb_nums[i] );
 	}
+  //cgs.media.timerSlices[i] = trap_R_RegisterShader( sb_nums[i] );
+  cgs.media.timerSlices[0] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice5" );
+  cgs.media.timerSlices[1] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice7" );
+  cgs.media.timerSlices[2] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice12" );
+  cgs.media.timerSlices[3] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice24" );
 
 	cgs.media.botSkillShaders[0] = trap_R_RegisterShader( "menu/art/skill1.tga" );
 	cgs.media.botSkillShaders[1] = trap_R_RegisterShader( "menu/art/skill2.tga" );
@@ -702,6 +712,7 @@ static void CG_RegisterGraphics( void ) {
 	for ( i = 0 ; i < NUM_CROSSHAIRS ; i++ ) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader( va("gfx/2d/crosshair%c", 'a'+i) );
 	}
+	cgs.media.crosshairShader[i] = trap_R_RegisterShader( "menu/art/3_cursor2" );
 
 	cgs.media.backTileShader = trap_R_RegisterShader( "gfx/2d/backtile" );
 	cgs.media.noammoShader = trap_R_RegisterShader( "icons/noammo" );
@@ -835,6 +846,12 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.medkitUsageModel = trap_R_RegisterModel( "models/powerups/regen.md3" );
 	cgs.media.heartShader = trap_R_RegisterShaderNoMip( "ui/assets/statusbar/selectedhealth.tga" );
 	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
+#endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  cgs.media.frozenShader = trap_R_RegisterShader("freezeShader" );
+	cgs.media.freezeMarkShader = trap_R_RegisterShader( "freezeMarkShader" );
+  cgs.media.frozenSound = trap_S_RegisterSound("sound/teamplay/freezing.wav", qfalse);
+  cgs.media.unfrozenSound = trap_S_RegisterSound("sound/teamplay/xunfreeze.wav", qfalse);
 #endif
 
 	cgs.media.medalImpressive = trap_R_RegisterShaderNoMip( "medal_impressive" );

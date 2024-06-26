@@ -146,6 +146,63 @@
 
 //=============================================================
 
+// unholy trinity mode, start with rocket, rails, lightning
+#define USE_TRINITY 1
+// hot rockets do no self-splash damage, infinite rockets, intagib on direct hits
+#define USE_HOTRPG 1
+// hot BFG better balance, infinite ammo
+#define USE_HOTBFG 1
+// extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
+#define USE_MODES_DEATH 1
+// enable lightening discharge that kills players in radius when used in water
+#define USE_LV_DISCHARGE 1
+// instagib mode
+#define USE_INSTAGIB 1
+
+// compile item timers, show how long until power-up respawns
+#define USE_ITEM_TIMERS 1
+// advanged damage changes based on where the player is shot
+#define USE_LOCAL_DMG 1
+
+// enable birds eye view, set by server or client, for use in spray and prey game modes
+#define USE_BIRDS_EYE 1
+// Alice in Wonderland game dynamics like shrinking and growing a player
+#define USE_AIW 1
+
+// compile damage plums every time someone gets hit
+#define USE_DAMAGE_PLUMS 1
+// allow referees to freeze players/TODO: rebalance teams
+#define USE_REFEREE_CMDS 1
+// enable freeze tag as a game mode in addition to the chosen CTF/Overload
+#define USE_GAME_FREEZETAG 1
+// show rpg like status bar for health, ammo, frozenness
+#define USE_RPG_STATS 1
+
+// use alternate fire buttons
+#define USE_ALT_FIRE 1
+// enable portal gun, requires modified client
+#define USE_PORTALS 1
+
+// cluster grenades create offspring every time they hit something
+#define USE_CLUSTER_GRENADES 1
+// spreadfire weapon and powerup mod, sends lots of fire everywhere
+#define USE_WEAPON_SPREAD 1
+// enable vortex grenades that suck players in when they are tossed
+#define USE_VORTEX_GRENADES 1
+// enable bouncing rail guns
+#define USE_BOUNCE_RAIL 1
+// enable rails that go through walls
+//#define USE_INVULN_RAILS 1
+
+// homing rockets look for other people to track and change direction
+#define USE_HOMING_MISSILE 1
+// rpg accellerating missiles start slow and then speed up as they fly
+#define USE_ACCEL_RPG 1
+// enable bouncing rpgs from map items or server enabled
+#define USE_BOUNCE_RPG 1
+// enable vulnerable rockets that can be shot down
+#define USE_VULN_RPG 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
@@ -1013,6 +1070,13 @@ typedef struct playerState_s {
 
 #define	BUTTON_ANY			2048			// any key whatsoever
 
+#ifdef USE_ALT_FIRE
+#define BUTTON_ALT_ATTACK	  0x1000      // button3
+#define BUTTON_ALT_2        0x2000      // button4
+#define BUTTON_ALT_3        0x4000      // button5
+#define BUTTON_ALT_4        0x8000      // button6
+#endif
+
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set
 
@@ -1037,6 +1101,9 @@ typedef enum {
 	TR_LINEAR_STOP,
 	TR_SINE,					// value = base + sin( time / duration ) * delta
 	TR_GRAVITY
+#ifdef USE_ACCEL_RPG
+  ,TR_ACCEL
+#endif
 } trType_t;
 
 typedef struct {

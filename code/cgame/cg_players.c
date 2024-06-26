@@ -1504,6 +1504,7 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 		return;
 	}
 
+
 	if ( cent->currentState.powerups & ( 1 << PW_HASTE ) ) {
 		speedScale = 1.5;
 	} else {
@@ -1512,12 +1513,24 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 
 	ci = &cgs.clientinfo[ clientNum ];
 
+
+	// torso
+#ifdef USE_GAME_FREEZETAG
+	if(!(cent->currentState.powerups & ( 1 << PW_FROZEN ))) {
+#endif
+
 	// do the shuffle turn frames locally
 	if ( cent->pe.legs.yawing && ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) == LEGS_IDLE ) {
 		CG_RunLerpFrame( ci, &cent->pe.legs, LEGS_TURN, speedScale );
 	} else {
 		CG_RunLerpFrame( ci, &cent->pe.legs, cent->currentState.legsAnim, speedScale );
 	}
+
+	// torso
+#ifdef USE_GAME_FREEZETAG
+	}
+#endif
+
 
 	*legsOld = cent->pe.legs.oldFrame;
 	*legs = cent->pe.legs.frame;
@@ -1654,6 +1667,11 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 
 	// --------- yaw -------------
 
+	// torso
+#ifdef USE_GAME_FREEZETAG
+	if(!(cent->currentState.powerups & ( 1 << PW_FROZEN ))) {
+#endif
+
 	// allow yaw to drift a bit
 	if ( ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) != LEGS_IDLE 
 		|| ((cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT) != TORSO_STAND 
@@ -1677,13 +1695,11 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	legsAngles[YAW] = headAngles[YAW] + movementOffsets[ dir ];
 	torsoAngles[YAW] = headAngles[YAW] + 0.25 * movementOffsets[ dir ];
 
-	// torso
 	CG_SwingAngles( torsoAngles[YAW], 25, 90, cg_swingSpeed.value, &cent->pe.torso.yawAngle, &cent->pe.torso.yawing );
 	CG_SwingAngles( legsAngles[YAW], 40, 90, cg_swingSpeed.value, &cent->pe.legs.yawAngle, &cent->pe.legs.yawing );
 
 	torsoAngles[YAW] = cent->pe.torso.yawAngle;
 	legsAngles[YAW] = cent->pe.legs.yawAngle;
-
 
 	// --------- pitch -------------
 
@@ -1735,6 +1751,10 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 			legsAngles[ROLL] = 0.0f;
 		}
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	}
+#endif
 
 	// pain twitch
 	CG_AddPainTwitch( cent, torsoAngles );
@@ -2407,6 +2427,16 @@ Also called by CG_Missile for quad rockets, but nobody can tell...
 */
 void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int team ) {
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+    if ( state->powerups & ( 1 << PW_FROZEN ) )
+    {
+      trap_R_AddRefEntityToScene( ent );
+      ent->customShader = cgs.media.frozenShader;
+      trap_R_AddRefEntityToScene( ent );
+      return;
+    }
+#endif
+
 	if ( state->powerups & ( 1 << PW_INVIS ) ) {
 		ent->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( ent );
@@ -2492,6 +2522,76 @@ int CG_LightVerts( vec3_t normal, int numVerts, polyVert_t *verts )
 	return qtrue;
 }
 
+#ifdef USE_RPG_STATS
+
+#define NUMBER_SIZE		8
+void CG_PlayerStats( centity_t *cent ) {
+	clientInfo_t	*ci;
+	refEntity_t	re;
+	vec3_t		origin, delta, dir, vec, up = {0, 0, 1};
+	float		c, len;
+	int			i, health, digits[10], numdigits, negative;
+
+	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
+
+	re.reType = RT_SPRITE;
+  re.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON;
+	re.radius = 16;
+
+	//c = ( le->endTime - cg.time ) * le->lifeRate;
+
+	health = ci->health;
+  ChooseDamageColor(100 - health, re.shaderRGBA);
+
+	re.radius = NUMBER_SIZE / 2;
+
+	VectorCopy(cent->lerpOrigin, origin);
+	origin[2] += 50.0f; // - c * 100.0f;
+
+	VectorSubtract(cg.refdef.vieworg, origin, dir);
+	CrossProduct(dir, up, vec);
+	VectorNormalize(vec);
+
+	//VectorMA(origin, -10.0f + 20 * sin(c * 2 * M_PI), vec, origin);
+
+	// if the view would be "inside" the sprite, kill the sprite
+	// so it doesn't add too much overdraw
+	VectorSubtract( origin, cg.refdef.vieworg, delta );
+	len = VectorLengthSquared( delta );
+	if ( len < 20*20 || len > 20*600 ) {
+		return;
+	}
+
+	if (len >= 20*400 && len <= 20*600)
+		re.shaderRGBA[3] = 0xff - (len - 20*400) / (20*200) * 255;
+	else
+		re.shaderRGBA[3] = 0xAA;
+
+	negative = qfalse;
+	if (health < 0) {
+		negative = qtrue;
+		health = -health;
+	}
+
+	for (numdigits = 0; !(numdigits && !health); numdigits++) {
+		digits[numdigits] = health % 10;
+		health = health / 10;
+	}
+
+	if (negative) {
+		digits[numdigits] = 10;
+		numdigits++;
+	}
+
+	for (i = 0; i < numdigits; i++) {
+		VectorMA(origin, (float) (((float) numdigits / 2) - i) * NUMBER_SIZE, vec, re.origin);
+		re.customShader = cgs.media.numberShaders[digits[numdigits-1-i]];
+		trap_R_AddRefEntityToScene( &re );
+	}
+}
+#endif
+
+
 
 /*
 ===============
@@ -2517,6 +2617,10 @@ void CG_Player( centity_t *cent ) {
 #endif
 	qboolean		darken;
 
+	if ( cg.levelShot ) {
+		return;
+	}
+
 	// the client number is stored in clientNum.  It can't be derived
 	// from the entity number, because a single client may have
 	// multiple corpses on the level using the same clientinfo
@@ -2531,6 +2635,7 @@ void CG_Player( centity_t *cent ) {
 	if ( !ci->infoValid ) {
 		return;
 	}
+
 
 	// get the player model information
 	renderfx = 0;
@@ -2562,6 +2667,13 @@ void CG_Player( centity_t *cent ) {
 
 	// add the talk baloon or disconnect icon
 	CG_PlayerSprites( cent );
+
+#ifdef USE_RPG_STATS
+	// draw little health bars for players
+	if(cg_healthBar.integer) {
+		CG_PlayerStats( cent );
+	}
+#endif
 
 	// add the shadow
 	shadow = CG_PlayerShadow( cent, &shadowPlane );
@@ -2848,6 +2960,10 @@ void CG_Player( centity_t *cent ) {
 	//
 	// add the head
 	//
+#ifdef USE_HEADSHOTS
+  if(!cent->pe.noHead)
+  {
+#endif
 	head.hModel = ci->headModel;
 	if (!head.hModel) {
 		return;
@@ -2874,6 +2990,9 @@ void CG_Player( centity_t *cent ) {
 	head.shaderRGBA[3] = 255;
 	
 	CG_AddRefEntityWithPowerups( &head, &cent->currentState, ci->team );
+#ifdef USE_HEADSHOTS
+  }
+#endif
 
 #ifdef MISSIONPACK
 	CG_BreathPuffs(cent, &head);
@@ -2924,6 +3043,10 @@ void CG_ResetPlayerEntity( centity_t *cent ) {
 	cent->pe.torso.yawing = qfalse;
 	cent->pe.torso.pitchAngle = cent->rawAngles[PITCH];
 	cent->pe.torso.pitching = qfalse;
+  
+#ifdef USE_HEADSHOTS
+  cent->pe.noHead = qfalse;
+#endif
 
 	if ( cg_debugPosition.integer ) {
 		CG_Printf("%i ResetPlayerEntity yaw=%f\n", cent->currentState.number, cent->pe.torso.yawAngle );

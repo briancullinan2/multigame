@@ -51,6 +51,12 @@ extern	float	pm_flightfriction;
 
 extern	int		c_pmove;
 
+#ifdef USE_PORTALS
+#ifdef CGAME
+#define wp_portalEnable cgwp_portalEnable
+#define g_altPortal cg_altPortal
+#endif
+#endif
 void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 void PM_AddTouchEnt( int entityNum );
 void PM_AddEvent( int newEvent );

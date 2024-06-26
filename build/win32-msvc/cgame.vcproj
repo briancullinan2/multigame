@@ -400,6 +400,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\cgame\cg_timer.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\cgame\cg_syscalls.c"
 				>
 			</File>

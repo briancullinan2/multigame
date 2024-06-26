@@ -92,5 +92,69 @@ G_CVAR( pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#ifdef USE_PORTALS
+G_CVAR( wp_portalEnable, "wp_portalEnable", "1", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
+#ifdef USE_ALT_FIRE
+G_CVAR( g_altPortal, "g_altPortal", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
+#endif
+#endif
 
+
+#ifdef USE_TRINITY
+G_CVAR( g_unholyTrinity, "g_unholyTrinity", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_HOTRPG
+G_CVAR( g_hotRockets, "g_hotRockets", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_HOTBFG
+G_CVAR( g_hotBFG, "g_hotBFG", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+
+#ifdef USE_INSTAGIB
+G_CVAR( g_instagib, "g_instagib", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_LOCAL_DMG
+G_CVAR( g_locDamage, "g_locDamage", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+
+#ifdef USE_BIRDS_EYE
+G_CVAR( g_birdsEye, "g_birdsEye", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_thirdPerson, "g_thirdPerson", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_sideview, "g_sideview", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+#ifdef USE_AIW
+G_CVAR( g_upsideDown, "g_upsideDown", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+G_CVAR( g_freezeTag, "g_freezeTag", "1", 0, 0, qfalse, qfalse )
+G_CVAR( g_thawTime, "g_thawTime", "180", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+
+#ifdef USE_VORTEX_GRENADES
+G_CVAR( g_clusterGrenades, "g_clusterGrenades", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_VORTEX_GRENADES
+G_CVAR( g_vortexGrenades, "g_vortexGrenades", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_INVULN_RAILS
+G_CVAR( g_railThruWalls, "g_railThruWalls", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_BOUNCE_RAIL
+G_CVAR( wp_railBounce, "wp_railBounce", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_HOMING_MISSILE
+G_CVAR( wp_rocketHoming, "wp_rocketHoming", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_BOUNCE_RPG
+G_CVAR( wp_bfgBounce, "wp_bfgBounce", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_plasmaBounce, "wp_plasmaBounce", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_rocketBounce, "wp_rocketBounce", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_VULN_RPG
+G_CVAR( wp_rocketVuln, "wp_rocketVuln", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_ACCEL_RPG
+G_CVAR( wp_rocketAccel, "wp_rocketAccel", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
 #undef G_CVAR

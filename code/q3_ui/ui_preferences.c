@@ -55,7 +55,7 @@ typedef struct {
 	menuradiobutton_s	allowdownload;
 	menubitmap_s		back;
 
-	qhandle_t			crosshairShader[NUM_CROSSHAIRS];
+	qhandle_t			crosshairShader[NUM_CROSSHAIRS + 1];
 } preferences_t;
 
 static preferences_t s_preferences;
@@ -70,7 +70,7 @@ static const char *teamoverlay_names[] =
 };
 
 static void Preferences_SetMenuItems( void ) {
-	s_preferences.crosshair.curvalue		= (int)trap_Cvar_VariableValue( "cg_drawCrosshair" ) % NUM_CROSSHAIRS;
+	s_preferences.crosshair.curvalue		= (int)trap_Cvar_VariableValue( "cg_drawCrosshair" ) % (NUM_CROSSHAIRS + 1);
 	s_preferences.simpleitems.curvalue		= trap_Cvar_VariableValue( "cg_simpleItems" ) != 0;
 	s_preferences.brass.curvalue			= trap_Cvar_VariableValue( "cg_brassTime" ) != 0;
 	s_preferences.wallmarks.curvalue		= trap_Cvar_VariableValue( "cg_marks" ) != 0;
@@ -92,7 +92,7 @@ static void Preferences_Event( void* ptr, int notification ) {
 	switch( ((menucommon_s*)ptr)->id ) {
 	case ID_CROSSHAIR:
 		s_preferences.crosshair.curvalue++;
-		if( s_preferences.crosshair.curvalue == NUM_CROSSHAIRS ) {
+		if( s_preferences.crosshair.curvalue == NUM_CROSSHAIRS + 1 ) {
 			s_preferences.crosshair.curvalue = 0;
 		}
 		trap_Cvar_SetValue( "cg_drawCrosshair", s_preferences.crosshair.curvalue );
@@ -385,6 +385,7 @@ void Preferences_Cache( void ) {
 	for( n = 0; n < NUM_CROSSHAIRS; n++ ) {
 		s_preferences.crosshairShader[n] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c", 'a' + n ) );
 	}
+	s_preferences.crosshairShader[n] = trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
 }
 
 

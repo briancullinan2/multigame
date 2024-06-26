@@ -481,6 +481,10 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		G_ModelIndex( SP_PODIUM_MODEL );
 	}
 
+#ifdef USE_PORTALS
+	G_ModelIndex( "models/portal/portal_blue.md3" );
+	G_ModelIndex( "models/portal/portal_red.md3" );
+#endif
 	if ( trap_Cvar_VariableIntegerValue( "bot_enable" ) ) {
 		BotAISetup( restart );
 		BotAILoadMap( restart );
@@ -1917,7 +1921,7 @@ static void G_RunFrame( int levelTime ) {
 	gclient_t	*client;
 	static	gentity_t *missiles[ MAX_GENTITIES - MAX_CLIENTS ];
 	int		numMissiles;
-	
+
 	// if we are waiting for the level to restart, do nothing
 	if ( level.restarted ) {
 		return;
@@ -1999,6 +2003,7 @@ static void G_RunFrame( int levelTime ) {
 		}
 
 		G_RunThink( ent );
+
 	}
 
 	if ( numMissiles ) {

@@ -258,6 +258,20 @@ static void CG_OffsetThirdPersonView( void ) {
 	}
 
 
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+			|| cg_birdsEye.integer) {
+		// Zygote - Out 300 units to the right
+		view[2] += 300;
+	} else
+	if(cg.predictedPlayerState.pm_type == PM_PLATFORM
+			|| cg_sideview.integer) {
+		// Zygote - Out 300 units to the right
+		view[1] -= 300;
+	}
+#endif
+
 	VectorCopy( view, cg.refdef.vieworg );
 
 	// select pitch to look at focus point from vieword
@@ -266,8 +280,26 @@ static void CG_OffsetThirdPersonView( void ) {
 	if ( focusDist < 1 ) {
 		focusDist = 1;	// should never happen
 	}
-	cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2( focusPoint[2], focusDist );
-	cg.refdefViewAngles[YAW] -= cg_thirdPersonAngle.value;
+
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+			|| cg_birdsEye.integer) {
+		cg.refdefViewAngles[PITCH] = 89.9;
+		cg.refdefViewAngles[YAW] = 0;
+	} else 
+	if(cg.predictedPlayerState.pm_type == PM_PLATFORM
+			|| cg_sideview.integer) {
+		// Zygote - These values are locked in place
+		cg.refdefViewAngles[PITCH] = 0;		// locked at level view of players head
+		cg.refdefViewAngles[YAW] = 89.9;		// looking in!
+	} else {
+#endif
+		cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2( focusPoint[2], focusDist );
+		cg.refdefViewAngles[YAW] -= cg_thirdPersonAngle.value;
+#ifdef USE_BIRDS_EYE
+	}
+#endif
 }
 
 
@@ -315,6 +347,22 @@ static void CG_OffsetFirstPersonView( void ) {
 		origin[2] += cg.predictedPlayerState.viewheight;
 		return;
 	}
+
+#ifdef USE_BIRDS_EYE
+		if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE 
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer) {
+			angles[PITCH] = 0;
+			cg.refdefViewAngles[PITCH] = 1;
+		}
+#endif
+
+#ifdef USE_AIW
+	if(cg.predictedPlayerState.pm_type == PM_UPSIDEDOWN || cg_upsideDown.integer) {
+		angles[ROLL] = 180;
+		cg.refdefViewAngles[ROLL] = 180;
+	}
+#endif
+
 
 	// add angles based on weapon kick
 	VectorAdd (angles, cg.kick_angles, angles);
@@ -407,6 +455,14 @@ static void CG_OffsetFirstPersonView( void ) {
 
 	VectorAdd (origin, cg.kick_origin, origin);
 
+#ifdef USE_AIW
+	//if(cg_reverseControls.integer) {
+	//	cg.refdef.vieworg[YAW] -= cg.refdef.vieworg[YAW];
+	//	cg.refdef.vieworg[PITCH] -= cg.refdef.vieworg[PITCH];
+	//}
+#endif
+
+
 	// pivot the eye based on a neck length
 #if 0
 	{
@@ -459,6 +515,13 @@ static int CG_CalcFov( void ) {
 	float	zoomFov;
 	float	f;
 	int		inwater;
+
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE) {
+		cgs.fov = cg_fov.value + 20;
+	} else
+#endif
 
 	cgs.fov = cg_fov.value;
 	if ( cgs.fov < 1.0 )
@@ -667,7 +730,13 @@ static int CG_CalcViewValues( void ) {
 		}
 	}
 
-	if ( cg.renderingThirdPerson ) {
+	if ( cg.renderingThirdPerson
+		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+		|| cg_birdsEye.integer
+		|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
+		|| cg_sideview.integer
+	) {
 		// back away from character
 		CG_OffsetThirdPersonView();
 	} else {
@@ -831,7 +900,14 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_PredictPlayerState();
 
 	// decide on third person view
-	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+	cg.renderingThirdPerson = cg_thirdPerson.integer 
+		|| cg_sideview.integer
+		|| cg_birdsEye.integer
+		|| cg.snap->ps.pm_type == PM_BIRDSEYE
+		|| cg.snap->ps.pm_type == PM_FOLLOWCURSOR
+		|| cg.snap->ps.pm_type == PM_PLATFORM
+		|| cg.snap->ps.pm_type == PM_THIRDPERSON
+		|| (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 
 	CG_TrackClientTeamChange();
 

@@ -400,6 +400,7 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/cg_scoreboard.o \
   $(B)/$(MOD)/cgame/cg_servercmds.o \
   $(B)/$(MOD)/cgame/cg_snapshot.o \
+  $(B)/$(MOD)/cgame/cg_timer.o \
   $(B)/$(MOD)/cgame/cg_view.o \
   $(B)/$(MOD)/cgame/cg_weapons.o \
   \
@@ -443,6 +444,7 @@ QAOBJ_ = \
   $(B)/$(MOD)/game/g_items.o \
   $(B)/$(MOD)/game/g_mem.o \
   $(B)/$(MOD)/game/g_misc.o \
+  $(B)/$(MOD)/game/g_portal.o \
   $(B)/$(MOD)/game/g_missile.o \
   $(B)/$(MOD)/game/g_mover.o \
   $(B)/$(MOD)/game/g_rotation.o \
@@ -455,6 +457,7 @@ QAOBJ_ = \
   $(B)/$(MOD)/game/g_utils.o \
   $(B)/$(MOD)/game/g_unlagged.o \
   $(B)/$(MOD)/game/g_weapon.o \
+  $(B)/$(MOD)/game/g_weapon2.o \
   \
   $(B)/$(MOD)/game/q_math.o \
   $(B)/$(MOD)/game/q_shared.o
