@@ -828,6 +828,10 @@ typedef struct {
 	qhandle_t	rocketExplosionShader;
 	qhandle_t	grenadeExplosionShader;
 	qhandle_t	bfgExplosionShader;
+#ifdef USE_PORTALS
+  qhandle_t	redBFG;
+  qhandle_t	blueBFG;
+#endif
 	qhandle_t	bloodExplosionShader;
 
 	// special effects models

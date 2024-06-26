@@ -129,6 +129,10 @@ CG_CVAR( cg_teamColors, "cg_teamColors", "", CVAR_ARCHIVE )
 CG_CVAR( cg_deadBodyDarken, "cg_deadBodyDarken", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
+#ifdef USE_PORTALS
+CG_CVAR( cgwp_portalEnable, "wp_portalEnable", "1", CVAR_SERVERINFO )
+CG_CVAR( cg_altPortal, "g_altPortal", "1", CVAR_SERVERINFO )
+#endif
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
 

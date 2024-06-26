@@ -146,6 +146,12 @@
 
 //=============================================================
 
+// use alternate fire buttons
+#define USE_ALT_FIRE 1
+// enable portal gun, requires modified client
+#define USE_PORTALS 1
+
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
@@ -1012,6 +1018,13 @@ typedef struct playerState_s {
 #define BUTTON_FOLLOWME		1024
 
 #define	BUTTON_ANY			2048			// any key whatsoever
+
+#ifdef USE_ALT_FIRE
+#define BUTTON_ALT_ATTACK	  0x1000      // button3
+#define BUTTON_ALT_2        0x2000      // button4
+#define BUTTON_ALT_3        0x4000      // button5
+#define BUTTON_ALT_4        0x8000      // button6
+#endif
 
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set

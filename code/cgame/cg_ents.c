@@ -473,6 +473,16 @@ static void CG_Missile( centity_t *cent ) {
 	ent.skinNum = cg.clientFrame & 1;
 	ent.hModel = weapon->missileModel;
 	ent.renderfx = weapon->missileRenderfx | RF_NOSHADOW;
+#ifdef USE_PORTALS
+  if(cent->currentState.weapon == WP_BFG
+    && cgwp_portalEnable.integer) {
+    if(cent->currentState.powerups & (1 << 4)) {
+      ent.customShader = cgs.media.blueBFG;
+    } else if(cent->currentState.powerups & (1 << 5)) {
+      ent.customShader = cgs.media.redBFG;
+    }
+  }
+#endif
 
 #ifdef MISSIONPACK
 	if ( cent->currentState.weapon == WP_PROX_LAUNCHER ) {
@@ -632,36 +642,183 @@ void CG_Beam( const centity_t *cent ) {
 }
 
 
+#ifdef USE_PORTALS
+#define AWAY_FROM_WALL 8.0f
+
+static void CG_PersonalPortal(const centity_t *cent) {
+  vec3_t		    angles, angles2, vec, velocity;
+	//vec3_t		    origin;
+  refEntity_t			ent;
+  qboolean        isMirror;
+  centity_t       *target;
+  //refdef_t		    refdef;
+	float           len;
+  //float           x = 0, y = 0, w = 640, h = 480;
+
+  // always face portal towards player
+  VectorSubtract( cg.refdef.vieworg, cent->lerpOrigin, vec );
+  len = VectorNormalize( vec );
+  VectorClear(angles);
+	VectorClear(angles2);
+
+  // add portal model
+  memset (&ent, 0, sizeof(ent));
+
+  // angles used below for camera direction
+  if( cent->currentState.eventParm ) {
+    // is wall portal
+    ByteToDir( cent->currentState.eventParm, angles );
+    vectoangles( angles, angles );
+    AnglesToAxis( angles, ent.axis );
+    AngleVectors ( angles, velocity, NULL, NULL );
+    VectorNormalize( velocity );
+    VectorScale( velocity, AWAY_FROM_WALL, velocity );
+    VectorSubtract( cent->lerpOrigin, velocity, ent.origin );
+  } else {
+		// is standalone portal
+		// tracks player position on 2 axis to make it always look like someone can fit through it
+		angles[YAW] = -180;
+		angles[YAW] += cg.refdefViewAngles[YAW];
+		angles[PITCH] -= cg.refdefViewAngles[PITCH];
+		angles[ROLL] = 0;
+		SnapVector( angles );
+		AxisClear( ent.axis );
+    AnglesToAxis( angles, ent.axis );
+    VectorCopy( cent->lerpOrigin, ent.origin);
+  }
+
+  ent.hModel = cgs.gameModels[cent->currentState.modelindex];
+	//VectorScale( ent.axis[0], 1.5, ent.axis[0] );
+	//VectorScale( ent.axis[1], 1.5, ent.axis[1] );
+	//VectorScale( ent.axis[2], 1.5, ent.axis[2] );
+	//ent.nonNormalizedAxes = qtrue;
+  if(!ent.hModel) {
+    return;
+  }
+  ent.reType = RT_MODEL;
+	//ent.reType = RT_SPRITE;
+  ent.renderfx = RF_NOSHADOW | RF_FIRST_PERSON;
+  ent.frame = cent->currentState.number;
+  ent.oldframe = cent->currentState.otherEntityNum;
+  trap_R_AddRefEntityToScene (&ent);
+
+
+
+  // add portal camera view
+  memset (&ent, 0, sizeof(ent));
+	VectorCopy( cent->lerpOrigin, ent.origin );
+  VectorCopy( cent->currentState.origin2, ent.oldorigin );
+	//PerpendicularVector( vec, angles );
+	//VectorScale( vec, AWAY_FROM_WALL, vec );
+	//VectorSubtract( cent->lerpOrigin, vec, ent.origin );
+	//VectorSubtract( cent->currentState.origin2, vec, ent.oldorigin );
+  // TODO: size of portal model cached somewhere else like itemInfo_t?
+  // TODO: change cg_weapons to match, it also uses midpoint of weapon models?
+  //if(cent->currentState.powerups)
+  //Com_Printf("origin: %f, %f, %f == %f, %f, %f\n", 
+  //  ent.origin[0], ent.origin[1], ent.origin[2],
+  //  ent.oldorigin[0], ent.oldorigin[1], ent.oldorigin[2]);
+  if(ent.origin[0] == ent.oldorigin[0]
+    && ent.origin[1] == ent.oldorigin[1]
+    && ent.origin[2] == ent.oldorigin[2]
+  ) {
+    // is mirror
+		isMirror = qtrue;
+		target = &cg_entities[cent->currentState.otherEntityNum];
+		if(target->currentState.eventParm) {
+			AxisClear( ent.axis );
+		} else {
+			angles2[PITCH] = angles[PITCH];
+			AnglesToAxis( angles2, ent.axis );
+		}
+		/*
+		if( target->currentState.eventParm
+			|| cent->currentState.eventParm ) {
+			ByteToDir( target->currentState.eventParm, angles2 );
+			vectoangles( angles2, angles2 );
+			AnglesToAxis( angles2, ent.axis );
+		}
+		*/
+  } else {
+		isMirror = qfalse;
+		target = &cg_entities[cent->currentState.otherEntityNum];
+		if( target->currentState.eventParm ) {
+			// if it is a wall portal
+			ByteToDir( target->currentState.eventParm, angles2 );
+			vectoangles( angles2, angles2 );
+			angles2[PITCH] = -angles[PITCH];
+			angles2[YAW] += angles[YAW];
+			angles2[ROLL] = -90;
+			AnglesToAxis( angles2, ent.axis );
+		} else {
+			// TODO: camera bobbing might actually be cool for free standing portals
+			// 180 from portal is same as continuing the view angle but from another position
+			angles2[PITCH] = -angles[PITCH];
+			angles2[YAW] = angles[YAW] - 180;
+			angles2[ROLL] = -90;
+			AnglesToAxis( angles2, ent.axis );
+		}
+	}
+  ent.reType = RT_PORTALSURFACE;
+  //ent.renderfx = RF_FIRST_PERSON;
+	//ent.radius = 12;
+	ent.skinNum = 0;
+  ent.frame = cent->currentState.number;
+  ent.oldframe = (cent->currentState.powerups & 0xF0) | 12;
+  trap_R_AddRefEntityToScene(&ent);
+}
+
+
+void CG_DrawPortals( void ) {
+	centity_t			*cent;
+	int num;
+	for ( num = 0 ; num < cg.snap->numEntities ; num++ ) {
+		cent = &cg_entities[ cg.snap->entities[ num ].number ];
+#ifdef USE_PORTALS
+    if(cent->currentState.eType == ET_TELEPORT_TRIGGER
+			&& cent->currentState.modelindex
+			//&& cent->currentState.clientNum
+			&& (cent->currentState.powerups & ((1 << 4) | (1 << 5)))
+		) {
+      CG_PersonalPortal( cent );
+		}
+#endif
+	}
+}
+
+#endif
+
+
 /*
 ===============
 CG_Portal
 ===============
 */
 static void CG_Portal( const centity_t *cent ) {
-	refEntity_t			ent;
-	const entityState_t *s1;
+  refEntity_t			ent;
+  const entityState_t *s1;
 
-	s1 = &cent->currentState;
+  s1 = &cent->currentState;
 
-	// create the render entity
-	memset (&ent, 0, sizeof(ent));
-	VectorCopy( cent->lerpOrigin, ent.origin );
-	VectorCopy( s1->origin2, ent.oldorigin );
-	ByteToDir( s1->eventParm, ent.axis[0] );
-	PerpendicularVector( ent.axis[1], ent.axis[0] );
+  // create the render entity
+  memset (&ent, 0, sizeof(ent));
+  VectorCopy( cent->lerpOrigin, ent.origin );
+  VectorCopy( s1->origin2, ent.oldorigin );
+  ByteToDir( s1->eventParm, ent.axis[0] );
+  PerpendicularVector( ent.axis[1], ent.axis[0] );
 
-	// negating this tends to get the directions like they want
-	// we really should have a camera roll value
-	VectorSubtract( vec3_origin, ent.axis[1], ent.axis[1] );
+  // negating this tends to get the directions like they want
+  // we really should have a camera roll value
+  VectorSubtract( vec3_origin, ent.axis[1], ent.axis[1] );
 
-	CrossProduct( ent.axis[0], ent.axis[1], ent.axis[2] );
-	ent.reType = RT_PORTALSURFACE;
-	ent.oldframe = s1->powerups;
-	ent.frame = s1->frame;		// rotation speed
-	ent.skinNum = s1->clientNum/256.0 * 360;	// roll offset
+  CrossProduct( ent.axis[0], ent.axis[1], ent.axis[2] );
+  ent.reType = RT_PORTALSURFACE;
+  ent.oldframe = s1->powerups;
+  ent.frame = s1->frame;		// rotation speed
+  ent.skinNum = s1->clientNum/256.0 * 360;	// roll offset
 
-	// add to refresh list
-	trap_R_AddRefEntityToScene(&ent);
+  // add to refresh list
+  trap_R_AddRefEntityToScene(&ent);
 }
 
 
@@ -959,7 +1116,14 @@ static void CG_AddCEntity( centity_t *cent ) {
 		break;
 	case ET_INVISIBLE:
 	case ET_PUSH_TRIGGER:
+		break;
 	case ET_TELEPORT_TRIGGER:
+		if(cent->currentState.modelindex
+		//	&& cent->currentState.clientNum
+			&& (cent->currentState.powerups & ((1 << 4) | (1 << 5)))
+		) {
+      CG_PersonalPortal( cent );
+		}
 		break;
 	case ET_GENERAL:
 		CG_General( cent );

@@ -803,7 +803,12 @@ qboolean LogAccuracyHit( gentity_t *target, gentity_t *attacker ) {
 FireWeapon
 ===============
 */
-void FireWeapon( gentity_t *ent ) {
+#ifdef USE_ALT_FIRE
+void FireWeapon( gentity_t *ent, qboolean altFire ) 
+#else
+void FireWeapon( gentity_t *ent ) 
+#endif
+{
 	if ( ent->client->ps.powerups[PW_QUAD] ) {
 		s_quadFactor = g_quadfactor.value;
 	} else {
@@ -864,6 +869,15 @@ void FireWeapon( gentity_t *ent ) {
 		weapon_railgun_fire( ent );
 		break;
 	case WP_BFG:
+#ifdef USE_PORTALS
+    if(wp_portalEnable.integer
+#ifdef USE_ALT_FIRE
+      && !g_altPortal.integer // do both ends with right click, reset each time
+#endif
+    ) {
+			fire_portal( ent, muzzle, forward, altFire );
+    } else
+#endif
 		BFG_Fire( ent );
 		break;
 	case WP_GRAPPLING_HOOK:

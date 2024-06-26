@@ -374,6 +374,7 @@ typedef enum {
 	EV_CHANGE_WEAPON,
 	EV_FIRE_WEAPON,
 
+
 	EV_USE_ITEM0,
 	EV_USE_ITEM1,
 	EV_USE_ITEM2,
@@ -445,8 +446,13 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
-	EV_MAX
 
+#ifdef USE_ALT_FIRE
+  EV_ALTFIRE_WEAPON,
+  EV_ALTFIRE_BOTH,
+#endif
+
+	EV_MAX,
 } entity_event_t;
 
 

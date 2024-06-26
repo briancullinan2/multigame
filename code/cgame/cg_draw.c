@@ -2863,6 +2863,9 @@ void CG_TrackClientTeamChange( void )
 	}
 }
 
+#ifdef USE_PORTALS
+void CG_DrawPortals(void);
+#endif
 
 /*
 =====================
@@ -2900,4 +2903,7 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 	// draw status bar and other floating elements
  	CG_Draw2D( stereoView );
+#ifdef USE_PORTALS
+	//CG_DrawPortals();
+#endif
 }

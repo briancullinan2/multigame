@@ -481,6 +481,10 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		G_ModelIndex( SP_PODIUM_MODEL );
 	}
 
+#ifdef USE_PORTALS
+	G_ModelIndex( "models/portal/portal_blue.md3" );
+	G_ModelIndex( "models/portal/portal_red.md3" );
+#endif
 	if ( trap_Cvar_VariableIntegerValue( "bot_enable" ) ) {
 		BotAISetup( restart );
 		BotAILoadMap( restart );

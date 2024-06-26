@@ -32,6 +32,11 @@ int		c_pmove = 0;
 
 static int pm_respawntimer = 0;
 
+#ifdef USE_PORTALS
+extern vmCvar_t wp_portalEnable;
+extern vmCvar_t g_altPortal;
+#endif
+
 /*
 ===============
 PM_AddEvent
@@ -1107,6 +1112,14 @@ static void PM_GroundTrace( void ) {
 	pm->trace (&trace, pm->ps->origin, pm->mins, pm->maxs, point, pm->ps->clientNum, pm->tracemask);
 	pml.groundTrace = trace;
 
+#ifdef USE_PORTALS
+	{
+		// find nearest portal from our current trajectory the distance from the portal
+		// rerun the trace from the point of the portal
+	}
+
+
+#endif
 	// do something corrective if the trace starts in a solid...
 	if ( trace.allsolid ) {
 		if ( !PM_CorrectAllSolid(&trace) )
@@ -1604,7 +1617,23 @@ static void PM_Weapon( void ) {
 	}
 
 	// check for fire
-	if ( ! (pm->cmd.buttons & BUTTON_ATTACK) ) {
+#ifdef USE_ALT_FIRE
+#ifdef USE_PORTALS
+  if(!(pm->cmd.buttons & BUTTON_ATTACK)
+    && g_altPortal.integer
+    && (pm->cmd.buttons & BUTTON_ALT_ATTACK)) {
+    // don't show fire animation
+    pm->ps->weaponTime = 0;
+		pm->ps->weaponstate = WEAPON_READY;
+  	PM_AddEvent( EV_ALTFIRE_WEAPON );
+  } else
+#endif
+#endif // end USE_ALT_FIRE
+	if( !(pm->cmd.buttons & BUTTON_ATTACK) 
+#ifdef USE_ALT_FIRE
+    && !(pm->cmd.buttons & BUTTON_ALT_ATTACK)
+#endif
+  ) {
 		pm->ps->weaponTime = 0;
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
@@ -1638,6 +1667,14 @@ static void PM_Weapon( void ) {
 	}
 
 	// fire weapon
+#ifdef USE_ALT_FIRE
+  if ((pm->cmd.buttons & BUTTON_ALT_ATTACK)
+    && (pm->cmd.buttons & BUTTON_ATTACK))
+    PM_AddEvent( EV_ALTFIRE_BOTH );
+  else if (pm->cmd.buttons & BUTTON_ALT_ATTACK)
+  	PM_AddEvent( EV_ALTFIRE_WEAPON );
+  else if (pm->cmd.buttons & BUTTON_ATTACK)
+#endif
 	PM_AddEvent( EV_FIRE_WEAPON );
 
 	switch( pm->ps->weapon ) {
@@ -1667,6 +1704,11 @@ static void PM_Weapon( void ) {
 		addTime = 1500;
 		break;
 	case WP_BFG:
+#ifdef USE_PORTALS
+    if(wp_portalEnable.integer) {
+      addTime = 1000;
+    } else
+#endif
 		addTime = 200;
 		break;
 	case WP_GRAPPLING_HOOK:
@@ -1685,6 +1727,12 @@ static void PM_Weapon( void ) {
 #endif
 	}
 
+#ifdef USE_PORTALS
+    if(wp_portalEnable.integer
+      && pm->ps->weapon == WP_BFG) {
+      // do nothing to speed
+    } else
+#endif
 #ifdef MISSIONPACK
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 		addTime /= 1.5;

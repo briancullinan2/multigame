@@ -4,7 +4,6 @@
 
 #include "g_local.h"
 
-
 /*QUAKED func_group (0 0 0) ?
 Used to group brushes together just for editor convenience.  They are turned into normal brushes by the utilities.
 */
@@ -47,6 +46,8 @@ void SP_light( gentity_t *self ) {
 }
 
 
+
+#ifndef USE_PORTALS
 
 /*
 =================================================================================
@@ -470,4 +471,6 @@ void DropPortalSource( gentity_t *player ) {
 	}
 
 }
+#endif
+
 #endif
