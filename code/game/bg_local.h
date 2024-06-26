@@ -51,6 +51,7 @@ extern	float	pm_flightfriction;
 
 extern	int		c_pmove;
 
+#ifdef USE_WEAPON_VARS
 
 #ifdef CGAME
 
@@ -59,7 +60,6 @@ extern	int		c_pmove;
 #define wp_grapplePull cgwp_grapplePull
 #endif
 
-#ifdef USE_WEAPON_VARS
 #define wp_gauntCycle   cgwp_gauntCycle
 #define wp_lightCycle   cgwp_lightCycle
 #define wp_shotgunCycle cgwp_shotgunCycle
@@ -74,12 +74,24 @@ extern	int		c_pmove;
 #define wp_proxCycle    cgwp_proxCycle
 #define wp_chainCycle   cgwp_chainCycle
 #define wp_flameCycle   cgwp_flameCycle
-#endif
 
-#endif // end CGAME
+extern vmCvar_t  cgwp_gauntCycle;
+extern vmCvar_t  cgwp_lightCycle;
+extern vmCvar_t  cgwp_shotgunCycle;
+extern vmCvar_t  cgwp_machineCycle;
+extern vmCvar_t  cgwp_grenadeCycle;
+extern vmCvar_t  cgwp_rocketCycle;
+extern vmCvar_t  cgwp_plasmaCycle;
+extern vmCvar_t  cgwp_railCycle;
+extern vmCvar_t  cgwp_bfgCycle;
+extern vmCvar_t  cgwp_grappleCycle;
+extern vmCvar_t  cgwp_nailCycle;
+extern vmCvar_t  cgwp_proxCycle;
+extern vmCvar_t  cgwp_chainCycle;
+extern vmCvar_t  cgwp_flameCycle;
 
+#else // end CGAME
 
-#ifdef USE_WEAPON_VARS
 extern vmCvar_t  wp_gauntCycle;
 extern vmCvar_t  wp_lightCycle;
 extern vmCvar_t  wp_shotgunCycle;
@@ -94,7 +106,10 @@ extern vmCvar_t  wp_nailCycle;
 extern vmCvar_t  wp_proxCycle;
 extern vmCvar_t  wp_chainCycle;
 extern vmCvar_t  wp_flameCycle;
+
 #endif
+
+#endif // end USE_WEAPON_VARS
 
 #ifdef USE_GRAPPLE
 extern vmCvar_t  g_altGrapple;
