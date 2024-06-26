@@ -743,6 +743,9 @@ qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 #define KAMI_BOOMSPHERE_MAXRADIUS		720
 #define KAMI_SHOCKWAVE2_MAXRADIUS		704
 
+
+#define MAX_MAP_SIZE 65536
+
 // custom functions
 #ifdef BUILD_GAME_STATIC
 intptr_t CG_Call( int command, int arg0, int arg1, int arg2 );
@@ -769,3 +772,15 @@ qboolean replace1( const char match, const char replace, char *str );
 qboolean  BigEndian( void );
 
 //#endif // __BG_PUBLIC_H
+#define MAX_MAP_SIZE 65536
+
+// Tracemap
+#ifdef CGAME
+void CG_GenerateTracemap( void );
+#endif // CGAMEDLL
+qboolean BG_LoadTraceMap( char *rawmapname, vec2_t world_mins, vec2_t world_maxs );
+float BG_GetSkyHeightAtPoint( vec3_t pos );
+float BG_GetSkyGroundHeightAtPoint( vec3_t pos );
+float BG_GetGroundHeightAtPoint( vec3_t pos );
+int BG_GetTracemapGroundFloor( void );
+int BG_GetTracemapGroundCeil( void );

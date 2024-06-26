@@ -132,4 +132,6 @@ CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
 
+CG_CVAR( cg_atmosphere, "g_atmosphere", "", CVAR_SERVERINFO | CVAR_TEMP )
+CG_CVAR( cg_atmosphericEffects, "cg_atmosphericEffects", "1", CVAR_ARCHIVE )
 #undef CG_CVAR

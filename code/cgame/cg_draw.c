@@ -2892,6 +2892,9 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// clear around the rendered view if sized down
 	CG_TileClear();
 
+	// add atmospheric effects like rain and snow
+	CG_PB_RenderPolyBuffers();
+
 	// draw 3D view
 	trap_R_RenderScene( &cg.refdef );
 
