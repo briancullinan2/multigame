@@ -31,6 +31,9 @@
 #define FL_NO_BOTS				0x00002000	// spawn point not for bot use
 #define FL_NO_HUMANS			0x00004000	// spawn point just for bots
 #define FL_FORCE_GESTURE		0x00008000	// force gesture on client
+#ifdef USE_WEAPON_DROP
+#define FL_THROWN_ITEM		0x00040000  // XRAY FMJ weapon throwing
+#endif
 
 // movers are things like doors, plats, buttons, etc
 typedef enum {
@@ -38,6 +41,14 @@ typedef enum {
 	MOVER_POS2,
 	MOVER_1TO2,
 	MOVER_2TO1
+
+#ifdef USE_ROTATING_DOOR
+  // VALKYRIE: angle movements
+  ,ROTATOR_POS1,
+  ROTATOR_POS2,
+  ROTATOR_1TO2,
+  ROTATOR_2TO1
+#endif
 } moverState_t;
 
 #define SP_PODIUM_MODEL		"models/mapobjects/podium/podium4.md3"
@@ -156,10 +167,18 @@ struct gentity_s {
 
 	gitem_t		*item;			// for bonus items
 
+
+#ifdef USE_SINGLEPLAYER // entity
+	int			stop_event;
+#endif
+
 	// team for spawn spot
 	team_t		fteam;
 
 	tag_t		tag;
+#ifdef USE_ROTATING_DOOR
+  float		distance;		// VALKYRIE: for rotating door
+#endif
 };
 
 
@@ -477,7 +496,11 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn );
 void UseHoldableItem( gentity_t *ent );
 void PrecacheItem (gitem_t *it);
 gentity_t *Drop_Item( gentity_t *ent, gitem_t *item, float angle );
+#ifdef USE_WEAPON_DROP
+gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity, int xr_flags );
+#else
 gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity );
+#endif
 void SetRespawn (gentity_t *ent, float delay);
 void G_SpawnItem (gentity_t *ent, gitem_t *item);
 void FinishSpawningItem( gentity_t *ent );

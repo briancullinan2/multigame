@@ -14,6 +14,7 @@ static int enemyModelModificationCount  = -1;
 static int enemyColorsModificationCount = -1;
 static int teamModelModificationCount  = -1;
 static int teamColorsModificationCount = -1;
+static int atmosphereModificationCount = -1;
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
@@ -26,10 +27,12 @@ qboolean linearLight = qfalse;
 qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
 void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 void (*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
+void (*trap_R_AddPolyBufferToScene)( polyBuffer_t* pPolyBuffer );
 #else
 int dll_com_trapGetValue;
 int dll_trap_R_AddRefEntityToScene2;
 int dll_trap_R_AddLinearLightToScene;
+int dll_trap_R_AddPolyBufferToScene;
 #endif
 
 /*
@@ -133,6 +136,7 @@ void CG_RegisterCvars( void ) {
 	enemyColorsModificationCount = cg_enemyColors.modificationCount;
 	teamModelModificationCount = cg_teamModel.modificationCount;
 	teamColorsModificationCount = cg_teamColors.modificationCount;
+	atmosphereModificationCount = cg_atmosphere.modificationCount;
 
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
@@ -189,6 +193,12 @@ void CG_UpdateCvars( void ) {
 #endif
 		// FIXME E3 HACK
 		trap_Cvar_Set( "teamoverlay", "1" );
+	}
+
+
+	if(atmosphereModificationCount != cg_atmosphere.modificationCount) {
+		atmosphereModificationCount = cg_atmosphere.modificationCount;
+		CG_EffectParse(cg_atmosphere.string);
 	}
 
 	// if model changed
@@ -1679,6 +1689,11 @@ void CG_AssetCache( void ) {
 	cgDC.Assets.sliderThumb = trap_R_RegisterShaderNoMip( ASSET_SLIDER_THUMB );
 }
 #endif
+
+
+void CG_EffectParse( const char *effectstr );
+
+
 /*
 =================
 CG_Init
@@ -1690,6 +1705,7 @@ Will perform callbacks to make the loading info screen update.
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	char  value[MAX_CVAR_VALUE_STRING];
 	const char	*s;
+	vec3_t mins, maxs;
 
 	// clear everything
 	memset( &cgs, 0, sizeof( cgs ) );
@@ -1715,6 +1731,12 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 			trap_R_AddLinearLightToScene = (void*)~atoi( value );
 			linearLight = qtrue;
 		}
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddPolyBufferToScene" ) ) {
+			trap_R_AddPolyBufferToScene = (void*)~atoi( value );
+			trap_Cvar_Set("cg_atmosphericEffects", "1");
+		} else {
+			trap_Cvar_Set("cg_atmosphericEffects", "0");
+		}
 #else
 		dll_com_trapGetValue = atoi( value );
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddRefEntityToScene2" ) ) {
@@ -1724,6 +1746,12 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddLinearLightToScene_Q3E" ) ) {
 			dll_trap_R_AddLinearLightToScene = atoi( value );
 			linearLight = qtrue;
+		}
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddPolyBufferToScene" ) ) {
+			dll_trap_R_AddPolyBufferToScene = atoi( value );
+			trap_Cvar_Set("cg_atmosphericEffects", "1");
+		} else {
+			trap_Cvar_Set("cg_atmosphericEffects", "0");
 		}
 #endif
 	}
@@ -1814,6 +1842,23 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	CG_LoadingString( "graphics" );
 
 	CG_RegisterGraphics();
+
+	trap_R_ModelBounds( 0, mins, maxs );
+	cg.mapcoordsMins[0] = (int)mins[0];
+	cg.mapcoordsMaxs[0] = (int)maxs[0];
+	cg.mapcoordsMins[1] = (int)mins[1];
+	cg.mapcoordsMaxs[1] = (int)maxs[1];
+	if(cg.mapcoordsMaxs[1] - cg.mapcoordsMins[1] > cg.mapcoordsMaxs[0] - cg.mapcoordsMins[0]) {
+		int dif = (int)((cg.mapcoordsMaxs[1] - cg.mapcoordsMins[1]) - (cg.mapcoordsMaxs[0] - cg.mapcoordsMins[0]));
+		cg.mapcoordsMins[0] -= dif / 2.0f;
+		cg.mapcoordsMaxs[0] += dif / 2.0f;
+	} else {
+		int dif = (int)((cg.mapcoordsMaxs[0] - cg.mapcoordsMins[0]) - (cg.mapcoordsMaxs[1] - cg.mapcoordsMins[1]));
+		cg.mapcoordsMins[1] -= dif / 2.0f;
+		cg.mapcoordsMaxs[1] += dif / 2.0f;
+	}
+	cg.mapcoordsValid = qtrue;
+	CG_EffectParse(cg_atmosphere.string);
 
 	CG_LoadingString( "clients" );
 

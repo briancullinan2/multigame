@@ -15,6 +15,11 @@ float	pm_stopspeed = 100.0f;
 float	pm_duckScale = 0.25f;
 float	pm_swimScale = 0.50f;
 float	pm_wadeScale = 0.70f;
+#ifdef USE_LADDERS
+float  pm_ladderScale = 0.50;
+float  pm_ladderfriction = 3000;
+float  pm_ladderAccelerate = 3000;
+#endif
 
 float	pm_accelerate = 10.0f;
 float	pm_airaccelerate = 1.0f;
@@ -31,6 +36,39 @@ int		c_pmove = 0;
 #define NO_RESPAWN_OVERBOUNCE 250
 
 static int pm_respawntimer = 0;
+
+#ifdef USE_PHYSICS_VARS
+
+#ifdef CGAME
+#ifdef MISSIONPACK
+#define g_scoutFactor  cg_scoutFactor
+#endif
+#define g_hasteFactor  cg_hasteFactor
+#define g_jumpVelocity cg_jumpVelocity
+#define g_gravity      cg_gravity
+#define g_wallWalk     cg_wallWalk
+
+#ifdef MISSIONPACK
+extern vmCvar_t  cg_scoutFactor;
+#endif
+extern vmCvar_t  cg_hasteFactor;
+extern vmCvar_t  cg_jumpVelocity;
+extern vmCvar_t  cg_gravity;
+extern vmCvar_t  cg_wallWalk;
+
+#else
+
+#ifdef MISSIONPACK
+extern vmCvar_t  g_scoutFactor;
+#endif
+extern vmCvar_t  g_hasteFactor;
+extern vmCvar_t  g_jumpVelocity;
+extern vmCvar_t  g_gravity;
+extern vmCvar_t  g_wallWalk;
+
+#endif
+
+#endif // end USE_PHYSICS_VARS
 
 /*
 ===============
@@ -199,6 +237,13 @@ static void PM_Friction( void ) {
 		drop += speed*pm_flightfriction*pml.frametime;
 	}
 
+#ifdef USE_LADDERS
+  if ( pml.ladder ) // If they're on a ladder... 
+  {
+    drop += speed*pm_ladderfriction*pml.frametime;  // Add ladder friction! 
+  }
+#endif
+
 	if ( pm->ps->pm_type == PM_SPECTATOR) {
 		drop += speed*pm_spectatorfriction*pml.frametime;
 	}
@@ -364,7 +409,12 @@ static qboolean PM_CheckJump( void ) {
 	pm->ps->pm_flags |= PMF_JUMP_HELD;
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
+#ifdef USE_PHYSICS_VARS
+  // TODO: make this a part of gravity boots
+  pm->ps->velocity[2] = g_jumpVelocity.integer;
+#else
 	pm->ps->velocity[2] = JUMP_VELOCITY;
+#endif
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
@@ -1142,7 +1192,12 @@ static void PM_GroundTrace( void ) {
 	}
 	
 	// slopes that are too steep will not be considered onground
-	if ( trace.plane.normal[2] < MIN_WALK_NORMAL ) {
+#ifdef USE_PHYSICS_VARS
+  if ( trace.plane.normal[2] < g_wallWalk.value )
+#else
+  if ( trace.plane.normal[2] < MIN_WALK_NORMAL )
+#endif
+  {
 		if ( pm->debugLevel ) {
 			Com_Printf("%i:steep\n", c_pmove);
 		}
@@ -1687,7 +1742,11 @@ static void PM_Weapon( void ) {
 
 #ifdef MISSIONPACK
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+#ifdef USE_PHYSICS_VARS
+    addTime /= g_scoutFactor.value;
+#else
 		addTime /= 1.5;
+#endif
 	}
 	else
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
@@ -1696,7 +1755,11 @@ static void PM_Weapon( void ) {
   else
 #endif
 	if ( pm->ps->powerups[PW_HASTE] ) {
+#ifdef USE_PHYSICS_VARS
+    addTime /= g_hasteFactor.value;
+#else
 		addTime /= 1.3;
+#endif
 	}
 
 	pm->ps->weaponTime += addTime;
@@ -1821,6 +1884,91 @@ void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 
 }
 
+
+#ifdef USE_LADDERS
+/*
+===================
+PM_LadderMove()
+by: Calrathan [Arthur Tomlin]
+
+Right now all I know is that this works for VERTICAL ladders. 
+Ladders with angles on them (urban2 for AQ2) haven't been tested.
+===================
+*/
+static void PM_LadderMove( void ) {
+	int i;
+	vec3_t wishvel;
+	float wishspeed;
+	vec3_t wishdir;
+	float scale;
+	float vel;
+
+	PM_Friction ();
+
+	scale = PM_CmdScale( &pm->cmd );
+
+	// user intentions [what the user is attempting to do]
+	if ( !scale ) { 
+		wishvel[0] = 0;
+		wishvel[1] = 0;
+		wishvel[2] = 0;
+	}
+	else {   // if they're trying to move... lets calculate it
+		for (i=0 ; i<3 ; i++)
+			wishvel[i] = scale * pml.forward[i]*pm->cmd.forwardmove +
+				     scale * pml.right[i]*pm->cmd.rightmove; 
+		wishvel[2] += scale * pm->cmd.upmove;
+	}
+
+	VectorCopy (wishvel, wishdir);
+	wishspeed = VectorNormalize(wishdir);
+
+	if ( wishspeed > pm->ps->speed * pm_ladderScale ) {
+		wishspeed = pm->ps->speed * pm_ladderScale;
+	}
+
+	PM_Accelerate (wishdir, wishspeed, pm_ladderAccelerate);
+
+	// This SHOULD help us with sloped ladders, but it remains untested.
+	if ( pml.groundPlane && DotProduct( pm->ps->velocity,
+		pml.groundTrace.plane.normal ) < 0 ) {
+		vel = VectorLength(pm->ps->velocity);
+		// slide along the ground plane [the ladder section under our feet] 
+		PM_ClipVelocity (pm->ps->velocity, pml.groundTrace.plane.normal, 
+			pm->ps->velocity, OVERCLIP );
+
+		VectorNormalize(pm->ps->velocity);
+		VectorScale(pm->ps->velocity, vel, pm->ps->velocity);
+	}
+
+	PM_SlideMove( qfalse ); // move without gravity
+}
+
+
+/*
+=============
+CheckLadder [ ARTHUR TOMLIN ]
+=============
+*/
+static void CheckLadder( void )
+{
+	vec3_t flatforward,spot;
+	trace_t trace;
+	pml.ladder = qfalse;
+	// check for ladder
+	flatforward[0] = pml.forward[0];
+	flatforward[1] = pml.forward[1];
+	flatforward[2] = 0;
+	VectorNormalize (flatforward);
+	VectorMA (pm->ps->origin, 1, flatforward, spot);
+	pm->trace (&trace, pm->ps->origin, pm->mins, pm->maxs, spot,
+		pm->ps->clientNum, MASK_PLAYERSOLID);
+
+	if ((trace.fraction < 1) && (trace.surfaceFlags & SURF_LADDER))
+		pml.ladder = qtrue;
+
+}
+#endif
 
 /*
 ================
@@ -1971,6 +2119,9 @@ void PmoveSingle (pmove_t *pmove) {
 	}
 
 	PM_DropTimers();
+#ifdef USE_LADDERS
+  CheckLadder();  // ARTHUR TOMLIN check and see if they're on a ladder
+#endif
 
 #ifdef MISSIONPACK
 	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
@@ -1989,6 +2140,10 @@ void PmoveSingle (pmove_t *pmove) {
 	} else if ( pm->waterlevel > 1 ) {
 		// swimming
 		PM_WaterMove();
+#ifdef USE_LADDERS
+  } else if (pml.ladder) {	
+		PM_LadderMove();
+#endif
 	} else if ( pml.walking ) {
 		// walking on ground
 		PM_WalkMove();

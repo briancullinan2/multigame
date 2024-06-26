@@ -5,6 +5,14 @@
 #include "q_shared.h"
 #include "bg_public.h"
 
+#ifdef CGAME
+
+#define g_gravity      cg_gravity
+extern vmCvar_t  cg_gravity;
+#else
+extern vmCvar_t  g_gravity;
+#endif // end USE_PHYSICS_VARS
+
 /*QUAKED item_***** ( 0 0 0 ) (-16 -16 -16) (16 16 16) suspended
 DO NOT USE THIS CLASS, IT JUST HOLDS GENERAL INFORMATION.
 The suspended flag will allow items to hang in the air, otherwise they are dropped to the next surface.
@@ -904,6 +912,45 @@ int		bg_numItems = ARRAY_LEN( bg_itemlist ) - 1;
 
 
 /*
+===============
+BG_FindItemForWeapon
+
+===============
+*/
+gitem_t	*BG_FindItemForHealth( int amount ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_HEALTH && it->quantity == amount ) {
+			return it;
+		}
+	}
+
+	Com_Error( ERR_DROP, "Couldn't find item for health %i", amount);
+	return NULL;
+}
+
+/*
+===============
+BG_FindItemForWeapon
+
+===============
+*/
+gitem_t	*BG_FindItemForAmmo( weapon_t weapon ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_AMMO && it->giTag == weapon ) {
+			return it;
+		}
+	}
+
+	Com_Error( ERR_DROP, "Couldn't find ammo for weapon %i", weapon);
+	return NULL;
+}
+
+
+/*
 ==============
 BG_FindItemForPowerup
 ==============
@@ -1206,7 +1253,11 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) 
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+#if defined(USE_PHYSICS_VARS) && (defined(CGAME) || defined(QAGAME))
+    result[2] -= 0.5 * g_gravity.value * deltaTime * deltaTime;
+#else
 		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;		// FIXME: local gravity...
+#endif
 		break;
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trType );
@@ -1249,7 +1300,11 @@ void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorCopy( tr->trDelta, result );
+#if defined(USE_PHYSICS_VARS) && (defined(CGAME) || defined(QAGAME))
+    result[2] -= g_gravity.value * deltaTime;
+#else
 		result[2] -= DEFAULT_GRAVITY * deltaTime;		// FIXME: local gravity...
+#endif
 		break;
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trType );
@@ -1362,6 +1417,12 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GETFLAG",
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
+
+#ifdef USE_SINGLEPLAYER // entity
+	"EV_PLAYERSTOP",
+	"EV_EARTHQUAKE",
+#endif
+
 
 };
 
