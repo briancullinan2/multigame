@@ -31,6 +31,15 @@
 #define FL_NO_BOTS				0x00002000	// spawn point not for bot use
 #define FL_NO_HUMANS			0x00004000	// spawn point just for bots
 #define FL_FORCE_GESTURE		0x00008000	// force gesture on client
+#ifdef USE_BOUNCE_RPG
+#define FL_ROCKETBOUNCE		0x00010000
+#endif
+#ifdef USE_CLOAK_CMD
+#define FL_CLOAK      		0x00020000
+#endif
+#ifdef USE_GRAVITY_BOOTS
+#define FL_BOOTS          0x00080000  // Anti Gravity Boots
+#endif
 
 // movers are things like doors, plats, buttons, etc
 typedef enum {
@@ -240,6 +249,10 @@ typedef struct {
 	int			teamVoted;
 
 	qboolean	inGame;
+#ifdef USE_ADVANCED_CLASS
+  pclass_t	playerclass;	   // The players current class
+  pclass_t	newplayerclass;	   // The class the player will become when it respawns
+#endif
 } clientPersistant_t;
 
 // unlagged
@@ -305,18 +318,30 @@ struct gclient_s {
 	qboolean	fireHeld;			// used for hook
 	gentity_t	*hook;				// grapple hook if out
 
+#ifdef USE_LASER_SIGHT
+  gentity_t	*lasersight;			// lasersight OR flashlight if in use
+#endif
+
 	int			switchTeamTime;		// time the player switched teams
 
 	// timeResidual is used to handle events that happen every second
 	// like health / armor countdowns and regeneration
 	int			timeResidual;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	gentity_t	*persistantPowerup;
 	int			portalID;
-	int			ammoTimes[WP_NUM_WEAPONS];
+	int			ammoTimes[WP_MAX_WEAPONS];
 	int			invulnerabilityTime;
 #endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	// MORE STATS for switching weapons, this is transfered to player state
+	int			ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
+	int			weapons[WP_MAX_CLASSES];
+	int			weaponClass;
+#endif
+
 
 	char		*areabits;
 
@@ -556,7 +581,7 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir);
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 gentity_t *fire_nail( gentity_t *self, vec3_t start, vec3_t forward, vec3_t right, vec3_t up );
 gentity_t *fire_prox( gentity_t *self, vec3_t start, vec3_t aimdir );
 #endif

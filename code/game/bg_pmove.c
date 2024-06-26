@@ -7,6 +7,31 @@
 #include "bg_public.h"
 #include "bg_local.h"
 
+
+#ifdef USE_GRAPPLE
+
+#ifdef CGAME
+#define g_altGrapple cg_altGrapple
+#define wp_grapplePull cgwp_grapplePull
+
+extern vmCvar_t cgwp_grapplePull;
+extern vmCvar_t cgwp_grappleCycle;
+#else
+extern vmCvar_t wp_grapplePull;
+extern vmCvar_t wp_grappleCycle;
+#endif
+
+#endif
+
+#ifdef USE_FLAME_THROWER
+#ifdef CGAME
+#define wp_flameCycle cgwp_flameCycle
+extern vmCvar_t cgwp_flameCycle;
+#else
+extern vmCvar_t wp_flameCycle;
+#endif
+#endif
+
 pmove_t		*pm;
 pml_t		pml;
 
@@ -643,6 +668,8 @@ static void PM_AirMove( void ) {
 	PM_StepSlideMove ( qtrue );
 }
 
+
+#ifdef USE_GRAPPLE
 /*
 ===================
 PM_GrappleMove
@@ -662,12 +689,14 @@ static void PM_GrappleMove( void ) {
 	if (vlen <= 100)
 		VectorScale(vel, 10 * vlen, vel);
 	else
-		VectorScale(vel, 800, vel);
+    VectorScale(vel, wp_grapplePull.value, vel);
 
 	VectorCopy(vel, pm->ps->velocity);
 
 	pml.groundPlane = qfalse;
 }
+#endif
+
 
 /*
 ===================
@@ -1462,11 +1491,11 @@ PM_BeginWeaponChange
 ===============
 */
 static void PM_BeginWeaponChange( int weapon ) {
-	if ( weapon <= WP_NONE || weapon >= WP_NUM_WEAPONS ) {
+	if ( weapon <= WP_NONE || weapon >= WP_MAX_WEAPONS ) {
 		return;
 	}
 
-	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 		return;
 	}
 	
@@ -1491,15 +1520,15 @@ static void PM_FinishWeaponChange( void ) {
 	int		weapon;
 
 	weapon = pm->cmd.weapon;
-	if ( weapon < WP_NONE || weapon >= WP_NUM_WEAPONS ) {
+	if ( weapon < WP_NONE || weapon >= WP_MAX_WEAPONS ) {
 		weapon = WP_NONE;
 	}
 
-	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 		weapon = WP_NONE;
 	}
 
-	pm->ps->weapon = weapon;
+	pm->ps->weapon = weapon + floor(pm->ps->weapon / WP_MAX_WEAPONS) * WP_MAX_WEAPONS; // keep weapon class from input
 	pm->ps->weaponstate = WEAPON_RAISING;
 	pm->ps->eFlags &= ~EF_FIRING;
 	pm->ps->weaponTime += 250;
@@ -1578,7 +1607,7 @@ static void PM_Weapon( void ) {
 	// can't change if weapon is firing, but can change
 	// again if lowering or raising
 	if ( pm->ps->weaponTime <= 0 || pm->ps->weaponstate != WEAPON_FIRING ) {
-		if ( pm->ps->weapon != pm->cmd.weapon ) {
+		if ( abs((pm->ps->weapon & 0x1FF) % WP_MAX_WEAPONS) != pm->cmd.weapon ) {
 			PM_BeginWeaponChange( pm->cmd.weapon );
 		}
 	}
@@ -1604,7 +1633,25 @@ static void PM_Weapon( void ) {
 	}
 
 	// check for fire
-	if ( ! (pm->cmd.buttons & BUTTON_ATTACK) ) {
+#ifdef USE_ALT_FIRE
+#ifdef USE_GRAPPLE
+  // this exits early with weapon time so alt grapple doesn't show weapon firing
+  if(!(pm->cmd.buttons & BUTTON_ATTACK)
+    && g_altGrapple.integer
+    && (pm->cmd.buttons & BUTTON_ALT_ATTACK)) {
+    // don't show fire animation
+    pm->ps->weaponTime = 0;
+		pm->ps->weaponstate = WEAPON_READY;
+  	PM_AddEvent( EV_ALTFIRE_WEAPON );
+    return;
+  } else
+#endif
+#endif // end USE_ALT_FIRE
+	if( !(pm->cmd.buttons & BUTTON_ATTACK) 
+#ifdef USE_ALT_FIRE
+    && !(pm->cmd.buttons & BUTTON_ALT_ATTACK)
+#endif
+  ) {
 		pm->ps->weaponTime = 0;
 		pm->ps->weaponstate = WEAPON_READY;
 		return;
@@ -1626,53 +1673,131 @@ static void PM_Weapon( void ) {
 	pm->ps->weaponstate = WEAPON_FIRING;
 
 	// check for out of ammo
-	if ( ! pm->ps->ammo[ pm->ps->weapon ] ) {
+	if ( ! pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] ) {
 		PM_AddEvent( EV_NOAMMO );
 		pm->ps->weaponTime += 500;
 		return;
 	}
 
 	// take an ammo away if not infinite
-	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 ) {
-		pm->ps->ammo[ pm->ps->weapon ]--;
+	if ( pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] != -1 && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] != INFINITE ) {
+		pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ]--;
 	}
 
 	// fire weapon
 	PM_AddEvent( EV_FIRE_WEAPON );
 
+#ifdef USE_WEAPON_VARS
+  switch( pm->ps->weapon ) {
+  default:
+  case WP_GAUNTLET:
+  case WP_GAUNTLET2:
+    addTime = wp_gauntCycle.integer;
+    break;
+  case WP_LIGHTNING:
+  case WP_LIGHTNING2:
+    addTime = wp_lightCycle.integer;
+    break;
+  case WP_SHOTGUN:
+  case WP_SHOTGUN2:
+    addTime = wp_shotgunCycle.integer;
+    break;
+  case WP_MACHINEGUN:
+  case WP_MACHINEGUN2:
+    addTime = wp_machineCycle.integer;
+    break;
+  case WP_GRENADE_LAUNCHER:
+  case WP_GRENADE_LAUNCHER2:
+    addTime = wp_grenadeCycle.integer;
+    break;
+  case WP_ROCKET_LAUNCHER:
+  case WP_ROCKET_LAUNCHER2:
+    addTime = wp_rocketCycle.integer;
+    break;
+  case WP_PLASMAGUN:
+  case WP_PLASMAGUN2:
+    addTime = wp_plasmaCycle.integer;
+    break;
+  case WP_RAILGUN:
+  case WP_RAILGUN2:
+    addTime = wp_railCycle.integer;
+    break;
+  case WP_BFG:
+  case WP_BFG2:
+    addTime = wp_bfgCycle.integer;
+    break;
+#ifdef USE_GRAPPLE
+  case WP_GRAPPLING_HOOK:
+    addTime = wp_grappleCycle.integer;
+    break;
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+  case WP_NAILGUN:
+    addTime = wp_nailCycle.integer;
+    break;
+  case WP_PROX_LAUNCHER:
+    addTime = wp_proxCycle.integer;
+    break;
+  case WP_CHAINGUN:
+    addTime = wp_chainCycle.integer;
+    break;
+#endif
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+    addTime = wp_flameCycle.integer;
+    break;
+#endif
+  }
+
+#else // USE_WEAPON_VARS
 	switch( pm->ps->weapon ) {
 	default:
 	case WP_GAUNTLET:
+	case WP_GAUNTLET2:
 		addTime = 400;
 		break;
 	case WP_LIGHTNING:
+	case WP_LIGHTNING2:
 		addTime = 50;
 		break;
 	case WP_SHOTGUN:
+	case WP_SHOTGUN2:
 		addTime = 1000;
 		break;
 	case WP_MACHINEGUN:
+	case WP_MACHINEGUN2:
 		addTime = 100;
 		break;
 	case WP_GRENADE_LAUNCHER:
+	case WP_GRENADE_LAUNCHER2:
 		addTime = 800;
 		break;
 	case WP_ROCKET_LAUNCHER:
+	case WP_ROCKET_LAUNCHER2:
 		addTime = 800;
 		break;
 	case WP_PLASMAGUN:
+	case WP_PLASMAGUN2:
 		addTime = 100;
 		break;
 	case WP_RAILGUN:
+	case WP_RAILGUN2:
 		addTime = 1500;
 		break;
 	case WP_BFG:
+	case WP_BFG2:
 		addTime = 200;
 		break;
+#ifdef USE_GRAPPLE
 	case WP_GRAPPLING_HOOK:
+#ifdef USE_WEAPON_VARS
+    addTime = wp_grappleCycle.integer;
+#else
 		addTime = 400;
+#endif
 		break;
-#ifdef MISSIONPACK
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_NAILGUN:
 		addTime = 1000;
 		break;
@@ -1683,8 +1808,30 @@ static void PM_Weapon( void ) {
 		addTime = 30;
 		break;
 #endif
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+//#ifdef USE_WEAPON_VARS
+    addTime = wp_flameCycle.integer;
+//#else
+//    addTime = 40;
+//#endif
+    break;
+#endif
 	}
 
+#endif
+
+#ifdef USE_ALT_FIRE
+  // Hypo: simple alt-fire example
+  if (pm->cmd.buttons & BUTTON_ALT_ATTACK) {
+#ifdef USE_GRAPPLE
+    if(g_altGrapple.integer) {
+      // do nothing
+    } else
+#endif
+  	addTime /= 2.0;
+  } else
+#endif
 #ifdef MISSIONPACK
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 		addTime /= 1.5;
@@ -1861,7 +2008,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// set the firing flag for continuous beam weapons
 	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] ) {
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] ) {
 		pm->ps->eFlags |= EF_FIRING;
 	} else {
 		pm->ps->eFlags &= ~EF_FIRING;
@@ -1980,11 +2127,15 @@ void PmoveSingle (pmove_t *pmove) {
 	if ( pm->ps->powerups[PW_FLIGHT] ) {
 		// flight powerup doesn't allow jump and has different friction
 		PM_FlyMove();
-	} else if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
+	} else 
+#ifdef USE_GRAPPLE
+  if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
 		PM_GrappleMove();
 		// We can wiggle a bit
 		PM_AirMove();
-	} else if (pm->ps->pm_flags & PMF_TIME_WATERJUMP) {
+	} else 
+#endif
+  if (pm->ps->pm_flags & PMF_TIME_WATERJUMP) {
 		PM_WaterJumpMove();
 	} else if ( pm->waterlevel > 1 ) {
 		// swimming

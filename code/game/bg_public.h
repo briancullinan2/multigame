@@ -191,7 +191,7 @@ void Pmove (pmove_t *pmove);
 typedef enum {
 	STAT_HEALTH,
 	STAT_HOLDABLE_ITEM,
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	STAT_PERSISTANT_POWERUP,
 #endif
 	STAT_WEAPONS,					// 16 bit fields
@@ -228,7 +228,7 @@ typedef enum {
 
 // entityState_t->eFlags
 #define	EF_DEAD				0x00000001		// don't draw a foe marker over players with EF_DEAD
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 #define EF_TICKING			0x00000002		// used to make players play the prox mine ticking sound
 #endif
 #define	EF_TELEPORT_BIT		0x00000004		// toggled every time the origin abruptly changes
@@ -295,31 +295,63 @@ typedef enum {
 	HI_NUM_HOLDABLE
 } holdable_t;
 
+#ifdef USE_ADVANCED_WEAPONS
 
 typedef enum {
 	WP_NONE,
+	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
 
-	WP_GAUNTLET,
-	WP_MACHINEGUN,
-	WP_SHOTGUN,
-	WP_GRENADE_LAUNCHER,
-	WP_ROCKET_LAUNCHER,
-	WP_LIGHTNING,
-	WP_RAILGUN,
-	WP_PLASMAGUN,
-	WP_BFG,
-	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
-	WP_NAILGUN,
-	WP_PROX_LAUNCHER,
-	WP_CHAINGUN,
+	WP_GAUNTLET = 1,
+	WP_MACHINEGUN = 2,
+	WP_SHOTGUN = 3,
+	WP_GRENADE_LAUNCHER = 4,
+	WP_ROCKET_LAUNCHER = 5,
+	WP_LIGHTNING = 6,
+	WP_RAILGUN = 7,
+	WP_PLASMAGUN = 8,
+
+
+	WP_CROWBAR = 9,
+	WP_MOD_CLASSES = 10,
+
+	WP_PORTAL_GUN = 10,
+	WP_CHAINSAW = 11,
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	WP_CHAINGUN = 12,
+	WP_NAILGUN = 13,
+	WP_PROX_LAUNCHER = 14,
 #endif
+	WP_HOMING_ROCKET = 15,
+	WP_THORS_HAMMER = 16,
+#ifdef USE_FLAME_THROWER
+	WP_FLAME_THROWER = 17,
+#endif
+	WP_BFG = 18,
 
-	WP_NUM_WEAPONS,
+	WP_GRAPPLING_HOOK = 19,
+
+
+	WP_GAUNTLET2 = 21,
+	WP_MACHINEGUN2 = 22,
+	WP_SHOTGUN2 = 23,
+	WP_GRENADE_LAUNCHER2 = 24,
+	WP_ROCKET_LAUNCHER2 = 25,
+	WP_LIGHTNING2 = 26,
+	WP_RAILGUN2 = 27,
+	WP_PLASMAGUN2 = 28,
+	WP_BFG2 = 29,
+
+	WP_NUM_WEAPONS = 30,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
-	WP_MAX_WEAPONS = 16
+	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
+	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools
 } weapon_t;
 
+#define WP_MAX_CLASSES (1 << (MAX_WEAPONS - WP_MAX_WEAPONS - 1))
+
+#else
+
+#endif
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])
 #define	PLAYEREVENT_DENIEDREWARD		0x0001
@@ -445,6 +477,11 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+	
+#ifdef USE_WEAPON_ORDER
+  EV_ITEM_PICKUP2,			// had items
+#endif
+
 	EV_MAX
 
 } entity_event_t;
@@ -548,6 +585,17 @@ typedef enum {
 	TEAM_NUM_TEAMS
 } team_t;
 
+
+#ifdef USE_ADVANCED_CLASS
+typedef enum {
+	PCLASS_BFG,
+	PCLASS_LIGHTNING,
+	PCLASS_RAILGUN,
+
+	PCLASS_NUM_CLASSES
+} pclass_t;
+#endif
+
 typedef enum {
 	TAG_NONE = 0,
 	TAG_DONTSPAWN,
@@ -596,12 +644,15 @@ typedef enum {
 	MOD_SUICIDE,
 	MOD_TARGET_LASER,
 	MOD_TRIGGER_HURT,
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	MOD_NAIL,
 	MOD_CHAINGUN,
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
+#endif
+#ifdef USE_FLAME_THROWER
+  MOD_FLAME_THROWER,
 #endif
 	MOD_GRAPPLE
 } meansOfDeath_t;
@@ -649,6 +700,7 @@ extern	int		bg_numItems;
 
 gitem_t	*BG_FindItem( const char *pickupName );
 gitem_t	*BG_FindItemForWeapon( weapon_t weapon );
+gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon );
 gitem_t	*BG_FindItemForPowerup( powerup_t pw );
 gitem_t	*BG_FindItemForHoldable( holdable_t pw );
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
@@ -688,6 +740,9 @@ typedef enum {
 	ET_INVISIBLE,
 	ET_GRAPPLE,				// grapple hooked on wall
 	ET_TEAM,
+#ifdef USE_LASER_SIGHT
+  ET_LASER,         // lasersight entity type
+#endif
 
 	ET_EVENTS				// any of the EV_* events can be added freestanding
 							// by setting eType to ET_EVENTS + eventNum

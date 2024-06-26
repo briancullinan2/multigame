@@ -686,6 +686,20 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz( model, Info_ValueForKey( userinfo, "model" ), sizeof( model ) );
 	Q_strncpyz( headModel, Info_ValueForKey( userinfo, "headmodel" ), sizeof( headModel ) );
 
+#ifdef USE_ADVANCED_CLASS
+  if (!Q_stricmp (model, "biker/red"))
+     client->pers.newplayerclass = PCLASS_BFG;
+  else if (!Q_stricmp (model, "anarki/blue"))
+     client->pers.newplayerclass = PCLASS_LIGHTNING;
+  else if (!Q_stricmp (model, "grunt/red"))
+     client->pers.newplayerclass = PCLASS_RAILGUN;
+  else {
+     client->pers.newplayerclass = PCLASS_BFG;
+     Q_strncpyz( model, "biker/red", sizeof( model ) );
+  }
+  client->pers.playerclass = client->pers.newplayerclass;
+#endif
+
 	// team task (0 = none, 1 = offence, 2 = defence)
 	teamTask = atoi(Info_ValueForKey(userinfo, "teamtask"));
 	// team Leader (1 = leader, 0 is normal player)
@@ -964,6 +978,10 @@ void ClientSpawn(gentity_t *ent) {
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
 
+#ifdef USE_ADVANCED_WEAPONS
+	int weaponClass;
+#endif
+
 	index = ent - g_entities;
 	client = ent->client;
 
@@ -1081,10 +1099,20 @@ void ClientSpawn(gentity_t *ent) {
 	ent->watertype = 0;
 	ent->flags = 0;
 	
+
+#ifdef USE_ADVANCED_CLASS
+  client->pers.playerclass = client->pers.newplayerclass;  
+#endif
+
 	VectorCopy (playerMins, ent->r.mins);
 	VectorCopy (playerMaxs, ent->r.maxs);
 
 	client->ps.clientNum = index;
+
+
+#ifdef USE_ADVANCED_WEAPONS
+	// TODO: make these templates somehow where a conditional evaluates to this if else code
+#endif
 
 	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_MACHINEGUN );
 	if ( g_gametype.integer == GT_TEAM ) {
@@ -1093,9 +1121,63 @@ void ClientSpawn(gentity_t *ent) {
 		client->ps.ammo[WP_MACHINEGUN] = 100;
 	}
 
+#ifdef USE_ADVANCED_CLASS
+  //assign weapons according to class
+  switch (client->pers.playerclass){
+  case PCLASS_BFG:
+    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BFG );
+    client->ps.ammo[WP_BFG] = 20;
+    break;
+  case PCLASS_LIGHTNING:
+    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_LIGHTNING );
+    client->ps.ammo[WP_LIGHTNING] = 60;
+    break;
+  case PCLASS_RAILGUN:
+  default:
+    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_RAILGUN );
+    client->ps.ammo[WP_RAILGUN] = 20;
+    break;
+  }
+#endif
+
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;
-	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+
+#if defined(USE_GRAPPLE)
+  if(wp_grappleEnable.integer 
+#ifdef USE_ALT_FIRE
+    && !g_altGrapple.integer
+#endif
+  ) {
+    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
+    client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+  }
+#endif
+#ifdef USE_FLAME_THROWER
+  //Spawn player with flame thrower
+  client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
+  client->ps.ammo[WP_FLAME_THROWER] = 999;
+#endif
+
+
+#ifdef USE_ADVANCED_WEAPONS
+	weaponClass = floor(client->ps.weapon / WP_MAX_WEAPONS);
+	client->weapons[weaponClass] = client->ps.stats[STAT_WEAPONS];
+	for(i = 0; i < WP_MAX_WEAPONS; i++) {
+		client->ammo[weaponClass][i] = client->ps.ammo[i];
+	}
+
+	// give the zero weapon (empty/hands) and malee weapon to all the classes
+	for(i = 0; i < WP_MAX_CLASSES; i++) {
+		if(i * WP_MAX_WEAPONS >= WP_NUM_WEAPONS) {
+			break;
+		}
+		client->weapons[i] |= 3;
+		client->ammo[i][0] = -1;
+		client->ammo[i][1] = -1;
+	}
+
+#endif
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
@@ -1140,7 +1222,7 @@ void ClientSpawn(gentity_t *ent) {
 		// select the highest weapon number available, after any
 		// spawn given items have fired
 		client->ps.weapon = 1;
-		for ( i = WP_NUM_WEAPONS - 1 ; i > 0 ; i-- ) {
+		for ( i = WP_MAX_WEAPONS - 1 ; i > 0 ; i-- ) {
 			if ( client->ps.stats[STAT_WEAPONS] & ( 1 << i ) ) {
 				client->ps.weapon = i;
 				break;

@@ -64,21 +64,45 @@ void TossClientItems( gentity_t *self ) {
 	// drop the weapon if not a gauntlet or machinegun
 	weapon = self->s.weapon;
 
+#ifdef USE_CLOAK_CMD
+  if (self->flags & FL_CLOAK) {
+  	// remove the invisible powerup if the player is cloaked.
+  	self->client->ps.powerups[PW_INVIS] = level.time;
+  } 
+#endif
+
 	// make a special check to see if they are changing to a new
 	// weapon that isn't the mg or gauntlet.  Without this, a client
 	// can pick up a weapon, be killed, and not drop the weapon because
 	// their weapon change hasn't completed yet and they are still holding the MG.
-	if ( weapon == WP_MACHINEGUN || weapon == WP_GRAPPLING_HOOK ) {
+	if ( weapon == WP_MACHINEGUN 
+#ifdef USE_GRAPPLE
+		|| weapon == WP_GRAPPLING_HOOK 
+#endif
+#ifdef USE_FLAME_THROWER
+		|| weapon == WP_FLAME_THROWER
+#endif
+  ) {
 		if ( self->client->ps.weaponstate == WEAPON_DROPPING ) {
 			weapon = self->client->pers.cmd.weapon;
 		}
-		if ( !( self->client->ps.stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+		if ( !( self->client->ps.stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 			weapon = WP_NONE;
 		}
 	}
 
-	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
-		self->client->ps.ammo[ weapon ] ) {
+	if ( weapon > WP_MACHINEGUN 
+#ifdef USE_WEAPON_VARS
+		&& self->client->ps.ammo[ weapon ] != INFINITE
+#endif
+#ifdef USE_GRAPPLE
+		&& weapon != WP_GRAPPLING_HOOK 
+#endif
+#ifdef USE_FLAME_THROWER
+		// don't drop flame thrower power-up
+    && weapon != WP_FLAME_THROWER
+#endif
+    && self->client->ps.ammo[ weapon ] ) {
 		// find the item type for this weapon
 		item = BG_FindItemForWeapon( weapon );
 
@@ -291,12 +315,15 @@ char	*modNames[] = {
 	"MOD_SUICIDE",
 	"MOD_TARGET_LASER",
 	"MOD_TRIGGER_HURT",
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	"MOD_NAIL",
 	"MOD_CHAINGUN",
 	"MOD_PROXIMITY_MINE",
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
+#ifdef USE_FLAME_THROWER
+  "MOD_FLAME_THROWER",
+#endif
 #endif
 	"MOD_GRAPPLE"
 };
@@ -444,9 +471,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	// check for a player that almost brought in cubes
 	CheckAlmostScored( self, attacker );
 
+#ifdef USE_GRAPPLE
 	if (self->client && self->client->hook) {
 		Weapon_HookFree(self->client->hook);
 	}
+#endif
 #ifdef MISSIONPACK
 	if ((self->client->ps.eFlags & EF_TICKING) && self->activator) {
 		self->client->ps.eFlags &= ~EF_TICKING;
@@ -744,7 +773,7 @@ int RaySphereIntersections( vec3_t origin, float radius, vec3_t point, vec3_t di
 	return 0;
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 ================
 G_InvulnerabilityEffect

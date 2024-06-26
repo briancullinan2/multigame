@@ -569,6 +569,8 @@ static void CG_DrawStatusBar( void ) {
 #ifdef MISSIONPACK
 	qhandle_t	handle;
 #endif
+	qhandle_t		ammoModel;
+
 	static float colors[4][4] = { 
 //		{ 0.2, 1.0, 0.2, 1.0 } , { 1.0, 0.2, 0.2, 1.0 }, {0.5, 0.5, 0.5, 1} };
 		{ 1.0f, 0.69f, 0.0f, 1.0f },    // normal
@@ -593,13 +595,14 @@ static void CG_DrawStatusBar( void ) {
 	VectorClear( angles );
 
 	// draw any 3D icons first, so the changes back to 2D are minimized
-	if ( cent->currentState.weapon && cg_weapons[ cent->currentState.weapon ].ammoModel ) {
+	ammoModel = cg_weapons[ cent->currentState.weapon % WP_MAX_WEAPONS + cg.weaponClass * WP_MAX_WEAPONS ].ammoModel;
+	if ( cent->currentState.weapon && ammoModel ) {
 		origin[0] = 70;
 		origin[1] = 0;
 		origin[2] = 0;
 		angles[YAW] = 90 + 20 * sin( ( cg.time % TMOD_1000 ) / 1000.0 );
 		CG_Draw3DModel( CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE,
-					   cg_weapons[ cent->currentState.weapon ].ammoModel, 0, origin, angles );
+					   ammoModel, 0, origin, angles );
 	}
 
 	CG_DrawStatusBarHead( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE );
@@ -638,7 +641,7 @@ static void CG_DrawStatusBar( void ) {
 	// ammo
 	//
 	if ( cent->currentState.weapon ) {
-		value = ps->ammo[cent->currentState.weapon];
+		value = ps->ammo[cent->currentState.weapon % WP_MAX_WEAPONS];
 		if ( value > -1 ) {
 			if ( cg.predictedPlayerState.weaponstate == WEAPON_FIRING
 				&& cg.predictedPlayerState.weaponTime > 100 ) {
@@ -665,7 +668,7 @@ static void CG_DrawStatusBar( void ) {
 			if ( !cg_draw3dIcons.integer && cg_drawIcons.integer ) {
 				qhandle_t	icon;
 
-				icon = cg_weapons[ cg.predictedPlayerState.weapon ].ammoIcon;
+				icon = cg_weapons[ cg.predictedPlayerState.weapon % WP_MAX_WEAPONS + cg.weaponClass * WP_MAX_WEAPONS ].ammoIcon;
 				if ( icon ) {
 					CG_DrawPic( CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, icon );
 				}

@@ -178,6 +178,11 @@ static void CG_Obituary( entityState_t *ent ) {
 				message = "found his prox mine";
 			}
 			break;
+#ifdef USE_FLAME_THROWER
+    case MOD_FLAME_THROWER:
+      message = "was fried by";
+      break;
+#endif
 #endif
 		default:
 			if ( gender == GENDER_FEMALE )
@@ -294,7 +299,7 @@ static void CG_Obituary( entityState_t *ent ) {
 			message = "was blasted by";
 			message2 = "'s BFG";
 			break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 		case MOD_NAIL:
 			message = "was nailed by";
 			break;
@@ -409,7 +414,13 @@ CG_ItemPickup
 A new item was picked up this frame
 ================
 */
-static void CG_ItemPickup( int itemNum ) {
+#ifdef USE_WEAPON_ORDER
+int RateWeapon (int weapon);
+static void CG_ItemPickup( int itemNum, qboolean alreadyHad )
+#else
+static void CG_ItemPickup( int itemNum ) 
+#endif
+{
 	static int oldItem = -1;
 	
 	cg.itemPickup = itemNum;
@@ -427,6 +438,12 @@ static void CG_ItemPickup( int itemNum ) {
 	if ( bg_itemlist[itemNum].giType == IT_WEAPON ) {
 		// select it immediately
 		if ( cg_autoswitch.integer && bg_itemlist[itemNum].giTag != WP_MACHINEGUN ) {
+#ifdef USE_WEAPON_ORDER
+      if(cg_autoswitch.integer == 2 && alreadyHad) {
+        if(RateWeapon( bg_itemlist[itemNum].giTag) < RateWeapon( cg.weaponSelect ))
+          return;
+      }
+#endif
 			cg.weaponSelectTime = cg.time;
 			cg.weaponSelect = bg_itemlist[itemNum].giTag;
 		}
@@ -753,6 +770,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, CG_CustomSound( es->number, "*gasp.wav" ) );
 		break;
 
+#ifdef USE_WEAPON_ORDER
+  case EV_ITEM_PICKUP2:
+#endif
 	case EV_ITEM_PICKUP:
 		{
 			gitem_t	*item;
@@ -803,7 +823,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
-				CG_ItemPickup( index );
+#ifdef USE_WEAPON_ORDER
+				CG_ItemPickup( index, event == EV_ITEM_PICKUP2 );
+#else
+        CG_ItemPickup( index );
+#endif
 			}
 
 			if ( ce ) {
@@ -841,7 +865,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
-				CG_ItemPickup( index );
+#ifdef USE_WEAPON_ORDER
+				CG_ItemPickup( index, qfalse );
+#else
+        CG_ItemPickup( index );
+#endif
 			}
 
 			if ( ce ) {
@@ -864,6 +892,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.selectSound );
 		break;
 
+#ifdef USE_ALT_FIRE
+  case EV_ALTFIRE_WEAPON:
+#ifdef USE_GRAPPLE
+    if(cg_altGrapple.integer) {
+      // don't play firing animation
+      break;
+    }
+#endif
+#endif
 	case EV_FIRE_WEAPON:
 		CG_FireWeapon( cent );
 		break;
@@ -990,9 +1027,18 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			fovOffset = -0.2f * ( cgs.fov - 90.0f );
 
 			// 13.5, -5.5, -6.0
-			VectorMA( vec, cg_gun_x.value + 13.5f, cg.refdef.viewaxis[0], vec );
-			VectorMA( vec, cg_gun_y.value - 5.5f, cg.refdef.viewaxis[1], vec );
-			VectorMA( vec, cg_gun_z.value + fovOffset - 6.0f, cg.refdef.viewaxis[2], vec );
+#ifdef USE_WEAPON_CENTER
+      if(cg_gunCenter.integer) {
+        VectorMA( vec, cg_gun_x.value + 13.5f, cg.refdef.viewaxis[0], vec );
+  			VectorMA( vec, (cg_gun_y.value + 5*cg_gunCenter.value) - 5.5f, cg.refdef.viewaxis[1], vec );
+  			VectorMA( vec, cg_gun_z.value + fovOffset - 6.0f, cg.refdef.viewaxis[2], vec );
+      } else
+#endif
+      {
+        VectorMA( vec, cg_gun_x.value + 13.5f, cg.refdef.viewaxis[0], vec );
+  			VectorMA( vec, cg_gun_y.value - 5.5f, cg.refdef.viewaxis[1], vec );
+  			VectorMA( vec, cg_gun_z.value + fovOffset - 6.0f, cg.refdef.viewaxis[2], vec );
+      }
 		}
 		else
 			VectorCopy( es->origin2, vec );

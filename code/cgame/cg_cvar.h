@@ -23,7 +23,11 @@ CG_CVAR( cg_drawStatus, "cg_drawStatus", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawTimer, "cg_drawTimer", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawFPS, "cg_drawFPS", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_drawSnapshot, "cg_drawSnapshot", "0", CVAR_ARCHIVE  )
+#ifdef USE_3D_WEAPONS
+CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "2", CVAR_ARCHIVE )
+#else
 CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "1", CVAR_ARCHIVE )
+#endif
 CG_CVAR( cg_drawIcons, "cg_drawIcons", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAmmoWarning, "cg_drawAmmoWarning", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawAttacker, "cg_drawAttacker", "1", CVAR_ARCHIVE )
@@ -132,4 +136,39 @@ CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
 
+#ifdef USE_WEAPON_VARS
+CG_CVAR( cgwp_gauntCycle, "wp_gauntCycle", "400", CVAR_SERVERINFO )
+CG_CVAR( cgwp_lightCycle, "wp_lightCycle", "50", CVAR_SERVERINFO )
+CG_CVAR( cgwp_shotgunCycle, "wp_shotgunCycle", "1000", CVAR_SERVERINFO )
+CG_CVAR( cgwp_machineCycle, "wp_machineCycle", "100", CVAR_SERVERINFO )
+CG_CVAR( cgwp_grenadeCycle, "wp_grenadeCycle", "800", CVAR_SERVERINFO )
+CG_CVAR( cgwp_rocketCycle, "wp_rocketCycle", "800", CVAR_SERVERINFO )
+CG_CVAR( cgwp_plasmaCycle, "wp_plasmaCycle", "100", CVAR_SERVERINFO )
+CG_CVAR( cgwp_railCycle, "wp_railCycle", "1500", CVAR_SERVERINFO )
+CG_CVAR( cgwp_bfgCycle, "wp_bfgCycle", "200", CVAR_SERVERINFO )
+#ifdef USE_GRAPPLE
+CG_CVAR( cgwp_grappleCycle, "wp_grappleCycle", "400", CVAR_SERVERINFO )
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+CG_CVAR( cgwp_nailCycle, "wp_nailCycle", "1000", CVAR_SERVERINFO )
+CG_CVAR( cgwp_proxCycle, "wp_proxCycle", "800", CVAR_SERVERINFO )
+CG_CVAR( cgwp_chainCycle, "wp_chainCycle", "30", CVAR_SERVERINFO )
+#endif
+#endif
+
+#ifdef USE_WEAPON_ORDER
+CG_CVAR( cg_weaponOrder, "cg_weaponOrder", "1/2/3/4/6/8/5/7/9", CVAR_ARCHIVE ) //WarZone
+#endif
+#ifdef USE_WEAPON_CENTER
+CG_CVAR( cg_gunCenter, "cg_gunCenter", "1", CVAR_ARCHIVE )
+#endif
+
+#ifdef USE_GRAPPLE
+CG_CVAR( cgwp_grappleEnable, "wp_grappleEnable", "1", CVAR_SERVERINFO )
+CG_CVAR( cgwp_grapplePull,  "wp_grapplePull", "700", CVAR_SERVERINFO )
+CG_CVAR( cg_altGrapple,  "g_altGrapple", "1", CVAR_SERVERINFO )
+#endif
+#ifdef USE_FLAME_THROWER
+CG_CVAR( cgwp_flameCycle, "wp_flameCycle", "40", CVAR_SERVERINFO )
+#endif
 #undef CG_CVAR

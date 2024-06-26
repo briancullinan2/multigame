@@ -247,22 +247,62 @@ void Cmd_Give_f( gentity_t *ent )
 			return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
+
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
-		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - 
+		int i, j;
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				gitem_t *it = BG_FindItemForWeapon(i * WP_MAX_WEAPONS + j);
+				if(it && it->icon) {
+					ent->client->weapons[i] |= (1 << j);
+				}
+			}
+		}
+	}
+
+	if (give_all || Q_stricmp(name, "ammo") == 0)
+	{
+		int i, j;
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			for ( j = 0 ; j < WP_MAX_WEAPONS ; j++ ) {
+				gitem_t *it = BG_FindAmmoForWeapon(i * WP_MAX_WEAPONS + j);
+				if(i * WP_MAX_WEAPONS + j == WP_GAUNTLET
+					|| i * WP_MAX_WEAPONS + j == WP_GAUNTLET2
+					|| i * WP_MAX_WEAPONS + j == WP_GRAPPLING_HOOK) {
+					ent->client->ammo[i][j] = -1;
+				} else 
+				if(it && it->icon) {
+					ent->client->ammo[i][j] = 999;
+				}
+			}
+		}
+	}
+#else
+
+	if (give_all || Q_stricmp(name, "weapons") == 0)
+	{
+#ifdef USE_GRAPPLE
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_MAX_WEAPONS) - 1 - 
 			( 1 << WP_GRAPPLING_HOOK ) - ( 1 << WP_NONE );
+#else
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_MAX_WEAPONS) - 1 - ( 1 << WP_NONE );
+#endif
 		if (!give_all)
 			return;
 	}
 
 	if (give_all || Q_stricmp(name, "ammo") == 0)
 	{
-		for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
+		for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
 			ent->client->ps.ammo[i] = 999;
 		}
 		if (!give_all)
 			return;
 	}
+
+#endif
 
 	if (give_all || Q_stricmp(name, "armor") == 0)
 	{
@@ -1769,6 +1809,89 @@ static void Cmd_SetViewpos_f( gentity_t *ent ) {
 
 
 
+#ifdef USE_BOUNCE_CMD
+/*
+=================
+Cmd_RBounce_f
+=================
+*/
+void Cmd_RBounce_f( gentity_t *ent ) {
+
+	char *msg; // message to player
+
+	if (ent->flags & FL_ROCKETBOUNCE) {
+		msg = "Rocket Bounce OFF\n";
+    ent->flags &= ~FL_ROCKETBOUNCE;
+	} else {
+	  msg = "Rocket Bounce ON\n";
+    ent->flags |= FL_ROCKETBOUNCE;
+  }
+	trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_CLOAK_CMD
+/*
+=================
+Cmd_Cloak_f
+=================
+*/
+void Cmd_Cloak_f( gentity_t *ent ) {
+
+	char *msg; // message to player
+
+  
+  if(!g_enableCloak.integer) {
+    msg = "Cloaking not enabled\n";
+	} else if (ent->flags & FL_CLOAK) {
+		msg = "Cloaking OFF\n";
+    ent->flags &= ~FL_CLOAK;
+		ent->client->ps.powerups[PW_INVIS] = level.time;
+		// Removes the invisible powerup from the player
+	}        
+	else {
+		msg = "Cloaking ON\n";
+    ent->flags |= FL_CLOAK;
+		ent->client->ps.powerups[PW_INVIS] = level.time + 1000000000;
+		// Gives the invisible powerup to the player
+	}
+
+	trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_GRAVITY_BOOTS
+/*
+=================
+Cmd_Boots_f          function for turning boots on/off
+=================
+*/
+void Cmd_Boots_f( gentity_t *ent ) {
+  char *msg; // message to player
+
+  if(!g_enableBoots.integer) {
+    msg = "Gravity boots not enabled\n";
+  } else if (ent->flags & FL_BOOTS) {
+    msg = "Anti Gravity boots OFF\n";
+    ent->flags &= ~FL_BOOTS;
+  } else {
+    msg = "Anti Gravity boots ON\n";
+    ent->flags |= FL_BOOTS;
+  }
+
+  trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_LASER_SIGHT
+// in g_weapon.c
+void Laser_Gen( gentity_t *ent, int type );
+#endif
+
+
 /*
 =================
 Cmd_Stats_f
@@ -1869,6 +1992,41 @@ void ClientCommand( int clientNum ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
+	// cycle classes just like we do with weapons but server side
+	if (Q_stricmp (cmd, "prevclass") == 0) {
+		int i;
+		int prevClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			prevClass--;
+			if(prevClass < 0) {
+				prevClass = WP_MAX_CLASSES - 1;
+			}
+			if(ent->client->weapons[prevClass] > 0) {
+				break;
+			}
+		}
+		ent->s.weapon = ent->client->ps.weapon = WP_MAX_CLASSES - 1 + prevClass * WP_MAX_WEAPONS;
+		ent->client->weaponClass = prevClass;
+	}
+	else if (Q_stricmp (cmd, "nextclass") == 0) {
+		int i;
+		int nextClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			nextClass++;
+			if(nextClass >= WP_MAX_CLASSES) {
+				nextClass = 0;
+			}
+			if(ent->client->weapons[nextClass] > 0) {
+				break;
+			}
+		}
+		ent->s.weapon = ent->client->ps.weapon = 0 + nextClass * WP_MAX_WEAPONS;
+		ent->client->weaponClass = nextClass;
+	}
+	else
+#endif
+
 	if (Q_stricmp (cmd, "give") == 0)
 		Cmd_Give_f (ent);
 	else if (Q_stricmp (cmd, "god") == 0)
@@ -1905,6 +2063,24 @@ void ClientCommand( int clientNum ) {
 		Cmd_GameCommand_f( ent );
 	else if (Q_stricmp (cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f( ent );
+#ifdef USE_BOUNCE_CMD
+  else if (Q_stricmp (cmd, "rbounce") == 0)
+    Cmd_RBounce_f( ent );
+#endif
+#ifdef USE_CLOAK_CMD
+  else if (Q_stricmp (cmd, "cloak") == 0)
+  	Cmd_Cloak_f( ent );
+#endif
+#ifdef USE_GRAVITY_BOOTS
+  else if (Q_stricmp (cmd, "boots") == 0)
+     Cmd_Boots_f( ent );
+#endif
+#ifdef USE_LASER_SIGHT
+  else if (Q_stricmp (cmd, "laser") == 0)
+		Laser_Gen( ent, 1 );//1=Laser, 2=Flashlight
+	else if (Q_stricmp (cmd, "flashlight") == 0)
+		Laser_Gen( ent, 2 );
+#endif
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
 	else

@@ -429,6 +429,16 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #endif
 		} else {
 			// count down health when over max
+#ifdef USE_CLOAK_CMD
+      if (ent->flags & FL_CLOAK) {
+        // count down health when cloaked.
+      	ent->health--;
+      	if ( ent->health < 11) {
+      		ent->flags ^= FL_CLOAK;
+      		ent->client->ps.powerups[PW_INVIS] = level.time;
+      	}
+      } else
+#endif
 			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
@@ -439,7 +449,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
 		int w, max, inc, t, i;
     int weapList[]={WP_MACHINEGUN,WP_SHOTGUN,WP_GRENADE_LAUNCHER,WP_ROCKET_LAUNCHER,WP_LIGHTNING,WP_RAILGUN,WP_PLASMAGUN,WP_BFG,WP_NAILGUN,WP_PROX_LAUNCHER,WP_CHAINGUN};
@@ -544,8 +554,28 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			G_Damage (ent, NULL, NULL, NULL, NULL, damage, 0, MOD_FALLING);
 			break;
 
+#ifdef USE_ALT_FIRE
+    case EV_ALTFIRE_BOTH:
+    case EV_ALTFIRE_WEAPON:
+#ifdef USE_GRAPPLE
+      if(g_altGrapple.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_GRAPPLING_HOOK;
+        FireWeapon( ent, qtrue );
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
+      FireWeapon( ent, qtrue );
+
+      if(event != EV_ALTFIRE_BOTH)
+      break;        
+#endif
 		case EV_FIRE_WEAPON:
+#ifdef USE_ALT_FIRE
+			FireWeapon( ent, qfalse );
+#else
 			FireWeapon( ent );
+#endif
 			break;
 
 		case EV_USE_ITEM1:		// teleporter
@@ -733,6 +763,9 @@ void ClientThink_real( gentity_t *ent ) {
 	int			oldEventSequence;
 	int			msec;
 	usercmd_t	*ucmd;
+#ifdef USE_ADVANCED_WEAPONS
+	int i;
+#endif
 
 	client = ent->client;
 
@@ -742,6 +775,29 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	// mark the time, so the connection sprite can be removed
 	ucmd = &ent->client->pers.cmd;
+
+#ifdef USE_ADVANCED_WEAPONS
+	//G_Printf("game class: %i\n", weaponClass);
+	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
+	client->ps.stats[STAT_WEAPONS] = client->weapons[client->weaponClass];
+	for(i = 0; i < WP_MAX_WEAPONS; i++) {
+		client->ps.ammo[i] = client->ammo[client->weaponClass][i];
+	}
+		/*G_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
+		client->weaponClass,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 0)) >> 0,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 1)) >> 1,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 2)) >> 2,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 3)) >> 3,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 4)) >> 4,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 5)) >> 5,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 6)) >> 6,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 7)) >> 7,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 8)) >> 8,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 9)) >> 9
+		);*/
+
+#endif
 
 	// sanity check the command time to prevent speedup cheating
 	if ( ucmd->serverTime > level.time + 200 ) {
@@ -818,6 +874,10 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	client->ps.gravity = g_gravity.value;
+#ifdef USE_GRAVITY_BOOTS
+  if (g_enableBoots.integer && ent->flags & FL_BOOTS)    //  umm and this,
+     client->ps.gravity = g_gravity.value * 0.20;        //  yeah... this too
+#endif
 
 	// set speed
 	client->ps.speed = g_speed.value;
@@ -832,11 +892,19 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.speed *= 1.3;
 	}
 
+#ifdef USE_GRAPPLE
 	// Let go of the hook if we aren't firing
+#ifdef USE_ALT_FIRE
+  if ( g_altGrapple.integer 
+    && client->hook && !( ucmd->buttons & BUTTON_ALT_ATTACK ) ) {
+    Weapon_HookFree(client->hook);
+  } else
+#endif
 	if ( client->ps.weapon == WP_GRAPPLING_HOOK &&
 		client->hook && !( ucmd->buttons & BUTTON_ATTACK ) ) {
 		Weapon_HookFree(client->hook);
 	}
+#endif
 
 	// set up for pmove
 	oldEventSequence = client->ps.eventSequence;
@@ -927,11 +995,23 @@ void ClientThink_real( gentity_t *ent ) {
 
 	BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
 
+#ifdef USE_ADVANCED_WEAPONS
+	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
+	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
+	client->ammo[client->weaponClass][ client->ps.weapon % WP_MAX_WEAPONS ] = client->ps.ammo[client->ps.weapon % WP_MAX_WEAPONS];
+#endif
+
 	SendPendingPredictableEvents( &ent->client->ps );
 
-	if ( !( ent->client->ps.eFlags & EF_FIRING ) ) {
+#ifdef USE_GRAPPLE
+	if ( !( ent->client->ps.eFlags & EF_FIRING ) 
+#ifdef USE_ALT_FIRE
+    || (g_altGrapple.integer && !(pm.cmd.buttons & BUTTON_ALT_ATTACK))
+#endif
+  ) {
 		client->fireHeld = qfalse;		// for grapple
 	}
+#endif
 
 	// use the snapped origin for linking so it matches client predicted versions
 	VectorCopy( ent->s.pos.trBase, ent->r.currentOrigin );
@@ -1090,6 +1170,9 @@ void ClientEndFrame( gentity_t *ent ) {
 	gclient_t	*client;
 	// unlagged
 	int			frames;
+#ifdef USE_ADVANCED_WEAPONS
+	int weaponClass;
+#endif
 
 	if ( !ent->client )
 		return;

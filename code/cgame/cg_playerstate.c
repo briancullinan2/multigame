@@ -23,7 +23,7 @@ void CG_CheckAmmo( void ) {
 	// see about how many seconds of ammo we have remaining
 	weapons = cg.snap->ps.stats[ STAT_WEAPONS ];
 	total = 0;
-	for ( i = WP_MACHINEGUN ; i < WP_NUM_WEAPONS ; i++ ) {
+	for ( i = WP_MACHINEGUN ; i < WP_MAX_WEAPONS ; i++ ) {
 		if ( ! ( weapons & ( 1 << i ) ) ) {
 			continue;
 		}
@@ -191,6 +191,7 @@ void CG_Respawn( void ) {
 
 	// select the weapon the server says we are using
 	cg.weaponSelect = cg.snap->ps.weapon;
+	cg.weaponClass = floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
 
 	cg.timeResidual = cg.snap->ps.commandTime + 1000;
 }
