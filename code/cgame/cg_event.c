@@ -963,6 +963,17 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_ScorePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		break;
 
+#if defined(USE_DAMAGE_PLUMS) || defined(USE_RPG_STATS)
+	case EV_DAMAGEPLUM:
+		if(cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
+			CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
+		}
+		if(cent->currentState.time2) {
+			cgs.clientinfo[cent->currentState.otherEntityNum].health = cent->currentState.time2;
+		}
+		break;
+#endif
+
 	//
 	// missile impacts
 	//
@@ -1203,6 +1214,24 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		}
 		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.regenSound );
 		break;
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  case EV_FROZEN:
+		if ( es->number == cg.snap->ps.clientNum ) {
+			cg.powerupActive = PW_FROZEN;
+			cg.powerupTime = cg.time;
+		}
+		cgs.clientinfo[es->number].health = 0;
+		cg_entities[es->number].currentState.powerups |= (1 << PW_FROZEN);
+		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.frozenSound );
+		break;
+  case EV_UNFROZEN:
+    // TODO: play unfreeze sound
+    //cg_entities[es->number].items[ITEM_PW_MIN + PW_FROZEN] = 0;
+		cg_entities[es->number].currentState.powerups &= ~(1 << PW_FROZEN);
+    trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.frozenSound );
+    break;
+#endif
 
 	case EV_GIB_PLAYER:
 		// don't play gib sound when using the kamikaze because it interferes

@@ -1363,6 +1363,17 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
 
+#ifdef USE_DAMAGE_PLUMS
+  "EV_DAMAGEPLUM",			// damage plum
+#endif
+
+
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  "EV_FROZEN",
+  "EV_UNFROZEN",
+#endif
+
 };
 
 /*

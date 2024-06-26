@@ -118,7 +118,10 @@ typedef enum {
 	PM_DEAD,		// no acceleration or turning, but free falling
 	PM_FREEZE,		// stuck in place with no control
 	PM_INTERMISSION,	// no movement or status bar
-	PM_SPINTERMISSION	// no movement or status bar
+	PM_SPINTERMISSION,	// no movement or status bar
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PM_FROZEN,
+#endif
 } pmtype_t;
 
 typedef enum {
@@ -279,6 +282,9 @@ typedef enum {
 	PW_AMMOREGEN,
 	PW_INVULNERABILITY,
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PW_FROZEN,
+#endif
 	PW_NUM_POWERUPS
 
 } powerup_t;
@@ -445,6 +451,15 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
+
+#ifdef USE_DAMAGE_PLUMS
+  EV_DAMAGEPLUM,			// damage plum
+#endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  EV_FROZEN,
+  EV_UNFROZEN,
+#endif
+
 	EV_MAX
 
 } entity_event_t;

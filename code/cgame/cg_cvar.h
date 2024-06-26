@@ -131,5 +131,14 @@ CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
+#ifdef USE_DAMAGE_PLUMS
+CG_CVAR( cg_damagePlum, "cg_damagePlums", "1", CVAR_USERINFO | CVAR_ARCHIVE)
+#endif
+
+#ifdef USE_RPG_STATS
+CG_CVAR( cg_healthBar, "cg_healthBar", "1", CVAR_USERINFO | CVAR_TEMP )
+#endif
+
+
 
 #undef CG_CVAR

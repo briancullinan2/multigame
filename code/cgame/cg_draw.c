@@ -687,6 +687,10 @@ static void CG_DrawStatusBar( void ) {
 		color = 1; // red
 	}
 
+#ifdef USE_GAME_FREEZETAG
+	if(value != INFINITE) {
+#endif
+
 #ifdef USE_NEW_FONT_RENDERER
 	CG_SelectFont( 1 );
 	CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
@@ -699,6 +703,10 @@ static void CG_DrawStatusBar( void ) {
 	
 	CG_ColorForHealth( hcolor );
 	trap_R_SetColor( hcolor );
+
+#ifdef USE_GAME_FREEZETAG
+	}
+#endif
 
 	//
 	// armor

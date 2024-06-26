@@ -146,6 +146,15 @@
 
 //=============================================================
 
+// compile damage plums every time someone gets hit
+#define USE_DAMAGE_PLUMS 1
+// allow referees to freeze players/TODO: rebalance teams
+#define USE_REFEREE_CMDS 1
+// enable freeze tag as a game mode in addition to the chosen CTF/Overload
+#define USE_GAME_FREEZETAG 1
+// show rpg like status bar for health, ammo, frozenness
+#define USE_RPG_STATS 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

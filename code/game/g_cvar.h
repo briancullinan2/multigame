@@ -93,4 +93,10 @@ G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+G_CVAR( g_freezeTag, "g_freezeTag", "1", 0, 0, qfalse, qfalse )
+G_CVAR( g_thawTime, "g_thawTime", "180", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+
 #undef G_CVAR

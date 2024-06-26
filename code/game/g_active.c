@@ -429,6 +429,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #endif
 		} else {
 			// count down health when over max
+#ifdef USE_GAME_FREEZETAG
+			if(!g_freezeTag.integer || ent->health != INFINITE)
+#endif
 			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
@@ -811,7 +814,14 @@ void ClientThink_real( gentity_t *ent ) {
 
 	if ( client->noclip ) {
 		client->ps.pm_type = PM_NOCLIP;
-	} else if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
+  } else
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( client->ps.powerups[PW_FROZEN] || client->ps.stats[STAT_HEALTH] <= 0 ) {
+    client->ps.pm_type = PM_FROZEN;
+		client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+  } else
+#endif
+  if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		client->ps.pm_type = PM_DEAD;
 	} else {
 		client->ps.pm_type = PM_NORMAL;
@@ -831,6 +841,17 @@ void ClientThink_real( gentity_t *ent ) {
 	if ( client->ps.powerups[PW_HASTE] ) {
 		client->ps.speed *= 1.3;
 	}
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if(g_thawTime.integer
+    && ent->client->ps.powerups[PW_FROZEN]
+    && level.time >= ent->client->ps.powerups[PW_FROZEN]
+  ) {
+    G_AddEvent( ent, EV_UNFROZEN, 0 );
+    ent->client->ps.powerups[PW_FROZEN] = 0;
+    SetClientViewAngle(ent, client->frozen_angles);
+  }
+#endif
 
 	// Let go of the hook if we aren't firing
 	if ( client->ps.weapon == WP_GRAPPLING_HOOK &&
@@ -971,6 +992,13 @@ void ClientThink_real( gentity_t *ent ) {
 	client->latched_buttons |= client->buttons & ~client->oldbuttons;
 
 	// check for respawning
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer
+		 || client->ps.stats[STAT_HEALTH] != INFINITE
+		 || client->ps.pm_type != PM_FROZEN
+	) {
+#endif
+
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
@@ -988,6 +1016,13 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 		return;
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	} else {
+
+	}
+#endif
+
 
 	// perform once-a-second actions
 	ClientTimerActions( ent, msec );

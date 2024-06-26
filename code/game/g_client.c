@@ -440,6 +440,11 @@ respawn
 void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer) {
+		G_Error("Respawn called in freeze tag mode!");
+	}
+#endif
 	if ( ent->health <= 0 )
 		CopyToBodyQue( ent );
 
@@ -1076,6 +1081,9 @@ void ClientSpawn(gentity_t *ent) {
 		ent->r.contents = CONTENTS_BODY;
 		ent->clipmask = MASK_PLAYERSOLID;
 	}
+#ifdef USE_DAMAGE_PLUMS
+  ent->pain = player_pain;
+#endif
 	ent->die = player_die;
 	ent->waterlevel = 0;
 	ent->watertype = 0;

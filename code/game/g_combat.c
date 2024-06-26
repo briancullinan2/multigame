@@ -415,6 +415,129 @@ void CheckAlmostScored( gentity_t *self, gentity_t *attacker ) {
 	}
 }
 
+#ifdef USE_GAME_FREEZETAG
+
+void CheckFrozen() {
+	int redCount = 0, blueCount = 0, frozenCount = 0, clientCount = 0;
+	int redTeam = 0, blueTeam = 0;
+	gentity_t	*lastAlive;
+	gentity_t	*ent;
+	int i;
+
+
+	ent = &g_entities[0];
+	for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
+		if ( !ent->inuse ) {
+			continue;
+		}
+		if ( !ent->r.linked ) {
+			continue;
+		}
+		if( ent->client->pers.connected == CON_CONNECTED ) {
+			clientCount++;
+			if (ent->client->sess.sessionTeam == TEAM_RED) {
+				redTeam++;
+				if(ent->client->ps.powerups[PW_FROZEN]) {
+					redCount++;
+				}
+			} 
+			if (ent->client->sess.sessionTeam == TEAM_BLUE) {
+				blueTeam++;
+				if(ent->client->ps.powerups[PW_FROZEN]) {
+					blueCount++;
+				}
+			}
+			if (ent->client->ps.powerups[PW_FROZEN] ) {
+				frozenCount++;
+			} else {
+				lastAlive = ent;
+			}
+		}
+	}
+
+	if(frozenCount > 0 && frozenCount == clientCount - 1) {
+		AddScore(lastAlive, lastAlive->r.currentOrigin, frozenCount);
+		ent = &g_entities[0];
+		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
+			if(ent->inuse && ent->client && ent->client->ps.powerups[PW_FROZEN]) {
+				G_AddEvent( ent, EV_UNFROZEN, 0 );
+				ent->client->ps.pm_type = PM_DEAD;
+				ent->client->ps.stats[STAT_HEALTH] = 0;
+				ent->client->ps.powerups[PW_FROZEN] = 0;
+				ent->health = 0;
+				//SetClientViewAngle(ent, ent->client->frozen_angles);
+			}
+		}
+	}
+	if(redTeam == 0 || blueTeam == 0) {
+		return;
+	}
+	if(redCount == clientCount || redCount == redTeam ) {
+		AddScore(lastAlive, lastAlive->r.currentOrigin, redCount);
+		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
+			if(ent->inuse && ent->client && ent->client->ps.powerups[PW_FROZEN]) {
+				G_AddEvent( ent, EV_UNFROZEN, 0 );
+				ent->client->ps.pm_type = PM_DEAD;
+				ent->client->ps.stats[STAT_HEALTH] = 0;
+				ent->client->ps.powerups[PW_FROZEN] = 0;
+				ent->health = 0;
+				//SetClientViewAngle(ent, ent->client->frozen_angles);
+			}
+		}
+	}
+	if(blueCount == clientCount || blueCount == blueTeam) {
+		AddScore(lastAlive, lastAlive->r.currentOrigin, blueCount);
+		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
+			if(ent->inuse && ent->client && ent->client->ps.powerups[PW_FROZEN]) {
+				G_AddEvent( ent, EV_UNFROZEN, 0 );
+				ent->client->ps.pm_type = PM_DEAD;
+				ent->client->ps.stats[STAT_HEALTH] = 0;
+				ent->client->ps.powerups[PW_FROZEN] = 0;
+				ent->health = 0;
+				//SetClientViewAngle(ent, ent->client->frozen_angles);
+			}
+		}
+	}
+}
+
+#endif
+
+
+
+
+#ifdef USE_DAMAGE_PLUMS
+void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
+  gentity_t *plum;
+
+  if ( self->client->ps.pm_type == PM_DEAD ) {
+		return;
+	}
+  
+  if ( !attacker || !attacker->client || self->client == attacker->client ) {
+    return;
+  }
+
+  plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
+  // only send this temp entity to a single client
+#if defined(USE_GAME_FREEZETAG) || defined(USE_RPG_STATS)
+	if(g_freezeTag.integer) {
+		// send health for use with frozen players status bar to show how close to thawing they are
+		// adding health here for RPG game.
+		// TODO: should be changed to something like powerup[PW_FROZEN] - level.time
+		// on both client end and server end.
+		plum->s.time2 = self->client->ps.stats[STAT_HEALTH];
+		plum->r.svFlags |= SVF_BROADCAST;
+	} else
+#endif
+  plum->r.svFlags |= SVF_SINGLECLIENT;
+  plum->r.singleClient = attacker->s.number;
+  //
+  plum->s.otherEntityNum2 = attacker->s.number;
+  plum->s.otherEntityNum = self->s.number;
+  plum->s.time = damage;
+}
+#endif
+
 /*
 ==================
 player_die
@@ -453,6 +576,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		self->activator->think = G_FreeEntity;
 		self->activator->nextthink = level.time;
 	}
+#endif
+
+#ifdef USE_GAME_FREEZETAG
+	if(g_freezeTag.integer && meansOfDeath != MOD_TRIGGER_HURT) {
+		self->client->ps.pm_type = PM_FROZEN;
+	} else
 #endif
 	self->client->ps.pm_type = PM_DEAD;
 
@@ -596,6 +725,10 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		}
 	}
 
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer && meansOfDeath != MOD_TRIGGER_HURT) {
+#endif
+
 	self->takedamage = qtrue;	// can still be gibbed
 
 	self->s.weapon = WP_NONE;
@@ -665,6 +798,26 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		}
 #endif
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	} else {
+
+		self->client->ps.torsoAnim = TORSO_STAND;
+		self->client->ps.legsAnim = LEGS_IDLE;
+
+ 		self->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+
+		G_AddEvent( self, EV_FROZEN, killer );
+
+		if(meansOfDeath != MOD_TRIGGER_HURT) {
+			self->takedamage = qfalse;	// can still be gibbed
+			self->health = INFINITE;
+			self->client->ps.stats[STAT_HEALTH] = INFINITE;
+		}
+
+		CheckFrozen();
+	}
+#endif
 
 	trap_LinkEntity (self);
 
@@ -1187,6 +1340,15 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 
 	for ( e = 0 ; e < numListedEntities ; e++ ) {
 		ent = &g_entities[entityList[ e ]];
+
+#ifdef USE_GAME_FREEZETAG
+		if(g_freezeTag.integer) {
+			// don't do radius damage to frozen players, like they turned into a brick of ice
+			if(ent->client->ps.pm_type == PM_FROZEN) {
+				continue;
+			}
+		}
+#endif
 
 		if (ent == ignore)
 			continue;

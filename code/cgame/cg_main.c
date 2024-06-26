@@ -836,6 +836,12 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.heartShader = trap_R_RegisterShaderNoMip( "ui/assets/statusbar/selectedhealth.tga" );
 	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
 #endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  cgs.media.frozenShader = trap_R_RegisterShader("freezeShader" );
+	cgs.media.freezeMarkShader = trap_R_RegisterShader( "freezeMarkShader" );
+  cgs.media.frozenSound = trap_S_RegisterSound("sound/teamplay/freezing.wav", qfalse);
+  cgs.media.unfrozenSound = trap_S_RegisterSound("sound/teamplay/xunfreeze.wav", qfalse);
+#endif
 
 	cgs.media.medalImpressive = trap_R_RegisterShaderNoMip( "medal_impressive" );
 	cgs.media.medalExcellent = trap_R_RegisterShaderNoMip( "medal_excellent" );

@@ -334,6 +334,10 @@ struct gclient_s {
 		int		enemy;
 		int		amount;
 	} damage;
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  vec3_t		frozen_angles;
+#endif
 };
 
 
@@ -610,6 +614,9 @@ void BeginIntermission (void);
 void InitBodyQue (void);
 void ClientSpawn( gentity_t *ent );
 void player_die (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
+#ifdef USE_DAMAGE_PLUMS
+void player_pain (gentity_t *self, gentity_t *attacker, int damage);
+#endif
 void AddScore( gentity_t *ent, vec3_t origin, int score );
 void CalculateRanks( void );
 qboolean SpotWouldTelefrag( gentity_t *spot );
