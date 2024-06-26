@@ -12,6 +12,11 @@ static	vec3_t	muzzle_origin; // for hitscan weapon trace
 
 #define NUM_NAILSHOTS 15
 
+#ifdef USE_VULN_RPG
+#define IsSelf(x, y) i == 0 \
+  && !(x.surfaceFlags & SURF_NOIMPACT) \
+  && x.entityNum == ent->s.number
+#endif
 
 /*
 ===============
@@ -189,6 +194,16 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 		// unlagged
 		G_DoTimeShiftFor( ent );
 
+#ifdef USE_VULN_RPG
+    if(wp_rocketVuln.integer) {
+      trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ENTITYNUM_NONE, MASK_SHOT );
+      // double check we aren't hitting ourselves on the first pass
+      if(IsSelf(tr, ent)) {
+        // do another trace that skips ourselves
+        trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ent->s.number, MASK_SHOT );
+      }
+    } else
+#endif
 		trap_Trace( &tr, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
 
 		// unlagged
@@ -410,6 +425,11 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 //	VectorAdd( m->s.pos.trDelta, ent->client->ps.velocity, m->s.pos.trDelta );	// "real" physics
 }
 
+
+#if defined(USE_BOUNCE_RPG) || defined(USE_HOMING_MISSILE) || defined(USE_VULN_RPG) || defined(USE_ACCEL_RPG)
+gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir);
+#endif
+
 /*
 ======================================================================
 
@@ -421,6 +441,26 @@ ROCKET
 void Weapon_RocketLauncher_Fire (gentity_t *ent) {
 	gentity_t	*m;
 
+#ifdef USE_BOUNCE_RPG
+	if(wp_rocketBounce.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	} else
+#endif
+#ifdef USE_HOMING_MISSILE
+  if(wp_rocketHoming.integer)
+		m = fire_special_rocket(ent, muzzle, forward);
+	else
+#endif
+#ifdef USE_VULN_RPG
+  if(wp_rocketVuln.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	}
+#endif
+#ifdef USE_ACCEL_RPG
+  if(wp_rocketAccel.integer) {
+		m = fire_special_rocket(ent, muzzle, forward);
+	}
+#endif
 	m = fire_rocket (ent, muzzle, forward);
 	m->damage *= s_quadFactor;
 	m->splashDamage *= s_quadFactor;
@@ -489,6 +529,11 @@ void weapon_railgun_fire( gentity_t *ent ) {
 	hits = 0;
 	passent = ent->s.number;
 	do {
+#ifdef USE_VULN_RPG
+    if(wp_rocketVuln.integer) {
+      passent = ENTITYNUM_NONE;
+    }
+#endif
 		trap_Trace( &trace, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
 		if ( trace.entityNum >= ENTITYNUM_MAX_NORMAL ) {
 			break;
@@ -660,6 +705,16 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		// unlagged
 		G_DoTimeShiftFor( ent );
 
+#ifdef USE_VULN_RPG
+    if(wp_rocketVuln.integer) {
+      trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ENTITYNUM_NONE, MASK_SHOT );
+      // double check we aren't hitting ourselves on the first pass
+      if(IsSelf(tr, ent)) {
+        // do another trace that skips ourselves
+        trap_Trace( &tr, muzzle_origin, NULL, NULL, end, ent->s.number, MASK_SHOT );
+      }
+    } else
+#endif
 		trap_Trace( &tr, muzzle_origin, NULL, NULL, end, passent, MASK_SHOT );
 
 		// unlagged

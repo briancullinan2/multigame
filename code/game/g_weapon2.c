@@ -514,3 +514,195 @@ void fire_special_railgun( gentity_t *ent ) {
 #endif
 }
 
+
+#ifdef USE_VULN_RPG
+/*
+================
+G_MissileDie
+
+Lancer - Destroy a missile
+================
+*/
+void G_MissileDie( gentity_t *self, gentity_t *inflictor,
+  gentity_t *attacker, int damage, int mod ) {
+  if (inflictor == self)
+    return;
+  self->takedamage = qfalse;
+  self->think = G_ExplodeMissile;
+  self->nextthink = level.time + 10;
+}
+#endif
+
+
+#ifdef USE_HOMING_MISSILE
+/*
+================
+CCH: rocket_think
+
+Fly like an eagle...
+--"Fly Like an Eagle", Steve Miller Band
+================
+*/
+#define ROCKET_SPEED	   600
+#define ROCKET_VIS_CONE  0.95
+#define ROCKET_TURNING   0.08
+// 
+
+void rocket_think( gentity_t *ent ) {
+	gentity_t	*target, *tent;
+	float		targetlength, tentlength;
+	int		i;
+	vec3_t		tentdir, targetdir, forward, midbody;
+	trace_t		tr;
+
+	target = NULL;
+	targetlength = LIGHTNING_RANGE;
+	// Best way to get forward vector for this rocket?
+	VectorCopy(ent->s.pos.trDelta, forward);
+	VectorNormalize(forward);
+	for (i = 0; i < level.maxclients; i++) {
+		// Here we use tent to point to potential targets
+		tent = &g_entities[i];
+
+		if (!tent->inuse) continue;
+		if (tent == ent->parent) continue;
+		if ( OnSameTeam( tent, ent->parent ) ) continue;
+
+		// Aim for the body, not the feet
+		midbody[0] = tent->r.currentOrigin[0] + 
+			(tent->r.mins[0] + tent->r.maxs[0]) * 0.5;
+		midbody[1] = tent->r.currentOrigin[1] + 
+			(tent->r.mins[1] + tent->r.maxs[1]) * 0.5;
+		midbody[2] = tent->r.currentOrigin[2] + 
+			(tent->r.mins[2] + tent->r.maxs[2]) * 0.5;
+
+		VectorSubtract(midbody, ent->r.currentOrigin, tentdir);
+		tentlength = VectorLength(tentdir);
+		if ( tentlength > targetlength ) continue;
+
+		// Quick normalization of tentdir since 
+		// we already have the length
+		tentdir[0] /= tentlength;
+		tentdir[1] /= tentlength;
+		tentdir[2] /= tentlength;
+    // this value determines how wide from it's direction it can search for 
+    //   players to target
+		if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) continue;
+
+		trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
+			tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
+
+		if ( tent != &g_entities[tr.entityNum] ) continue;
+
+		target = tent;
+		targetlength = tentlength;
+		VectorCopy(tentdir, targetdir);
+	}
+
+	ent->nextthink += 20;
+
+	if (!target) return;
+
+  // this variable determines how quickly it can change direction
+	VectorMA(forward, ROCKET_TURNING, targetdir, targetdir);
+	VectorNormalize(targetdir);
+	VectorScale(targetdir, ROCKET_SPEED, ent->s.pos.trDelta);
+}
+#endif
+
+
+
+/*
+=================
+fire_rocket
+=================
+*/
+gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
+	gentity_t	*bolt;
+
+	VectorNormalize (dir);
+
+	bolt = G_Spawn();
+	bolt->classname = "rocket";
+#ifdef USE_BOUNCE_RPG
+  if (self->flags & FL_ROCKETBOUNCE || wp_rocketBounce.integer) {
+  	bolt->s.eFlags = EF_BOUNCE;
+		// shorter explosion time because of the extra bouncing chaos
+    bolt->nextthink = level.time + 2500;
+	} else
+#endif
+#ifdef USE_HOMING_MISSILE
+  if(wp_rocketHoming.integer)
+    bolt->nextthink = level.time + 20;	// CCH
+  else
+#endif
+#ifdef USE_HOMING_MISSILE
+  if(wp_rocketHoming.integer) {
+    bolt->think = rocket_think;		// CCH
+  } else
+#endif
+  bolt->think = G_ExplodeMissile;
+	bolt->s.eType = ET_MISSILE;
+	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
+	bolt->s.weapon = WP_ROCKET_LAUNCHER;
+#ifdef USE_VULN_RPG
+  // Lancer
+  if(wp_rocketVuln.integer) {
+    bolt->health = 5;
+    bolt->takedamage = qtrue;
+    bolt->die = G_MissileDie;
+    bolt->r.contents = CONTENTS_BODY;
+    VectorSet(bolt->r.mins, -10, -3, 0);
+    VectorCopy(bolt->r.mins, bolt->r.absmin);
+    VectorSet(bolt->r.maxs, 10, 3, 6);
+    VectorCopy(bolt->r.maxs, bolt->r.absmax);
+  }
+#endif
+	bolt->r.ownerNum = self->s.number;
+	bolt->parent = self;
+	bolt->damage = 100;
+	bolt->splashDamage = 100;
+	bolt->splashRadius = 120;
+	bolt->methodOfDeath = MOD_ROCKET;
+	bolt->splashMethodOfDeath = MOD_ROCKET_SPLASH;
+	bolt->clipmask = MASK_SHOT;
+	bolt->target_ent = NULL;
+
+	if ( self->s.powerups & (1 << PW_QUAD) )
+		bolt->s.powerups |= (1 << PW_QUAD);
+
+	// missile owner
+	bolt->s.clientNum = self->s.clientNum;
+	// unlagged
+	bolt->s.otherEntityNum = self->s.number;
+
+#ifdef USE_ACCEL_RPG
+  if(wp_rocketAccel.integer) {
+    bolt->s.pos.trType = TR_ACCEL;
+  	bolt->s.pos.trDuration = 500;
+  } else
+#endif
+	bolt->s.pos.trType = TR_LINEAR;
+	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
+	VectorCopy( start, bolt->s.pos.trBase );
+	SnapVector( bolt->s.pos.trBase );			// save net bandwidth
+#ifdef USE_HOMING_MISSILE
+  if(wp_rocketHoming.integer)
+    VectorScale( dir, ROCKET_SPEED, bolt->s.pos.trDelta );	// CCH
+  else
+#endif
+#ifdef USE_ACCEL_RPG
+  if(wp_rocketAccel.integer)
+    VectorScale( dir, 50, bolt->s.pos.trDelta );
+  else
+#endif
+#ifdef USE_WEAPON_VARS
+	VectorScale( dir, wp_rocketSpeed.integer, bolt->s.pos.trDelta );
+#else
+	VectorScale( dir, 900, bolt->s.pos.trDelta );
+#endif
+	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
+	VectorCopy (start, bolt->r.currentOrigin);
+
+	return bolt;
+}

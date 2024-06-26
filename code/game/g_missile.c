@@ -48,6 +48,11 @@ void G_ExplodeMissile( gentity_t *ent ) {
 	vec3_t		dir;
 	vec3_t		origin;
 
+#ifdef USE_VULN_RPG
+  // Lancer
+  ent->takedamage = qfalse;
+#endif
+
 	BG_EvaluateTrajectory( &ent->s.pos, level.time, origin );
 	SnapVector( origin );
 	G_SetOrigin( ent, origin );
@@ -284,6 +289,11 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		G_AddEvent( ent, EV_GRENADE_BOUNCE, 0 );
 		return;
 	}
+
+#ifdef USE_VULN_RPG
+  // Lancer
+  ent->takedamage = qfalse;
+#endif
 
 #ifdef MISSIONPACK
 	if ( other->takedamage ) {

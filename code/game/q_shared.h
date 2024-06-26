@@ -157,6 +157,15 @@
 // enable rails that go through walls
 //#define USE_INVULN_RAILS 1
 
+// homing rockets look for other people to track and change direction
+#define USE_HOMING_MISSILE 1
+// rpg accellerating missiles start slow and then speed up as they fly
+#define USE_ACCEL_RPG 1
+// enable bouncing rpgs from map items or server enabled
+#define USE_BOUNCE_RPG 1
+// enable vulnerable rockets that can be shot down
+#define USE_VULN_RPG 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
@@ -1048,6 +1057,9 @@ typedef enum {
 	TR_LINEAR_STOP,
 	TR_SINE,					// value = base + sin( time / duration ) * delta
 	TR_GRAVITY
+#ifdef USE_ACCEL_RPG
+  ,TR_ACCEL
+#endif
 } trType_t;
 
 typedef struct {

@@ -105,4 +105,18 @@ G_CVAR( g_railThruWalls, "g_railThruWalls", "1", CVAR_ARCHIVE, 0, qfalse, qfalse
 #ifdef USE_BOUNCE_RAIL
 G_CVAR( wp_railBounce, "wp_railBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
+#ifdef USE_HOMING_MISSILE
+G_CVAR( wp_rocketHoming, "wp_rocketHoming", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_BOUNCE_RPG
+G_CVAR( wp_bfgBounce, "wp_bfgBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_plasmaBounce, "wp_plasmaBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( wp_rocketBounce, "wp_rocketBounce", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_VULN_RPG
+G_CVAR( wp_rocketVuln, "wp_rocketVuln", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+#ifdef USE_ACCEL_RPG
+G_CVAR( wp_rocketAccel, "wp_rocketAccel", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
 #undef G_CVAR
