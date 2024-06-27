@@ -606,7 +606,7 @@ static void CG_TouchTriggerPrediction( void ) {
 		cent = cg_triggerEntities[ i ];
 		ent = &cent->currentState;
 
-		if ( ent->eType == ET_ITEM && !spectator ) {
+		if ( ent->eType == ET_ITEM && !(ent->eFlags & EF_TIMER) && !spectator ) {
 			CG_TouchItem( cent );
 			continue;
 		}

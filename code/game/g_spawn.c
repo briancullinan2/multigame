@@ -423,22 +423,34 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
 		G_SpawnInt( "notsingle", "0", &i );
 		if ( i ) {
-			G_FreeEntity( ent );
-			return;
+			Q_strcpy(ent->not, "notsingle");
+			//G_FreeEntity( ent );
+			//return;
+			ent->r.svFlags = SVF_NOCLIENT;
+			ent->s.eFlags |= EF_NODRAW;
+			ent->tag = TAG_DONTSPAWN;
 		}
 	}
 	// check for "notteam" flag (GT_FFA, GT_TOURNAMENT, GT_SINGLE_PLAYER)
 	if ( g_gametype.integer >= GT_TEAM ) {
 		G_SpawnInt( "notteam", "0", &i );
 		if ( i ) {
-			G_FreeEntity( ent );
-			return;
+			Q_strcpy(ent->not, "notteam");
+			//G_FreeEntity( ent );
+			//return;
+			ent->r.svFlags = SVF_NOCLIENT;
+			ent->s.eFlags |= EF_NODRAW;
+			ent->tag = TAG_DONTSPAWN;
 		}
 	} else {
 		G_SpawnInt( "notfree", "0", &i );
 		if ( i ) {
-			G_FreeEntity( ent );
-			return;
+			Q_strcpy(ent->not, "notfree");
+			//G_FreeEntity( ent );
+			//return;
+			ent->r.svFlags = SVF_NOCLIENT;
+			ent->s.eFlags |= EF_NODRAW;
+			ent->tag = TAG_DONTSPAWN;
 		}
 	}
 
@@ -451,8 +463,8 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 #else
 	G_SpawnInt( "notq3a", "0", &i );
 	if ( i ) {
-		G_FreeEntity( ent );
-		return;
+		//G_FreeEntity( ent );
+		//return;
 	}
 #endif
 
@@ -462,8 +474,12 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 
 			s = strstr( value, gametypeName );
 			if( !s ) {
-				G_FreeEntity( ent );
-				return;
+				//G_FreeEntity( ent );
+				//return;
+				Q_strcpy(ent->gametype, value);
+				ent->r.svFlags = SVF_NOCLIENT;
+				ent->s.eFlags |= EF_NODRAW;
+				ent->tag = TAG_DONTSPAWN;
 			}
 		}
 	}

@@ -189,6 +189,11 @@ struct gentity_s {
 	team_t		fteam;
 
 	tag_t		tag;
+
+	char 		gametype[MAX_STRING_CHARS];
+	char    not[MAX_STRING_CHARS];
+	qboolean nothot;
+
 #ifdef USE_PORTALS
 	int     items[MAX_ITEMS];
 	int     world;

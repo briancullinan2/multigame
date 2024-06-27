@@ -559,6 +559,21 @@ qboolean	ConsoleCommand( void ) {
 	}
 #endif
 
+	if (Q_stricmp (cmd, "gametype") == 0) {
+		char	str[MAX_TOKEN_CHARS];
+		int game;
+		trap_Argv( 1, str, sizeof( str ) );
+		if ( str[0] >= '0' && str[0] <= '9' ) {
+			game = atoi( str );
+			trap_Cvar_Set( "gametype", va("%i", game) );
+			g_gametype.value = game;
+			g_gametype.modificationCount++;
+			UpdateGameType();
+		}
+		return qtrue;
+	}
+
+
 	if (g_dedicated.integer) {
 		if (Q_stricmp (cmd, "say") == 0) {
 			G_BroadcastServerCommand( -1, va("print \"server: %s\"", ConcatArgs(1) ) );

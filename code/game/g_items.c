@@ -667,13 +667,13 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// picked up items still stay around, they just don't
 	// draw anything.  This allows respawnable items
 	// to be placed on movers.
-	ent->s.eFlags |= EF_NODRAW;
-	ent->r.contents = 0;
 #ifdef USE_ITEM_TIMERS
 	ent->r.svFlags |= SVF_BROADCAST;
 #else
-  ent->r.svFlags |= SVF_NOCLIENT;
+	ent->r.svFlags |= SVF_NOCLIENT;
 #endif
+	ent->s.eFlags |= EF_NODRAW;
+	ent->r.contents = 0;
 
 	// ZOID
 	// A negative respawn times means to never respawn this item (but don't 
@@ -1081,38 +1081,30 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 	G_SpawnFloat( "random", "0", &ent->random );
 	G_SpawnFloat( "wait", "0", &ent->wait );
 
-#ifdef USE_INSTAGIB
-  if(g_instagib.integer && item->giType != IT_TEAM) {
-		// don't send items to clients
-		ent->r.svFlags = SVF_NOCLIENT;
-		// don't draw items on client
-		ent->s.eFlags |= EF_NODRAW;
-    ent->tag = TAG_DONTSPAWN;
+	if(item->giType != IT_TEAM) {
+		ent->nothot = qtrue;
 	}
+
+  if(item->giType != IT_TEAM && (qfalse
+#ifdef USE_INSTAGIB
+		|| g_instagib.integer 
 #endif
 #ifdef USE_HOTRPG
-  if(g_hotRockets.integer && item->giType != IT_TEAM) {
-		ent->r.svFlags = SVF_NOCLIENT;
-		ent->s.eFlags |= EF_NODRAW;
-    ent->tag = TAG_DONTSPAWN;
-	} else
+		|| g_hotRockets.integer
 #endif
 #ifdef USE_HOTBFG
-  if(g_hotBFG.integer && item->giType != IT_TEAM) {
-		ent->r.svFlags = SVF_NOCLIENT;
-		ent->s.eFlags |= EF_NODRAW;
-    ent->tag = TAG_DONTSPAWN;
-	} else
+		|| g_hotBFG.integer
 #endif
 #ifdef USE_TRINITY
-  if(g_unholyTrinity.integer && item->giType != IT_TEAM) {
+		|| g_unholyTrinity.integer
+#endif
+	)) {
+		// don't send items to clients
 		ent->r.svFlags = SVF_NOCLIENT;
 		ent->s.eFlags |= EF_NODRAW;
     ent->tag = TAG_DONTSPAWN;
-	} else
-#endif
-  {
-  	RegisterItem( item );
+	} else {
+	RegisterItem( item );
 
 	if ( G_ItemDisabled( item ) ) {
 		ent->tag = TAG_DONTSPAWN;
