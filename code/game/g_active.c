@@ -1252,88 +1252,76 @@ void ClientThink_real( gentity_t *ent ) {
 #endif
 
 #ifdef USE_BIRDS_EYE
-	if(pm.ps->pm_type == PM_FOLLOWCURSOR) {
-		// ZYGOTE START
-		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
-			
-			if(!ent->client->cursorEnt || ent->client->cursorEnt->r.ownerNum != ent->client->ps.clientNum 
-				|| level.time - ent->client->cursorEnt->eventTime > 1000) {
-				gentity_t *pent;
-				if(ent->client->cursorEnt && ent->client->cursorEnt->r.ownerNum == ent->client->ps.clientNum) {
-					G_FreeEntity(ent->client->cursorEnt);
-				}
-				ent->client->cursorEnt = pent = G_TempEntity( client->ps.origin, EV_CURSORSTART );
-				pent->s.clientNum = client - level.clients;
-				pent->r.singleClient = client - level.clients;
-				pent->r.svFlags |= SVF_SINGLECLIENT;
-				pent->freeAfterEvent = qfalse;
-				pent->s.eType = ET_CURSOR;
-				pent->eventTime = level.time;
-				pent->freetime = level.time + 1000;
-				pent->r.ownerNum = ent->client->ps.clientNum;
-			} else {
-				gentity_t *pent;
-				pent = ent->client->cursorEnt;
-				//pent->eventTime = level.time;
-				//pent->s.event++;
-				//G_AddEvent(pent, EV_EVENT_BITS, 0);
-				pent->s.pos.trBase[0] = SHORT2ANGLE(ucmd->angles[YAW]);
-				pent->s.pos.trBase[1] = SHORT2ANGLE(ucmd->angles[PITCH]);
-				
-				
-				VectorCopy(pent->s.pos.trBase, pent->s.origin);
+	if(pm.ps->pm_type == PM_FOLLOWCURSOR
+		|| pm.ps->pm_type == PM_PLATFORM) {
+		if(!ent->client->cursorEnt || ent->client->cursorEnt->r.ownerNum != ent->client->ps.clientNum 
+			|| level.time - ent->client->cursorEnt->eventTime > 1000) {
+			gentity_t *pent;
+			if(ent->client->cursorEnt && ent->client->cursorEnt->r.ownerNum == ent->client->ps.clientNum) {
+				G_FreeEntity(ent->client->cursorEnt);
 			}
-
-			// Copy modified YAW into viewangles
-			ent->client->ps.delta_angles[PITCH] = 0;
-			ent->s.angles[PITCH] = SHORT2ANGLE(1);
-		}
-		// ZYGOTE FINISH
-	} else
-	if(pm.ps->pm_type == PM_BIRDSEYE) {
-		// ZYGOTE START
-		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
-			// Copy modified YAW into viewangles
-			ent->client->ps.delta_angles[PITCH] = 0;
-			ent->s.angles[PITCH] = SHORT2ANGLE(1);
-		}
-		// ZYGOTE FINISH
-	} else
-	if(pm.ps->pm_type == PM_PLATFORM) {
-		// ZYGOTE START
-		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
-			short		temp;
-
-			// Setup temp
-			temp = ent->client->pers.cmd.angles[YAW] + ent->client->ps.delta_angles[YAW];		
+			ent->client->cursorEnt = pent = G_TempEntity( client->ps.origin, EV_CURSORSTART );
+			pent->s.clientNum = client - level.clients;
+			pent->r.singleClient = client - level.clients;
+			pent->r.svFlags |= SVF_SINGLECLIENT;
+			pent->freeAfterEvent = qfalse;
+			pent->s.eType = ET_CURSOR;
+			pent->eventTime = level.time;
+			pent->freetime = level.time + 1000;
+			pent->r.ownerNum = ent->client->ps.clientNum;
+		} else {
+			gentity_t *pent;
+			pent = ent->client->cursorEnt;
+			//pent->eventTime = level.time;
+			//pent->s.event++;
+			//G_AddEvent(pent, EV_EVENT_BITS, 0);
+			pent->s.pos.trBase[0] = SHORT2ANGLE(ucmd->angles[YAW]);
+			pent->s.pos.trBase[1] = SHORT2ANGLE(ucmd->angles[PITCH]);
 			
-			// Some ugly shit, but it works :)
-			if ( (temp > -30000) && (temp < 0) ) {
-				ent->client->ps.delta_angles[YAW] = -1000 - ent->client->pers.cmd.angles[YAW];
-				temp = 0; // RIGHT
-			}
-			if ( (temp < 30000) && (temp > 0) ) {
-				ent->client->ps.delta_angles[YAW] = 1000 - ent->client->pers.cmd.angles[YAW];
-				temp = 32000; // LEFT
-			}	
-
-			// Copy modified YAW into viewangles
-			ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp);
-
+			
+			VectorCopy(pent->s.pos.trBase, pent->s.origin);
 		}
+	}
+
+
+
+
+	if(pm.ps->pm_type == PM_FOLLOWCURSOR && !(ent->r.svFlags & SVF_BOT)) {
+		ent->client->ps.delta_angles[PITCH] = 0;
+		ent->s.angles[PITCH] = SHORT2ANGLE(1);
+	} else
+	if(pm.ps->pm_type == PM_BIRDSEYE && !(ent->r.svFlags & SVF_BOT)) {
+		ent->client->ps.delta_angles[PITCH] = 0;
+		ent->s.angles[PITCH] = SHORT2ANGLE(1);
+	} else
+	if(pm.ps->pm_type == PM_PLATFORM && !(ent->r.svFlags & SVF_BOT)) {
+		// ZYGOTE START
+		// (Human) NOT A BOT
+		short		temp;
+
+		// Setup temp
+		temp = -ent->client->pers.cmd.angles[YAW]; // + ent->client->ps.delta_angles[YAW];		
+		
+		// Some ugly shit, but it works :)
+		if ( (temp > -30000) && (temp < 0) ) {
+			ent->client->ps.delta_angles[YAW] = -1000 - ent->client->pers.cmd.angles[YAW];
+			temp = 0; // RIGHT
+		}
+		if ( (temp < 30000) && (temp > 0) ) {
+			ent->client->ps.delta_angles[YAW] = 1000 - ent->client->pers.cmd.angles[YAW];
+			temp = 32000; // LEFT
+		}	
+
+		// Copy modified YAW into viewangles
+		ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp);
 		// ZYGOTE FINISH
 	}
 #endif
 #ifdef USE_AIW
-	if(pm.ps->pm_type == PM_UPSIDEDOWN) {
-		// ZYGOTE START
-		if (!(ent->r.svFlags & SVF_BOT)) { // (Human) NOT A BOT
-
-			// Copy modified YAW into viewangles
-			ent->client->ps.delta_angles[ROLL] = 180;
-			ent->client->ps.viewangles[ROLL] = SHORT2ANGLE(180);
-
-		}
+	if(pm.ps->pm_type == PM_UPSIDEDOWN && !(ent->r.svFlags & SVF_BOT)) {
+		// Copy modified YAW into viewangles
+		ent->client->ps.delta_angles[ROLL] = 180;
+		ent->client->ps.viewangles[ROLL] = SHORT2ANGLE(180);
 	}
 #endif
 

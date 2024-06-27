@@ -2029,25 +2029,14 @@ static void CG_DrawCrosshair( void ) {
 
 	if ( cg.renderingThirdPerson
 #ifdef USE_BIRDS_EYE
-		&& cg.predictedPlayerState.pm_type != PM_BIRDSEYE && cg.predictedPlayerState.pm_type != PM_FOLLOWCURSOR && cg_birdsEye.integer == 0
+		&& cg.predictedPlayerState.pm_type != PM_BIRDSEYE 
+		&& cg.predictedPlayerState.pm_type != PM_FOLLOWCURSOR 
+		&& cg.predictedPlayerState.pm_type != PM_PLATFORM
+		&& cg_birdsEye.integer == 0
 #endif
 	) {
 		return;
 	}
-
-
-
-#ifdef USE_BIRDS_EYE
-	if ( cg.predictedPlayerState.pm_type == PM_BIRDSEYE || cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer ) {
-
-		//cgs.cursorX = cg_entities[cg.snap->ps.clientNum].currentState.origin2[0];
-		//cgs.cursorY = cg_entities[cg.snap->ps.clientNum].currentState.origin2[1];
-		//cgs.cursorX = cg_entities[cg.snap->ps.clientNum].currentState.apos.trBase[0];
-		//cgs.cursorY = cg_entities[cg.snap->ps.clientNum].currentState.apos.trBase[1];
-		//CG_Printf("moving: %fx%f\n", cgs.cursorX, cgs.cursorY);
-	}
-#endif
-
 
 
 	// set color based on health
@@ -2083,7 +2072,11 @@ static void CG_DrawCrosshair( void ) {
 	hShader = cgs.media.crosshairShader[ ca % (NUM_CROSSHAIRS + 1) ];
 
 #ifdef USE_BIRDS_EYE
-	if ( cg.predictedPlayerState.pm_type == PM_BIRDSEYE || cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer ) {
+	if ( cg.predictedPlayerState.pm_type == PM_BIRDSEYE 
+	|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR 
+	|| cg.predictedPlayerState.pm_type == PM_PLATFORM
+	|| cg_birdsEye.integer ) {
+		// use the cursor value (turning radius) as a percentage of the screen 
 		trap_R_DrawStretchPic( x + cg.refdef.x + (1.0f - cgs.cursorX / 360.0f) * (cg.refdef.width - w) - cgs.screenXBias,
 			y + cg.refdef.y + cgs.cursorY / 360.0f * (cg.refdef.height - h) - cgs.screenYBias,
 			w, h, 0, 0, 1, 1, hShader );

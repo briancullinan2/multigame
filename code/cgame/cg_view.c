@@ -295,8 +295,8 @@ static void CG_OffsetThirdPersonView( void ) {
 		cg.refdefViewAngles[YAW] = 89.9;		// looking in!
 	} else {
 #endif
-		cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2( focusPoint[2], focusDist );
-		cg.refdefViewAngles[YAW] -= cg_thirdPersonAngle.value;
+	cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2( focusPoint[2], focusDist );
+	cg.refdefViewAngles[YAW] -= cg_thirdPersonAngle.value;
 #ifdef USE_BIRDS_EYE
 	}
 #endif
@@ -349,11 +349,11 @@ static void CG_OffsetFirstPersonView( void ) {
 	}
 
 #ifdef USE_BIRDS_EYE
-		if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE 
-			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer) {
-			angles[PITCH] = 0;
-			cg.refdefViewAngles[PITCH] = 1;
-		}
+	if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE 
+		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer) {
+		angles[PITCH] = 0;
+		cg.refdefViewAngles[PITCH] = 1;
+	}
 #endif
 
 #ifdef USE_AIW
@@ -535,7 +535,8 @@ static int CG_CalcFov( void ) {
 
 #ifdef USE_BIRDS_EYE
 	if(cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
-		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE) {
+		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+		|| cg_birdsEye.integer) {
 		cgs.fov = cg_fov.value + 20;
 	} else
 #endif
