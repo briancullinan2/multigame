@@ -271,6 +271,10 @@ static void CG_Item( centity_t *cent ) {
 		return;
 	}
 
+	if(item && item->giType == IT_TEAM) {
+	//	CG_Printf("drawing flag %i\n", es->eFlags);
+	}
+
 	// items bob up and down continuously
 	scale = 0.005 + cent->currentState.number * 0.00001;
 	modulus = 2 * M_PI * 20228 / scale;

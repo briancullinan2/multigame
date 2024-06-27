@@ -668,10 +668,11 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// draw anything.  This allows respawnable items
 	// to be placed on movers.
 #ifdef USE_ITEM_TIMERS
-	ent->r.svFlags |= SVF_BROADCAST;
-#else
-	ent->r.svFlags |= SVF_NOCLIENT;
+	if(ent->item->giType != IT_TEAM) {
+		ent->r.svFlags |= SVF_BROADCAST;
+	} else
 #endif
+	ent->r.svFlags |= SVF_NOCLIENT;
 	ent->s.eFlags |= EF_NODRAW;
 	ent->r.contents = 0;
 
