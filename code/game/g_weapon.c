@@ -434,7 +434,7 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 	VectorNormalize( forward );
 
 #ifdef USE_CLUSTER_GRENADES
-	if(g_clusterGrenades.integer) {
+	if(wp_grenadeCluster.integer) {
 		m = fire_special_grenade (ent, muzzle, forward, qtrue);
 	} else
 #endif
@@ -1082,23 +1082,6 @@ void Laser_Gen( gentity_t *ent, int type )	{
 
 #endif
 
-#ifdef USE_FLAME_THROWER
-gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir);
-
-/*
-=======================================================================
-FLAME_THROWER
-=======================================================================
-*/
-void Weapon_fire_flame (gentity_t *ent ) {
-	gentity_t *m;
-
-	m = fire_flame(ent, muzzle, forward);
-	m->damage *= s_quadFactor;
-	m->splashDamage *= s_quadFactor;
-}
-#endif
-
 
 /*
 ===============
@@ -1134,13 +1117,18 @@ qboolean LogAccuracyHit( gentity_t *target, gentity_t *attacker ) {
 }
 
 
+#ifdef USE_PORTALS
+gentity_t *fire_portal (gentity_t *self, vec3_t start, vec3_t dir, qboolean altFire);
+#endif
 #ifdef USE_WEAPON_SPREAD
 void SpreadFire_Powerup(gentity_t* ent, gentity_t* (*fireFunc)(gentity_t*, vec3_t, vec3_t) );
 #endif
 #ifdef USE_CLUSTER_GRENADES
 gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir);
 #endif
-
+#ifdef USE_FLAME_THROWER
+void Weapon_fire_flame (gentity_t *ent );
+#endif
 
 /*
 ===============
@@ -1227,7 +1215,7 @@ void FireWeapon( gentity_t *ent )
   //Hal9000 spreadfire
   if ( ent->client->ps.powerups[PW_SPREAD] ) {
 #ifdef USE_CLUSTER_GRENADES
-		if(g_clusterGrenades.integer) {
+		if(wp_grenadeCluster.integer) {
 			SpreadFire_Powerup(ent, fire_cluster_grenade);
 		} else
 #endif
@@ -1247,7 +1235,7 @@ void FireWeapon( gentity_t *ent )
 	case WP_RAILGUN2:
 	case WP_RAILGUN:
 #ifdef USE_INVULN_RAILS
-    if(g_railThruWalls.integer)
+    if(wp_railThruWalls.integer)
 			fire_special_railgun( ent );
 		else
 #endif

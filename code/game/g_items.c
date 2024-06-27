@@ -526,17 +526,14 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 #endif
 
 #ifdef USE_TRINITY
-	//SCO if ent-item is some sort of team item.
 	if (g_unholyTrinity.integer && ent->item->giType != IT_TEAM)
 		return;
 #endif
 #ifdef USE_HOTRPG
-	//SCO if ent-item is some sort of team item.
 	if (g_hotRockets.integer && ent->item->giType != IT_TEAM)
 		return;
 #endif
 #ifdef USE_HOTBFG
-	//SCO if ent-item is some sort of team item.
 	if (g_hotBFG.integer && ent->item->giType != IT_TEAM)
 		return;
 #endif

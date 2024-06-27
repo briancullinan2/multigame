@@ -344,11 +344,13 @@ typedef enum {
 	WP_RAILGUN = 7,
 	WP_PLASMAGUN = 8,
 
-
 	WP_CROWBAR = 9,
+
 	WP_MOD_CLASSES = 10,
 
+#ifdef USE_PORTAL
 	WP_PORTAL_GUN = 10,
+#endif
 	WP_CHAINSAW = 11,
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	WP_CHAINGUN = 12,
@@ -361,10 +363,11 @@ typedef enum {
 	WP_FLAME_THROWER = 17,
 #endif
 	WP_BFG = 18,
-
+#ifdef USE_GRAPPLE
 	WP_GRAPPLING_HOOK = 19,
+#endif
 
-
+#ifdef USE_ADVANCED_WEAPONS
 	WP_GAUNTLET2 = 21,
 	WP_MACHINEGUN2 = 22,
 	WP_SHOTGUN2 = 23,
@@ -374,6 +377,7 @@ typedef enum {
 	WP_RAILGUN2 = 27,
 	WP_PLASMAGUN2 = 28,
 	WP_BFG2 = 29,
+#endif
 
 	WP_NUM_WEAPONS = 30,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c

@@ -1215,7 +1215,7 @@ void ClientSpawn(gentity_t *ent) {
   }
 #endif
 
-	if(!( qfalse
+	if(!( !wp_gauntEnable.integer
 #ifdef USE_HOTRPG
 		|| g_hotRockets.integer
 #endif
@@ -1295,9 +1295,11 @@ if(g_hotBFG.integer) {
   }
 #endif
 #ifdef USE_FLAME_THROWER
-  //Spawn player with flame thrower
-  client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
-  client->ps.ammo[WP_FLAME_THROWER] = 999;
+	if(wp_flameEnable.integer) {
+		//Spawn player with flame thrower
+		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
+		client->ps.ammo[WP_FLAME_THROWER] = 999;
+	}
 #endif
 
 
@@ -1342,7 +1344,7 @@ if(g_hotBFG.integer) {
 		}
 #endif
 
-		if(!( qfalse
+		if(!( !wp_gauntEnable.integer
 #ifdef USE_HOTRPG
 			|| g_hotRockets.integer
 #endif

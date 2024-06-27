@@ -240,13 +240,13 @@ gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboo
 
 	bolt = G_Spawn();
 #ifdef USE_CLUSTER_GRENADES
-	if(g_clusterGrenades.integer && isCluster) {
+	if(wp_grenadeCluster.integer && isCluster) {
 	  bolt->classname = "cgrenade";
 	} else
 #endif
 	bolt->classname = "grenade";
 #ifdef USE_VORTEX_GRENADES
-  if(g_vortexGrenades.integer) {
+  if(wp_grenadeVortex.integer) {
     bolt->nextthink = level.time + 1000; // call G_Suck in 1 second
     bolt->think = G_Suck;
     bolt->wait = level.time + 20000; // vortext grenade lifetime.
@@ -296,7 +296,7 @@ gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboo
 
 #ifdef USE_CLUSTER_GRENADES
 gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
-	return fire_special_grenade(self, start, dir, g_clusterGrenades.integer);
+	return fire_special_grenade(self, start, dir, wp_grenadeCluster.integer);
 }
 #endif
 
@@ -361,7 +361,7 @@ void fire_special_railgun( gentity_t *ent ) {
 #endif
 	do {
 #ifdef USE_INVULN_RAILS
-    if(g_railThruWalls.integer)
+    if(wp_railThruWalls.integer)
       trap_Trace (&trace, tracefrom, NULL, NULL, end, passent, MASK_SHOT );
     else
 #endif
@@ -377,7 +377,7 @@ void fire_special_railgun( gentity_t *ent ) {
 
 		if ( trace.entityNum >= ENTITYNUM_MAX_NORMAL ) {
 #ifdef USE_INVULN_RAILS
-      if(g_railThruWalls.integer) {
+      if(wp_railThruWalls.integer) {
         // SUM break if we hit the sky
   			if (trace.surfaceFlags & SURF_SKY)
   				break;
@@ -429,7 +429,7 @@ void fire_special_railgun( gentity_t *ent ) {
 			}
 		}
 #ifdef USE_INVULN_RAILS
-    if(!g_railThruWalls.integer)
+    if(!wp_railThruWalls.integer)
 #endif
 		if ( trace.contents & CONTENTS_SOLID ) {
 			break;		// we hit something solid enough to stop the beam
@@ -451,7 +451,7 @@ void fire_special_railgun( gentity_t *ent ) {
 
 	// the final trace endpos will be the terminal point of the rail trail
 #ifdef USE_INVULN_RAILS
-  if(g_railThruWalls.integer)
+  if(wp_railThruWalls.integer)
     VectorCopy (lastend, trace.endpos);
 #endif
 
@@ -484,7 +484,7 @@ void fire_special_railgun( gentity_t *ent ) {
 
 #ifdef USE_INVULN_RAILS
   //send the effect to everyone since it tunnels through walls
-	if(g_railThruWalls.integer) {
+	if(wp_railThruWalls.integer) {
 		tent->r.svFlags |= SVF_BROADCAST;
 	}
 #endif
@@ -706,3 +706,63 @@ gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 
 	return bolt;
 }
+
+
+#ifdef USE_FLAME_THROWER
+/*
+=================
+fire_flame
+=================
+*/
+gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir) {
+  gentity_t*bolt;
+
+  VectorNormalize (dir);
+
+  bolt = G_Spawn();
+  bolt->classname = "flame";
+  bolt->nextthink = level.time + 1500;
+  bolt->think = G_ExplodeMissile;
+  bolt->s.eType = ET_MISSILE;
+  bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
+  bolt->s.weapon = WP_FLAME_THROWER;
+  bolt->r.ownerNum = self->s.number;
+  bolt->parent = self;
+#ifdef USE_WEAPON_VARS
+  bolt->damage = wp_flameDamage.integer;
+  bolt->splashDamage = wp_flameSplash.integer;
+  bolt->splashRadius = wp_flameRadius.integer;
+#else
+  bolt->damage = 30;
+  bolt->splashDamage = 25;
+  bolt->splashRadius = 45;
+#endif
+  bolt->methodOfDeath = MOD_FLAME_THROWER;
+  bolt->splashMethodOfDeath = MOD_PLASMA_SPLASH;
+  bolt->clipmask = MASK_SHOT;
+
+  bolt->s.pos.trType = TR_LINEAR;
+  bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;// move a bit on the very first frame
+  VectorCopy( start, bolt->s.pos.trBase );
+  VectorScale( dir, 300, bolt->s.pos.trDelta );
+  SnapVector( bolt->s.pos.trDelta );// save net bandwidth
+
+  VectorCopy (start, bolt->r.currentOrigin);
+
+  return bolt;
+}
+
+
+/*
+=======================================================================
+FLAME_THROWER
+=======================================================================
+*/
+void Weapon_fire_flame (gentity_t *ent ) {
+	gentity_t *m;
+
+	m = fire_flame(ent, muzzle, forward);
+	m->damage *= s_quadFactor;
+	m->splashDamage *= s_quadFactor;
+}
+#endif

@@ -638,51 +638,6 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 //=============================================================================
 
 
-#ifdef USE_FLAME_THROWER
-/*
-=================
-fire_flame
-=================
-*/
-gentity_t *fire_flame (gentity_t *self, vec3_t start, vec3_t dir) {
-  gentity_t*bolt;
-
-  VectorNormalize (dir);
-
-  bolt = G_Spawn();
-  bolt->classname = "flame";
-  bolt->nextthink = level.time + 1500;
-  bolt->think = G_ExplodeMissile;
-  bolt->s.eType = ET_MISSILE;
-  bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-  bolt->s.weapon = WP_FLAME_THROWER;
-  bolt->r.ownerNum = self->s.number;
-  bolt->parent = self;
-#ifdef USE_WEAPON_VARS
-  bolt->damage = wp_flameDamage.integer;
-  bolt->splashDamage = wp_flameSplash.integer;
-  bolt->splashRadius = wp_flameRadius.integer;
-#else
-  bolt->damage = 30;
-  bolt->splashDamage = 25;
-  bolt->splashRadius = 45;
-#endif
-  bolt->methodOfDeath = MOD_FLAME_THROWER;
-  bolt->splashMethodOfDeath = MOD_PLASMA_SPLASH;
-  bolt->clipmask = MASK_SHOT;
-
-  bolt->s.pos.trType = TR_LINEAR;
-  bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;// move a bit on the very first frame
-  VectorCopy( start, bolt->s.pos.trBase );
-  VectorScale( dir, 300, bolt->s.pos.trDelta );
-  SnapVector( bolt->s.pos.trDelta );// save net bandwidth
-
-  VectorCopy (start, bolt->r.currentOrigin);
-
-  return bolt;
-}
-#endif
-
 /*
 =================
 fire_grenade
@@ -748,57 +703,6 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 
 //=============================================================================
 
-
-#ifdef USE_PORTALS
-gentity_t *fire_portal (gentity_t *self, vec3_t start, vec3_t dir, qboolean altFire) {
-	gentity_t	*bolt;
-
-	VectorNormalize (dir);
-
-	bolt = G_Spawn();
-  // TODO: something for g_altPortal mode that resets
-  if(altFire) {
-    Com_Printf("portal b\n");
-    bolt->classname = "portal_b";
-    bolt->s.powerups = (1 << 5);
-  } else {
-    Com_Printf("portal a\n");
-    bolt->classname = "portal_a";
-    bolt->s.powerups = (1 << 4);
-  }
-	bolt->nextthink = level.time + 10000;
-	bolt->think = G_ExplodeMissile;
-	bolt->s.eType = ET_MISSILE;
-	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
-	bolt->s.weapon = WP_BFG;
-	bolt->r.ownerNum = self->s.number;
-	bolt->parent = self;
-  // TODO: use these as pickup and throwing values in bfg mode?
-	bolt->damage = 0;
-  bolt->splashDamage = 0;
-	bolt->splashRadius = 0;
-
-	bolt->methodOfDeath = MOD_TELEFRAG;
-	bolt->splashMethodOfDeath = MOD_UNKNOWN;
-	bolt->clipmask = MASK_SHOT;
-	bolt->target_ent = NULL;
-
-	// missile owner
-	bolt->s.clientNum = self->s.clientNum;
-	// unlagged
-	bolt->s.otherEntityNum = self->s.number;
-
-	bolt->s.pos.trType = TR_LINEAR;
-	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
-	VectorCopy( start, bolt->s.pos.trBase );
-	SnapVector( bolt->s.pos.trBase );			// save net bandwidth
-	VectorScale( dir, 2000, bolt->s.pos.trDelta );
-	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
-	VectorCopy (start, bolt->r.currentOrigin);
-
-	return bolt;
-}
-#endif
 
 /*
 =================

@@ -5,6 +5,62 @@
 #include "g_local.h"
 
 
+#ifdef USE_PORTALS
+#define	MISSILE_PRESTEP_TIME	50
+void G_ExplodeMissile( gentity_t *ent );
+
+
+gentity_t *fire_portal (gentity_t *self, vec3_t start, vec3_t dir, qboolean altFire) {
+	gentity_t	*bolt;
+
+	VectorNormalize (dir);
+
+	bolt = G_Spawn();
+  // TODO: something for g_altPortal mode that resets
+  if(altFire) {
+    Com_Printf("portal b\n");
+    bolt->classname = "portal_b";
+    bolt->s.powerups = (1 << 5);
+  } else {
+    Com_Printf("portal a\n");
+    bolt->classname = "portal_a";
+    bolt->s.powerups = (1 << 4);
+  }
+	bolt->nextthink = level.time + 10000;
+	bolt->think = G_ExplodeMissile;
+	bolt->s.eType = ET_MISSILE;
+	bolt->r.svFlags = SVF_USE_CURRENT_ORIGIN;
+	bolt->s.weapon = WP_BFG;
+	bolt->r.ownerNum = self->s.number;
+	bolt->parent = self;
+  // TODO: use these as pickup and throwing values in bfg mode?
+	bolt->damage = 0;
+  bolt->splashDamage = 0;
+	bolt->splashRadius = 0;
+
+	bolt->methodOfDeath = MOD_TELEFRAG;
+	bolt->splashMethodOfDeath = MOD_UNKNOWN;
+	bolt->clipmask = MASK_SHOT;
+	bolt->target_ent = NULL;
+
+	// missile owner
+	bolt->s.clientNum = self->s.clientNum;
+	// unlagged
+	bolt->s.otherEntityNum = self->s.number;
+
+	bolt->s.pos.trType = TR_LINEAR;
+	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
+	VectorCopy( start, bolt->s.pos.trBase );
+	SnapVector( bolt->s.pos.trBase );			// save net bandwidth
+	VectorScale( dir, 2000, bolt->s.pos.trDelta );
+	SnapVector( bolt->s.pos.trDelta );			// save net bandwidth
+	VectorCopy (start, bolt->r.currentOrigin);
+
+	return bolt;
+}
+
+
+
 /*
 =================================================================================
 
@@ -274,107 +330,7 @@ void SP_misc_portal_camera(gentity_t *ent) {
 	ent->s.clientNum = roll/360.0 * 256;
 }
 
-/*
-======================================================================
 
-  SHOOTERS
-
-======================================================================
-*/
-
-void Use_Shooter( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
-	vec3_t		dir;
-	float		deg;
-	vec3_t		up, right;
-
-	// see if we have a target
-	if ( ent->enemy ) {
-		VectorSubtract( ent->enemy->r.currentOrigin, ent->s.origin, dir );
-		VectorNormalize( dir );
-	} else {
-		VectorCopy( ent->movedir, dir );
-	}
-
-	// randomize a bit
-	PerpendicularVector( up, dir );
-	CrossProduct( up, dir, right );
-
-	deg = crandom() * ent->random;
-	VectorMA( dir, deg, up, dir );
-
-	deg = crandom() * ent->random;
-	VectorMA( dir, deg, right, dir );
-
-	VectorNormalize( dir );
-
-	switch ( ent->s.weapon ) {
-	case WP_GRENADE_LAUNCHER:
-		fire_grenade( ent, ent->s.origin, dir );
-		break;
-	case WP_ROCKET_LAUNCHER:
-		fire_rocket( ent, ent->s.origin, dir );
-		break;
-	case WP_PLASMAGUN:
-		fire_plasma( ent, ent->s.origin, dir );
-		break;
-	}
-
-	G_AddEvent( ent, EV_FIRE_WEAPON, 0 );
-}
-
-
-static void InitShooter_Finish( gentity_t *ent ) {
-	ent->enemy = G_PickTarget( ent->target );
-	ent->think = 0;
-	ent->nextthink = 0;
-}
-
-void InitShooter( gentity_t *ent, int weapon ) {
-	ent->use = Use_Shooter;
-	ent->s.weapon = weapon;
-
-	RegisterItem( BG_FindItemForWeapon( weapon ) );
-
-	G_SetMovedir( ent->s.angles, ent->movedir );
-
-	if ( !ent->random ) {
-		ent->random = 1.0;
-	}
-	ent->random = sin( M_PI * ent->random / 180 );
-	// target might be a moving object, so we can't set movedir for it
-	if ( ent->target ) {
-		ent->think = InitShooter_Finish;
-		ent->nextthink = level.time + 500;
-	}
-	trap_LinkEntity( ent );
-}
-
-/*QUAKED shooter_rocket (1 0 0) (-16 -16 -16) (16 16 16)
-Fires at either the target or the current direction.
-"random" the number of degrees of deviance from the taget. (1.0 default)
-*/
-void SP_shooter_rocket( gentity_t *ent ) {
-	InitShooter( ent, WP_ROCKET_LAUNCHER );
-}
-
-/*QUAKED shooter_plasma (1 0 0) (-16 -16 -16) (16 16 16)
-Fires at either the target or the current direction.
-"random" is the number of degrees of deviance from the taget. (1.0 default)
-*/
-void SP_shooter_plasma( gentity_t *ent ) {
-	InitShooter( ent, WP_PLASMAGUN);
-}
-
-/*QUAKED shooter_grenade (1 0 0) (-16 -16 -16) (16 16 16)
-Fires at either the target or the current direction.
-"random" is the number of degrees of deviance from the taget. (1.0 default)
-*/
-void SP_shooter_grenade( gentity_t *ent ) {
-	InitShooter( ent, WP_GRENADE_LAUNCHER);
-}
-
-
-#ifdef USE_PORTALS
 void PortalDestroy( gentity_t *self ) {
   gclient_t *client;
   client = &level.clients[self->r.ownerNum];
@@ -730,4 +686,5 @@ void DropPortalSource( gentity_t *player, vec3_t isWall ) {
 	player->client->portalID = 0;
 //	ent->spawnflags = player->client->ps.persistant[PERS_TEAM];
 }
+
 #endif

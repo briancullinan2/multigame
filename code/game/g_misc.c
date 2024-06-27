@@ -229,6 +229,8 @@ void SP_misc_portal_camera(gentity_t *ent) {
 	ent->s.clientNum = roll/360.0 * 256;
 }
 
+#endif
+
 /*
 ======================================================================
 
@@ -328,7 +330,7 @@ void SP_shooter_grenade( gentity_t *ent ) {
 	InitShooter( ent, WP_GRENADE_LAUNCHER);
 }
 
-
+#ifndef USE_PORTALS
 #ifdef MISSIONPACK
 static void PortalDie (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	G_FreeEntity( self );
