@@ -4,12 +4,12 @@
 void G_ExplodeMissile( gentity_t *ent );
 #define	MISSILE_PRESTEP_TIME	50
 
-#ifdef USE_WEAPON_SPREAD
-
 static	float	s_quadFactor;
 static	vec3_t	forward, right, up;
 static	vec3_t	muzzle;
 static	vec3_t	muzzle_origin; // for hitscan weapon trace
+
+#ifdef USE_WEAPON_SPREAD
 
 /*
 ===============
@@ -331,6 +331,16 @@ void fire_special_railgun( gentity_t *ent ) {
   vec3_t		tracefrom;	// SUM
   vec3_t		lastend;	// SUM
 #endif
+	if ( ent->client->ps.powerups[PW_QUAD] ) {
+		s_quadFactor = g_quadfactor.value;
+	} else {
+		s_quadFactor = 1.0;
+	}
+
+	// set aiming directions
+	AngleVectors( ent->client->ps.viewangles, forward, right, up );
+
+	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
 
 	damage = 100 * s_quadFactor;
 
