@@ -2297,19 +2297,16 @@ void PmoveSingle (pmove_t *pmove) {
 		// brian added this to face the player towards a cursor
 		float rad = atan2(SHORT2ANGLE(pm->cmd.angles[YAW]) - 180.0f, 180.0f - SHORT2ANGLE(pm->cmd.angles[PITCH])); // In radians
 		float deg = rad * (180.0f / M_PI);
+		pm->ps->delta_angles[PITCH] = 0;
+		pm->ps->delta_angles[YAW] = 0;
 		pm->ps->viewangles[PITCH] = deg < 0 ? 270 - deg : deg - 90;
-		pm->ps->viewangles[YAW] = deg < 0 ? -180 : 1;
-
-		// Zygote Start
+		pm->ps->viewangles[YAW] = 0; //deg < 0 ? 180 : 0;
 		pm->cmd.rightmove = 0; // no strafe ever!
-		if(deg < pm->cmd.angles[YAW] && deg < 0) {
-			//pm->cmd.forwardmove = -pm->cmd.forwardmove;
-		}
 		//PM_UpdateViewAngles( pm->ps, &pm->cmd );	// Update angles from controls!!??
 		
 		// This sets my movement direction based on my view angles
 		AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
-		pml.forward[0] = deg < 0 ? 16000 : -16000;
+		pml.forward[0] = deg < 0 ? -16000 : 16000;
 		pml.forward[1] = 0;
 		pml.forward[2] = 0;
 

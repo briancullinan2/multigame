@@ -268,7 +268,7 @@ static void CG_OffsetThirdPersonView( void ) {
 	if(cg.predictedPlayerState.pm_type == PM_PLATFORM
 			|| cg_sideview.integer) {
 		// Zygote - Out 300 units to the right
-		view[1] -= 300;
+		view[1] += 300;
 	}
 #endif
 
@@ -292,7 +292,7 @@ static void CG_OffsetThirdPersonView( void ) {
 			|| cg_sideview.integer) {
 		// Zygote - These values are locked in place
 		cg.refdefViewAngles[PITCH] = 0;		// locked at level view of players head
-		cg.refdefViewAngles[YAW] = 89.9;		// looking in!
+		cg.refdefViewAngles[YAW] = 270.9;		// looking in!
 	} else {
 #endif
 	cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2( focusPoint[2], focusDist );
@@ -536,6 +536,7 @@ static int CG_CalcFov( void ) {
 #ifdef USE_BIRDS_EYE
 	if(cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
 		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+		|| cg.predictedPlayerState.pm_type == PM_PLATFORM
 		|| cg_birdsEye.integer) {
 		cgs.fov = cg_fov.value + 20;
 	} else
@@ -786,8 +787,8 @@ static int CG_CalcViewValues( void ) {
 		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
 		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
 		|| cg_birdsEye.integer
-		|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
-		|| cg_sideview.integer
+	//	|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
+	//	|| cg_sideview.integer
 	) {
 		// back away from character
 		CG_OffsetThirdPersonView();
@@ -956,11 +957,11 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	// decide on third person view
 	cg.renderingThirdPerson = cg_thirdPerson.integer 
-		|| cg_sideview.integer
+	//	|| cg_sideview.integer
 		|| cg_birdsEye.integer
 		|| cg.snap->ps.pm_type == PM_BIRDSEYE
 		|| cg.snap->ps.pm_type == PM_FOLLOWCURSOR
-		|| cg.snap->ps.pm_type == PM_PLATFORM
+	//	|| cg.snap->ps.pm_type == PM_PLATFORM
 		|| cg.snap->ps.pm_type == PM_THIRDPERSON
 		|| (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 

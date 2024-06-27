@@ -1300,7 +1300,7 @@ void ClientThink_real( gentity_t *ent ) {
 		short		temp;
 
 		// Setup temp
-		temp = -ent->client->pers.cmd.angles[YAW]; // + ent->client->ps.delta_angles[YAW];		
+		temp = ent->client->pers.cmd.angles[YAW]; // + ent->client->ps.delta_angles[YAW];		
 		
 		// Some ugly shit, but it works :)
 		if ( (temp > -30000) && (temp < 0) ) {
@@ -1313,6 +1313,9 @@ void ClientThink_real( gentity_t *ent ) {
 		}	
 
 		// Copy modified YAW into viewangles
+		//G_Printf("view: %f\n", SHORT2ANGLE(temp));
+		ent->client->ps.delta_angles[YAW] = 0;
+		//ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp) < 0 ? 270 : 90;
 		ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp);
 		// ZYGOTE FINISH
 	}
