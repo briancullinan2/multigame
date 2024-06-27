@@ -787,8 +787,8 @@ static int CG_CalcViewValues( void ) {
 		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
 		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
 		|| cg_birdsEye.integer
-	//	|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
-	//	|| cg_sideview.integer
+		|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
+		|| cg_sideview.integer
 	) {
 		// back away from character
 		CG_OffsetThirdPersonView();
@@ -957,11 +957,11 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	// decide on third person view
 	cg.renderingThirdPerson = cg_thirdPerson.integer 
-	//	|| cg_sideview.integer
+		|| cg_sideview.integer
 		|| cg_birdsEye.integer
 		|| cg.snap->ps.pm_type == PM_BIRDSEYE
 		|| cg.snap->ps.pm_type == PM_FOLLOWCURSOR
-	//	|| cg.snap->ps.pm_type == PM_PLATFORM
+		|| cg.snap->ps.pm_type == PM_PLATFORM
 		|| cg.snap->ps.pm_type == PM_THIRDPERSON
 		|| (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 

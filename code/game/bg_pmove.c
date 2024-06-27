@@ -716,7 +716,6 @@ static void PM_AirMove( void ) {
 		wishvel[i] = pml.forward[i]*fmove + pml.right[i]*smove;
 	}
 	wishvel[2] = 0;
-
 	VectorCopy (wishvel, wishdir);
 	wishspeed = VectorNormalize(wishdir);
 	wishspeed *= scale;
@@ -724,10 +723,16 @@ static void PM_AirMove( void ) {
 	// not on ground, so little effect on velocity
 #ifdef USE_BIRDS_EYE
 	if(pm->ps->pm_type == PM_PLATFORM) {
+		//wishdir[1] = 0;
 		PM_Accelerate (wishdir, wishspeed, 5);
 	} else
 #endif
 	PM_Accelerate (wishdir, wishspeed, pm_airaccelerate);
+#ifdef USE_BIRDS_EYE
+	//if(pm->ps->pm_type == PM_PLATFORM) {
+	//	pm->ps->velocity[1] = 0;
+	//}
+#endif
 
 	// we may have a ground plane that is very steep, even
 	// though we don't have a groundentity
@@ -746,7 +751,10 @@ static void PM_AirMove( void ) {
 	else
 		PM_SlideMove ( qtrue );
 #endif
-
+#ifdef USE_BIRDS_EYE
+	//if(pm->ps->pm_type == PM_PLATFORM) {
+	//} else
+#endif
 	PM_StepSlideMove ( qtrue );
 }
 
@@ -2301,7 +2309,12 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->ps->delta_angles[YAW] = 0;
 		pm->ps->viewangles[PITCH] = deg < 0 ? 270 - deg : deg - 90;
 		pm->ps->viewangles[YAW] = 0; //deg < 0 ? 180 : 0;
-		pm->cmd.rightmove = 0; // no strafe ever!
+		if(pm->cmd.forwardmove == 0) {
+			pm->cmd.forwardmove = deg < 0 ? pm->cmd.rightmove : -pm->cmd.rightmove;
+			pm->cmd.rightmove = 0;
+		} else {
+			pm->cmd.rightmove = 0; // no strafe ever!
+		}
 		//PM_UpdateViewAngles( pm->ps, &pm->cmd );	// Update angles from controls!!??
 		
 		// This sets my movement direction based on my view angles
