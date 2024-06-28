@@ -351,13 +351,12 @@ static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *
 				}
 				continue;
 			}
-#else
+#endif
 			if ( LogAccuracyHit( traceEnt, ent ) ) {
 				hitClient = qtrue;
 			}
 			G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_SHOTGUN );
 			return hitClient;
-#endif
 		}
 		return qfalse;
 	}

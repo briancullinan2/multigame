@@ -1790,7 +1790,6 @@ void ResizeScreen( void ) {
 
 	// get the rendering configuration from the client system
 	trap_GetGlconfig( &cgs.glconfig );
-CG_Printf("resizing screen! %i x %f\n", cgs.glconfig.vidWidth, cgs.glconfig.windowAspect);
 
 	cgs.screenXBias = 0.0;
 	cgs.screenYBias = 0.0;

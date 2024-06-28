@@ -644,7 +644,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		}
 	}
 	if ( !item->classname ) {
-		CG_Error( "Couldn't find weapon %i", weaponNum );
+		CG_Printf( "Couldn't find weapon %i", weaponNum );
 		return;
 	}
 	CG_RegisterItemVisuals( item - bg_itemlist );
@@ -1645,7 +1645,11 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 		fovOffset[2] = 0;
 	}
 
-	fovOffset[0] -= (2 - cgs.glconfig.windowAspect) * 10 - 5;
+#ifdef USE_WEAPON_CENTER
+  if(cg_gunCenter.integer) {
+		fovOffset[0] -= (2 - cgs.glconfig.windowAspect) * 10 - 5;
+	}
+#endif
 
 	cent = &cg.predictedPlayerEntity;	// &cg_entities[cg.snap->ps.clientNum];
 	CG_RegisterWeapon( ps->weapon );

@@ -254,6 +254,10 @@
 #define USE_BOUNCE_RPG 1
 // enable cloaking command for clients to turn on infinite invisibility
 #define USE_CLOAK_CMD 1
+// use advanced gaming features like many teams, map rotations settings, randomizing items
+#define USE_ADVANCED_GAMES 1
+
+
 
 typedef unsigned char 		byte;
 

@@ -1291,6 +1291,13 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		knockback = 0;
 	}
 
+#ifdef USE_GRAVITY_BOOTS
+	// half the knockback with boots on
+	if(targ->client->ps.gravity && targ->client->ps.gravity != g_gravity.value) {
+		knockback *= 0.5f;
+	}
+#endif
+
 	// figure momentum add, even if the damage won't be taken
 	if ( knockback && targ->client ) {
 		vec3_t	kvel;

@@ -1106,8 +1106,9 @@ void ClientThink_real( gentity_t *ent ) {
 
 	client->ps.gravity = g_gravity.value;
 #ifdef USE_GRAVITY_BOOTS
-  if (g_enableBoots.integer && ent->flags & FL_BOOTS)    //  umm and this,
-     client->ps.gravity = g_gravity.value * 0.20;        //  yeah... this too
+  if (g_enableBoots.integer && ent->flags & FL_BOOTS) {                  //  umm and this,
+     client->ps.gravity = g_gravity.value * g_bootsGravity.value;        //  yeah... this too
+	}
 #endif
 
 	// set speed
@@ -1120,8 +1121,7 @@ void ClientThink_real( gentity_t *ent ) {
 #else
 		client->ps.speed *= 1.5;
 #endif
-	}
-	else
+	} else
 #endif
 	if ( client->ps.powerups[PW_HASTE] ) {
 #ifdef USE_PHYSICS_VARS

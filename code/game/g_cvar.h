@@ -147,6 +147,7 @@ G_CVAR( g_enableCloak, "g_enableCloak", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
 #ifdef USE_GRAVITY_BOOTS
 G_CVAR( g_enableBoots, "g_enableBoots", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( g_bootsGravity, "g_bootsGravity", "0.5", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 
 #ifdef USE_WEAPON_ORDER
