@@ -316,6 +316,9 @@ void CopyToBodyQue( gentity_t *ent ) {
 	int			contents;
 
 	trap_UnlinkEntity (ent);
+#ifdef USE_HORDES
+	return;
+#endif
 
 	// if client is in a nodrop area, don't leave the body
 	contents = trap_PointContents( ent->s.origin, -1 );
@@ -456,8 +459,14 @@ void respawn( gentity_t *ent ) {
 		return;
 
 	// add a teleportation effect
+#ifdef USE_HORDES
+	if(qfalse) {
+#endif
 	tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
 	tent->s.clientNum = ent->s.clientNum;
+#ifdef USE_HORDES
+	}
+#endif
 
 	// optimize bandwidth
 	if ( level.intermissiontime ) {
@@ -1391,6 +1400,9 @@ if(g_hotBFG.integer) {
 	SetClientViewAngle( ent, spawn_angles );
 
 	// entity should be unlinked before calling G_KillBox()	
+#ifdef USE_HORDES
+	if(qfalse) // TODO: implement anti spawn kill
+#endif
 	if ( !isSpectator )
 		G_KillBox( ent );
 

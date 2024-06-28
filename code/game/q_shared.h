@@ -259,6 +259,9 @@
 
 
 
+// many team colors, with automatically added many bots, rules for respawning, dying, and decay
+#define USE_HORDES 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
@@ -977,7 +980,7 @@ typedef enum {
 #define	MAX_CLIENTS			64		// absolute limit
 #define MAX_LOCATIONS		64
 
-#define	GENTITYNUM_BITS		10		// don't need to send any more
+#define	GENTITYNUM_BITS		12		// don't need to send any more
 #define	MAX_GENTITIES		(1<<GENTITYNUM_BITS)
 
 // entitynums are communicated with GENTITY_BITS, so any reserved

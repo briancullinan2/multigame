@@ -122,6 +122,9 @@ void AddTeamScore( vec3_t origin, team_t team, int score ) {
 	if ( score == 0 ) {
 		return;
 	}
+#ifdef USE_HORDES
+	return;
+#endif
 
 	eventParm = -1;
 	otherTeam = OtherTeam( team );

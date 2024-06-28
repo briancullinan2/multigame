@@ -62,6 +62,9 @@ void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles ) {
 
 	// use temp events at source and destination to prevent the effect
 	// from getting dropped by a second player event
+#ifdef USE_HORDES
+  if(qfalse)
+#endif
 	if ( player->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		tent = G_TempEntity( player->client->ps.origin, EV_PLAYER_TELEPORT_OUT );
 		tent->s.clientNum = player->s.clientNum;

@@ -515,6 +515,44 @@ static void G_LocateSpawnSpots( void )
 	level.numSpawnSpots = n;
 }
 
+#ifdef USE_HORDES
+qboolean setup = qfalse;
+int lastTime = 2000;
+void G_AddBot( const char *name, float skill, const char *team, int delay, const char *altname );
+
+static void InitHoards() {
+	int i;
+	int blue_count = 0;
+	int red_count = 0;
+	if(level.time - lastTime < 200) {
+		return;
+	}
+	lastTime = level.time;
+	for ( i=0; i < level.num_entities ; i++ ){
+		if ( g_entities[i].r.svFlags & SVF_BOT ) {
+			if(level.clients[i].sess.sessionTeam == TEAM_BLUE) {
+				blue_count++;
+			} else if (level.clients[i].sess.sessionTeam == TEAM_RED) {
+				red_count++;
+			}
+		}
+	}
+	if(g_hoardRed.integer > red_count) {
+		for(i = 0; i < g_hoardRed.integer - red_count; i++) {
+			G_AddBot( "sarge", 5, "red", i, 0 );
+			return;
+		}
+	}
+	if(g_hoardBlue.integer > blue_count) {
+		for(i = 0; i < g_hoardBlue.integer - blue_count; i++) {
+			G_AddBot( "sarge", 5, "blue", i, 0 );
+			return;
+		}
+	}
+}
+#endif
+
+
 
 /*
 ============
@@ -2181,6 +2219,8 @@ static void G_RunFrame( int levelTime ) {
 			ClientEndFrame( ent );
 		}
 	}
+
+	InitHoards();
 
 	// see if it is time to do a tournement restart
 	CheckTournament();

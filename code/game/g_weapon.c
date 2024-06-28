@@ -237,7 +237,11 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 			if( LogAccuracyHit( traceEnt, ent ) ) {
 				ent->client->accuracy_hits++;
 			}
-		} else {
+		} else 
+#ifdef USE_HORDES
+		if(qfalse)
+#endif
+		{
 			tent = G_TempEntity( tr.endpos, EV_BULLET_HIT_WALL );
 			tent->s.eventParm = DirToByte( tr.plane.normal );
 		}
@@ -854,7 +858,11 @@ void Weapon_LightningFire( gentity_t *ent ) {
 			tent->s.otherEntityNum = traceEnt->s.number;
 			tent->s.eventParm = DirToByte( tr.plane.normal );
 			tent->s.weapon = ent->s.weapon;
-		} else if ( !( tr.surfaceFlags & SURF_NOIMPACT ) ) {
+		} else 
+#ifdef USE_HORDES
+		if(qfalse)
+#endif
+		if ( !( tr.surfaceFlags & SURF_NOIMPACT ) ) {
 			tent = G_TempEntity( tr.endpos, EV_MISSILE_MISS );
 			tent->s.eventParm = DirToByte( tr.plane.normal );
 			tent->s.weapon = ent->s.weapon;

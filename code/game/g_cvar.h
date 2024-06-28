@@ -158,4 +158,10 @@ G_CVAR( g_supportsWeaponOrder, "g_supportsWeaponOrder", "1", CVAR_SERVERINFO | C
 #include "./g_cvar_weapon2.h"
 #include "./g_cvar_weapon3.h"
 
+
+#ifdef USE_HORDES
+G_CVAR( g_hoardRed, "g_hoardRed", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hoardBlue, "g_hoardBlue", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+
 #undef G_CVAR
