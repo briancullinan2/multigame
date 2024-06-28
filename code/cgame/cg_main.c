@@ -18,6 +18,12 @@ static int atmosphereModificationCount = -1;
 static int weaponsOrderModificationCount = -1; //WarZone
 static int gametypeModificationCount = -1;
 
+static int rmodeModificationCount = -1;
+static int raspectModificationCount = -1;
+static int rheightModificationCount = -1;
+static int rwidthModificationCount = -1;
+static int rfullscreenModificationCount = -1;
+
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
 
@@ -145,6 +151,11 @@ void CG_RegisterCvars( void ) {
 	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
 	gametypeModificationCount = cg_gametype.modificationCount; 
 
+	rmodeModificationCount = cg_mode.modificationCount;
+	raspectModificationCount = cg_aspect.modificationCount;
+	rheightModificationCount = cg_height.modificationCount;
+	rwidthModificationCount = cg_width.modificationCount;
+	rfullscreenModificationCount = cg_fullscreen.modificationCount;
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	trap_Cvar_Register(NULL, "headmodel", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
@@ -178,6 +189,10 @@ void CG_ForceModelChange( void ) {
 #ifdef USE_WEAPON_ORDER
 void UpdateWeaponOrder (void);
 #endif
+
+static void CG_RegisterSounds( void );
+static void CG_RegisterGraphics( qboolean firstTime );
+void ResizeScreen( void );
 
 /*
 =================
@@ -229,6 +244,20 @@ void CG_UpdateCvars( void ) {
 		CG_RegisterGraphics(qfalse);
 		CG_RegisterSounds();
 		CG_LoadingString( "" );
+	}
+
+	if(	rmodeModificationCount != cg_mode.modificationCount
+		|| raspectModificationCount != cg_aspect.modificationCount
+		|| rheightModificationCount != cg_height.modificationCount
+		|| rwidthModificationCount != cg_width.modificationCount
+		|| rfullscreenModificationCount != cg_fullscreen.modificationCount
+	) {
+		rmodeModificationCount = cg_mode.modificationCount;
+		raspectModificationCount = cg_aspect.modificationCount;
+		rheightModificationCount = cg_height.modificationCount;
+		rwidthModificationCount = cg_width.modificationCount;
+		rfullscreenModificationCount = cg_fullscreen.modificationCount;
+		ResizeScreen();
 	}
 
 	// if model changed
@@ -1756,6 +1785,40 @@ void CG_AssetCache( void ) {
 
 
 void CG_EffectParse( const char *effectstr );
+
+void ResizeScreen( void ) {
+
+	// get the rendering configuration from the client system
+	trap_GetGlconfig( &cgs.glconfig );
+CG_Printf("resizing screen! %i x %f\n", cgs.glconfig.vidWidth, cgs.glconfig.windowAspect);
+
+	cgs.screenXBias = 0.0;
+	cgs.screenYBias = 0.0;
+	
+	if ( cgs.glconfig.vidWidth * 480 > cgs.glconfig.vidHeight * 640 ) {
+		// wide screen, scale by height
+		cgs.screenXScale = cgs.screenYScale = cgs.glconfig.vidHeight * (1.0/480.0);
+		cgs.screenXBias = 0.5 * ( cgs.glconfig.vidWidth - ( cgs.glconfig.vidHeight * (640.0/480.0) ) );
+	}
+	else {
+		// no wide screen, scale by width
+		cgs.screenXScale = cgs.screenYScale = cgs.glconfig.vidWidth * (1.0/640.0);
+		cgs.screenYBias = 0.5 * ( cgs.glconfig.vidHeight - ( cgs.glconfig.vidWidth * (480.0/640.0) ) );
+	}
+
+	cgs.screenXmin = 0.0 - (cgs.screenXBias / cgs.screenXScale);
+	cgs.screenXmax = 640.0 + (cgs.screenXBias / cgs.screenXScale);
+
+	cgs.screenYmin = 0.0 - (cgs.screenYBias / cgs.screenYScale);
+	cgs.screenYmax = 480.0 + (cgs.screenYBias / cgs.screenYScale);
+
+	cgs.cursorScaleR = 1.0 / cgs.screenXScale;
+	if ( cgs.cursorScaleR < 0.5 ) {
+		cgs.cursorScaleR = 0.5;
+	}
+
+}
+
 
 
 /*

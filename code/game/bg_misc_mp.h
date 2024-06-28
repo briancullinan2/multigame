@@ -1,3 +1,27 @@
+
+#ifdef USE_PORTALS
+#ifndef MISSIONPACK
+
+/*QUAKED holdable_portal (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+{
+  "holdable_portal", 
+  "sound/items/holdable.wav",
+      { "models/powerups/holdable/porter.md3",
+  0, 0, 0},
+/* icon */		"icons/portal",
+/* pickup */	"Portal",
+  60,
+  IT_HOLDABLE,
+  HI_PORTAL,
+/* precache */ "",
+/* sounds */ ""
+},
+
+#endif
+#endif
+
+
 #if defined(MISSIONPACK)
 
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended

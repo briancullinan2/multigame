@@ -348,7 +348,7 @@ typedef enum {
 
 	WP_MOD_CLASSES = 10,
 
-#ifdef USE_PORTAL
+#ifdef USE_PORTALS
 	WP_PORTAL_GUN = 10,
 #endif
 	WP_CHAINSAW = 11,

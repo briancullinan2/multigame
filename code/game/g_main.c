@@ -238,6 +238,7 @@ void G_RegisterCvars( void ) {
 	}
 
 	// check some things
+	g_gametype.integer = trap_Cvar_VariableIntegerValue( "g_gametype" );
 	if ( g_gametype.integer < 0 || g_gametype.integer >= GT_MAX_GAME_TYPE ) {
 		G_Printf( "g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer );
 		trap_Cvar_Set( "g_gametype", "0" );

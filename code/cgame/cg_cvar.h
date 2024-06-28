@@ -136,7 +136,11 @@ CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_gametype, "gametype", "0", CVAR_SERVERINFO ) // used for debugging
 
-
+CG_CVAR( cg_mode, "r_mode", "-2", CVAR_ARCHIVE )
+CG_CVAR( cg_aspect, "r_customAspect", "1", CVAR_ARCHIVE )
+CG_CVAR( cg_height, "r_customHeight", "1024", CVAR_ARCHIVE )
+CG_CVAR( cg_width, "r_customWidth", "1600", CVAR_ARCHIVE )
+CG_CVAR( cg_fullscreen, "r_modeFullscreen", "-2", CVAR_ARCHIVE )
 
 
 #ifdef USE_PORTALS
