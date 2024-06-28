@@ -379,6 +379,10 @@ struct gclient_s {
 	// like health / armor countdowns and regeneration
 	int			timeResidual;
 
+#ifdef USE_GAME_FREEZETAG
+	int     lastFreezeTime; // for calculating how frozen they are extactly
+#endif
+
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	gentity_t	*persistantPowerup;
 	int			portalID;

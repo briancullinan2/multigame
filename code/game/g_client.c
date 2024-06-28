@@ -446,11 +446,6 @@ respawn
 void respawn( gentity_t *ent ) {
 	gentity_t	*tent;
 
-#ifdef USE_GAME_FREEZETAG
-	if(!g_freezeTag.integer) {
-		G_Error("Respawn called in freeze tag mode!");
-	}
-#endif
 	if ( ent->health <= 0 )
 		CopyToBodyQue( ent );
 
@@ -1318,7 +1313,7 @@ if(g_hotBFG.integer) {
 	}
 
 	// give the zero weapon (empty/hands) and malee weapon to all the classes
-	for(i = 0; i < WP_MAX_CLASSES; i++) {
+	for(i = 1; i < WP_MAX_CLASSES; i++) {
 		if(i * WP_MAX_WEAPONS >= WP_NUM_WEAPONS) {
 			break;
 		}

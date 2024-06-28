@@ -479,6 +479,33 @@ void CheckAlmostScored( gentity_t *self, gentity_t *attacker ) {
 	}
 }
 
+
+
+#ifdef USE_DAMAGE_PLUMS
+void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
+  gentity_t *plum;
+
+  if ( self->client->ps.pm_type == PM_DEAD ) {
+		return;
+	}
+  
+  if ( !attacker || !attacker->client || self->client == attacker->client ) {
+    return;
+  }
+
+  plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
+  // only send this temp entity to a single client
+  plum->r.svFlags |= SVF_SINGLECLIENT;
+  plum->r.singleClient = attacker->s.number;
+  //
+  plum->s.otherEntityNum2 = attacker->s.number;
+  plum->s.otherEntityNum = self->s.number;
+  plum->s.time = damage;
+}
+#endif
+
+
+
 #ifdef USE_GAME_FREEZETAG
 
 void CheckFrozen() {
@@ -487,7 +514,7 @@ void CheckFrozen() {
 	gentity_t	*lastAlive;
 	gentity_t	*ent;
 	int i;
-
+	qboolean unfreezeAll = qfalse;
 
 	ent = &g_entities[0];
 	for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
@@ -521,10 +548,26 @@ void CheckFrozen() {
 
 	if(frozenCount > 0 && frozenCount == clientCount - 1) {
 		AddScore(lastAlive, lastAlive->r.currentOrigin, frozenCount);
+		unfreezeAll = qtrue;
+	}
+	if(!(redTeam == 0 || blueTeam == 0)) {
+		if(redCount == clientCount || redCount == redTeam ) {
+			AddScore(lastAlive, lastAlive->r.currentOrigin, redCount);
+			unfreezeAll = qtrue;
+		}
+		if(blueCount == clientCount || blueCount == blueTeam) {
+			AddScore(lastAlive, lastAlive->r.currentOrigin, blueCount);
+			unfreezeAll = qtrue;
+		}
+	}
+
+	if(unfreezeAll) {
 		ent = &g_entities[0];
 		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
-			if(ent->inuse && ent->client && ent->client->ps.powerups[PW_FROZEN]) {
+			if(ent->inuse && ent->client && (ent->client->ps.powerups[PW_FROZEN]
+				|| ent->client->ps.pm_type == PM_FROZEN)) {
 				G_AddEvent( ent, EV_UNFROZEN, 0 );
+				// TODO: decide if they die or gib or come back to life
 				ent->client->ps.pm_type = PM_DEAD;
 				ent->client->ps.stats[STAT_HEALTH] = 0;
 				ent->client->ps.powerups[PW_FROZEN] = 0;
@@ -533,74 +576,51 @@ void CheckFrozen() {
 			}
 		}
 	}
-	if(redTeam == 0 || blueTeam == 0) {
-		return;
-	}
-	if(redCount == clientCount || redCount == redTeam ) {
-		AddScore(lastAlive, lastAlive->r.currentOrigin, redCount);
-		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
-			if(ent->inuse && ent->client && ent->client->ps.powerups[PW_FROZEN]) {
-				G_AddEvent( ent, EV_UNFROZEN, 0 );
-				ent->client->ps.pm_type = PM_DEAD;
-				ent->client->ps.stats[STAT_HEALTH] = 0;
-				ent->client->ps.powerups[PW_FROZEN] = 0;
-				ent->health = 0;
-				//SetClientViewAngle(ent, ent->client->frozen_angles);
-			}
-		}
-	}
-	if(blueCount == clientCount || blueCount == blueTeam) {
-		AddScore(lastAlive, lastAlive->r.currentOrigin, blueCount);
-		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
-			if(ent->inuse && ent->client && ent->client->ps.powerups[PW_FROZEN]) {
-				G_AddEvent( ent, EV_UNFROZEN, 0 );
-				ent->client->ps.pm_type = PM_DEAD;
-				ent->client->ps.stats[STAT_HEALTH] = 0;
-				ent->client->ps.powerups[PW_FROZEN] = 0;
-				ent->health = 0;
-				//SetClientViewAngle(ent, ent->client->frozen_angles);
-			}
-		}
-	}
+
+
 }
 
-#endif
 
-
-
-
-#ifdef USE_DAMAGE_PLUMS
-void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
+void player_frozen(gentity_t *self, int killer) {
   gentity_t *plum;
 
-  if ( self->client->ps.pm_type == PM_DEAD ) {
+	if(!g_freezeTag.integer) {
 		return;
 	}
-  
-  if ( !attacker || !attacker->client || self->client == attacker->client ) {
-    return;
-  }
 
-  plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
-  // only send this temp entity to a single client
-#if defined(USE_GAME_FREEZETAG) || defined(USE_RPG_STATS)
-	if(g_freezeTag.integer) {
-		// send health for use with frozen players status bar to show how close to thawing they are
-		// adding health here for RPG game.
-		// TODO: should be changed to something like powerup[PW_FROZEN] - level.time
-		// on both client end and server end.
-		plum->s.time2 = self->client->ps.stats[STAT_HEALTH];
-		plum->r.svFlags |= SVF_BROADCAST;
-	} else
-#endif
-  plum->r.svFlags |= SVF_SINGLECLIENT;
-  plum->r.singleClient = attacker->s.number;
-  //
-  plum->s.otherEntityNum2 = attacker->s.number;
+  if ( self->client->ps.pm_type != PM_DEAD
+		&& self->client->ps.pm_type != PM_FROZEN ) {
+		return;
+	}
+
+	plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
+	plum->s.time2 = g_thawTime.integer - (level.time - self->client->ps.powerups[PW_FROZEN]) / 1000.0f;
   plum->s.otherEntityNum = self->s.number;
-  plum->s.time = damage;
+	plum->r.svFlags |= SVF_BROADCAST;
+	self->client->lastFreezeTime = level.time;
+
+	CheckFrozen();
+
+  if ( self->client->ps.pm_type == PM_FROZEN ) {
+		return;
+	}
+
+	self->client->ps.pm_type = PM_FROZEN;
+	self->client->ps.torsoAnim = TORSO_STAND;
+	self->client->ps.legsAnim = LEGS_IDLE;
+
+	self->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+
+	self->takedamage = qfalse;	// can still be gibbed
+	self->health = INFINITE;
+	self->client->ps.stats[STAT_HEALTH] = INFINITE;
+
+	G_AddEvent( self, EV_FROZEN, killer );
+
 }
 #endif
+
+
 
 /*
 ==================
@@ -652,11 +672,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	}
 #endif
 
-#ifdef USE_GAME_FREEZETAG
-	if(g_freezeTag.integer && meansOfDeath != MOD_TRIGGER_HURT && meansOfDeath != MOD_VOID) {
-		self->client->ps.pm_type = PM_FROZEN;
-	} else
-#endif
 	self->client->ps.pm_type = PM_DEAD;
 
 	if ( attacker ) {
@@ -915,21 +930,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 #ifdef USE_GAME_FREEZETAG
 	} else {
-
-		self->client->ps.torsoAnim = TORSO_STAND;
-		self->client->ps.legsAnim = LEGS_IDLE;
-
- 		self->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
-
-		G_AddEvent( self, EV_FROZEN, killer );
-
-		if(meansOfDeath != MOD_TRIGGER_HURT) {
-			self->takedamage = qfalse;	// can still be gibbed
-			self->health = INFINITE;
-			self->client->ps.stats[STAT_HEALTH] = INFINITE;
-		}
-
-		CheckFrozen();
+		player_frozen(self, killer);
 	}
 #endif
 

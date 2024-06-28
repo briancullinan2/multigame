@@ -942,6 +942,12 @@ void SendPendingPredictableEvents( playerState_t *ps ) {
 	}
 }
 
+
+#ifdef USE_GAME_FREEZETAG
+void player_frozen(gentity_t *self, int killer);
+#endif
+
+
 /*
 ==============
 ClientThink
@@ -1068,9 +1074,9 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.pm_type = PM_NOCLIP;
   } else
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-  if ( client->ps.powerups[PW_FROZEN] || client->ps.stats[STAT_HEALTH] <= 0 ) {
+  if ( g_freezeTag.integer && client->ps.powerups[PW_FROZEN] ) {
     client->ps.pm_type = PM_FROZEN;
-		client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+		//client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
   } else
 #endif
   if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
@@ -1418,7 +1424,13 @@ void ClientThink_real( gentity_t *ent ) {
 
 #ifdef USE_GAME_FREEZETAG
 	} else {
-
+		//if(level.time - client->ps.powerups[PW_FROZEN] >= 0) {
+		//	client->ps.pm_type = PM_DEAD;
+		//	respawn( ent );
+		//}
+		//if(level.time - client->lastFreezeTime >= 1000) {
+		//	player_frozen(ent, 0);
+		//}
 	}
 #endif
 
@@ -1439,6 +1451,25 @@ void ClientThink( int clientNum ) {
 	gentity_t *ent;
 
 	ent = g_entities + clientNum;
+
+#ifdef USE_GAME_FREEZETAG
+	if(ent->client->pers.connected == CON_CONNECTED) {
+		if(g_freezeTag.integer &&
+			(ent->client->ps.stats[STAT_HEALTH] == INFINITE
+			|| ent->client->ps.powerups[PW_FROZEN])) {
+			if(level.time - ent->client->ps.powerups[PW_FROZEN] >= 0) {
+				ent->client->ps.pm_type = PM_DEAD;
+				respawn( ent );
+			}
+			if(level.time - ent->client->lastFreezeTime >= 1000) {
+				player_frozen(ent, 0);
+			}
+		}
+	}
+#endif
+
+
+
 	trap_GetUsercmd( clientNum, &ent->client->pers.cmd );
 
 	// mark the time we got info, so we can display the
@@ -1454,6 +1485,7 @@ void ClientThink( int clientNum ) {
 
 
 void G_RunClient( gentity_t *ent ) {
+
 	if ( !(ent->r.svFlags & SVF_BOT) && !g_synchronousClients.integer ) {
 		return;
 	}
