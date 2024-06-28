@@ -860,7 +860,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 			tent->s.weapon = ent->s.weapon;
 		} else 
 #ifdef USE_HORDES
-		if(qfalse)
+		if(!g_hordeMode.integer)
 #endif
 		if ( !( tr.surfaceFlags & SURF_NOIMPACT ) ) {
 			tent = G_TempEntity( tr.endpos, EV_MISSILE_MISS );

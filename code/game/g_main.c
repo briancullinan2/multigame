@@ -537,14 +537,14 @@ static void InitHoards() {
 			}
 		}
 	}
-	if(g_hoardRed.integer > red_count) {
-		for(i = 0; i < g_hoardRed.integer - red_count; i++) {
+	if(g_hordeRed.integer > red_count) {
+		for(i = 0; i < g_hordeRed.integer - red_count; i++) {
 			G_AddBot( "sarge", 5, "red", i, 0 );
 			return;
 		}
 	}
-	if(g_hoardBlue.integer > blue_count) {
-		for(i = 0; i < g_hoardBlue.integer - blue_count; i++) {
+	if(g_hordeBlue.integer > blue_count) {
+		for(i = 0; i < g_hordeBlue.integer - blue_count; i++) {
 			G_AddBot( "sarge", 5, "blue", i, 0 );
 			return;
 		}

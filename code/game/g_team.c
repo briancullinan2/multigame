@@ -122,8 +122,11 @@ void AddTeamScore( vec3_t origin, team_t team, int score ) {
 	if ( score == 0 ) {
 		return;
 	}
+
 #ifdef USE_HORDES
-	return;
+	if(g_hordeMode.integer) {
+		return;
+	}
 #endif
 
 	eventParm = -1;

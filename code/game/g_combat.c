@@ -64,13 +64,17 @@ void TossClientItems( gentity_t *self ) {
 	// drop the weapon if not a gauntlet or machinegun
 	weapon = self->s.weapon;
 
+#ifdef USE_HORDES
+	if(g_hordeMode.integer) {
+		return;
+	}
+#endif
+
 #ifdef USE_CLOAK_CMD
   if (self->flags & FL_CLOAK) {
   	// remove the invisible powerup if the player is cloaked.
   	self->client->ps.powerups[PW_INVIS] = level.time;
   } 
-#ifdef USE_HORDES
-	return;
 #endif
 
 	// make a special check to see if they are changing to a new
@@ -294,7 +298,7 @@ void GibEntity( gentity_t *self, int killer ) {
 #endif
 
 #ifdef USE_HORDES
-	if(qfalse)
+	if(!g_hordeMode.integer)
 #endif
 	G_AddEvent( self, EV_GIB_PLAYER, killer );
 	self->takedamage = qfalse;
@@ -720,7 +724,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	// broadcast the death event to everyone
 #ifdef USE_HORDES
-	if(qfalse)
+	if(!g_hordeMode.integer)
 	{
 #endif
 	ent = G_TempEntity( self->r.currentOrigin, EV_OBITUARY );
@@ -830,7 +834,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 #endif
 
 #ifdef USE_HORDES
-	if(g_forcerespawn.value > 1.700)
+	if(!g_hordeMode.integer || g_forcerespawn.value > 1.700)
 #endif
 	Cmd_Score_f( self );		// show scores
 	// send updated scores to any clients that are following this one,

@@ -450,12 +450,12 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		ent->s.otherEntityNum = other->s.number;
 	} else if( trace->surfaceFlags & SURF_METALSTEPS ) {
 #ifdef USE_HORDES
-	if(qfalse)
+	if(!g_hordeMode.integer)
 #endif
 		G_AddEvent( ent, EV_MISSILE_MISS_METAL, DirToByte( trace->plane.normal ) );
 	} else 
 #ifdef USE_HORDES
-	if(qfalse)
+	if(!g_hordeMode.integer)
 #endif
 	{
 		G_AddEvent( ent, EV_MISSILE_MISS, DirToByte( trace->plane.normal ) );
