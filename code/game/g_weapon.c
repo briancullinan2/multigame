@@ -841,12 +841,11 @@ void Weapon_LightningFire( gentity_t *ent ) {
 				}
 				continue;
 			}
-#else
+#endif
 			if ( LogAccuracyHit( traceEnt, ent ) ) {
 				ent->client->accuracy_hits++;
 			}
 			G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_LIGHTNING );
-#endif
 		}
 
 		if ( traceEnt->takedamage && traceEnt->client ) {

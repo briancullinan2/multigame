@@ -191,7 +191,7 @@ void UpdateWeaponOrder (void);
 #endif
 
 static void CG_RegisterSounds( void );
-static void CG_RegisterGraphics( qboolean firstTime );
+static void CG_RegisterGraphics( void );
 void ResizeScreen( void );
 
 /*
