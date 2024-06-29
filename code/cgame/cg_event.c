@@ -1083,7 +1083,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 #if defined(USE_DAMAGE_PLUMS) || defined(USE_RPG_STATS)
 	case EV_DAMAGEPLUM:
-		if(cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
+		if(cent->currentState.time && cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
 			CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		}
 		if(cent->currentState.time2) {

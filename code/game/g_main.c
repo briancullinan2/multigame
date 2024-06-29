@@ -260,6 +260,7 @@ static char *gametypeNames[] = {"ffa", "tournament", "single", "team", "ctf", "o
 	char *gametypeName;
 	// nope, server controls entity spawning
 	// G_InitGame(level.time, level.time, qtrue);
+	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 
 	// TODO: loop through entities and re-enable to ones that were disabled when the map spawned
 	ent = g_entities + MAX_CLIENTS;
@@ -548,6 +549,7 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	srand( randomSeed );
 
 	G_RegisterCvars();
+	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 
 	G_ProcessIPBans();
 
@@ -1811,7 +1813,12 @@ static void CheckTournament( void ) {
 
 		// if all players have arrived, start the countdown
 		if ( level.warmupTime < 0 ) {
-			if ( g_warmup.integer > 0 ) {
+			if (
+#ifdef USE_HORDES
+				!g_hordeMode.integer && 
+#endif
+			 	g_warmup.integer > 0 
+			) {
 				level.warmupTime = level.time + g_warmup.integer * 1000;
 			} else {
 				level.warmupTime = 0;
@@ -2066,6 +2073,58 @@ void G_RunThink( gentity_t *ent ) {
 }
 
 
+#ifdef USE_HORDES
+qboolean setup = qfalse;
+int lastTime = 2000;
+void G_AddBot( const char *name, float skill, const char *team, int delay, const char *altname );
+
+static void InitHoards() {
+	int i;
+	int blue_count = 0;
+	int red_count = 0;
+	int player_count = 0;
+	if(!g_hordeMode.integer) {
+		return;
+	}
+	if(level.time - lastTime < 300) {
+		return;
+	}
+	lastTime = level.time;
+	for ( i=0; i < MAX_CLIENTS ; i++ ){
+		if(!g_entities[i].inuse) {
+			continue;
+		}
+		if ( g_entities[i].r.svFlags & SVF_BOT ) {
+			if(level.clients[i].sess.sessionTeam == TEAM_BLUE) {
+				blue_count++;
+			} else if (level.clients[i].sess.sessionTeam == TEAM_RED) {
+				red_count++;
+			}
+		}
+		player_count++;
+	}
+
+	// don't continue here if server is full
+	if(player_count >= g_maxclients.integer) {
+		return;
+	}
+
+	if(g_hordeRed.integer > red_count) {
+		for(i = 0; i < g_hordeRed.integer - red_count; i++) {
+			G_AddBot( "sarge", 5, "red", i, 0 );
+			return;
+		}
+	}
+	if(g_hordeBlue.integer > blue_count) {
+		for(i = 0; i < g_hordeBlue.integer - blue_count; i++) {
+			G_AddBot( "sarge", 5, "blue", i, 0 );
+			return;
+		}
+	}
+}
+#endif
+
+
 /*
 ================
 G_RunFrame
@@ -2181,6 +2240,13 @@ static void G_RunFrame( int levelTime ) {
 			ClientEndFrame( ent );
 		}
 	}
+
+#ifdef USE_HORDES
+	if(g_hordeMode.integer) {
+		InitHoards();
+	}
+#endif
+
 
 	// see if it is time to do a tournement restart
 	CheckTournament();

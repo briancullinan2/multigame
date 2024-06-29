@@ -123,7 +123,7 @@ G_CVAR( g_upsideDown, "g_upsideDown", "0", CVAR_TEMP, 0, qfalse, qfalse )
 #endif
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-G_CVAR( g_freezeTag, "g_freezeTag", "1", 0, 0, qfalse, qfalse )
+G_CVAR( g_freezeTag, "g_freezeTag", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_thawTime, "g_thawTime", "180", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 
@@ -153,6 +153,13 @@ G_CVAR( g_bootsGravity, "g_bootsGravity", "0.5", CVAR_ARCHIVE, 0, qfalse, qfalse
 #ifdef USE_WEAPON_ORDER
 G_CVAR( g_supportsWeaponOrder, "g_supportsWeaponOrder", "1", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse ) //WarZone
 #endif
+
+#ifdef USE_HORDES
+G_CVAR( g_hordeMode, "g_hordeMode", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeRed,  "g_hordeRed", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeBlue, "g_hordeBlue", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+
 
 #include "./g_cvar_weapon.h"
 #include "./g_cvar_weapon2.h"

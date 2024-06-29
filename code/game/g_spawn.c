@@ -629,7 +629,12 @@ void SP_worldspawn( void ) {
 	} else {
 		// assume that g_doWarmup is always 1
 		level.warmupTime = -1;
-		if ( g_warmup.integer > 0 ) {
+		if ( 
+#ifdef USE_HORDES
+			!g_hordeMode.integer && 
+#endif
+			g_warmup.integer > 0 
+		) {
 			trap_SetConfigstring( CS_WARMUP, va( "%i", level.warmupTime ) );
 		} else {
 			trap_SetConfigstring( CS_WARMUP, "" );

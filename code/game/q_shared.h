@@ -257,6 +257,8 @@
 // use advanced gaming features like many teams, map rotations settings, randomizing items
 #define USE_ADVANCED_GAMES 1
 
+// many team colors, with automatically added many bots, rules for respawning, dying, and decay
+#define USE_HORDES 1
 
 
 typedef unsigned char 		byte;
