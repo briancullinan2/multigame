@@ -423,8 +423,7 @@ static void G_UpdateCvars( void ) {
 					|| cv->vmCvar == &g_unholyTrinity
 #endif
 				) {
-					UpdateGameType();
-
+					//UpdateGameType();
 				}
 
 				if ( cv->trackChange ) {

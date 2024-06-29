@@ -1238,7 +1238,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	vec3_t		bouncedir, impactpoint;
 #endif
 
-	if (!targ->takedamage && targ->s.number > MAX_CLIENTS) {
+	if (!targ->takedamage) {
 		return;
 	}
 
@@ -1545,8 +1545,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
     }
 #endif
 	}
-
-	G_Printf("wtf! %i\n", take);
 
 	// do the damage
 	if (take) {

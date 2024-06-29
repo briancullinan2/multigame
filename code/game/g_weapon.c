@@ -261,11 +261,9 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 					passent = traceEnt->s.number;
 				}
 				continue;
-			} else 
-#endif
-			{
-				G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_MACHINEGUN );
 			}
+#endif
+			G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_MACHINEGUN );
 		}
 		break;
 	}
@@ -333,7 +331,7 @@ static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *
 			return qfalse;
 		}
 
-		if ( traceEnt->takedamage || traceEnt->s.number < MAX_CLIENTS ) {
+		if ( traceEnt->takedamage ) {
 #ifdef USE_WEAPON_VARS
       damage = wp_shotgunDamage.integer * s_quadFactor;
 #else
