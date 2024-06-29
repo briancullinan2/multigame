@@ -24,5 +24,7 @@
 #include "./bg_misc_mp.h"
 #endif
 
+#ifdef USE_ADVANCED_WEAPONS
 #include "./bg_misc_weapons2.h"
 #include "./bg_misc_ammo2.h"
+#endif

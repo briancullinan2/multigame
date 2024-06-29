@@ -524,11 +524,18 @@ static void InitHoards() {
 	int i;
 	int blue_count = 0;
 	int red_count = 0;
-	if(level.time - lastTime < 200) {
+	int player_count = 0;
+	if(!g_hordeMode.integer) {
+		return;
+	}
+	if(level.time - lastTime < 300) {
 		return;
 	}
 	lastTime = level.time;
-	for ( i=0; i < level.num_entities ; i++ ){
+	for ( i=0; i < MAX_CLIENTS ; i++ ){
+		if(!g_entities[i].inuse) {
+			continue;
+		}
 		if ( g_entities[i].r.svFlags & SVF_BOT ) {
 			if(level.clients[i].sess.sessionTeam == TEAM_BLUE) {
 				blue_count++;
@@ -536,7 +543,14 @@ static void InitHoards() {
 				red_count++;
 			}
 		}
+		player_count++;
 	}
+
+	// don't continue here if server is full
+	if(player_count >= g_maxclients.integer) {
+		return;
+	}
+
 	if(g_hordeRed.integer > red_count) {
 		for(i = 0; i < g_hordeRed.integer - red_count; i++) {
 			G_AddBot( "sarge", 5, "red", i, 0 );
@@ -2220,7 +2234,11 @@ static void G_RunFrame( int levelTime ) {
 		}
 	}
 
-	InitHoards();
+#ifdef USE_HORDES
+	if(g_hordeMode.integer) {
+		InitHoards();
+	}
+#endif
 
 	// see if it is time to do a tournement restart
 	CheckTournament();

@@ -78,6 +78,9 @@ static void TeleportPlayer_real( gentity_t *player,
 
 	// use temp events at source and destination to prevent the effect
 	// from getting dropped by a second player event
+#ifdef USE_HORDES
+  if(!g_hordeMode.integer)
+#endif
 	if ( !destination && !self && player->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		tent = G_TempEntity( player->client->ps.origin, EV_PLAYER_TELEPORT_OUT );
 		tent->s.clientNum = player->s.clientNum;

@@ -191,7 +191,9 @@ void CG_Respawn( void ) {
 
 	// select the weapon the server says we are using
 	cg.weaponSelect = cg.snap->ps.weapon;
+#ifdef USE_ADVANCED_WEAPONS
 	cg.weaponClass = floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
+#endif
 
 	cg.timeResidual = cg.snap->ps.commandTime + 1000;
 }

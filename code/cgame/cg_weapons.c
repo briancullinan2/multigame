@@ -586,13 +586,14 @@ static void CG_GrenadeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 	CG_RocketTrail( ent, wi );
 }
 
-
+#ifdef USE_ADVANCED_WEAPONS
 weaponInfo_t bg_weaponlist[] = {
 #include "./cg_weapons.h"
 #include "./cg_weapons2.h"
 	// end of list marker
 	{WP_NONE}
 };
+#endif
 
 
 /*
@@ -623,13 +624,13 @@ void CG_RegisterWeapon( int weaponNum ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
 	for(i = 0; i < ARRAY_LEN(bg_weaponlist); i++) {
 		if(bg_weaponlist[i].giTag == weaponNum) {
 			break;
 		}
 	}
 
-#ifdef USE_ADVANCED_WEAPONS
 	if(i < ARRAY_LEN(bg_weaponlist)) {
 		memcpy(weaponInfo, &bg_weaponlist[i], sizeof( *weaponInfo ));
 	} else

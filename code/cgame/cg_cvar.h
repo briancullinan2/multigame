@@ -214,7 +214,7 @@ CG_CVAR( cg_gunCenter, "cg_gunCenter", "1", CVAR_ARCHIVE )
 #endif
 
 #ifdef USE_GRAPPLE
-CG_CVAR( cgwp_grappleEnable, "wp_grappleEnable", "1", CVAR_SERVERINFO )
+CG_CVAR( cgwp_grappleEnable, "wp_grappleEnable", "0", CVAR_SERVERINFO )
 CG_CVAR( cgwp_grapplePull,  "wp_grapplePull", "700", CVAR_SERVERINFO )
 CG_CVAR( cg_altGrapple,  "g_altGrapple", "1", CVAR_SERVERINFO )
 #endif

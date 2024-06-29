@@ -565,7 +565,7 @@ typedef struct {
 
 	// input state sent to server
 	int			weaponSelect;
-#ifdef USE_ADVANCED_WEAPONS
+#if 1 //def USE_ADVANCED_WEAPONS
 	int			weaponClass;
 	int			weaponChange;
 	// MORE STATS for switching weapons, this is transfered to player state

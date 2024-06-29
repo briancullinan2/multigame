@@ -389,7 +389,36 @@ typedef enum {
 
 #else
 
+typedef enum {
+	WP_NONE,
+	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
+
+	WP_GAUNTLET,
+	WP_MACHINEGUN,
+	WP_SHOTGUN,
+	WP_GRENADE_LAUNCHER,
+	WP_ROCKET_LAUNCHER,
+	WP_LIGHTNING,
+	WP_RAILGUN,
+	WP_PLASMAGUN,
+	WP_BFG,
+	WP_GRAPPLING_HOOK,
+#ifdef MISSIONPACK
+	WP_NAILGUN,
+	WP_PROX_LAUNCHER,
+	WP_CHAINGUN,
 #endif
+#ifdef USE_FLAME_THROWER
+	WP_FLAME_THROWER,
+#endif
+
+	WP_NUM_WEAPONS,
+	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
+	WP_MAX_WEAPONS = 16
+} weapon_t;
+
+#endif
+
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])
 #define	PLAYEREVENT_DENIEDREWARD		0x0001
