@@ -18,7 +18,7 @@ G_CVAR( g_mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse 
 G_CVAR( g_fps, "sv_fps", "30", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
 // latched vars
-G_CVAR( g_gametype, "gametype", "0", CVAR_SERVERINFO | CVAR_USERINFO, 0, qtrue, qfalse )
+G_CVAR( g_gametype, "g_gametype", "0", CVAR_SERVERINFO | CVAR_USERINFO | CVAR_LATCH, 0, qfalse, qfalse )
 
 G_CVAR( g_maxclients, "sv_maxclients", "8", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse, qfalse ) // allow this many total, including spectators
 G_CVAR( g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse, qfalse ) // allow this many active

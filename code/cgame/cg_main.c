@@ -16,7 +16,6 @@ static int teamModelModificationCount  = -1;
 static int teamColorsModificationCount = -1;
 static int atmosphereModificationCount = -1;
 static int weaponsOrderModificationCount = -1; //WarZone
-static int gametypeModificationCount = -1;
 
 static int rmodeModificationCount = -1;
 static int raspectModificationCount = -1;
@@ -151,7 +150,6 @@ void CG_RegisterCvars( void ) {
 #ifdef USE_WEAPON_ORDER
 	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
 #endif
-	gametypeModificationCount = cg_gametype.modificationCount; 
 
 	rmodeModificationCount = cg_mode.modificationCount;
 	raspectModificationCount = cg_aspect.modificationCount;
@@ -239,14 +237,6 @@ void CG_UpdateCvars( void ) {
     weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
   } 
 #endif
-
-	if(gametypeModificationCount != cg_gametype.modificationCount) {
-		gametypeModificationCount = cg_gametype.modificationCount;
-		cgs.gametype = atoi(cg_gametype.string);
-		CG_RegisterGraphics(qfalse);
-		CG_RegisterSounds();
-		CG_LoadingString( "" );
-	}
 
 	if(	rmodeModificationCount != cg_mode.modificationCount
 		|| raspectModificationCount != cg_aspect.modificationCount
@@ -714,7 +704,7 @@ CG_RegisterGraphics
 This function may execute for a couple of minutes with a slow disk.
 =================
 */
-static void CG_RegisterGraphics( qboolean firstTime ) {
+static void CG_RegisterGraphics( void ) {
 	int			i;
 	char		items[MAX_ITEMS+1];
 	static char		*sb_nums[11] = {
@@ -731,19 +721,16 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 		"gfx/2d/numbers/minus_32b",
 	};
 
-	if(firstTime) {
-		// clear any references to old media
-		memset( &cg.refdef, 0, sizeof( cg.refdef ) );
-		trap_R_ClearScene();
+	// clear any references to old media
+	memset( &cg.refdef, 0, sizeof( cg.refdef ) );
+	trap_R_ClearScene();
 
-		CG_LoadingString( cgs.mapname );
+	CG_LoadingString( cgs.mapname );
 
-		trap_R_LoadWorldMap( cgs.mapname );
+	trap_R_LoadWorldMap( cgs.mapname );
 
-		// precache status bar pics
-		CG_LoadingString( "game media" );
-	}
-
+	// precache status bar pics
+	CG_LoadingString( "game media" );
 
 	for ( i = 0 ; i < ARRAY_LEN( sb_nums ) ; i++ ) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader( sb_nums[i] );
@@ -1969,7 +1956,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 
 	CG_LoadingString( "graphics" );
 
-	CG_RegisterGraphics(qtrue);
+	CG_RegisterGraphics();
 
 	trap_R_ModelBounds( 0, mins, maxs );
 	cg.mapcoordsMins[0] = (int)mins[0];
