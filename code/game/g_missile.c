@@ -449,12 +449,12 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		G_AddEvent( ent, EV_MISSILE_HIT, DirToByte( trace->plane.normal ) );
 		ent->s.otherEntityNum = other->s.number;
 	} else if( trace->surfaceFlags & SURF_METALSTEPS ) {
-#ifdef USE_HORDES
+#if 0 //def USE_HORDES
 	if(!g_hordeMode.integer)
 #endif
 		G_AddEvent( ent, EV_MISSILE_MISS_METAL, DirToByte( trace->plane.normal ) );
 	} else 
-#ifdef USE_HORDES
+#if 0 //def USE_HORDES
 	if(!g_hordeMode.integer)
 #endif
 	{
@@ -644,6 +644,9 @@ gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t dir) {
 
 //=============================================================================
 
+
+#define GRENADE_DAMAGE	100		// bolt->damage for grenade
+#define GRENADE_RADIUS	150		// bolt->splashRadius for grenade
 
 /*
 =================

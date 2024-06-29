@@ -110,7 +110,7 @@ G_CVAR( g_hotBFG, "g_hotBFG", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_instagib, "g_instagib", "0", 0, 0, qfalse, qfalse )
 #endif
 #ifdef USE_LOCAL_DMG
-G_CVAR( g_locDamage, "g_locDamage", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( g_locDamage, "g_locDamage", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 
 #ifdef USE_BIRDS_EYE
@@ -123,7 +123,7 @@ G_CVAR( g_upsideDown, "g_upsideDown", "0", CVAR_TEMP, 0, qfalse, qfalse )
 #endif
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-G_CVAR( g_freezeTag, "g_freezeTag", "1", 0, 0, qfalse, qfalse )
+G_CVAR( g_freezeTag, "g_freezeTag", "0", 0, 0, qfalse, qfalse )
 G_CVAR( g_thawTime, "g_thawTime", "180", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 

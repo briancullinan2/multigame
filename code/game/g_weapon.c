@@ -238,14 +238,14 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 				ent->client->accuracy_hits++;
 			}
 		} else 
-#ifdef USE_HORDES
+#if 0 //def USE_HORDES
 		if(!g_hordeMode.integer)
 #endif
 		{
 			tent = G_TempEntity( tr.endpos, EV_BULLET_HIT_WALL );
 			tent->s.eventParm = DirToByte( tr.plane.normal );
+			tent->s.otherEntityNum = ent->s.number;
 		}
-		tent->s.otherEntityNum = ent->s.number;
 
 		if ( traceEnt->takedamage ) {
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
@@ -261,13 +261,11 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 					passent = traceEnt->s.number;
 				}
 				continue;
-			}
-			else {
+			} else 
 #endif
+			{
 				G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_MACHINEGUN );
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			}
-#endif
 		}
 		break;
 	}
@@ -335,7 +333,7 @@ static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *
 			return qfalse;
 		}
 
-		if ( traceEnt->takedamage ) {
+		if ( traceEnt->takedamage || traceEnt->s.number < MAX_CLIENTS ) {
 #ifdef USE_WEAPON_VARS
       damage = wp_shotgunDamage.integer * s_quadFactor;
 #else
@@ -859,7 +857,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 			tent->s.eventParm = DirToByte( tr.plane.normal );
 			tent->s.weapon = ent->s.weapon;
 		} else 
-#ifdef USE_HORDES
+#if 0 //def USE_HORDES
 		if(!g_hordeMode.integer)
 #endif
 		if ( !( tr.surfaceFlags & SURF_NOIMPACT ) ) {
@@ -920,174 +918,6 @@ void weapon_proxlauncher_fire (gentity_t *ent) {
 #endif
 
 //======================================================================
-
-
-#ifdef USE_WEAPON_DROP
-/*
-================
-dropWeapon XRAY FMJ
-================
-*/
-gentity_t *dropWeapon( gentity_t *ent, gitem_t *item, float angle, int xr_flags ) { // XRAY FMJ
-	vec3_t	velocity;
-	vec3_t	origin;
-
-	VectorCopy( ent->s.pos.trBase, origin );
-
-	// set aiming directions
-	AngleVectors (ent->client->ps.viewangles, velocity, NULL, NULL);
-
-	origin[2] += ent->client->ps.viewheight;
-	VectorMA( origin, 34, velocity, origin ); // 14
-	// snap to integer coordinates for more efficient network bandwidth usage
-	SnapVector( origin);
-
-	// extra vertical velocity
-	velocity[2] += 0.3;
-	VectorNormalize( velocity );
-	return LaunchItem( item, origin, velocity, xr_flags );
-}
-
-
-/*
-=============
-ThrowWeapon
-
-XRAY FMJ
-=============
-*/
-
-gentity_t *ThrowWeapon( gentity_t *ent ) {
-	gclient_t	*client;
-	usercmd_t	*ucmd;
-	gitem_t		*xr_item;
-	gentity_t	*xr_drop;
-	byte i;
-	int amount;
-
-	client = ent->client;
-	ucmd = &ent->client->pers.cmd;
-
-	if( client->ps.weapon == WP_GAUNTLET
-		|| client->ps.weapon == WP_MACHINEGUN
-#ifdef USE_GRAPPLE
-		|| client->ps.weapon == WP_GRAPPLING_HOOK
-#endif
-		|| ( ucmd->buttons & BUTTON_ATTACK )
-		// TODO: just make it disappear in mode where it affects speed
-		|| client->ps.ammo[client->ps.weapon] == INFINITE
-		|| client->ps.weapon == WP_NONE)
-		return NULL;
-
-
-	xr_item = BG_FindItemForWeapon( client->ps.weapon );
-
-	amount = client->ps.ammo[ client->ps.weapon ]; // XRAY save amount
-	client->ps.ammo[ client->ps.weapon ] = 0;
-
-	client->ps.stats[STAT_WEAPONS] &= ~( 1 << client->ps.weapon );
-	client->ps.weapon = WP_MACHINEGUN;
-	for ( i = WP_NUM_WEAPONS - 1 ; i > 0 ; i-- ) {
-		if ( client->ps.stats[STAT_WEAPONS] & ( 1 << i ) ) {
-			client->ps.weapon = i;
-			break;
-		}
-	}
-
-	xr_drop = dropWeapon( ent, xr_item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-	if( amount != 0)
-		xr_drop->count= amount;
-	else
-		xr_drop->count= -1; // XRAY FMJ 0 is already taken, -1 means no ammo
-  return xr_drop;
-}
-#endif
-
-#ifdef USE_LASER_SIGHT
-#define LASER_THINK_TIME 50
-/*
-============
-Laser Sight Stuff
-
-	Laser Sight / Flash Light Functions
-============
-*/
-
-void Laser_Think( gentity_t *self )	{
-	vec3_t		end, start, forward, up;
-	trace_t		tr;
-
-	//If Player Dies, You Die -> now thanks to Camouflage!
-	if (self->parent->client->ps.pm_type == PM_DEAD)  {
-		G_FreeEntity(self);
-		return;
-	}
-
-	//Set Aiming Directions
-	AngleVectors(self->parent->client->ps.viewangles, forward, right, up);
-	CalcMuzzlePointOrigin(self->parent, muzzle_origin, forward, right, up, start);
-	VectorMA (start, 8192, forward, end);
-
-	//Trace Position
-	trap_Trace (&tr, start, NULL, NULL, end, self->parent->s.number, MASK_SHOT );
-
-	//Did you not hit anything?
-	if (tr.surfaceFlags & SURF_NOIMPACT || tr.surfaceFlags & SURF_SKY)	{
-		self->nextthink = level.time + 50;
-		trap_UnlinkEntity(self);
-		return;
-	}
-
-	//Move you forward to keep you visible
-	if (tr.fraction != 1)	VectorMA(tr.endpos,-8,forward,tr.endpos);
-
-	//Set Your position
-	VectorCopy( tr.endpos, self->r.currentOrigin );
-	VectorCopy( tr.endpos, self->s.pos.trBase );
-
-	vectoangles(tr.plane.normal, self->s.angles);
-
-	trap_LinkEntity(self);
-
-	//Prep next move
-	self->nextthink = level.time + LASER_THINK_TIME;
-}
-
-void Laser_Gen( gentity_t *ent, int type )	{
-	gentity_t	*las;
-	int oldtype;
-
-	//Get rid of you?
-	if ( ent->client->lasersight) {
-		  oldtype = ent->client->lasersight->s.eventParm;
-		  G_FreeEntity( ent->client->lasersight );
-		  ent->client->lasersight = NULL;
-		  if (oldtype == type)
-			  return;
-	}
-
-	las = G_Spawn();
-
-	las->nextthink = level.time + LASER_THINK_TIME;
-	las->think = Laser_Think;
-	las->r.ownerNum = ent->s.number;
-	las->parent = ent;
-	las->s.eType = ET_LASER;
-
-	//Lets tell it if flashlight or laser
-	if (type == 2)	{
-		las->s.eventParm = 2; //tells CG that it is a flashlight
-		las->classname = "flashlight";
-	}
-	else {
-		las->s.eventParm = 1; //tells CG that it is a laser sight
-		las->classname = "lasersight";
-	}
-
-	ent->client->lasersight = las;
-}
-
-#endif
 
 
 /*

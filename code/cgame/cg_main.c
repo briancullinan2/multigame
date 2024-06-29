@@ -148,7 +148,9 @@ void CG_RegisterCvars( void ) {
 	teamModelModificationCount = cg_teamModel.modificationCount;
 	teamColorsModificationCount = cg_teamColors.modificationCount;
 	atmosphereModificationCount = cg_atmosphere.modificationCount;
+#ifdef USE_WEAPON_ORDER
 	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
+#endif
 	gametypeModificationCount = cg_gametype.modificationCount; 
 
 	rmodeModificationCount = cg_mode.modificationCount;

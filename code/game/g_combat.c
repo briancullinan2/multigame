@@ -494,6 +494,12 @@ void CheckAlmostScored( gentity_t *self, gentity_t *attacker ) {
 void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
   gentity_t *plum;
 
+#ifdef USE_HORDES
+	if(g_hordeMode.integer) {
+		return;
+	}
+#endif
+
   if ( self->client->ps.pm_type == PM_DEAD ) {
 		return;
 	}
@@ -1232,7 +1238,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	vec3_t		bouncedir, impactpoint;
 #endif
 
-	if (!targ->takedamage) {
+	if (!targ->takedamage && targ->s.number > MAX_CLIENTS) {
 		return;
 	}
 
@@ -1539,6 +1545,8 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
     }
 #endif
 	}
+
+	G_Printf("wtf! %i\n", take);
 
 	// do the damage
 	if (take) {

@@ -205,10 +205,13 @@ void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 	}
 
 	if ( activator->client->ps.pm_type != PM_NORMAL
+#ifdef USE_BIRDS_EYE
 		&& activator->client->ps.pm_type != PM_BIRDSEYE
 		&& activator->client->ps.pm_type != PM_FOLLOWCURSOR
 		&& activator->client->ps.pm_type != PM_THIRDPERSON
-		&& activator->client->ps.pm_type != PM_PLATFORM ) {
+		&& activator->client->ps.pm_type != PM_PLATFORM 
+#endif
+	) {
 		return;
 	}
 	if ( activator->client->ps.powerups[PW_FLIGHT] ) {

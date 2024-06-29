@@ -1191,12 +1191,14 @@ static void CG_AddCEntity( centity_t *cent ) {
 	case ET_PUSH_TRIGGER:
 		break;
 	case ET_TELEPORT_TRIGGER:
+#ifdef USE_PORTALS
 		if(cent->currentState.modelindex
 		//	&& cent->currentState.clientNum
 			&& (cent->currentState.powerups & ((1 << 4) | (1 << 5)))
 		) {
       CG_PersonalPortal( cent );
 		}
+#endif
 		break;
 	case ET_GENERAL:
 		CG_General( cent );

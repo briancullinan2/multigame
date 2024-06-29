@@ -1229,6 +1229,7 @@ void ClientSpawn(gentity_t *ent) {
   }
 #endif
 
+#ifdef USE_WEAPON_VARS
 	if(!( !wp_gauntEnable.integer
 #ifdef USE_HOTRPG
 		|| g_hotRockets.integer
@@ -1242,7 +1243,9 @@ void ClientSpawn(gentity_t *ent) {
 #ifdef USE_INSTAGIB
 		|| g_instagib.integer
 #endif
-	)) {
+	)) 
+#endif
+	{
 
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;

@@ -742,7 +742,9 @@ static int CG_CalcViewValues( void ) {
 			// 
 			// letterbox look
 			//
+#ifdef USE_SINGLE_PLAYER
 			black_bars = 0;
+#endif
 		}
 	}
 
@@ -784,11 +786,13 @@ static int CG_CalcViewValues( void ) {
 	}
 
 	if ( cg.renderingThirdPerson
+#ifdef USE_BIRDS_EYE
 		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
 		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
 		|| cg_birdsEye.integer
 		|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
 		|| cg_sideview.integer
+#endif
 	) {
 		// back away from character
 		CG_OffsetThirdPersonView();
@@ -957,12 +961,14 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	// decide on third person view
 	cg.renderingThirdPerson = cg_thirdPerson.integer 
+#ifdef USE_BIRDS_EYE
 		|| cg_sideview.integer
 		|| cg_birdsEye.integer
 		|| cg.snap->ps.pm_type == PM_BIRDSEYE
 		|| cg.snap->ps.pm_type == PM_FOLLOWCURSOR
 		|| cg.snap->ps.pm_type == PM_PLATFORM
 		|| cg.snap->ps.pm_type == PM_THIRDPERSON
+#endif
 		|| (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 
 	CG_TrackClientTeamChange();

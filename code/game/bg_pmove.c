@@ -1868,39 +1868,30 @@ static void PM_Weapon( void ) {
 	switch( pm->ps->weapon ) {
 	default:
 	case WP_GAUNTLET:
-	case WP_GAUNTLET2:
 		addTime = 400;
 		break;
 	case WP_LIGHTNING:
-	case WP_LIGHTNING2:
 		addTime = 50;
 		break;
 	case WP_SHOTGUN:
-	case WP_SHOTGUN2:
 		addTime = 1000;
 		break;
 	case WP_MACHINEGUN:
-	case WP_MACHINEGUN2:
 		addTime = 100;
 		break;
 	case WP_GRENADE_LAUNCHER:
-	case WP_GRENADE_LAUNCHER2:
 		addTime = 800;
 		break;
 	case WP_ROCKET_LAUNCHER:
-	case WP_ROCKET_LAUNCHER2:
 		addTime = 800;
 		break;
 	case WP_PLASMAGUN:
-	case WP_PLASMAGUN2:
 		addTime = 100;
 		break;
 	case WP_RAILGUN:
-	case WP_RAILGUN2:
 		addTime = 1500;
 		break;
 	case WP_BFG:
-	case WP_BFG2:
 #ifdef USE_PORTALS
     if(wp_portalEnable.integer) {
       addTime = 1000;
