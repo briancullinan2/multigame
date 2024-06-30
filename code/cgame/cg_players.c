@@ -400,7 +400,7 @@ static qboolean	CG_FindClientHeadFile( char *filename, int length, clientInfo_t 
 				team = "blue";
 				break;
 			}
-#ifdef USE_ADVANCED_GAMES
+#if 0 //def USE_ADVANCED_GAMES
 			case TEAM_GOLD: {
 				team = "gold";
 				break;

@@ -983,8 +983,8 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	else if( strcmp(ent->classname, "team_CTF_greenflag") == 0 ) {
 		team = TEAM_GREEN;
 	}
-
 #endif
+
 #ifdef MISSIONPACK
 	else if( strcmp(ent->classname, "team_CTF_neutralflag") == 0  ) {
 		team = TEAM_FREE;

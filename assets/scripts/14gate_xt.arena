@@ -1,0 +1,7 @@
+{
+map		"14gate_xt"
+longname	"Arena Gate CTF - Extended (by brian)"
+type		"ctf"
+capturelimit    "8"
+author		"brian"
+}

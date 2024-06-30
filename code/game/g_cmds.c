@@ -588,6 +588,12 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 			team = TEAM_RED;
 		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
 			team = TEAM_BLUE; 
+#ifdef USE_ADVANCED_GAMES
+		} else if ( !Q_stricmp( s, "yellow" ) || !Q_stricmp( s, "y" ) || !Q_stricmp( s, "gold" ) || !Q_stricmp( s, "k" ) ) {
+			team = TEAM_GOLD;
+		} else if ( !Q_stricmp( s, "green" ) || !Q_stricmp( s, "g" ) ) {
+			team = TEAM_GREEN; 
+#endif
 		} else {
 			team = -1;
 		}
@@ -624,6 +630,13 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 			team = TEAM_RED;
 		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
 			team = TEAM_BLUE;
+#ifdef USE_ADVANCED_GAMES
+		} else if ( !Q_stricmp( s, "yellow" ) || !Q_stricmp( s, "y" ) || !Q_stricmp( s, "gold" ) || !Q_stricmp( s, "k" ) ) {
+			team = TEAM_GOLD;
+		} else if ( !Q_stricmp( s, "green" ) || !Q_stricmp( s, "g" ) ) {
+			team = TEAM_GREEN;
+
+#endif
 		} else {
 			// pick the team with the least number of players
 			team = PickTeam( clientNum );
@@ -787,6 +800,14 @@ static void Cmd_Team_f( gentity_t *ent ) {
 		case TEAM_RED:
 			trap_SendServerCommand( ent-g_entities, "print \"Red team\n\"" );
 			break;
+#ifdef USE_ADVANCED_GAMES
+		case TEAM_GOLD:
+			trap_SendServerCommand( ent-g_entities, "print \"Gold team\n\"" );
+			break;
+		case TEAM_GREEN:
+			trap_SendServerCommand( ent-g_entities, "print \"Green team\n\"" );
+			break;
+#endif
 		case TEAM_FREE:
 			trap_SendServerCommand( ent-g_entities, "print \"Free team\n\"" );
 			break;

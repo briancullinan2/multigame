@@ -581,6 +581,7 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	srand( randomSeed );
 
 	G_RegisterCvars();
+	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 
 	G_ProcessIPBans();
 
@@ -597,7 +598,6 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	level.snd_fry = G_SoundIndex("sound/player/fry.wav");	// FIXME standing in lava / slime
 
-	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 	if ( g_gametype.integer != GT_SINGLE_PLAYER && g_log.string[0] ) {
 		if ( g_logSync.integer ) {
 			trap_FS_FOpenFile( g_log.string, &level.logFile, FS_APPEND_SYNC );

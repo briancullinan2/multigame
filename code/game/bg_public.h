@@ -304,10 +304,12 @@ typedef enum {
 	PW_GREENFLAG,
 #endif
 
+#ifdef MISSIONPACK
 	PW_SCOUT,
 	PW_GUARD,
 	PW_DOUBLER,
 	PW_AMMOREGEN,
+#endif
 	PW_INVULNERABILITY,
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
@@ -659,7 +661,6 @@ typedef enum {
 #ifdef USE_ADVANCED_GAMES
 	TEAM_GOLD,
 	TEAM_GREEN,
-
 #endif
 
 	TEAM_SPECTATOR,
