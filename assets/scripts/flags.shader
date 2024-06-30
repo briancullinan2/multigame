@@ -65,3 +65,26 @@ models/flags/g_flag2
                 rgbGen identity
         }
 }
+
+
+icons/iconf_gold1
+{
+	sort opaque
+	nopicmip
+	{
+		map icons/iconf_gold1.tga
+		blendFunc blend
+	}
+}
+
+icons/iconf_green1
+{
+	sort opaque
+	nopicmip
+	{
+		map icons/iconf_green1.tga
+		blendFunc blend
+	}
+}
+
+

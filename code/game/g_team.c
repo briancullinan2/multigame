@@ -830,8 +830,26 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 
 	// the flag is at home base.  if the player has the enemy
 	// flag, he's just won!
+#ifdef USE_ADVANCED_GAMES
+	if(cl->ps.powerups[PW_GOLDFLAG] && cl->sess.sessionTeam != TEAM_GOLD) {
+		cl->ps.powerups[PW_GOLDFLAG] = 0;
+	} else
+	if(cl->ps.powerups[PW_BLUEFLAG] && cl->sess.sessionTeam != TEAM_BLUE) {
+		cl->ps.powerups[PW_BLUEFLAG] = 0;
+	} else
+	if(cl->ps.powerups[PW_REDFLAG] && cl->sess.sessionTeam != TEAM_RED) {
+		cl->ps.powerups[PW_REDFLAG] = 0;
+	} else
+	if(cl->ps.powerups[PW_GREENFLAG] && cl->sess.sessionTeam != TEAM_GREEN) {
+		cl->ps.powerups[PW_GREENFLAG] = 0;
+	}
+
+#else
 	if (!cl->ps.powerups[enemy_flag])
 		return 0; // We don't have the flag
+#endif
+
+
 #ifdef MISSIONPACK
 	if( g_gametype.integer == GT_1FCTF ) {
 		PrintMsg( NULL, "%s" S_COLOR_WHITE " captured the flag!\n", cl->pers.netname );
@@ -931,10 +949,21 @@ static int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, team_t team ) 
 		PrintMsg (NULL, "%s" S_COLOR_WHITE " got the %s flag!\n",
 			other->client->pers.netname, TeamName(team));
 
+#ifdef USE_ADVANCED_GAMES
+		if (team == TEAM_RED)
+			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
+		else if (team == TEAM_BLUE)
+			cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
+		else if (team == TEAM_GOLD)
+			cl->ps.powerups[PW_GOLDFLAG] = INT_MAX; // flags never expire
+		else if (team == TEAM_GREEN)
+			cl->ps.powerups[PW_GREENFLAG] = INT_MAX; // flags never expire
+#else
 		if (team == TEAM_RED)
 			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
 		else
 			cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
+#endif
 
 		Team_SetFlagStatus( team, FLAG_TAKEN );
 #ifdef MISSIONPACK

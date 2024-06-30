@@ -1326,6 +1326,43 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 					return qtrue;
 			}
 #ifdef USE_ADVANCED_GAMES
+			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
+				if (item->giTag == PW_BLUEFLAG ||
+					item->giTag == PW_GOLDFLAG ||
+					item->giTag == PW_GREENFLAG ||
+					(item->giTag == PW_REDFLAG && ent->modelindex2) ||
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) ||
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_GOLDFLAG]) ||
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_GREENFLAG]) )
+					return qtrue;
+			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
+				if (item->giTag == PW_REDFLAG ||
+					item->giTag == PW_GOLDFLAG ||
+					item->giTag == PW_GREENFLAG ||
+					(item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) ||
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GOLDFLAG]) ||
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GREENFLAG]) )
+					return qtrue;
+			} else if (ps->persistant[PERS_TEAM] == TEAM_GOLD) {
+				if (item->giTag == PW_REDFLAG ||
+					item->giTag == PW_BLUEFLAG ||
+					item->giTag == PW_GREENFLAG ||
+					(item->giTag == PW_GOLDFLAG && ent->modelindex2) ||
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_REDFLAG]) ||
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_BLUEFLAG]) ||
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_GREENFLAG]) )
+					return qtrue;
+			} else if (ps->persistant[PERS_TEAM] == TEAM_GREEN) {
+				if (item->giTag == PW_REDFLAG ||
+					item->giTag == PW_BLUEFLAG ||
+					item->giTag == PW_GOLDFLAG ||
+					(item->giTag == PW_GREENFLAG && ent->modelindex2) ||
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_REDFLAG]) ||
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_BLUEFLAG]) ||
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_GOLDFLAG]) )
+					return qtrue;
+			}
 #endif
 		}
 
