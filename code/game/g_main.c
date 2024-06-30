@@ -238,7 +238,7 @@ void G_RegisterCvars( void ) {
 	}
 
 	// check some things
-	g_gametype.integer = trap_Cvar_VariableIntegerValue( "g_gametype" );
+	//g_gametype.integer = trap_Cvar_VariableIntegerValue( "g_gametype" );
 	if ( g_gametype.integer < 0 || g_gametype.integer >= GT_MAX_GAME_TYPE ) {
 		G_Printf( "g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer );
 		trap_Cvar_Set( "g_gametype", "0" );
@@ -511,6 +511,38 @@ static void G_LocateSpawnSpots( void )
 				ent->count = 0;
 				continue;
 			}
+#ifdef USE_ADVANCED_GAMES
+			if ( !Q_stricmp( ent->classname+9, "goldspawn" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GOLD;
+				ent->count = 1; // means its not initial spawn point
+				continue;
+			}
+			if ( !Q_stricmp( ent->classname+9, "greenspawn" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GREEN;
+				ent->count = 1;
+				continue;
+			}
+			// base spawn spots
+			if ( !Q_stricmp( ent->classname+9, "goldplayer" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GOLD;
+				ent->count = 0;
+				continue;
+			}
+			if ( !Q_stricmp( ent->classname+9, "greenplayer" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GREEN;
+				ent->count = 0;
+				continue;
+			}
+
+#endif
 		}
 	}
 	level.numSpawnSpots = n;
@@ -549,7 +581,6 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	srand( randomSeed );
 
 	G_RegisterCvars();
-	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 
 	G_ProcessIPBans();
 
@@ -566,6 +597,7 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	level.snd_fry = G_SoundIndex("sound/player/fry.wav");	// FIXME standing in lava / slime
 
+	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 	if ( g_gametype.integer != GT_SINGLE_PLAYER && g_log.string[0] ) {
 		if ( g_logSync.integer ) {
 			trap_FS_FOpenFile( g_log.string, &level.logFile, FS_APPEND_SYNC );
@@ -1668,6 +1700,10 @@ static void G_WarmupEnd( void )
 			// already processed in Team_ResetFlags()
 			if ( ent->item->giTag == PW_NEUTRALFLAG || ent->item->giTag == PW_REDFLAG || ent->item->giTag == PW_BLUEFLAG )
 				continue;
+#ifdef USE_ADVANCED_GAMES
+			if ( ent->item->giTag == PW_GOLDFLAG || ent->item->giTag == PW_GREENFLAG )
+				continue;
+#endif
 
 			// remove dropped items
 			if ( ent->flags & FL_DROPPED_ITEM ) {
@@ -2263,6 +2299,10 @@ static void G_RunFrame( int levelTime ) {
 	// check team votes
 	CheckTeamVote( TEAM_RED );
 	CheckTeamVote( TEAM_BLUE );
+#ifdef USE_ADVANCED_GAMES
+	CheckTeamVote( TEAM_GOLD );
+	CheckTeamVote( TEAM_GREEN );
+#endif
 
 	// for tracking changes
 	CheckCvars();

@@ -137,3 +137,41 @@ Only in CTF games
 /* precache */ "",
 /* sounds */ ""
 },
+
+#ifdef USE_ADVANCED_GAMES
+
+/*QUAKED team_CTF_goldflag (1 0 0) (-16 -16 -16) (16 16 16)
+Only in CTF games
+*/
+	{
+		"team_CTF_goldflag",
+		NULL,
+        { "models/flags/k_flag.md3",
+		0, 0, 0 },
+/* icon */		"icons/iconf_gold1",
+/* pickup */	"Gold Flag",
+		0,
+		IT_TEAM,
+		PW_GOLDFLAG,
+/* precache */ "",
+/* sounds */ ""
+	},
+
+/*QUAKED team_CTF_greenflag (0 0 1) (-16 -16 -16) (16 16 16)
+Only in CTF games
+*/
+	{
+		"team_CTF_greenflag",
+		NULL,
+        { "models/flags/g_flag.md3",
+		0, 0, 0 },
+/* icon */		"icons/iconf_green1",
+/* pickup */	"Green Flag",
+		0,
+		IT_TEAM,
+		PW_GREENFLAG,
+/* precache */ "",
+/* sounds */ ""
+	},
+#endif
+

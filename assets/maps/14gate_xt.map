@@ -47837,7 +47837,7 @@ gothic_trim/pitted_rust3
 }
 // entity 224
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "origin" "-896 -364 -104"
 "angle" "45"
 }
@@ -47868,7 +47868,7 @@ gothic_trim/pitted_rust3
 }
 // entity 229
 {
-"classname" "team_CTF_blueflag"
+"classname" "team_CTF_greenflag"
 "angle" "180"
 "origin" "2564 4 -72"
 "gametype" "ctf"
@@ -48097,79 +48097,79 @@ gothic_trim/pitted_rust3
 }
 // entity 262
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "origin" "2044 -492 -144"
 "angle" "90"
 }
 // entity 263
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "angle" "270"
 "origin" "2044 500 -144"
 }
 // entity 264
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "angle" "90"
 "origin" "1372 -460 -104"
 }
 // entity 265
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "origin" "1372 468 -104"
 "angle" "270"
 }
 // entity 266
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "origin" "1212 -348 -104"
 "angle" "135"
 }
 // entity 267
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "angle" "90"
 "origin" "2076 -492 -144"
 }
 // entity 268
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "angle" "270"
 "origin" "2076 500 -144"
 }
 // entity 269
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "origin" "2236 212 -144"
 "angle" "225"
 }
 // entity 270
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "angle" "135"
 "origin" "2236 -204 -144"
 }
 // entity 271
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "origin" "1804 -140 -144"
 "angle" "0"
 }
 // entity 272
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "angle" "0"
 "origin" "1804 148 -144"
 }
 // entity 273
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "angle" "45"
 "origin" "1852 -412 -104"
 }
 // entity 274
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_greenplayer"
 "origin" "1852 420 -104"
 "angle" "315"
 }
@@ -48221,19 +48221,19 @@ gothic_trim/pitted_rust3
 }
 // entity 282
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "angle" "225"
 "origin" "1212 356 -104"
 }
 // entity 283
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "angle" "135"
 "origin" "828 -428 -104"
 }
 // entity 284
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_greenspawn"
 "origin" "828 436 -104"
 "angle" "225"
 }
@@ -48348,7 +48348,7 @@ gothic_trim/pitted_rust3
 }
 // entity 301
 {
-"classname" "team_CTF_blueflag"
+"classname" "team_CTF_goldflag"
 "angle" "0"
 "origin" "-2604 0 -72"
 "gametype" "ctf"
@@ -48577,37 +48577,37 @@ gothic_trim/pitted_rust3
 }
 // entity 334
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "origin" "-2084 496 -144"
 "angle" "270"
 }
 // entity 335
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "angle" "90"
 "origin" "-2084 -496 -144"
 }
 // entity 336
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "angle" "270"
 "origin" "-1412 464 -104"
 }
 // entity 337
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "origin" "-1412 -464 -104"
 "angle" "90"
 }
 // entity 338
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "origin" "-1252 352 -104"
 "angle" "315"
 }
 // entity 339
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "angle" "270"
 "origin" "-2116 496 -144"
 }
@@ -48619,37 +48619,37 @@ gothic_trim/pitted_rust3
 }
 // entity 341
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "origin" "-2276 -208 -144"
 "angle" "45"
 }
 // entity 342
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "angle" "315"
 "origin" "-2276 208 -144"
 }
 // entity 343
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "origin" "-1844 144 -144"
 "angle" "180"
 }
 // entity 344
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "angle" "180"
 "origin" "-1844 -144 -144"
 }
 // entity 345
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "angle" "225"
 "origin" "-1892 416 -104"
 }
 // entity 346
 {
-"classname" "team_CTF_blueplayer"
+"classname" "team_CTF_goldplayer"
 "origin" "-1892 -416 -104"
 "angle" "135"
 }
@@ -48701,19 +48701,19 @@ gothic_trim/pitted_rust3
 }
 // entity 354
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "angle" "45"
 "origin" "-1252 -352 -104"
 }
 // entity 355
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "angle" "315"
 "origin" "-868 432 -104"
 }
 // entity 356
 {
-"classname" "team_CTF_bluespawn"
+"classname" "team_CTF_goldspawn"
 "origin" "-868 -432 -104"
 "angle" "45"
 }

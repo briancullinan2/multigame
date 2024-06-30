@@ -1824,6 +1824,13 @@ void Cmd_DropFlag_f(gentity_t *ent) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+#ifdef USE_ADVANCED_GAMES
+  } else if(ent->client->ps.powerups[PW_GOLDFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->ps.powerups[PW_GREENFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_GREENFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+
+#endif
   } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   }

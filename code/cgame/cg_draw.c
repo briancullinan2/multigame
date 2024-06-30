@@ -425,6 +425,12 @@ void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean fo
 			handle = cgs.media.redFlagModel;
 		} else if( team == TEAM_BLUE ) {
 			handle = cgs.media.blueFlagModel;
+#ifdef USE_ADVANCED_GAMES
+		} else if( team == TEAM_GOLD ) {
+			handle = cgs.media.goldFlagModel;
+		} else if( team == TEAM_GREEN ) {
+			handle = cgs.media.greenFlagModel;
+#endif
 		} else if( team == TEAM_FREE ) {
 			handle = cgs.media.neutralFlagModel;
 		} else {
@@ -438,6 +444,12 @@ void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean fo
 			item = BG_FindItemForPowerup( PW_REDFLAG );
 		} else if( team == TEAM_BLUE ) {
 			item = BG_FindItemForPowerup( PW_BLUEFLAG );
+#ifdef USE_ADVANCED_GAMES
+		} else if( team == TEAM_GOLD ) {
+			item = BG_FindItemForPowerup( PW_GOLDFLAG );
+		} else if( team == TEAM_GREEN ) {
+			item = BG_FindItemForPowerup( PW_GREENFLAG );
+#endif
 		} else if( team == TEAM_FREE ) {
 			item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
 		} else {
@@ -611,6 +623,13 @@ static void CG_DrawStatusBar( void ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
 	} else if( cg.predictedPlayerState.powerups[PW_BLUEFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_BLUE );
+#ifdef USE_ADVANCED_GAMES
+	} else if( cg.predictedPlayerState.powerups[PW_GOLDFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GOLD );
+	} else if( cg.predictedPlayerState.powerups[PW_GREENFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GREEN );
+
+#endif
 	} else if( cg.predictedPlayerState.powerups[PW_NEUTRALFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_FREE );
 	}

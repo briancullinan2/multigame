@@ -400,6 +400,16 @@ static qboolean	CG_FindClientHeadFile( char *filename, int length, clientInfo_t 
 				team = "blue";
 				break;
 			}
+#ifdef USE_ADVANCED_GAMES
+			case TEAM_GOLD: {
+				team = "gold";
+				break;
+			}
+			case TEAM_GREEN: {
+				team = "green";
+				break;
+			}
+#endif
 			default: {
 				team = "default";
 				break;
@@ -2158,6 +2168,33 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 		}
 		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
 	}
+
+
+#ifdef USE_ADVANCED_GAMES
+	// goldflag
+	if ( powerups & ( 1 << PW_GOLDFLAG ) ) {
+		if (ci->newAnims) {
+			CG_PlayerFlag( cent, cgs.media.goldFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.goldFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 1.0f, 0.2f, 0.2f );
+	}
+
+	// greenflag
+	if ( powerups & ( 1 << PW_GREENFLAG ) ) {
+		if (ci->newAnims){
+			CG_PlayerFlag( cent, cgs.media.greenFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.greenFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
+	}
+
+
+#endif
 
 	// neutralflag
 	if ( powerups & ( 1 << PW_NEUTRALFLAG ) ) {

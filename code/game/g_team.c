@@ -10,8 +10,16 @@ typedef struct teamgame_s {
 	flagStatus_t	redStatus;	// CTF
 	flagStatus_t	blueStatus;	// CTF
 	flagStatus_t	flagStatus;	// One Flag CTF
+#ifdef USE_ADVANCED_GAMES
+	flagStatus_t	goldStatus;	// CTF
+	flagStatus_t	greenStatus;	// CTF
+#endif
 	int				redTakenTime;
 	int				blueTakenTime;
+#ifdef USE_ADVANCED_GAMES
+	int				goldTakenTime;
+	int				greenTakenTime;
+#endif
 	int				redObeliskAttackedTime;
 	int				blueObeliskAttackedTime;
 } teamgame_t;
@@ -31,6 +39,12 @@ void Team_InitGame( void ) {
 		Team_SetFlagStatus( TEAM_RED, FLAG_ATBASE );
 		teamgame.blueStatus = -1; // Invalid to force update
 		Team_SetFlagStatus( TEAM_BLUE, FLAG_ATBASE );
+#ifdef USE_ADVANCED_GAMES
+		teamgame.goldStatus = -1;
+		Team_SetFlagStatus(TEAM_GOLD, FLAG_ATBASE);
+		teamgame.greenStatus = -1;
+		Team_SetFlagStatus(TEAM_GREEN, FLAG_ATBASE);
+#endif
 		break;
 #ifdef MISSIONPACK
 	case GT_1FCTF:
@@ -194,6 +208,23 @@ static void Team_SetFlagStatus( team_t team, flagStatus_t status ) {
 		}
 		break;
 
+#ifdef USE_ADVANCED_GAMES
+	case TEAM_GOLD:	// CTF
+		if ( teamgame.goldStatus != status ) {
+			teamgame.goldStatus = status;
+			modified = qtrue;
+		}
+		break;
+
+	case TEAM_GREEN:	// CTF
+		if ( teamgame.greenStatus != status ) {
+			teamgame.greenStatus = status;
+			modified = qtrue;
+		}
+		break;
+
+#endif
+
 	case TEAM_FREE:	// One Flag CTF
 		if ( teamgame.flagStatus != status ) {
 			teamgame.flagStatus = status;
@@ -232,6 +263,14 @@ void Team_CheckDroppedItem( gentity_t *dropped ) {
 	else if( dropped->item->giTag == PW_NEUTRALFLAG ) {
 		Team_SetFlagStatus( TEAM_FREE, FLAG_DROPPED );
 	}
+#ifdef USE_ADVANCED_GAMES
+	else if( dropped->item->giTag == PW_GOLDFLAG ) {
+		Team_SetFlagStatus( TEAM_GOLD, FLAG_DROPPED );
+	}
+	else if( dropped->item->giTag == PW_GREENFLAG ) {
+		Team_SetFlagStatus( TEAM_GREEN, FLAG_DROPPED );
+	}
+#endif
 }
 
 
@@ -413,7 +452,15 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 		break;
 	case TEAM_BLUE:
 		c = "team_CTF_blueflag";
-		break;		
+		break;	
+#ifdef USE_ADVANCED_GAMES
+	case TEAM_GOLD:
+		c = "team_CTF_goldflag";
+		break;
+	case TEAM_GREEN:
+		c = "team_CTF_greenflag";
+		break;
+#endif
 	default:
 		return;
 	}
@@ -528,6 +575,14 @@ static gentity_t *Team_ResetFlag( team_t team ) {
 	case TEAM_BLUE:
 		c = "team_CTF_blueflag";
 		break;
+#ifdef USE_ADVANCED_GAMES
+	case TEAM_GOLD:
+		c = "team_CTF_goldflag";
+		break;
+	case TEAM_GREEN:
+		c = "team_CTF_greenflag";
+		break;
+#endif
 	case TEAM_FREE:
 		c = "team_CTF_neutralflag";
 		break;
@@ -555,6 +610,10 @@ void Team_ResetFlags( void ) {
 	if( g_gametype.integer == GT_CTF ) {
 		Team_ResetFlag( TEAM_RED );
 		Team_ResetFlag( TEAM_BLUE );
+#ifdef USE_ADVANCED_GAMES
+		Team_ResetFlag( TEAM_GOLD );
+		Team_ResetFlag( TEAM_GREEN );
+#endif
 	}
 #ifdef MISSIONPACK
 	else if( g_gametype.integer == GT_1FCTF ) {
@@ -610,6 +669,25 @@ static void Team_TakeFlagSound( gentity_t *ent, team_t team ) {
 			teamgame.redTakenTime = level.time;
 			break;
 
+#ifdef USE_ADVANCED_GAMES
+		case TEAM_GOLD:
+			if( teamgame.goldStatus != FLAG_ATBASE ) {
+				if (teamgame.goldTakenTime > level.time - 10000)
+					return;
+			}
+			teamgame.goldTakenTime = level.time;
+			break;
+
+		case TEAM_GREEN:	// CTF
+			if( teamgame.greenStatus != FLAG_ATBASE ) {
+				if (teamgame.greenTakenTime > level.time - 10000)
+					return;
+			}
+			teamgame.greenTakenTime = level.time;
+			break;
+
+#endif
+
 		default:
 			return;
 	}
@@ -662,6 +740,15 @@ void Team_FreeEntity( gentity_t *ent ) {
 	else if( ent->item->giTag == PW_BLUEFLAG ) {
 		Team_ReturnFlag( TEAM_BLUE );
 	}
+#ifdef USE_ADVANCED_GAMES
+	else if( ent->item->giTag == PW_GOLDFLAG ) {
+		Team_ReturnFlag( TEAM_GOLD );
+	}
+	else if( ent->item->giTag == PW_GREENFLAG ) {
+		Team_ReturnFlag( TEAM_GREEN );
+	}
+	
+#endif
 	else if( ent->item->giTag == PW_NEUTRALFLAG ) {
 		Team_ReturnFlag( TEAM_FREE );
 	}
@@ -686,6 +773,14 @@ void Team_DroppedFlagThink(gentity_t *ent) {
 	else if( ent->item->giTag == PW_BLUEFLAG ) {
 		team = TEAM_BLUE;
 	}
+#ifdef USE_ADVANCED_GAMES
+	else if( ent->item->giTag == PW_GOLDFLAG ) {
+		team = TEAM_GOLD;
+	}
+	else if( ent->item->giTag == PW_GREENFLAG ) {
+		team = TEAM_GREEN;
+	}
+#endif
 	else if( ent->item->giTag == PW_NEUTRALFLAG ) {
 		team = TEAM_FREE;
 	}
@@ -881,6 +976,15 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	else if( strcmp(ent->classname, "team_CTF_blueflag") == 0 ) {
 		team = TEAM_BLUE;
 	}
+#ifdef USE_ADVANCED_GAMES
+	else if( strcmp(ent->classname, "team_CTF_goldflag") == 0 ) {
+		team = TEAM_GOLD;
+	}
+	else if( strcmp(ent->classname, "team_CTF_greenflag") == 0 ) {
+		team = TEAM_GREEN;
+	}
+
+#endif
 #ifdef MISSIONPACK
 	else if( strcmp(ent->classname, "team_CTF_neutralflag") == 0  ) {
 		team = TEAM_FREE;
@@ -997,6 +1101,9 @@ gentity_t *SelectRandomTeamSpawnPoint( gentity_t *ent, int teamstate, team_t tea
 	qboolean	checkState;
 	qboolean	checkTelefrag;
 
+#ifdef USE_ADVANCED_GAMES
+	if ( team != TEAM_GOLD && team != TEAM_GREEN )
+#endif
 	if ( team != TEAM_RED && team != TEAM_BLUE )
 		return NULL;
 
@@ -1203,6 +1310,38 @@ Targets will be fired when someone spawns in on them.
 void SP_team_CTF_bluespawn(gentity_t *ent) {
 }
 
+
+#ifdef USE_ADVANCED_GAMES
+
+/*QUAKED team_CTF_goldplayer (1 0 0) (-16 -16 -16) (16 16 32)
+Only in CTF games.  Gold players spawn here at game start.
+*/
+void SP_team_CTF_goldplayer( gentity_t *ent ) {
+}
+
+
+/*QUAKED team_CTF_greenplayer (0 0 1) (-16 -16 -16) (16 16 32)
+Only in CTF games.  Green players spawn here at game start.
+*/
+void SP_team_CTF_greenplayer( gentity_t *ent ) {
+}
+
+
+/*QUAKED team_CTF_goldspawn (1 0 0) (-16 -16 -24) (16 16 32)
+potential spawning position for gold team in CTF games.
+Targets will be fired when someone spawns in on them.
+*/
+void SP_team_CTF_goldspawn(gentity_t *ent) {
+}
+
+/*QUAKED team_CTF_greenspawn (0 0 1) (-16 -16 -24) (16 16 32)
+potential spawning position for green team in CTF games.
+Targets will be fired when someone spawns in on them.
+*/
+void SP_team_CTF_greenspawn(gentity_t *ent) {
+}
+
+#endif
 
 #ifdef MISSIONPACK
 /*

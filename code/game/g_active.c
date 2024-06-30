@@ -762,6 +762,14 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			} else if ( ent->client->ps.powerups[ PW_BLUEFLAG ] ) {
 				item = BG_FindItemForPowerup( PW_BLUEFLAG );
 				j = PW_BLUEFLAG;
+#ifdef USE_ADVANCED_GAMES
+			} else if ( ent->client->ps.powerups[ PW_GOLDFLAG ] ) {
+				item = BG_FindItemForPowerup( PW_GOLDFLAG );
+				j = PW_GOLDFLAG;
+			} else if ( ent->client->ps.powerups[ PW_GREENFLAG ] ) {
+				item = BG_FindItemForPowerup( PW_GREENFLAG );
+				j = PW_GREENFLAG;
+#endif
 			} else if ( ent->client->ps.powerups[ PW_NEUTRALFLAG ] ) {
 				item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
 				j = PW_NEUTRALFLAG;
