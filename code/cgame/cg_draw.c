@@ -553,6 +553,16 @@ void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team )
 		hcolor[0] = 0.0f;
 		hcolor[1] = 0.1f;
 		hcolor[2] = 1.0f;
+#ifdef USE_ADVANCED_GAMES
+	} else if ( team == TEAM_GOLD ) {
+		hcolor[0] = 1.0f;
+		hcolor[1] = 0.8f;
+		hcolor[2] = 0.0f;
+	} else if ( team == TEAM_GREEN ) {
+		hcolor[0] = 0.1f;
+		hcolor[1] = 1.0f;
+		hcolor[2] = 0.1f;
+#endif
 	} else {
 		return;
 	}
@@ -1233,6 +1243,64 @@ static float CG_DrawScores( float y ) {
 				}
 			}
 		}
+
+#ifdef USE_ADVANCED_GAMES
+		y += BIGCHAR_HEIGHT + 8 + BIGCHAR_HEIGHT + 8;
+
+		x0 = cgs.screenXmax + 1;
+		color[0] = 1.0f;
+		color[1] = 0.8f;
+		color[2] = 0.0f;
+		color[3] = 0.33f;
+		// second score
+		s = va( "%2i", s2 );
+		w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH + 8;
+		x = x0 - w;
+		CG_FillRect( x, y-4,  w, BIGCHAR_HEIGHT+8, color );
+		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_GOLD ) {
+			CG_DrawPic( x, y-4, w, BIGCHAR_HEIGHT+8, cgs.media.selectShader );
+		}
+		CG_DrawString( x0-4, y, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT );
+
+		if ( cgs.gametype == GT_CTF ) {
+			// Display flag status
+			item = BG_FindItemForPowerup( PW_GOLDFLAG );
+
+			if (item) {
+				y1 = y - BIGCHAR_HEIGHT - 8;
+				if( cgs.goldflag >= 0 && cgs.goldflag <= 2 ) {
+					CG_DrawPic( x, y1-4, w, BIGCHAR_HEIGHT+8, cgs.media.goldFlagShader[cgs.goldflag] );
+				}
+			}
+		}
+		color[0] = 0.1f;
+		color[1] = 1.0f;
+		color[2] = 0.1f;
+		color[3] = 0.33f;
+		// first score
+		x0 = x;
+		s = va( "%2i", s1 );
+		w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH + 8;
+		x -= w;
+		CG_FillRect( x, y-4,  w, BIGCHAR_HEIGHT+8, color );
+		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_GREEN ) {
+			CG_DrawPic( x, y-4, w, BIGCHAR_HEIGHT+8, cgs.media.selectShader );
+		}
+
+		CG_DrawString( x0-4, y, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT );
+
+		if ( cgs.gametype == GT_CTF ) {
+			// Display flag status
+			item = BG_FindItemForPowerup( PW_GREENFLAG );
+
+			if (item) {
+				y1 = y - BIGCHAR_HEIGHT - 8;
+				if( cgs.greenflag >= 0 && cgs.greenflag <= 2 ) {
+					CG_DrawPic( x, y1-4, w, BIGCHAR_HEIGHT+8, cgs.media.greenFlagShader[cgs.greenflag] );
+				}
+			}
+		}
+#endif
 
 #ifdef MISSIONPACK
 		if ( cgs.gametype == GT_1FCTF ) {

@@ -231,6 +231,10 @@ void CG_SetConfigValues( void ) {
 		s = CG_ConfigString( CS_FLAGSTATUS );
 		cgs.redflag = s[0] - '0';
 		cgs.blueflag = s[1] - '0';
+#ifdef USE_ADVANCED_GAMES
+		cgs.goldflag = s[2] - '0';
+		cgs.greenflag = s[3] - '0';
+#endif
 	}
 #ifdef MISSIONPACK
 	else if( cgs.gametype == GT_1FCTF ) {

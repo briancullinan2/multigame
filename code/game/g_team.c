@@ -242,7 +242,13 @@ static void Team_SetFlagStatus( team_t team, flagStatus_t status ) {
 		if ( g_gametype.integer == GT_CTF ) {
 			st[0] = ctfFlagStatusRemap[teamgame.redStatus];
 			st[1] = ctfFlagStatusRemap[teamgame.blueStatus];
+#ifdef USE_ADVANCED_GAMES
+			st[2] = ctfFlagStatusRemap[teamgame.goldStatus];
+			st[3] = ctfFlagStatusRemap[teamgame.greenStatus];
+			st[4] = '\0';
+#else
 			st[2] = '\0';
+#endif
 		} else {	// GT_1FCTF
 			st[0] = oneFlagStatusRemap[teamgame.flagStatus];
 			st[1] = '\0';
@@ -650,6 +656,31 @@ static void Team_TakeFlagSound( gentity_t *ent, team_t team ) {
 		return;
 	}
 
+
+#ifdef USE_ADVANCED_GAMES
+	if( teamgame.blueStatus != FLAG_ATBASE ) {
+		if (teamgame.blueTakenTime > level.time - 10000)
+			return;
+		teamgame.blueTakenTime = level.time;
+	}
+	if( teamgame.redStatus != FLAG_ATBASE ) {
+		if (teamgame.redTakenTime > level.time - 10000)
+			return;
+		teamgame.redTakenTime = level.time;
+	}
+	if( teamgame.goldStatus != FLAG_ATBASE ) {
+		if (teamgame.goldTakenTime > level.time - 10000)
+			return;
+		teamgame.goldTakenTime = level.time;
+	}
+	if( teamgame.greenStatus != FLAG_ATBASE ) {
+		if (teamgame.greenTakenTime > level.time - 10000)
+			return;
+		teamgame.greenTakenTime = level.time;
+	}
+
+#else
+
 	// only play sound when the flag was at the base
 	// or not picked up the last 10 seconds
 	switch ( team ) {
@@ -669,33 +700,25 @@ static void Team_TakeFlagSound( gentity_t *ent, team_t team ) {
 			teamgame.redTakenTime = level.time;
 			break;
 
-#ifdef USE_ADVANCED_GAMES
-		case TEAM_GOLD:
-			if( teamgame.goldStatus != FLAG_ATBASE ) {
-				if (teamgame.goldTakenTime > level.time - 10000)
-					return;
-			}
-			teamgame.goldTakenTime = level.time;
-			break;
-
-		case TEAM_GREEN:	// CTF
-			if( teamgame.greenStatus != FLAG_ATBASE ) {
-				if (teamgame.greenTakenTime > level.time - 10000)
-					return;
-			}
-			teamgame.greenTakenTime = level.time;
-			break;
-
-#endif
-
 		default:
 			return;
 	}
+
+#endif
+
 
 	te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_TEAM_SOUND );
 	if( team == TEAM_BLUE ) {
 		te->s.eventParm = GTS_RED_TAKEN;
 	}
+#ifdef USE_ADVANCED_GAMES
+	else if( team == TEAM_GOLD ) {
+		te->s.eventParm = GTS_GOLD_TAKEN;
+	}
+	else if( team == TEAM_GREEN ) {
+		te->s.eventParm = GTS_GREEN_TAKEN;
+	}
+#endif
 	else {
 		te->s.eventParm = GTS_BLUE_TAKEN;
 	}
@@ -842,6 +865,8 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	} else
 	if(cl->ps.powerups[PW_GREENFLAG] && cl->sess.sessionTeam != TEAM_GREEN) {
 		cl->ps.powerups[PW_GREENFLAG] = 0;
+	} else {
+		return 0;
 	}
 
 #else
@@ -861,7 +886,9 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	}
 #endif
 
+#ifndef USE_ADVANCED_GAMES
 	cl->ps.powerups[enemy_flag] = 0;
+#endif
 
 	teamgame.last_flag_capture = level.time;
 	teamgame.last_capture_team = team;
@@ -949,21 +976,16 @@ static int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, team_t team ) 
 		PrintMsg (NULL, "%s" S_COLOR_WHITE " got the %s flag!\n",
 			other->client->pers.netname, TeamName(team));
 
-#ifdef USE_ADVANCED_GAMES
 		if (team == TEAM_RED)
 			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
-		else if (team == TEAM_BLUE)
-			cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
+#ifdef USE_ADVANCED_GAMES
 		else if (team == TEAM_GOLD)
 			cl->ps.powerups[PW_GOLDFLAG] = INT_MAX; // flags never expire
 		else if (team == TEAM_GREEN)
 			cl->ps.powerups[PW_GREENFLAG] = INT_MAX; // flags never expire
-#else
-		if (team == TEAM_RED)
-			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
+#endif
 		else
 			cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
-#endif
 
 		Team_SetFlagStatus( team, FLAG_TAKEN );
 #ifdef MISSIONPACK

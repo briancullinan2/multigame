@@ -1913,6 +1913,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	cg.weaponSelect = WP_MACHINEGUN;
 
 	cgs.redflag = cgs.blueflag = -1; // For compatibily, default to unset for
+#ifdef USE_ADVANCED_GAMES
+	cgs.goldflag = cgs.greenflag = -1; // For compatibily, default to unset for
+#endif
 	cgs.flagStatus = -1;
 	// old servers
 

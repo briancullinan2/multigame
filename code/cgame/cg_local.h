@@ -1169,6 +1169,9 @@ typedef struct {
 
 	int				scores1, scores2;		// from configstrings
 	int				redflag, blueflag;		// flag status from configstrings
+#ifdef USE_ADVANCED_GAMES
+	int				greenflag, goldflag;		// flag status from configstrings
+#endif
 	int				flagStatus;
 
 	qboolean  newHud;
