@@ -53,7 +53,7 @@ textures/14gate_xt/fog
 	surfaceparm nolightmap
 	surfaceparm nonsolid
 	surfaceparm trans
-	fogparms ( 0.7 0.7 0.7 ) 1024
+	fogparms ( 0.7 0.7 0.7 ) 512
 	{
 		map textures/liquids/kc_fogcloud3.tga
 		blendfunc filter
@@ -70,6 +70,52 @@ textures/14gate_xt/fog
 	}
 }
 
+textures/14gate_xt/fog2
+{
+	qer_editorimage textures/sfx/fog_grey.tga
+	surfaceparm fog
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	surfaceparm trans
+	fogparms ( 0.5 0.5 0.5 ) 1024
+	{
+		map textures/liquids/kc_fogcloud3.tga
+		blendfunc filter
+		rgbGen identity
+		tcMod scale -0.05 -0.05
+		tcMod scroll 0.01 -0.01
+	}
+	{
+		map textures/liquids/kc_fogcloud3.tga
+		blendfunc filter
+		rgbGen identity
+		tcMod scale 0.05 0.05
+		tcMod scroll 0.01 -0.01
+	}
+}
+textures/14gate_xt/fog3
+{
+	qer_editorimage textures/sfx/fog_grey.tga
+	surfaceparm fog
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	surfaceparm trans
+	fogparms ( 0.3 0.3 0.3 ) 2048
+	{
+		map textures/liquids/kc_fogcloud3.tga
+		blendfunc filter
+		rgbGen identity
+		tcMod scale -0.05 -0.05
+		tcMod scroll 0.01 -0.01
+	}
+	{
+		map textures/liquids/kc_fogcloud3.tga
+		blendfunc filter
+		rgbGen identity
+		tcMod scale 0.05 0.05
+		tcMod scroll 0.01 -0.01
+	}
+}
 textures/14gate_xt/sky
 {
 	qer_editorimage textures/skies/myskydark.jpg

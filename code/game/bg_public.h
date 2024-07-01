@@ -222,13 +222,23 @@ typedef enum {
 	STAT_HEALTH,
 	STAT_HOLDABLE_ITEM,
 #ifdef USE_ADVANCED_ITEMS
-	STAT_HOLDABLE_ITEM2,
-	STAT_HOLDABLE_ITEM3,
+	STAT_HOLDABLE_AVAILABLE,
+	STAT_HOLDABLE_UPDATE,
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	STAT_PERSISTANT_POWERUP,
+#ifdef USE_ADVANCED_ITEMS
+	STAT_PERSISTANT_AVAILABLE,
+	STAT_PERSISTANT_UPDATE,
+#endif
 #endif
 	STAT_WEAPONS,					// 16 bit fields
+#ifdef USE_ADVANCED_WEAPONS
+	STAT_WEAPONS_AVAILABLE,
+	STAT_WEAPONS_UPDATE,
+	//STAT_WEAPONS_PREV,
+	//STAT_WEAPONS_NEXT,
+#endif
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
@@ -293,6 +303,55 @@ typedef enum {
 
 #define EF_NOPREDICT ( EF_AWARDS | EF_PERSISTANT | EF_TALK )
 
+
+#ifdef USE_ADVANCED_ITEMS
+
+
+// NOTE: may not have more than 16
+typedef enum {
+	PW_NONE,
+
+	PW_QUAD = 1,
+	PW_REGEN = 2,
+	PW_BATTLESUIT = 3,
+	PW_HASTE = 4,
+	PW_INVIS = 5,
+	PW_FLIGHT = 6,
+
+	PW_REDFLAG = 7,
+	PW_BLUEFLAG = 8,
+	PW_NEUTRALFLAG = 9,
+
+	PW_MAX_POWERUPS = 10,
+
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	PW_GOLDFLAG = 11,
+	PW_GREENFLAG = 12,
+#endif
+
+	PW_SCOUT = 13,
+	PW_GUARD = 14,
+	PW_DOUBLER = 15,
+	PW_AMMOREGEN = 16,
+	PW_INVULNERABILITY = 17,
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PW_FROZEN = 18,
+#endif
+
+#ifdef USE_WEAPON_SPREAD
+  PW_SPREAD = 19,  //Hal9000 spreadfire
+#endif
+
+	PW_NUM_POWERUPS = 20,
+
+} powerup_t;
+
+#define PW_MAX_ITEMGROUPS (1 << (MAX_POWERUPS - PW_MAX_POWERUPS - 1))
+
+#else
+
+
 // NOTE: may not have more than 16
 typedef enum {
 	PW_NONE,
@@ -318,8 +377,8 @@ typedef enum {
 	PW_GUARD,
 	PW_DOUBLER,
 	PW_AMMOREGEN,
-#endif
 	PW_INVULNERABILITY,
+#endif
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   PW_FROZEN,
@@ -332,6 +391,8 @@ typedef enum {
 	PW_NUM_POWERUPS
 
 } powerup_t;
+
+#endif
 
 typedef enum {
 	HI_NONE,

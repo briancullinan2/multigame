@@ -99,6 +99,14 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
 
+#ifdef USE_ADVANCED_ITEMS
+	{
+		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
+		other->client->items[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = other->client->ps.powerups[ent->item->giTag];
+		G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+	}
+#endif
+
 	// give any nearby players a "denied" anti-reward
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
 		vec3_t		delta;

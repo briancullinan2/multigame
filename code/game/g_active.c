@@ -1012,6 +1012,38 @@ void ClientThink_real( gentity_t *ent ) {
 
 #endif
 
+#ifdef USE_ADVANCED_ITEMS
+	// update item classes but actually store them on the client
+	// TODO: use these techniques to improve weapon switching without delay
+	if(client->lastItemTime + 60 < level.time) {
+		int i, j;
+		int itemBits;
+		// TODO: find the next item in inventory and switch to that class for updates
+		int prevItemClass = client->ps.stats[STAT_HOLDABLE_UPDATE];
+		for(i = 0; i < 2 * PW_NUM_POWERUPS; i++) {
+			prevItemClass++;
+			if(prevItemClass == PW_MAX_ITEMGROUPS) {
+				prevItemClass = 0;
+			}
+			itemBits = 0;
+			for(j = 0; j < PW_MAX_POWERUPS; j++) {
+				if(client->items[prevItemClass][j] > 0) {
+					itemBits |= (1 << j);
+				}
+			}
+			if(itemBits) {
+				break;
+			}
+		}
+
+		if(i < 2 * PW_NUM_POWERUPS) {
+			client->ps.stats[STAT_HOLDABLE_UPDATE] = prevItemClass;
+			client->ps.stats[STAT_HOLDABLE_AVAILABLE] = itemBits;
+		}
+		client->lastItemTime = level.time;
+	}
+#endif
+
 	// sanity check the command time to prevent speedup cheating
 	if ( ucmd->serverTime > level.time + 200 ) {
 		ucmd->serverTime = level.time + 200;

@@ -667,7 +667,7 @@ static void CG_DrawStatusBar( void ) {
 		} else {
 			handle = cgs.media.blueCubeModel;
 		}
-		CG_Draw3DModel( 640 - (TEXT_ICON_SPACE + ICON_SIZE), 416, ICON_SIZE, ICON_SIZE, handle, 0, origin, angles );
+		CG_Draw3DModel( cgs.screenXmax - (TEXT_ICON_SPACE + ICON_SIZE), 416, ICON_SIZE, ICON_SIZE, handle, 0, origin, angles );
 	}
 #endif
 	//
@@ -778,7 +778,7 @@ static void CG_DrawStatusBar( void ) {
 			value = 99;
 		}
 		trap_R_SetColor( colors[0] );
-		CG_DrawField (640 - (CHAR_WIDTH*2 + TEXT_ICON_SPACE + ICON_SIZE), y, 2, value);
+		CG_DrawField (cgs.screenXmax - (CHAR_WIDTH*2 + TEXT_ICON_SPACE + ICON_SIZE), y, 2, value);
 		trap_R_SetColor( NULL );
 		// if we didn't draw a 3D icon, draw a 2D icon for armor
 		if ( !cg_draw3dIcons.integer && cg_drawIcons.integer ) {
@@ -787,7 +787,7 @@ static void CG_DrawStatusBar( void ) {
 			} else {
 				handle = cgs.media.blueCubeIcon;
 			}
-			CG_DrawPic( 640 - (TEXT_ICON_SPACE + ICON_SIZE), y, ICON_SIZE, ICON_SIZE, handle );
+			CG_DrawPic( cgs.screenXmax - (TEXT_ICON_SPACE + ICON_SIZE), y, ICON_SIZE, ICON_SIZE, handle );
 		}
 	}
 #endif
@@ -1106,7 +1106,7 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper ) {
 			} else {
 				xx = x + w - TINYCHAR_WIDTH;
 			}
-			for (j = 0; j <= PW_NUM_POWERUPS; j++) {
+			for (j = 0; j <= MAX_POWERUPS; j++) {
 				if (ci->powerups & (1 << j)) {
 
 					item = BG_FindItemForPowerup( j );
@@ -1432,14 +1432,13 @@ static float CG_DrawPowerups( float y ) {
 
 	// sort the list by time remaining
 	active = 0;
-	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
-		if ( !ps->powerups[ i ] ) {
-			continue;
-		}
-		t = ps->powerups[ i ] - cg.time;
+#ifdef USE_ADVANCED_ITEMS
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		int itemClass = floor(i / PW_MAX_POWERUPS);
+		t = cg.inventory[itemClass][i % PW_MAX_POWERUPS];
 		// ZOID--don't draw if the power up has unlimited time (999 seconds)
 		// This is true of the CTF flags
-		if ( t < 0 || t > 999000) {
+		if ( t <= 0 || t >= 999000) {
 			continue;
 		}
 
@@ -1457,6 +1456,33 @@ static float CG_DrawPowerups( float y ) {
 		sortedTime[j] = t;
 		active++;
 	}
+#else
+	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
+		if ( !ps->powerups[ i ] ) {
+			continue;
+		}
+		t = ps->powerups[ i ] - cg.time;
+		// ZOID--don't draw if the power up has unlimited time (999 seconds)
+		// This is true of the CTF flags
+		if ( t < 0 || t >= 999000) {
+			continue;
+		}
+
+		// insert into the list
+		for ( j = 0 ; j < active ; j++ ) {
+			if ( sortedTime[j] >= t ) {
+				for ( k = active - 1 ; k >= j ; k-- ) {
+					sorted[k+1] = sorted[k];
+					sortedTime[k+1] = sortedTime[k];
+				}
+				break;
+			}
+		}
+		sorted[j] = i;
+		sortedTime[j] = t;
+		active++;
+	}
+#endif
 
 	// draw the icons and timers
 	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;

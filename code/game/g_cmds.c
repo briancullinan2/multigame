@@ -1891,7 +1891,7 @@ void Cmd_DropPowerup_f(gentity_t *ent) {
   {
     gentity_t	*drop;
     int i;
-    for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+    for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
       if ( ent->client->ps.powerups[i ] > level.time ) {
         drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
         // decide how many seconds it has left
@@ -2015,7 +2015,7 @@ void Cmd_Drop_f( gentity_t *ent ) {
 #endif
     {
       int i;
-      for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+      for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
         if ( ent->client->ps.powerups[i ] > level.time ) {
           drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
           // decide how many seconds it has left

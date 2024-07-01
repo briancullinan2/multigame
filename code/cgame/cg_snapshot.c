@@ -226,6 +226,27 @@ static void CG_TransitionSnapshot( void ) {
 #endif
 
 
+#ifdef USE_ADVANCED_ITEMS
+		if(ps->stats[STAT_HOLDABLE_UPDATE] != ops->stats[STAT_HOLDABLE_UPDATE]
+			|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) {
+			int j;
+			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
+			CG_Printf("%i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
+			for(j = 0; j < PW_MAX_POWERUPS; j++) {
+				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
+					CG_Printf("1");
+					cg.inventory[prevItemClass][j] = 1;
+				} else {
+					CG_Printf("0");
+					cg.inventory[prevItemClass][j] = 0;
+				}
+			}
+			CG_Printf("\n");
+		}
+
+#endif
+
+
 	}
 }
 

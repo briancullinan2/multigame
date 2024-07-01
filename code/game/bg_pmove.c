@@ -1378,6 +1378,7 @@ static void PM_CheckDuck (void)
 {
 	trace_t	trace;
 
+#ifdef MISSIONPACK
 	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
 		if ( pm->ps->pm_flags & PMF_INVULEXPAND ) {
 			// invulnerability sphere has a 42 units radius
@@ -1392,6 +1393,7 @@ static void PM_CheckDuck (void)
 		pm->ps->viewheight = CROUCH_VIEWHEIGHT;
 		return;
 	}
+#endif
 	pm->ps->pm_flags &= ~PMF_INVULEXPAND;
 
 	pm->mins[0] = -15;
@@ -1462,9 +1464,11 @@ static void PM_Footsteps( void ) {
 
 	if ( pm->ps->groundEntityNum == ENTITYNUM_NONE ) {
 
+#ifdef MISSIONPACK
 		if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
 			PM_ContinueLegsAnim( LEGS_IDLECR );
 		}
+#endif
 		// airborne leaves position in cycle intact, but doesn't advance
 		if ( pm->waterlevel > 1 ) {
 			PM_ContinueLegsAnim( LEGS_SWIM );

@@ -572,6 +572,12 @@ typedef struct {
 	//int			ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
 	//int			weapons[WP_MAX_CLASSES];
 #endif
+
+#ifdef USE_ADVANCED_ITEMS
+
+	int inventory[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+#endif
+
 	// auto rotating items
 	vec3_t		autoAngles;
 	vec3_t		autoAxis[3];

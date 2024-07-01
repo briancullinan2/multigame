@@ -105,11 +105,11 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.frame.generic.flags	= QMF_INACTIVE;
 	s_teammain.frame.generic.name   = TEAMMAIN_FRAME;
 	s_teammain.frame.width			= 300;
-	s_teammain.frame.height			= 225;
+	s_teammain.frame.height			= 260;
 	s_teammain.frame.generic.x		= (640-s_teammain.frame.width)/2;
 	s_teammain.frame.generic.y		= (480-s_teammain.frame.height)/2;
 
-	y = 195; // 188
+	y = 175; // 188
 
 	s_teammain.joinred.generic.type     = MTYPE_PTEXT;
 	s_teammain.joinred.generic.flags    = QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
