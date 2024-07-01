@@ -365,6 +365,10 @@ static void CG_ConfigStringModified( void ) {
 			// format is rb where its red/blue, 0 is at base, 1 is taken, 2 is dropped
 			cgs.redflag = str[0] - '0';
 			cgs.blueflag = str[1] - '0';
+#ifdef USE_ADVANCED_GAMES
+			cgs.goldflag = str[2] - '0';
+			cgs.greenflag = str[3] - '0';
+#endif
 		}
 #ifdef MISSIONPACK
 		else if( cgs.gametype == GT_1FCTF ) {

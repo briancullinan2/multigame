@@ -72,6 +72,12 @@ const char *TeamName( team_t team ) {
 		return "RED";
 	else if ( team == TEAM_BLUE )
 		return "BLUE";
+#ifdef USE_ADVANCED_GAMES
+	else if ( team == TEAM_GOLD )
+		return "GOLD";
+	else if ( team == TEAM_GREEN )
+		return "GREEN";
+#endif
 	else if ( team == TEAM_SPECTATOR )
 		return "SPECTATOR";
 	return "FREE";
@@ -94,6 +100,12 @@ const char *TeamColorString( team_t team ) {
 		return S_COLOR_RED;
 	else if ( team == TEAM_BLUE )
 		return S_COLOR_BLUE;
+#ifdef USE_ADVANCED_GAMES
+	else if ( team == TEAM_GOLD )
+		return S_COLOR_YELLOW;
+	else if ( team == TEAM_GREEN )
+		return S_COLOR_GREEN;
+#endif
 	else if ( team == TEAM_SPECTATOR )
 		return S_COLOR_YELLOW;
 	return S_COLOR_WHITE;
@@ -738,6 +750,9 @@ static void Team_CaptureFlagSound( gentity_t *ent, team_t team ) {
 	if( team == TEAM_BLUE ) {
 		te->s.eventParm = GTS_BLUE_CAPTURE;
 	}
+#ifdef USE_ADVANCED_GAMES
+	// TODO:
+#endif
 	else {
 		te->s.eventParm = GTS_RED_CAPTURE;
 	}
