@@ -1005,7 +1005,7 @@ static void CG_TeamBase( const centity_t *cent ) {
 		else if ( cent->currentState.modelindex == TEAM_BLUE ) {
 			model.hModel = cgs.media.blueFlagBaseModel;
 		}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		else if ( cent->currentState.modelindex == TEAM_GOLD ) {
 			model.hModel = cgs.media.goldFlagBaseModel;
 		}

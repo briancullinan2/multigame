@@ -588,7 +588,7 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 			team = TEAM_RED;
 		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
 			team = TEAM_BLUE; 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		} else if ( !Q_stricmp( s, "yellow" ) || !Q_stricmp( s, "y" ) || !Q_stricmp( s, "gold" ) || !Q_stricmp( s, "k" ) ) {
 			team = TEAM_GOLD;
 		} else if ( !Q_stricmp( s, "green" ) || !Q_stricmp( s, "g" ) ) {
@@ -630,7 +630,7 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 			team = TEAM_RED;
 		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
 			team = TEAM_BLUE;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		} else if ( !Q_stricmp( s, "yellow" ) || !Q_stricmp( s, "y" ) || !Q_stricmp( s, "gold" ) || !Q_stricmp( s, "k" ) ) {
 			team = TEAM_GOLD;
 		} else if ( !Q_stricmp( s, "green" ) || !Q_stricmp( s, "g" ) ) {
@@ -800,7 +800,7 @@ static void Cmd_Team_f( gentity_t *ent ) {
 		case TEAM_RED:
 			trap_SendServerCommand( ent-g_entities, "print \"Red team\n\"" );
 			break;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		case TEAM_GOLD:
 			trap_SendServerCommand( ent-g_entities, "print \"Gold team\n\"" );
 			break;
@@ -1845,7 +1845,7 @@ void Cmd_DropFlag_f(gentity_t *ent) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
   } else if(ent->client->ps.powerups[PW_GOLDFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   } else if (ent->client->ps.powerups[PW_GREENFLAG]) {

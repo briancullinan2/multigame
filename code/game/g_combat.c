@@ -792,7 +792,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			Team_ReturnFlag( TEAM_BLUE );
 			self->client->ps.powerups[PW_BLUEFLAG] = 0;
 		}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		else if ( self->client->ps.powerups[PW_GOLDFLAG] ) {		// only happens in standard CTF
 			Team_ReturnFlag( TEAM_GOLD );
 			self->client->ps.powerups[PW_GOLDFLAG] = 0;
@@ -819,7 +819,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		else if ( self->client->ps.powerups[PW_BLUEFLAG] ) {	// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
 		}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		else if ( self->client->ps.powerups[PW_GOLDFLAG] ) {		// only happens in standard CTF
 			Team_ReturnFlag( TEAM_GOLD );
 		}

@@ -2170,7 +2170,7 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 	}
 
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	// goldflag
 	if ( powerups & ( 1 << PW_GOLDFLAG ) ) {
 		if (ci->newAnims) {
@@ -2192,8 +2192,6 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 		}
 		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
 	}
-
-
 #endif
 
 	// neutralflag

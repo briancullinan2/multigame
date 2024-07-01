@@ -425,7 +425,7 @@ void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean fo
 			handle = cgs.media.redFlagModel;
 		} else if( team == TEAM_BLUE ) {
 			handle = cgs.media.blueFlagModel;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		} else if( team == TEAM_GOLD ) {
 			handle = cgs.media.goldFlagModel;
 		} else if( team == TEAM_GREEN ) {
@@ -444,7 +444,7 @@ void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean fo
 			item = BG_FindItemForPowerup( PW_REDFLAG );
 		} else if( team == TEAM_BLUE ) {
 			item = BG_FindItemForPowerup( PW_BLUEFLAG );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		} else if( team == TEAM_GOLD ) {
 			item = BG_FindItemForPowerup( PW_GOLDFLAG );
 		} else if( team == TEAM_GREEN ) {
@@ -553,7 +553,7 @@ void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team )
 		hcolor[0] = 0.0f;
 		hcolor[1] = 0.1f;
 		hcolor[2] = 1.0f;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	} else if ( team == TEAM_GOLD ) {
 		hcolor[0] = 1.0f;
 		hcolor[1] = 0.8f;
@@ -617,7 +617,11 @@ static void CG_DrawStatusBar( void ) {
 	VectorClear( angles );
 
 	// draw any 3D icons first, so the changes back to 2D are minimized
+#ifdef USE_ADVANCED_WEAPONS
 	ammoModel = cg_weapons[ cent->currentState.weapon % WP_MAX_WEAPONS + cg.weaponClass * WP_MAX_WEAPONS ].ammoModel;
+#else
+	ammoModel = cg_weapons[ cent->currentState.weapon % WP_MAX_WEAPONS ].ammoModel;
+#endif
 	if ( cent->currentState.weapon && ammoModel ) {
 		origin[0] = 70;
 		origin[1] = 0;
@@ -633,7 +637,7 @@ static void CG_DrawStatusBar( void ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
 	} else if( cg.predictedPlayerState.powerups[PW_BLUEFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_BLUE );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	} else if( cg.predictedPlayerState.powerups[PW_GOLDFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GOLD );
 	} else if( cg.predictedPlayerState.powerups[PW_GREENFLAG] ) {
@@ -697,7 +701,11 @@ static void CG_DrawStatusBar( void ) {
 			if ( !cg_draw3dIcons.integer && cg_drawIcons.integer ) {
 				qhandle_t	icon;
 
+#ifdef USE_ADVANCED_WEAPONS
 				icon = cg_weapons[ cg.predictedPlayerState.weapon % WP_MAX_WEAPONS + cg.weaponClass * WP_MAX_WEAPONS ].ammoIcon;
+#else
+				icon = cg_weapons[ cg.predictedPlayerState.weapon % WP_MAX_WEAPONS ].ammoIcon;
+#endif
 				if ( icon ) {
 					CG_DrawPic( CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, icon );
 				}
@@ -1244,7 +1252,7 @@ static float CG_DrawScores( float y ) {
 			}
 		}
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		y += BIGCHAR_HEIGHT + 8 + BIGCHAR_HEIGHT + 8;
 
 		x0 = cgs.screenXmax + 1;
@@ -1253,7 +1261,7 @@ static float CG_DrawScores( float y ) {
 		color[2] = 0.0f;
 		color[3] = 0.33f;
 		// second score
-		s = va( "%2i", s2 );
+		s = va( "%2i", cgs.scores3 );
 		w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH + 8;
 		x = x0 - w;
 		CG_FillRect( x, y-4,  w, BIGCHAR_HEIGHT+8, color );
@@ -1279,7 +1287,7 @@ static float CG_DrawScores( float y ) {
 		color[3] = 0.33f;
 		// first score
 		x0 = x;
-		s = va( "%2i", s1 );
+		s = va( "%2i", cgs.scores4 );
 		w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH + 8;
 		x -= w;
 		CG_FillRect( x, y-4,  w, BIGCHAR_HEIGHT+8, color );

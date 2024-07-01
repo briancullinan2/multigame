@@ -647,7 +647,7 @@ Only in CTF games
 /* sounds */ ""
 	},
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 
 /*QUAKED team_CTF_goldflag (1 0 0) (-16 -16 -16) (16 16 16)
 Only in CTF games
@@ -1325,7 +1325,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) )
 					return qtrue;
 			}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG ||
 					item->giTag == PW_GOLDFLAG ||

@@ -54,7 +54,7 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 		Team_ReturnFlag( TEAM_RED );
 	} else if( activator->client->ps.powerups[PW_BLUEFLAG] ) {
 		Team_ReturnFlag( TEAM_BLUE );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	} else if( activator->client->ps.powerups[PW_GOLDFLAG] ) {
 		Team_ReturnFlag( TEAM_GOLD );
 	} else if( activator->client->ps.powerups[PW_GREENFLAG] ) {

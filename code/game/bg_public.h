@@ -69,6 +69,11 @@
 
 #define	CS_ITEMS				27		// string of 0's and 1's that tell which items are present
 
+#ifdef USE_ADVANCED_GAMES
+#define	CS_SCORES3				28
+#define	CS_SCORES4				29
+#endif
+
 #define	CS_MODELS				32
 #define	CS_SOUNDS				(CS_MODELS+MAX_MODELS)
 #define	CS_PLAYERS				(CS_SOUNDS+MAX_SOUNDS)
@@ -216,6 +221,10 @@ void Pmove (pmove_t *pmove);
 typedef enum {
 	STAT_HEALTH,
 	STAT_HOLDABLE_ITEM,
+#ifdef USE_ADVANCED_ITEMS
+	STAT_HOLDABLE_ITEM2,
+	STAT_HOLDABLE_ITEM3,
+#endif
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	STAT_PERSISTANT_POWERUP,
 #endif
@@ -299,7 +308,7 @@ typedef enum {
 	PW_BLUEFLAG,
 	PW_NEUTRALFLAG,
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	PW_GOLDFLAG,
 	PW_GREENFLAG,
 #endif
@@ -395,6 +404,33 @@ typedef enum {
 #define WP_MAX_CLASSES (1 << (MAX_WEAPONS - WP_MAX_WEAPONS - 1))
 
 #else
+
+typedef enum {
+	WP_NONE,
+
+	WP_GAUNTLET,
+	WP_MACHINEGUN,
+	WP_SHOTGUN,
+	WP_GRENADE_LAUNCHER,
+	WP_ROCKET_LAUNCHER,
+	WP_LIGHTNING,
+	WP_RAILGUN,
+	WP_PLASMAGUN,
+	WP_BFG,
+	WP_GRAPPLING_HOOK,
+#ifdef MISSIONPACK
+	WP_NAILGUN,
+	WP_PROX_LAUNCHER,
+	WP_CHAINGUN,
+#endif
+#ifdef USE_FLAME_THROWER
+	WP_FLAME_THROWER,
+#endif
+
+	WP_NUM_WEAPONS,
+	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
+	WP_MAX_WEAPONS = 16
+} weapon_t;
 
 #endif
 
@@ -578,7 +614,7 @@ typedef enum {
 	GTS_REDTEAM_TOOK_LEAD,
 	GTS_BLUETEAM_TOOK_LEAD,
 	GTS_TEAMS_ARE_TIED,
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	GTS_GOLD_CAPTURE,
 	GTS_GREEN_CAPTURE,
 	GTS_GOLD_RETURN,
@@ -670,7 +706,7 @@ typedef enum {
 	TEAM_RED,
 	TEAM_BLUE,
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	TEAM_GOLD,
 	TEAM_GREEN,
 #endif

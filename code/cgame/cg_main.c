@@ -825,7 +825,7 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 		cgs.media.blueFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_blu1" );
 		cgs.media.blueFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_blu2" );
 		cgs.media.blueFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_blu3" );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		cgs.media.goldFlagModel = trap_R_RegisterModel( "models/flags/k_flag.md3" );
 		cgs.media.greenFlagModel = trap_R_RegisterModel( "models/flags/g_flag.md3" );
 		cgs.media.goldFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_gold1" );
@@ -840,7 +840,7 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 
 		cgs.media.redFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/red.skin" );
 		cgs.media.blueFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/blue.skin" );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		cgs.media.goldFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/gold.skin" );
 		cgs.media.greenFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/green.skin" );
 #endif
@@ -848,7 +848,7 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 #ifdef MISSIONPACK
 		cgs.media.redFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/red_base.md3" );
 		cgs.media.blueFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/blue_base.md3" );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		cgs.media.goldFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/gold_base.md3" );
 		cgs.media.greenFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/green_base.md3" );
 #endif
@@ -1913,7 +1913,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	cg.weaponSelect = WP_MACHINEGUN;
 
 	cgs.redflag = cgs.blueflag = -1; // For compatibily, default to unset for
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	cgs.goldflag = cgs.greenflag = -1; // For compatibily, default to unset for
 #endif
 	cgs.flagStatus = -1;

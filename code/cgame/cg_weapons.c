@@ -3,6 +3,17 @@
 // cg_weapons.c -- events and effects dealing with weapons
 #include "cg_local.h"
 
+#ifdef USE_ADVANCED_WEAPONS
+
+#define WEAPON_CLASS (cg.weaponClass * WP_MAX_WEAPONS)
+
+#else
+
+#define WEAPON_CLASS 
+
+#endif
+
+
 /*
 ==========================
 CG_MachineGunEjectBrass
@@ -587,12 +598,16 @@ static void CG_GrenadeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 }
 
 
+#ifdef USE_ADVANCED_WEAPONS
+
 weaponInfo_t bg_weaponlist[] = {
 #include "./cg_weapons.h"
 #include "./cg_weapons2.h"
 	// end of list marker
 	{WP_NONE}
 };
+
+#endif
 
 
 /*
@@ -623,11 +638,13 @@ void CG_RegisterWeapon( int weaponNum ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
 	for(i = 0; i < ARRAY_LEN(bg_weaponlist); i++) {
 		if(bg_weaponlist[i].giTag == weaponNum) {
 			break;
 		}
 	}
+#endif
 
 #ifdef USE_ADVANCED_WEAPONS
 	if(i < ARRAY_LEN(bg_weaponlist)) {
@@ -1766,18 +1783,18 @@ void CG_DrawWeaponSelect( void ) {
     else
       weap = i % WP_MAX_WEAPONS;
     if ( bits & ( 1 << weap ) ) {
-			gitem_t *item = BG_FindItemForWeapon(cg.weaponClass * WP_MAX_WEAPONS + weap);
+			gitem_t *item = BG_FindItemForWeapon(WEAPON_CLASS + weap);
 			if(!item || !item->icon) {
 				continue;
 			}
 
-			if(cg.weaponClass * WP_MAX_WEAPONS + weap >= WP_NUM_WEAPONS) {
+			if(WEAPON_CLASS + weap >= WP_NUM_WEAPONS) {
 				continue;
 			}
 
-			CG_RegisterWeapon( cg.weaponClass * WP_MAX_WEAPONS + weap );
+			CG_RegisterWeapon( WEAPON_CLASS + weap );
 
-			if(!cg_weapons[cg.weaponClass * WP_MAX_WEAPONS + weap].weaponIcon) {
+			if(!cg_weapons[WEAPON_CLASS + weap].weaponIcon) {
 				continue;
 			}
 
@@ -1788,18 +1805,18 @@ void CG_DrawWeaponSelect( void ) {
 	//CG_Printf("weapon class: %i\n", cg.weaponClass);
 	for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
 		if ( bits & ( 1 << i ) ) {
-			gitem_t *item = BG_FindItemForWeapon(cg.weaponClass * WP_MAX_WEAPONS + i);
+			gitem_t *item = BG_FindItemForWeapon(WEAPON_CLASS + i);
 			if(!item || !item->icon) {
 				continue;
 			}
 
-			if(cg.weaponClass * WP_MAX_WEAPONS + i >= WP_NUM_WEAPONS) {
+			if(WEAPON_CLASS + i >= WP_NUM_WEAPONS) {
 				continue;
 			}
 
-			CG_RegisterWeapon( cg.weaponClass * WP_MAX_WEAPONS + i );
+			CG_RegisterWeapon( WEAPON_CLASS + i );
 
-			if(!cg_weapons[cg.weaponClass * WP_MAX_WEAPONS + i].weaponIcon) {
+			if(!cg_weapons[WEAPON_CLASS + i].weaponIcon) {
 				continue;
 			}
 
@@ -1832,22 +1849,22 @@ void CG_DrawWeaponSelect( void ) {
 			continue;
 		}
 
-		if(cg.weaponClass * WP_MAX_WEAPONS + i >= WP_NUM_WEAPONS) {
+		if(WEAPON_CLASS + i >= WP_NUM_WEAPONS) {
 			continue;
 		}
 
-		if(!cg_weapons[cg.weaponClass * WP_MAX_WEAPONS + i].weaponIcon) {
+		if(!cg_weapons[WEAPON_CLASS + i].weaponIcon) {
 			continue;
 		}
 
 		// draw weapon icon
 #ifdef USE_3D_WEAPONS
     if(cg_draw3dIcons.integer > 1) {
-      hud_weapons(x, y, &cg_weapons[cg.weaponClass * WP_MAX_WEAPONS + i]);
+      hud_weapons(x, y, &cg_weapons[WEAPON_CLASS + i]);
     }
 #endif
 		if(cg_draw3dIcons.integer <= 1 || !cg_weapons[i].weaponModel) {
-		CG_DrawPic( x, y, 32, 32, cg_weapons[cg.weaponClass * WP_MAX_WEAPONS + i].weaponIcon );
+		CG_DrawPic( x, y, 32, 32, cg_weapons[WEAPON_CLASS + i].weaponIcon );
     }
 
 		// draw selection marker
@@ -1878,9 +1895,9 @@ void CG_DrawWeaponSelect( void ) {
 	}
 
 	// draw the selected name
-	if ( cg.weaponClass * WP_MAX_WEAPONS + cg.weaponSelect < WP_NUM_WEAPONS
-		&& cg_weapons[ cg.weaponClass * WP_MAX_WEAPONS + cg.weaponSelect ].item && weaponSelect == 1 ) {
-		name = cg_weapons[ cg.weaponClass * WP_MAX_WEAPONS + cg.weaponSelect ].item->pickup_name;
+	if ( WEAPON_CLASS + cg.weaponSelect < WP_NUM_WEAPONS
+		&& cg_weapons[ WEAPON_CLASS + cg.weaponSelect ].item && weaponSelect == 1 ) {
+		name = cg_weapons[ WEAPON_CLASS + cg.weaponSelect ].item->pickup_name;
 		if ( name ) {
 			CG_DrawString( 320, y - 22, name, color, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_PROPORTIONAL | DS_CENTER | DS_FORCE_COLOR );
 		}
@@ -1896,7 +1913,7 @@ CG_WeaponSelectable
 ===============
 */
 qboolean CG_WeaponSelectable( int i ) {
-	int weapon = i % WP_MAX_WEAPONS + cg.weaponClass * WP_MAX_WEAPONS;
+	int weapon = WEAPON_CLASS + i % WP_MAX_WEAPONS;
 	if(weapon >= WP_NUM_WEAPONS) {
 		//CG_Printf("hit!\n");
 		return qfalse;

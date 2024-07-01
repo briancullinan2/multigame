@@ -511,7 +511,7 @@ static void G_LocateSpawnSpots( void )
 				ent->count = 0;
 				continue;
 			}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 			if ( !Q_stricmp( ent->classname+9, "goldspawn" ) ) {
 				level.spawnSpots[n] = ent; n++;
 				level.numSpawnSpotsTeam++;
@@ -1043,16 +1043,32 @@ void CalculateRanks( void ) {
 	if ( g_gametype.integer >= GT_TEAM ) {
 		trap_SetConfigstring( CS_SCORES1, va("%i", level.teamScores[TEAM_RED] ) );
 		trap_SetConfigstring( CS_SCORES2, va("%i", level.teamScores[TEAM_BLUE] ) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		trap_SetConfigstring( CS_SCORES3, va("%i", level.teamScores[TEAM_GOLD] ) );
+		trap_SetConfigstring( CS_SCORES4, va("%i", level.teamScores[TEAM_GREEN] ) );
+#endif
 	} else {
 		if ( level.numConnectedClients == 0 ) {
 			trap_SetConfigstring( CS_SCORES1, va("%i", SCORE_NOT_PRESENT) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", SCORE_NOT_PRESENT) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", SCORE_NOT_PRESENT) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", SCORE_NOT_PRESENT) );
+#endif
 		} else if ( level.numConnectedClients == 1 ) {
 			trap_SetConfigstring( CS_SCORES1, va("%i", level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] ) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", SCORE_NOT_PRESENT) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", SCORE_NOT_PRESENT) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", SCORE_NOT_PRESENT) );
+#endif
 		} else {
 			trap_SetConfigstring( CS_SCORES1, va("%i", level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] ) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", level.clients[ level.sortedClients[1] ].ps.persistant[PERS_SCORE] ) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", level.clients[ level.sortedClients[2] ].ps.persistant[PERS_SCORE] ) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", level.clients[ level.sortedClients[3] ].ps.persistant[PERS_SCORE] ) );
+#endif
 		}
 	}
 
@@ -1646,6 +1662,10 @@ static void G_WarmupEnd( void )
 
 	trap_SetConfigstring( CS_SCORES1, "0" );
 	trap_SetConfigstring( CS_SCORES2, "0" );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	trap_SetConfigstring( CS_SCORES3, "0" );
+	trap_SetConfigstring( CS_SCORES4, "0" );
+#endif
 	trap_SetConfigstring( CS_WARMUP, "" );
 	trap_SetConfigstring( CS_LEVEL_START_TIME, va( "%i", level.startTime ) );
 	
@@ -1700,7 +1720,7 @@ static void G_WarmupEnd( void )
 			// already processed in Team_ResetFlags()
 			if ( ent->item->giTag == PW_NEUTRALFLAG || ent->item->giTag == PW_REDFLAG || ent->item->giTag == PW_BLUEFLAG )
 				continue;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 			if ( ent->item->giTag == PW_GOLDFLAG || ent->item->giTag == PW_GREENFLAG )
 				continue;
 #endif
@@ -2299,7 +2319,7 @@ static void G_RunFrame( int levelTime ) {
 	// check team votes
 	CheckTeamVote( TEAM_RED );
 	CheckTeamVote( TEAM_BLUE );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	CheckTeamVote( TEAM_GOLD );
 	CheckTeamVote( TEAM_GREEN );
 #endif

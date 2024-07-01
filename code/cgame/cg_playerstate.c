@@ -191,7 +191,9 @@ void CG_Respawn( void ) {
 
 	// select the weapon the server says we are using
 	cg.weaponSelect = cg.snap->ps.weapon;
+#ifdef USE_ADVANCED_WEAPONS
 	cg.weaponClass = floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
+#endif
 
 	cg.timeResidual = cg.snap->ps.commandTime + 1000;
 }
@@ -408,7 +410,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 	if ( cgs.gametype >= GT_TEAM ) {
 		if ((ps->powerups[PW_REDFLAG] != ops->powerups[PW_REDFLAG] && ps->powerups[PW_REDFLAG]) ||
 			(ps->powerups[PW_BLUEFLAG] != ops->powerups[PW_BLUEFLAG] && ps->powerups[PW_BLUEFLAG]) ||
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 			(ps->powerups[PW_GOLDFLAG] != ops->powerups[PW_GOLDFLAG] && ps->powerups[PW_GOLDFLAG]) ||
 			(ps->powerups[PW_GREENFLAG] != ops->powerups[PW_GREENFLAG] && ps->powerups[PW_GREENFLAG]) ||
 #endif

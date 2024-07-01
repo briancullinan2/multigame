@@ -1179,19 +1179,15 @@ void FireWeapon( gentity_t *ent )
 
 	// fire the specific weapon
 	switch( ent->s.weapon ) {
-	case WP_GAUNTLET2:
 	case WP_GAUNTLET:
 		Weapon_Gauntlet( ent );
 		break;
-	case WP_LIGHTNING2:
 	case WP_LIGHTNING:
 		Weapon_LightningFire( ent );
 		break;
-	case WP_SHOTGUN2:
 	case WP_SHOTGUN:
 		weapon_supershotgun_fire( ent );
 		break;
-	case WP_MACHINEGUN2:
 	case WP_MACHINEGUN:
 #ifdef USE_WEAPON_VARS
     if ( g_gametype.integer != GT_TEAM ) {
@@ -1207,7 +1203,6 @@ void FireWeapon( gentity_t *ent )
 		}
 #endif
 		break;
-	case WP_GRENADE_LAUNCHER2:
 	case WP_GRENADE_LAUNCHER:
 #ifdef USE_WEAPON_SPREAD
   //Hal9000 spreadfire
@@ -1222,15 +1217,12 @@ void FireWeapon( gentity_t *ent )
 #endif
 		weapon_grenadelauncher_fire( ent );
 		break;
-	case WP_ROCKET_LAUNCHER2:
 	case WP_ROCKET_LAUNCHER:
 		Weapon_RocketLauncher_Fire( ent );
 		break;
-	case WP_PLASMAGUN2:
 	case WP_PLASMAGUN:
 		Weapon_Plasmagun_Fire( ent );
 		break;
-	case WP_RAILGUN2:
 	case WP_RAILGUN:
 #ifdef USE_INVULN_RAILS
     if(wp_railThruWalls.integer)
@@ -1244,7 +1236,6 @@ void FireWeapon( gentity_t *ent )
 #endif
 		weapon_railgun_fire( ent );
 		break;
-	case WP_BFG2:
 	case WP_BFG:
 #ifdef USE_PORTALS
     if(wp_portalEnable.integer

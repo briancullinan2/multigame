@@ -762,7 +762,7 @@ typedef struct {
 	qhandle_t	neutralFlagModel;
 	qhandle_t	redFlagShader[3];
 	qhandle_t	blueFlagShader[3];
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	qhandle_t	goldFlagModel;
 	qhandle_t	greenFlagModel;
 	qhandle_t	goldFlagShader[3];
@@ -775,7 +775,7 @@ typedef struct {
 
 	qhandle_t	redFlagFlapSkin;
 	qhandle_t	blueFlagFlapSkin;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	qhandle_t	goldFlagFlapSkin;
 	qhandle_t	greenFlagFlapSkin;
 #endif
@@ -783,7 +783,7 @@ typedef struct {
 
 	qhandle_t	redFlagBaseModel;
 	qhandle_t	blueFlagBaseModel;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	qhandle_t	goldFlagBaseModel;
 	qhandle_t	greenFlagBaseModel;
 #endif
@@ -1169,7 +1169,8 @@ typedef struct {
 
 	int				scores1, scores2;		// from configstrings
 	int				redflag, blueflag;		// flag status from configstrings
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	int				scores3, scores4;		// from configstrings
 	int				greenflag, goldflag;		// flag status from configstrings
 #endif
 	int				flagStatus;

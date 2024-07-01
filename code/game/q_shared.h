@@ -232,7 +232,7 @@
 // enable the flame thrower
 #define USE_FLAME_THROWER 1
 // use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
-#define USE_ADVANCED_WEAPONS 1
+//#define USE_ADVANCED_WEAPONS 1
 // client side weapon order
 #define USE_WEAPON_ORDER 1
 // draw 3D weapons that rotate slightly
@@ -256,6 +256,7 @@
 #define USE_CLOAK_CMD 1
 // use advanced gaming features like many teams, map rotations settings, randomizing items
 #define USE_ADVANCED_GAMES 1
+#define USE_ADVANCED_TEAMS 1
 
 // many team colors, with automatically added many bots, rules for respawning, dying, and decay
 #define USE_HORDES 1

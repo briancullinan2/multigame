@@ -10,13 +10,13 @@ typedef struct teamgame_s {
 	flagStatus_t	redStatus;	// CTF
 	flagStatus_t	blueStatus;	// CTF
 	flagStatus_t	flagStatus;	// One Flag CTF
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	flagStatus_t	goldStatus;	// CTF
 	flagStatus_t	greenStatus;	// CTF
 #endif
 	int				redTakenTime;
 	int				blueTakenTime;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	int				goldTakenTime;
 	int				greenTakenTime;
 #endif
@@ -39,7 +39,7 @@ void Team_InitGame( void ) {
 		Team_SetFlagStatus( TEAM_RED, FLAG_ATBASE );
 		teamgame.blueStatus = -1; // Invalid to force update
 		Team_SetFlagStatus( TEAM_BLUE, FLAG_ATBASE );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		teamgame.goldStatus = -1;
 		Team_SetFlagStatus(TEAM_GOLD, FLAG_ATBASE);
 		teamgame.greenStatus = -1;
@@ -72,7 +72,7 @@ const char *TeamName( team_t team ) {
 		return "RED";
 	else if ( team == TEAM_BLUE )
 		return "BLUE";
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if ( team == TEAM_GOLD )
 		return "GOLD";
 	else if ( team == TEAM_GREEN )
@@ -100,7 +100,7 @@ const char *TeamColorString( team_t team ) {
 		return S_COLOR_RED;
 	else if ( team == TEAM_BLUE )
 		return S_COLOR_BLUE;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if ( team == TEAM_GOLD )
 		return S_COLOR_YELLOW;
 	else if ( team == TEAM_GREEN )
@@ -220,7 +220,7 @@ static void Team_SetFlagStatus( team_t team, flagStatus_t status ) {
 		}
 		break;
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	case TEAM_GOLD:	// CTF
 		if ( teamgame.goldStatus != status ) {
 			teamgame.goldStatus = status;
@@ -254,7 +254,7 @@ static void Team_SetFlagStatus( team_t team, flagStatus_t status ) {
 		if ( g_gametype.integer == GT_CTF ) {
 			st[0] = ctfFlagStatusRemap[teamgame.redStatus];
 			st[1] = ctfFlagStatusRemap[teamgame.blueStatus];
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 			st[2] = ctfFlagStatusRemap[teamgame.goldStatus];
 			st[3] = ctfFlagStatusRemap[teamgame.greenStatus];
 			st[4] = '\0';
@@ -281,7 +281,7 @@ void Team_CheckDroppedItem( gentity_t *dropped ) {
 	else if( dropped->item->giTag == PW_NEUTRALFLAG ) {
 		Team_SetFlagStatus( TEAM_FREE, FLAG_DROPPED );
 	}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if( dropped->item->giTag == PW_GOLDFLAG ) {
 		Team_SetFlagStatus( TEAM_GOLD, FLAG_DROPPED );
 	}
@@ -471,7 +471,7 @@ void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker
 	case TEAM_BLUE:
 		c = "team_CTF_blueflag";
 		break;	
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	case TEAM_GOLD:
 		c = "team_CTF_goldflag";
 		break;
@@ -593,7 +593,7 @@ static gentity_t *Team_ResetFlag( team_t team ) {
 	case TEAM_BLUE:
 		c = "team_CTF_blueflag";
 		break;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	case TEAM_GOLD:
 		c = "team_CTF_goldflag";
 		break;
@@ -628,7 +628,7 @@ void Team_ResetFlags( void ) {
 	if( g_gametype.integer == GT_CTF ) {
 		Team_ResetFlag( TEAM_RED );
 		Team_ResetFlag( TEAM_BLUE );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		Team_ResetFlag( TEAM_GOLD );
 		Team_ResetFlag( TEAM_GREEN );
 #endif
@@ -669,7 +669,7 @@ static void Team_TakeFlagSound( gentity_t *ent, team_t team ) {
 	}
 
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	if( teamgame.blueStatus != FLAG_ATBASE ) {
 		if (teamgame.blueTakenTime > level.time - 10000)
 			return;
@@ -723,7 +723,7 @@ static void Team_TakeFlagSound( gentity_t *ent, team_t team ) {
 	if( team == TEAM_BLUE ) {
 		te->s.eventParm = GTS_RED_TAKEN;
 	}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if( team == TEAM_GOLD ) {
 		te->s.eventParm = GTS_GOLD_TAKEN;
 	}
@@ -750,7 +750,7 @@ static void Team_CaptureFlagSound( gentity_t *ent, team_t team ) {
 	if( team == TEAM_BLUE ) {
 		te->s.eventParm = GTS_BLUE_CAPTURE;
 	}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	// TODO:
 #endif
 	else {
@@ -778,7 +778,7 @@ void Team_FreeEntity( gentity_t *ent ) {
 	else if( ent->item->giTag == PW_BLUEFLAG ) {
 		Team_ReturnFlag( TEAM_BLUE );
 	}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if( ent->item->giTag == PW_GOLDFLAG ) {
 		Team_ReturnFlag( TEAM_GOLD );
 	}
@@ -811,7 +811,7 @@ void Team_DroppedFlagThink(gentity_t *ent) {
 	else if( ent->item->giTag == PW_BLUEFLAG ) {
 		team = TEAM_BLUE;
 	}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if( ent->item->giTag == PW_GOLDFLAG ) {
 		team = TEAM_GOLD;
 	}
@@ -868,7 +868,7 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 
 	// the flag is at home base.  if the player has the enemy
 	// flag, he's just won!
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	if(cl->ps.powerups[PW_GOLDFLAG] && cl->sess.sessionTeam != TEAM_GOLD) {
 		cl->ps.powerups[PW_GOLDFLAG] = 0;
 	} else
@@ -901,7 +901,8 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	}
 #endif
 
-#ifndef USE_ADVANCED_GAMES
+#if !defined(USE_ADVANCED_GAMES) && !defined(USE_ADVANCED_TEAMS)
+	// give the player some points
 	cl->ps.powerups[enemy_flag] = 0;
 #endif
 
@@ -993,7 +994,7 @@ static int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, team_t team ) 
 
 		if (team == TEAM_RED)
 			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 		else if (team == TEAM_GOLD)
 			cl->ps.powerups[PW_GOLDFLAG] = INT_MAX; // flags never expire
 		else if (team == TEAM_GREEN)
@@ -1042,7 +1043,7 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	else if( strcmp(ent->classname, "team_CTF_blueflag") == 0 ) {
 		team = TEAM_BLUE;
 	}
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	else if( strcmp(ent->classname, "team_CTF_goldflag") == 0 ) {
 		team = TEAM_GOLD;
 	}
@@ -1167,7 +1168,7 @@ gentity_t *SelectRandomTeamSpawnPoint( gentity_t *ent, int teamstate, team_t tea
 	qboolean	checkState;
 	qboolean	checkTelefrag;
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	if ( team != TEAM_GOLD && team != TEAM_GREEN )
 #endif
 	if ( team != TEAM_RED && team != TEAM_BLUE )
@@ -1377,7 +1378,7 @@ void SP_team_CTF_bluespawn(gentity_t *ent) {
 }
 
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 
 /*QUAKED team_CTF_goldplayer (1 0 0) (-16 -16 -16) (16 16 32)
 Only in CTF games.  Gold players spawn here at game start.

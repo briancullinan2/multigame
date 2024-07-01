@@ -13,7 +13,7 @@
 
 #define ID_JOINRED		100
 #define ID_JOINBLUE		101
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 #define ID_JOINGOLD		104
 #define ID_JOINGREEN		105
 #endif
@@ -27,7 +27,7 @@ typedef struct
 	menubitmap_s	frame;
 	menutext_s		joinred;
 	menutext_s		joinblue;
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	menutext_s		joingold;
 	menutext_s		joingreen;
 #endif
@@ -58,7 +58,7 @@ static void TeamMain_MenuEvent( void* ptr, int event ) {
 		UI_ForceMenuOff();
 		break;
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	case ID_JOINGOLD:
 		trap_Cmd_ExecuteText( EXEC_APPEND, "cmd team gold\n" );
 		UI_ForceMenuOff();
@@ -133,7 +133,7 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joinblue.color            = colorBlue;
 	y += INGAME_TEAM_VERTICAL_SPACING;
 
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 
 	s_teammain.joingold.generic.type     = MTYPE_PTEXT;
 	s_teammain.joingold.generic.flags    = QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
@@ -203,7 +203,7 @@ void TeamMain_MenuInit( void ) {
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.frame );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joinred );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joinblue );
-#ifdef USE_ADVANCED_GAMES
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingold );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingreen );
 #endif
