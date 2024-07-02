@@ -1,0 +1,153 @@
+newmtl common/WTF
+map_Kd 
+
+newmtl common/botclip
+map_Kd 
+
+newmtl common/caulk
+map_Kd 
+
+newmtl common/clip
+map_Kd 
+
+newmtl common/nodraw
+map_Kd 
+
+newmtl common/trigger
+map_Kd 
+
+newmtl common/weapclip
+map_Kd 
+
+newmtl rota3ctf1_floors/e6bmetal
+map_Kd textures/rota3ctf1_floors/e6bmetal
+
+newmtl rota3ctf1_floors/e6bmetal_darker
+map_Kd textures/rota3ctf1_floors/e6bmetal_darker
+
+newmtl rota3ctf1_floors/e6bmetal_darker2
+map_Kd textures/rota3ctf1_floors/e6bmetal_darker2
+
+newmtl rota3ctf1_floors/u_floor
+map_Kd textures/rota3ctf1_floors/u_floor
+
+newmtl rota3ctf1_floors/u_floor3_pad_8
+map_Kd textures/rota3ctf1_floors/u_floor3_pad_8
+
+newmtl rota3ctf1_floors/u_floor_gr8
+map_Kd textures/rota3ctf1_floors/u_floor_gr8
+
+newmtl rota3ctf1_grates/u_gr8_10a
+
+newmtl rota3ctf1_grates/u_gr8_2ba
+
+newmtl rota3ctf1_grates/u_gr8_5b
+map_Kd textures/rota3ctf1_grates/u_gr8_5b
+
+newmtl rota3ctf1_lights/u_lamp3_or
+map_Kd textures/rota3ctf1_lights/u_lamp3_or
+
+newmtl rota3ctf1_lights/u_lamp5_or
+map_Kd textures/rota3ctf1_lights/u_lamp5_or
+
+newmtl rota3ctf1_lights/u_lamplong1_500
+
+newmtl rota3ctf1_lights/u_lamplong1_or
+map_Kd textures/rota3ctf1_lights/u_lamplong1_or
+
+newmtl rota3ctf1_lights/u_py1_or
+map_Kd textures/rota3ctf1_lights/u_py1_or
+
+newmtl rota3ctf1_lights/u_py1_or128
+map_Kd textures/rota3ctf1_lights/u_py1_or128
+
+newmtl rota3ctf1_lights/u_thinline1_blue
+map_Kd textures/rota3ctf1_lights/u_thinline1_blue
+
+newmtl rota3ctf1_lights/u_thinline1_or
+map_Kd textures/rota3ctf1_lights/u_thinline1_or
+
+newmtl rota3ctf1_lights/u_trlight3_or
+map_Kd textures/rota3ctf1_lights/u_trlight3_or
+
+newmtl rota3ctf1_terrain/diry
+map_Kd textures/rota3ctf1_terrain/diry
+
+newmtl rota3ctf1_terrain/e6boltstrip
+map_Kd textures/rota3ctf1_terrain/e6boltstrip
+
+newmtl rota3ctf1_terrain/e6strimlight_s_nolightb
+
+newmtl rota3ctf1_terrain/grate_grey2
+map_Kd textures/rota3ctf1_terrain/grate_grey2
+
+newmtl rota3ctf1_terrain/grate_grey2_noclp
+
+newmtl rota3ctf1_terrain/list
+map_Kd textures/rota3ctf1_terrain/list
+
+newmtl rota3ctf1_terrain/rota
+map_Kd textures/rota3ctf1_terrain/rota
+
+newmtl rota3ctf1_terrain/sklo2
+map_Kd textures/rota3ctf1_terrain/sklo2
+
+newmtl rota3ctf1_terrain/ter_rock2
+map_Kd textures/rota3ctf1_terrain/ter_rock2
+
+newmtl rota3ctf1_terrain/u_trm8_3_noclp
+
+newmtl rota3ctf1_trim/r_trim_17b
+map_Kd textures/rota3ctf1_trim/r_trim_17b
+
+newmtl rota3ctf1_trim/r_trim_22h
+map_Kd textures/rota3ctf1_trim/r_trim_22h
+
+newmtl rota3ctf1_trim/r_trim_22j
+map_Kd textures/rota3ctf1_trim/r_trim_22j
+
+newmtl rota3ctf1_trim/u_trm16_2
+map_Kd textures/rota3ctf1_trim/u_trm16_2
+
+newmtl rota3ctf1_trim/u_trm64_1
+map_Kd textures/rota3ctf1_trim/u_trm64_1
+
+newmtl rota3ctf1_trim/u_trm8_3
+map_Kd textures/rota3ctf1_trim/u_trm8_3
+
+newmtl rota3ctf1_trim/u_trm8_6
+map_Kd textures/rota3ctf1_trim/u_trm8_6
+
+newmtl rota3ctf1_trim/ubase_trim
+map_Kd textures/rota3ctf1_trim/ubase_trim
+
+newmtl rota3ctf1_trim/ubase_trim4
+map_Kd textures/rota3ctf1_trim/ubase_trim4
+
+newmtl rota3ctf1_trim/ubase_trim7
+map_Kd textures/rota3ctf1_trim/ubase_trim7
+
+newmtl rota3ctf1_walls/u_base_orange1
+map_Kd textures/rota3ctf1_walls/u_base_orange1
+
+newmtl rota3ctf1_walls/ubase_holes
+map_Kd textures/rota3ctf1_walls/ubase_holes
+
+newmtl rota3ctf1_walls/ubase_pan4
+map_Kd textures/rota3ctf1_walls/ubase_pan4
+
+newmtl rota3ctf1_walls/ubase_pan_trix
+map_Kd textures/rota3ctf1_walls/ubase_pan_trix
+
+newmtl rota3ctf1_walls/wall_12e
+map_Kd textures/rota3ctf1_walls/wall_12e
+
+newmtl rota3ctf1_walls/wall_12or_plain
+map_Kd textures/rota3ctf1_walls/wall_12or_plain
+
+newmtl rota3dm2_bmtls/e6dmetal_darker
+map_Kd textures/rota3dm2_bmtls/e6dmetal_darker
+
+newmtl rota3dm2_trims/grate_grey2
+map_Kd textures/rota3dm2_trims/grate_grey2
+

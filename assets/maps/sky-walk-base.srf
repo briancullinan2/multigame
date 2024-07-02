@@ -1,0 +1,5129 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+2 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+3 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+4 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+5 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+6 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+7 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+8 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+9 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+10 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+11 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+12 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+13 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 859.175842
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+14 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 948.673157
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+15 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 948.673157
+}
+
+16 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 948.673157
+}
+
+17 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 948.673157
+}
+
+18 // ESurfaceType::Patch V: 21 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 948.673157
+}
+
+19 // ESurfaceType::Patch V: 21 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 948.673157
+}
+
+20 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/diry
+	longestCurve 948.673157
+}
+
+21 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	longestCurve 948.673157
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+22 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 948.673157
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+23 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 948.673157
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+24 // ESurfaceType::Patch V: 21 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 948.673157
+}
+
+25 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 948.673157
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+26 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 948.673157
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+27 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 948.673157
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+28 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 948.673157
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+29 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 250.592972
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+30 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	longestCurve 250.592972
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+31 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 250.592972
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+32 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 250.592972
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+33 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 250.592972
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+34 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_walls/wall_12e
+	longestCurve 152.992722
+}
+
+35 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	longestCurve 152.992722
+}
+
+36 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+37 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 447.487427
+}
+
+38 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/rrrtt
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+39 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+40 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 152.992722
+}
+
+41 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 152.992722
+}
+
+42 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+43 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+44 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_trim/r_trim_22j
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+45 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+46 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 107.396980
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+47 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 107.396980
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+48 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal
+	longestCurve 107.396980
+}
+
+49 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal
+	longestCurve 107.396980
+}
+
+50 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 73.928375
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+51 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 73.928375
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+52 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/u_base_orange1
+	longestCurve 73.928375
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+53 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+}
+
+54 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 107.396980
+}
+
+55 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 107.396980
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+56 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 107.396980
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+57 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal
+	longestCurve 107.396980
+}
+
+58 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal
+	longestCurve 107.396980
+}
+
+59 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 73.928375
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+60 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 73.928375
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+61 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal
+	longestCurve 107.396980
+}
+
+62 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/u_base_orange1
+	longestCurve 73.928375
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+63 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+}
+
+64 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 107.396980
+}
+
+65 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+66 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 787.577820
+}
+
+67 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 787.577820
+}
+
+68 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 787.577820
+}
+
+69 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 787.577820
+}
+
+70 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 787.577820
+}
+
+71 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+}
+
+72 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+}
+
+73 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+74 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+75 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 787.577820
+}
+
+76 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+77 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+78 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+79 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+80 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+81 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+82 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+83 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+84 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+85 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 447.487427
+}
+
+86 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+87 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+88 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+}
+
+89 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+}
+
+90 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+91 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+92 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+93 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	longestCurve 447.487427
+}
+
+94 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+95 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+96 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+97 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+98 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+99 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+100 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+101 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 447.487427
+}
+
+102 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 447.487427
+}
+
+103 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 787.577820
+}
+
+104 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 787.577820
+}
+
+105 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+106 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+107 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 196.894455
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+108 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 196.894455
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+109 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 196.894455
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+110 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 196.894455
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+111 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 178.994949
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+112 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 178.994949
+}
+
+113 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+114 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+115 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+116 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+117 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 859.175842
+}
+
+118 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 447.487427
+}
+
+119 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 35.798985
+}
+
+120 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 447.487427
+}
+
+121 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 35.798985
+}
+
+122 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 447.487427
+}
+
+123 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 787.577820
+}
+
+124 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 107.396980
+}
+
+125 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 107.396980
+}
+
+126 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 250.592972
+}
+
+127 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 948.673157
+}
+
+128 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 948.673157
+}
+
+129 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 948.673157
+}
+
+130 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 948.673157
+}
+
+131 // ESurfaceType::Patch V: 27 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+132 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+}
+
+133 // ESurfaceType::Patch V: 27 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 53.698490
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+134 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 53.698490
+}
+
+135 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+}
+
+136 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+}
+
+137 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/list
+	longestCurve 190.593231
+}
+
+138 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/list
+	longestCurve 127.392433
+}
+
+139 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/list
+	longestCurve 130.796829
+}
+
+140 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/weapclip
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+141 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/weapclip
+	longestCurve 859.175842
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+142 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 787.577820
+}
+
+143 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/weapclip
+	longestCurve 214.793961
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+144 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/weapclip
+	longestCurve 948.673157
+}
+
+145 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/common/weapclip
+	longestCurve 948.673157
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+146 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+147 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+}
+
+148 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 122.960793
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+149 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	longestCurve 859.175842
+}
+
+150 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 1145.567505
+}
+
+151 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	longestCurve 859.175842
+}
+
+152 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 859.175842
+}
+
+153 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 31.652481
+}
+
+154 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/diry
+	longestCurve 49.569916
+}
+
+155 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 31.652481
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+156 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3dm2_bmtls/e6dmetal_darker
+	longestCurve 31.652481
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+157 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 31.652481
+}
+
+158 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 948.673157
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+159 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 948.673157
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+160 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 948.673157
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+161 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 948.673157
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+162 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 31.652481
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+163 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 948.673157
+}
+
+164 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 948.673157
+}
+
+165 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 948.673157
+}
+
+166 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 948.673157
+}
+
+167 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 948.673157
+}
+
+168 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 948.673157
+}
+
+169 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/diry
+	longestCurve 948.673157
+}
+
+170 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 250.592972
+}
+
+171 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 250.592972
+}
+
+172 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 250.592972
+}
+
+173 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	longestCurve 250.592972
+}
+
+174 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	longestCurve 1145.567505
+}
+
+175 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	longestCurve 1145.567505
+}
+
+176 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 143.195938
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+177 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 143.195938
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+178 // ESurfaceType::Patch V: 15 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 152.992722
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+179 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 152.992722
+}
+
+180 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 1145.567505
+}
+
+181 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 1145.567505
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+182 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 193.840607
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+183 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+184 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+185 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+186 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+187 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/tr
+	longestCurve 1145.567505
+}
+
+188 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/r_trim_22h
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+189 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	longestCurve 1145.567505
+}
+
+190 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+191 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/tr
+	longestCurve 1145.567505
+}
+
+192 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+193 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/tr
+	longestCurve 1145.567505
+}
+
+194 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+195 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+196 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	longestCurve 1145.567505
+}
+
+197 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 1145.567505
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+198 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+199 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	longestCurve 1145.567505
+}
+
+200 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+201 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/tr
+	longestCurve 1145.567505
+}
+
+202 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 1145.567505
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+203 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+204 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 1145.567505
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+205 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	longestCurve 1145.567505
+}
+
+206 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	longestCurve 1145.567505
+}
+
+207 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+208 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/tr
+	longestCurve 1145.567505
+}
+
+209 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+210 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	longestCurve 1145.567505
+}
+
+211 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	longestCurve 1145.567505
+}
+
+212 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 1145.567505
+}
+
+213 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 1145.567505
+}
+
+214 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/tr
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+215 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/u_trm8_3_noclp
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+216 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+217 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 787.577820
+}
+
+218 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 787.577820
+}
+
+219 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	longestCurve 787.577820
+}
+
+220 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_trlight3_blue
+	longestCurve 787.577820
+}
+
+221 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_trlight3_blue
+	longestCurve 644.381775
+}
+
+222 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 644.381775
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+223 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 644.381775
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+224 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+}
+
+225 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+}
+
+226 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 107.396980
+}
+
+227 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+228 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+229 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 73.928375
+}
+
+230 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 73.928375
+}
+
+231 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 73.928375
+}
+
+232 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 73.928375
+}
+
+233 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp3_blue
+	longestCurve 73.928375
+}
+
+234 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+}
+
+235 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+}
+
+236 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 107.396980
+}
+
+237 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+238 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 107.396980
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+239 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 73.928375
+}
+
+240 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 73.928375
+}
+
+241 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 73.928375
+}
+
+242 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 73.928375
+}
+
+243 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	longestCurve 178.994949
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+244 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	longestCurve 178.994949
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+245 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	longestCurve 178.994949
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+246 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	longestCurve 178.994949
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+247 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+248 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+249 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_holes
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+250 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_holes
+	longestCurve 447.487427
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+251 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+252 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+253 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+254 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+255 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+256 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+257 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+258 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+259 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+260 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+261 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+262 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+263 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+264 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+265 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+266 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+267 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+268 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+269 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+270 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+271 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+272 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+273 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+274 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+275 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+276 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+277 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+278 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+279 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 72.854156
+}
+
+280 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 72.854156
+}
+
+281 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 72.854156
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+282 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 787.577820
+}
+
+283 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+284 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+285 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+286 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+287 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+288 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+289 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+290 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+291 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+292 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+293 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+294 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+295 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+296 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+297 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 74.854156
+}
+
+298 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 74.854156
+}
+
+299 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 74.854156
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+300 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+301 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+302 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+303 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+304 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+305 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+306 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+307 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+308 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+309 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+310 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+311 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+312 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 787.577820
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+313 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 787.577820
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+314 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 787.577820
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+315 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+}
+
+316 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 787.577820
+}
+
+317 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 787.577820
+}
+
+318 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 787.577820
+}
+
+319 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 787.577820
+}
+
+320 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 787.577820
+}
+
+321 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 787.577820
+}
+
+322 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+323 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 447.487427
+}
+
+324 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+}
+
+325 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+326 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 447.487427
+}
+
+327 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+328 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+}
+
+329 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	longestCurve 447.487427
+}
+
+330 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+}
+
+331 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+332 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+333 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 787.577820
+}
+
+334 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	longestCurve 447.487427
+}
+
+335 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+}
+
+336 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+337 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 447.487427
+}
+
+338 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	longestCurve 447.487427
+}
+
+339 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+}
+
+340 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rrota
+	longestCurve 447.487427
+}
+
+341 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/rota
+	longestCurve 447.487427
+}
+
+342 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_5b
+	longestCurve 447.487427
+}
+
+343 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+344 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+345 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+346 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+347 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+348 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+349 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+350 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+351 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+352 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+353 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+354 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+355 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+356 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+357 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_500
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+358 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 787.577820
+}
+
+359 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 787.577820
+}
+
+360 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 447.487427
+}
+
+361 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 447.487427
+}
+
+362 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+}
+
+363 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 196.894455
+}
+
+364 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 196.894455
+}
+
+365 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	longestCurve 196.894455
+}
+
+366 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	longestCurve 196.894455
+}
+
+367 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/diry
+	longestCurve 196.894455
+}
+
+368 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 447.487427
+}
+
+369 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	longestCurve 447.487427
+}
+
+370 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 447.487427
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+371 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 1145.567505
+}
+
+372 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 71.597969
+}
+
+373 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 429.587921
+}
+
+374 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 214.793961
+}
+
+375 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/botclip
+	sampleSize 0
+	longestCurve 447.487427
+}
+
+376 // ESurfaceType::Patch V: 15 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 107.396980
+}
+
+377 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+378 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+379 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+380 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+381 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	longestCurve 447.487427
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+382 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 644.381775
+}
+
+383 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 196.894455
+}
+
+384 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 948.673157
+}
+
+385 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/clip
+	sampleSize 0
+	longestCurve 948.673157
+}
+
+386 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 53.698490
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+387 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 53.698490
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+388 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 53.698490
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+389 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	longestCurve 53.698490
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+390 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 1145.567505
+}
+
+391 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 1145.567505
+}
+
+392 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+393 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	longestCurve 1145.567505
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+394 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	longestCurve 1145.567505
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+395 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/weapclip
+	longestCurve 178.994949
+}
+
+396 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/common/weapclip
+	longestCurve 948.673157
+}
+
+397 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+398 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 122.960793
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+399 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+400 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+401 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+402 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 122.960793
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+403 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 72.854156
+}
+
+404 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 72.854156
+}
+
+405 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 72.854156
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+406 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	longestCurve 74.854156
+}
+
+407 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 74.854156
+}
+
+408 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 74.854156
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+409 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+410 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 122.960793
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+411 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+412 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+413 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	longestCurve 122.960793
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+414 // ESurfaceType::Patch V: 9 I: 0 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	longestCurve 122.960793
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+415 // ESurfaceType::Meta V: 14 I: 24 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+416 // ESurfaceType::Meta V: 14 I: 24 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+417 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+418 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+419 // ESurfaceType::Meta V: 25 I: 45 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+420 // ESurfaceType::Meta V: 24 I: 42 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+421 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+422 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+423 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+424 // ESurfaceType::Meta V: 23 I: 39 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_2ba
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+425 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_grates/u_gr8_10a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+426 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+427 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+428 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+429 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/u_floor3_pad_8
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+430 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp7_blue
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+431 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan4
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+432 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_bmtls/e6dmetal_darker
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+433 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/rrrtt
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+434 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+435 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+436 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim7
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+437 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/r_trim_22j
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+438 // ESurfaceType::Meta V: 15 I: 39 planar
+{
+	shader textures/rota3ctf1_walls/ubase_holes
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+439 // ESurfaceType::Meta V: 14 I: 39 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+440 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+441 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+442 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+443 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+444 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+445 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+446 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+447 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+448 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+449 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+450 // ESurfaceType::Meta V: 8 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+451 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+452 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+453 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+454 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+455 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_trlight3_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+456 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_trlight3_blue
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+457 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+458 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+459 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+460 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+461 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+462 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+463 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+464 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+465 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+466 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+467 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+468 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+469 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/ter_rock2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+470 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+471 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+472 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+473 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+474 // ESurfaceType::Meta V: 22 I: 63 planar
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+475 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_thinline1_blue
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+476 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_py1_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+477 // ESurfaceType::Meta V: 27 I: 84 planar
+{
+	shader textures/rota3ctf1_floors/u_floor
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+478 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_walls/wall_12e
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+479 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_walls/wall_12e
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+480 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+481 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+482 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+483 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+484 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+485 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+486 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+487 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+488 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+489 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+490 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+491 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+492 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+493 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+494 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+495 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+496 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+497 // ESurfaceType::Meta V: 7 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/u_trm16_2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+498 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/u_trm16_2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+499 // ESurfaceType::Meta V: 10 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/u_trm16_2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+500 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+501 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+502 // ESurfaceType::Meta V: 14 I: 24 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+503 // ESurfaceType::Meta V: 16 I: 24 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+504 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+505 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+506 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+507 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+508 // ESurfaceType::Meta V: 14 I: 24 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+509 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+510 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+511 // ESurfaceType::Meta V: 16 I: 24 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+512 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+513 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+514 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/rota
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+515 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_py1_blue128
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+516 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_py1_blue128
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+517 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+518 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+519 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+520 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+521 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+522 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+523 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+524 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_lights/u_lamp5_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+525 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_blue
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+526 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+527 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+528 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+529 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_blue
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+530 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_lights/u_lamplong1_blue
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+531 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+532 // ESurfaceType::Meta V: 9 I: 24 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+533 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+534 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+535 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+536 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+537 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+538 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+539 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+540 // ESurfaceType::Meta V: 18 I: 39 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+541 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+542 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+543 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+544 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+545 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+546 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2_noclp
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+547 // ESurfaceType::Meta V: 16 I: 36 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+548 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+549 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+550 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+551 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+552 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+553 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+554 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+555 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+556 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+557 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+558 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+559 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+560 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+561 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+562 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+563 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+564 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+565 // ESurfaceType::Meta V: 9 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+566 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+567 // ESurfaceType::Meta V: 11 I: 27 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+568 // ESurfaceType::Meta V: 8 I: 18 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+569 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+570 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+571 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+572 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+573 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+574 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+575 // ESurfaceType::Meta V: 12 I: 36 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+576 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+577 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+578 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+579 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+580 // ESurfaceType::Meta V: 12 I: 36 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+581 // ESurfaceType::Meta V: 19 I: 48 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+582 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+583 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+584 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+585 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+586 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+587 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+588 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+589 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+590 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+591 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+592 // ESurfaceType::Meta V: 14 I: 36 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+593 // ESurfaceType::Meta V: 8 I: 18 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+594 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+595 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+596 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm64_1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+597 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+598 // ESurfaceType::Meta V: 11 I: 30 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+599 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+600 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+601 // ESurfaceType::Meta V: 15 I: 27 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+602 // ESurfaceType::Meta V: 17 I: 33 planar
+{
+	shader textures/rota3ctf1_floors/u_floor_gr8
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+603 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/u_trm8_3_noclp
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+604 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/u_trm8_3_noclp
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+605 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/u_trm8_3_noclp
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+606 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/u_trm8_3_noclp
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+607 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+608 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+609 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+610 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+611 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+612 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+613 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+614 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+615 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+616 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+617 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+618 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+619 // ESurfaceType::Meta V: 17 I: 48 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+620 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+621 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/u_trm8_3
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+622 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+623 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+624 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+625 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+626 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+627 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+628 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/tr
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+629 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+630 // ESurfaceType::Meta V: 9 I: 21 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+631 // ESurfaceType::Meta V: 64 I: 192 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+632 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_walls/ubase_pan_trix
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+633 // ESurfaceType::Meta V: 9 I: 15 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+634 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+635 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+636 // ESurfaceType::Meta V: 7 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+637 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+638 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+639 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+640 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+641 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+642 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+643 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+644 // ESurfaceType::Meta V: 9 I: 24 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+645 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+646 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+647 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+648 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+649 // ESurfaceType::Meta V: 6 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+650 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+651 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+652 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+653 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+654 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+655 // ESurfaceType::Meta V: 11 I: 27 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+656 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+657 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+658 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+659 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+660 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+661 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+662 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+663 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+664 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+665 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+666 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+667 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+668 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+669 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+670 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+671 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+672 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+673 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+674 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+675 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+676 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+677 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+678 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+679 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+680 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+681 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+682 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+683 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+684 // ESurfaceType::Meta V: 17 I: 42 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+685 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+686 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+687 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+688 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+689 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3dm2_trims/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+690 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+691 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+692 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+693 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+694 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+695 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+696 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+697 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+698 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+699 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+700 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+701 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+702 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+703 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+704 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+705 // ESurfaceType::Meta V: 10 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+706 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+707 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+708 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+709 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+710 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+711 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+712 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+713 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+714 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+715 // ESurfaceType::Meta V: 12 I: 18 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+716 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+717 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+718 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+719 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+720 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+721 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+722 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+723 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+724 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+725 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+726 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+727 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+728 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+729 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+730 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+731 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+732 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+733 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+734 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+735 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+736 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+737 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+738 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+739 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+740 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+741 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+742 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+743 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+744 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+745 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+746 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+747 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+748 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+749 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+750 // ESurfaceType::Meta V: 9 I: 21 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+751 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+752 // ESurfaceType::Meta V: 12 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+753 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+754 // ESurfaceType::Meta V: 18 I: 30 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+755 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+756 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+757 // ESurfaceType::Meta V: 21 I: 39 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+758 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+759 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+760 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+761 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+762 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+763 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+764 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+765 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+766 // ESurfaceType::Meta V: 15 I: 33 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+767 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+768 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+769 // ESurfaceType::Meta V: 16 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+770 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+771 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+772 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+773 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+774 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+775 // ESurfaceType::Meta V: 8 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+776 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+777 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+778 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+779 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+780 // ESurfaceType::Meta V: 9 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+781 // ESurfaceType::Meta V: 12 I: 30 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+782 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+783 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+784 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+785 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+786 // ESurfaceType::Meta V: 13 I: 27 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+787 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+788 // ESurfaceType::Meta V: 11 I: 33 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+789 // ESurfaceType::Meta V: 11 I: 30 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+790 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+791 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+792 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+793 // ESurfaceType::Meta V: 22 I: 54 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+794 // ESurfaceType::Meta V: 14 I: 30 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+795 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+796 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+797 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+798 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+799 // ESurfaceType::Meta V: 11 I: 21 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+800 // ESurfaceType::Meta V: 12 I: 30 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+801 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+802 // ESurfaceType::Meta V: 13 I: 27 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+803 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+804 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+805 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+806 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+807 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+808 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+809 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+810 // ESurfaceType::Meta V: 43 I: 153 planar
+{
+	shader textures/rota3ctf1_terrain/rrota
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+811 // ESurfaceType::Meta V: 29 I: 84 planar
+{
+	shader textures/rota3ctf1_terrain/rrota
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
