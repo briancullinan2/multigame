@@ -389,6 +389,8 @@ static char *gametypeNames[] = {"ffa", "tournament", "single", "team", "ctf", "o
 		}
 	}
 
+	CalculateRanks();
+
 }
 
 
@@ -1136,6 +1138,9 @@ void MoveClientToIntermission( gentity_t *ent ) {
 
 	// clean up powerup info
 	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+	memset( client->inventory, 0, sizeof( client->inventory ) );
+#endif
 
 	client->ps.eFlags = ( client->ps.eFlags & ~EF_PERSISTANT ) | ( client->ps.eFlags & EF_PERSISTANT );
 
@@ -1693,6 +1698,10 @@ static void G_WarmupEnd( void )
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 
 		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+		memset( client->inventory, 0, sizeof( client->inventory ) );
+#endif
+
 
 		ClientUserinfoChanged( i ); // set max.health etc.
 

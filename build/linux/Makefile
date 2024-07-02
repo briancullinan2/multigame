@@ -449,6 +449,7 @@ QAOBJ_ = \
   $(B)/$(MOD)/game/g_mem.o \
   $(B)/$(MOD)/game/g_misc.o \
   $(B)/$(MOD)/game/g_portal.o \
+  $(B)/$(MOD)/game/g_powerup.o \
   $(B)/$(MOD)/game/g_missile.o \
   $(B)/$(MOD)/game/g_mover.o \
   $(B)/$(MOD)/game/g_rotation.o \

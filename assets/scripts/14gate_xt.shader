@@ -123,6 +123,7 @@ textures/14gate_xt/sky
 	surfaceparm noimpact
 	surfaceparm nolightmap
 	surfaceparm nomarks
+	q3map_surfacelight 50
 //	q3map_surfacelight 130
 //	q3map_sun 1 1 1 80 315 70
 	skyParms textures/14gate_xt/env/filter 384 -

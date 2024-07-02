@@ -2642,7 +2642,7 @@ void CG_Player( centity_t *cent ) {
 	int				renderfx;
 	qboolean		shadow;
 	float			shadowPlane;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	refEntity_t		skull;
 	refEntity_t		powerup;
 	int				t;
@@ -2788,7 +2788,7 @@ void CG_Player( centity_t *cent ) {
 
 	CG_AddRefEntityWithPowerups( &torso, &cent->currentState, ci->team );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if ( cent->currentState.eFlags & EF_KAMIKAZE ) {
 
 		memset( &skull, 0, sizeof(skull) );

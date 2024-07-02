@@ -115,7 +115,7 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
 	} else {
 		s_quadFactor = 1.0;
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( ent->client->persistantPowerup && ent->client->persistantPowerup->item && ent->client->persistantPowerup->item->giTag == PW_DOUBLER ) {
 		s_quadFactor *= 2;
 	}
@@ -1144,7 +1144,7 @@ void FireWeapon( gentity_t *ent )
 	} else {
 		s_quadFactor = 1.0;
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( ent->client->persistantPowerup && ent->client->persistantPowerup->item && ent->client->persistantPowerup->item->giTag == PW_DOUBLER ) {
 		s_quadFactor *= 2;
 	}
@@ -1280,7 +1280,7 @@ void FireWeapon( gentity_t *ent )
 }
 
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 
 /*
 ===============

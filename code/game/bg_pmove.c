@@ -1694,6 +1694,28 @@ static void PM_Weapon( void ) {
 	// check for item using
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
 		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
+#if 0 //def USE_ADVANCED_ITEMS
+			int i;
+			for(i = 0; i < PW_NUM_POWERUPS; i++) {
+				gitem_t *item = BG_FindItemForPowerup(i);
+				int itemClass = floor(i / PW_MAX_POWERUPS);
+				if(!item || !item->giTag) {
+					continue;
+				}
+				if(item->giTag == HI_MEDKIT
+					&& pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25)) {
+					continue;
+				}
+				if(item->giType == IT_HOLDABLE && (*pm->inventory)[itemClass][i % PW_MAX_POWERUPS]) {
+					pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+					//PM_AddEvent( EV_USE_ITEM0 + (i % PW_MAX_POWERUPS) );
+					BG_AddPredictableEventToPlayerstate( EV_USE_ITEM0, i, pm->ps, -1 );
+					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
+					(*pm->inventory)[itemClass][i % PW_MAX_POWERUPS] = 0;
+					break;
+				}
+			}
+#else
 			if ( bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_MEDKIT
 				&& pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25) ) {
 				// don't use medkit if at max health
@@ -1702,6 +1724,7 @@ static void PM_Weapon( void ) {
 				PM_AddEvent( EV_USE_ITEM0 + bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag );
 				pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
 			}
+#endif
 			return;
 		}
 	} else {

@@ -160,6 +160,10 @@ G_CVAR( g_hordeRed,  "g_hordeRed", "0", CVAR_TEMP, 0, qfalse, qfalse )
 G_CVAR( g_hordeBlue, "g_hordeBlue", "0", CVAR_TEMP, 0, qfalse, qfalse )
 #endif
 
+#ifdef USE_ADVANCED_ITEMS
+G_CVAR( g_holdMultiple, "g_holdMultiple", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#endif
+
 
 #include "./g_cvar_weapon.h"
 #include "./g_cvar_weapon2.h"

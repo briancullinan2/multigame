@@ -517,7 +517,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.gibBounce2Sound = trap_S_RegisterSound( "sound/player/gibimp2.wav", qfalse );
 	cgs.media.gibBounce3Sound = trap_S_RegisterSound( "sound/player/gibimp3.wav", qfalse );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	cgs.media.useInvulnerabilitySound = trap_S_RegisterSound( "sound/items/invul_activate.wav", qfalse );
 	cgs.media.invulnerabilityImpactSound1 = trap_S_RegisterSound( "sound/items/invul_impact_01.wav", qfalse );
 	cgs.media.invulnerabilityImpactSound2 = trap_S_RegisterSound( "sound/items/invul_impact_02.wav", qfalse );
@@ -638,7 +638,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.sfx_rockexp = trap_S_RegisterSound ("sound/weapons/rocket/rocklx1a.wav", qfalse);
 	cgs.media.sfx_plasmaexp = trap_S_RegisterSound ("sound/weapons/plasma/plasmx1a.wav", qfalse);
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #if 0
 	cgs.media.sfx_proxexp = trap_S_RegisterSound( "sound/weapons/proxmine/wstbexpl.wav" , qfalse);
 	cgs.media.sfx_nghit = trap_S_RegisterSound( "sound/weapons/nailgun/wnalimpd.wav" , qfalse);
@@ -924,7 +924,7 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 	cgs.media.teleportEffectModel = trap_R_RegisterModel( "models/misc/telep.md3" );
 	cgs.media.teleportEffectShader = trap_R_RegisterShader( "teleportEffect" );
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	cgs.media.kamikazeEffectModel = trap_R_RegisterModel( "models/weaphits/kamboom2.md3" );
 	cgs.media.kamikazeShockWave = trap_R_RegisterModel( "models/weaphits/kamwave.md3" );
 	cgs.media.kamikazeHeadModel = trap_R_RegisterModel( "models/powerups/kamikazi.md3" );

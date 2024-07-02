@@ -445,6 +445,9 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		// set up for pmove
 		memset( &pm, 0, sizeof( pm ) );
 		pm.ps = &client->ps;
+#ifdef USE_ADVANCED_ITEMS
+		pm.inventory = &client->inventory;
+#endif
 		pm.cmd = *ucmd;
 		if ( client->noclip )
 			pm.tracemask = 0;
@@ -751,6 +754,11 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 #endif
 			break;
 
+#ifdef USE_ADVANCED_ITEMS
+		case EV_USE_ITEM0:
+			UsePowerup(ent, client->ps.eventParms[ i & (MAX_PS_EVENTS-1) ]);
+			break;
+#else
 		case EV_USE_ITEM1:		// teleporter
 			// drop flags in CTF
 			item = NULL;
@@ -787,18 +795,6 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 				ent->client->ps.powerups[ j ] = 0;
 			}
-#ifdef USE_PORTALS
-      if(g_altPortal.integer) {
-        int oldWeapon = ent->s.weapon;
-        ent->s.weapon = WP_BFG;
-#ifdef USE_ALT_FIRE
-        FireWeapon( ent, qtrue );
-#else
-        FireWeapon( ent );
-#endif
-        ent->s.weapon = oldWeapon;
-      } else
-#endif
 
 #ifdef MISSIONPACK
 			if ( g_gametype.integer == GT_HARVESTER ) {
@@ -838,7 +834,12 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			// start the kamikze
 			G_StartKamikaze( ent );
 			break;
+		case EV_USE_ITEM5:		// invulnerability
+			ent->client->invulnerabilityTime = level.time + 10000;
+			break;
+#endif
 
+#ifdef USE_PORTALS
 		case EV_USE_ITEM4:		// portal
 			if( ent->client->portalID ) {
 				DropPortalSource( ent, qfalse );
@@ -847,20 +848,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 				DropPortalDestination( ent, qfalse );
 			}
 			break;
-		case EV_USE_ITEM5:		// invulnerability
-			ent->client->invulnerabilityTime = level.time + 10000;
-			break;
 #endif
 
-#ifdef USE_PORTALS
-		case HI_PORTAL:		// portal
-			if( ent->client->portalID ) {
-				DropPortalSource( ent, qfalse );
-			}
-			else {
-				DropPortalDestination( ent, qfalse );
-			}
-			break;
 #endif
 
 		default:
@@ -1015,9 +1004,10 @@ void ClientThink_real( gentity_t *ent ) {
 #ifdef USE_ADVANCED_ITEMS
 	// update item classes but actually store them on the client
 	// TODO: use these techniques to improve weapon switching without delay
-	if(client->lastItemTime + 60 < level.time) {
+	if(client->lastItemTime + 30 < level.time) {
 		int i, j;
 		int itemBits;
+		qboolean hasItems = qfalse;
 		// TODO: find the next item in inventory and switch to that class for updates
 		int prevItemClass = client->ps.stats[STAT_HOLDABLE_UPDATE];
 		for(i = 0; i < 2 * PW_NUM_POWERUPS; i++) {
@@ -1025,13 +1015,22 @@ void ClientThink_real( gentity_t *ent ) {
 			if(prevItemClass == PW_MAX_ITEMGROUPS) {
 				prevItemClass = 0;
 			}
+			if(!client->inventoryModified[prevItemClass]) {
+				continue;
+			}
 			itemBits = 0;
+			hasItems = qfalse;
 			for(j = 0; j < PW_MAX_POWERUPS; j++) {
-				if(client->items[prevItemClass][j] > 0) {
+				gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
+				if(!item || !item->giTag) {
+					continue;
+				}
+				hasItems = qtrue;
+				if(client->inventory[prevItemClass][j] > 0) {
 					itemBits |= (1 << j);
 				}
 			}
-			if(itemBits) {
+			if(hasItems) {
 				break;
 			}
 		}
@@ -1039,6 +1038,7 @@ void ClientThink_real( gentity_t *ent ) {
 		if(i < 2 * PW_NUM_POWERUPS) {
 			client->ps.stats[STAT_HOLDABLE_UPDATE] = prevItemClass;
 			client->ps.stats[STAT_HOLDABLE_AVAILABLE] = itemBits;
+			client->inventoryModified[prevItemClass] = qfalse;
 		}
 		client->lastItemTime = level.time;
 	}
@@ -1619,7 +1619,21 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-#ifdef MISSIONPACK
+#ifdef USE_ADVANCED_GAMES
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		gitem_t *item = BG_FindItemForPowerup(i);
+		int itemClass = floor(i / PW_MAX_POWERUPS);
+		if(item->giType != IT_HOLDABLE &&
+			item->giType != IT_PERSISTANT_POWERUP &&
+			client->inventory[itemClass][i % PW_MAX_POWERUPS] && 
+			client->inventory[itemClass][i % PW_MAX_POWERUPS] < client->pers.cmd.serverTime) {
+			client->inventory[itemClass][i % PW_MAX_POWERUPS] = 0;
+			client->inventoryModified[itemClass] = qtrue;
+		}
+	}
+#endif
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	// set powerup for player animation
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		ent->client->ps.powerups[PW_GUARD] = level.time;

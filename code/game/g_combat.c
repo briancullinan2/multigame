@@ -880,6 +880,10 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	// remove powerups
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
+#ifdef USE_ADVANCED_ITEMS
+	memset( self->client->inventory, 0, sizeof( self->client->inventory ) );
+#endif
+
 #ifdef USE_PORTALS
   if(self->client->portalDestination) {
     PortalDestroy(self->client->portalDestination);

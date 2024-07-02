@@ -13,6 +13,12 @@ extern vmCvar_t  cg_gravity;
 extern vmCvar_t  g_gravity;
 #endif // end USE_PHYSICS_VARS
 
+#ifdef QAGAME
+#ifdef USE_ADVANCED_ITEMS
+extern vmCvar_t  g_holdMultiple;
+#endif
+#endif
+
 /*QUAKED item_***** ( 0 0 0 ) (-16 -16 -16) (16 16 16) suspended
 DO NOT USE THIS CLASS, IT JUST HOLDS GENERAL INFORMATION.
 The suspended flag will allow items to hang in the air, otherwise they are dropped to the next surface.
@@ -647,7 +653,7 @@ Only in CTF games
 /* sounds */ ""
 	},
 
-#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+#ifdef USE_ADVANCED_GAMES
 
 /*QUAKED team_CTF_goldflag (1 0 0) (-16 -16 -16) (16 16 16)
 Only in CTF games
@@ -707,7 +713,7 @@ Only in CTF games
 #endif
 #endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -756,6 +762,10 @@ Only in CTF games
 /* sounds */ ""
 	},
 
+#endif
+
+#ifdef MISSIONPACK
+
 /*QUAKED ammo_nails (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -803,6 +813,10 @@ Only in CTF games
 /* precache */ "",
 /* sounds */ ""
 	},
+
+#endif
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 
 	//
 	// PERSISTANT POWERUP ITEMS
@@ -915,6 +929,14 @@ Only in One Flag CTF games
 /* precache */ "",
 /* sounds */ ""
 	},
+
+
+#endif
+
+
+#ifdef MISSIONPACK
+
+
 /*QUAKED weapon_nailgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -1079,6 +1101,9 @@ gitem_t	*BG_FindItemForPowerup( powerup_t pw ) {
 
 	for ( i = 0 ; i < bg_numItems ; i++ ) {
 		if ( (bg_itemlist[i].giType == IT_POWERUP || 
+#ifdef USE_ADVANCED_ITEMS
+					bg_itemlist[i].giType == IT_HOLDABLE || 
+#endif
 					bg_itemlist[i].giType == IT_TEAM ||
 					bg_itemlist[i].giType == IT_PERSISTANT_POWERUP) && 
 			bg_itemlist[i].giTag == pw ) {
@@ -1089,6 +1114,7 @@ gitem_t	*BG_FindItemForPowerup( powerup_t pw ) {
 	return NULL;
 }
 
+#ifndef USE_ADVANCED_ITEMS
 
 /*
 ==============
@@ -1109,6 +1135,7 @@ gitem_t	*BG_FindItemForHoldable( holdable_t pw ) {
 	return NULL;
 }
 
+#endif
 
 /*
 ===============
@@ -1274,7 +1301,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 	case IT_POWERUP:
 		return qtrue;	// powerups are always picked up
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		// can only hold one item at a time
 		if ( ps->stats[STAT_PERSISTANT_POWERUP] ) {
@@ -1325,7 +1352,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) )
 					return qtrue;
 			}
-#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+#ifdef USE_ADVANCED_GAMES
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG ||
 					item->giTag == PW_GOLDFLAG ||
@@ -1375,6 +1402,11 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 
 	case IT_HOLDABLE:
 		// can only hold one item at a time
+#ifdef QAGAME
+#ifdef USE_ADVANCED_ITEMS
+		if(!g_holdMultiple.integer)
+#endif
+#endif
 		if ( ps->stats[STAT_HOLDABLE_ITEM] ) {
 			return qfalse;
 		}

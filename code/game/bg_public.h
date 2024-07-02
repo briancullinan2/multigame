@@ -158,6 +158,60 @@ typedef enum {
 	WEAPON_FIRING
 } weaponstate_t;
 
+#ifdef USE_ADVANCED_ITEMS
+
+
+// NOTE: may not have more than 16
+typedef enum {
+	PW_NONE,
+
+	PW_QUAD = 1,
+	PW_REGEN = 2,
+	PW_BATTLESUIT = 3,
+	PW_HASTE = 4,
+	PW_INVIS = 5,
+	PW_FLIGHT = 6,
+
+	PW_REDFLAG = 7,
+	PW_BLUEFLAG = 8,
+	PW_NEUTRALFLAG = 9,
+
+	PW_MAX_POWERUPS = 10,
+	// = 10
+
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	PW_GOLDFLAG = 11,
+	PW_GREENFLAG = 12,
+#endif
+
+	PW_SCOUT = 13,
+	PW_GUARD = 14,
+	PW_DOUBLER = 15,
+	PW_AMMOREGEN = 16,
+	PW_INVULNERABILITY = 17,
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PW_FROZEN = 18,
+#endif
+
+#ifdef USE_WEAPON_SPREAD
+  PW_SPREAD = 19,  //Hal9000 spreadfire
+#endif
+
+	HI_TELEPORTER = 20,
+	HI_MEDKIT = 21,
+	HI_KAMIKAZE = 22,
+	HI_PORTAL = 23,
+	HI_INVULNERABILITY = 24,
+
+	PW_NUM_POWERUPS = 25,
+
+} powerup_t;
+
+#define PW_MAX_ITEMGROUPS (1 << (MAX_POWERUPS - PW_MAX_POWERUPS - 1))
+
+#endif
+
 // pmove->pm_flags
 #define	PMF_DUCKED			1
 #define	PMF_JUMP_HELD		2
@@ -203,10 +257,16 @@ typedef struct {
 	int			pmove_fixed;
 	int			pmove_msec;
 
+
 	// callbacks to test the world
 	// these will be different functions during game and cgame
 	void		(*trace)( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask );
 	int			(*pointcontents)( const vec3_t point, int passEntityNum );
+
+#ifdef USE_ADVANCED_ITEMS
+	int (*inventory)[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+#endif
+
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles
@@ -283,7 +343,7 @@ typedef enum {
 #define	EF_AWARD_GAUNTLET	0x00000040		// draw a gauntlet sprite
 #define	EF_NODRAW			0x00000080		// may have an event, but no model (unspawned items)
 #define	EF_FIRING			0x00000100		// for lightning gun
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #define	EF_KAMIKAZE			0x00000200
 #endif
 #define	EF_MOVER_STOP		0x00000400		// will push otherwise
@@ -304,52 +364,7 @@ typedef enum {
 #define EF_NOPREDICT ( EF_AWARDS | EF_PERSISTANT | EF_TALK )
 
 
-#ifdef USE_ADVANCED_ITEMS
-
-
-// NOTE: may not have more than 16
-typedef enum {
-	PW_NONE,
-
-	PW_QUAD = 1,
-	PW_REGEN = 2,
-	PW_BATTLESUIT = 3,
-	PW_HASTE = 4,
-	PW_INVIS = 5,
-	PW_FLIGHT = 6,
-
-	PW_REDFLAG = 7,
-	PW_BLUEFLAG = 8,
-	PW_NEUTRALFLAG = 9,
-
-	PW_MAX_POWERUPS = 10,
-
-#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
-	PW_GOLDFLAG = 11,
-	PW_GREENFLAG = 12,
-#endif
-
-	PW_SCOUT = 13,
-	PW_GUARD = 14,
-	PW_DOUBLER = 15,
-	PW_AMMOREGEN = 16,
-	PW_INVULNERABILITY = 17,
-
-#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-  PW_FROZEN = 18,
-#endif
-
-#ifdef USE_WEAPON_SPREAD
-  PW_SPREAD = 19,  //Hal9000 spreadfire
-#endif
-
-	PW_NUM_POWERUPS = 20,
-
-} powerup_t;
-
-#define PW_MAX_ITEMGROUPS (1 << (MAX_POWERUPS - PW_MAX_POWERUPS - 1))
-
-#else
+#ifndef USE_ADVANCED_ITEMS
 
 
 // NOTE: may not have more than 16
@@ -394,6 +409,8 @@ typedef enum {
 
 #endif
 
+#ifndef USE_ADVANCED_ITEMS
+
 typedef enum {
 	HI_NONE,
 
@@ -405,6 +422,8 @@ typedef enum {
 
 	HI_NUM_HOLDABLE
 } holdable_t;
+
+#endif
 
 #ifdef USE_ADVANCED_WEAPONS
 
@@ -883,7 +902,7 @@ typedef enum {
   MOD_FROM_GRAVE,
 #endif
 	MOD_TRIGGER_HURT,
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	MOD_NAIL,
 	MOD_CHAINGUN,
 	MOD_PROXIMITY_MINE,
@@ -947,7 +966,9 @@ gitem_t	*BG_FindItem( const char *pickupName );
 gitem_t	*BG_FindItemForWeapon( weapon_t weapon );
 gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon );
 gitem_t	*BG_FindItemForPowerup( powerup_t pw );
+#ifndef USE_ADVANCED_ITEMS
 gitem_t	*BG_FindItemForHoldable( holdable_t pw );
+#endif
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
 
 qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps );

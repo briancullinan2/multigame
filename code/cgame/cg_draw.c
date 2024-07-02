@@ -1253,7 +1253,7 @@ static float CG_DrawScores( float y ) {
 		}
 
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
-		y += BIGCHAR_HEIGHT + 8 + BIGCHAR_HEIGHT + 8;
+		y -= BIGCHAR_HEIGHT + 8 + BIGCHAR_HEIGHT + 8;
 
 		x0 = cgs.screenXmax + 1;
 		color[0] = 1.0f;
@@ -1401,6 +1401,114 @@ static float CG_DrawScores( float y ) {
 #endif // MISSIONPACK
 
 
+#ifdef USE_ADVANCED_ITEMS
+
+
+/*
+================
+CG_DrawPowerups
+================
+*/
+static float CG_DrawPowerups( float y ) {
+	int		sorted[MAX_POWERUPS];
+	int		sortedTime[MAX_POWERUPS];
+	int		i, j, k;
+	int		active;
+	playerState_t	*ps;
+	int		t;
+	gitem_t	*item;
+	int		x;
+	int		color;
+	float	size;
+	float	f;
+	static const float colors[2][4] = { 
+		{ 0.2f, 1.0f, 0.2f, 1.0f },
+		{ 1.0f, 0.2f, 0.2f, 1.0f } 
+	};
+
+	ps = &cg.snap->ps;
+
+	if ( ps->stats[STAT_HEALTH] <= 0 ) {
+		return y;
+	}
+
+	// sort the list by time remaining
+	active = 0;
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		int itemClass = floor(i / PW_MAX_POWERUPS);
+		t = cg.inventory[itemClass][i % PW_MAX_POWERUPS];
+		// ZOID--don't draw if the power up has unlimited time (999 seconds)
+		// This is true of the CTF flags
+		if ( t <= 0 || t >= 999000) {
+			continue;
+		}
+
+		// insert into the list
+		for ( j = 0 ; j < active ; j++ ) {
+			if ( sortedTime[j] >= t ) {
+				for ( k = active - 1 ; k >= j ; k-- ) {
+					sorted[k+1] = sorted[k];
+					sortedTime[k+1] = sortedTime[k];
+				}
+				break;
+			}
+		}
+		sorted[j] = i;
+		sortedTime[j] = t;
+		active++;
+	}
+
+	// draw the icons and timers
+	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;
+	for ( i = 0 ; i < active ; i++ ) {
+		item = BG_FindItemForPowerup( sorted[i] );
+
+		if ( item ) {
+
+			color = 1;
+
+			y -= ICON_SIZE;
+
+			if(sortedTime[ i ] != 1) {
+				trap_R_SetColor( colors[color] );
+				CG_DrawField( x, y, 2, sortedTime[ i ] / 1000 );
+			}
+
+			//t = ps->powerups[ sorted[i] ];
+			//if ( t - cg.time >= POWERUP_BLINKS * POWERUP_BLINK_TIME ) {
+				trap_R_SetColor( NULL );
+			/*
+			TODO: fix this with some time syncing device
+
+			} else {
+				vec4_t	modulate;
+
+				f = (float)( t - cg.time ) / POWERUP_BLINK_TIME;
+				f -= (int)f;
+				modulate[0] = modulate[1] = modulate[2] = modulate[3] = f;
+				trap_R_SetColor( modulate );
+			}
+			*/
+
+			if ( cg.powerupActive == sorted[i] && 
+				cg.time - cg.powerupTime < PULSE_TIME ) {
+				f = 1.0 - ( (float)( cg.time - cg.powerupTime ) / PULSE_TIME );
+				size = ICON_SIZE * ( 1.0 + ( PULSE_SCALE - 1.0 ) * f );
+			} else {
+				size = ICON_SIZE;
+			}
+
+			CG_DrawPic( cgs.screenXmax + 1 - size, y + ICON_SIZE / 2 - size / 2, 
+				size, size, trap_R_RegisterShader( item->icon ) );
+		} // if ( item )
+	}
+	trap_R_SetColor( NULL );
+
+	return y;
+}
+
+#else
+
 /*
 ================
 CG_DrawPowerups
@@ -1432,31 +1540,6 @@ static float CG_DrawPowerups( float y ) {
 
 	// sort the list by time remaining
 	active = 0;
-#ifdef USE_ADVANCED_ITEMS
-	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
-		int itemClass = floor(i / PW_MAX_POWERUPS);
-		t = cg.inventory[itemClass][i % PW_MAX_POWERUPS];
-		// ZOID--don't draw if the power up has unlimited time (999 seconds)
-		// This is true of the CTF flags
-		if ( t <= 0 || t >= 999000) {
-			continue;
-		}
-
-		// insert into the list
-		for ( j = 0 ; j < active ; j++ ) {
-			if ( sortedTime[j] >= t ) {
-				for ( k = active - 1 ; k >= j ; k-- ) {
-					sorted[k+1] = sorted[k];
-					sortedTime[k+1] = sortedTime[k];
-				}
-				break;
-			}
-		}
-		sorted[j] = i;
-		sortedTime[j] = t;
-		active++;
-	}
-#else
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( !ps->powerups[ i ] ) {
 			continue;
@@ -1482,7 +1565,6 @@ static float CG_DrawPowerups( float y ) {
 		sortedTime[j] = t;
 		active++;
 	}
-#endif
 
 	// draw the icons and timers
 	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;
@@ -1528,6 +1610,7 @@ static float CG_DrawPowerups( float y ) {
 }
 #endif // MISSIONPACK
 
+#endif // USE_ADVANCED_ITEMS
 
 /*
 =====================
@@ -2765,7 +2848,9 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 			CG_DrawWeaponSelect();
 
 #ifndef MISSIONPACK
+#ifndef USE_ADVANCED_ITEMS
 			CG_DrawHoldableItem();
+#endif
 #else
 			//CG_DrawPersistantPowerup();
 #endif

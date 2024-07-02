@@ -241,7 +241,7 @@ typedef enum {
 #ifdef USE_DAMAGE_PLUMS
   LE_DAMAGEPLUM,
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	LE_KAMIKAZE,
 	LE_INVULIMPACT,
 	LE_INVULJUICED,
@@ -919,7 +919,7 @@ typedef struct {
 	// special effects models
 	qhandle_t	teleportEffectModel;
 	qhandle_t	teleportEffectShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	qhandle_t	kamikazeEffectModel;
 	qhandle_t	kamikazeShockWave;
 	qhandle_t	kamikazeHeadModel;
@@ -966,7 +966,7 @@ typedef struct {
 	sfxHandle_t	sfx_railg;
 	sfxHandle_t	sfx_rockexp;
 	sfxHandle_t	sfx_plasmaexp;
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	sfxHandle_t	sfx_proxexp;
 	sfxHandle_t	sfx_nghit;
 	sfxHandle_t	sfx_nghitflesh;
@@ -1081,7 +1081,7 @@ typedef struct {
 	sfxHandle_t	countFightSound;
 	sfxHandle_t	countPrepareSound;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	// new stuff
 	qhandle_t patrolShader;
 	qhandle_t assaultShader;

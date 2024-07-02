@@ -448,6 +448,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\g_portal.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\g_powerup.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\g_rotation.c"
 				>
 			</File>

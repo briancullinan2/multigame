@@ -167,7 +167,7 @@ struct gentity_s
 	gentity_t *teamchain;	 // next entity in team
 	gentity_t *teammaster; // master of the team
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int kamikazeTime;
 	int kamikazeShockTime;
 #endif
@@ -392,9 +392,9 @@ struct gclient_s
 	int lastFreezeTime; // for calculating how frozen they are extactly
 #endif
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
-	gentity_t *persistantPowerup;
 	int portalID;
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+	gentity_t *persistantPowerup;
 	int ammoTimes[WP_MAX_WEAPONS];
 	int invulnerabilityTime;
 #endif
@@ -403,9 +403,6 @@ struct gclient_s
 	gentity_t *portalSource;
 	int lastPortal;
 	gentity_t *lastPortalEnt;
-#if !defined(MISSIONPACK) && !defined(USE_ADVANCED_WEAPONS)
-	int portalID;
-#endif
 #endif
 
 #ifdef USE_ADVANCED_WEAPONS
@@ -417,7 +414,8 @@ struct gclient_s
 
 #ifdef USE_ADVANCED_ITEMS
 	int lastItemTime;
-	int items[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+	int inventory[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+	qboolean inventoryModified[PW_MAX_ITEMGROUPS];
 #endif
 
 			char *areabits;
@@ -651,7 +649,7 @@ void TossClientCubes(gentity_t *self);
 #define DAMAGE_NO_ARMOR 0x00000002			// armor does not protect from this damage
 #define DAMAGE_NO_KNOCKBACK 0x00000004	// do not affect velocity, just view angles
 #define DAMAGE_NO_PROTECTION 0x00000008 // armor, shields, invulnerability, and godmode have no effect
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #define DAMAGE_NO_TEAM_PROTECTION 0x00000010 // armor, shields, invulnerability, and godmode have no effect
 #endif
 

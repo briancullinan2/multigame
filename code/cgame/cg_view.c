@@ -229,7 +229,7 @@ static void CG_OffsetThirdPersonView( void ) {
 
 	VectorCopy( cg.refdef.vieworg, view );
 
-	view[2] += 8;
+	view[2] += 10;
 
 	cg.refdefViewAngles[PITCH] *= 0.5;
 

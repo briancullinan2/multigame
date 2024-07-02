@@ -22,7 +22,7 @@
 #endif
 
 
-#if defined(MISSIONPACK)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */

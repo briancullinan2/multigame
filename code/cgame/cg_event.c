@@ -407,34 +407,51 @@ static void CG_Obituary( entityState_t *ent ) {
 CG_UseItem
 ===============
 */
-static void CG_UseItem( centity_t *cent ) {
+#ifdef USE_ADVANCED_ITEMS
+static void CG_UseItem( centity_t *cent, int itemNum ) 
+#else
+static void CG_UseItem( centity_t *cent ) 
+#endif
+{
 	clientInfo_t *ci;
+#ifdef USE_ADVANCED_ITEMS
+	int			clientNum;
+#else
 	int			itemNum, clientNum;
+#endif
 	gitem_t		*item;
 	entityState_t *es;
 
 	es = &cent->currentState;
 	
+#ifndef USE_ADVANCED_ITEMS
 	itemNum = (es->event & ~EV_EVENT_BITS) - EV_USE_ITEM0;
 	if ( itemNum < 0 || itemNum > HI_NUM_HOLDABLE ) {
 		itemNum = 0;
 	}
+#endif
 
 	// print a message if the local player
 	if ( es->number == cg.snap->ps.clientNum ) {
 		if ( !itemNum ) {
 			CG_CenterPrint( "No item to use", SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		} else {
+#ifdef USE_ADVANCED_ITEMS
+			item = BG_FindItemForPowerup( itemNum );
+#else
 			item = BG_FindItemForHoldable( itemNum );
+#endif
 			CG_CenterPrint( va("Use %s", item->pickup_name), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		}
 	}
 
 	switch ( itemNum ) {
 	default:
+#ifndef USE_ADVANCED_ITEMS
 	case HI_NONE:
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.useNothingSound );
 		break;
+#endif
 
 	case HI_TELEPORTER:
 		break;
@@ -862,7 +879,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			if ( item->giType == IT_POWERUP || item->giType == IT_TEAM) {
 				trap_S_StartSound (NULL, es->number, CHAN_AUTO,	cgs.media.n_healthSound );
 			} else if (item->giType == IT_PERSISTANT_POWERUP) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 				switch (item->giTag ) {
 					case PW_SCOUT:
 						trap_S_StartSound (NULL, es->number, CHAN_AUTO,	cgs.media.scoutSound );
@@ -995,7 +1012,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	case EV_USE_ITEM13:
 	case EV_USE_ITEM14:
 	case EV_USE_ITEM15:
+#ifdef USE_ADVANCED_ITEMS
+		CG_UseItem( cent, es->eventParm );
+#else
 		CG_UseItem( cent );
+#endif
 		break;
 
 	//=================================================================
@@ -1051,6 +1072,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	case EV_PROXIMITY_MINE_TRIGGER:
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.wstbactvSound );
 		break;
+
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 
 	case EV_KAMIKAZE:
 		CG_KamikazeEffect( cent->lerpOrigin );
@@ -1289,7 +1313,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 				case GTS_TEAMS_ARE_TIED:
 					CG_AddBufferedSound( cgs.media.teamsTiedSound );
 					break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 				case GTS_KAMIKAZE:
 					trap_S_StartLocalSound(cgs.media.kamikazeFarSound, CHAN_ANNOUNCER);
 					break;
@@ -1372,7 +1396,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		// don't play gib sound when using the kamikaze because it interferes
 		// with the kamikaze sound, downside is that the gib sound will also
 		// not be played when someone is gibbed while just carrying the kamikaze
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if ( !(es->eFlags & EF_KAMIKAZE) ) {
 			trap_S_StartSound( NULL, es->number, CHAN_BODY, cgs.media.gibSound );
 		}

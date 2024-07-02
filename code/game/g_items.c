@@ -66,7 +66,7 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 	case IT_POWERUP:
 		return firstSpawn ? SPAWN_POWERUP : RESPAWN_POWERUP;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		return -1;
 		break;
@@ -86,9 +86,9 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	int			i;
 	gclient_t	*client;
 
-	if ( !other->client->ps.powerups[ent->item->giTag] ) {
+	if ( !other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] ) {
 		// round timing to seconds to make multiple powerup timers count in sync
-		other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
+		other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] = level.time - ( level.time % 1000 );
 	}
 
 	if ( ent->count ) {
@@ -97,13 +97,14 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		quantity = ent->item->quantity;
 	}
 
-	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
+	other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] += quantity * 1000;
 
 #ifdef USE_ADVANCED_ITEMS
 	{
 		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
-		other->client->items[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = other->client->ps.powerups[ent->item->giTag];
-		G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS];
+		other->client->inventoryModified[itemClass] = qtrue;
+		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
 	}
 #endif
 
@@ -160,7 +161,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 //======================================================================
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 	int		clientNum;
 	char	userinfo[MAX_INFO_STRING];
@@ -169,6 +170,16 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 
 	other->client->ps.stats[STAT_PERSISTANT_POWERUP] = ent->item - bg_itemlist;
 	other->client->persistantPowerup = ent;
+
+#ifdef USE_ADVANCED_ITEMS
+	{
+		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
+		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = 1;
+		other->client->inventoryModified[itemClass] = qtrue;
+		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+	}
+#endif
+
 
 	switch( ent->item->giTag ) {
 	case PW_GUARD:
@@ -237,9 +248,20 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 
 int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
+#ifdef USE_ADVANCED_ITEMS
+	{
+		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
+		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = 1;
+		other->client->inventoryModified[itemClass] = qtrue;
+		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+	}
+#endif
+
 	other->client->ps.stats[STAT_HOLDABLE_ITEM] = ent->item - bg_itemlist;
 
-#ifdef MISSIONPACK	
+
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( ent->item->giTag == HI_KAMIKAZE ) {
 		other->client->ps.eFlags |= EF_KAMIKAZE;
 	}
@@ -336,7 +358,7 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	int			quantity;
 
 	// small and mega healths will go over the max
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( other->client && bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	}
@@ -369,7 +391,7 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
   		other->client->ps.speed = g_speed.value;
   	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
   	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
   		other->client->ps.speed *= 1.5;
   	}
@@ -404,7 +426,7 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 //======================================================================
 
 int Pickup_Armor( gentity_t *ent, gentity_t *other ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int		upperBound;
 
 	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
@@ -556,6 +578,17 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+{
+	int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
+	if(ent->item->giType == IT_HOLDABLE && 
+		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS]) {
+		return;
+	}
+}
+
+#endif
+
 	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
 
 	predict = other->client->pers.predictItemPickup;
@@ -585,7 +618,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		else
 			predict = qfalse;
 		break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		respawn = Pickup_PersistantPowerup(ent, other);
 		break;
@@ -676,7 +709,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// draw anything.  This allows respawnable items
 	// to be placed on movers.
 #ifdef USE_ITEM_TIMERS
-	if(ent->item->giType != IT_TEAM) {
+	if(ent->item->giType != IT_TEAM && respawn != -1) {
 		ent->r.svFlags |= SVF_BROADCAST;
 	} else
 #endif
@@ -1134,7 +1167,7 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 		G_SpawnFloat( "noglobalsound", "0", &ent->speed);
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if ( item->giType == IT_PERSISTANT_POWERUP ) {
 		ent->s.generic1 = ent->spawnflags;
 	}

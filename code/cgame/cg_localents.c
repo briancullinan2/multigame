@@ -612,7 +612,7 @@ static void CG_AddSpriteExplosion( localEntity_t *le ) {
 }
 
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 /*
 ====================
 CG_AddKamikaze
@@ -1093,7 +1093,7 @@ void CG_AddLocalEntities( void ) {
 			CG_AddDamagePlum( le );
 			break;
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		case LE_KAMIKAZE:
 			CG_AddKamikaze( le );
 			break;

@@ -66,6 +66,9 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 	}
 
 	memset( activator->client->ps.powerups, 0, sizeof( activator->client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+		memset( activator->client->inventory, 0, sizeof( activator->client->inventory ) );
+#endif
 }
 
 void SP_target_remove_powerups( gentity_t *ent ) {

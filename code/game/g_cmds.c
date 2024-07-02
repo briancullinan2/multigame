@@ -773,6 +773,9 @@ void StopFollowing( gentity_t *ent, qboolean release ) {
 	if ( release ) {
 		client->ps.stats[STAT_HEALTH] = ent->health = 1;
 		memset( client->ps.powerups, 0, sizeof ( client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+		memset( client->inventory, 0, sizeof( client->inventory ) );
+#endif
 	}
 	SetClientViewAngle( ent, client->ps.viewangles );
 

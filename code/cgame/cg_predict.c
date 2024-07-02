@@ -508,6 +508,17 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;	// can't hold it
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	{
+		int tag = bg_itemlist[cent->currentState.modelindex].giTag;
+		int itemClass = floor(tag / PW_MAX_POWERUPS);
+		if(bg_itemlist[cent->currentState.modelindex].giType == IT_HOLDABLE && 
+			cg.inventory[itemClass][tag % PW_MAX_POWERUPS]) {
+			return;
+		}
+	}
+#endif
+
 	item = &bg_itemlist[ cent->currentState.modelindex ];
 
 	// Special case for flags.  
@@ -973,6 +984,9 @@ void CG_PredictPlayerState( void ) {
 
 	// prepare for pmove
 	cg_pmove.ps = &cg.predictedPlayerState;
+#ifdef USE_ADVANCED_ITEMS
+	cg_pmove.inventory = &cg.inventory;
+#endif
 	cg_pmove.trace = CG_Trace;
 	cg_pmove.pointcontents = CG_PointContents;
 	if ( cg_pmove.ps->pm_type == PM_DEAD ) {
