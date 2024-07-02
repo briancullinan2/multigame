@@ -5748,541 +5748,1309 @@ default
 	sampleSize 0
 }
 
-957 // ESurfaceType::Meta V: 64 I: 246 
+957 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+958 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+959 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+960 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+961 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+962 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+963 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+964 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+965 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+966 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight
+	sampleSize 0
+}
+
+967 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+968 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+969 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+970 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+971 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+972 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+973 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+974 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+975 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+976 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+977 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+978 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+979 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+980 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+981 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+982 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+983 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+984 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+985 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+986 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+987 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+988 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+989 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+990 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_blend
+	sampleSize 0
+}
+
+991 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+992 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+993 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+994 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+995 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+996 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+997 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+998 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+999 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+1000 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+1001 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1002 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1003 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1004 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1005 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1006 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1007 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1008 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1009 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1010 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1011 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1012 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1013 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1014 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1015 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1016 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1017 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1018 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1019 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3dm2_bmtls/e6dmetal_darker
+	sampleSize 0
+}
+
+1020 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1021 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1022 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1023 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1024 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1025 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1026 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1027 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1028 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1029 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1030 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1031 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+1032 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1033 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1034 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1035 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+1036 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1037 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3dm2_bmtls/e6dmetal_darker
+	sampleSize 0
+}
+
+1038 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3dm2_bmtls/e6dmetal_darker
+	sampleSize 0
+}
+
+1039 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_floors/e6bmetal_darker
+	sampleSize 0
+}
+
+1040 // ESurfaceType::Triangles V: 256 I: 384 
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1041 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+1042 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+1043 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+1044 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader rota3ctf1_terrain/e6strimlight_s_nolightb
+	sampleSize 0
+}
+
+1045 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1046 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1047 // ESurfaceType::Triangles V: 512 I: 768 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+1048 // ESurfaceType::Triangles V: 512 I: 768 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+1049 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1050 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1051 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1052 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1053 // ESurfaceType::Triangles V: 512 I: 768 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+1054 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1055 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1056 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1057 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1058 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1059 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1060 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1061 // ESurfaceType::Triangles V: 512 I: 768 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+1062 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1063 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1064 // ESurfaceType::Triangles V: 512 I: 768 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+1065 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/diry
+	sampleSize 0
+}
+
+1066 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/sklo2
+	sampleSize 0
+}
+
+1067 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+1068 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+1069 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1070 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1071 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1072 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1073 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1074 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+1075 // ESurfaceType::Triangles V: 256 I: 384 planar
+{
+	shader textures/rota3ctf1_terrain/e6strimlight_s_nolight
+	sampleSize 0
+}
+
+1076 // ESurfaceType::Triangles V: 512 I: 768 
+{
+	shader textures/rota3ctf1_trim/ubase_trim4
+	sampleSize 0
+}
+
+1077 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/grate_grey2
+	sampleSize 0
+}
+
+1078 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/rota3ctf1_terrain/e6boltstrip
+	sampleSize 0
+}
+
+1079 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader rota3ctf1_terrain/e6strimlight
+	sampleSize 0
+}
+
+1080 // ESurfaceType::Meta V: 64 I: 246 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-958 // ESurfaceType::Meta V: 64 I: 291 
+1081 // ESurfaceType::Meta V: 64 I: 291 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-959 // ESurfaceType::Meta V: 8 I: 18 
+1082 // ESurfaceType::Meta V: 8 I: 18 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-960 // ESurfaceType::Meta V: 64 I: 264 
+1083 // ESurfaceType::Meta V: 64 I: 264 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-961 // ESurfaceType::Meta V: 43 I: 180 
+1084 // ESurfaceType::Meta V: 43 I: 180 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-962 // ESurfaceType::Meta V: 64 I: 294 
+1085 // ESurfaceType::Meta V: 64 I: 294 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-963 // ESurfaceType::Meta V: 39 I: 159 
+1086 // ESurfaceType::Meta V: 39 I: 159 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-964 // ESurfaceType::Meta V: 26 I: 84 
+1087 // ESurfaceType::Meta V: 26 I: 84 
 {
 	shader textures/rota3ctf1_trim/ubase_trim
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-965 // ESurfaceType::Meta V: 64 I: 291 planar
+1088 // ESurfaceType::Meta V: 64 I: 291 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-966 // ESurfaceType::Meta V: 64 I: 279 planar
+1089 // ESurfaceType::Meta V: 64 I: 279 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-967 // ESurfaceType::Meta V: 64 I: 255 planar
+1090 // ESurfaceType::Meta V: 64 I: 255 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-968 // ESurfaceType::Meta V: 6 I: 12 planar
+1091 // ESurfaceType::Meta V: 6 I: 12 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-969 // ESurfaceType::Meta V: 8 I: 18 planar
+1092 // ESurfaceType::Meta V: 8 I: 18 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-970 // ESurfaceType::Meta V: 27 I: 102 planar
+1093 // ESurfaceType::Meta V: 27 I: 102 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-971 // ESurfaceType::Meta V: 64 I: 249 planar
+1094 // ESurfaceType::Meta V: 64 I: 249 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-972 // ESurfaceType::Meta V: 64 I: 288 planar
+1095 // ESurfaceType::Meta V: 64 I: 288 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-973 // ESurfaceType::Meta V: 14 I: 42 planar
+1096 // ESurfaceType::Meta V: 14 I: 42 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-974 // ESurfaceType::Meta V: 64 I: 291 planar
+1097 // ESurfaceType::Meta V: 64 I: 291 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-975 // ESurfaceType::Meta V: 64 I: 279 planar
+1098 // ESurfaceType::Meta V: 64 I: 279 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-976 // ESurfaceType::Meta V: 64 I: 255 planar
+1099 // ESurfaceType::Meta V: 64 I: 255 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-977 // ESurfaceType::Meta V: 6 I: 12 planar
+1100 // ESurfaceType::Meta V: 6 I: 12 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-978 // ESurfaceType::Meta V: 8 I: 18 planar
+1101 // ESurfaceType::Meta V: 8 I: 18 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-979 // ESurfaceType::Meta V: 27 I: 102 planar
+1102 // ESurfaceType::Meta V: 27 I: 102 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-980 // ESurfaceType::Meta V: 64 I: 249 planar
+1103 // ESurfaceType::Meta V: 64 I: 249 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-981 // ESurfaceType::Meta V: 64 I: 291 planar
+1104 // ESurfaceType::Meta V: 64 I: 291 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-982 // ESurfaceType::Meta V: 5 I: 9 planar
+1105 // ESurfaceType::Meta V: 5 I: 9 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-983 // ESurfaceType::Meta V: 11 I: 27 planar
+1106 // ESurfaceType::Meta V: 11 I: 27 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-984 // ESurfaceType::Meta V: 3 I: 3 planar
+1107 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/rota3ctf1_terrain/grate_grey2
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-985 // ESurfaceType::Meta V: 64 I: 279 
+1108 // ESurfaceType::Meta V: 64 I: 279 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-986 // ESurfaceType::Meta V: 32 I: 105 
+1109 // ESurfaceType::Meta V: 32 I: 105 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-987 // ESurfaceType::Meta V: 64 I: 279 
+1110 // ESurfaceType::Meta V: 64 I: 279 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-988 // ESurfaceType::Meta V: 29 I: 105 
+1111 // ESurfaceType::Meta V: 29 I: 105 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-989 // ESurfaceType::Meta V: 64 I: 261 
+1112 // ESurfaceType::Meta V: 64 I: 261 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-990 // ESurfaceType::Meta V: 14 I: 39 
+1113 // ESurfaceType::Meta V: 14 I: 39 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-991 // ESurfaceType::Meta V: 26 I: 84 
+1114 // ESurfaceType::Meta V: 26 I: 84 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-992 // ESurfaceType::Meta V: 64 I: 291 
+1115 // ESurfaceType::Meta V: 64 I: 291 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-993 // ESurfaceType::Meta V: 26 I: 93 planar
+1116 // ESurfaceType::Meta V: 26 I: 93 planar
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-994 // ESurfaceType::Meta V: 64 I: 273 
+1117 // ESurfaceType::Meta V: 64 I: 273 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-995 // ESurfaceType::Meta V: 25 I: 84 
+1118 // ESurfaceType::Meta V: 25 I: 84 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-996 // ESurfaceType::Meta V: 10 I: 27 
+1119 // ESurfaceType::Meta V: 10 I: 27 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-997 // ESurfaceType::Meta V: 64 I: 300 
+1120 // ESurfaceType::Meta V: 64 I: 300 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-998 // ESurfaceType::Meta V: 6 I: 12 
+1121 // ESurfaceType::Meta V: 6 I: 12 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-999 // ESurfaceType::Meta V: 64 I: 243 
+1122 // ESurfaceType::Meta V: 64 I: 243 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1000 // ESurfaceType::Meta V: 6 I: 12 
+1123 // ESurfaceType::Meta V: 6 I: 12 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-1001 // ESurfaceType::Meta V: 21 I: 72 
+1124 // ESurfaceType::Meta V: 21 I: 72 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-1002 // ESurfaceType::Meta V: 33 I: 129 
+1125 // ESurfaceType::Meta V: 33 I: 129 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1003 // ESurfaceType::Meta V: 64 I: 288 
+1126 // ESurfaceType::Meta V: 64 I: 288 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-1004 // ESurfaceType::Meta V: 26 I: 72 
+1127 // ESurfaceType::Meta V: 26 I: 72 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-1005 // ESurfaceType::Meta V: 10 I: 24 planar
+1128 // ESurfaceType::Meta V: 10 I: 24 planar
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-1006 // ESurfaceType::Meta V: 64 I: 282 
+1129 // ESurfaceType::Meta V: 64 I: 282 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-1007 // ESurfaceType::Meta V: 25 I: 93 
+1130 // ESurfaceType::Meta V: 25 I: 93 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-1008 // ESurfaceType::Meta V: 64 I: 255 
+1131 // ESurfaceType::Meta V: 64 I: 255 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1009 // ESurfaceType::Meta V: 12 I: 36 planar
+1132 // ESurfaceType::Meta V: 12 I: 36 planar
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1010 // ESurfaceType::Meta V: 64 I: 294 
+1133 // ESurfaceType::Meta V: 64 I: 294 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1011 // ESurfaceType::Meta V: 28 I: 90 
+1134 // ESurfaceType::Meta V: 28 I: 90 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1012 // ESurfaceType::Meta V: 31 I: 93 
+1135 // ESurfaceType::Meta V: 31 I: 93 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1013 // ESurfaceType::Meta V: 5 I: 9 planar
+1136 // ESurfaceType::Meta V: 5 I: 9 planar
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1014 // ESurfaceType::Meta V: 64 I: 291 
+1137 // ESurfaceType::Meta V: 64 I: 291 
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1015 // ESurfaceType::Meta V: 4 I: 6 planar
+1138 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1016 // ESurfaceType::Meta V: 25 I: 87 planar
+1139 // ESurfaceType::Meta V: 25 I: 87 planar
 {
 	shader textures/rota3ctf1_floors/e6bmetal_darker2
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1017 // ESurfaceType::Meta V: 16 I: 30 planar
+1140 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1018 // ESurfaceType::Meta V: 8 I: 12 planar
+1141 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1142 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1143 // ESurfaceType::Meta V: 7 I: 9 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1144 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1145 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1146 // ESurfaceType::Meta V: 8 I: 12 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1019 // ESurfaceType::Meta V: 4 I: 6 planar
+1147 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-1020 // ESurfaceType::Meta V: 4 I: 6 planar
+1148 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1021 // ESurfaceType::Meta V: 3 I: 3 planar
+1149 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1022 // ESurfaceType::Meta V: 4 I: 6 planar
+1150 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1023 // ESurfaceType::Meta V: 4 I: 6 planar
+1151 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-1024 // ESurfaceType::Meta V: 4 I: 6 planar
+1152 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1025 // ESurfaceType::Meta V: 3 I: 3 planar
+1153 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1026 // ESurfaceType::Meta V: 4 I: 6 planar
+1154 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-1027 // ESurfaceType::Meta V: 4 I: 6 planar
+1155 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1028 // ESurfaceType::Meta V: 3 I: 3 planar
+1156 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1029 // ESurfaceType::Meta V: 5 I: 9 planar
+1157 // ESurfaceType::Meta V: 5 I: 9 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1030 // ESurfaceType::Meta V: 3 I: 3 planar
+1158 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1031 // ESurfaceType::Meta V: 3 I: 3 planar
+1159 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1032 // ESurfaceType::Meta V: 4 I: 6 planar
+1160 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-1033 // ESurfaceType::Meta V: 4 I: 6 planar
+1161 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-1034 // ESurfaceType::Meta V: 3 I: 3 planar
+1162 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
 }
 
-1035 // ESurfaceType::Meta V: 7 I: 9 planar
+1163 // ESurfaceType::Meta V: 7 I: 9 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1036 // ESurfaceType::Meta V: 3 I: 3 planar
+1164 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1037 // ESurfaceType::Meta V: 3 I: 3 planar
+1165 // ESurfaceType::Meta V: 3 I: 3 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
 }
 
-1038 // ESurfaceType::Meta V: 4 I: 6 planar
+1166 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-1039 // ESurfaceType::Meta V: 4 I: 6 planar
+1167 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-1040 // ESurfaceType::Meta V: 4 I: 6 planar
+1168 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
 }
 
-1041 // ESurfaceType::Meta V: 4 I: 6 planar
+1169 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-1042 // ESurfaceType::Meta V: 4 I: 6 planar
+1170 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-1043 // ESurfaceType::Meta V: 4 I: 6 planar
+1171 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-1044 // ESurfaceType::Meta V: 4 I: 6 planar
+1172 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-1045 // ESurfaceType::Meta V: 4 I: 6 planar
+1173 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
 }
 
-1046 // ESurfaceType::Meta V: 4 I: 6 planar
+1174 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
 	lightmapAxis ( -1.000000 -0.000000 -0.000000 )

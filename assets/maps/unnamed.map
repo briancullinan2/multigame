@@ -99,3 +99,9 @@
 "origin" "848 416 224"
 "_tb_textures" "textures;textures/rota3ctf1_floors"
 }
+// entity 7
+{
+"classname" "misc_model"
+"origin" "1760 256 592"
+"model" "maps/sky-walk-tunnel.obj"
+}
