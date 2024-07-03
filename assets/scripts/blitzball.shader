@@ -127,7 +127,7 @@ textures/common/sky1
 }
 
 
-textures/sfx/diamond2cjumppad
+textures/sfx/bouncepad01_diamond2cTGA
 {
 	qer_editorimage textures/sfx/bouncepad01_diamond2cTGA.tga
 	//q3map_surfacelight 2000
