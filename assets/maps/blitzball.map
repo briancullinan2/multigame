@@ -1362,3 +1362,23 @@
 "classname" "info_player_start"
 "origin" "-1432 1824 -1072"
 }
+// entity 53
+{
+"classname" "misc_model"
+"origin" "1680 -1408 384"
+"model" "maps/space-platform-teleporter.obj"
+}
+// entity 54
+{
+"origin" "1734 -1472 336"
+"model" "models/mapobjects/jets/jets01.md3"
+"classname" "misc_model"
+"spawnflags" "4"
+}
+// entity 55
+{
+"classname" "misc_model"
+"model" "models/mapobjects/jets/jets01.md3"
+"origin" "1734 -1344 336"
+"spawnflags" "4"
+}

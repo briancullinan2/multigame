@@ -1,0 +1,422 @@
+// Game: Quake 3
+// Format: Quake3 (legacy)
+// entity 0
+{
+"classname" "worldspawn"
+// brush 0
+{
+( -62 -120 24 ) ( -62 -120 -16 ) ( -62 120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 6 -120 24 ) ( 6 -120 -16 ) ( -62 -120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( -62 120 -16 ) ( -62 -120 -16 ) ( 6 -120 -16 ) base_wall/metalfloor_wall_15 0 0 0 0.5 0.5 0 0 0
+( -62 -120 24 ) ( -62 120 24 ) ( 6 120 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( -62 120 24 ) ( -62 120 -16 ) ( 6 120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 6 120 24 ) ( 6 120 -16 ) ( 6 -120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+}
+// brush 1
+{
+( 134 -64 24 ) ( 134 -64 -16 ) ( 134 64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 138 -64 24 ) ( 138 -64 -16 ) ( 134 -64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 134 64 -16 ) ( 134 -64 -16 ) ( 138 -64 -16 ) base_wall/metalfloor_wall_15 0 0 0 0.5 0.5 0 0 0
+( 134 -64 24 ) ( 134 64 24 ) ( 138 64 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 134 64 24 ) ( 134 64 -16 ) ( 138 64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 138 64 24 ) ( 138 64 -16 ) ( 138 -64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+}
+// brush 2
+{
+( 6 -64 24 ) ( 6 -64 -16 ) ( 6 64 -16 ) sfx/pentfloor_diamond2c 120 0 0 0.5 0.5 0 0 0
+( 134 -64 24 ) ( 134 -64 -16 ) ( 6 -64 -16 ) sfx/pentfloor_diamond2c 120 0 0 0.5 0.5 0 0 0
+( 6 64 -16 ) ( 6 -64 -16 ) ( 134 -64 -16 ) base_wall/metalfloor_wall_15 120 0 0 0.5 0.5 0 0 0
+( 6 -64 24 ) ( 6 64 24 ) ( 134 64 24 ) sfx/pentfloor_diamond2c -13 128 0 0.5 0.5 0 0 0
+( 6 64 24 ) ( 6 64 -16 ) ( 134 64 -16 ) sfx/pentfloor_diamond2c 120 0 0 0.5 0.5 0 0 0
+( 134 64 24 ) ( 134 64 -16 ) ( 134 -64 -16 ) sfx/pentfloor_diamond2c 120 0 0 0.5 0.5 0 0 0
+}
+// brush 3
+{
+( 6 64 24 ) ( 6 64 -16 ) ( 6 120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 138 64 24 ) ( 138 64 -16 ) ( 6 64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 6 120 -16 ) ( 6 64 -16 ) ( 138 64 -16 ) base_wall/metalfloor_wall_15 0 0 0 0.5 0.5 0 0 0
+( 6 64 24 ) ( 6 120 24 ) ( 138 120 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 6 120 24 ) ( 6 120 -16 ) ( 138 120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 138 120 24 ) ( 138 120 -16 ) ( 138 64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+}
+// brush 4
+{
+( 6 -120 24 ) ( 6 -120 -16 ) ( 6 -64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 138 -120 24 ) ( 138 -120 -16 ) ( 6 -120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 6 -64 -16 ) ( 6 -120 -16 ) ( 138 -120 -16 ) base_wall/metalfloor_wall_15 0 0 0 0.5 0.5 0 0 0
+( 6 -120 24 ) ( 6 -64 24 ) ( 138 -64 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 6 -64 24 ) ( 6 -64 -16 ) ( 138 -64 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( 138 -64 24 ) ( 138 -64 -16 ) ( 138 -120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+}
+// brush 5
+{
+( -126 -56 -16 ) ( -126 56 -16 ) ( -126 56 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( -62 -120 24 ) ( -62 -120 -16 ) ( -126 -56 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( -126 56 24 ) ( -126 56 -16 ) ( -62 120 -16 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( -126 56 -16 ) ( -126 -56 -16 ) ( -62 -120 -16 ) base_wall/metalfloor_wall_15 0 0 0 0.5 0.5 0 0 0
+( -126 -56 24 ) ( -126 56 24 ) ( -62 120 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+( -62 120 -16 ) ( -62 -120 -16 ) ( -62 -120 24 ) base_floor/diamond2c 0 0 0 0.5 0.5 0 0 0
+}
+// brush 6
+{
+( 138 -128 24 ) ( 138 -128 12 ) ( 138 128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 146 -128 24 ) ( 146 -128 12 ) ( 138 -128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 128 12 ) ( 138 -128 12 ) ( 146 -128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 -128 24 ) ( 138 128 24 ) ( 146 128 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 128 24 ) ( 138 128 12 ) ( 146 128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 146 128 24 ) ( 146 128 12 ) ( 146 -128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 7
+{
+( -62 120 24 ) ( -62 120 12 ) ( -62 128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 120 24 ) ( 138 120 12 ) ( -62 120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 12 ) ( -62 120 12 ) ( 138 120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 120 24 ) ( -62 128 24 ) ( 138 128 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 24 ) ( -62 128 12 ) ( 138 128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 128 24 ) ( 138 128 12 ) ( 138 120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 8
+{
+( -62 -128 24 ) ( -62 -128 12 ) ( -62 -120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 -128 24 ) ( 138 -128 12 ) ( -62 -128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -120 12 ) ( -62 -128 12 ) ( 138 -128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -128 24 ) ( -62 -120 24 ) ( 138 -120 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -120 24 ) ( -62 -120 12 ) ( 138 -120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 -120 24 ) ( 138 -120 12 ) ( 138 -128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 9
+{
+( -134 -56 24 ) ( -134 -56 12 ) ( -134 56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 -56 24 ) ( -126 -56 12 ) ( -134 -56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 56 12 ) ( -134 -56 12 ) ( -126 -56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 -56 24 ) ( -134 56 24 ) ( -126 56 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 56 24 ) ( -134 56 12 ) ( -126 56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 56 24 ) ( -126 56 12 ) ( -126 -56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 10
+{
+( -62 -128 24 ) ( -62 -128 12 ) ( -134 -56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -128 12 ) ( -62 -120 12 ) ( -126 -56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 -56 24 ) ( -126 -56 24 ) ( -62 -120 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 -56 12 ) ( -126 -56 12 ) ( -126 -56 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 -56 24 ) ( -126 -56 12 ) ( -62 -120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -120 12 ) ( -62 -128 12 ) ( -62 -128 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 11
+{
+( -134 56 24 ) ( -134 56 12 ) ( -62 128 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 56 12 ) ( -134 56 12 ) ( -134 56 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 56 12 ) ( -126 56 12 ) ( -62 120 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 24 ) ( -62 120 24 ) ( -126 56 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 120 24 ) ( -62 120 12 ) ( -126 56 12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 12 ) ( -62 120 12 ) ( -62 120 24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 12
+{
+( -98 36 160 ) ( -98 36 24 ) ( -86 76 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -58 36 24 ) ( -98 36 24 ) ( -98 36 160 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -70 76 24 ) ( -86 76 24 ) ( -98 36 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -58 36 160 ) ( -98 36 160 ) ( -86 76 160 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -86 76 24 ) ( -70 76 24 ) ( -70 76 160 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -70 76 160 ) ( -70 76 24 ) ( -58 36 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+}
+// brush 13
+{
+( -86 -80 160 ) ( -86 -80 24 ) ( -98 -40 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -70 -80 24 ) ( -86 -80 24 ) ( -86 -80 160 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -58 -40 24 ) ( -98 -40 24 ) ( -86 -80 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -70 -80 160 ) ( -86 -80 160 ) ( -98 -40 160 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -98 -40 24 ) ( -58 -40 24 ) ( -58 -40 160 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -58 -40 160 ) ( -58 -40 24 ) ( -70 -80 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+}
+// brush 14
+{
+( -84 -80 160 ) ( -84 -80 24 ) ( -96 -40 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -72 -80 24 ) ( -84 -80 24 ) ( -84 -80 160 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -60 -40 24 ) ( -96 -40 24 ) ( -84 -80 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -72 -80 160 ) ( -84 -80 160 ) ( -96 -40 160 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -96 -40 24 ) ( -60 -40 24 ) ( -60 -40 160 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -60 -40 160 ) ( -60 -40 24 ) ( -72 -80 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+}
+// brush 15
+{
+( -96 34 160 ) ( -96 34 24 ) ( -84 74 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -60 34 24 ) ( -96 34 24 ) ( -96 34 160 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -72 74 24 ) ( -84 74 24 ) ( -96 34 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -60 34 160 ) ( -96 34 160 ) ( -84 74 160 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -84 74 24 ) ( -72 74 24 ) ( -72 74 160 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -72 74 160 ) ( -72 74 24 ) ( -60 34 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+}
+// brush 16
+{
+( -144 -8 288 ) ( -144 -8 24 ) ( -144 8 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -118 -8 288 ) ( -118 -8 24 ) ( -144 -8 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -144 8 24 ) ( -144 -8 24 ) ( -118 -8 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -144 -8 288 ) ( -144 8 288 ) ( -118 8 288 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -144 8 288 ) ( -144 8 24 ) ( -118 8 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+( -118 8 288 ) ( -118 8 24 ) ( -118 -8 24 ) common/clip 0 0 0 0.5 0.5 0 0 0
+}
+// brush 17
+{
+( -142 -8 288 ) ( -142 -8 24 ) ( -142 8 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -120 -8 288 ) ( -120 -8 24 ) ( -142 -8 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -142 8 24 ) ( -142 -8 24 ) ( -120 -8 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -142 -8 288 ) ( -142 8 288 ) ( -120 8 288 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -142 8 288 ) ( -142 8 24 ) ( -120 8 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+( -120 8 288 ) ( -120 8 24 ) ( -120 -8 24 ) common/weapclip 0 0 0 0.5 0.5 0 0 0
+}
+// brush 18
+{
+( -134 56 -4 ) ( -134 56 -16 ) ( -62 128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 56 -16 ) ( -134 56 -16 ) ( -134 56 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 56 -16 ) ( -126 56 -16 ) ( -62 120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 -4 ) ( -62 120 -4 ) ( -126 56 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 120 -4 ) ( -62 120 -16 ) ( -126 56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 -16 ) ( -62 120 -16 ) ( -62 120 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 19
+{
+( -62 -128 -4 ) ( -62 -128 -16 ) ( -134 -56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -128 -16 ) ( -62 -120 -16 ) ( -126 -56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 -56 -4 ) ( -126 -56 -4 ) ( -62 -120 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 -56 -16 ) ( -126 -56 -16 ) ( -126 -56 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 -56 -4 ) ( -126 -56 -16 ) ( -62 -120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -120 -16 ) ( -62 -128 -16 ) ( -62 -128 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 20
+{
+( -134 -56 -4 ) ( -134 -56 -16 ) ( -134 56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 -56 -4 ) ( -126 -56 -16 ) ( -134 -56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 56 -16 ) ( -134 -56 -16 ) ( -126 -56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 -56 -4 ) ( -134 56 -4 ) ( -126 56 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -134 56 -4 ) ( -134 56 -16 ) ( -126 56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -126 56 -4 ) ( -126 56 -16 ) ( -126 -56 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 21
+{
+( -62 -128 -4 ) ( -62 -128 -16 ) ( -62 -120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 -128 -4 ) ( 138 -128 -16 ) ( -62 -128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -120 -16 ) ( -62 -128 -16 ) ( 138 -128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -128 -4 ) ( -62 -120 -4 ) ( 138 -120 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 -120 -4 ) ( -62 -120 -16 ) ( 138 -120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 -120 -4 ) ( 138 -120 -16 ) ( 138 -128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 22
+{
+( -62 120 -4 ) ( -62 120 -16 ) ( -62 128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 120 -4 ) ( 138 120 -16 ) ( -62 120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 -16 ) ( -62 120 -16 ) ( 138 120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 120 -4 ) ( -62 128 -4 ) ( 138 128 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( -62 128 -4 ) ( -62 128 -16 ) ( 138 128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 128 -4 ) ( 138 128 -16 ) ( 138 120 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 23
+{
+( 138 -128 -4 ) ( 138 -128 -16 ) ( 138 128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 146 -128 -4 ) ( 146 -128 -16 ) ( 138 -128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 128 -16 ) ( 138 -128 -16 ) ( 146 -128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 -128 -4 ) ( 138 128 -4 ) ( 146 128 -4 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 138 128 -4 ) ( 138 128 -16 ) ( 146 128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 146 128 -4 ) ( 146 128 -16 ) ( 146 -128 -16 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 24
+{
+( 138 -128 12 ) ( 138 -128 -4 ) ( 138 128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 146 -128 12 ) ( 146 -128 -4 ) ( 138 -128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 128 -4 ) ( 138 -128 -4 ) ( 146 -128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 -128 12 ) ( 138 128 12 ) ( 146 128 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 128 12 ) ( 138 128 -4 ) ( 146 128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 146 128 12 ) ( 146 128 -4 ) ( 146 -128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+}
+// brush 25
+{
+( -62 120 12 ) ( -62 120 -4 ) ( -62 128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 120 12 ) ( 138 120 -4 ) ( -62 120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 128 -4 ) ( -62 120 -4 ) ( 138 120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 120 12 ) ( -62 128 12 ) ( 138 128 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 128 12 ) ( -62 128 -4 ) ( 138 128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 128 12 ) ( 138 128 -4 ) ( 138 120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+}
+// brush 26
+{
+( -62 -128 12 ) ( -62 -128 -4 ) ( -62 -120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 -128 12 ) ( 138 -128 -4 ) ( -62 -128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 -120 -4 ) ( -62 -128 -4 ) ( 138 -128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 -128 12 ) ( -62 -120 12 ) ( 138 -120 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 -120 12 ) ( -62 -120 -4 ) ( 138 -120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( 138 -120 12 ) ( 138 -120 -4 ) ( 138 -128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+}
+// brush 27
+{
+( -134 -56 12 ) ( -134 -56 -4 ) ( -134 56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -126 -56 12 ) ( -126 -56 -4 ) ( -134 -56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -134 56 -4 ) ( -134 -56 -4 ) ( -126 -56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -134 -56 12 ) ( -134 56 12 ) ( -126 56 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -134 56 12 ) ( -134 56 -4 ) ( -126 56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -126 56 12 ) ( -126 56 -4 ) ( -126 -56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+}
+// brush 28
+{
+( -62 -128 12 ) ( -62 -128 -4 ) ( -134 -56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 -128 -4 ) ( -62 -120 -4 ) ( -126 -56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -134 -56 12 ) ( -126 -56 12 ) ( -62 -120 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -134 -56 -4 ) ( -126 -56 -4 ) ( -126 -56 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -126 -56 12 ) ( -126 -56 -4 ) ( -62 -120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 -120 -4 ) ( -62 -128 -4 ) ( -62 -128 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+}
+// brush 29
+{
+( -134 56 12 ) ( -134 56 -4 ) ( -62 128 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -126 56 -4 ) ( -134 56 -4 ) ( -134 56 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -134 56 -4 ) ( -126 56 -4 ) ( -62 120 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 128 12 ) ( -62 120 12 ) ( -126 56 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 120 12 ) ( -62 120 -4 ) ( -126 56 -4 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+( -62 128 -4 ) ( -62 120 -4 ) ( -62 120 12 ) base_trim/basemetalsupport 0 0 0 0.5 0.5 0 0 0
+}
+// brush 30
+{
+( 6 16 -12 ) ( 6 16 -24 ) ( 6 112 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 102 16 -12 ) ( 102 16 -24 ) ( 6 16 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 6 112 -24 ) ( 6 16 -24 ) ( 102 16 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 6 16 -12 ) ( 6 112 -12 ) ( 102 112 -12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 6 112 -12 ) ( 6 112 -24 ) ( 102 112 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 102 112 -12 ) ( 102 112 -24 ) ( 102 16 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 31
+{
+( 6 -112 -12 ) ( 6 -112 -24 ) ( 6 -16 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 102 -112 -12 ) ( 102 -112 -24 ) ( 6 -112 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 6 -16 -24 ) ( 6 -112 -24 ) ( 102 -112 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 6 -112 -12 ) ( 6 -16 -12 ) ( 102 -16 -12 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 6 -16 -12 ) ( 6 -16 -24 ) ( 102 -16 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 102 -16 -12 ) ( 102 -16 -24 ) ( 102 -112 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+}
+// brush 32
+{
+( 22 -96 -40 ) ( 22 -32 -40 ) ( 6 -16 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+( 86 -96 -40 ) ( 22 -96 -40 ) ( 6 -112 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+( 86 -32 -40 ) ( 22 -32 -40 ) ( 22 -96 -40 ) base_floor/techfloor 0 0 0 0.5 0.5 0 0 0
+( 102 -112 -24 ) ( 6 -112 -24 ) ( 6 -16 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 22 -32 -40 ) ( 86 -32 -40 ) ( 102 -16 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+( 86 -32 -40 ) ( 86 -96 -40 ) ( 102 -112 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+}
+// brush 33
+{
+( 22 32 -40 ) ( 22 96 -40 ) ( 6 112 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+( 86 32 -40 ) ( 22 32 -40 ) ( 6 16 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+( 86 96 -40 ) ( 22 96 -40 ) ( 22 32 -40 ) base_floor/techfloor 0 0 0 0.5 0.5 0 0 0
+( 102 16 -24 ) ( 6 16 -24 ) ( 6 112 -24 ) base_trim/dirty_pewter 0 0 0 0.5 0.5 0 0 0
+( 22 96 -40 ) ( 86 96 -40 ) ( 102 112 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+( 86 96 -40 ) ( 86 32 -40 ) ( 102 16 -24 ) base_wall/atech1_e 0 0 0 0.5 0.5 0 0 0
+}
+}
+// entity 1
+{
+"target" "t33"
+"classname" "trigger_teleport"
+// brush 0
+{
+( -98 -32 152 ) ( -98 -32 16 ) ( -98 32 16 ) common/trigger 0 0 0 0.5 0.5 0 0 0
+( -54 -32 152 ) ( -54 -32 16 ) ( -98 -32 16 ) common/trigger 0 0 0 0.5 0.5 0 0 0
+( -98 32 16 ) ( -98 -32 16 ) ( -54 -32 16 ) common/trigger 0 0 0 0.5 0.5 0 0 0
+( -98 -32 152 ) ( -98 32 152 ) ( -54 32 152 ) common/trigger 0 0 0 0.5 0.5 0 0 0
+( -98 32 152 ) ( -98 32 16 ) ( -54 32 16 ) common/trigger 0 0 0 0.5 0.5 0 0 0
+( -54 32 152 ) ( -54 32 16 ) ( -54 -32 16 ) common/trigger 0 0 0 0.5 0.5 0 0 0
+}
+}
+// entity 2
+{
+"origin" "70 -4 44"
+"classname" "item_health_mega"
+}
+// entity 3
+{
+"angle" "360"
+"classname" "misc_model"
+"model" "models/mapobjects/teleporter/teleporter.md3"
+"origin" "-78 0 24"
+}
+// entity 4
+{
+"classname" "misc_model"
+"model" "models/mapobjects/lamps/newlamp2.md3"
+"angle" "270"
+"origin" "-128 0 20"
+}
+// entity 5
+{
+"origin" "-70 0 260"
+"classname" "light"
+}
+// entity 6
+{
+"light" "10"
+"classname" "light"
+"origin" "-104 0 240"
+}
+// entity 7
+{
+"origin" "-104 0 208"
+"classname" "light"
+"light" "10"
+}
+// entity 8
+{
+"light" "10"
+"classname" "light"
+"origin" "-104 0 176"
+}
+// entity 9
+{
+"origin" "-104 0 144"
+"classname" "light"
+"light" "10"
+}
+// entity 10
+{
+"light" "10"
+"classname" "light"
+"origin" "-104 0 112"
+}
+// entity 11
+{
+"classname" "misc_model"
+"model" "models/mapobjects/jets/jets01.md3"
+"origin" "54 64 -52"
+"spawnflags" "4"
+}
+// entity 12
+{
+"origin" "70 80 -84"
+"_color" "0.118063 0.100483 0.066093"
+"light" "15"
+"classname" "light"
+}
+// entity 13
+{
+"origin" "54 64 -50"
+"_color" "1.000000 0.643137 0.913725"
+"light" "50"
+"classname" "light"
+}
+// entity 14
+{
+"origin" "54 -64 -52"
+"model" "models/mapobjects/jets/jets01.md3"
+"classname" "misc_model"
+"spawnflags" "4"
+}
+// entity 15
+{
+"classname" "light"
+"light" "15"
+"_color" "0.118063 0.100483 0.066093"
+"origin" "66 -84 -84"
+}
+// entity 16
+{
+"classname" "light"
+"light" "50"
+"_color" "1.000000 0.643137 0.913725"
+"origin" "54 -64 -50"
+}
