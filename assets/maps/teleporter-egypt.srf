@@ -1,0 +1,80 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/liquids/clear_calm1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/liquids/clear_calm1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+2 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+3 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+4 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+5 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+6 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+7 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+8 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+9 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+10 // ESurfaceType::Meta V: 16 I: 24 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+11 // ESurfaceType::Meta V: 16 I: 24 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
