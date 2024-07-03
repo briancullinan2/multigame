@@ -1,0 +1,8210 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+2 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+3 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+4 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+5 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+6 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+7 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+8 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+9 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+10 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+11 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+12 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+13 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+14 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+15 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+16 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+17 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+18 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+19 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+20 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+21 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+22 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+23 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+24 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+25 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+26 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+27 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+28 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+29 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+30 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+31 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+32 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+33 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+34 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+35 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+36 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+37 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+38 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+39 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+40 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+41 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+42 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+43 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+44 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+45 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+46 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+47 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+48 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+49 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+50 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+51 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+52 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+53 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+54 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+55 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+56 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+57 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+58 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+59 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+60 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+61 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+62 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+63 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+64 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+65 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+66 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+67 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+68 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+69 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+70 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+71 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+72 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+73 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+74 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+75 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+76 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+77 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+78 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+79 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+80 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+81 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+82 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+83 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+84 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+85 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+86 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+87 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+88 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+89 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+90 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+91 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+92 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+93 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+94 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+95 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+96 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+97 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+98 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+99 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+100 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+101 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+102 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+103 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+104 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+105 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+106 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+107 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+108 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+109 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+110 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+111 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+112 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+113 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+114 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+115 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+116 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+117 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+118 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+119 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+120 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+121 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+122 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+123 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+124 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+125 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+126 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+127 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+128 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+129 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+130 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+131 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+132 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+133 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+134 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+135 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+136 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+137 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+138 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+139 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+140 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+141 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+142 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+143 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+144 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+145 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+146 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+147 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+148 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+149 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+150 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+151 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+152 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+153 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+154 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+155 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+156 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+157 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+158 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+159 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+160 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+161 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+162 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+163 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+164 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+165 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+166 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+167 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+168 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+169 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+170 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+171 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+172 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+173 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+174 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+175 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+176 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+177 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+178 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+179 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+180 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+181 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+182 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+183 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+184 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+185 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+186 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+187 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+188 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+189 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+190 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+191 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+192 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+193 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+194 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+195 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+196 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+197 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+198 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+199 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+200 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+201 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+202 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+203 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+204 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+205 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+206 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+207 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+208 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+209 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+210 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+211 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+212 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+213 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+214 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+215 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+216 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+217 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/cornerlight
+	sampleSize 0
+}
+
+218 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+219 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+220 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+221 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+222 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+223 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+224 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+225 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+226 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+227 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+228 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+229 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+230 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+231 // ESurfaceType::Triangles V: 8 I: 18 planar
+{
+	shader textures/gothic_block/blocks17
+	sampleSize 0
+}
+
+232 // ESurfaceType::Triangles V: 8 I: 18 planar
+{
+	shader textures/sfx/bouncepad01_diamond2cTGA
+	sampleSize 0
+}
+
+233 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+234 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+235 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+236 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/border11light
+	sampleSize 0
+}
+
+237 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+238 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+239 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+240 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+241 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+242 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+243 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+244 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+245 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+246 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+247 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+248 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+249 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+250 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+251 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+252 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+253 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+254 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+255 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+256 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+257 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+258 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+259 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+260 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+261 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+262 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+263 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+264 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+265 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+266 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+267 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+268 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+269 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+270 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+271 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+272 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+273 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+274 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+275 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+276 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+277 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+278 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+279 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+280 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+281 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+282 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+283 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+284 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+285 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+286 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+287 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+288 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+289 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+290 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+291 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+292 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+293 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+294 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+295 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+296 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_light/runway
+	sampleSize 0
+}
+
+297 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+298 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+299 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+300 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+301 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+302 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+303 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+304 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+305 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+306 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+307 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+308 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+309 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+310 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+311 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+312 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+313 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+314 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+315 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+316 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+317 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+318 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+319 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+320 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+321 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+322 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+323 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+324 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+325 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+326 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+327 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+328 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+329 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+330 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+331 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+332 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+333 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+334 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+335 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+336 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+337 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+338 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+339 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+340 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+341 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+342 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+343 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+344 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+345 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+346 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+347 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+348 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+349 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+350 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+351 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+352 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+353 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+354 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+355 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+356 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+357 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+358 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+359 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+360 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+361 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+362 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+363 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+364 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+365 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+366 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+367 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+368 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+369 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+370 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+371 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+372 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+373 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+374 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+375 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+376 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+377 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+378 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+379 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+380 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+381 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+382 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+383 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+384 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+385 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+386 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+387 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+388 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+389 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+390 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+391 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+392 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+393 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+394 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+395 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+396 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+397 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+398 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+399 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+400 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+401 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+402 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+403 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+404 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+405 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+406 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+407 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+408 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+409 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+410 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+411 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+412 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+413 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+414 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+415 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+416 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+417 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+418 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+419 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+420 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+421 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+422 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+423 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+424 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+425 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+426 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+427 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+428 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+429 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+430 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+431 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+432 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+433 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+434 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+435 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+436 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+437 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+438 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+439 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+440 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+441 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+442 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+443 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+444 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+445 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+446 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+447 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+448 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+449 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+450 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+451 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+452 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+453 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+454 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+455 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+456 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+457 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+458 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+459 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+460 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+461 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+462 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+463 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+464 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+465 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+466 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+467 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+468 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+469 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+470 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+471 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+472 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+473 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+474 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+475 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+476 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+477 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+478 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+479 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+480 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+481 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+482 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+483 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+484 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+485 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+486 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+487 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+488 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+489 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+490 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+491 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+492 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+493 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+494 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+495 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+496 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+497 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+498 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+499 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+500 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+501 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+502 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+503 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+504 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+505 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+506 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+507 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+508 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+509 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+510 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+511 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+512 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+513 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+514 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+515 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+516 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+517 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+518 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+519 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+520 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+521 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+522 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+523 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+524 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+525 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+526 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+527 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+528 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+529 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+530 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+531 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+532 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+533 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+534 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+535 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+536 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+537 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+538 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+539 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+540 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+541 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+542 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+543 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+544 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+545 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+546 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+547 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+548 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+549 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+550 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+551 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+552 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+553 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+554 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+555 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+556 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+557 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+558 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+559 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+560 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+561 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+562 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+563 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+564 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+565 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+566 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+567 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+568 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+569 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+570 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+571 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+572 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+573 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+574 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+575 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+576 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+577 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+578 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+579 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+580 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+581 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+582 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+583 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+584 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+585 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+586 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+587 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+588 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+589 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+590 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+591 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+592 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+593 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+594 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+595 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+596 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+597 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+598 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+599 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+600 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+601 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+602 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+603 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+604 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+605 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+606 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+607 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+608 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+609 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+610 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+611 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+612 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+613 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+614 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+615 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+616 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+617 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+618 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+619 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+620 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+621 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+622 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+623 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+624 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+625 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+626 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+627 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+628 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+629 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+630 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+631 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+632 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+633 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+634 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+635 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+636 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+637 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+638 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+639 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+640 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+641 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+642 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+643 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+644 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+645 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+646 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+647 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+648 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+649 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+650 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+651 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+652 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+653 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+654 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+655 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+656 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+657 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+658 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+659 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+660 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+661 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+662 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+663 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+664 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+665 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+666 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+667 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+668 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+669 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+670 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+671 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+672 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+673 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+674 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+675 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+676 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+677 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+678 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+679 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+680 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+681 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+682 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+683 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+684 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+685 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+686 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+687 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+688 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+689 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+690 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+691 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+692 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+693 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+694 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+695 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+696 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+697 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+698 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+699 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+700 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+701 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+702 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+703 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+704 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+705 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+706 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+707 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+708 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+709 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+710 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+711 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+712 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+713 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+714 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+715 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+716 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+717 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+718 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+719 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+720 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+721 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+722 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+723 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+724 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+725 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+726 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+727 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+728 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+729 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+730 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+731 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+732 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+733 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+734 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+735 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+736 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+737 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+738 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+739 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+740 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+741 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+742 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+743 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+744 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+745 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+746 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+747 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+748 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+749 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+750 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+751 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+752 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+753 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+754 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+755 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+756 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+757 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+758 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+759 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+760 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+761 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+762 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+763 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+764 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+765 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+766 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+767 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+768 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+769 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+770 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+771 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+772 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+773 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+774 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+775 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+776 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+777 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+778 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+779 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+780 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+781 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+782 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+783 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+784 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+785 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+786 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+787 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+788 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+789 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+790 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+791 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+792 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+793 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+794 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+795 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+796 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+797 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+798 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+799 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+800 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+801 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+802 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+803 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+804 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+805 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+806 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+807 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+808 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+809 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+810 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+811 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+812 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+813 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+814 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+815 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+816 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+817 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+818 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+819 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+820 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+821 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+822 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+823 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+824 // ESurfaceType::Triangles V: 3 I: 3 planar
+{
+	shader textures/base_trim/basemetalsupport
+	sampleSize 0
+}
+
+825 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+826 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+827 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+828 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+829 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+830 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+831 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+832 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+833 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+834 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+835 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+836 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+837 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+838 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+839 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+840 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+841 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+842 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+843 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+844 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+845 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+846 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+847 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+848 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+849 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+850 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+851 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+852 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+853 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+854 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+855 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+856 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+857 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+858 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+859 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+860 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+861 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+862 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+863 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+864 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+865 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+866 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+867 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+868 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+869 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+870 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+871 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+872 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+873 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+874 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+875 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+876 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+877 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+878 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+879 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+880 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+881 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+882 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+883 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+884 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+885 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+886 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+887 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+888 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+889 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+890 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+891 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+892 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+893 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+894 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+895 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+896 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+897 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+898 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+899 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+900 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+901 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+902 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+903 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+904 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+905 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+906 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+907 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+908 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+909 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+910 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+911 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+912 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+913 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+914 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+915 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+916 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+917 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+918 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+919 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+920 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+921 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+922 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+923 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+924 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+925 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+926 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+927 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+928 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+929 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+930 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+931 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+932 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/dirty_pewter
+	sampleSize 0
+}
+
+933 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+934 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+935 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+936 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+937 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+938 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+939 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+940 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+941 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+942 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+943 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+944 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_floor/diamond2c
+	sampleSize 0
+}
+
+945 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+946 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+947 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+948 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+949 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+950 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+951 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+952 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+953 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+954 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+955 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+956 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalblack03
+	sampleSize 0
+}
+
+957 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+958 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+959 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+960 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+961 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+962 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+963 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+964 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+965 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+966 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+967 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+968 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+969 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+970 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+971 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+972 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+973 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+974 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+975 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+976 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+977 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+978 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+979 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+980 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+981 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+982 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+983 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+984 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+985 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+986 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+987 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+988 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+989 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+990 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+991 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+992 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+993 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+994 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+995 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+996 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+997 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+998 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+999 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1000 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1001 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+1002 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1003 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1004 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1005 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1006 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1007 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/metalfloor_wall_12
+	sampleSize 0
+}
+
+1008 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1009 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1010 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter
+	sampleSize 0
+}
+
+1011 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1012 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1013 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1014 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1015 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1016 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1017 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1018 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1019 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1020 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1021 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1022 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	sampleSize 0
+}
+
+1023 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1024 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1025 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1026 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1027 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1028 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1029 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1030 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1031 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1032 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1033 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1034 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1035 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1036 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1037 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1038 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1039 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+1040 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+1041 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+1042 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+1043 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+1044 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	sampleSize 0
+}
+
+1045 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1046 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1047 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1048 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1049 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1050 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1051 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1052 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1053 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1054 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1055 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1056 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1057 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	sampleSize 0
+}
+
+1058 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/bouncepad01_diamond2cTGA
+	sampleSize 0
+}
+
+1059 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1060 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1061 // ESurfaceType::Meta V: 10 I: 24 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1062 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1063 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1064 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1065 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1066 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1067 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1068 // ESurfaceType::Meta V: 12 I: 24 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1069 // ESurfaceType::Meta V: 12 I: 24 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1070 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1071 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1072 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/base_wall/c_met5_2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1073 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1074 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1075 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1076 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1077 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1078 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1079 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1080 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1081 // ESurfaceType::Meta V: 6 I: 12 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1082 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1083 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1084 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1085 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1086 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1087 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1088 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1089 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1090 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1091 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1092 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1093 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1094 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1095 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1096 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1097 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1098 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/common/sky1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1099 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1100 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1101 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1102 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1103 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1104 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1105 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1106 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1107 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1108 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1109 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1110 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1111 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1112 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1113 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1114 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1115 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1116 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1117 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1118 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1119 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1120 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1121 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1122 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1123 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1124 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1125 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1126 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1127 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1128 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1129 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1130 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1131 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1132 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1133 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1134 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1135 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1136 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1137 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1138 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1139 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1140 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1141 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1142 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1143 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1144 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1145 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1146 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1147 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1148 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1149 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1150 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1151 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1152 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1153 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+1154 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1155 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1156 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1157 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1158 // ESurfaceType::Meta V: 13 I: 33 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1159 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1160 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1161 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1162 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1163 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1164 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1165 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1166 // ESurfaceType::Meta V: 11 I: 27 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1167 // ESurfaceType::Meta V: 5 I: 9 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1168 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1169 // ESurfaceType::Meta V: 7 I: 15 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1170 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1171 // ESurfaceType::Meta V: 8 I: 18 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1172 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	sampleSize 0
+}
+
+1173 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1174 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1175 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1176 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1177 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1178 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1179 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1180 // ESurfaceType::Meta V: 71 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1181 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1182 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1183 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1184 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1185 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1186 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1187 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1188 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1189 // ESurfaceType::Meta V: 71 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1190 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1191 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1192 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1193 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1194 // ESurfaceType::Meta V: 49 I: 216 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1195 // ESurfaceType::Meta V: 49 I: 216 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1196 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1197 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1198 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1199 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1200 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1201 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1202 // ESurfaceType::Meta V: 49 I: 216 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1203 // ESurfaceType::Meta V: 49 I: 216 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1204 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1205 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1206 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1207 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1208 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1209 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1210 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1211 // ESurfaceType::Meta V: 71 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1212 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1213 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1214 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1215 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1216 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1217 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1218 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1219 // ESurfaceType::Meta V: 71 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1220 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1221 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1222 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1223 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1224 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1225 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1226 // ESurfaceType::Meta V: 269 I: 1419 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1227 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1228 // ESurfaceType::Meta V: 261 I: 1371 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1229 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1230 // ESurfaceType::Meta V: 269 I: 1419 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1231 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1232 // ESurfaceType::Meta V: 261 I: 1371 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1233 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1234 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1235 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1236 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1237 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1238 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1239 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1240 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1241 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1242 // ESurfaceType::Meta V: 269 I: 1419 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1243 // ESurfaceType::Meta V: 269 I: 1419 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1244 // ESurfaceType::Meta V: 261 I: 1371 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1245 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1246 // ESurfaceType::Meta V: 261 I: 1371 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1247 // ESurfaceType::Meta V: 364 I: 1950 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1248 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1249 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1250 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1251 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1252 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1253 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1254 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1255 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1256 // ESurfaceType::Meta V: 71 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1257 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1258 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1259 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1260 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1261 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1262 // ESurfaceType::Meta V: 49 I: 216 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1263 // ESurfaceType::Meta V: 49 I: 216 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1264 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1265 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1266 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1267 // ESurfaceType::Meta V: 196 I: 1014 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1268 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1269 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1270 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1271 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1272 // ESurfaceType::Meta V: 70 I: 324 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1273 // ESurfaceType::Meta V: 91 I: 432 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1274 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1275 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1276 // ESurfaceType::Meta V: 56 I: 252 planar
+{
+	shader textures/common/transwater
+	sampleSize 0
+}
+
+1277 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1278 // ESurfaceType::Meta V: 354 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1279 // ESurfaceType::Meta V: 252 I: 1296 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1280 // ESurfaceType::Meta V: 303 I: 1512 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1281 // ESurfaceType::Meta V: 252 I: 1296 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1282 // ESurfaceType::Meta V: 303 I: 1512 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1283 // ESurfaceType::Meta V: 354 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1284 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1285 // ESurfaceType::Meta V: 354 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1286 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1287 // ESurfaceType::Meta V: 252 I: 1296 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1288 // ESurfaceType::Meta V: 303 I: 1512 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1289 // ESurfaceType::Meta V: 252 I: 1296 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1290 // ESurfaceType::Meta V: 303 I: 1512 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1291 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1292 // ESurfaceType::Meta V: 354 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1293 // ESurfaceType::Meta V: 382 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1294 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1295 // ESurfaceType::Meta V: 382 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1296 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1297 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1298 // ESurfaceType::Meta V: 382 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1299 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1300 // ESurfaceType::Meta V: 382 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1301 // ESurfaceType::Meta V: 999 I: 5598 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1302 // ESurfaceType::Meta V: 999 I: 5415 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1303 // ESurfaceType::Meta V: 999 I: 5526 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1304 // ESurfaceType::Meta V: 999 I: 5421 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1305 // ESurfaceType::Meta V: 999 I: 5526 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1306 // ESurfaceType::Meta V: 999 I: 5421 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1307 // ESurfaceType::Meta V: 999 I: 5592 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1308 // ESurfaceType::Meta V: 999 I: 5421 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1309 // ESurfaceType::Meta V: 332 I: 1698 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1310 // ESurfaceType::Meta V: 328 I: 1677 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1311 // ESurfaceType::Meta V: 328 I: 1677 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1312 // ESurfaceType::Meta V: 348 I: 1692 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1313 // ESurfaceType::Meta V: 118 I: 558 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1314 // ESurfaceType::Meta V: 118 I: 558 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1315 // ESurfaceType::Meta V: 96 I: 426 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1316 // ESurfaceType::Meta V: 98 I: 435 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1317 // ESurfaceType::Meta V: 96 I: 426 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1318 // ESurfaceType::Meta V: 97 I: 429 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1319 // ESurfaceType::Meta V: 999 I: 5406 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1320 // ESurfaceType::Meta V: 999 I: 5307 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1321 // ESurfaceType::Meta V: 93 I: 417 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1322 // ESurfaceType::Meta V: 72 I: 300 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1323 // ESurfaceType::Meta V: 75 I: 297 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1324 // ESurfaceType::Meta V: 63 I: 240 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1325 // ESurfaceType::Meta V: 282 I: 1446 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1326 // ESurfaceType::Meta V: 44 I: 153 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1327 // ESurfaceType::Meta V: 999 I: 5310 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1328 // ESurfaceType::Meta V: 999 I: 5415 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1329 // ESurfaceType::Meta V: 99 I: 435 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1330 // ESurfaceType::Meta V: 96 I: 426 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1331 // ESurfaceType::Meta V: 399 I: 1974 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1332 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1333 // ESurfaceType::Meta V: 354 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1334 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1335 // ESurfaceType::Meta V: 303 I: 1512 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1336 // ESurfaceType::Meta V: 252 I: 1296 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1337 // ESurfaceType::Meta V: 252 I: 1296 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1338 // ESurfaceType::Meta V: 303 I: 1512 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1339 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1340 // ESurfaceType::Meta V: 354 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1341 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1342 // ESurfaceType::Meta V: 382 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1343 // ESurfaceType::Meta V: 324 I: 1644 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1344 // ESurfaceType::Meta V: 382 I: 1896 planar
+{
+	shader textures/liquids/watertest
+	sampleSize 0
+}
+
+1345 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1346 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1347 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1348 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1349 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1350 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/launchpad_diamond
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+1351 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1352 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1353 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1354 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1355 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1356 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1357 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1358 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1359 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1360 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1361 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
+1362 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/blitzfog
+	entity 8
+	castShadows 0
+	sampleSize 0
+}
+
