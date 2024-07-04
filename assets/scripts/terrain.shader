@@ -695,6 +695,7 @@ textures/terrain/mpterra4_0
 {
 	qer_editorimage textures/stone/pjrock9c.tga
 	surfaceparm nolightmap
+	surfaceparm terrain
 	q3map_novertexshadows
 	q3map_forcesunlight	
 	{
@@ -716,6 +717,7 @@ textures/terrain/mpterra4_1
 {
 	qer_editorimage textures/stone/pjrock12c.tga
 	surfaceparm nolightmap
+	surfaceparm terrain
 	q3map_novertexshadows
 	q3map_forcesunlight	
 	{
@@ -738,6 +740,7 @@ textures/terrain/mpterra4_2
 {
 	qer_editorimage textures/stone/pjrock10c.tga
 	surfaceparm nolightmap
+	surfaceparm terrain
 	q3map_novertexshadows
 	q3map_forcesunlight	
 	{
@@ -757,8 +760,9 @@ textures/terrain/mpterra4_2
 
 textures/terrain/mpterra4_0to1
 {
-	qer_editorimage textures/stone/pjrock9c.tga
+	qer_editorimage textures/stone/pjrock912c.tga
 	surfaceparm nolightmap
+	surfaceparm terrain
 	q3map_novertexshadows
 	q3map_forcesunlight	
 	{
@@ -788,6 +792,7 @@ textures/terrain/mpterra4_0to2
 {
 	qer_editorimage textures/stone/pjrock9c.tga
 	surfaceparm nolightmap
+	surfaceparm terrain
 	q3map_novertexshadows
 	q3map_forcesunlight	
 	{
@@ -816,8 +821,9 @@ textures/terrain/mpterra4_0to2
 
 textures/terrain/mpterra4_1to2
 {
-	qer_editorimage textures/stone/pjrock12c.tga
+	qer_editorimage textures/stone/pjrock1210c.tga
 	surfaceparm nolightmap
+	surfaceparm terrain
 	q3map_novertexshadows
 	q3map_forcesunlight	
 	{
@@ -842,3 +848,182 @@ textures/terrain/mpterra4_1to2
 		
 	}
 }
+
+textures/liquids2/calm_poollight2nt
+	{
+
+
+	
+		qer_editorimage textures/liquids/pool3d_4b.tga
+		q3map_globaltexture
+		qer_trans .75
+
+		surfaceparm trans
+		surfaceparm nonsolid
+		surfaceparm water
+		surfaceparm nolightmap
+		q3map_surfacelight 50
+
+		cull disable
+		
+	
+	
+		{ 
+			map textures/liquids/pool3d_5c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .5 .5
+			tcmod transform 1.5 0 1.5 1 1 2
+			tcmod scroll -.05 .001
+		}
+	
+		{ 
+			map textures/liquids/pool3d_6c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .5 .5
+			tcmod transform 0 1.5 1 1.5 2 1
+			tcmod scroll .025 -.001
+		}
+
+		{ 
+			map textures/liquids/pool3d_3c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .25 .5
+			tcmod scroll .001 .025
+		}
+		{
+			map textures/liquids/pool3d_4b2.tga
+			blendfunc add
+			tcmod scale .125 .125	
+			rgbgen identity
+		}
+
+
+		//	END
+	}
+
+
+textures/liquids/x_calm_pool_nolight
+	{
+		//	*************************************************
+		//	* CALM GREEN WATER POOL oct.6.2000
+		//    * same as calm water but emits NO light -Xian	*
+		//	* IF YOU CHANGE THIS PLEASE COMMENT THE CHANGE	*
+		//	*************************************************
+
+	
+		qer_editorimage textures/liquids/pool3d_4b.tga
+		q3map_globaltexture
+		qer_trans .75
+
+		surfaceparm trans
+		surfaceparm nonsolid
+		surfaceparm water
+		surfaceparm nolightmap
+
+		cull disable
+		tesssize 256
+		deformVertexes wave 100 sin 1 1 1 .1
+		
+	
+	
+		{ 
+			map textures/liquids/pool3d_5c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .5 .5
+			tcmod transform 1.5 0 1.5 1 1 2
+			tcmod scroll -.05 .001
+		}
+	
+		{ 
+			map textures/liquids/pool3d_6c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .5 .5
+			tcmod transform 0 1.5 1 1.5 2 1
+			tcmod scroll .025 -.001
+		}
+
+		{ 
+			map textures/liquids/pool3d_3c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .25 .5
+			tcmod scroll .001 .025
+		}
+		{
+			map textures/liquids/pool3d_4b2.tga
+			blendfunc add
+			tcmod scale .125 .125	
+			rgbgen identity
+		}
+
+
+		//	END
+	}
+
+
+
+textures/liquids/calm_pool_nolight
+	{
+		//	*************************************************
+		//	* CALM GREEN WATER POOL oct.6.2000
+		//    * same as calm water but emits NO light -Xian	*
+		//	* IF YOU CHANGE THIS PLEASE COMMENT THE CHANGE	*
+		//	*************************************************
+
+	
+		qer_editorimage textures/liquids/pool3d_4b.tga
+		q3map_globaltexture
+		qer_trans .75
+
+		surfaceparm trans
+		surfaceparm nonsolid
+		surfaceparm water
+		surfaceparm nolightmap
+
+		cull disable
+		tesssize 64
+		deformVertexes wave 100 sin 1 1 1 .1
+		
+	
+	
+		{ 
+			map textures/liquids/pool3d_5c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .5 .5
+			tcmod transform 1.5 0 1.5 1 1 2
+			tcmod scroll -.05 .001
+		}
+	
+		{ 
+			map textures/liquids/pool3d_6c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .5 .5
+			tcmod transform 0 1.5 1 1.5 2 1
+			tcmod scroll .025 -.001
+		}
+
+		{ 
+			map textures/liquids/pool3d_3c2.tga
+			blendFunc GL_dst_color GL_zero
+			rgbgen identity
+			tcmod scale .25 .5
+			tcmod scroll .001 .025
+		}
+		{
+			map textures/liquids/pool3d_4b2.tga
+			blendfunc add
+			tcmod scale .125 .125	
+			rgbgen identity
+		}
+
+
+		//	END
+	}
+

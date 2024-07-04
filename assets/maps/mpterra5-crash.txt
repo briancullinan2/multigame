@@ -1,0 +1,10 @@
+OS:	macOS 14.5
+Qt:	5.15.12
+GL_VENDOR:	Apple
+GL_RENDERER:	Apple M1 Max
+GL_VERSION:	2.1 Metal - 88.1
+TrenchBroom Version:	2024.1
+TrenchBroom Build:	v2024.1 Release macOS
+Reason:	At line 10775, column 38: Expected integer or decimal, but got string (raw data: '8.0.971')
+Stack trace:
+<uncaught exception>
