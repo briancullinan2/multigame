@@ -1,6 +1,25 @@
+textures/skies/mpterrax
+{
+  q3map_sunExt 1 .95 0.85 200 180 60 3 32
+	q3map_lightmapFilterRadius 0 160
+	q3map_skylight 40 3
+	surfaceparm sky
+	surfaceparm noimpact
+	q3map_surfacelight 100
+	surfaceparm nolightmap
+//	skyParms textures/14gate_xt/env/filter 384 -
+	{
+		map textures/skies/myskydark.jpg
+		blendfunc filter
+		tcMod scroll 0.05 0.1
+		tcMod scale 2 2
+	}
+}
+
 textures/common/terrain.tga
 {
   qer_editorimage textures/stone/pjrock10bc.tga
+	qer_trans 0.5
   q3map_terrain
   surfaceparm nolightmap
 }
@@ -8,6 +27,7 @@ textures/common/terrain.tga
 textures/common/terrain
 {
   qer_editorimage textures/stone/pjrock10bc.tga
+	qer_trans 0.5
   q3map_terrain
   surfaceparm nolightmap
 
@@ -23,6 +43,7 @@ textures/common/terrain2
 {
   q3map_terrain
   qer_editorimage textures/common/terrain.tga
+	qer_trans 0.5
   surfaceparm dust
   surfaceparm nolightmap
 
@@ -38,6 +59,7 @@ textures/terrain/vxmpterrax
 
 {
   qer_editorimage textures/stone/pjrock10bc.tga
+	qer_trans 0.5
   surfaceparm nolightmap
   q3map_novertexshadows
   q3map_forcesunlight
@@ -53,10 +75,38 @@ textures/terrain/vxmpterrax
 }
 
 
+textures/terrain/pjrock10c
+{
+  surfaceparm terrain
+  {
+    map textures/stone/pjrock10c.tga
+    rgbGen vertex
+  }
+}
+
+textures/terrain/pjrock12c
+{
+  surfaceparm terrain
+  {
+    map textures/stone/pjrock12c.tga
+    rgbGen vertex
+  }
+}
+
+textures/terrain/pjrock9c
+{
+  surfaceparm terrain
+  {
+    map textures/stone/pjrock9c.tga
+    rgbGen vertex
+  }
+}
+
 textures/terrain/mpterrax_0
 {
-  q3map_terrain
-  qer_editorimage textures/stone/pjrock9c.tga
+  qer_editorimage textures/terrain/mpterrax_0.tga
+	qer_trans 0.5
+  novlcollapse
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -80,6 +130,7 @@ textures/terrain/mpterrax_1
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock12c.tga
+  novlcollapse
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -88,7 +139,7 @@ textures/terrain/mpterrax_1
     map textures/stone/pjrock12c.tga
     //tcmod transform 1 0 1 1 1 1
     rgbGen vertex
-    tcmod scale 0.5 0.5 
+    tcmod scale 0.25 0.25 
   }
   {
     map textures/skies2/clouds2.tga
@@ -104,14 +155,15 @@ textures/terrain/mpterrax_2
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock10c.tga
+  novlcollapse
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
   q3map_forcesunlight	
   {
     map textures/stone/pjrock10c.tga
-    tcmod scale 0.25 0.25 
     rgbGen vertex
+    tcmod scale 0.25 0.25 
   }
   {
     map textures/skies2/clouds2.tga
@@ -127,6 +179,7 @@ textures/terrain/mpterrax_0to1
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock912c.tga
+  novlcollapse
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -134,12 +187,11 @@ textures/terrain/mpterrax_0to1
   {
     map textures/stone/pjrock9c.tga	
     rgbGen vertex
-    alphaGen vertex
     tcmod scale 0.5 0.5 
   }
   {
     map textures/stone/pjrock12c.tga
-    tcmod scale 0.5 0.5 
+    tcmod scale 0.25 0.25 
     rgbGen vertex
     alphaGen vertex
     blendFunc GL_SRC_ALPHA GL_ONE_MINUS_SRC_ALPHA
@@ -158,12 +210,13 @@ textures/terrain/mpterrax_0to2
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock9c.tga
+  novlcollapse
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
   q3map_forcesunlight	
   {
-    map textures/stone/pjrock9c.tga
+    map textures/stone/pjrock12c.tga
     rgbGen vertex
     alphaGen vertex
     tcmod scale 0.5 0.5
@@ -190,6 +243,7 @@ textures/terrain/mpterrax_1to2
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock1210c.tga
+  novlcollapse
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -198,7 +252,7 @@ textures/terrain/mpterrax_1to2
     map textures/stone/pjrock12c.tga
     rgbGen vertex
     alphaGen vertex
-    tcmod scale 0.5 0.5 
+    tcmod scale 0.25 0.25 
   }
   {
     map textures/stone/pjrock10c.tga

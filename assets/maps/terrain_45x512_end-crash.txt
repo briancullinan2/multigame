@@ -1,0 +1,10 @@
+OS:	macOS 14.5
+Qt:	5.15.12
+GL_VENDOR:	Apple
+GL_RENDERER:	Apple M1 Max
+GL_VERSION:	2.1 Metal - 88.1
+TrenchBroom Version:	2024.1
+TrenchBroom Build:	v2024.1 Release macOS
+Reason:	access success value on a failed result
+Stack trace:
+<uncaught exception>

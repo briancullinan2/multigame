@@ -1,0 +1,33 @@
+Renderer info: Apple M1 Max version 2.1 Metal - 88.1 from Apple
+Depth buffer bits: 32
+Multisampling enabled
+Adding file system path "/Applications/TrenchBroom.app/Contents/Resources/defaults/assets"
+Creating new document
+Skipping duplicate entity property definition (line 369, column 0)
+Skipping duplicate entity property definition (line 416, column 0)
+Skipping duplicate entity property definition (line 529, column 0)
+Skipping duplicate entity property definition (line 611, column 0)
+Loaded entity definition file entities.ent
+Renderer info: Apple M1 Max version 2.1 Metal - 88.1 from Apple
+Depth buffer bits: 32
+Multisampling enabled
+Adding file system path "/Applications/TrenchBroom.app/Contents/Resources/defaults/assets"
+Loading document from /Users/briancullinan/multigame/assets/maps/terrain_45x512_end.map
+Skipping duplicate entity property definition (line 369, column 0)
+Skipping duplicate entity property definition (line 416, column 0)
+Skipping duplicate entity property definition (line 529, column 0)
+Skipping duplicate entity property definition (line 611, column 0)
+Loaded entity definition file entities.ent
+Could not load model models/powerups/health/small_cross.md3: 'models/powerups/health/small_cross.md3' not found
+Could not load model models/weapons2/rocketl/rocketl.md3: 'models/weapons2/rocketl/rocketl.md3' not found
+Could not load model models/mapobjects/tree2/tree2.md3: 'models/mapobjects/tree2/tree2.md3' not found
+Could not load model models/mapobjects/tree2/tree4.md3: 'models/mapobjects/tree2/tree4.md3' not found
+Could not load model models/mapobjects/tree2/tree6.md3: 'models/mapobjects/tree2/tree6.md3' not found
+Could not load model models/mapobjects/tree2/tree5.md3: 'models/mapobjects/tree2/tree5.md3' not found
+Could not load model models/mapobjects/tree2/tree7.md3: 'models/mapobjects/tree2/tree7.md3' not found
+Could not load model models/mapobjects/tree2/tree3.md3: 'models/mapobjects/tree2/tree3.md3' not found
+Loaded "/Users/briancullinan/multigame/assets/maps/terrain_45x512_end.map" in 93ms
+Adding file system path "/Applications/TrenchBroom.app/Contents/Resources/defaults/assets"
+Adding file system path "/Users/briancullinan/planet_quake_data/quake3-baseq3/baseq3"
+Adding shader file system
+scripts/sfx.shader: Unknown blendFunc name 'GL_add' (line 852, column 27)

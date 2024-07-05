@@ -1,0 +1,131 @@
+newmtl ***unknown***
+
+newmtl common/caulk
+map_Kd 
+
+newmtl common/clip
+map_Kd 
+
+newmtl common/donotenter
+map_Kd 
+
+newmtl common/weapclip
+map_Kd 
+
+newmtl gothic_block/blocks15
+map_Kd textures/gothic_block/blocks15
+
+newmtl gothic_block/blocks17
+map_Kd textures/gothic_block/blocks17
+
+newmtl gothic_block/blocks18b
+map_Kd textures/gothic_block/blocks18b
+
+newmtl gothic_block/blocks18c_3
+map_Kd textures/gothic_block/blocks18c_3
+
+newmtl gothic_ceiling/woodceiling1a
+map_Kd textures/gothic_ceiling/woodceiling1a
+
+newmtl gothic_ceiling/woodceiling1b_dark
+map_Kd textures/gothic_ceiling/woodceiling1b_dark
+
+newmtl gothic_door/km_arena1archfinalc_mid
+map_Kd textures/gothic_door/km_arena1archfinalc_mid
+
+newmtl gothic_door/km_arena1archfinalc_top
+map_Kd textures/gothic_door/km_arena1archfinalc_top
+
+newmtl gothic_door/km_arena1archfinald_bot
+map_Kd textures/gothic_door/km_arena1archfinald_bot
+
+newmtl gothic_door/km_arena1archfinald_mid
+map_Kd textures/gothic_door/km_arena1archfinald_mid
+
+newmtl gothic_door/skullarch_a
+map_Kd textures/gothic_door/skullarch_a
+
+newmtl gothic_door/skullarch_b
+map_Kd textures/gothic_door/skullarch_b
+
+newmtl gothic_door/skullarch_c
+map_Kd textures/gothic_door/skullarch_c
+
+newmtl gothic_door/xian_tourneyarch_inside2
+map_Kd textures/gothic_door/xian_tourneyarch_inside2
+
+newmtl gothic_floor/center2trn
+map_Kd textures/gothic_floor/center2trn
+
+newmtl gothic_floor/largerblock3b
+map_Kd textures/gothic_floor/largerblock3b
+
+newmtl gothic_floor/metalbridge06
+map_Kd textures/gothic_floor/metalbridge06
+
+newmtl gothic_floor/xstairtop4
+map_Kd textures/gothic_floor/xstairtop4
+
+newmtl gothic_floor/xstepborder3
+map_Kd textures/gothic_floor/xstepborder3
+
+newmtl gothic_trim/baseboard09_e
+map_Kd textures/gothic_trim/baseboard09_e
+
+newmtl gothic_trim/baseboard09_e2
+map_Kd textures/gothic_trim/baseboard09_e2
+
+newmtl gothic_trim/baseboard09_l2
+map_Kd textures/gothic_trim/baseboard09_l2
+
+newmtl gothic_trim/km_arena1tower4
+map_Kd textures/gothic_trim/km_arena1tower4
+
+newmtl gothic_trim/km_arena1tower4_a
+map_Kd textures/gothic_trim/km_arena1tower4_a
+
+newmtl gothic_trim/metalsupsolid
+map_Kd textures/gothic_trim/metalsupsolid
+
+newmtl gothic_trim/pitted_rust
+map_Kd textures/gothic_trim/pitted_rust
+
+newmtl gothic_trim/pitted_rust2
+map_Kd textures/gothic_trim/pitted_rust2
+
+newmtl gothic_trim/pitted_rust3
+map_Kd textures/gothic_trim/pitted_rust3
+
+newmtl gothic_wall/iron01_e
+map_Kd textures/gothic_wall/iron01_e
+
+newmtl gothic_wall/iron01_ntech3
+map_Kd textures/gothic_wall/iron01_ntech3
+
+newmtl gothic_wall/skull4
+map_Kd textures/gothic_wall/skull4
+
+newmtl gothic_wall/supportborder_blue_b
+map_Kd textures/gothic_wall/supportborder_blue_b
+
+newmtl gothic_wall/supportborder_blue_c
+map_Kd textures/gothic_wall/supportborder_blue_c
+
+newmtl liquids/lavahell_750
+map_Kd textures/liquids/lavahell_750
+
+newmtl organics/dirt2
+map_Kd textures/organics/dirt2
+
+newmtl sfx/computer_blocks17
+map_Kd textures/sfx/computer_blocks17
+
+newmtl skies/tim_hell
+map_Kd textures/skies/tim_hell
+
+newmtl skin/chapthroat
+map_Kd textures/skin/chapthroat
+
+newmtl skin/skin6
+map_Kd textures/skin/skin6
+
