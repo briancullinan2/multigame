@@ -1,0 +1,356 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+1 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+2 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+3 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+4 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+5 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+6 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+7 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_c3_rust
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+8 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+9 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+10 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+11 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+12 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+13 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+14 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+15 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+16 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+17 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_wall/iron01_e
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+18 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+19 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+20 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+21 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+22 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+23 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+24 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+25 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/gothic_trim/pitted_rust3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+26 // ESurfaceType::Meta V: 13 I: 33 planar
+{
+	shader textures/organics/dirt2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+27 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/organics/dirt2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+28 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/organics/dirt2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+29 // ESurfaceType::Meta V: 13 I: 33 planar
+{
+	shader textures/organics/dirt2
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+30 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/organics/dirt2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+31 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/organics/dirt2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+32 // ESurfaceType::Meta V: 320 I: 945 
+{
+	shader textures/terrain/mpterrax_1to2
+	sampleSize 0
+}
+
+33 // ESurfaceType::Meta V: 30 I: 84 
+{
+	shader textures/terrain/mpterrax_1to2
+	sampleSize 0
+}
+
+34 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_0to2
+	sampleSize 0
+}
+
+35 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_0to2
+	sampleSize 0
+}
+
+36 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_0to2
+	sampleSize 0
+}
+
+37 // ESurfaceType::Meta V: 9 I: 21 
+{
+	shader textures/terrain/mpterrax_0to2
+	sampleSize 0
+}
+
+38 // ESurfaceType::Meta V: 16 I: 42 
+{
+	shader textures/terrain/mpterrax_0to2
+	sampleSize 0
+}
+
+39 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_0to2
+	sampleSize 0
+}
+
+40 // ESurfaceType::Meta V: 288 I: 843 
+{
+	shader textures/terrain/mpterrax_0to1
+	sampleSize 0
+}
+
+41 // ESurfaceType::Meta V: 24 I: 72 
+{
+	shader textures/terrain/mpterrax_0to1
+	sampleSize 0
+}
+
+42 // ESurfaceType::Meta V: 14 I: 36 
+{
+	shader textures/terrain/mpterrax_0to1
+	sampleSize 0
+}
+
+43 // ESurfaceType::Meta V: 296 I: 1215 
+{
+	shader textures/terrain/mpterrax_2
+	sampleSize 0
+}
+
+44 // ESurfaceType::Meta V: 98 I: 384 
+{
+	shader textures/terrain/mpterrax_2
+	sampleSize 0
+}
+
+45 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+46 // ESurfaceType::Meta V: 5 I: 9 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+47 // ESurfaceType::Meta V: 5 I: 9 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+48 // ESurfaceType::Meta V: 9 I: 24 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+49 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+50 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+51 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+52 // ESurfaceType::Meta V: 10 I: 27 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+53 // ESurfaceType::Meta V: 158 I: 594 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+54 // ESurfaceType::Meta V: 3 I: 3 planar
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+55 // ESurfaceType::Meta V: 93 I: 330 
+{
+	shader textures/terrain/mpterrax_1
+	sampleSize 0
+}
+
+56 // ESurfaceType::Meta V: 467 I: 2364 
+{
+	shader textures/terrain/mpterrax_0
+	sampleSize 0
+}
+
+57 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader textures/terrain/mpterrax_0
+	sampleSize 0
+}
+

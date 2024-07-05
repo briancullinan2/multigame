@@ -1,0 +1,96 @@
+// Game: Quake 3
+// Format: Quake3 (legacy)
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_textures" "textures/common;textures/stone;textures/terrain"
+"_shader" "terrain/mpterrax"
+"_indexmap" "maps/terrain-test_alphamap.tga"
+"_layers" "3"
+"vertexremapshader1" "textures/terrain/mpterrax_0to1;textures/terrain/vxmpterrax"
+"vertexremapshader2" "textures/terrain/mpterrax_0to2;textures/terrain/vxmpterrax"
+"vertexremapshader3" "textures/terrain/mpterrax_1to2;textures/terrain/vxmpterrax"
+"vertexremapshader4" "textures/terrain/mpterrax_0;textures/terrain/vxmpterrax"
+"vertexremapshader5" "textures/terrain/mpterrax_1;textures/terrain/vxmpterrax"
+"vertexremapshader6" "textures/terrain/mpterrax_2;textures/terrain/vxmpterrax"
+//"remapshader1" "textures/terrain/mpterrax_0to1;textures/common/terrain"
+//"remapshader2" "textures/terrain/mpterrax_0to2;textures/common/terrain"
+//"remapshader3" "textures/terrain/mpterrax_1to2;textures/common/terrain"
+//"remapshader4" "textures/terrain/mpterrax_0;textures/common/terrain"
+//"remapshader5" "textures/terrain/mpterrax_1;textures/common/terrain"
+//"remapshader6" "textures/terrain/mpterrax_2;textures/common/terrain"
+// brush 0
+{
+( -5504 384 576 ) ( -5504 320 576 ) ( -5504 320 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 320 576 ) ( 8448 320 576 ) ( 8448 320 -1792 ) common/sky1 0 0 0 0.5 0.5
+( 8448 320 -1792 ) ( 8448 384 -1792 ) ( -5504 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 384 576 ) ( 8448 384 576 ) ( 8448 320 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 384 -1792 ) ( 8448 384 576 ) ( -5504 384 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 320 576 ) ( 8448 384 576 ) ( 8448 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+}
+// brush 1
+{
+( -5504 384 576 ) ( -5504 -8960 576 ) ( -5504 -8960 512 ) common/sky1 0 0 0 0.5 0.5
+( -5504 -8960 576 ) ( 8448 -8960 576 ) ( 8448 -8960 512 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 512 ) ( 8448 384 512 ) ( -5504 384 512 ) common/sky1 0 0 0 0.5 0.5
+( -5504 384 576 ) ( 8448 384 576 ) ( 8448 -8960 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 384 512 ) ( 8448 384 576 ) ( -5504 384 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 576 ) ( 8448 384 576 ) ( 8448 384 512 ) common/sky1 0 0 0 0.5 0.5
+}
+// brush 2
+{
+( 8384 384 576 ) ( 8384 -8960 576 ) ( 8384 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( 8384 -8960 576 ) ( 8448 -8960 576 ) ( 8448 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 -1792 ) ( 8448 384 -1792 ) ( 8384 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+( 8384 384 576 ) ( 8448 384 576 ) ( 8448 -8960 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 384 -1792 ) ( 8448 384 576 ) ( 8384 384 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 576 ) ( 8448 384 576 ) ( 8448 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+}
+// brush 3
+{
+( -5504 384 -1728 ) ( -5504 -8960 -1728 ) ( -5504 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 -8960 -1728 ) ( 8448 -8960 -1728 ) ( 8448 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 -1792 ) ( 8448 384 -1792 ) ( -5504 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 384 -1728 ) ( 8448 384 -1728 ) ( 8448 -8960 -1728 ) common/sky1 0 0 0 0.5 0.5
+( 8448 384 -1792 ) ( 8448 384 -1728 ) ( -5504 384 -1728 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 -1728 ) ( 8448 384 -1728 ) ( 8448 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+}
+// brush 4
+{
+( -5504 384 576 ) ( -5504 -8960 576 ) ( -5504 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 -8960 -1792 ) ( -5504 -8960 576 ) ( -5440 -8960 576 ) common/sky1 0 0 0 0.5 0.5
+( -5504 384 -1792 ) ( -5504 -8960 -1792 ) ( -5440 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5440 -8960 576 ) ( -5504 -8960 576 ) ( -5504 384 576 ) common/sky1 0 0 0 0.5 0.5
+( -5440 384 576 ) ( -5504 384 576 ) ( -5504 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5440 -8960 576 ) ( -5440 384 576 ) ( -5440 384 -1792 ) common/sky1 0 0 0 0.5 0.5
+}
+// brush 5
+{
+( -5504 -8896 576 ) ( -5504 -8960 576 ) ( -5504 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 -8960 576 ) ( 8448 -8960 576 ) ( 8448 -8960 -1792 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 -1792 ) ( 8448 -8896 -1792 ) ( -5504 -8896 -1792 ) common/sky1 0 0 0 0.5 0.5
+( -5504 -8896 576 ) ( 8448 -8896 576 ) ( 8448 -8960 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8896 -1792 ) ( 8448 -8896 576 ) ( -5504 -8896 576 ) common/sky1 0 0 0 0.5 0.5
+( 8448 -8960 576 ) ( 8448 -8896 576 ) ( 8448 -8896 -1792 ) common/sky1 0 0 0 0.5 0.5
+}
+}
+// entity 1
+{
+"classname" "misc_model"
+"origin" "1984 -4288 -1520"
+"model" "maps/terrain_45x512_end.obj"
+"spawnflags" "6"
+"_indexmap" "maps/terrain_45x512_end_alphamap.tga"
+"_shader" "terrain/mpterrax"
+"_layers" "3"
+}
+// entity 2
+{
+"classname" "info_player_start"
+"origin" "-3152 -2032 -1128"
+}
+// entity 3
+{
+"classname" "info_player_start"
+"origin" "5200 -6128 -1256"
+}
