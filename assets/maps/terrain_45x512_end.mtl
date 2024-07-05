@@ -3,6 +3,9 @@
 newmtl common/terrain
 Kd 1.000000 1.000000 1.000000
 map_Kd textures/common/terrain
+newmtl terrain/mpterrax_0
+Kd 1.000000 1.000000 1.000000
+map_Kd textures/terrain/mpterrax_0
 newmtl common/sky1
 Kd 1.000000 1.000000 1.000000
 map_Kd ../textures/common/sky1.tga
@@ -46,6 +49,9 @@ newmtl terrain/mpterrax_0
 Kd 0.803752 1.000000 0.387962
 map_Kd ../textures/stone/pjrock9c.tga
 
+newmtl textures/terrain/mpterrax_0
+Kd 1.000000 1.000000 1.000000
+map_Kd textures/terrain/mpterrax_0
 newmtl textures/common/terrain
 Kd 1.000000 1.000000 1.000000
 map_Kd textures/common/terrain
