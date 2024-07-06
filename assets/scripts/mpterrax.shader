@@ -1,11 +1,11 @@
 textures/skies/mpterrax
 {
-  q3map_sunExt 1 .95 0.85 200 180 60 3 32
+  q3map_sunExt 1 .95 0.85 30 180 60 3 32
 	q3map_lightmapFilterRadius 0 160
-	q3map_skylight 40 3
+	q3map_skylight 30 3
 	surfaceparm sky
 	surfaceparm noimpact
-	q3map_surfacelight 100
+	q3map_surfacelight 30
 	surfaceparm nolightmap
 //	skyParms textures/14gate_xt/env/filter 384 -
 	{
@@ -77,6 +77,7 @@ textures/terrain/vxmpterrax
 
 textures/terrain/pjrock10c
 {
+  surfaceparm nolightmap
   surfaceparm terrain
   {
     map textures/stone/pjrock10c.tga
@@ -86,6 +87,7 @@ textures/terrain/pjrock10c
 
 textures/terrain/pjrock12c
 {
+  surfaceparm nolightmap
   surfaceparm terrain
   {
     map textures/stone/pjrock12c.tga
@@ -95,6 +97,7 @@ textures/terrain/pjrock12c
 
 textures/terrain/pjrock9c
 {
+  surfaceparm nolightmap
   surfaceparm terrain
   {
     map textures/stone/pjrock9c.tga

@@ -74,8 +74,8 @@ textures/skies/terrain1
 	surfaceparm nolightmap
 	surfaceparm sky
 
-	q3map_sun	.8 .8 .6 80 190 80
-	q3map_surfacelight 65
+	q3map_sun	1.1 .5 .7 60 130 100
+	q3map_surfacelight 55
 
 	qer_editorimage textures/skies/toxicbluesky.tga
 

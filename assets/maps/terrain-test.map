@@ -3,8 +3,8 @@
 // entity 0
 {
 "classname" "worldspawn"
-"_tb_textures" "textures/common;textures/gothic_floor;textures/stone;textures/terrain"
 "_shader" "terrain/mpterrax"
+"_tb_textures" "textures/common;textures/gothic_floor;textures/stone;textures/terrain"
 "vertexremapshader1" "textures/terrain/mpterrax_0to1;textures/terrain/vxmpterrax"
 "vertexremapshader2" "textures/terrain/mpterrax_0to2;textures/terrain/vxmpterrax"
 "vertexremapshader3" "textures/terrain/mpterrax_1to2;textures/terrain/vxmpterrax"
@@ -95,33 +95,462 @@
 // entity 5
 {
 "origin" "2344 -8944 -1272"
-"light" "10000"
+"light" "2000"
 "classname" "light"
 "_color" "1.000000 0.925490 0.749020"
-"radius" "8000"
+"radius" "3000"
 "angle" "300"
 }
-// entity 8
+// entity 6
 {
-"origin" "-3960 -4296 -120"
-"light" "5000"
+"origin" "-2168 -968 -888"
+"light" "2000"
 "classname" "light"
 "_color" "1.000000 0.925490 0.749020"
 "target" ""
-"radius" "10000"
+"radius" "3000"
 }
-// entity 9
+// entity 7
 {
 "classname" "misc_model"
-"origin" "-2704 -6704 -1344"
+"origin" "-2828 -6192 -1540"
 "model" "maps/base-castle-gothic.obj"
 "spawnflags" "6"
 }
-// entity 10
+// entity 8
 {
 "classname" "misc_model"
-"origin" "5616 -2000 -1344"
+"origin" "5736 -2256 -1540"
 "model" "maps/base-castle-gothic.obj"
 "spawnflags" "6"
 "angles" "0 180 0"
+}
+// entity 9
+{
+"classname" "light"
+"origin" "4792 -3896 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 10
+{
+"classname" "target_position"
+"origin" "5640 -2808 -1176"
+"targetname" "sun_t"
+}
+// entity 11
+{
+"origin" "-2040 -3848 -1208"
+"light" "-5000"
+"classname" "light"
+"_color" "1.000000 0.925490 0.749020"
+"target" ""
+"radius" "3000"
+}
+// entity 12
+{
+"classname" "light"
+"origin" "5816 -3128 -920"
+"target" "sun_t"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+}
+// entity 13
+{
+"classname" "light"
+"origin" "5304 -7480 -920"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 14
+{
+"classname" "light"
+"origin" "4792 -5688 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 15
+{
+"classname" "light"
+"origin" "3256 -6200 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 16
+{
+"classname" "light"
+"origin" "2232 -6968 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 17
+{
+"classname" "light"
+"origin" "1976 -5432 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 18
+{
+"classname" "light"
+"origin" "952 -3896 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 19
+{
+"classname" "light"
+"origin" "696 -2872 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 20
+{
+"classname" "light"
+"origin" "696 -1080 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 21
+{
+"classname" "light"
+"origin" "-584 -2104 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 22
+{
+"classname" "light"
+"origin" "-1864 -2872 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 23
+{
+"classname" "light"
+"origin" "-1864 -4920 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 24
+{
+"classname" "light"
+"origin" "-2888 -5688 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 25
+{
+"classname" "light"
+"origin" "-3128 -6448 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 26
+{
+"classname" "light"
+"origin" "-2872 -6448 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 27
+{
+"classname" "light"
+"origin" "-3656 -7736 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 28
+{
+"classname" "light"
+"origin" "-3912 -6200 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 29
+{
+"classname" "light"
+"origin" "-1608 -7736 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 30
+{
+"classname" "light"
+"origin" "-1608 -6200 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 31
+{
+"classname" "light"
+"origin" "-1608 -6200 -1432"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 32
+{
+"classname" "light"
+"origin" "-840 -6200 -664"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 33
+{
+"classname" "light"
+"origin" "-840 -7480 -920"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 34
+{
+"classname" "light"
+"origin" "-1096 -4664 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 35
+{
+"classname" "light"
+"origin" "-328 -3128 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 36
+{
+"classname" "light"
+"origin" "696 -4664 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 37
+{
+"classname" "light"
+"origin" "1208 -6200 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 38
+{
+"classname" "light"
+"origin" "1464 -7736 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 39
+{
+"classname" "light"
+"origin" "3768 -7736 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 40
+{
+"classname" "light"
+"origin" "3256 -5432 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 41
+{
+"classname" "light"
+"origin" "4280 -3896 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 42
+{
+"classname" "light"
+"origin" "1976 -3896 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 43
+{
+"classname" "light"
+"origin" "1464 -2104 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 44
+{
+"classname" "light"
+"origin" "1464 -824 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 45
+{
+"classname" "light"
+"origin" "-840 -824 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 46
+{
+"classname" "light"
+"origin" "4024 -1848 -408"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 47
+{
+"classname" "light"
+"origin" "4024 -1080 -664"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 48
+{
+"classname" "light"
+"origin" "5048 -1080 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 49
+{
+"classname" "light"
+"origin" "6584 -1080 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 50
+{
+"classname" "light"
+"origin" "6840 -2360 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 51
+{
+"classname" "light"
+"origin" "4536 -2616 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 52
+{
+"classname" "light"
+"origin" "6072 -5944 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 53
+{
+"classname" "light"
+"origin" "6840 -4664 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 54
+{
+"classname" "light"
+"origin" "5744 -2232 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 55
+{
+"classname" "light"
+"origin" "6000 -2232 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
+}
+// entity 56
+{
+"classname" "light"
+"origin" "1976 -4664 -1176"
+"radius" "3000"
+"light" "2000"
+"_color" "1 0.8 0.5"
+"angle" "360"
 }
