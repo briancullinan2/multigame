@@ -1165,6 +1165,16 @@ static void CG_ServerCommand( void ) {
 		}
 	}
 
+#ifdef USE_SINGLEPLAYER
+	if ( !strcmp( cmd, "exec" ) ) {
+		char	message[256];
+		trap_Args( message, sizeof( message ) );
+		trap_SendConsoleCommand(message);
+		return;
+	}
+
+#endif
+
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
 

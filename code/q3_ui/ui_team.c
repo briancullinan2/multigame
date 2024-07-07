@@ -191,6 +191,10 @@ void TeamMain_MenuInit( void ) {
 	case GT_TOURNAMENT:
 		s_teammain.joinred.generic.flags  |= QMF_GRAYED;
 		s_teammain.joinblue.generic.flags |= QMF_GRAYED;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		s_teammain.joingold.generic.flags  |= QMF_GRAYED;
+		s_teammain.joingreen.generic.flags |= QMF_GRAYED;
+#endif
 		break;
 
 	default:

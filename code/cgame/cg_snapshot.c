@@ -231,7 +231,7 @@ static void CG_TransitionSnapshot( void ) {
 			|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) {
 			int j;
 			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
-			CG_Printf("%i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
+			CG_Printf("items %i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
 			for(j = 0; j < PW_MAX_POWERUPS; j++) {
 				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
 					CG_Printf("1");

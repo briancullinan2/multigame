@@ -265,14 +265,16 @@ void locateCamera( gentity_t *ent ) {
 	}
 
 	// swing camera ?
-	if ( owner->spawnflags & 4 ) {
+	if ( owner->spawnflags & 4 || ent->spawnflags & 4 ) {
 		// set to 0 for no rotation at all
 		ent->s.powerups = 0;
 	}
 	else {
 		ent->s.powerups = 1;
 	}
+#ifdef USE_MULTIWORLD
   ent->s.powerups |= (owner->world << 8);
+#endif
 
 	// clientNum holds the rotate offset
 	ent->s.clientNum = owner->s.clientNum;

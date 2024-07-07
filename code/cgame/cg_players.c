@@ -2345,7 +2345,7 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 
 	*shadowPlane = trace.endpos[2] + 1;
 
-	if ( cg_shadows.integer != 1 ) {	// no mark for stencil or projection shadows
+	if ( cg_shadows.integer == 0 ) {	// no mark for stencil or projection shadows
 		return qtrue;
 	}
 
@@ -2716,7 +2716,7 @@ void CG_Player( centity_t *cent ) {
 	// add a water splash if partially in and out of water
 	CG_PlayerSplash( cent );
 
-	if ( cg_shadows.integer == 3 && shadow ) {
+	if ( cg_shadows.integer && shadow ) {
 		renderfx |= RF_SHADOW_PLANE;
 	}
 	renderfx |= RF_LIGHTING_ORIGIN;			// use the same origin for all

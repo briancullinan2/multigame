@@ -462,14 +462,37 @@ void SP_target_location( gentity_t *self ){
 	G_SetOrigin( self, self->s.origin );
 }
 
-char target_execs[10][MAX_QPATH]; // max of 10 level change entities per level
+#ifdef USE_SINGLEPLAYER 
+
+char target_execs[MAX_WORLDS][MAX_QPATH]; // max of 10 level change entities per level
 int num_target_execs=0;
 
 void target_use_exec( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	//char buf[MAX_QPATH];
 	//char *nx= target_execs[self->health];
-
 	G_Printf("using exec: %s", self->message);
+	// the higher the spawnflag the stranger this gets
+	// default: Exec Server command like an admin would but from a map trigger
+	// 4: send server command to all clients, stuff like \say to print messages
+	// 8: send a command to the specific client that activates it
+	// 16: send a command to the console of the client that activates it, by prefixing "exec"
+	// 32: send a command to the console of all clients by prefixing "exec"
+	// the last two are important because it creates a full loop and makes it look
+	//   like a server command came from a specific client, covering all bases/entries
+	//   16 is how we transfer a client using the \game command to subsequent worlds
+
+
+	if((self->spawnflags & 32)) {
+		trap_SendServerCommand( -1, va("exec %s", self->message ));
+	}
+	if((self->spawnflags & 16)) {
+		trap_SendServerCommand( activator->client - level.clients, va("exec %s", self->message ));
+		return;
+	}
+	if((self->spawnflags & 8)) {
+		trap_SendServerCommand( activator->client - level.clients, va("%s", self->message ));
+		return;
+	}
 	if((self->spawnflags & 4)) {
 		trap_SendServerCommand( -1, va("%s", self->message ));
 		return;
@@ -481,14 +504,25 @@ void SP_target_exec( gentity_t *self ) {
 	char *buf;
 	char *nx=target_execs[num_target_execs];
 
-	self->health=num_target_execs;
 	G_SpawnString( "message", "print no command", &buf);
-	G_Printf("mapCommand (%d): %s\n",num_target_execs,buf);
-	Com_sprintf(nx,sizeof(target_execs[0]),"%s",buf);
+
+	Com_sprintf(nx,sizeof(target_execs[0]),"load game %s",buf);
+	if(nx[0]) {
+		if(num_target_execs == MAX_WORLDS) {
+			// this should be a strange occurance if it happens
+			// TODO: demonstrate how to unload worlds in the case of the lobby level changer / select
+			G_Printf("MAX_WORLDS reached, not loading %s\n", nx);
+			return;
+		}
+		G_Printf("mapCommand (%d): %s\n",num_target_execs,buf);
+		self->world=num_target_execs;
+		num_target_execs++;
+	}
+
 	self->use = target_use_exec;
-	num_target_execs++;
 } 
-#ifdef USE_SINGLEPLAYER // entity
+
+// entity
 /*QUAKED target_earthquake (1 0 0) (-16 -16 -24) (16 16 32)
 starts earthquake
 "length" - length in  seconds (2-32, in steps of 2)

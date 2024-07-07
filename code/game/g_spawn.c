@@ -99,6 +99,9 @@ const field_t fields[] = {
 #ifdef USE_ROTATING_DOOR
   {"distance", FOFS(distance), F_FLOAT},	// VALKYRIE: for rotating doors
 #endif
+#ifdef USE_MULTIWORLD
+	{"world", FOFS(world), F_INT},
+#endif
 
 	{NULL}
 };
@@ -241,12 +244,13 @@ spawn_t	spawns[] = {
 	{"target_position", SP_target_position},
 	{"target_location", SP_target_location},
 	{"target_push", SP_target_push},
-	{"target_exec", SP_target_exec},
 
 #ifdef USE_SINGLEPLAYER // entity
+	{"target_exec", SP_target_exec},
 	{"target_earthquake", SP_target_earthquake},
 	{"target_player_stop", SP_target_player_stop},
 #endif
+
 	{"light", SP_light},
 	{"path_corner", SP_path_corner},
 

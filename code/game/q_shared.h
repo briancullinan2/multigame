@@ -263,6 +263,9 @@
 // many team colors, with automatically added many bots, rules for respawning, dying, and decay
 #define USE_HORDES 1
 
+// special multiworld features like cameras and portals
+#define USE_MULTIWORLD 1
+#define MAX_WORLDS 10
 
 typedef unsigned char 		byte;
 

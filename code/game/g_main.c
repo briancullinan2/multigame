@@ -34,6 +34,10 @@ static cvarTable_t gameCvarTable[] = {
 
 };
 
+#ifdef USE_MULTIWORLD
+vmCvar_t mapnames[MAX_WORLDS];
+int mapnamesModificationCounts[MAX_WORLDS];
+#endif
 
 static void G_InitGame( int levelTime, int randomSeed, int restart );
 static void G_RunFrame( int levelTime );
@@ -232,6 +236,15 @@ void G_RegisterCvars( void ) {
 			remapped = qtrue;
 		}
 	}
+
+#ifdef USE_MULTIWORLD
+	// give the game basic awareness of other maps that are loaded since we're already sharing entities
+	for(i = 0; i < MAX_WORLDS; i++) {
+		trap_Cvar_Register(&mapnames[i], va("mapname_%i", i), "", CVAR_ROM);
+		mapnamesModificationCounts[i] = mapnames[i].modificationCount;
+	}
+#endif
+
 
 	if (remapped) {
 		G_RemapTeamShaders();
@@ -441,6 +454,17 @@ static void G_UpdateCvars( void ) {
 			}
 		}
 	}
+
+#ifdef USE_MULTIWORLD
+	for(i = 0; i < MAX_WORLDS; i++) {
+		trap_Cvar_Update(&mapnames[i]);
+		if ( cv->modificationCount != cv->vmCvar->modificationCount ) {
+			// TODO: check that it matched "\load game" command expectations from mappers
+			//   should have a consistent loading order, and me offeset by some time or 
+			//   location in game or trigger, but it should be useful to know this.
+		}
+	}
+#endif
 
 	if (remapped) {
 		G_RemapTeamShaders();
