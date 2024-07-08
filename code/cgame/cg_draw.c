@@ -1975,7 +1975,11 @@ static void CG_DrawDisconnect( void ) {
 	x = cgs.screenXmax + 1 - 48;
 	y = cgs.screenYmax + 1 - 48;
 
-	CG_DrawPic( x, y, 48, 48, trap_R_RegisterShader( "gfx/2d/net.tga" ) );
+	if(!cgs.media.netConnect) {
+		cgs.media.netConnect = trap_R_RegisterShader( "gfx/2d/net.tga" );
+	}
+
+	CG_DrawPic( x, y, 48, 48, cgs.media.netConnect );
 }
 
 

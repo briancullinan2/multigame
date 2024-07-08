@@ -4910,3 +4910,43 @@ base_trim/wire02a_f
 "arena" "2"
 "s" "Succulent Subversion"
 }
+// entity 100
+{
+"classname" "item_health_large"
+"origin" "364 -318 248"
+}
+// entity 101
+{
+"classname" "item_health_large"
+"origin" "-419 -356 478"
+}
+// entity 102
+{
+"classname" "item_health_large"
+"origin" "-622 31 544"
+}
+// entity 103
+{
+"classname" "item_health_large"
+"origin" "757 453 314"
+}
+// entity 104
+{
+"classname" "item_health_large"
+"origin" "466 472 314"
+}
+// entity 105
+{
+"classname" "item_health_large"
+"origin" "314 -697 248"
+}
+// entity 106
+{
+"classname" "item_health_large"
+"origin" "-394 -719 478"
+}
+// entity 107
+{
+"classname" "item_health_large"
+"origin" "690 -660 248"
+}

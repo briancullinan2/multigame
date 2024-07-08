@@ -36,11 +36,13 @@ qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
 void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 void (*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
 void (*trap_R_AddPolyBufferToScene)( polyBuffer_t* pPolyBuffer );
+void (*trap_R_SwitchWorld)( int world );
 #else
 int dll_com_trapGetValue;
 int dll_trap_R_AddRefEntityToScene2;
 int dll_trap_R_AddLinearLightToScene;
 int dll_trap_R_AddPolyBufferToScene;
+int dll_trap_R_SwitchWorld;
 #endif
 
 /*
@@ -1880,6 +1882,14 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 		} else {
 			trap_Cvar_Set("cg_atmosphericEffects", "0");
 		}
+#ifdef USE_MULTIWORLD
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_SwitchWorld" ) ) {
+			trap_R_SwitchWorld = (void*)~atoi( value );
+			cg.multiworld = qtrue;
+		} else {
+			cg.multiworld = qfalse;
+		}
+#endif
 #else
 		dll_com_trapGetValue = atoi( value );
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddRefEntityToScene2" ) ) {
@@ -1896,6 +1906,14 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 		} else {
 			trap_Cvar_Set("cg_atmosphericEffects", "0");
 		}
+#ifdef USE_MULTIWORLD
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_SwitchWorld" ) ) {
+			dll_trap_R_SwitchWorld = atoi( value );
+			cg.multiworld = qtrue;
+		} else {
+			cg.multiworld = qfalse;
+		}
+#endif
 #endif
 	}
 

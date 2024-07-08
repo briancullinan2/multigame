@@ -447,3 +447,9 @@ void trap_R_AddLinearLightToScene( const vec3_t start, const vec3_t end, float i
 void    trap_R_AddPolyBufferToScene( polyBuffer_t* pPolyBuffer ) {
 	syscall( dll_trap_R_AddPolyBufferToScene, pPolyBuffer );
 }
+
+#ifdef USE_MULTIWORLD
+void    trap_R_SwitchWorld( int world ) {
+	syscall( dll_trap_R_SwitchWorld, world );
+}
+#endif

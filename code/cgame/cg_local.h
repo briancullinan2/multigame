@@ -523,6 +523,15 @@ typedef struct {
 	snapshot_t	*nextSnap;			// cg.nextSnap->serverTime > cg.time, or NULL
 	snapshot_t	activeSnapshots[2];
 
+#ifdef USE_MULTIWORLD
+	// there are only one or two snapshot_t that are relevent at a time
+	int					snapshotNumWorlds[MAX_WORLDS];	// the number of snapshots the client system has received
+	//int				snapshotTimeWorlds[MAX_WORLDS];	// the time from latestSnapshotNum, so we don't need to read the snapshot yet
+	snapshot_t	snapshotWorlds[MAX_WORLDS];
+	qboolean    multiworld;
+#endif
+
+
 	float		frameInterpolation;	// (float)( cg.time - cg.frame->serverTime ) / (cg.nextFrame->serverTime - cg.frame->serverTime)
 
 	qboolean	thisFrameTeleport;
@@ -1117,6 +1126,9 @@ typedef struct {
 	qhandle_t	freezeMarkShader;
   sfxHandle_t	unfrozenSound;
 #endif
+
+	qhandle_t netConnect;
+
 } cgMedia_t;
 
 
@@ -1822,11 +1834,18 @@ extern  qboolean linearLight;
 extern void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 extern void	(*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
 extern void	(*trap_R_AddPolyBufferToScene)( polyBuffer_t *pPolyBuffer );
+#ifdef USE_MULTIWORLD
+extern void	(*trap_R_SwitchWorld)( int world );
+#endif
 #else
 qboolean trap_GetValue( char *value, int valueSize, const char *key );
 void trap_R_AddRefEntityToScene2( const refEntity_t *re );
 void trap_R_AddLinearLightToScene( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
 void	trap_R_AddPolyBufferToScene( polyBuffer_t *pPolyBuffer );
+#ifdef USE_MULTIWORLD
+void	trap_R_SwitchWorld( int world );
+extern int dll_trap_R_SwitchWorld;
+#endif
 extern int dll_com_trapGetValue;
 extern int dll_trap_R_AddRefEntityToScene2;
 extern int dll_trap_R_AddLinearLightToScene;

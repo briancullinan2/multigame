@@ -6,6 +6,9 @@
 #include "cg_local.h"
 #include "../ui/ui_shared.h"
 
+#ifdef MISSIONPACK
+
+
 extern displayContextDef_t cgDC;
 
 
@@ -1855,3 +1858,4 @@ void CG_GetTeamColor(vec4_t *color) {
 	}
 }
 
+#endif

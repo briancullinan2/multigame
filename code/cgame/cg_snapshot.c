@@ -12,7 +12,7 @@
 CG_ResetEntity
 ==================
 */
-static void CG_ResetEntity( centity_t *cent ) {
+void CG_ResetEntity( centity_t *cent ) {
 	// if the previous snapshot this entity was updated in is at least
 	// an event window back in time then we can reset the previous event
 	if ( cent->snapShotTime < cg.time - EVENT_VALID_MSEC ) {
@@ -456,6 +456,29 @@ void CG_ProcessSnapshots( void ) {
 		// we have passed the transition from nextFrame to frame
 		CG_TransitionSnapshot();
 	} while ( 1 );
+
+
+
+#if 0 //def USE_MULTIWORLD
+	// spy on snapshots from other CGVMs
+	if(cg.multiworld) {
+		int i;
+		for(i = 0; i < MAX_WORLDS; i++) {
+			int latest, latestTime;
+			trap_R_SwitchWorld(i);
+			trap_GetCurrentSnapshotNumber( &latest, &latestTime );
+			if(cg.snapshotNumWorlds[i] < latest) {
+				cg.snapshotNumWorlds[i] = latest;
+				trap_GetSnapshot( latest, &cg.snapshotWorlds[i] );
+			}
+		}
+
+	}
+#endif
+
+
+
+
 
 	// assert our valid conditions upon exiting
 	if ( cg.snap == NULL ) {

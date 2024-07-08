@@ -1265,6 +1265,12 @@ static void CG_AddCEntity( centity_t *cent ) {
 	}
 }
 
+
+#ifdef USE_MULTIWORLD
+void CG_ResetEntity( centity_t *cent );
+#endif
+
+
 /*
 ===============
 CG_AddPacketEntities
@@ -1316,5 +1322,23 @@ void CG_AddPacketEntities( void ) {
 		cent = &cg_entities[ cg.snap->entities[ num ].number ];
 		CG_AddCEntity( cent );
 	}
+
+#if 0 //def USE_MULTIWORLD
+	if(cg.multiworld) {
+		int i;
+		for(i = 0; i < MAX_WORLDS; i++) {
+			//CG_Printf("Resetting %i: %i\n", i, cg.snapshotWorlds[i].numEntities );
+			for ( num = 0 ; num < cg.snapshotWorlds[i].numEntities ; num++ ) {
+				centity_t		cent;
+				memcpy(&cent.currentState, &cg.snapshotWorlds[i].entities[ num ], sizeof(entityState_t));
+				CG_ResetEntity(&cent);
+				trap_R_SwitchWorld(i);
+				CG_AddCEntity( &cent );
+			}
+		}
+	}
+#endif
+
+
 }
 

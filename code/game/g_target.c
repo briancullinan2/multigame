@@ -500,10 +500,10 @@ void target_use_exec( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 	trap_SendConsoleCommand( EXEC_APPEND, va("%s\n", self->message ) );
 }
 
+
 void SP_target_exec( gentity_t *self ) {
 	char *buf;
 	char *nx=target_execs[num_target_execs];
-
 	G_SpawnString( "message", "print no command", &buf);
 
 	Com_sprintf(nx,sizeof(target_execs[0]),"load game %s",buf);
