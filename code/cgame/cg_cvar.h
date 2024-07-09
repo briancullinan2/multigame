@@ -221,4 +221,10 @@ CG_CVAR( cg_altGrapple,  "g_altGrapple", "1", CVAR_SERVERINFO )
 #ifdef USE_FLAME_THROWER
 CG_CVAR( cgwp_flameCycle, "wp_flameCycle", "40", CVAR_SERVERINFO )
 #endif
+
+
+#ifdef USE_MULTIWORLD
+CG_CVAR( cg_worlds, "worlds", "0", CVAR_USERINFO | CVAR_ROM | CVAR_NORESTART )
+#endif
+
 #undef CG_CVAR

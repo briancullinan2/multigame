@@ -1298,6 +1298,15 @@ void CG_NewClientInfo( int clientNum ) {
 	CG_SetSkinAndModel( &newInfo, ci, v, allowNativeModel, clientNum, myClientNum, myTeam, qfalse, 
 		newInfo.headModelName, sizeof( newInfo.headModelName ),	newInfo.headSkinName, sizeof( newInfo.headSkinName ) );
 
+
+#ifdef USE_MULTIWORLD
+	v = Info_ValueForKey( configstring, "worlds" );
+if(newInfo.worlds != atoi( v )) {
+	newInfo.worlds = atoi( v );
+	//Com_Printf("Adding world to client: %i in %i\n", clientNum, newInfo.worlds);
+}
+#endif
+
 	// allow deferred load at some conditions
 	can_defer = cg_deferPlayers.integer == 2 || ( cg_deferPlayers.integer == 1 && myTeam != TEAM_SPECTATOR && team == TEAM_SPECTATOR );
 

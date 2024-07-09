@@ -753,6 +753,17 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz( model, Info_ValueForKey( userinfo, "model" ), sizeof( model ) );
 	Q_strncpyz( headModel, Info_ValueForKey( userinfo, "headmodel" ), sizeof( headModel ) );
 
+#ifdef USE_MULTIWORLD
+	s = Info_ValueForKey( userinfo, "worlds" );
+	if(*s) {
+		client->pers.allWorlds = atoi(s) | (1 << level.world); // add this game instance to occupying worlds to let the client know about
+	} else {
+		client->pers.allWorlds |= (1 << level.world);
+	}
+//Com_Printf("Adding world to server client: %i in %i\n", client - level.clients, client->pers.allWorlds);
+#endif
+
+
 #ifdef USE_ADVANCED_CLASS
   if (!Q_stricmp (model, "sarge"))
      client->pers.newplayerclass = PCLASS_RANGER;
@@ -780,6 +791,18 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
+#ifdef USE_MULTIWORLD
+	if ( ent->r.svFlags & SVF_BOT ) {
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tt\\%d\\tl\\%d\\worlds\\%i",
+			client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2,
+			client->pers.maxHealth, client->sess.wins, client->sess.losses,
+			Info_ValueForKey( userinfo, "skill" ), teamTask, teamLeader, client->pers.allWorlds );
+	} else {
+		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\tt\\%d\\tl\\%d\\worlds\\%i",
+			client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2, 
+			client->pers.maxHealth, client->sess.wins, client->sess.losses, teamTask, teamLeader, client->pers.allWorlds );
+	}
+#else
 	if ( ent->r.svFlags & SVF_BOT ) {
 		s = va("n\\%s\\t\\%i\\model\\%s\\hmodel\\%s\\c1\\%s\\c2\\%s\\hc\\%i\\w\\%i\\l\\%i\\skill\\%s\\tt\\%d\\tl\\%d",
 			client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2,
@@ -790,6 +813,8 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 			client->pers.netname, client->sess.sessionTeam, model, headModel, c1, c2, 
 			client->pers.maxHealth, client->sess.wins, client->sess.losses, teamTask, teamLeader );
 	}
+#endif
+
 
 	trap_SetConfigstring( CS_PLAYERS+clientNum, s );
 

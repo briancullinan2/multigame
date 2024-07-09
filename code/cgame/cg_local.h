@@ -397,6 +397,11 @@ typedef struct {
 	vec3_t			bodyColor;
 	vec3_t			legsColor;
 
+#ifdef USE_MULTIWORLD
+	int         worlds;
+#endif
+
+
 #ifdef USE_RPG_STATS
 
 #endif

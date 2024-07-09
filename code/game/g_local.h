@@ -304,6 +304,11 @@ typedef struct
 	pclass_t playerclass;		 // The players current class
 	pclass_t newplayerclass; // The class the player will become when it respawns
 #endif
+
+#ifdef USE_MULTIWORLD
+	int allWorlds;
+#endif
+
 } clientPersistant_t;
 
 // unlagged
@@ -439,6 +444,7 @@ struct gclient_s
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
 	vec3_t frozen_angles;
 #endif
+
 };
 
 //
@@ -467,6 +473,11 @@ typedef struct
 
 	int framenum;
 	int time;					// in msec
+
+#ifdef USE_MULTIWORLD
+	int world; // this gives the VM a position relative to other VMs it can share data with
+#endif
+
 	int previousTime; // so movers can back up when blocked
 
 	int startTime; // level.time the map was started

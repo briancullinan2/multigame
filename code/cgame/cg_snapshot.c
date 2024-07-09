@@ -458,8 +458,9 @@ void CG_ProcessSnapshots( void ) {
 	} while ( 1 );
 
 
+	//CG_Printf("worlds: %i\n", cgs.clientinfo[cg.snap->ps.clientNum].worlds);
 
-#if 0 //def USE_MULTIWORLD
+#ifdef USE_MULTIWORLD
 	// spy on snapshots from other CGVMs
 	if(cg.multiworld) {
 		int i;
@@ -472,6 +473,7 @@ void CG_ProcessSnapshots( void ) {
 				trap_GetSnapshot( latest, &cg.snapshotWorlds[i] );
 			}
 		}
+			//trap_R_SwitchWorld(0);
 
 	}
 #endif

@@ -581,11 +581,16 @@ G_InitGame
 
 ============
 */
-static void G_InitGame( int levelTime, int randomSeed, int restart ) {
+#ifdef USE_MULTIWORLD
+static void G_InitGame( int levelTime, int randomSeed, int restart ) 
+#else
+static void G_InitGame( int levelTime, int randomSeed, qboolean restart ) 
+#endif
+{
 	char value[ MAX_CVAR_VALUE_STRING ];
 	int	i;
 
-	G_Printf ("------- Game Initialization -------\n");
+	G_Printf ("------- Game Initialization (%i) -------\n", restart);
 	G_Printf ("gamename: %s\n", GAMEVERSION);
 	G_Printf ("gamedate: %s\n", __DATE__);
 
@@ -616,6 +621,9 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// set some level globals
 	memset( &level, 0, sizeof( level ) );
 	level.time = levelTime;
+#ifdef USE_MULTIWORLD
+	level.world = restart;
+#endif
 
 	level.startTime = levelTime;
 

@@ -1323,11 +1323,15 @@ void CG_AddPacketEntities( void ) {
 		CG_AddCEntity( cent );
 	}
 
-#if 0 //def USE_MULTIWORLD
+#ifdef USE_MULTIWORLD
 	if(cg.multiworld) {
 		int i;
 		for(i = 0; i < MAX_WORLDS; i++) {
-			//CG_Printf("Resetting %i: %i\n", i, cg.snapshotWorlds[i].numEntities );
+			//if(i == cgs.clientinfo[cg.snap->ps.clientNum].worlds) {
+			//	continue;
+			//}
+			//CG_Printf("other ents %i: %i\n", i, cg.snapshotWorlds[i].numEntities );
+#if 0
 			for ( num = 0 ; num < cg.snapshotWorlds[i].numEntities ; num++ ) {
 				centity_t		cent;
 				memcpy(&cent.currentState, &cg.snapshotWorlds[i].entities[ num ], sizeof(entityState_t));
@@ -1335,7 +1339,9 @@ void CG_AddPacketEntities( void ) {
 				trap_R_SwitchWorld(i);
 				CG_AddCEntity( &cent );
 			}
+#endif
 		}
+		//trap_R_SwitchWorld(0);
 	}
 #endif
 
