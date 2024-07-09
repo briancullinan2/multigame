@@ -196,8 +196,7 @@ struct gentity_s
 	char not [MAX_STRING_CHARS];
 	qboolean nothot;
 
-#ifdef USE_PORTALS
-	int items[MAX_ITEMS];
+#if defined(USE_PORTALS) || defined(USE_MULTIWORLD)
 	int world;
 #endif
 

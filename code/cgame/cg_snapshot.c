@@ -473,7 +473,7 @@ void CG_ProcessSnapshots( void ) {
 				trap_GetSnapshot( latest, &cg.snapshotWorlds[i] );
 			}
 		}
-			//trap_R_SwitchWorld(0);
+		trap_R_SwitchWorld(0);
 
 	}
 #endif

@@ -211,7 +211,11 @@ static void CG_InterpolatePlayerState( qboolean grabAngles ) {
 		int			cmdNum;
 
 		cmdNum = trap_GetCurrentCmdNumber();
+#ifdef USE_MULTIWORLD
+		trap_GetUserCmd( cmdNum, &cmd, NULL );
+#else
 		trap_GetUserCmd( cmdNum, &cmd );
+#endif
 
 		PM_UpdateViewAngles( out, &cmd );
 	}
@@ -1008,7 +1012,11 @@ void CG_PredictPlayerState( void ) {
 	// can't accurately predict a current position, so just freeze at
 	// the last good position we had
 	cmdNum = current - CMD_BACKUP + 1;
+#ifdef USE_MULTIWORLD
+	trap_GetUserCmd( cmdNum, &oldestCmd, NULL );
+#else
 	trap_GetUserCmd( cmdNum, &oldestCmd );
+#endif
 	if ( oldestCmd.serverTime > cg.snap->ps.commandTime
 		&& oldestCmd.serverTime < cg.time ) {	// special check for map_restart
 		if ( cg_showmiss.integer ) {
@@ -1018,7 +1026,11 @@ void CG_PredictPlayerState( void ) {
 	}
 
 	// get the latest command so we can know which commands are from previous map_restarts
+#ifdef USE_MULTIWORLD
+	trap_GetUserCmd( current, &latestCmd, NULL );
+#else
 	trap_GetUserCmd( current, &latestCmd );
+#endif
 
 	// get the most recent information we have, even if
 	// the server time is beyond our current cg.time,
@@ -1131,7 +1143,11 @@ void CG_PredictPlayerState( void ) {
 
 	for ( /* cmdNum = current - CMD_BACKUP + 1 */; cmdNum <= current ; cmdNum++ ) {
 		// get the command
+#ifdef USE_MULTIWORLD
+		trap_GetUserCmd( cmdNum, &cg_pmove.cmd, NULL );
+#else
 		trap_GetUserCmd( cmdNum, &cg_pmove.cmd );
+#endif
 
 		if ( cgs.pmove_fixed ) {
 			PM_UpdateViewAngles( cg_pmove.ps, &cg_pmove.cmd );

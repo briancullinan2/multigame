@@ -1327,21 +1327,20 @@ void CG_AddPacketEntities( void ) {
 	if(cg.multiworld) {
 		int i;
 		for(i = 0; i < MAX_WORLDS; i++) {
-			//if(i == cgs.clientinfo[cg.snap->ps.clientNum].worlds) {
-			//	continue;
-			//}
+			if(i == cgs.selectedWorld || cg.snapshotWorlds[i].numEntities == 0) {
+				continue;
+			}
 			//CG_Printf("other ents %i: %i\n", i, cg.snapshotWorlds[i].numEntities );
-#if 0
-			for ( num = 0 ; num < cg.snapshotWorlds[i].numEntities ; num++ ) {
+			for ( num = 0; num < cg.snapshotWorlds[i].numEntities ; num++ ) {
 				centity_t		cent;
 				memcpy(&cent.currentState, &cg.snapshotWorlds[i].entities[ num ], sizeof(entityState_t));
 				CG_ResetEntity(&cent);
+				cent.world = num;
 				trap_R_SwitchWorld(i);
 				CG_AddCEntity( &cent );
 			}
-#endif
 		}
-		//trap_R_SwitchWorld(0);
+		trap_R_SwitchWorld(0);
 	}
 #endif
 

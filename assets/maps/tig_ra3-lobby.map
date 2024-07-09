@@ -3715,15 +3715,17 @@ gothic_block/blocks17i
 // entity 1
 {
 "arena" "4"
-"classname" "trigger_teleport"
+"classname" "trigger_multiple"
+"targetname" ""
+"target" "trigger_world_2"
 // brush 0
 {
-( 0 936 64 ) ( 0 840 64 ) ( 0 840 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 0 840 64 ) ( 256 840 64 ) ( 256 840 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 256 840 -64 ) ( 256 936 -64 ) ( 0 936 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 0 936 64 ) ( 256 936 64 ) ( 256 840 64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 256 936 -64 ) ( 256 936 64 ) ( 0 936 64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 256 840 64 ) ( 256 936 64 ) ( 256 936 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 0 944 64 ) ( 0 848 64 ) ( 0 848 -64 ) common/trigger -16 0 0 0.5 0.5 134217728 0 0
+( 0 848 64 ) ( 256 848 64 ) ( 256 848 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 256 848 -64 ) ( 256 944 -64 ) ( 0 944 -64 ) common/trigger 0 16 0 0.5 0.5 134217728 0 0
+( 0 944 64 ) ( 256 944 64 ) ( 256 848 64 ) common/trigger 0 16 0 0.5 0.5 134217728 0 0
+( 256 944 -64 ) ( 256 944 64 ) ( 0 944 64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 256 848 64 ) ( 256 944 64 ) ( 256 944 -64 ) common/trigger -16 0 0 0.5 0.5 134217728 0 0
 }
 }
 // entity 2
@@ -4192,12 +4194,12 @@ gothic_block/blocks17i
 "arena" "1"
 // brush 0
 {
-( 0 -872 64 ) ( 0 -968 64 ) ( 0 -968 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 0 -968 64 ) ( 256 -968 64 ) ( 256 -968 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 256 -968 -64 ) ( 256 -872 -64 ) ( 0 -872 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 0 -872 64 ) ( 256 -872 64 ) ( 256 -968 64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 256 -872 -64 ) ( 256 -872 64 ) ( 0 -872 64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( 256 -968 64 ) ( 256 -872 64 ) ( 256 -872 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 0 -884 64 ) ( 0 -980 64 ) ( 0 -980 -64 ) common/trigger 24 0 0 0.5 0.5 134217728 0 0
+( 0 -980 64 ) ( 256 -980 64 ) ( 256 -980 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 256 -980 -64 ) ( 256 -884 -64 ) ( 0 -884 -64 ) common/trigger 0 -24 0 0.5 0.5 134217728 0 0
+( 0 -884 64 ) ( 256 -884 64 ) ( 256 -980 64 ) common/trigger 0 -24 0 0.5 0.5 134217728 0 0
+( 256 -884 -64 ) ( 256 -884 64 ) ( 0 -884 64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 256 -980 64 ) ( 256 -884 64 ) ( 256 -884 -64 ) common/trigger 24 0 0 0.5 0.5 134217728 0 0
 }
 }
 // entity 73
@@ -4215,12 +4217,12 @@ gothic_block/blocks17i
 "arena" "3"
 // brush 0
 {
-( -984 400 64 ) ( -984 144 64 ) ( -984 144 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
-( -984 144 64 ) ( -888 144 64 ) ( -888 144 -64 ) common/trigger 0 0 180.00002 0.5 -0.5 134217728 0 0
-( -888 144 -64 ) ( -888 400 -64 ) ( -984 400 -64 ) common/trigger 0 0 90 0.5 0.5 134217728 0 0
-( -984 400 64 ) ( -888 400 64 ) ( -888 144 64 ) common/trigger 0 0 90 0.5 0.5 134217728 0 0
-( -888 400 -64 ) ( -888 400 64 ) ( -984 400 64 ) common/trigger 0 0 180.00002 0.5 -0.5 134217728 0 0
-( -888 144 64 ) ( -888 400 64 ) ( -888 400 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( -992 400 64 ) ( -992 144 64 ) ( -992 144 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( -992 144 64 ) ( -896 144 64 ) ( -896 144 -64 ) common/trigger -16 0 180.00002 0.5 -0.5 134217728 0 0
+( -896 144 -64 ) ( -896 400 -64 ) ( -992 400 -64 ) common/trigger 0 16 90 0.5 0.5 134217728 0 0
+( -992 400 64 ) ( -896 400 64 ) ( -896 144 64 ) common/trigger 0 16 90 0.5 0.5 134217728 0 0
+( -896 400 -64 ) ( -896 400 64 ) ( -992 400 64 ) common/trigger -16 0 180.00002 0.5 -0.5 134217728 0 0
+( -896 144 64 ) ( -896 400 64 ) ( -896 400 -64 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
 }
 }
 // entity 75
@@ -4228,6 +4230,7 @@ gothic_block/blocks17i
 "classname" "misc_portal_surface"
 "origin" "128 916 -20"
 "spawnflags" "4"
+"target" "tig_ra3-quiet"
 }
 // entity 76
 {
@@ -4256,7 +4259,6 @@ gothic_block/blocks17i
 "angles" "24 160 0"
 "arena" "2"
 "s" "Succulent Subversion"
-"target" ""
 "targetname" "tig_ra3-succulent"
 "spawnflags" "4"
 "world" "1"
@@ -4302,11 +4304,67 @@ gothic_block/blocks17i
 "target" "trigger_world_1"
 // brush 0
 {
-( -984 -172 64 ) ( -984 -428 64 ) ( -984 -428 -64 ) common/trigger -8 0 0 0.5 0.5 134217728 0 0
-( -984 -428 64 ) ( -888 -428 64 ) ( -888 -428 -64 ) common/trigger 0 0 180.00002 0.5 -0.5 134217728 0 0
-( -888 -428 -64 ) ( -888 -172 -64 ) ( -984 -172 -64 ) common/trigger -8 0 90 0.5 0.5 134217728 0 0
-( -984 -172 64 ) ( -888 -172 64 ) ( -888 -428 64 ) common/trigger -8 0 90 0.5 0.5 134217728 0 0
-( -888 -172 -64 ) ( -888 -172 64 ) ( -984 -172 64 ) common/trigger 0 0 180.00002 0.5 -0.5 134217728 0 0
-( -888 -428 64 ) ( -888 -172 64 ) ( -888 -172 -64 ) common/trigger -8 0 0 0.5 0.5 134217728 0 0
+( -988 -172 64 ) ( -988 -428 64 ) ( -988 -428 -64 ) common/trigger -8 0 0 0.5 0.5 134217728 0 0
+( -988 -428 64 ) ( -892 -428 64 ) ( -892 -428 -64 ) common/trigger -8 0 180.00002 0.5 -0.5 134217728 0 0
+( -892 -428 -64 ) ( -892 -172 -64 ) ( -988 -172 -64 ) common/trigger -8 8 90 0.5 0.5 134217728 0 0
+( -988 -172 64 ) ( -892 -172 64 ) ( -892 -428 64 ) common/trigger -8 8 90 0.5 0.5 134217728 0 0
+( -892 -172 -64 ) ( -892 -172 64 ) ( -988 -172 64 ) common/trigger -8 0 180.00002 0.5 -0.5 134217728 0 0
+( -892 -428 64 ) ( -892 -172 64 ) ( -892 -172 -64 ) common/trigger -8 0 0 0.5 0.5 134217728 0 0
 }
+}
+// entity 86
+{
+"classname" "trigger_always"
+"origin" "-948 -364 444"
+"wait" "4"
+"target" "load_map2"
+}
+// entity 87
+{
+"classname" "target_exec"
+"origin" "-948 156 408"
+"targetname" "load_map2"
+"message" "load game tig_ra3-quiet"
+}
+// entity 88
+{
+"arena" "2"
+"classname" "target_exec"
+"spawnflags" "16"
+"message" "game 0 2"
+"origin" "172 832 -8"
+"targetname" "trigger_world_2"
+}
+// entity 89
+{
+"classname" "trigger_always"
+"origin" "-872 -364 444"
+"wait" "5"
+"target" "load_map_client2"
+}
+// entity 90
+{
+"classname" "target_exec"
+"origin" "-872 156 408"
+"targetname" "load_map_client2"
+"message" "load tig_ra3-quiet"
+"spawnflags" "32"
+}
+// entity 91
+{
+"origin" "-996 944 448"
+"message" "Quiet Times"
+"arena" "4"
+"classname" "misc_portal_camera"
+"spawnflags" "4"
+"targetname" "tig_ra3-quiet"
+"world" "2"
+"target" "world1_dir"
+"roll" "270"
+}
+// entity 92
+{
+"classname" "target_position"
+"origin" "424 -84 -144"
+"targetname" "world1_dir"
 }

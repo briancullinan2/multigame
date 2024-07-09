@@ -1957,7 +1957,11 @@ static void CG_DrawDisconnect( void ) {
 
 	// draw the phone jack if we are completely past our buffers
 	cmdNum = trap_GetCurrentCmdNumber() - CMD_BACKUP + 1;
+#ifdef USE_MULTIWORLD
+	trap_GetUserCmd( cmdNum, &cmd, &cgs.selectedWorld );
+#else
 	trap_GetUserCmd( cmdNum, &cmd );
+#endif
 	if ( cmd.serverTime <= cg.snap->ps.commandTime
 		|| cmd.serverTime > cg.time ) {	// special check for map_restart // bk 0102165 - FIXME
 		return;

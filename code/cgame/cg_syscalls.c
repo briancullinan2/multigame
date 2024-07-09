@@ -309,7 +309,12 @@ int			trap_GetCurrentCmdNumber( void ) {
 	return syscall( CG_GETCURRENTCMDNUMBER );
 }
 
-qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd ) {
+#ifdef USE_MULTIWORLD
+qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd, int *world ) 
+#else
+qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd ) 
+#endif
+{
 	return syscall( CG_GETUSERCMD, cmdNumber, ucmd );
 }
 

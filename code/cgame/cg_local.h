@@ -209,6 +209,9 @@ typedef struct centity_s {
 	// exact interpolated position of entity on this frame
 	vec3_t			lerpOrigin;
 	vec3_t			lerpAngles;
+#ifdef USE_MULTIWORLD
+	int world;
+#endif
 } centity_t;
 
 
@@ -1260,6 +1263,12 @@ typedef struct {
 
 	float			cursorX;
 	float			cursorY;
+
+#ifdef USE_MULTIWORLD
+	int selectedWorld;
+#endif
+
+
 } cgs_t;
 
 //==============================================================================
@@ -1777,7 +1786,11 @@ qboolean	trap_GetServerCommand( int serverCommandNumber );
 // a lagged connection
 int			trap_GetCurrentCmdNumber( void );	
 
+#ifdef USE_MULTIWORLD
+qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd, int *world );
+#else
 qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd );
+#endif
 
 // used for the weapon select and zoom
 void		trap_SetUserCmdValue( int stateValue, float sensitivityScale );
