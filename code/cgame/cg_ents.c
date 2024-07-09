@@ -1340,7 +1340,7 @@ void CG_AddPacketEntities( void ) {
 				CG_AddCEntity( &cent );
 			}
 		}
-		trap_R_SwitchWorld(0);
+		trap_R_SwitchWorld(cgs.selectedWorld);
 	}
 #endif
 
