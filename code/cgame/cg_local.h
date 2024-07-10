@@ -1117,6 +1117,8 @@ typedef struct {
 	sfxHandle_t scoutSound;
 #endif
 	qhandle_t cursor;
+  qhandle_t selectCursor;
+	qhandle_t sizeCursor;
 
 	sfxHandle_t	regenSound;
 	sfxHandle_t	protectSound;

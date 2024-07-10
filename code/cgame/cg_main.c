@@ -2086,7 +2086,7 @@ void CG_EventHandling( cgame_event_t type )
 {
 
 }
-
+#endif
 
 void CG_SetScoreCatcher( qboolean enable )
 {
@@ -2125,6 +2125,7 @@ void CG_SetScoreCatcher( qboolean enable )
 	}
 }
 
+#ifndef MISSIONPACK
 
 void CG_KeyEvent( int key, qboolean down ) 
 {

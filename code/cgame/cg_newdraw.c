@@ -1765,7 +1765,7 @@ CG_EventHandling
       2 - hud editor
 
 */
-void CG_EventHandling(int type) {
+void CG_EventHandling(cgame_event_t type) {
 	cgs.eventHandling = type;
   if (type == CGAME_EVENT_NONE) {
     CG_HideTeamMenu();
@@ -1832,8 +1832,8 @@ int CG_ClientNumFromName(const char *p) {
   return -1;
 }
 
-  Menus_OpenByName("voiceMenu");
 void CG_ShowResponseHead( void ) {
+  Menus_OpenByName("voiceMenu");
 	trap_Cvar_Set("cl_conXOffset", "72");
 	cg.voiceTime = cg.time;
 }

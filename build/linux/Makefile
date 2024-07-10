@@ -27,6 +27,9 @@ endif
 ifndef MOD
 MOD=multigame
 endif
+ifdef MISSIONPACK
+MOD=multigame-ta
+endif
 
 ifeq ($(COMPILE_PLATFORM),cygwin)
   PLATFORM=mingw32
@@ -98,7 +101,11 @@ BR=$(BUILD_DIR)/release-$(PLATFORM)-$(ARCH)
 
 QADIR=$(MOUNT_DIR)/game
 CGDIR=$(MOUNT_DIR)/cgame
+ifdef MISSIONPACK
+UIDIR=$(MOUNT_DIR)/ui
+else
 UIDIR=$(MOUNT_DIR)/q3_ui
+endif
 SYSCALL=$(MOUNT_DIR)/../build/win32-qvm
 
 bin_path=$(shell which $(1) 2> /dev/null)
@@ -228,12 +235,17 @@ TARGET_QVMS = \
   $(B)/$(MOD)/vm/qagame.qvm \
   $(B)/$(MOD)/vm/ui.qvm
 
-TARGETS += $(TARGET_QVMS) xxx-multigame.pk3
+TARGETS += $(TARGET_QVMS) xxx-$(MOD).pk3
 else
 TARGETS += \
   $(B)/$(MOD)/cgame$(SHLIBNAME) \
   $(B)/$(MOD)/qagame$(SHLIBNAME) \
   $(B)/$(MOD)/ui$(SHLIBNAME)
+endif
+
+ifdef MISSIONPACK
+BASE_CFLAGS += -DMISSIONPACK=1
+QVM_CFLAGS += -DMISSIONPACK=1
 endif
 
 ifeq ("$(CC)", $(findstring "$(CC)", "clang" "clang++"))
@@ -412,8 +424,13 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/q_math.o \
   $(B)/$(MOD)/cgame/q_shared.o
 
+
 CGOBJ   = $(CGOBJ_) $(B)/$(MOD)/cgame/cg_syscalls.o
 CGASM   = $(subst /cgame/,/vm/cgame/,$(CGOBJ_:.o=.asm)) $(CGDIR)/cg_syscalls.asm
+ifdef MISSIONPACK
+CGOBJ  += $(B)/$(MOD)/ui/ui_shared.o
+CGASM  += $(B)/$(MOD)/vm/ui/ui_shared.asm
+endif
 
 $(B)/$(MOD)/vm/cgame.qvm: $(CGASM)
 	$(echo_cmd) "LD $@"
@@ -487,8 +504,15 @@ UIOBJ_ = \
   $(B)/$(MOD)/ui/ui_main.o \
   $(B)/$(MOD)/ui/bg_misc.o \
   $(B)/$(MOD)/ui/bg_lib.o \
-  $(B)/$(MOD)/ui/ui_addbots.o \
   $(B)/$(MOD)/ui/ui_atoms.o \
+  $(B)/$(MOD)/ui/ui_gameinfo.o \
+  $(B)/$(MOD)/ui/ui_players.o 
+
+ifdef MISSIONPACK
+UIOBJ_ +=   $(B)/$(MOD)/ui/ui_shared.o
+else
+UIOBJ_ +=   \
+  $(B)/$(MOD)/ui/ui_addbots.o \
   $(B)/$(MOD)/ui/ui_cdkey.o \
   $(B)/$(MOD)/ui/ui_cinematics.o \
   $(B)/$(MOD)/ui/ui_confirm.o \
@@ -497,7 +521,6 @@ UIOBJ_ = \
   $(B)/$(MOD)/ui/ui_credits.o \
   $(B)/$(MOD)/ui/ui_demo2.o \
   $(B)/$(MOD)/ui/ui_display.o \
-  $(B)/$(MOD)/ui/ui_gameinfo.o \
   $(B)/$(MOD)/ui/ui_ingame.o \
   $(B)/$(MOD)/ui/ui_loadconfig.o \
   $(B)/$(MOD)/ui/ui_menu.o \
@@ -506,7 +529,6 @@ UIOBJ_ = \
   $(B)/$(MOD)/ui/ui_network.o \
   $(B)/$(MOD)/ui/ui_options.o \
   $(B)/$(MOD)/ui/ui_playermodel.o \
-  $(B)/$(MOD)/ui/ui_players.o \
   $(B)/$(MOD)/ui/ui_playersettings.o \
   $(B)/$(MOD)/ui/ui_preferences.o \
   $(B)/$(MOD)/ui/ui_qmenu.o \
@@ -524,8 +546,10 @@ UIOBJ_ = \
   $(B)/$(MOD)/ui/ui_startserver.o \
   $(B)/$(MOD)/ui/ui_team.o \
   $(B)/$(MOD)/ui/ui_teamorders.o \
-  $(B)/$(MOD)/ui/ui_video.o \
-  \
+  $(B)/$(MOD)/ui/ui_video.o
+endif
+
+UIOBJ_ +=   \
   $(B)/$(MOD)/ui/q_math.o \
   $(B)/$(MOD)/ui/q_shared.o
 
@@ -610,14 +634,14 @@ distclean: clean
 	@rm -rf $(BUILD_DIR)
 
 
-xxx-multigame.pk3: $(TARGET_QVMS)
+xxx-$(MOD).pk3: $(TARGET_QVMS)
 	$(echo_cmd) "ZIPPING $<"
 	$(Q)cd $(B)/$(MOD) && \
-		$(ZIP) ../../../xxx-multigame.pk3 vm/*.qvm && \
-		$(ZIP) -u ../../../xxx-multigame.pk3 vm/*.map && \
-		$(ZIP) -u ../../../xxx-multigame.pk3 vm/*.jts
+		$(ZIP) ../../../xxx-$(MOD).pk3 vm/*.qvm && \
+		$(ZIP) -u ../../../xxx-$(MOD).pk3 vm/*.map && \
+		$(ZIP) -u ../../../xxx-$(MOD).pk3 vm/*.jts
 	$(Q)cd ../../assets && \
-		$(ZIP) -u ../build/linux/xxx-multigame.pk3 ./*
+		$(ZIP) -u ../build/linux/xxx-$(MOD).pk3 ./*
 
 
 #############################################################################

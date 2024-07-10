@@ -2515,9 +2515,9 @@ static qboolean CG_DrawScoreboard( void ) {
 
 	if (menuScoreboard == NULL) {
 		if ( cgs.gametype >= GT_TEAM ) {
-			menuScoreboard = CG_Menus_FindByName("teamscore_menu");
+			menuScoreboard = Menus_FindByName("teamscore_menu");
 		} else {
-			menuScoreboard = CG_Menus_FindByName("score_menu");
+			menuScoreboard = Menus_FindByName("score_menu");
 		}
 	}
 

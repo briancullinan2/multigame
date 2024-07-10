@@ -1426,9 +1426,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_Beam( cent );
 		break;
 
-	case EV_PROXIMITY_MINE_STICK:
-	case EV_PROXIMITY_MINE_TRIGGER:
-		break;
 
 	case EV_CURSORSTART:
 		CG_Printf("Start cursor\n");
