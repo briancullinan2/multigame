@@ -6,6 +6,7 @@
 
 #include "ui_local.h"
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
 
 //
 // arena and bot info
@@ -302,3 +303,5 @@ char *UI_GetBotNameByNumber( int num ) {
 	}
 	return "Sarge";
 }
+
+#endif

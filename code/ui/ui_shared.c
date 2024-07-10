@@ -6,6 +6,8 @@
 #include "../cgame/cg_local.h"
 #endif
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+
 #define SCROLL_TIME_START					500
 #define SCROLL_TIME_ADJUST				150
 #define SCROLL_TIME_ADJUSTOFFSET	40
@@ -5776,4 +5778,6 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	}
 	return qfalse;
 }
+
+#endif
 

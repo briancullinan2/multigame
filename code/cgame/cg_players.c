@@ -2686,10 +2686,9 @@ void CG_Player( centity_t *cent ) {
 	if ( cent->currentState.number == cg.snap->ps.clientNum) {
 		if (!cg.renderingThirdPerson) {
 			renderfx = RF_THIRD_PERSON;			// only draw in mirrors
-		} else {
-			if (cg_cameraMode.integer) {
-				return;
-			}
+		}
+		else if (cg_cameraMode.integer) {
+			return;
 		}
 	}
 

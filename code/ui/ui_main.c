@@ -13,6 +13,8 @@ USER INTERFACE MAIN
 
 #include "ui_local.h"
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+
 uiInfo_t uiInfo;
 
 static const char *MonthAbbrev[] = {
@@ -5758,4 +5760,6 @@ static void UI_StartServerRefresh(qboolean full)
 		}
 	}
 }
+
+#endif
 

@@ -4,6 +4,7 @@
 
 #include "ui_local.h"
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
 
 #define UI_TIMER_GESTURE		2300
 #define UI_TIMER_JUMP			1000
@@ -1356,3 +1357,6 @@ void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_
 		UI_ForceTorsoAnim( pi, torsoAnim );
 	}
 }
+
+#endif
+

@@ -100,6 +100,9 @@ typedef enum {
 	GT_OBELISK,
 	GT_HARVESTER,
 #endif
+
+
+
 	GT_MAX_GAME_TYPE
 } gametype_t;
 

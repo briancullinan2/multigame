@@ -10,6 +10,8 @@
 	#define UI_CVAR( vmCvar, cvarName, defaultString, cvarFlags ) { & vmCvar, cvarName, defaultString, cvarFlags },
 #endif
 
+#if defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU)
+
 UI_CVAR( ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE )
 UI_CVAR( ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE )
 
@@ -65,6 +67,10 @@ UI_CVAR( ui_server14, "server14", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server15, "server15", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server16, "server16", "", CVAR_ARCHIVE )
 UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM )
+
+#endif
+
+
 UI_CVAR( ui_new, "ui_new", "0", CVAR_TEMP )
 UI_CVAR( ui_debug, "ui_debug", "0", CVAR_TEMP )
 UI_CVAR( ui_initialized, "ui_initialized", "0", CVAR_TEMP )

@@ -7,6 +7,9 @@
 **********************************************************************/
 #include "ui_local.h"
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+
+
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
 
 #ifndef BUILD_GAME_STATIC
@@ -513,3 +516,6 @@ qboolean UI_CursorInRect (int x, int y, int width, int height)
 
 	return qtrue;
 }
+
+#endif
+

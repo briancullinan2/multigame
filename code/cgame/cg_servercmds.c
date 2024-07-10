@@ -1165,7 +1165,7 @@ static void CG_ServerCommand( void ) {
 		}
 	}
 
-#ifdef USE_SINGLEPLAYER
+#ifdef USE_MULTIWORLD
 	if ( !strcmp( cmd, "exec" ) ) {
 		char	message[256];
 		trap_Args( message, sizeof( message ) );
