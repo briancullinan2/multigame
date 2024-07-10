@@ -21,7 +21,11 @@ CG_CVAR( cg_gibs, "cg_gibs", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_draw2D, "cg_draw2D", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawStatus, "cg_drawStatus", "1", CVAR_ARCHIVE )
 CG_CVAR( cg_drawTimer, "cg_drawTimer", "0", CVAR_ARCHIVE )
+#ifdef USE_MULTIWORLD
+CG_CVAR( cg_drawFPS, "cg_drawFPS", "1", CVAR_ARCHIVE )
+#else
 CG_CVAR( cg_drawFPS, "cg_drawFPS", "0", CVAR_ARCHIVE )
+#endif
 CG_CVAR( cg_drawSnapshot, "cg_drawSnapshot", "0", CVAR_ARCHIVE  )
 #ifdef USE_3D_WEAPONS
 CG_CVAR( cg_draw3dIcons, "cg_draw3dIcons", "2", CVAR_ARCHIVE )

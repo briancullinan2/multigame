@@ -440,6 +440,9 @@ static void PortalTouch( gentity_t *self, gentity_t *other, trace_t *trace) {
 		return;
 	}
 
+// TODO: if world != client->world 
+//  SendClientCommand("tele ")
+// TODO: update velocity on other entity after they joined with a wait think
 	TeleportPlayer_real( other, destination->s.pos.trBase, other->client->ps.viewangles, destination, self );
 }
 

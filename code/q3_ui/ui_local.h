@@ -467,6 +467,7 @@ typedef struct {
 	int					realtime;
 	float				cursorx;
 	float				cursory;
+	qboolean 		absolute;
 	int					menusp;
 	menuframework_s*	activemenu;
 	menuframework_s*	stack[MAX_MENUDEPTH];
@@ -504,7 +505,7 @@ typedef struct {
 extern void			UI_Init( void );
 extern void			UI_Shutdown( void );
 extern void			UI_KeyEvent( int key, int down );
-extern void			UI_MouseEvent( int dx, int dy );
+extern void			UI_MouseEvent( int dx, int dy, qboolean absolute );
 extern void			UI_Refresh( int realtime );
 extern qboolean		UI_ConsoleCommand( int realTime );
 extern float		UI_ClampCvar( float min, float max, float value );

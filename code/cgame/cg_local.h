@@ -1147,6 +1147,8 @@ typedef struct {
 typedef struct {
 	gameState_t		gameState;			// gamestate from server
 	glconfig_t		glconfig;			// rendering configuration
+
+	qboolean  absolute;
 	float			screenXScale;		// derived from glconfig
 	float			screenYScale;
 	
@@ -1314,7 +1316,7 @@ int CG_CrosshairPlayer( void );
 int CG_LastAttacker( void );
 void CG_LoadMenus(const char *menuFile);
 void CG_KeyEvent( int key, qboolean down );
-void CG_MouseEvent( int x, int y );
+void CG_MouseEvent( int x, int y, qboolean absolute );
 void CG_EventHandling( cgame_event_t type );
 void CG_RankRunFrame( void );
 void CG_SetScoreSelection(void *menu);

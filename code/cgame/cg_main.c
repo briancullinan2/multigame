@@ -83,7 +83,7 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
 #endif
-		CG_MouseEvent(arg0, arg1);
+		CG_MouseEvent(arg0, arg1, arg2);
 		return 0;
 	case CG_EVENT_HANDLING:
 		CG_EventHandling(arg0);
@@ -2141,10 +2141,21 @@ void CG_KeyEvent( int key, qboolean down )
 }
 
 
-void CG_MouseEvent( int x, int y )
+void CG_MouseEvent( int x, int y, qboolean absolute )
 {
-	cgs.cursorX += x * cgs.cursorScaleR;
-	cgs.cursorY += y * cgs.cursorScaleR;
+	if(x == -10000 && y == -10000) {
+		cgs.cursorX = 0;
+		cgs.cursorY = 0;
+		cgs.absolute = qtrue;
+	} else if(cgs.absolute) {
+		cgs.cursorX = x;
+		cgs.cursorY = y;
+		cgs.absolute = qfalse;
+	} else {
+		cgs.absolute = qfalse;
+		cgs.cursorX += x * cgs.cursorScaleR;
+		cgs.cursorY += y * cgs.cursorScaleR;
+	}
 
 	if ( cgs.cursorX < cgs.screenXmin ) {
 		cgs.cursorX = cgs.screenXmin;

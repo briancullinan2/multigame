@@ -1683,7 +1683,7 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
   }
 }
 
-void CG_MouseEvent(int x, int y) {
+void CG_MouseEvent(int x, int y, qboolean absolute) {
 	int n;
 
 	if ( cg.predictedPlayerState.pm_type == PM_NORMAL 

@@ -461,6 +461,7 @@ void CG_ProcessSnapshots( void ) {
 	//CG_Printf("worlds: %i\n", cgs.clientinfo[cg.snap->ps.clientNum].worlds);
 
 #ifdef USE_MULTIWORLD
+// TODO: use this same method serverside to spy on and modify entity trajectories, like rockets and moving players
 	// spy on snapshots from other CGVMs
 	if(cg.multiworld) {
 		int i;

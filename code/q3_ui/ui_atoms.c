@@ -878,7 +878,7 @@ void UI_KeyEvent( int key, int down ) {
 UI_MouseEvent
 =================
 */
-void UI_MouseEvent( int dx, int dy )
+void UI_MouseEvent( int dx, int dy, qboolean absolute )
 {
 	int				i;
 	menucommon_s*	m;
@@ -886,10 +886,21 @@ void UI_MouseEvent( int dx, int dy )
 	if ( !uis.activemenu )
 		return;
 
-	// update virtual mouse cursor coordinates
-	uis.cursorx += dx * uis.cursorScaleR;
-	uis.cursory += dy * uis.cursorScaleR;
-	
+	if(dx == -10000 && dy == -10000) {
+		uis.cursorx = 0;
+		uis.cursory = 0;
+		uis.absolute = qtrue;
+	} else if(uis.absolute || absolute) {
+		uis.cursorx = (dx - uis.biasX) / uis.scale; //* 640.0f / uis.glconfig.vidWidth;
+		uis.cursory = (dy - uis.biasY) / uis.scale; // * 480.0f / uis.glconfig.vidHeight;
+		uis.absolute = qfalse;
+	} else {
+		uis.absolute = qfalse;
+		// update virtual mouse cursor coordinates
+		uis.cursorx += dx * uis.cursorScaleR;
+		uis.cursory += dy * uis.cursorScaleR;
+	}
+
 	// clamp virtual coordinates
 	if ( uis.cursorx < uis.screenXmin )
 		uis.cursorx = uis.screenXmin;
@@ -1230,7 +1241,7 @@ void UI_Refresh( int realtime )
 			Menu_Draw( uis.activemenu );
 
 		if( uis.firstdraw ) {
-			UI_MouseEvent( 0, 0 );
+			UI_MouseEvent( 0, 0, qfalse );
 			uis.firstdraw = qfalse;
 		}
 	}

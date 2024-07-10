@@ -44,7 +44,7 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 		return 0;
 
 	case UI_MOUSE_EVENT:
-		UI_MouseEvent( arg0, arg1 );
+		UI_MouseEvent( arg0, arg1, arg2 );
 		return 0;
 
 	case UI_REFRESH:
