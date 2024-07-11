@@ -2946,9 +2946,6 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 //#ifdef USE_BIRDS_EYE
 //		|| cg_birdsEye.integer || cg.predictedPlayerState.pm_type == PM_BIRDSEYE
 //#endif
-#ifdef USE_CLASSIC_HUD
-			|| cg.editPlayerMode
-#endif
 	) {
 		float x, y, w, h;
 		trap_R_SetColor( NULL );
@@ -3209,14 +3206,17 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 #ifdef USE_CLASSIC_HUD
 	if(cg.editPlayerMode) {
-		if(!menuEditPlayer) {
-			menuEditPlayer = Menus_FindByName("player_menu");
-			Menus_Activate(menuEditPlayer);
-		}
-
+		float x, y, w, h;
 		if(menuEditPlayer) {
 			Menu_Paint(menuEditPlayer, qtrue);
 		}
+		trap_R_SetColor( NULL );
+		x = cgs.cursorX - 12;
+		y = cgs.cursorY - 12;
+		w = 24;
+		h = 24;
+		CG_AdjustFrom640( &x, &y, &w, &h );
+		trap_R_DrawStretchPic( x, y, w, h, 0, 0, 1, 1, cgs.media.cursor );
 	}
 #endif
 

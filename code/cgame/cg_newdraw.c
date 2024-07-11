@@ -1707,8 +1707,16 @@ void CG_MouseEvent(int x, int y, qboolean absolute) {
 			|| cg.predictedPlayerState.pm_type == PM_REVERSEDUPSIDEDOWN
 #endif
 			|| (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse) ) {
-    trap_Key_SetCatcher(0);
-		return;
+
+#ifdef USE_CLASSIC_HUD
+		if(cg.editPlayerMode)
+			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
+		else
+#endif
+		{
+			trap_Key_SetCatcher(0);
+			return;
+		}
 	}
 
 	cgs.cursorX+= x;
@@ -1818,8 +1826,15 @@ void CG_KeyEvent(int key, qboolean down) {
 #endif
 			|| (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse)) {
 		CG_EventHandling(CGAME_EVENT_NONE);
-    trap_Key_SetCatcher(0);
-		return;
+#ifdef USE_CLASSIC_HUD
+		if(!cg.editPlayerMode)
+			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
+		else
+#endif
+		{
+			trap_Key_SetCatcher(0);
+			return;
+		}
 	}
 
   //if (key == trap_Key_GetKey("teamMenu") || !Display_CaptureItem(cgs.cursorX, cgs.cursorY)) {

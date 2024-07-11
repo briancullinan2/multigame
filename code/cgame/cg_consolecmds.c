@@ -112,6 +112,7 @@ static void CG_ScoresUp_f( void ) {
 
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
+extern menuDef_t *menuEditPlayer;
 extern menuDef_t *menuScoreboard;
 void Menu_Reset( void );			// FIXME: add to right include file
 
@@ -479,6 +480,11 @@ void CG_StartCamera( const char *name, qboolean startBlack ) {
 		if(Q_stristr(name, "_playeredit") != NULL) {
 			cg.editPlayerMode = qtrue;
 			cg.pauseBreak = cg.time + 5000; // we know the camera is 7 seconds long
+			if(!menuEditPlayer) {
+				menuEditPlayer = Menus_FindByName("player_menu");
+				Menus_Activate(menuEditPlayer);
+			}
+			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
 		}
 #endif
 
