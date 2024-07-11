@@ -1225,7 +1225,7 @@ typedef struct {
 	int				teamChatPos;
 	int				teamLastChatPos;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	qboolean eventHandling;
 	qboolean mouseCaptured;
 	qboolean sizingHud;

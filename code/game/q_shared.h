@@ -267,6 +267,11 @@
 #define USE_MULTIWORLD 1
 #define MAX_WORLDS 10
 
+// loads the standard Q3 hud if the mod is missing a huds.txt file.
+#define USE_CLASSIC_HUD 1
+// loads the standard Q3 menu if the mod is missing a menus.txt file.
+#define USE_CLASSIC_MENU 1
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

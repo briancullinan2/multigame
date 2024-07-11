@@ -10,6 +10,17 @@ SINGLE PLAYER POSTGAME MENU
 
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_ProportionalStringWidth UI_CLASSIC_ProportionalStringWidth
+#define UI_DrawNamedPic UI_CLASSIC_DrawNamedPic 
+#endif
+
 #define MAX_SCOREBOARD_CLIENTS		8
 
 #define AWARD_PRESENTATION_TIME		2000

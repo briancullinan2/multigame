@@ -5,7 +5,7 @@
 #include "cg_local.h"
 
 // for the voice chats
-#ifdef MISSIONPACK // bk001205
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD) // bk001205
 #include "../../ui/menudef.h"
 #endif
 //==========================================================================

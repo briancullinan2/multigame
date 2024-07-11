@@ -11,6 +11,22 @@ USER INTERFACE MAIN
 
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+
+#define UI_Init UI_CLASSIC_Init
+#define UI_Shutdown UI_CLASSIC_Shutdown
+#define UI_KeyEvent UI_CLASSIC_KeyEvent
+#define UI_MouseEvent UI_CLASSIC_MouseEvent
+#define UI_Refresh UI_CLASSIC_Refresh
+#define UI_ConsoleCommand UI_CLASSIC_ConsoleCommand
+#define UI_Refresh UI_CLASSIC_Refresh
+#define UI_IsFullscreen UI_CLASSIC_IsFullscreen
+#define UI_SetActiveMenu UI_CLASSIC_SetActiveMenu
+#define UI_DrawConnectScreen UI_CLASSIC_DrawConnectScreen
+
+#endif
+
+#ifndef USE_CLASSIC_MENU
 
 /*
 ================
@@ -73,11 +89,13 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 }
 
 
+
 /*
 ================
 cvars
 ================
 */
+
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -101,7 +119,6 @@ static cvarTable_t		cvarTable[] = {
 
 // bk001129 - made static to avoid aliasing
 static int cvarTableSize = sizeof(cvarTable) / sizeof(cvarTable[0]);
-
 
 /*
 =================
@@ -131,6 +148,8 @@ void UI_UpdateCvars( void ) {
 	}
 }
 
+
+#endif
 
 /*
 =================

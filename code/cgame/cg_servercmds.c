@@ -6,7 +6,7 @@
 
 #include "cg_local.h"
 
-#ifdef MISSIONPACK // bk001204
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD) // bk001204
 #include "../../ui/menudef.h" // bk001205 - for Q3_ui as well
 
 typedef struct {

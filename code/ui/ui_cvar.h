@@ -10,7 +10,7 @@
 	#define UI_CVAR( vmCvar, cvarName, defaultString, cvarFlags ) { & vmCvar, cvarName, defaultString, cvarFlags },
 #endif
 
-#if defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU)
+#if defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU) || defined(EXTERN_UI_CVAR)
 
 UI_CVAR( ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE )
 UI_CVAR( ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE )
@@ -67,6 +67,8 @@ UI_CVAR( ui_server14, "server14", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server15, "server15", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server16, "server16", "", CVAR_ARCHIVE )
 UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM )
+
+UI_CVAR( ui_developer, "developer", "0", 0 )
 
 #endif
 
@@ -135,7 +137,5 @@ UI_CVAR( ui_teamArenaFirstRun, "ui_teamArenaFirstRun", "0", CVAR_ARCHIVE )
 UI_CVAR( ui_realWarmUp, "g_warmup", "20", CVAR_ARCHIVE )
 UI_CVAR( ui_realCaptureLimit, "capturelimit", "8", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART )
 UI_CVAR( ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE )
-
-UI_CVAR( ui_developer, "developer", "0", 0 )
 
 #undef UI_CVAR

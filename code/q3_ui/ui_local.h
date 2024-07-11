@@ -287,7 +287,11 @@ extern void TeamMain_Cache( void );
 //
 // ui_connect.c
 //
+#ifdef USE_CLASSIC_MENU
+extern void UI_CLASSIC_DrawConnectScreen( qboolean overlay );
+#else
 extern void UI_DrawConnectScreen( qboolean overlay );
+#endif
 
 //
 // ui_controls2.c
@@ -454,10 +458,21 @@ typedef struct {
 	int				realWeapon;
 } playerInfo_t;
 
+#ifdef USE_CLASSIC_MENU
+
+void UI_CLASSIC_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time );
+void UI_CLASSIC_PlayerInfo_SetModel( playerInfo_t *pi, const char *model );
+void UI_CLASSIC_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNum, qboolean chat );
+qboolean UI_CLASSIC_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName );
+
+#else
+
 void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time );
 void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model );
 void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNum, qboolean chat );
 qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName );
+
+#endif
 
 //
 // ui_atoms.c
@@ -502,6 +517,45 @@ typedef struct {
 	int startTime;
 } uiStatic_t;
 
+
+#ifdef USE_CLASSIC_MENU
+
+extern void			UI_CLASSIC_Init( void );
+extern void			UI_CLASSIC_Shutdown( void );
+extern void			UI_CLASSIC_KeyEvent( int key, int down );
+extern void			UI_CLASSIC_MouseEvent( int dx, int dy, qboolean absolute );
+extern void			UI_CLASSIC_Refresh( int realtime );
+extern qboolean		UI_CLASSIC_ConsoleCommand( int realTime );
+extern float		UI_CLASSIC_ClampCvar( float min, float max, float value );
+extern void			UI_CLASSIC_DrawNamedPic( float x, float y, float width, float height, const char *picname );
+extern void			UI_CLASSIC_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ); 
+extern void			UI_CLASSIC_FillRect( float x, float y, float width, float height, const float *color );
+extern void			UI_CLASSIC_DrawRect( float x, float y, float width, float height, const float *color );
+extern void			UI_CLASSIC_UpdateScreen( void );
+extern void			UI_CLASSIC_SetColor( const float *rgba );
+extern void			UI_CLASSIC_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
+extern void			UI_CLASSIC_DrawBannerString( int x, int y, const char* str, int style, vec4_t color );
+extern float		UI_CLASSIC_ProportionalSizeScale( int style );
+extern void			UI_CLASSIC_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color );
+extern void			UI_DrawProportionalString_AutoWrapped( int x, int ystart, int xmax, int ystep, const char* str, int style, vec4_t color );
+extern int			UI_CLASSIC_ProportionalStringWidth( const char* str );
+extern void			UI_CLASSIC_DrawString( int x, int y, const char* str, int style, vec4_t color );
+extern void			UI_CLASSIC_DrawChar( int x, int y, int ch, int style, vec4_t color );
+extern qboolean 	UI_CLASSIC_CursorInRect (int x, int y, int width, int height);
+extern void			UI_CLASSIC_AdjustFrom640( float *x, float *y, float *w, float *h );
+extern void			UI_CLASSIC_DrawTextBox (int x, int y, int width, int lines);
+extern qboolean		UI_CLASSIC_IsFullscreen( void );
+extern void			UI_CLASSIC_SetActiveMenu( uiMenuCommand_t menu );
+extern void			UI_CLASSIC_PushMenu ( menuframework_s *menu );
+extern void			UI_CLASSIC_PopMenu (void);
+extern void			UI_CLASSIC_ForceMenuOff (void);
+extern char			*UI_Argv( int arg );
+extern char			*UI_Cvar_VariableString( const char *var_name );
+extern void			UI_CLASSIC_Refresh( int time );
+extern void			UI_StartDemoLoop( void );
+
+#else
+
 extern void			UI_Init( void );
 extern void			UI_Shutdown( void );
 extern void			UI_KeyEvent( int key, int down );
@@ -535,6 +589,9 @@ extern char			*UI_Argv( int arg );
 extern char			*UI_Cvar_VariableString( const char *var_name );
 extern void			UI_Refresh( int time );
 extern void			UI_StartDemoLoop( void );
+
+#endif
+
 extern qboolean		m_entersound;
 extern uiStatic_t	uis;
 
@@ -700,9 +757,19 @@ int UI_GetNumArenas( void );
 int UI_GetNumSPArenas( void );
 int UI_GetNumSPTiers( void );
 
+#ifdef USE_CLASSIC_MENU
+
+char *UI_CLASSIC_GetBotInfoByNumber( int num );
+char *UI_CLASSIC_GetBotInfoByName( const char *name );
+int UI_CLASSIC_GetNumBots( void );
+
+#else
+
 char *UI_GetBotInfoByNumber( int num );
 char *UI_GetBotInfoByName( const char *name );
 int UI_GetNumBots( void );
+
+#endif
 
 void UI_GetBestScore( int level, int *score, int *skill );
 void UI_SetBestScore( int level, int score );

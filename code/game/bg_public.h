@@ -95,7 +95,7 @@ typedef enum {
 
 	GT_TEAM,			// team deathmatch
 	GT_CTF,				// capture the flag
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
 	GT_1FCTF,
 	GT_OBELISK,
 	GT_HARVESTER,

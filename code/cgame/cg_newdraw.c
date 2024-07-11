@@ -1,12 +1,12 @@
 
-#ifndef MISSIONPACK // bk001204
-#error This file not be used for classic Q3A.
-#endif
-
 #include "cg_local.h"
 #include "../ui/ui_shared.h"
 
-#ifdef MISSIONPACK
+#if !defined(MISSIONPACK) && !defined(USE_CLASSIC_HUD) // bk001204
+#error This file not be used for classic Q3A.
+#endif
+
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 
 
 extern displayContextDef_t cgDC;
@@ -1685,6 +1685,13 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
 
 void CG_MouseEvent(int x, int y, qboolean absolute) {
 	int n;
+#ifdef USE_CLASSIC_HUD
+		if(cg_hudFiles.string[0] == '\0') {
+			CG_CLASSIC_MouseEvent(x, y, absolute);
+			return;
+		}
+#endif
+
 
 	if ( cg.predictedPlayerState.pm_type == PM_NORMAL 
 #ifdef USE_BIRDS_EYE
@@ -1766,6 +1773,12 @@ CG_EventHandling
 
 */
 void CG_EventHandling(cgame_event_t type) {
+#ifdef USE_CLASSIC_HUD
+	if(cg_hudFiles.string[0] == '\0') {
+		return;
+	}
+#endif
+
 	cgs.eventHandling = type;
   if (type == CGAME_EVENT_NONE) {
     CG_HideTeamMenu();
@@ -1779,6 +1792,12 @@ void CG_EventHandling(cgame_event_t type) {
 
 
 void CG_KeyEvent(int key, qboolean down) {
+#ifdef USE_CLASSIC_HUD
+		if(cg_hudFiles.string[0] == '\0') {
+			CG_CLASSIC_KeyEvent(key, down);
+			return;
+		}
+#endif
 
 	if (!down) {
 		return;

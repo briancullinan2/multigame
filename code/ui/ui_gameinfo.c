@@ -3,11 +3,12 @@
 //
 // gameinfo.c
 //
-#ifndef MISSIONPACK
-#error this file is for mission pack -DMISSIONPACK=1
-#endif
 
 #include "ui_local.h"
+
+#if !defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU)
+#error this file is for mission pack -DMISSIONPACK=1
+#endif
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
 
@@ -16,7 +17,7 @@
 //
 
 
-int				ui_numBots;
+static int		ui_numBots;
 static char		*ui_botInfos[MAX_BOTS];
 
 static int		ui_numArenas;

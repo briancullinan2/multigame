@@ -32,7 +32,7 @@
 #include "match.h"
 
 // for the voice chats
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../../ui/menudef.h"
 #endif
 

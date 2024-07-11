@@ -5,6 +5,14 @@
 #include "ui_local.h"
 
 
+#ifdef USE_CLASSIC_MENU
+#define UI_DrawPlayer UI_CLASSIC_DrawPlayer
+#define UI_PlayerInfo_SetModel UI_CLASSIC_PlayerInfo_SetModel
+#define UI_PlayerInfo_SetInfo UI_CLASSIC_PlayerInfo_SetInfo
+#define UI_RegisterClientModelname UI_CLASSIC_RegisterClientModelname
+#define UI_AdjustFrom640 UI_CLASSIC_AdjustFrom640
+#endif
+
 #define UI_TIMER_GESTURE		2300
 #define UI_TIMER_JUMP			1000
 #define UI_TIMER_LAND			130
@@ -667,7 +675,12 @@ static float	UI_MachinegunSpinAngle( playerInfo_t *pi ) {
 UI_DrawPlayer
 ===============
 */
-void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time ) {
+#ifdef USE_CLASSIC_MENU
+void UI_CLASSIC_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time ) 
+#else
+void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time ) 
+#endif
+{
 	refdef_t		refdef;
 	refEntity_t		legs;
 	refEntity_t		torso;
@@ -1047,7 +1060,12 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 UI_RegisterClientModelname
 ==========================
 */
-qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName ) {
+#ifdef USE_CLASSIC_MENU
+qboolean UI_CLASSIC_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName ) 
+#else
+qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName ) 
+#endif
+{
 	char		modelName[MAX_QPATH];
 	char		skinName[MAX_QPATH];
 	char		filename[MAX_QPATH];
@@ -1119,9 +1137,18 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 UI_PlayerInfo_SetModel
 ===============
 */
-void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model ) {
+#ifdef USE_CLASSIC_MENU
+void UI_CLASSIC_PlayerInfo_SetModel( playerInfo_t *pi, const char *model ) 
+#else
+void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model ) 
+#endif
+{
 	memset( pi, 0, sizeof(*pi) );
+#ifdef USE_CLASSIC_MENU
+	UI_CLASSIC_RegisterClientModelname( pi, model );
+#else
 	UI_RegisterClientModelname( pi, model );
+#endif
 	pi->weapon = WP_MACHINEGUN;
 	pi->currentWeapon = pi->weapon;
 	pi->lastWeapon = pi->weapon;
@@ -1138,7 +1165,12 @@ void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model ) {
 UI_PlayerInfo_SetInfo
 ===============
 */
-void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) {
+#ifdef USE_CLASSIC_MENU
+void UI_CLASSIC_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) 
+#else
+void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) 
+#endif
+{
 	int			currentAnim;
 	weapon_t	weaponNum;
 

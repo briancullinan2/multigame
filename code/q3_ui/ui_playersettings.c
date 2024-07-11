@@ -2,6 +2,20 @@
 //
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_SetColor UI_CLASSIC_SetColor
+#define UI_PlayerInfo_SetModel UI_CLASSIC_PlayerInfo_SetModel
+#define UI_PlayerInfo_SetInfo UI_CLASSIC_PlayerInfo_SetInfo
+#define UI_DrawPlayer UI_CLASSIC_DrawPlayer
+#define UI_DrawHandlePic UI_CLASSIC_DrawHandlePic
+#endif
+
 #define ART_FRAMEL			"menu/art/frame2_l"
 #define ART_FRAMER			"menu/art/frame1_r"
 #define ART_MODEL0			"menu/art/model_0"

@@ -148,7 +148,7 @@ vmCvar_t  ui_teamArenaFirstRun;
 void _UI_Init( qboolean );
 void _UI_Shutdown( void );
 void _UI_KeyEvent( int key, qboolean down );
-void _UI_MouseEvent( int dx, int dy );
+void _UI_MouseEvent( int dx, int dy, qboolean absolute );
 void _UI_Refresh( int realtime );
 qboolean _UI_IsFullscreen( void );
 
@@ -176,7 +176,7 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 		  return 0;
 
 	  case UI_MOUSE_EVENT:
-		  _UI_MouseEvent( arg0, arg1 );
+		  _UI_MouseEvent( arg0, arg1, arg2 );
 		  return 0;
 
 	  case UI_REFRESH:
@@ -603,6 +603,13 @@ void _UI_Refresh( int realtime )
 	//	return;
 	//}
 
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		UI_CLASSIC_Refresh( realtime );
+		return;
+	}
+#endif
+
 	uiInfo.uiDC.frameTime = realtime - uiInfo.uiDC.realTime;
 	uiInfo.uiDC.realTime = realtime;
 
@@ -928,6 +935,10 @@ qboolean Load_Menu(int handle) {
 	return qfalse;
 }
 
+#ifdef USE_CLASSIC_MENU
+void UI_CLASSIC_Init( void );
+#endif
+
 void UI_LoadMenus(const char *menuFile, qboolean reset) {
 	pc_token_t token;
 	int handle;
@@ -937,11 +948,21 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 
 	handle = trap_PC_LoadSource( menuFile );
 	if (!handle) {
+#ifdef USE_CLASSIC_MENU
+		trap_Print( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
+		handle = trap_PC_LoadSource( "ui/menus.txt" );
+		if (!handle) {
+			trap_Print( va( S_COLOR_RED "default menu file not found: ui/menus.txt, using vanilla menu!\n", menuFile ) );
+			trap_Cvar_Set( "ui_menuFiles", "" );
+			return;
+		}
+#else
 		trap_Error( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
 		handle = trap_PC_LoadSource( "ui/menus.txt" );
 		if (!handle) {
 			trap_Error( va( S_COLOR_RED "default menu file not found: ui/menus.txt, unable to continue!\n", menuFile ) );
 		}
+#endif
 	}
 
 	ui_new.integer = 1;
@@ -5124,16 +5145,16 @@ void _UI_Init( qboolean inGameLoad ) {
 		menuSet = "ui/menus.txt";
 	}
 
-#if 0
-	if (uiInfo.inGameLoad) {
-		UI_LoadMenus("ui/ingame.txt", qtrue);
-	} else { // bk010222: left this: UI_LoadMenus(menuSet, qtrue);
-	}
-#else 
 	UI_LoadMenus(menuSet, qtrue);
 	UI_LoadMenus("ui/ingame.txt", qfalse);
-#endif
 	
+#ifdef USE_CLASSIC_MENU
+	if(*UI_Cvar_VariableString("ui_menuFiles") == '\0')
+	{
+		UI_CLASSIC_Init();
+	}
+#endif
+
 	Menus_CloseAll();
 
 	trap_LAN_LoadCachedServers();
@@ -5169,6 +5190,14 @@ UI_KeyEvent
 */
 void _UI_KeyEvent( int key, qboolean down ) {
 
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		UI_CLASSIC_KeyEvent(key, down);
+		return;
+	}
+#endif
+
+
   if (Menu_Count() > 0) {
     menuDef_t *menu = Menu_GetFocused();
 		if (menu) {
@@ -5194,8 +5223,16 @@ void _UI_KeyEvent( int key, qboolean down ) {
 UI_MouseEvent
 =================
 */
-void _UI_MouseEvent( int dx, int dy )
+void _UI_MouseEvent( int dx, int dy, qboolean absolute )
 {
+
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		UI_CLASSIC_MouseEvent( dx, dy, absolute );
+		return;
+	}
+#endif
+
 	// update mouse screen position
 	uiInfo.uiDC.cursorx += dx;
 	if (uiInfo.uiDC.cursorx < 0)
@@ -5228,6 +5265,15 @@ void UI_LoadNonIngame( void ) {
 
 void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 	char buf[256];
+
+#ifdef USE_CLASSIC_MENU
+	uiInfo.activeMenu = menu;
+	if(*UI_Cvar_VariableString("ui_menuFiles") == '\0')
+	{
+		UI_CLASSIC_SetActiveMenu(menu);
+		return;
+	}
+#endif
 
 	// this should be the ONLY way the menu system is brought up
 	// enusure minumum menu data is cached
@@ -5299,6 +5345,13 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 }
 
 qboolean _UI_IsFullscreen( void ) {
+
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		return UI_CLASSIC_IsFullscreen();
+	}
+#endif
+
 	return Menus_AnyFullScreenVisible();
 }
 
@@ -5573,7 +5626,15 @@ typedef struct {
 	char		*cvarName;
 	char		*defaultString;
 	int			cvarFlags;
+	int     modifiedCount;
 } cvarTable_t;
+
+#ifdef USE_CLASSIC_MENU
+#define DECLARE_UI_CVAR
+	#include "../q3_ui/ui_cvar.h"
+#undef DECLARE_UI_CVAR
+#endif
+
 
 #define DECLARE_UI_CVAR
 	#include "ui_cvar.h"
@@ -5582,11 +5643,18 @@ typedef struct {
 // bk001129 - made static to avoid aliasing
 static cvarTable_t		cvarTable[] = {
 
+#ifdef USE_CLASSIC_MENU
+#define UI_CVAR_LIST
+	#include "../q3_ui/ui_cvar.h"
+#undef UI_CVAR_LIST
+#endif
+
 #define UI_CVAR_LIST
 	#include "ui_cvar.h"
 #undef UI_CVAR_LIST
 
 };
+
 
 // bk001129 - made static to avoid aliasing
 static int		cvarTableSize = sizeof(cvarTable) / sizeof(cvarTable[0]);
@@ -5603,8 +5671,14 @@ void UI_RegisterCvars( void ) {
 
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
+		cv->modifiedCount = cv->vmCvar->modificationCount;
 	}
 }
+
+#ifdef USE_CLASSIC_MENU
+void UpdatePreferences( void );
+void UI_SetActiveMenu( uiMenuCommand_t menu );
+#endif
 
 /*
 =================
@@ -5617,7 +5691,31 @@ void UI_UpdateCvars( void ) {
 
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Update( cv->vmCvar );
+
+#ifdef USE_CLASSIC_MENU
+		if(cv->vmCvar->modificationCount != cvarTable[i].modifiedCount) {
+
+			if(cv->vmCvar == &ui_menuFiles) {
+				if(ui_menuFiles.string[0] == '\0') {
+					//if(!uis.charset) {
+						UI_CLASSIC_Init();
+					//}
+					UI_CLASSIC_SetActiveMenu(uiInfo.activeMenu);
+				} else {
+					//if(!uiInfo.startTime) {
+						UI_LoadMenus(ui_menuFiles.string, qtrue);
+					//}
+					_UI_SetActiveMenu(uiInfo.activeMenu);
+				}
+				UpdatePreferences();
+			}
+
+			cv->modifiedCount = cv->vmCvar->modificationCount;
+		}
+#endif
 	}
+
+
 }
 
 

@@ -5,7 +5,7 @@
 
 #include "cg_local.h"
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../ui/ui_shared.h"
 
 // used for scoreboard
@@ -22,7 +22,7 @@ char systemChat[256];
 char teamChat1[256];
 char teamChat2[256];
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 
 int CG_Text_Width(const char *text, float scale, int limit) {
   int count,len;
@@ -188,7 +188,7 @@ CG_DrawField
 Draws large numbers for status bar and powerups
 ==============
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static void CG_DrawField (int x, int y, int width, int value) {
 	char	num[16], *ptr;
 	int		l;
@@ -467,7 +467,7 @@ CG_DrawStatusBarHead
 
 ================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 
 static void CG_DrawStatusBarHead( float x ) {
 	vec3_t		angles;
@@ -527,7 +527,7 @@ CG_DrawStatusBarFlag
 
 ================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static void CG_DrawStatusBarFlag( float x, int team ) {
 	CG_DrawFlagModel( x, cgs.screenYmax + 1 - ICON_SIZE, ICON_SIZE, ICON_SIZE, team, qfalse );
 }
@@ -577,7 +577,7 @@ void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team )
 CG_DrawStatusBar
 ================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #define STATUSBAR_HEIGHT 60
 static void CG_DrawStatusBar( void ) {
 	int			color;
@@ -1179,7 +1179,7 @@ CG_DrawScores
 Draw the small two score display
 =================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static float CG_DrawScores( float y ) {
 	const char	*s;
 	int			s1, s2, score;
@@ -1514,7 +1514,7 @@ static float CG_DrawPowerups( float y ) {
 CG_DrawPowerups
 ================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static float CG_DrawPowerups( float y ) {
 	int		sorted[MAX_POWERUPS];
 	int		sortedTime[MAX_POWERUPS];
@@ -1618,7 +1618,7 @@ CG_DrawLowerRight
 
 =====================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static void CG_DrawLowerRight( void ) {
 	float	y;
 
@@ -1639,7 +1639,7 @@ static void CG_DrawLowerRight( void ) {
 CG_DrawPickupItem
 ===================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static int CG_DrawPickupItem( int y ) {
 	int		value;
 	float	*fadeColor;
@@ -1683,7 +1683,7 @@ static int CG_DrawPickupItem( int y ) {
 CG_DrawLowerLeft
 =====================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static void CG_DrawLowerLeft( void ) {
 	float	y;
 
@@ -1777,7 +1777,7 @@ static void CG_DrawTeamInfo( void ) {
 CG_DrawHoldableItem
 ===================
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 static void CG_DrawHoldableItem( void ) { 
 	int		value;
 
@@ -2011,6 +2011,12 @@ static void CG_DrawLagometer( void ) {
 	// draw the graph
 	//
 #ifdef MISSIONPACK
+#ifdef USE_CLASSIC_HUD
+	if(cg_hudFiles.string[0] == '\0') {
+	x = cgs.screenXmax + 1 - 48;
+	y = cgs.screenYmax + 1 - 48;
+	}
+#endif
 	x = cgs.screenXmax + 1 - 48;
 	y = cgs.screenYmax + 1 - 144;
 #else
@@ -2781,7 +2787,7 @@ static void CG_DrawWarmup( void ) {
 
 
 //==================================================================================
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 /* 
 =================
 CG_DrawTimedMenus
@@ -2840,7 +2846,12 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		// don't draw any status if dead or the scoreboard is being explicitly shown
 		if ( !cg.showScores && cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
+#ifdef USE_CLASSIC_HUD
+      if(cg_hudFiles.string[0] == '\0') {
+        CG_DrawStatusBar();
+      } else
+#endif
 			if ( cg_drawStatus.integer ) {
 				Menu_PaintAll();
 				CG_DrawTimedMenus();
@@ -2863,6 +2874,11 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 			CG_DrawHoldableItem();
 #endif
 #else
+#ifdef USE_CLASSIC_HUD
+      if(cg_hudFiles.string[0] == '\0') {
+				CG_DrawHoldableItem();
+      }
+#endif
 			//CG_DrawPersistantPowerup();
 #endif
 			CG_DrawReward();
@@ -2891,6 +2907,12 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 #ifndef MISSIONPACK
 	CG_DrawLowerRight();
 	CG_DrawLowerLeft();
+#endif
+#ifdef USE_CLASSIC_HUD
+	if(cg_hudFiles.string[0] == '\0') {
+		CG_DrawLowerRight();
+		CG_DrawLowerLeft();
+	}
 #endif
 
 	if ( !CG_DrawFollow() ) {

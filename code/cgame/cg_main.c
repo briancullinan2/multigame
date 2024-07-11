@@ -3,7 +3,7 @@
 // cg_main.c -- initialization and primary entry point for cgame
 #include "cg_local.h"
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../ui/ui_shared.h"
 // display context for new ui stuff
 displayContextDef_t cgDC;
@@ -17,6 +17,10 @@ static int teamColorsModificationCount = -1;
 static int atmosphereModificationCount = -1;
 static int weaponsOrderModificationCount = -1; //WarZone
 static int gametypeModificationCount = -1;
+
+#ifdef USE_CLASSIC_HUD
+static int hudFilesModificationCount = -1;
+#endif
 
 static int rmodeModificationCount = -1;
 static int raspectModificationCount = -1;
@@ -152,6 +156,9 @@ void CG_RegisterCvars( void ) {
 	atmosphereModificationCount = cg_atmosphere.modificationCount;
 	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
 	gametypeModificationCount = cg_gametype.modificationCount; 
+#ifdef USE_CLASSIC_HUD
+	hudFilesModificationCount = cg_hudFiles.modificationCount;
+#endif
 
 	rmodeModificationCount = cg_mode.modificationCount;
 	raspectModificationCount = cg_aspect.modificationCount;
@@ -210,6 +217,15 @@ void CG_UpdateCvars( void ) {
 	}
 
 	// check for modications here
+
+#ifdef USE_CLASSIC_HUD
+	if(hudFilesModificationCount != cg_hudFiles.modificationCount) {
+		hudFilesModificationCount = cg_hudFiles.modificationCount;
+		if(cg_hudFiles.string[0] == '\0') {
+			CG_LoadMenus(cg_hudFiles.string);
+		}
+	}
+#endif
 
 	// If team overlay is on, ask for updates from the server.  If its off,
 	// let the server know so we don't receive it
@@ -1144,7 +1160,10 @@ void CG_StartMusic( void ) {
 
 	trap_S_StartBackgroundTrack( parm1, parm2 );
 }
-#ifdef MISSIONPACK
+
+
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
+
 char *CG_GetMenuBuffer(const char *filename) {
 	int	len;
 	fileHandle_t	f;
@@ -1405,11 +1424,21 @@ void CG_LoadMenus(const char *menuFile) {
 
 	len = trap_FS_FOpenFile( menuFile, &f, FS_READ );
 	if ( !f ) {
+#ifdef USE_CLASSIC_HUD
+		trap_Print( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
+		len = trap_FS_FOpenFile( "ui/hud.txt", &f, FS_READ );
+		if (!f) {
+			trap_Print( va( S_COLOR_RED "default menu file not found: ui/hud.txt, using vanilla hud!\n", menuFile ) );
+			trap_Cvar_Set( "cg_hudFiles", "" );
+			return;
+		}
+#else
 		trap_Error( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
 		len = trap_FS_FOpenFile( "ui/hud.txt", &f, FS_READ );
 		if (!f) {
 			trap_Error( va( S_COLOR_RED "default menu file not found: ui/hud.txt, unable to continue!\n", menuFile ) );
 		}
+#endif
 	}
 
 	if ( len >= MAX_MENUDEFFILE ) {
@@ -1648,18 +1677,16 @@ static void CG_FeederSelection(float feederID, int index) {
 		cg.selectedScore = index;
 	}
 }
-#endif
 
-#ifdef MISSIONPACK
+
 static float CG_Cvar_Get(const char *cvar) {
 	char buff[128];
 	memset(buff, 0, sizeof(buff));
 	trap_Cvar_VariableStringBuffer(cvar, buff, sizeof(buff));
 	return atof(buff);
 }
-#endif
 
-#ifdef MISSIONPACK
+
 void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
 	CG_Text_Paint(x, y, scale, color, text, 0, limit, style);
 }
@@ -1800,6 +1827,7 @@ void CG_AssetCache( void ) {
 	cgDC.Assets.sliderBar = trap_R_RegisterShaderNoMip( ASSET_SLIDER_BAR );
 	cgDC.Assets.sliderThumb = trap_R_RegisterShaderNoMip( ASSET_SLIDER_THUMB );
 }
+
 #endif
 
 
@@ -1993,7 +2021,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 
 	trap_CM_LoadMap( cgs.mapname );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	String_Init();
 #endif
 
@@ -2028,7 +2056,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 
 	CG_RegisterClients();		// if low on memory, some clients will be deferred
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	CG_AssetCache();
 	CG_LoadHudMenu();      // load new hud stuff
 #endif
@@ -2081,7 +2109,7 @@ CG_EventHandling
       2 - scoreboard
       3 - hud editor
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU) && !defined(USE_CLASSIC_HUD)
 void CG_EventHandling( cgame_event_t type ) 
 {
 
@@ -2125,9 +2153,13 @@ void CG_SetScoreCatcher( qboolean enable )
 	}
 }
 
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_MENU) || defined(USE_CLASSIC_HUD)
 
+#ifdef USE_CLASSIC_HUD
+void CG_CLASSIC_KeyEvent( int key, qboolean down ) 
+#else
 void CG_KeyEvent( int key, qboolean down ) 
+#endif
 {
 	// process scoreboard clicks etc.
 	if ( cgs.score_catched && down ) 
@@ -2142,7 +2174,11 @@ void CG_KeyEvent( int key, qboolean down )
 }
 
 
+#ifdef USE_CLASSIC_HUD
+void CG_CLASSIC_MouseEvent( int x, int y, qboolean absolute )
+#else
 void CG_MouseEvent( int x, int y, qboolean absolute )
+#endif
 {
 	if(x == -10000 && y == -10000) {
 		cgs.cursorX = 0;

@@ -12,6 +12,15 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #include "ui_local.h"
 #include "../game/q_shared.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#endif
+
 
 #define REFRESH_DELAY			10	  // in ms
 #define MAX_RESPONSE_TIME		10000 // in ms

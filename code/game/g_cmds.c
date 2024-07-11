@@ -2,7 +2,7 @@
 //
 #include "g_local.h"
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../../ui/menudef.h"			// for the voice chats
 #endif
 

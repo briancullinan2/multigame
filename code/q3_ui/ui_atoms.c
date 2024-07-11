@@ -7,10 +7,46 @@
 **********************************************************************/
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+
+#define UI_Init UI_CLASSIC_Init
+#define UI_Shutdown UI_CLASSIC_Shutdown
+#define UI_KeyEvent UI_CLASSIC_KeyEvent
+#define UI_MouseEvent UI_CLASSIC_MouseEvent
+#define UI_Refresh UI_CLASSIC_Refresh
+#define UI_ConsoleCommand UI_CLASSIC_ConsoleCommand
+#define UI_ClampCvar UI_CLASSIC_ClampCvar
+#define UI_DrawNamedPic UI_CLASSIC_DrawNamedPic
+#define UI_DrawHandlePic UI_CLASSIC_DrawHandlePic 
+#define UI_FillRect UI_CLASSIC_FillRect
+#define UI_DrawRect UI_CLASSIC_DrawRect
+#define UI_UpdateScreen UI_CLASSIC_UpdateScreen
+#define UI_SetColor UI_CLASSIC_SetColor
+#define UI_LerpColor UI_CLASSIC_LerpColor
+#define UI_DrawBannerString UI_CLASSIC_DrawBannerString
+#define UI_ProportionalSizeScale UI_CLASSIC_ProportionalSizeScale
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_ProportionalStringWidth UI_CLASSIC_ProportionalStringWidth
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_CursorInRect  UI_CLASSIC_CursorInRect 
+#define UI_AdjustFrom640 UI_CLASSIC_AdjustFrom640
+#define UI_DrawTextBox UI_CLASSIC_DrawTextBox 
+#define UI_IsFullscreen UI_CLASSIC_IsFullscreen
+#define UI_SetActiveMenu UI_CLASSIC_SetActiveMenu
+#define UI_PushMenu UI_CLASSIC_PushMenu 
+#define UI_PopMenu UI_CLASSIC_PopMenu 
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff 
+#define UI_Refresh UI_CLASSIC_Refresh
+#define UI_StartDemoLoop UI_CLASSIC_StartDemoLoop
+
+
+#endif
+
 uiStatic_t		uis;
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
 
-#ifndef BUILD_GAME_STATIC
+#if !defined(BUILD_GAME_STATIC) && !defined(USE_CLASSIC_MENU)
 // these are here so the functions in q_shared.c can link
 
 void QDECL Com_Error( int level, const char *fmt, ... ) {
@@ -124,6 +160,16 @@ void UI_PushMenu( menuframework_s *menu )
 	uis.firstdraw = qtrue;
 }
 
+void UI_ForceMenuOff (void)
+{
+	uis.menusp     = 0;
+	uis.activemenu = NULL;
+
+	trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_UI );
+	trap_Key_ClearStates();
+	trap_Cvar_Set( "cl_paused", "0" );
+}
+
 /*
 =================
 UI_PopMenu
@@ -145,16 +191,6 @@ void UI_PopMenu (void)
 	else {
 		UI_ForceMenuOff ();
 	}
-}
-
-void UI_ForceMenuOff (void)
-{
-	uis.menusp     = 0;
-	uis.activemenu = NULL;
-
-	trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_UI );
-	trap_Key_ClearStates();
-	trap_Cvar_Set( "cl_paused", "0" );
 }
 
 /*
@@ -951,6 +987,9 @@ void UI_MouseEvent( int dx, int dy, qboolean absolute )
 }
 
 
+#ifndef USE_CLASSIC_MENU
+
+
 char *UI_Argv( int arg ) {
 	static char	buffer[MAX_STRING_CHARS];
 
@@ -968,6 +1007,8 @@ char *UI_Cvar_VariableString( const char *var_name ) {
 	return buffer;
 }
 
+
+#endif
 
 /*
 =================
@@ -1084,7 +1125,9 @@ UI_Init
 =================
 */
 void UI_Init( void ) {
+#ifndef USE_CLASSIC_MENU
 	UI_RegisterCvars();
+#endif
 
 	UI_InitGameinfo();
 

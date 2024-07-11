@@ -6,6 +6,9 @@
 
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_ParseInfos UI_CLASSIC_ParseInfos
+#endif
 
 //
 // arena and bot info
@@ -13,7 +16,7 @@
 
 #define POOLSIZE	128 * 1024
 
-int				ui_numBots;
+static int		ui_numBots;
 static char		*ui_botInfos[MAX_BOTS];
 
 static int		ui_numArenas;
@@ -23,9 +26,15 @@ static int		ui_numSinglePlayerArenas;
 static int		ui_numSpecialSinglePlayerArenas;
 
 static char		memoryPool[POOLSIZE];
+#ifndef USE_CLASSIC_MENU
 static int		allocPoint, outOfMemory;
+#else
+extern int		allocPoint, outOfMemory;
+void *UI_Alloc( int size );
+void UI_InitMemory( void );
+#endif
 
-
+#ifndef USE_CLASSIC_MENU
 /*
 ===============
 UI_Alloc
@@ -56,12 +65,19 @@ void UI_InitMemory( void ) {
 	outOfMemory = qfalse;
 }
 
+#endif
+
 /*
 ===============
 UI_ParseInfos
 ===============
 */
-int UI_ParseInfos( char *buf, int max, char *infos[] ) {
+#ifdef USE_CLASSIC_MENU
+int UI_CLASSIC_ParseInfos( char *buf, int max, char *infos[] ) 
+#else
+int UI_ParseInfos( char *buf, int max, char *infos[] ) 
+#endif
+{
 	char	*token;
 	int		count;
 	char	key[MAX_TOKEN_CHARS];
@@ -374,7 +390,12 @@ static void UI_LoadBots( void ) {
 UI_GetBotInfoByNumber
 ===============
 */
-char *UI_GetBotInfoByNumber( int num ) {
+#ifdef USE_CLASSIC_MENU
+char *UI_CLASSIC_GetBotInfoByNumber( int num ) 
+#else
+char *UI_GetBotInfoByNumber( int num ) 
+#endif
+{
 	if( num < 0 || num >= ui_numBots ) {
 		trap_Print( va( S_COLOR_RED "Invalid bot number: %i\n", num ) );
 		return NULL;
@@ -388,7 +409,12 @@ char *UI_GetBotInfoByNumber( int num ) {
 UI_GetBotInfoByName
 ===============
 */
-char *UI_GetBotInfoByName( const char *name ) {
+#ifdef USE_CLASSIC_MENU
+char *UI_CLASSIC_GetBotInfoByName( const char *name ) 
+#else
+char *UI_GetBotInfoByName( const char *name ) 
+#endif
+{
 	int		n;
 	char	*value;
 
@@ -722,7 +748,12 @@ int UI_GetNumSPTiers( void ) {
 UI_GetNumBots
 ===============
 */
-int UI_GetNumBots( void ) {
+#ifdef USE_CLASSIC_MENU
+int UI_CLASSIC_GetNumBots( void ) 
+#else
+int UI_GetNumBots( void ) 
+#endif
+{
 	return ui_numBots;
 }
 
@@ -788,8 +819,9 @@ UI_InitGameinfo
 ===============
 */
 void UI_InitGameinfo( void ) {
-
+#ifndef USE_CLASSIC_MENU
 	UI_InitMemory();
+#endif
 	UI_LoadArenas();
 	UI_LoadBots();
 
