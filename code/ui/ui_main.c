@@ -603,13 +603,6 @@ void _UI_Refresh( int realtime )
 	//	return;
 	//}
 
-#ifdef USE_CLASSIC_MENU
-	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
-		UI_CLASSIC_Refresh( realtime );
-		return;
-	}
-#endif
-
 	uiInfo.uiDC.frameTime = realtime - uiInfo.uiDC.realTime;
 	uiInfo.uiDC.realTime = realtime;
 
@@ -629,8 +622,15 @@ void _UI_Refresh( int realtime )
 	}
 
 
-
 	UI_UpdateCvars();
+
+
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		UI_CLASSIC_Refresh( realtime );
+		return;
+	}
+#endif
 
 	if (Menu_Count() > 0) {
 		// paint all the menus
@@ -5191,7 +5191,7 @@ UI_KeyEvent
 void _UI_KeyEvent( int key, qboolean down ) {
 
 #ifdef USE_CLASSIC_MENU
-	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+	if( ui_menuFiles.string[0] == '\0' ) {
 		UI_CLASSIC_KeyEvent(key, down);
 		return;
 	}

@@ -1857,7 +1857,34 @@ void CG_ShowResponseHead( void ) {
 	cg.voiceTime = cg.time;
 }
 
+char *CG_Cvar_VariableString( const char *var_name ) {
+	static char	buffer[MAX_STRING_CHARS];
+
+	trap_Cvar_VariableStringBuffer( var_name, buffer, sizeof( buffer ) );
+
+	return buffer;
+}
+
+void CG_Update(const char *name) {
+	if (Q_stricmp(name, "ui_SetName") == 0) {
+		trap_Cvar_Set( "name", CG_Cvar_VariableString("ui_Name"));
+ 	} else if (Q_stricmp(name, "ui_GetName") == 0) {
+		trap_Cvar_Set( "ui_Name", CG_Cvar_VariableString("name"));
+ 	}
+}
+
 void CG_RunMenuScript(char **args) {
+	const char *name, *name2;
+	char buff[1024];
+	if (String_Parse(args, &name)) {
+		if (Q_stricmp(name, "update") == 0) {
+			if (String_Parse(args, &name2)) {
+				CG_Update(name2);
+			}
+		} else if (Q_stricmp(name, "captureMouse") == 0) {
+			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
+		}
+	}
 }
 
 

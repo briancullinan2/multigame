@@ -457,6 +457,10 @@ CG_StartCamera
 */
 void CG_StartCamera( const char *name, qboolean startBlack ) {
 	int cam;
+	if(cg.cameraMode) {
+		Com_DPrintf("Camera already active\n");
+		return;
+	}
 	if ((cam = trap_loadCamera(name)) >= 0)
 	{
 		cg.cameraMode = qtrue;
@@ -470,6 +474,14 @@ void CG_StartCamera( const char *name, qboolean startBlack ) {
 		// letterbox look
 		//
 		black_bars = 1;
+#ifdef USE_CLASSIC_HUD
+	// spy on camera name for play edit menu
+		if(Q_stristr(name, "_playeredit") != NULL) {
+			cg.editPlayerMode = qtrue;
+			cg.pauseBreak = cg.time + 5000; // we know the camera is 7 seconds long
+		}
+#endif
+
 		trap_startCamera(cg.currentCamera, cg.time);	// camera on in client
 	} else {
 		CG_Printf ("Unable to load camera \"%s\"\n",name);

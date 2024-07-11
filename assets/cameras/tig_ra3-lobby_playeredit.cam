@@ -1,0 +1,9 @@
+cameraPathDef 
+{
+  time 7.500000
+  camera_Fixed
+  {
+    name position
+    pos ( 800 -22 -76 )
+  }
+}

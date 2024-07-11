@@ -737,6 +737,12 @@ typedef struct {
 	qboolean cameraMode;		// if rendering from a loaded camera
 	int      currentCamera;
 
+#ifdef USE_CLASSIC_HUD
+	int      pauseBreak;
+	int      pausedTime;
+	qboolean editPlayerMode;
+#endif
+
 	// development tool
 	refEntity_t		testModelEntity;
 	char			testModelName[MAX_QPATH];

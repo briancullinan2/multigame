@@ -11,6 +11,9 @@
 // used for scoreboard
 extern displayContextDef_t cgDC;
 menuDef_t *menuScoreboard = NULL;
+#ifdef USE_CLASSIC_HUD
+menuDef_t *menuEditPlayer = NULL;
+#endif
 #else
 int drawTeamOverlayModificationCount = -1;
 #endif
@@ -2478,9 +2481,14 @@ static void CG_DrawTeamVote(void) {
 
 
 static qboolean CG_DrawScoreboard( void ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
 	static qboolean firstTime = qtrue;
 	float fade, *fadeColor;
+#ifdef USE_CLASSIC_MENU
+	if( cg_hudFiles.string[0] == '\0' ) {
+		return CG_DrawOldScoreboard();
+	}
+#endif
 
 	if (menuScoreboard) {
 		menuScoreboard->window.flags &= ~WINDOW_FORCED;
@@ -2555,11 +2563,18 @@ CG_DrawIntermission
 static void CG_DrawIntermission( void ) {
 //	int key;
 #ifdef MISSIONPACK
+#ifdef USE_CLASSIC_HUD
+	if( cg_hudFiles.string[0] == '\0' )
+#endif
 	//if (cg_singlePlayer.integer) {
-	//	CG_DrawCenterString();
-	//	return;
-	//}
+	if ( cgs.gametype == GT_SINGLE_PLAYER ) {
+		CG_DrawCenterString();
+		return;
+	}
 #else
+#ifdef USE_CLASSIC_HUD
+	if( cg_hudFiles.string[0] == '\0' )
+#endif
 	if ( cgs.gametype == GT_SINGLE_PLAYER ) {
 		CG_DrawCenterString();
 		return;
@@ -2620,7 +2635,7 @@ static void CG_DrawAmmoWarning( void ) {
 }
 
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 =================
 CG_DrawProxWarning
@@ -2862,7 +2877,7 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
       
 			CG_DrawAmmoWarning();
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 			CG_DrawProxWarning();
 #endif      
 			CG_DrawCrosshair();
@@ -2876,7 +2891,9 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 #else
 #ifdef USE_CLASSIC_HUD
       if(cg_hudFiles.string[0] == '\0') {
+#ifndef USE_ADVANCED_ITEMS
 				CG_DrawHoldableItem();
+#endif
       }
 #endif
 			//CG_DrawPersistantPowerup();
@@ -2929,6 +2946,9 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 //#ifdef USE_BIRDS_EYE
 //		|| cg_birdsEye.integer || cg.predictedPlayerState.pm_type == PM_BIRDSEYE
 //#endif
+#ifdef USE_CLASSIC_HUD
+			|| cg.editPlayerMode
+#endif
 	) {
 		float x, y, w, h;
 		trap_R_SetColor( NULL );
@@ -3186,6 +3206,20 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	if (black_bars)
 		CG_BlackBars();
 #endif
+
+#ifdef USE_CLASSIC_HUD
+	if(cg.editPlayerMode) {
+		if(!menuEditPlayer) {
+			menuEditPlayer = Menus_FindByName("player_menu");
+			Menus_Activate(menuEditPlayer);
+		}
+
+		if(menuEditPlayer) {
+			Menu_Paint(menuEditPlayer, qtrue);
+		}
+	}
+#endif
+
 }
 
 /*

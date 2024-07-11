@@ -470,7 +470,7 @@ int num_target_execs=0;
 void target_use_exec( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	//char buf[MAX_QPATH];
 	//char *nx= target_execs[self->health];
-	G_Printf("using exec: %s", self->message);
+	G_Printf("using exec: %s\n", self->message);
 	// the higher the spawnflag the stranger this gets
 	// default: Exec Server command like an admin would but from a map trigger
 	// 4: send server command to all clients, stuff like \say to print messages

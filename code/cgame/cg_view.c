@@ -743,6 +743,10 @@ static int CG_CalcViewValues( void ) {
 			// letterbox look
 			//
 			black_bars = 0;
+#ifdef USE_CLASSIC_HUD
+			cg.editPlayerMode = qfalse;
+			Menus_CloseByName("player_menu"); // because stupid hud is using Menus_PaintAll
+#endif
 		}
 	}
 

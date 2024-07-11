@@ -4368,3 +4368,50 @@ gothic_block/blocks17i
 "origin" "424 -84 -144"
 "targetname" "world1_dir"
 }
+// entity 93
+{
+"classname" "misc_model"
+"origin" "972 -24 -136"
+"model" "models/mapobjects/podium/podium4.md3"
+}
+// entity 94
+{
+"arena" "4"
+"classname" "trigger_multiple"
+"target" "start_playeredit"
+// brush 0
+{
+( 916 112 -144 ) ( 916 112 -16 ) ( 916 -144 -16 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+( 916 -144 -16 ) ( 1012 -144 -16 ) ( 1012 -144 -144 ) common/trigger 24 0 180.00002 0.5 -0.5 134217728 0 0
+( 1012 112 -144 ) ( 916 112 -144 ) ( 916 -144 -144 ) common/trigger 0 -24 90 0.5 0.5 134217728 0 0
+( 916 -144 -16 ) ( 916 112 -16 ) ( 1012 112 -16 ) common/trigger 0 -24 90 0.5 0.5 134217728 0 0
+( 1012 112 -16 ) ( 916 112 -16 ) ( 916 112 -144 ) common/trigger 24 0 180.00002 0.5 -0.5 134217728 0 0
+( 1012 -144 -16 ) ( 1012 112 -16 ) ( 1012 112 -144 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
+}
+}
+// entity 95
+{
+"classname" "info_player_intermission"
+"origin" "768 -24 28"
+}
+// entity 96
+{
+"classname" "target_exec"
+"origin" "996 -76 88"
+"targetname" "start_playeredit"
+"message" "camera tig_ra3-lobby_playeredit"
+"spawnflags" "32"
+}
+// entity 97
+{
+"classname" "target_push"
+"origin" "980 -20 -8"
+"targetname" "start_playeredit"
+"target" "start_playerwait"
+}
+// entity 98
+{
+"classname" "target_position"
+"origin" "864 -20 4"
+"targetname" "start_playerwait"
+}
