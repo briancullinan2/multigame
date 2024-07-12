@@ -8,7 +8,13 @@
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 
+#ifdef USE_CLASSIC_HUD
+static clientInfo_t info;
+qboolean updateModel = qtrue;
 
+#endif
+
+char *CG_Cvar_VariableString( const char *var_name );
 extern displayContextDef_t cgDC;
 
 
@@ -1494,7 +1500,393 @@ void CG_DrawMedal(int ownerDraw, rectDef_t *rect, float scale, vec4_t color, qha
 
 }
 
+#ifdef USE_CLASSIC_HUD
+
+
+/*
+===============
+UI_PlayerInfo_SetModel
+===============
+*/
+qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, const char *skinName, const char *headModelName, const char *headSkinName, const char *teamName );
+
+void CG_PlayerInfo_SetModel( clientInfo_t *pi, const char *model, const char *headmodel, char *teamName ) {
+	memset( pi, 0, sizeof(*pi) );
+	CG_RegisterClientModelname( pi, model, "default", headmodel, "default", teamName );
+	pi->curWeapon = WP_MACHINEGUN;
+}
+
+static void CG_DrawPlayerModel(rectDef_t *rect) {
+  static clientInfo_t info;
+  char model[MAX_QPATH];
+  char team[256];
+	char head[256];
+	vec3_t	viewangles;
+	vec3_t	moveangles;
+
+	strcpy(team, CG_Cvar_VariableString("ui_teamName"));
+	strcpy(model, CG_Cvar_VariableString("team_model"));
+	strcpy(head, CG_Cvar_VariableString("team_headmodel"));
+	updateModel = qtrue;
+
+  if (updateModel) {
+  	memset( &info, 0, sizeof(clientInfo_t) );
+  	viewangles[YAW]   = 180 - 10;
+  	viewangles[PITCH] = 0;
+  	viewangles[ROLL]  = 0;
+  	VectorClear( moveangles );
+    CG_PlayerInfo_SetModel( &info, model, head, team);
+    //UI_PlayerInfo_SetInfo( &info, LEGS_IDLE, TORSO_STAND, viewangles, vec3_origin, WP_MACHINEGUN, qfalse );
+//		UI_RegisterClientModelname( &info, model, head, team);
+    updateModel = qfalse;
+  }
+
+}
+
+qboolean CG_hasSkinForBase(const char *base, const char *team) {
+	char	test[1024];
 	
+	Com_sprintf( test, sizeof( test ), "models/players/%s/%s/lower_default.skin", base, team );
+
+	if (trap_FS_FOpenFile(test, 0, FS_READ)) {
+		return qtrue;
+	}
+	Com_sprintf( test, sizeof( test ), "models/players/characters/%s/%s/lower_default.skin", base, team );
+
+	if (trap_FS_FOpenFile(test, 0, FS_READ)) {
+		return qtrue;
+	}
+	return qfalse;
+}
+
+static int CG_TeamIndexFromName(const char *name) {
+  int i;
+
+  if (name && *name) {
+    for (i = 0; i < cg.teamCount; i++) {
+      if (Q_stricmp(name, cg.teamList[i].teamName) == 0) {
+        return i;
+      }
+    }
+  } 
+
+  return 0;
+
+}
+
+const char *CG_SelectedHead(int index, int *actual) {
+	int i, c;
+	c = 0;
+	*actual = 0;
+	for (i = 0; i < cg.characterCount; i++) {
+		if (cg.characterList[i].active) {
+			if (c == index) {
+				*actual = i;
+				return cg.characterList[i].name;
+			} else {
+				c++;
+			}
+		}
+	}
+	return "";
+}
+
+
+/*
+==================
+CG_MapCountByTeam
+==================
+*/
+int CG_HeadCountByTeam( void ) {
+	static int init = 0;
+	int i, j, k, c, tIndex;
+	
+	c = 0;
+	if (!init) {
+		for (i = 0; i < cg.characterCount; i++) {
+			cg.characterList[i].reference = 0;
+			for (j = 0; j < cg.teamCount; j++) {
+			  if (CG_hasSkinForBase(cg.characterList[i].base, cg.teamList[j].teamName)) {
+					cg.characterList[i].reference |= (1<<j);
+			  }
+			}
+		}
+		init = 1;
+	}
+
+	tIndex = CG_TeamIndexFromName(CG_Cvar_VariableString("ui_teamName"));
+
+	// do names
+	for (i = 0; i < cg.characterCount; i++) {
+		cg.characterList[i].active = qfalse;
+		for(j = 0; j < TEAM_MEMBERS; j++) {
+			if (cg.teamList[tIndex].teamMembers[j] != NULL) {
+				if (cg.characterList[i].reference&(1<<tIndex)) {// && Q_stricmp(cg.teamList[tIndex].teamMembers[j], cg.characterList[i].name)==0) {
+					cg.characterList[i].active = qtrue;
+					c++;
+					break;
+				}
+			}
+		}
+	}
+
+	// and then aliases
+	for(j = 0; j < TEAM_MEMBERS; j++) {
+		for(k = 0; k < cg.aliasCount; k++) {
+			if (cg.aliasList[k].name != NULL) {
+				if (Q_stricmp(cg.teamList[tIndex].teamMembers[j], cg.aliasList[k].name)==0) {
+					for (i = 0; i < cg.characterCount; i++) {
+						if (cg.characterList[i].headImage != -1 && cg.characterList[i].reference&(1<<tIndex) && Q_stricmp(cg.aliasList[k].ai, cg.characterList[i].name)==0) {
+							if (cg.characterList[i].active == qfalse) {
+								cg.characterList[i].active = qtrue;
+								c++;
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	return c;
+}
+
+
+static void CG_DrawClanName(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
+  CG_Text_Paint(rect->x, rect->y, scale, color, CG_Cvar_VariableString("ui_teamName"), 0, 0, textStyle);
+}
+
+static const char *handicapValues[] = {"None","95","90","85","80","75","70","65","60","55","50","45","40","35","30","25","20","15","10","5",NULL};
+
+static void CG_DrawHandicap(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
+  int i, h;
+
+  h = Com_Clamp( 5, 100, atof(CG_Cvar_VariableString("handicap")) );
+  i = 20 - h / 5;
+
+  CG_Text_Paint(rect->x, rect->y, scale, color, handicapValues[i], 0, 0, textStyle);
+}
+
+#endif
+
+void CG_FeederSelection(float feederID, int index);
+
+
+static qboolean CG_ClanName_HandleKey(int flags, float *special, int key) {
+	CG_Error("Handling key!");
+  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
+    int i;
+    i = CG_TeamIndexFromName(CG_Cvar_VariableString("ui_teamName"));
+		if (cg.teamList[i].cinematic >= 0) {
+		  trap_CIN_StopCinematic(cg.teamList[i].cinematic);
+			cg.teamList[i].cinematic = -1;
+		}
+		if (key == K_MOUSE2) {
+	    i--;
+		} else {
+	    i++;
+		}
+    if (i >= cg.teamCount) {
+      i = 0;
+    } else if (i < 0) {
+			i = cg.teamCount - 1;
+		}
+  	trap_Cvar_Set( "ui_teamName", cg.teamList[i].teamName);
+		CG_HeadCountByTeam();
+		CG_FeederSelection(FEEDER_HEADS, 0);
+		updateModel = qtrue;
+    return qtrue;
+  }
+  return qfalse;
+}
+
+static int gamecodetoui[] = {4,2,3,0,5,1,6};
+static int uitogamecode[] = {4,6,2,3,1,5,7};
+
+void CG_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ) {
+	float	s0;
+	float	s1;
+	float	t0;
+	float	t1;
+
+	if( w < 0 ) {	// flip about vertical
+		w  = -w;
+		s0 = 1;
+		s1 = 0;
+	}
+	else {
+		s0 = 0;
+		s1 = 1;
+	}
+
+	if( h < 0 ) {	// flip about horizontal
+		h  = -h;
+		t0 = 1;
+		t1 = 0;
+	}
+	else {
+		t0 = 0;
+		t1 = 1;
+	}
+	
+	CG_AdjustFrom640( &x, &y, &w, &h );
+	trap_R_DrawStretchPic( x, y, w, h, s0, t0, s1, t1, hShader );
+}
+
+static void CG_DrawEffects(rectDef_t *rect, float scale, vec4_t color) {
+	CG_DrawHandlePic( rect->x, rect->y - 14, 128, 8, cgDC.Assets.fxBasePic );
+	CG_DrawHandlePic( rect->x + cg.effectsColor * 16 + 8, rect->y - 16, 16, 12, cgDC.Assets.fxPic[cg.effectsColor] );
+}
+
+static qboolean CG_Effects_HandleKey(int flags, float *special, int key) {
+  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
+
+		if (key == K_MOUSE2) {
+	    cg.effectsColor--;
+		} else {
+	    cg.effectsColor++;
+		}
+
+    if( cg.effectsColor > 6 ) {
+	  	cg.effectsColor = 0;
+		} else if (cg.effectsColor < 0) {
+	  	cg.effectsColor = 6;
+		}
+
+	  trap_Cvar_Set( "color1", va("%i", uitogamecode[cg.effectsColor]) );
+    return qtrue;
+  }
+  return qfalse;
+}
+
+static qboolean CG_Handicap_HandleKey(int flags, float *special, int key) {
+  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
+    int h;
+    h = Com_Clamp( 5, 100, atof(CG_Cvar_VariableString("handicap")) );
+		if (key == K_MOUSE2) {
+	    h -= 5;
+		} else {
+	    h += 5;
+		}
+    if (h > 100) {
+      h = 5;
+    } else if (h < 0) {
+			h = 100;
+		}
+  	trap_Cvar_Set( "handicap", va( "%i", h) );
+    return qtrue;
+  }
+  return qfalse;
+}
+
+/*
+===============
+UI_BuildPlayerList
+===============
+*/
+static void CG_BuildPlayerList( void ) {
+	playerState_t	cs;
+	int		n, count, team, team2, playerTeamNumber;
+	const char	*info;
+
+	cs = cg.snap->ps;
+	info = CG_ConfigString( CS_PLAYERS + cs.clientNum );
+	cg.playerNumber = cs.clientNum;
+	cg.teamLeader = atoi(Info_ValueForKey(info, "tl"));
+	team = atoi(Info_ValueForKey(info, "t"));
+	info = CG_ConfigString( CS_SERVERINFO );
+	count = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
+	cg.playerCount = 0;
+	cg.myTeamCount = 0;
+	playerTeamNumber = 0;
+	for( n = 0; n < count; n++ ) {
+		info = CG_ConfigString( CS_PLAYERS + n );
+
+		if (info[0]) {
+			Q_strncpyz( cg.playerNames[cg.playerCount], Info_ValueForKey( info, "n" ), MAX_NAME_LENGTH );
+			Q_CleanStr( cg.playerNames[cg.playerCount] );
+			cg.playerCount++;
+			team2 = atoi(Info_ValueForKey(info, "t"));
+			if (team2 == team) {
+				Q_strncpyz( cg.teamNames[cg.myTeamCount], Info_ValueForKey( info, "n" ), MAX_NAME_LENGTH );
+				Q_CleanStr( cg.teamNames[cg.myTeamCount] );
+				cg.teamClientNums[cg.myTeamCount] = n;
+				if (cg.playerNumber == n) {
+					playerTeamNumber = cg.myTeamCount;
+				}
+				cg.myTeamCount++;
+			}
+		}
+	}
+
+	if (!cg.teamLeader) {
+		trap_Cvar_Set("cg_selectedPlayer", va("%d", playerTeamNumber));
+	}
+
+	n = atof(CG_Cvar_VariableString("cg_selectedPlayer"));
+	if (n < 0 || n > cg.myTeamCount) {
+		n = 0;
+	}
+	if (n < cg.myTeamCount) {
+		trap_Cvar_Set("cg_selectedPlayerName", cg.teamNames[n]);
+	}
+}
+
+
+static qboolean CG_SelectedPlayer_HandleKey(int flags, float *special, int key) {
+  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
+		int selected;
+
+		CG_BuildPlayerList();
+		if (!cg.teamLeader) {
+			return qfalse;
+		}
+		selected = atof(CG_Cvar_VariableString("cg_selectedPlayer"));
+		
+		if (key == K_MOUSE2) {
+			selected--;
+		} else {
+			selected++;
+		}
+
+		if (selected > cg.myTeamCount) {
+			selected = 0;
+		} else if (selected < 0) {
+			selected = cg.myTeamCount;
+		}
+
+		if (selected == cg.myTeamCount) {
+		 	trap_Cvar_Set( "cg_selectedPlayerName", "Everyone");
+		} else {
+		 	trap_Cvar_Set( "cg_selectedPlayerName", cg.teamNames[selected]);
+		}
+	 	trap_Cvar_Set( "cg_selectedPlayer", va("%d", selected));
+	}
+	return qfalse;
+}
+
+qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
+  switch (ownerDraw) {
+#ifdef USE_CLASSIC_HUD
+    case UI_EFFECTS:
+      return CG_Effects_HandleKey(flags, special, key);
+      break;
+    case UI_HANDICAP:
+      return CG_Handicap_HandleKey(flags, special, key);
+      break;
+    case UI_CLANNAME:
+      return CG_ClanName_HandleKey(flags, special, key);
+      break;
+		case UI_SELECTEDPLAYER:
+			CG_SelectedPlayer_HandleKey(flags, special, key);
+			break;
+#endif
+    default:
+      break;
+  }
+	return qfalse;
+}
+
 //
 void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y, int ownerDraw, int ownerDrawFlags, int align, float special, float scale, vec4_t color, qhandle_t shader, int textStyle) {
 	rectDef_t rect;
@@ -1678,6 +2070,20 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
   case CG_2NDPLACE:
     CG_Draw2ndPlace(&rect, scale, color, shader, textStyle);
 		break;
+
+#ifdef USE_CLASSIC_HUD
+	case UI_EFFECTS:
+		CG_DrawEffects(&rect, scale, color);
+		break;
+	case UI_CLANNAME:
+		CG_DrawClanName(&rect, scale, color, textStyle);
+		break;
+	case UI_HANDICAP:
+		CG_DrawHandicap(&rect, scale, color, textStyle);
+		break;
+
+#endif
+
   default:
     break;
   }
@@ -1693,6 +2099,9 @@ void CG_MouseEvent(int x, int y, qboolean absolute) {
 #endif
 
 
+#ifdef USE_CLASSIC_HUD
+	if(!cg.editPlayerMode)
+#endif
 	if ( cg.predictedPlayerState.pm_type == PM_NORMAL 
 #ifdef USE_BIRDS_EYE
 			|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
@@ -1707,16 +2116,8 @@ void CG_MouseEvent(int x, int y, qboolean absolute) {
 			|| cg.predictedPlayerState.pm_type == PM_REVERSEDUPSIDEDOWN
 #endif
 			|| (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse) ) {
-
-#ifdef USE_CLASSIC_HUD
-		if(cg.editPlayerMode)
-			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
-		else
-#endif
-		{
-			trap_Key_SetCatcher(0);
-			return;
-		}
+		trap_Key_SetCatcher(0);
+		return;
 	}
 
 	cgs.cursorX+= x;
@@ -1782,6 +2183,13 @@ CG_EventHandling
 */
 void CG_EventHandling(cgame_event_t type) {
 #ifdef USE_CLASSIC_HUD
+	if(type == CGAME_EVENT_NONE) {
+		black_bars = 0;
+		cg.cameraMode = qfalse;
+		cg.pauseBreak = 0;
+		cg.editPlayerMode = qfalse;
+		Menus_CloseByName("player_menu"); // because stupid hud is using Menus_PaintAll
+	}
 	if(cg_hudFiles.string[0] == '\0') {
 		return;
 	}
@@ -1805,12 +2213,17 @@ void CG_KeyEvent(int key, qboolean down) {
 			CG_CLASSIC_KeyEvent(key, down);
 			return;
 		}
-#endif
+
+#else
 
 	if (!down) {
 		return;
 	}
+#endif
 
+#ifdef USE_CLASSIC_HUD
+	if(!cg.editPlayerMode)
+#endif
 	if ( cg.predictedPlayerState.pm_type == PM_NORMAL 
 #ifdef USE_BIRDS_EYE
 			|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
@@ -1826,15 +2239,8 @@ void CG_KeyEvent(int key, qboolean down) {
 #endif
 			|| (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse)) {
 		CG_EventHandling(CGAME_EVENT_NONE);
-#ifdef USE_CLASSIC_HUD
-		if(!cg.editPlayerMode)
-			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
-		else
-#endif
-		{
-			trap_Key_SetCatcher(0);
-			return;
-		}
+		trap_Key_SetCatcher(0);
+		return;
 	}
 
   //if (key == trap_Key_GetKey("teamMenu") || !Display_CaptureItem(cgs.cursorX, cgs.cursorY)) {
@@ -1842,8 +2248,6 @@ void CG_KeyEvent(int key, qboolean down) {
   //  CG_EventHandling(CGAME_EVENT_NONE);
   //  trap_Key_SetCatcher(0);
   //}
-
-
 
   Display_HandleKey(key, down, cgs.cursorX, cgs.cursorY);
 
@@ -1898,6 +2302,10 @@ void CG_RunMenuScript(char **args) {
 			}
 		} else if (Q_stricmp(name, "captureMouse") == 0) {
 			trap_Key_SetCatcher(trap_Key_GetCatcher() | KEYCATCH_CGAME);
+		} else if (Q_stricmp(name, "unpauseCamera") == 0) {
+			cg.pauseBreak = 0;
+			cg.editPlayerMode = qfalse;
+			Menus_CloseByName("player_menu"); // because stupid hud is using Menus_PaintAll
 		}
 	}
 }

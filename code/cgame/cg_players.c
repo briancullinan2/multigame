@@ -541,7 +541,7 @@ static qboolean	CG_RegisterClientSkin( clientInfo_t *ci, const char *teamName, c
 CG_RegisterClientModelname
 ==========================
 */
-static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, const char *skinName, const char *headModelName, const char *headSkinName, const char *teamName ) {
+qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, const char *skinName, const char *headModelName, const char *headSkinName, const char *teamName ) {
 	char	filename[MAX_QPATH];
 	const char		*headName;
 	char newTeamName[MAX_QPATH];

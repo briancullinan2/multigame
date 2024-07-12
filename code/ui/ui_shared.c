@@ -5703,7 +5703,10 @@ void Display_HandleKey(int key, qboolean down, int x, int y) {
 		menu = Menu_GetFocused();
 	}
 	if (menu) {
-		Menu_HandleKey(menu, key, down );
+		if (key == K_ESCAPE && down && !Menus_AnyFullScreenVisible()) {
+			Menus_CloseAll();
+		} else
+			Menu_HandleKey(menu, key, down );
 	}
 }
 

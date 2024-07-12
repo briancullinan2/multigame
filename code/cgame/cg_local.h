@@ -498,6 +498,40 @@ typedef struct {
 } skulltrail_t;
 
 
+#ifdef USE_CLASSIC_HUD
+#define MAX_HEADS 64
+#define MAX_ALIASES 64
+#define MAX_TEAMS 64
+#define TEAM_MEMBERS 5
+
+typedef struct {
+  const char *name;
+	const char *imageName;
+  qhandle_t headImage;
+	const char *base;
+	qboolean active;
+	int reference;
+} characterInfo;
+
+typedef struct {
+	const char *name;
+	const char *ai;
+	const char *action;
+} aliasInfo;
+
+typedef struct {
+  const char *teamName;
+	const char *imageName;
+	const char *teamMembers[TEAM_MEMBERS];
+  qhandle_t teamIcon;
+  qhandle_t teamIcon_Metal;
+  qhandle_t teamIcon_Name;
+	int cinematic;
+} teamInfo;
+
+#endif
+
+
 #define MAX_REWARDSTACK		10
 #define MAX_SOUNDBUFFER		20
 
@@ -741,6 +775,25 @@ typedef struct {
 	int      pauseBreak;
 	int      pausedTime;
 	qboolean editPlayerMode;
+		
+	int characterCount;
+	characterInfo characterList[MAX_HEADS];
+
+	int aliasCount;
+	aliasInfo aliasList[MAX_ALIASES];
+
+	int teamCount;
+	teamInfo teamList[MAX_TEAMS];
+
+	int playerCount;
+	int myTeamCount;
+	int playerNumber; 
+	qboolean teamLeader;
+	char playerNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	char teamNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	int teamClientNums[MAX_CLIENTS];
+	int effectsColor;
+
 #endif
 
 	// development tool
@@ -1142,6 +1195,7 @@ typedef struct {
 	qhandle_t	freezeMarkShader;
   sfxHandle_t	unfrozenSound;
 #endif
+
 
 	qhandle_t netConnect;
 

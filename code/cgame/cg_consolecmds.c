@@ -70,6 +70,12 @@ static void CG_Viewpos_f (void) {
 
 static void CG_ScoresDown_f( void ) {
 
+#ifdef USE_CLASSIC_HUD
+	if(cg.editPlayerMode) {
+		return;
+	}
+#endif
+
 #ifdef MISSIONPACK
 	CG_BuildSpectatorString();
 #endif

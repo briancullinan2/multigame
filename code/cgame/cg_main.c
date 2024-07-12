@@ -19,6 +19,10 @@ static int weaponsOrderModificationCount = -1; //WarZone
 static int gametypeModificationCount = -1;
 
 #ifdef USE_CLASSIC_HUD
+const char *CG_SelectedHead(int index, int *actual);
+int CG_HeadCountByTeam( void );
+char *CG_Cvar_VariableString( const char *var_name );
+extern qboolean updateModel;
 static int hudFilesModificationCount = -1;
 #endif
 
@@ -83,7 +87,7 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 		CG_KeyEvent(arg0, arg1);
 		return 0;
 	case CG_MOUSE_EVENT:
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
 #endif
@@ -1491,12 +1495,6 @@ void CG_LoadMenus(const char *menuFile) {
 }
 
 
-
-static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
-	return qfalse;
-}
-
-
 static int CG_FeederCount(float feederID) {
 	int i, count;
 	count = 0;
@@ -1514,7 +1512,14 @@ static int CG_FeederCount(float feederID) {
 		}
 	} else if (feederID == FEEDER_SCOREBOARD) {
 		return cg.numScores;
-	}
+	} 
+#ifdef USE_CLASSIC_HUD
+	else if (feederID == FEEDER_HEADS) {
+		return CG_HeadCountByTeam();
+	}// else if (feederID == FEEDER_Q3HEADS) {
+	//	return cg.q3HeadCount;
+	//}
+#endif
 	return count;
 }
 
@@ -1572,6 +1577,247 @@ static clientInfo_t * CG_InfoFromScoreIndex(int index, int team, int *scoreIndex
 	return &cgs.clientinfo[ cg.scores[index].client ];
 }
 
+#ifdef USE_CLASSIC_HUD
+
+
+static qboolean Team_Parse(char **p) {
+  char *token;
+  const char *tempStr;
+	int i;
+
+  token = COM_ParseExt(p, qtrue);
+
+  if (token[0] != '{') {
+    return qfalse;
+  }
+
+  while ( 1 ) {
+
+    token = COM_ParseExt(p, qtrue);
+    
+    if (Q_stricmp(token, "}") == 0) {
+      return qtrue;
+    }
+
+    if ( !token || token[0] == 0 ) {
+      return qfalse;
+    }
+
+    if (token[0] == '{') {
+      // seven tokens per line, team name and icon, and 5 team member names
+      if (!String_Parse(p, &cg.teamList[cg.teamCount].teamName) || !String_Parse(p, &tempStr)) {
+        return qfalse;
+      }
+    
+
+			cg.teamList[cg.teamCount].imageName = tempStr;
+	    cg.teamList[cg.teamCount].teamIcon = trap_R_RegisterShaderNoMip(cg.teamList[cg.teamCount].imageName);
+		  cg.teamList[cg.teamCount].teamIcon_Metal = trap_R_RegisterShaderNoMip(va("%s_metal",cg.teamList[cg.teamCount].imageName));
+			cg.teamList[cg.teamCount].teamIcon_Name = trap_R_RegisterShaderNoMip(va("%s_name", cg.teamList[cg.teamCount].imageName));
+
+			cg.teamList[cg.teamCount].cinematic = -1;
+
+			for (i = 0; i < TEAM_MEMBERS; i++) {
+				cg.teamList[cg.teamCount].teamMembers[i] = NULL;
+				if (!String_Parse(p, &cg.teamList[cg.teamCount].teamMembers[i])) {
+					return qfalse;
+				}
+			}
+
+      Com_Printf("Loaded team %s with team icon %s.\n", cg.teamList[cg.teamCount].teamName, tempStr);
+      if (cg.teamCount < MAX_TEAMS) {
+        cg.teamCount++;
+      } else {
+        Com_Printf("Too many teams, last team replaced!\n");
+      }
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] != '}') {
+        return qfalse;
+      }
+    }
+  }
+
+  return qfalse;
+}
+
+static qboolean Character_Parse(char **p) {
+  char *token;
+  const char *tempStr;
+
+  token = COM_ParseExt(p, qtrue);
+
+  if (token[0] != '{') {
+    return qfalse;
+  }
+
+
+  while ( 1 ) {
+    token = COM_ParseExt(p, qtrue);
+
+    if (Q_stricmp(token, "}") == 0) {
+      return qtrue;
+    }
+
+    if ( !token || token[0] == 0 ) {
+      return qfalse;
+    }
+
+    if (token[0] == '{') {
+      // two tokens per line, character name and sex
+      if (!String_Parse(p, &cg.characterList[cg.characterCount].name) || !String_Parse(p, &tempStr)) {
+        return qfalse;
+      }
+    
+      cg.characterList[cg.characterCount].headImage = -1;
+			cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/heads/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+
+	  if (tempStr && (!Q_stricmp(tempStr, "female"))) {
+        cg.characterList[cg.characterCount].base = String_Alloc(va("Janet"));
+      } else if (tempStr && (!Q_stricmp(tempStr, "male"))) {
+        cg.characterList[cg.characterCount].base = String_Alloc(va("James"));
+	  } else {
+        cg.characterList[cg.characterCount].base = String_Alloc(va("%s",tempStr));
+	  }
+
+      Com_Printf("Loaded %s character %s.\n", cg.characterList[cg.characterCount].base, cg.characterList[cg.characterCount].name);
+      if (cg.characterCount < MAX_HEADS) {
+        cg.characterCount++;
+      } else {
+        Com_Printf("Too many characters, last character replaced!\n");
+      }
+     
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] != '}') {
+        return qfalse;
+      }
+    }
+  }
+
+  return qfalse;
+}
+
+
+static qboolean Alias_Parse(char **p) {
+  char *token;
+
+  token = COM_ParseExt(p, qtrue);
+
+  if (token[0] != '{') {
+    return qfalse;
+  }
+
+  while ( 1 ) {
+    token = COM_ParseExt(p, qtrue);
+
+    if (Q_stricmp(token, "}") == 0) {
+      return qtrue;
+    }
+
+    if ( !token || token[0] == 0 ) {
+      return qfalse;
+    }
+
+    if (token[0] == '{') {
+      // three tokens per line, character name, bot alias, and preferred action a - all purpose, d - defense, o - offense
+      if (!String_Parse(p, &cg.aliasList[cg.aliasCount].name) || !String_Parse(p, &cg.aliasList[cg.aliasCount].ai) || !String_Parse(p, &cg.aliasList[cg.aliasCount].action)) {
+        return qfalse;
+      }
+    
+      Com_Printf("Loaded character alias %s using character ai %s.\n", cg.aliasList[cg.aliasCount].name, cg.aliasList[cg.aliasCount].ai);
+      if (cg.aliasCount < MAX_ALIASES) {
+        cg.aliasCount++;
+      } else {
+        Com_Printf("Too many aliases, last alias replaced!\n");
+      }
+     
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] != '}') {
+        return qfalse;
+      }
+    }
+  }
+
+  return qfalse;
+}
+
+
+// mode 
+// 0 - high level parsing
+// 1 - team parsing
+// 2 - character parsing
+static void CG_ParseTeamInfo(const char *teamFile) {
+	char	*token;
+  char *p;
+  char *buff = NULL;
+  //static int mode = 0; TTimo: unused
+
+  buff = CG_GetMenuBuffer(teamFile);
+  if (!buff) {
+    return;
+  }
+
+  p = buff;
+
+	while ( 1 ) {
+		token = COM_ParseExt( &p, qtrue );
+		if( !token || token[0] == 0 || token[0] == '}') {
+			break;
+		}
+
+		if ( Q_stricmp( token, "}" ) == 0 ) {
+      break;
+    }
+
+    if (Q_stricmp(token, "teams") == 0) {
+
+      if (Team_Parse(&p)) {
+        continue;
+      } else {
+        break;
+      }
+    }
+
+    if (Q_stricmp(token, "characters") == 0) {
+      Character_Parse(&p);
+    }
+
+    if (Q_stricmp(token, "aliases") == 0) {
+      Alias_Parse(&p);
+    }
+
+  }
+
+}
+
+
+
+/*
+===============
+UI_LoadTeams
+===============
+*/
+#if 0
+static void CG_LoadTeams( void ) {
+	char	teamList[4096];
+	char	*teamName;
+	int		i, len, count;
+
+	count = trap_FS_GetFileList( "", "team", teamList, 4096 );
+
+	if (count) {
+		teamName = teamList;
+		for ( i = 0; i < count; i++ ) {
+			len = strlen( teamName );
+			CG_ParseTeamInfo(teamName);
+			teamName += len + 1;
+		}
+	}
+
+}
+#endif
+
+#endif
+
 static const char *CG_FeederItemText(float feederID, int index, int column, qhandle_t *handle) {
 	gitem_t *item;
 	int scoreIndex = 0;
@@ -1580,6 +1826,13 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 	score_t *sp = NULL;
 
 	*handle = -1;
+
+#ifdef USE_CLASSIC_HUD
+	if (feederID == FEEDER_HEADS) {
+		int actual;
+		return CG_SelectedHead(index, &actual);
+	}
+#endif
 
 	if (feederID == FEEDER_REDTEAM_LIST) {
 		team = TEAM_RED;
@@ -1657,10 +1910,21 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 }
 
 static qhandle_t CG_FeederItemImage(float feederID, int index) {
+	if (feederID == FEEDER_HEADS) {
+		int actual;
+		CG_SelectedHead(index, &actual);
+		index = actual;
+		if (index >= 0 && index < cg.characterCount) {
+			if (cg.characterList[index].headImage == -1) {
+				cg.characterList[index].headImage = trap_R_RegisterShaderNoMip(cg.characterList[index].imageName);
+			}
+			return cg.characterList[index].headImage;
+		}
+  }
 	return 0;
 }
 
-static void CG_FeederSelection(float feederID, int index) {
+void CG_FeederSelection(float feederID, int index) {
 	if ( cgs.gametype >= GT_TEAM ) {
 		int i, count;
 		int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_RED : TEAM_BLUE;
@@ -1673,7 +1937,31 @@ static void CG_FeederSelection(float feederID, int index) {
 				count++;
 			}
 		}
-	} else {
+	}
+
+#ifdef USE_CLASSIC_HUD
+  else if (feederID == FEEDER_HEADS) {
+		int actual;
+		CG_SelectedHead(index, &actual);
+		index = actual;
+		if (index >= 0 && index < cg.characterCount) {
+			trap_Cvar_Set( "team_model", va("%s", cg.characterList[index].base));
+			trap_Cvar_Set( "team_headmodel", va("*%s", cg.characterList[index].name)); 
+			updateModel = qtrue;
+		}
+  } 
+	/*else if (feederID == FEEDER_Q3HEADS) {
+    if (index >= 0 && index < cg.q3HeadCount) {
+      trap_Cvar_Set( "model", cg.q3HeadNames[index]);
+      trap_Cvar_Set( "headmodel", cg.q3HeadNames[index]);
+			updateModel = qtrue;
+		}
+  }*/
+
+#endif
+
+
+	 else {
 		cg.selectedScore = index;
 	}
 }
@@ -1707,7 +1995,11 @@ static int CG_OwnerDrawWidth(int ownerDraw, float scale) {
 	  case CG_BLUE_NAME:
 			return CG_Text_Width(cg_blueTeamName.string, scale, 0);
 			break;
-
+#ifdef USE_CLASSIC_HUD
+    case UI_CLANNAME:
+			return CG_Text_Width(CG_Cvar_VariableString("ui_teamName"), scale, 0);
+      break;
+#endif
 
 	}
 	return 0;
@@ -1729,6 +2021,8 @@ static void CG_DrawCinematic(int handle, float x, float y, float w, float h) {
 static void CG_RunCinematicFrame(int handle) {
   trap_CIN_RunCinematic(handle);
 }
+
+qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key);
 
 /*
 =================
@@ -1826,6 +2120,7 @@ void CG_AssetCache( void ) {
 	cgDC.Assets.scrollBarThumb = trap_R_RegisterShaderNoMip( ASSET_SCROLL_THUMB );
 	cgDC.Assets.sliderBar = trap_R_RegisterShaderNoMip( ASSET_SLIDER_BAR );
 	cgDC.Assets.sliderThumb = trap_R_RegisterShaderNoMip( ASSET_SLIDER_THUMB );
+
 }
 
 #endif
@@ -2059,6 +2354,11 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	CG_AssetCache();
 	CG_LoadHudMenu();      // load new hud stuff
+#endif
+
+#if defined(USE_CLASSIC_HUD)
+	CG_ParseTeamInfo("teaminfo.txt");
+	//CG_LoadTeams();
 #endif
 
 	cg.loading = qfalse;	// future players will be deferred

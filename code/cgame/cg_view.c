@@ -670,9 +670,9 @@ static void CG_DamageBlendBlob( void ) {
 		return;
 	}
 
-	//if (cg.cameraMode) {
-	//	return;
-	//}
+	if (cg.cameraMode) {
+		return;
+	}
 
 	// ragePro systems can't fade blends, so don't obscure the screen
 	if ( cgs.glconfig.hardwareType == GLHW_RAGEPRO ) {
@@ -728,7 +728,7 @@ static int CG_CalcViewValues( void ) {
 	if (cg.cameraMode) {
 		vec3_t origin, angles;
 		float fov = 90;
-		if (trap_getCameraInfo(cg.currentCamera, cg.time, &origin, &angles, &fov)) {
+		if (trap_getCameraInfo(cg.currentCamera, cg.time - cg.pausedTime, &origin, &angles, &fov)) {
 			VectorCopy(origin, cg.refdef.vieworg);
 			angles[ROLL] = 0;
 			angles[PITCH] = -angles[PITCH];
@@ -737,6 +737,7 @@ static int CG_CalcViewValues( void ) {
 			return CG_CalcFov();
 		} else {
 			cg.cameraMode = qfalse;
+			cg.pauseBreak = 0;
 			CG_Fade(255, 0, 0);				// go black
 			CG_Fade(0, cg.time + 200, 1500);	// then fadeup
 			// 
@@ -744,8 +745,10 @@ static int CG_CalcViewValues( void ) {
 			//
 			black_bars = 0;
 #ifdef USE_CLASSIC_HUD
-			cg.editPlayerMode = qfalse;
-			Menus_CloseByName("player_menu"); // because stupid hud is using Menus_PaintAll
+			if(cg.editPlayerMode) {
+				cg.editPlayerMode = qfalse;
+				Menus_CloseByName("player_menu"); // because stupid hud is using Menus_PaintAll
+			}
 #endif
 		}
 	}
@@ -917,6 +920,12 @@ Generates and draws a game scene and status information at the given time.
 */
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback ) {
 	int		inwater;
+
+	if (cg.cameraMode && cg.pauseBreak) {
+		if(cg.time > cg.pauseBreak) {
+			cg.pausedTime += (serverTime - cg.time);
+		}
+	}
 
 	cg.time = serverTime;
 	cg.demoPlayback = demoPlayback;
