@@ -314,6 +314,7 @@ static void CG_Item( centity_t *cent ) {
 	}
 
 	ent.hModel = cg_items[es->modelindex].models[0];
+	ent.customSkin = cg_items[es->modelindex].skin;
 
 	VectorCopy( cent->lerpOrigin, ent.origin);
 	VectorCopy( cent->lerpOrigin, ent.oldorigin);

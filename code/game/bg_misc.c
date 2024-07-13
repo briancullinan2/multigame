@@ -105,7 +105,8 @@ gitem_t	bg_itemlist[] =
 		IT_ARMOR,
 		0,
 /* precache */ "",
-/* sounds */ ""
+/* sounds */ "",
+		"models/powerups/armor/armor_red.skin%rainbow"
 	},
 
 	//

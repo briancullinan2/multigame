@@ -964,6 +964,10 @@ void CG_RegisterItemVisuals( int itemNum ) {
 	itemInfo->registered = qtrue;
 
 	itemInfo->models[0] = trap_R_RegisterModel( item->world_model[0] );
+	if(item->skin) {
+		itemInfo->skin = trap_R_RegisterSkin( item->skin );
+	}
+
 
 	itemInfo->icon = trap_R_RegisterShaderNoMip( item->icon );
 

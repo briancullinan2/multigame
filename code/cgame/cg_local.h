@@ -482,6 +482,7 @@ typedef struct {
 	qhandle_t		models[MAX_ITEM_MODELS];
 	qhandle_t		icon;
 	qhandle_t		icon_df;
+	qhandle_t		skin;
 } itemInfo_t;
 
 
