@@ -265,6 +265,7 @@ void G_RegisterCvars( void ) {
 	trap_Cvar_Set( "g_doWarmup", "1" );
 }
 
+static void G_LocateSpawnSpots( void );
 
 void UpdateGameType() {
 	int i;

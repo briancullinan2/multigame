@@ -989,7 +989,7 @@ void CG_PredictPlayerState( void ) {
 	// prepare for pmove
 	cg_pmove.ps = &cg.predictedPlayerState;
 #ifdef USE_ADVANCED_ITEMS
-	cg_pmove.inventory = &cg.inventory;
+	memcpy(cg_pmove.inventory, cg.inventory, sizeof(cg.inventory));
 #endif
 	cg_pmove.trace = CG_Trace;
 	cg_pmove.pointcontents = CG_PointContents;

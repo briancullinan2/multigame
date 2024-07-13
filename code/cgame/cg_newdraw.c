@@ -519,6 +519,7 @@ static void CG_DrawSelectedPlayerPowerup( rectDef_t *rect, qboolean draw2D ) {
 		}
 
   }
+
 }
 
 

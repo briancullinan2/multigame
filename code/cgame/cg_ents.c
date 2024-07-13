@@ -314,7 +314,7 @@ static void CG_Item( centity_t *cent ) {
 	}
 
 	ent.hModel = cg_items[es->modelindex].models[0];
-	ent.customSkin = cg_items[es->modelindex].skin;
+	ent.customSkin = cg_items[es->modelindex].customSkin;
 
 	VectorCopy( cent->lerpOrigin, ent.origin);
 	VectorCopy( cent->lerpOrigin, ent.oldorigin);
@@ -342,6 +342,7 @@ static void CG_Item( centity_t *cent ) {
 
 	// increase the size of the weapons when they are presented as items
 	if ( item->giType == IT_WEAPON ) {
+		refEntity_t   barrel;
 		VectorScale( ent.axis[0], 1.5, ent.axis[0] );
 		VectorScale( ent.axis[1], 1.5, ent.axis[1] );
 		VectorScale( ent.axis[2], 1.5, ent.axis[2] );
@@ -357,6 +358,7 @@ static void CG_Item( centity_t *cent ) {
 			ent.shaderRGBA[2] = ci->color1[2] * 255.0f;
 			ent.shaderRGBA[3] = 255;
 		}
+		
 	}
 
 #ifdef MISSIONPACK
@@ -371,7 +373,8 @@ static void CG_Item( centity_t *cent ) {
 	// add to refresh list
 	trap_R_AddRefEntityToScene(&ent);
 
-#ifdef MISSIONPACK
+	// i always hated how the machine gun doesn't show the barrel
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	if ( item->giType == IT_WEAPON && wi->barrelModel ) {
 		refEntity_t	barrel;
 
@@ -417,6 +420,7 @@ static void CG_Item( centity_t *cent ) {
 					VectorScale( ent.axis[2], frac, ent.axis[2] );
 					ent.nonNormalizedAxes = qtrue;
 				}
+				ent.customSkin = cg_items[es->modelindex].customSkin2;
 				trap_R_AddRefEntityToScene( &ent );
 			}
 		}

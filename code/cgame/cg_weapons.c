@@ -964,8 +964,8 @@ void CG_RegisterItemVisuals( int itemNum ) {
 	itemInfo->registered = qtrue;
 
 	itemInfo->models[0] = trap_R_RegisterModel( item->world_model[0] );
-	if(item->skin) {
-		itemInfo->skin = trap_R_RegisterSkin( item->skin );
+	if(item->skinNames[0]) {
+		itemInfo->customSkin = trap_R_RegisterSkin( item->skinNames[0] );
 	}
 
 
@@ -1000,6 +1000,9 @@ void CG_RegisterItemVisuals( int itemNum ) {
 		item->giType == IT_ARMOR || item->giType == IT_HOLDABLE ) {
 		if ( item->world_model[1] ) {
 			itemInfo->models[1] = trap_R_RegisterModel( item->world_model[1] );
+		}
+		if(item->skinNames[1]) {
+			itemInfo->customSkin2 = trap_R_RegisterSkin( item->skinNames[1] );
 		}
 	}
 }
@@ -1458,6 +1461,8 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 
 	CG_PositionEntityOnTag( &gun, parent, parent->hModel, "tag_weapon");
 
+	gun.customSkin = cg_items[weapon->item - bg_itemlist].customSkin;
+
 	CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups );
 
 	// add the spinning barrel
@@ -1474,6 +1479,8 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		AnglesToAxis( angles, barrel.axis );
 
 		CG_PositionRotatedEntityOnTag( &barrel, &gun, weapon->weaponModel, "tag_barrel" );
+	
+		barrel.customSkin = cg_items[weapon->item - bg_itemlist].customSkin2;
 
 		CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups );
 	}

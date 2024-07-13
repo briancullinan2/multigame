@@ -2938,7 +2938,13 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) {
+	if ( 
+#ifdef USE_ADVANCED_ITEMS
+		cg.inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS]
+#else
+		cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) 
+#endif
+	) {
 		if ( !ci->invulnerabilityStartTime ) {
 			ci->invulnerabilityStartTime = cg.time;
 		}
@@ -2947,8 +2953,14 @@ void CG_Player( centity_t *cent ) {
 	else {
 		ci->invulnerabilityStartTime = 0;
 	}
-	if ( (cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) ||
-		cg.time - ci->invulnerabilityStopTime < 250 ) {
+	if ( 
+#ifdef USE_ADVANCED_ITEMS
+		cg.inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS]
+#else
+		(cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) 
+#endif
+		|| cg.time - ci->invulnerabilityStopTime < 250
+	) {
 
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.invulnerabilityPowerupModel;

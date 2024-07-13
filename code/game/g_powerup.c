@@ -8,9 +8,11 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	vec3_t	origin, angles;
 	int		i, j;
 	gentity_t *drop;
+
   int itemClass = floor(powerup / PW_MAX_POWERUPS);
   ent->client->inventory[itemClass][powerup % PW_MAX_POWERUPS] = 0;
   ent->client->inventoryModified[itemClass] = qtrue;
+  ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 
   switch(powerup) {
   case HI_TELEPORTER:		// teleporter

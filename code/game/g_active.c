@@ -446,7 +446,7 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		memset( &pm, 0, sizeof( pm ) );
 		pm.ps = &client->ps;
 #ifdef USE_ADVANCED_ITEMS
-		pm.inventory = &client->inventory;
+		memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
 #endif
 		pm.cmd = *ucmd;
 		if ( client->noclip )
@@ -678,6 +678,11 @@ void ClientIntermissionThink( gclient_t *client ) {
 }
 
 
+#ifdef USE_ADVANCED_ITEMS
+void UsePowerup( gentity_t *ent, powerup_t powerup );
+#endif
+
+
 /*
 ================
 ClientEvents
@@ -755,6 +760,11 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			break;
 
 #ifdef USE_ADVANCED_ITEMS
+		case EV_USE_ITEM5:
+		case EV_USE_ITEM4:
+		case EV_USE_ITEM3:
+		case EV_USE_ITEM2:
+		case EV_USE_ITEM1:
 		case EV_USE_ITEM0:
 			UsePowerup(ent, client->ps.eventParms[ i & (MAX_PS_EVENTS-1) ]);
 			break;
@@ -859,7 +869,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 /*
 ==============
 StuckInOtherClient
@@ -1021,10 +1031,10 @@ void ClientThink_real( gentity_t *ent ) {
 			itemBits = 0;
 			hasItems = qfalse;
 			for(j = 0; j < PW_MAX_POWERUPS; j++) {
-				gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
-				if(!item || !item->giTag) {
-					continue;
-				}
+				//gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
+				//if(!item || !item->giTag) {
+				//	continue;
+				//}
 				hasItems = qtrue;
 				if(client->inventory[prevItemClass][j] > 0) {
 					itemBits |= (1 << j);
@@ -1229,9 +1239,14 @@ void ClientThink_real( gentity_t *ent ) {
 		ent->client->pers.cmd.buttons |= BUTTON_GESTURE;
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	// check for invulnerability expansion before doing the Pmove
-	if (client->ps.powerups[PW_INVULNERABILITY] ) {
+#ifdef USE_ADVANCED_ITEMS
+	if (client->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] ) 
+#else
+	if (client->ps.powerups[PW_INVULNERABILITY] ) 
+#endif
+	{
 		if ( !(client->ps.pm_flags & PMF_INVULEXPAND) ) {
 			vec3_t mins = { -42, -42, -42 };
 			vec3_t maxs = { 42, 42, 42 };
@@ -1257,6 +1272,9 @@ void ClientThink_real( gentity_t *ent ) {
 #endif
 
 	pm.ps = &client->ps;
+#ifdef USE_ADVANCED_ITEMS
+	memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
+#endif
 	pm.cmd = *ucmd;
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
@@ -1627,13 +1645,36 @@ void ClientEndFrame( gentity_t *ent ) {
 			item->giType != IT_PERSISTANT_POWERUP &&
 			client->inventory[itemClass][i % PW_MAX_POWERUPS] && 
 			client->inventory[itemClass][i % PW_MAX_POWERUPS] < client->pers.cmd.serverTime) {
+
 			client->inventory[itemClass][i % PW_MAX_POWERUPS] = 0;
 			client->inventoryModified[itemClass] = qtrue;
 		}
 	}
 #endif
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
+		ent->client->inventory[(int)floor(PW_GUARD / PW_GUARD)][PW_GUARD % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+		ent->client->inventory[(int)floor(PW_SCOUT / PW_MAX_POWERUPS)][PW_SCOUT % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_SCOUT / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_DOUBLER ) {
+		ent->client->inventory[(int)floor(PW_DOUBLER / PW_MAX_POWERUPS)][PW_DOUBLER % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_DOUBLER / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
+		ent->client->inventory[(int)floor(PW_AMMOREGEN / PW_MAX_POWERUPS)][PW_AMMOREGEN % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_AMMOREGEN / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if ( ent->client->invulnerabilityTime > level.time ) {
+		ent->client->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] = 1;
+		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
+	}
+#else
+#ifdef MISSIONPACK
 	// set powerup for player animation
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		ent->client->ps.powerups[PW_GUARD] = level.time;
@@ -1650,6 +1691,7 @@ void ClientEndFrame( gentity_t *ent ) {
 	if ( ent->client->invulnerabilityTime > level.time ) {
 		ent->client->ps.powerups[PW_INVULNERABILITY] = level.time;
 	}
+#endif
 #endif
 
 	// save network bandwidth

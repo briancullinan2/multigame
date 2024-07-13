@@ -465,7 +465,7 @@ static void CG_UseItem( centity_t *cent )
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.medkitSound );
 		break;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case HI_KAMIKAZE:
 		break;
 

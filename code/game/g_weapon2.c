@@ -312,7 +312,7 @@ weapon_railgun_fire
 #define	MAX_RAIL_HITS	4
 void fire_special_railgun( gentity_t *ent ) {
 	vec3_t		end;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	vec3_t impactpoint, bouncedir;
 #endif
 	trace_t		trace;
@@ -409,7 +409,7 @@ void fire_special_railgun( gentity_t *ent ) {
 		}
 		traceEnt = &g_entities[ trace.entityNum ];
 		if ( traceEnt->takedamage ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if ( G_InvulnerabilityEffect( traceEnt, forward, trace.endpos, impactpoint, bouncedir ) ) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );

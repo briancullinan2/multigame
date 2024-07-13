@@ -79,7 +79,7 @@ Unofficial Quake III Arena gamecode patch
   * Quake 5 play on the home-worlds of each species, but in a mistakenly massive defeat of stop the Arenas on Vadrigas, they've expanded to each home world.
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
   * Playing split screen across the network for team based games where you might've been playing next to each other so you can watch your teammate.
-  
+  * automatically generate the rest of team assets like colors players using dynamic skins
 
 # Documentation
 

@@ -202,6 +202,7 @@ void hud_weapons(float x, float y, weaponInfo_t *weapon) {
 	refdef.time = cg.time;
 
 	trap_R_ClearScene();
+	ent.customSkin = cg_items[weapon->item - bg_itemlist].customSkin;
 	trap_R_AddRefEntityToScene( &ent );
   if(weapon->barrelModel) {
     memset( &barrel, 0, sizeof( barrel ) );
@@ -215,7 +216,8 @@ void hud_weapons(float x, float y, weaponInfo_t *weapon) {
   	barrel.renderfx = RF_NOSHADOW;		// no stencil shadows
     CG_PositionRotatedEntityOnTag( &barrel, &ent, weapon->weaponModel, "tag_barrel" );
     AxisCopy( ent.axis, barrel.axis );
-    trap_R_AddRefEntityToScene( &barrel );
+ 	  barrel.customSkin = cg_items[weapon->item - bg_itemlist].customSkin2;
+   trap_R_AddRefEntityToScene( &barrel );
   }
 	trap_R_RenderScene( &refdef );
 }

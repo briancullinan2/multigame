@@ -267,7 +267,7 @@ typedef struct {
 	int			(*pointcontents)( const vec3_t point, int passEntityNum );
 
 #ifdef USE_ADVANCED_ITEMS
-	int (*inventory)[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+	int inventory[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
 #endif
 
 } pmove_t;
@@ -451,7 +451,7 @@ typedef enum {
 	WP_PORTAL_GUN = 10,
 #endif
 	WP_CHAINSAW = 11,
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	WP_CHAINGUN = 12,
 	WP_NAILGUN = 13,
 	WP_PROX_LAUNCHER = 14,
@@ -501,13 +501,16 @@ typedef enum {
 	WP_PLASMAGUN,
 	WP_BFG,
 	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	WP_NAILGUN,
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
 #endif
 #ifdef USE_FLAME_THROWER
 	WP_FLAME_THROWER,
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	WP_HOMING_ROCKET,
 #endif
 
 	WP_NUM_WEAPONS,
@@ -959,7 +962,7 @@ typedef struct gitem_s {
 
 	char		const *precaches;		// string of all models and images this item will use
 	char		const *sounds;		// string of all sounds this item will use
-	char		const *skin;
+	char		*skinNames[MAX_ITEM_MODELS];
 } gitem_t;
 
 // included in both the game dll and the client

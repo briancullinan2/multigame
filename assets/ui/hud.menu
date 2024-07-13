@@ -26,24 +26,24 @@
 
 	//	POWERUP AREA	//
 
-	menuDef {
-		name "powerup area"
-		fullScreen MENU_FALSE
-		visible MENU_TRUE
-		rect 570 220 50 100
+	// menuDef {
+	// 	name "powerup area"
+	// 	fullScreen MENU_FALSE
+	// 	visible MENU_TRUE
+	// 	rect 570 220 50 100
 
-		itemDef {
-			name "powerupArea"
-			rect 0 0 40 40
-			visible 1
-			decoration
-			ownerdraw CG_AREA_POWERUP
-			special 4			// spacing
-			align HUD_VERTICAL
-		}
+	// 	itemDef {
+	// 		name "powerupArea"
+	// 		rect 0 0 40 40
+	// 		visible 1
+	// 		decoration
+	// 		ownerdraw CG_AREA_POWERUP
+	// 		special 4			// spacing
+	// 		align HUD_VERTICAL
+	// 	}
 
 
-	}
+	// }
 
 
 

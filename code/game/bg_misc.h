@@ -26,3 +26,8 @@
 
 #include "./bg_misc_weapons2.h"
 #include "./bg_misc_ammo2.h"
+
+#ifdef USE_ADVANCED_ITEMS
+#include "./bg_misc_items2.h"
+#endif
+
