@@ -589,10 +589,10 @@ gentity_t *RedirectTarget(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 	//   players to target
 	if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return qfalse;
 
-	//trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
-	//	tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
+	trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
+		tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
 
-	//if ( tent != &g_entities[tr.entityNum] ) return qfalse;
+	if ( tent != &g_entities[tr.entityNum] ) return qfalse;
 
 	targetlength = tentlength;
 	VectorCopy(tentdir, targetdir);
@@ -631,7 +631,7 @@ gentity_t *RedirectEntity(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 
 	// if ( tent != &g_entities[tr.entityNum] ) return qfalse;
 
-	targetlength = tentlength;
+	//targetlength = tentlength;
 	VectorCopy(tentdir, targetdir);
 	return tent;
 }

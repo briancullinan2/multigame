@@ -890,6 +890,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
 #ifdef USE_ADVANCED_ITEMS
 	memset( self->client->inventory, 0, sizeof( self->client->inventory ) );
+	memset( self->client->inventoryModified, 1, sizeof( self->client->inventoryModified ) );
 #endif
 
 #ifdef USE_PORTALS

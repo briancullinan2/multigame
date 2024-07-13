@@ -1035,6 +1035,9 @@ void ClientThink_real( gentity_t *ent ) {
 				//if(!item || !item->giTag) {
 				//	continue;
 				//}
+				if(prevItemClass * PW_MAX_POWERUPS + j > PW_NUM_POWERUPS) {
+					continue;
+				}
 				hasItems = qtrue;
 				if(client->inventory[prevItemClass * PW_MAX_POWERUPS + j] > 0) {
 					itemBits |= (1 << j);
@@ -1640,14 +1643,13 @@ void ClientEndFrame( gentity_t *ent ) {
 #ifdef USE_ADVANCED_ITEMS
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
 		gitem_t *item = BG_FindItemForPowerup(i);
-		int itemClass = floor(i / PW_MAX_POWERUPS);
 		if(item->giType != IT_HOLDABLE &&
 			item->giType != IT_PERSISTANT_POWERUP &&
 			client->inventory[i] && 
 			client->inventory[i] < client->pers.cmd.serverTime) {
 
 			client->inventory[i] = 0;
-			client->inventoryModified[itemClass] = qtrue;
+			client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
 		}
 	}
 

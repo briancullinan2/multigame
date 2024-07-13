@@ -1173,6 +1173,7 @@ void MoveClientToIntermission( gentity_t *ent ) {
 	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #ifdef USE_ADVANCED_ITEMS
 	memset( client->inventory, 0, sizeof( client->inventory ) );
+	memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
 #endif
 
 	client->ps.eFlags = ( client->ps.eFlags & ~EF_PERSISTANT ) | ( client->ps.eFlags & EF_PERSISTANT );
@@ -1733,6 +1734,7 @@ static void G_WarmupEnd( void )
 		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #ifdef USE_ADVANCED_ITEMS
 		memset( client->inventory, 0, sizeof( client->inventory ) );
+		memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
 #endif
 
 

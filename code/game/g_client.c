@@ -1155,6 +1155,11 @@ void ClientSpawn(gentity_t *ent) {
 	client->accuracy_shots = accuracy_shots;
 	client->lastkilled_client = -1;
 
+#ifdef USE_ADVANCED_ITEMS
+	memset( client->inventory, 0, sizeof( client->inventory ) );
+	memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
+#endif
+
 	for ( i = 0 ; i < MAX_PERSISTANT ; i++ ) {
 		client->ps.persistant[i] = persistant[i];
 	}
