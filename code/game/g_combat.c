@@ -214,6 +214,12 @@ void TossClientCubes( gentity_t *self ) {
 	drop->spawnflags = self->client->sess.sessionTeam;
 }
 
+#endif
+
+
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+
 
 /*
 =================
@@ -829,11 +835,13 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 #endif
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	TossClientPersistantPowerups( self );
+#ifdef MISSIONPACK // TODO || USE_ADVANCED_GAMES
 	if( g_gametype.integer == GT_HARVESTER ) {
 		TossClientCubes( self );
 	}
+#endif
 #endif
 
 	Cmd_Score_f( self );		// show scores
@@ -1282,7 +1290,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	// unless they are rocket jumping
 	if ( attacker->client && attacker != targ ) {
 		max = attacker->client->ps.stats[STAT_MAX_HEALTH];
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[attacker->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			max /= 2;
 		}

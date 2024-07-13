@@ -129,7 +129,7 @@ G_CVAR( g_thawTime, "g_thawTime", "180", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
 
 #ifdef USE_PHYSICS_VARS
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 G_CVAR( g_scoutFactor, "g_scoutFactor", "1.5", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
 #endif
 G_CVAR( g_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )

@@ -613,10 +613,10 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	case IT_POWERUP:
 		respawn = Pickup_Powerup(ent, other);
 		// allow prediction for some powerups
-		if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
-			predict = qtrue;
-		else
-			predict = qfalse;
+		//if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
+		//	predict = qtrue;
+		//else
+		//	predict = qfalse;
 		break;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:

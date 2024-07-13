@@ -181,7 +181,7 @@ CG_CVAR( cg_healthBar, "cg_healthBar", "1", CVAR_USERINFO | CVAR_TEMP )
 
 
 #ifdef USE_PHYSICS_VARS
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 CG_CVAR( cg_scoutFactor, "cg_scoutFactor", "1.5", CVAR_SERVERINFO)
 #endif
 CG_CVAR( cg_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO)

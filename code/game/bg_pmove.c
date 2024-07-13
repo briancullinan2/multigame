@@ -65,7 +65,7 @@ static int pm_respawntimer = 0;
 #ifdef USE_PHYSICS_VARS
 
 #ifdef CGAME
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #define g_scoutFactor  cg_scoutFactor
 #endif
 #define g_hasteFactor  cg_hasteFactor
@@ -73,7 +73,7 @@ static int pm_respawntimer = 0;
 #define g_gravity      cg_gravity
 #define g_wallWalk     cg_wallWalk
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 extern vmCvar_t  cg_scoutFactor;
 #endif
 extern vmCvar_t  cg_hasteFactor;
@@ -83,7 +83,7 @@ extern vmCvar_t  cg_wallWalk;
 
 #else
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 extern vmCvar_t  g_scoutFactor;
 #endif
 extern vmCvar_t  g_hasteFactor;
@@ -1993,7 +1993,7 @@ static void PM_Weapon( void ) {
   } else
 #endif
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 #ifdef USE_PHYSICS_VARS
     addTime /= g_scoutFactor.value;

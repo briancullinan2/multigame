@@ -80,6 +80,7 @@ Unofficial Quake III Arena gamecode patch
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
   * Playing split screen across the network for team based games where you might've been playing next to each other so you can watch your teammate.
   * automatically generate the rest of team assets like colors players using dynamic skins
+  * LookAtKiller and LookAheadOf for aimbot powerup
 
 # Documentation
 

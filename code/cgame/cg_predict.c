@@ -556,8 +556,13 @@ static void CG_TouchItem( centity_t *cent ) {
 	// grab it
 #ifdef USE_WEAPON_ORDER
   if(item->giType == IT_WEAPON) {
+#ifdef USE_ADVANCED_WEAPONS
+    alreadyHad = cg.snap->weapons[(int)floor(item->giTag / WP_MAX_WEAPONS)] & (1 << (item->giTag % WP_MAX_WEAPONS));
+#else
     alreadyHad = cg.snap->ps.stats[STAT_WEAPONS] & (1 << item->giTag);
+#endif
   }
+	//if(item->giTag )
   BG_AddPredictableEventToPlayerstate( alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
 #else
 	BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );

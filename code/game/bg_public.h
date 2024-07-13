@@ -95,7 +95,7 @@ typedef enum {
 
 	GT_TEAM,			// team deathmatch
 	GT_CTF,				// capture the flag
-#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU) || defined(USE_ADVANCED_ITEMS)
 	GT_1FCTF,
 	GT_OBELISK,
 	GT_HARVESTER,
@@ -207,7 +207,11 @@ typedef enum {
 	HI_PORTAL = 23,
 	HI_INVULNERABILITY = 24,
 
-	PW_NUM_POWERUPS = 25,
+	PW_VISIBILITY = 30,
+
+
+
+	PW_NUM_POWERUPS = 31,
 
 } powerup_t;
 

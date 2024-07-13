@@ -2906,6 +2906,11 @@ void CG_Player( centity_t *cent ) {
 		}
 	}
 
+
+#ifdef USE_ADVANCED_ITEMS
+// TODO: check for powerup in new arrays
+#endif
+
 	if ( cent->currentState.powerups & ( 1 << PW_GUARD ) ) {
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.guardPowerupModel;
