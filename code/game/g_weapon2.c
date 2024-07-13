@@ -545,6 +545,9 @@ void G_MissileDie( gentity_t *self, gentity_t *inflictor,
 
 
 #ifdef USE_HOMING_MISSILE
+
+
+
 /*
 ================
 CCH: rocket_think
@@ -554,19 +557,93 @@ Fly like an eagle...
 ================
 */
 #define ROCKET_SPEED	   600
-#define ROCKET_VIS_CONE  0.95
-#define ROCKET_TURNING   0.08
+#define ROCKET_VIS_CONE  0.90
+//#define ROCKET_TURNING   0.08
+#define ROCKET_TURNING   0.04
 // 
+
+gentity_t *RedirectTarget(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_t targetdir) {
+	vec3_t		tentdir, midbody;
+	float		targetlength, tentlength;
+	trace_t		tr;
+
+	// Aim for the body, not the feet
+	midbody[0] = tent->r.currentOrigin[0] + 
+		(tent->r.mins[0] + tent->r.maxs[0]) * 0.5;
+	midbody[1] = tent->r.currentOrigin[1] + 
+		(tent->r.mins[1] + tent->r.maxs[1]) * 0.5;
+	midbody[2] = tent->r.currentOrigin[2] + 
+		(tent->r.mins[2] + tent->r.maxs[2]) * 0.5;
+
+	VectorSubtract(midbody, ent->r.currentOrigin, tentdir);
+	tentlength = VectorLength(tentdir);
+	if ( tentlength > LIGHTNING_RANGE ) return qfalse;
+
+	// Quick normalization of tentdir since 
+	// we already have the length
+	tentdir[0] /= tentlength;
+	tentdir[1] /= tentlength;
+	tentdir[2] /= tentlength;
+
+	// this value determines how wide from it's direction it can search for 
+	//   players to target
+	if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return qfalse;
+
+	//trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
+	//	tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
+
+	//if ( tent != &g_entities[tr.entityNum] ) return qfalse;
+
+	targetlength = tentlength;
+	VectorCopy(tentdir, targetdir);
+	return tent;
+}
+
+gentity_t *RedirectEntity(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_t targetdir) {
+	vec3_t		tentdir, midbody;
+	float		targetlength, tentlength;
+	trace_t		tr;
+
+	// Aim for the body, not the feet
+	// midbody[0] = tent->r.currentOrigin[0] + 
+	// 	(tent->r.mins[0] + tent->r.maxs[0]) * 0.5;
+	// midbody[1] = tent->r.currentOrigin[1] + 
+	// 	(tent->r.mins[1] + tent->r.maxs[1]) * 0.5;
+	// midbody[2] = tent->r.currentOrigin[2] + 
+	// 	(tent->r.mins[2] + tent->r.maxs[2]) * 0.5;
+
+	VectorSubtract(tent->r.currentOrigin, ent->r.currentOrigin, tentdir);
+	tentlength = VectorLength(tentdir);
+	if ( tentlength > LIGHTNING_RANGE ) return qfalse;
+
+	// Quick normalization of tentdir since 
+	// we already have the length
+	tentdir[0] /= tentlength;
+	tentdir[1] /= tentlength;
+	tentdir[2] /= tentlength;
+
+	// this value determines how wide from it's direction it can search for 
+	//   players to target
+	 if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return qfalse;
+
+	// trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
+	// 	tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
+
+	// if ( tent != &g_entities[tr.entityNum] ) return qfalse;
+
+	targetlength = tentlength;
+	VectorCopy(tentdir, targetdir);
+	return tent;
+}
+
 
 void rocket_think( gentity_t *ent ) {
 	gentity_t	*target, *tent;
-	float		targetlength, tentlength;
 	int		i;
 	vec3_t		tentdir, targetdir, forward, midbody;
 	trace_t		tr;
 
 	target = NULL;
-	targetlength = LIGHTNING_RANGE;
 	// Best way to get forward vector for this rocket?
 	VectorCopy(ent->s.pos.trDelta, forward);
 	VectorNormalize(forward);
@@ -577,41 +654,34 @@ void rocket_think( gentity_t *ent ) {
 		if (!tent->inuse) continue;
 		if (tent == ent->parent) continue;
 		if ( OnSameTeam( tent, ent->parent ) ) continue;
+		if (tent->health <= 0) continue;
 
-		// Aim for the body, not the feet
-		midbody[0] = tent->r.currentOrigin[0] + 
-			(tent->r.mins[0] + tent->r.maxs[0]) * 0.5;
-		midbody[1] = tent->r.currentOrigin[1] + 
-			(tent->r.mins[1] + tent->r.maxs[1]) * 0.5;
-		midbody[2] = tent->r.currentOrigin[2] + 
-			(tent->r.mins[2] + tent->r.maxs[2]) * 0.5;
-
-		VectorSubtract(midbody, ent->r.currentOrigin, tentdir);
-		tentlength = VectorLength(tentdir);
-		if ( tentlength > targetlength ) continue;
-
-		// Quick normalization of tentdir since 
-		// we already have the length
-		tentdir[0] /= tentlength;
-		tentdir[1] /= tentlength;
-		tentdir[2] /= tentlength;
-    // this value determines how wide from it's direction it can search for 
-    //   players to target
-		if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) continue;
-
-		trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
-			tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
-
-		if ( tent != &g_entities[tr.entityNum] ) continue;
-
-		target = tent;
-		targetlength = tentlength;
-		VectorCopy(tentdir, targetdir);
+		target = RedirectTarget(ent, tent, forward, targetdir);
+		if(!target) {
+			continue;
+		} else {
+			//break; ?
+		}
 	}
 
 	ent->nextthink += 20;
 
-	if (!target) return;
+	if (!target) {
+		for (i = 0; i < level.numSpawnSpots; i++) {
+			// Here we use tent to point to potential targets
+			tent = level.spawnSpots[i];
+
+			//if ( OnSameTeam( tent, ent->parent ) ) continue;
+			target = RedirectEntity(ent, tent, forward, targetdir);
+			if(!target) {
+				continue;
+			}
+		}
+		if (!target) {
+		//G_Printf("no target!\n");
+			return;
+		}
+	}
 
   // this variable determines how quickly it can change direction
 	VectorMA(forward, ROCKET_TURNING, targetdir, targetdir);
@@ -627,7 +697,8 @@ void rocket_think( gentity_t *ent ) {
 fire_rocket
 =================
 */
-gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
+gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir, 
+	qboolean bounce, qboolean homing, qboolean vulnerable, qboolean accelerate) {
 	gentity_t	*bolt;
 
 	VectorNormalize (dir);
@@ -635,19 +706,15 @@ gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt = G_Spawn();
 	bolt->classname = "rocket";
 #ifdef USE_BOUNCE_RPG
-  if (self->flags & FL_ROCKETBOUNCE || wp_rocketBounce.integer) {
+  if (self->flags & FL_ROCKETBOUNCE || wp_rocketBounce.integer || bounce) {
   	bolt->s.eFlags = EF_BOUNCE;
 		// shorter explosion time because of the extra bouncing chaos
     bolt->nextthink = level.time + 2500;
 	} else
 #endif
 #ifdef USE_HOMING_MISSILE
-  if(wp_rocketHoming.integer)
+  if(wp_rocketHoming.integer || homing) {
     bolt->nextthink = level.time + 20;	// CCH
-  else
-#endif
-#ifdef USE_HOMING_MISSILE
-  if(wp_rocketHoming.integer) {
     bolt->think = rocket_think;		// CCH
   } else
 #endif
@@ -657,7 +724,7 @@ gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.weapon = WP_ROCKET_LAUNCHER;
 #ifdef USE_VULN_RPG
   // Lancer
-  if(wp_rocketVuln.integer) {
+  if(wp_rocketVuln.integer || vulnerable) {
     bolt->health = 5;
     bolt->takedamage = qtrue;
     bolt->die = G_MissileDie;
@@ -687,7 +754,7 @@ gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->s.otherEntityNum = self->s.number;
 
 #ifdef USE_ACCEL_RPG
-  if(wp_rocketAccel.integer) {
+  if(wp_rocketAccel.integer || accelerate) {
     bolt->s.pos.trType = TR_ACCEL;
   	bolt->s.pos.trDuration = 500;
   } else
@@ -697,12 +764,12 @@ gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	VectorCopy( start, bolt->s.pos.trBase );
 	SnapVector( bolt->s.pos.trBase );			// save net bandwidth
 #ifdef USE_HOMING_MISSILE
-  if(wp_rocketHoming.integer)
+  if(wp_rocketHoming.integer || homing)
     VectorScale( dir, ROCKET_SPEED, bolt->s.pos.trDelta );	// CCH
   else
 #endif
 #ifdef USE_ACCEL_RPG
-  if(wp_rocketAccel.integer)
+  if(wp_rocketAccel.integer || accelerate)
     VectorScale( dir, 50, bolt->s.pos.trDelta );
   else
 #endif

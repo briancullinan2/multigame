@@ -1036,7 +1036,7 @@ void ClientThink_real( gentity_t *ent ) {
 				//	continue;
 				//}
 				hasItems = qtrue;
-				if(client->inventory[prevItemClass][j] > 0) {
+				if(client->inventory[prevItemClass * PW_MAX_POWERUPS + j] > 0) {
 					itemBits |= (1 << j);
 				}
 			}
@@ -1242,7 +1242,7 @@ void ClientThink_real( gentity_t *ent ) {
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	// check for invulnerability expansion before doing the Pmove
 #ifdef USE_ADVANCED_ITEMS
-	if (client->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] ) 
+	if (client->inventory[PW_INVULNERABILITY] ) 
 #else
 	if (client->ps.powerups[PW_INVULNERABILITY] ) 
 #endif
@@ -1637,40 +1637,38 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-#ifdef USE_ADVANCED_GAMES
+#ifdef USE_ADVANCED_ITEMS
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
 		gitem_t *item = BG_FindItemForPowerup(i);
 		int itemClass = floor(i / PW_MAX_POWERUPS);
 		if(item->giType != IT_HOLDABLE &&
 			item->giType != IT_PERSISTANT_POWERUP &&
-			client->inventory[itemClass][i % PW_MAX_POWERUPS] && 
-			client->inventory[itemClass][i % PW_MAX_POWERUPS] < client->pers.cmd.serverTime) {
+			client->inventory[i] && 
+			client->inventory[i] < client->pers.cmd.serverTime) {
 
-			client->inventory[itemClass][i % PW_MAX_POWERUPS] = 0;
+			client->inventory[i] = 0;
 			client->inventoryModified[itemClass] = qtrue;
 		}
 	}
-#endif
 
-#ifdef USE_ADVANCED_ITEMS
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
-		ent->client->inventory[(int)floor(PW_GUARD / PW_GUARD)][PW_GUARD % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventory[PW_GUARD] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
 	}
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
-		ent->client->inventory[(int)floor(PW_SCOUT / PW_MAX_POWERUPS)][PW_SCOUT % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventory[PW_SCOUT] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_SCOUT / PW_MAX_POWERUPS)] = qtrue;
 	}
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_DOUBLER ) {
-		ent->client->inventory[(int)floor(PW_DOUBLER / PW_MAX_POWERUPS)][PW_DOUBLER % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventory[PW_DOUBLER] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_DOUBLER / PW_MAX_POWERUPS)] = qtrue;
 	}
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
-		ent->client->inventory[(int)floor(PW_AMMOREGEN / PW_MAX_POWERUPS)][PW_AMMOREGEN % PW_MAX_POWERUPS] = level.time;
+		ent->client->inventory[PW_AMMOREGEN] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_AMMOREGEN / PW_MAX_POWERUPS)] = qtrue;
 	}
 	if ( ent->client->invulnerabilityTime > level.time ) {
-		ent->client->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] = 1;
+		ent->client->inventory[PW_INVULNERABILITY] = 1;
 		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
 	}
 #else

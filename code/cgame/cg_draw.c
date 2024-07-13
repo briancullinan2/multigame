@@ -1439,7 +1439,7 @@ static float CG_DrawPowerups( float y ) {
 	active = 0;
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
 		int itemClass = floor(i / PW_MAX_POWERUPS);
-		t = cg.inventory[itemClass][i % PW_MAX_POWERUPS];
+		t = cg.inventory[i];
 		// ZOID--don't draw if the power up has unlimited time (999 seconds)
 		// This is true of the CTF flags
 		if ( t <= 0 || t >= 999000) {

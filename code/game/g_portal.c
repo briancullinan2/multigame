@@ -665,7 +665,7 @@ void DropPortalDestination(gentity_t *player, vec3_t isWall)
   {
     player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
 #ifdef USE_ADVANCED_ITEMS
-    player->client->inventory[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)][HI_PORTAL % PW_MAX_POWERUPS] = 1;
+    player->client->inventory[HI_PORTAL] = 1;
     player->client->inventoryModified[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)] = qtrue;
 #endif
   }
@@ -776,7 +776,7 @@ void DropPortalSource(gentity_t *player, vec3_t isWall)
   {
     player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
 #ifdef USE_ADVANCED_ITEMS
-    player->client->inventory[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)][HI_PORTAL % PW_MAX_POWERUPS] = 1;
+    player->client->inventory[HI_PORTAL] = 1;
     player->client->inventoryModified[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)] = qtrue;
 #endif
   }

@@ -446,7 +446,8 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 
 
 #if defined(USE_BOUNCE_RPG) || defined(USE_HOMING_MISSILE) || defined(USE_VULN_RPG) || defined(USE_ACCEL_RPG)
-gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir);
+gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir,
+qboolean bounce, qboolean homing, qboolean vulnerable, qboolean accelerate);
 #endif
 
 /*
@@ -457,27 +458,32 @@ ROCKET
 ======================================================================
 */
 
-void Weapon_RocketLauncher_Fire (gentity_t *ent) {
+#ifdef USE_ADVANCED_ITEMS
+void Weapon_RocketLauncher_Fire (gentity_t *ent, qboolean isHoming)
+#else
+void Weapon_RocketLauncher_Fire (gentity_t *ent)
+#endif
+{
 	gentity_t	*m;
 
 #ifdef USE_BOUNCE_RPG
 	if(wp_rocketBounce.integer) {
-		m = fire_special_rocket(ent, muzzle, forward);
+		m = fire_special_rocket(ent, muzzle, forward, qtrue, isHoming, qfalse, qfalse);
 	} else
 #endif
 #ifdef USE_HOMING_MISSILE
-  if(wp_rocketHoming.integer) {
-		m = fire_special_rocket(ent, muzzle, forward);
+  if(wp_rocketHoming.integer || isHoming) {
+		m = fire_special_rocket(ent, muzzle, forward, qfalse, isHoming, qfalse, qfalse);
 	} else
 #endif
 #ifdef USE_VULN_RPG
   if(wp_rocketVuln.integer) {
-		m = fire_special_rocket(ent, muzzle, forward);
+		m = fire_special_rocket(ent, muzzle, forward, qfalse, isHoming, qtrue, qfalse);
 	} else
 #endif
 #ifdef USE_ACCEL_RPG
   if(wp_rocketAccel.integer) {
-		m = fire_special_rocket(ent, muzzle, forward);
+		m = fire_special_rocket(ent, muzzle, forward, qfalse, isHoming, qfalse, qtrue);
 	} else
 #endif
 
@@ -1218,7 +1224,12 @@ void FireWeapon( gentity_t *ent )
 		weapon_grenadelauncher_fire( ent );
 		break;
 	case WP_ROCKET_LAUNCHER:
+#ifdef USE_ADVANCED_ITEMS
+	case WP_HOMING_ROCKET:
+		Weapon_RocketLauncher_Fire( ent, ent->s.weapon == WP_HOMING_ROCKET );
+#else
 		Weapon_RocketLauncher_Fire( ent );
+#endif
 		break;
 	case WP_PLASMAGUN:
 		Weapon_Plasmagun_Fire( ent );

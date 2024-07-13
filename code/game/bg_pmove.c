@@ -1380,7 +1380,7 @@ static void PM_CheckDuck (void)
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #ifdef USE_ADVANCED_ITEMS
-	if ( pm->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] ) 
+	if ( pm->inventory[PW_INVULNERABILITY] ) 
 #else
 	if ( pm->ps->powerups[PW_INVULNERABILITY] ) 
 #endif
@@ -1471,7 +1471,7 @@ static void PM_Footsteps( void ) {
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #ifdef USE_ADVANCED_ITEMS
-		if ( pm->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] ) 
+		if ( pm->inventory[PW_INVULNERABILITY] ) 
 #else
 		if ( pm->ps->powerups[PW_INVULNERABILITY] ) 
 #endif
@@ -1716,7 +1716,7 @@ static void PM_Weapon( void ) {
 					&& pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25)) {
 					continue;
 				}
-				if(item->giType == IT_HOLDABLE && pm->inventory[itemClass][i % PW_MAX_POWERUPS]) {
+				if(item->giType == IT_HOLDABLE && pm->inventory[i]) {
 					break;
 				}
 			}
@@ -2479,7 +2479,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 #ifdef USE_ADVANCED_ITEMS
-	if ( pm->inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS] ) 
+	if ( pm->inventory[PW_INVULNERABILITY] ) 
 #else
 	if ( pm->ps->powerups[PW_INVULNERABILITY] ) 
 #endif

@@ -517,7 +517,7 @@ static void CG_TouchItem( centity_t *cent ) {
 		int tag = bg_itemlist[cent->currentState.modelindex].giTag;
 		int itemClass = floor(tag / PW_MAX_POWERUPS);
 		if(bg_itemlist[cent->currentState.modelindex].giType == IT_HOLDABLE && 
-			cg.inventory[itemClass][tag % PW_MAX_POWERUPS]) {
+			cg.inventory[tag]) {
 			return;
 		}
 	}

@@ -628,7 +628,7 @@ typedef struct {
 
 #ifdef USE_ADVANCED_ITEMS
 
-	int inventory[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+	int inventory[PW_NUM_POWERUPS];
 #endif
 
 	// auto rotating items

@@ -2692,6 +2692,12 @@ void CG_Player( centity_t *cent ) {
 		}
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if(cg.inventory[PW_VISIBILITY]) {
+		renderfx |= RF_DEPTHEXTRAHACKY | RF_STENCIL;
+	}
+#endif
+
 	if ( cg_deadBodyDarken.integer && cent->currentState.eFlags & EF_DEAD )
 		darken = qtrue;
 	else
@@ -2945,7 +2951,7 @@ void CG_Player( centity_t *cent ) {
 	}
 	if ( 
 #ifdef USE_ADVANCED_ITEMS
-		cg.inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS]
+		cg.inventory[PW_INVULNERABILITY]
 #else
 		cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) 
 #endif
@@ -2960,7 +2966,7 @@ void CG_Player( centity_t *cent ) {
 	}
 	if ( 
 #ifdef USE_ADVANCED_ITEMS
-		cg.inventory[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)][PW_INVULNERABILITY % PW_MAX_POWERUPS]
+		cg.inventory[PW_INVULNERABILITY]
 #else
 		(cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) 
 #endif

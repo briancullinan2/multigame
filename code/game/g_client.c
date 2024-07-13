@@ -936,6 +936,7 @@ const char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 			return "BotConnectfailed";
 		}
 		ent->r.svFlags |= SVF_BOT;
+		ent->r.svFlags |= SVF_BROADCAST;
 		client->sess.spectatorClient = clientNum;
 	}
 	ent->inuse = qtrue;
@@ -1174,6 +1175,7 @@ void ClientSpawn(gentity_t *ent) {
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 	client->ps.eFlags = flags;
 
+	ent->r.svFlags |= SVF_BROADCAST;
 	ent->s.groundEntityNum = ENTITYNUM_NONE;
 	ent->client = &level.clients[index];
 	ent->inuse = qtrue;

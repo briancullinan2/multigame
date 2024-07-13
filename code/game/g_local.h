@@ -418,7 +418,7 @@ struct gclient_s
 
 #ifdef USE_ADVANCED_ITEMS
 	int lastItemTime;
-	int inventory[PW_MAX_ITEMGROUPS][PW_MAX_POWERUPS];
+	int inventory[PW_NUM_POWERUPS];
 	qboolean inventoryModified[PW_MAX_ITEMGROUPS];
 #endif
 

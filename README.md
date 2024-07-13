@@ -81,6 +81,7 @@ Unofficial Quake III Arena gamecode patch
   * Playing split screen across the network for team based games where you might've been playing next to each other so you can watch your teammate.
   * automatically generate the rest of team assets like colors players using dynamic skins
   * LookAtKiller and LookAheadOf for aimbot powerup
+  * Add spawn point as a target for homing missiles if there are no other players, add homing plasma, homing bullets, homing bfg, etc
 
 # Documentation
 

@@ -235,10 +235,10 @@ static void CG_TransitionSnapshot( void ) {
 			for(j = 0; j < PW_MAX_POWERUPS; j++) {
 				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
 					CG_Printf("1");
-					cg.inventory[prevItemClass][j] = 1;
+					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 1;
 				} else {
 					CG_Printf("0");
-					cg.inventory[prevItemClass][j] = 0;
+					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 0;
 				}
 			}
 			CG_Printf("\n");

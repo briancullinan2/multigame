@@ -101,9 +101,9 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 #ifdef USE_ADVANCED_ITEMS
 	{
-		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
-		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS];
-		other->client->inventoryModified[itemClass] = qtrue;
+		other->client->inventory[ent->item->giTag] = level.time - ( level.time % 1000 );
+		other->client->inventory[ent->item->giTag] += quantity * 1000;
+		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
 	}
 #endif
@@ -173,9 +173,8 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 
 #ifdef USE_ADVANCED_ITEMS
 	{
-		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
-		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = 1;
-		other->client->inventoryModified[itemClass] = qtrue;
+		other->client->inventory[ent->item->giTag] = 1;
+		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
 	}
 #endif
@@ -250,9 +249,8 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 #ifdef USE_ADVANCED_ITEMS
 	{
-		int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
-		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS] = 1;
-		other->client->inventoryModified[itemClass] = qtrue;
+		other->client->inventory[ent->item->giTag] = 1;
+		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
 	}
 #endif
@@ -582,7 +580,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 {
 	int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
 	if(ent->item->giType == IT_HOLDABLE && 
-		other->client->inventory[itemClass][ent->item->giTag % PW_MAX_POWERUPS]) {
+		other->client->inventory[ent->item->giTag]) {
 		return;
 	}
 }
