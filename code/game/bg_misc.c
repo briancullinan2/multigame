@@ -1293,7 +1293,11 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		}
 		else
 #endif
-		if ( item->quantity == 5 || item->quantity == 100 ) {
+		if ( item->quantity == 5 || item->quantity == 100 
+#ifdef USE_ADVANCED_ITEMS
+			|| item->quantity == 200 
+#endif
+		) {
 			if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] * 2 ) {
 				return qfalse;
 			}
@@ -1699,6 +1703,10 @@ const char *eventnames[EV_MAX] = {
   "EV_DAMAGEPLUM",			// damage plum
 #endif
 
+#ifdef USE_RPG_STATS
+	"EV_HEALTHPLUM",
+#endif
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   "EV_FROZEN",
   "EV_UNFROZEN",
@@ -1869,12 +1877,14 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 	s->weapon = ps->weapon;
 	s->groundEntityNum = ps->groundEntityNum;
 
+#ifndef USE_ADVANCED_ITEMS
 	s->powerups = 0;
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( ps->powerups[ i ] ) {
 			s->powerups |= 1 << i;
 		}
 	}
+#endif
 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
@@ -1950,12 +1960,14 @@ void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s
 	s->weapon = ps->weapon;
 	s->groundEntityNum = ps->groundEntityNum;
 
+#ifndef USE_ADVANCED_ITEMS
 	s->powerups = 0;
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( ps->powerups[ i ] ) {
 			s->powerups |= 1 << i;
 		}
 	}
+#endif
 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;

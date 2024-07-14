@@ -87,7 +87,11 @@ void P_WorldEffects( gentity_t *ent ) {
 
 	waterlevel = ent->waterlevel;
 
+#ifdef USE_ADVANCED_ITEMS
+	envirosuit = (ent->client->inventory[PW_BATTLESUIT] || ent->client->inventory[PW_GRAVITYSUIT] || ent->client->inventory[PW_SUPERMAN]);
+#else
 	envirosuit = ent->client->ps.powerups[PW_BATTLESUIT] > level.time;
+#endif
 
 	//
 	// check for drowning
@@ -517,7 +521,7 @@ Actions that happen once a second
 */
 void ClientTimerActions( gentity_t *ent, int msec ) {
 	gclient_t	*client;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int			maxHealth;
 #endif
 
@@ -528,11 +532,16 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		client->timeResidual -= 1000;
 
 		// regenerate
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
 		}
-		else if ( client->ps.powerups[PW_REGEN] ) {
+		else if ( client->ps.powerups[PW_REGEN] 
+#ifdef USE_ADVANCED_ITEMS
+			|| client->inventory[PW_REGEN]
+			|| client->inventory[PW_SUPERMAN] // obviously because he's healed by sun
+#endif
+		) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH];
 		}
 		else {
@@ -593,7 +602,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
 		int w, max, inc, t, i;
     int weapList[]={WP_MACHINEGUN,WP_SHOTGUN,WP_GRENADE_LAUNCHER,WP_ROCKET_LAUNCHER,WP_LIGHTNING,WP_RAILGUN,WP_PLASMAGUN,WP_BFG,WP_NAILGUN,WP_PROX_LAUNCHER,WP_CHAINGUN};
@@ -1035,7 +1044,7 @@ void ClientThink_real( gentity_t *ent ) {
 				//if(!item || !item->giTag) {
 				//	continue;
 				//}
-				if(prevItemClass * PW_MAX_POWERUPS + j > PW_NUM_POWERUPS) {
+				if(prevItemClass * PW_MAX_POWERUPS + j >= PW_NUM_POWERUPS) {
 					continue;
 				}
 				hasItems = qtrue;
@@ -1054,6 +1063,20 @@ void ClientThink_real( gentity_t *ent ) {
 			client->inventoryModified[prevItemClass] = qfalse;
 		}
 		client->lastItemTime = level.time;
+	}
+#endif
+
+#ifdef USE_RPG_STATS
+	if(client->lastHealthTime + 1000 < level.time) {
+		gentity_t *plum;
+		plum = G_TempEntity( ent->r.currentOrigin, EV_HEALTHPLUM );
+		// only send this temp entity to a single client
+		plum->r.svFlags |= SVF_BROADCAST;
+		ent->s.eFlags |= EF_NODRAW;
+		plum->s.otherEntityNum = ent->s.number;
+		plum->s.time = ent->health;
+		plum->s.powerups = ent->s.powerups;
+		client->lastHealthTime = level.time;
 	}
 #endif
 
@@ -1164,9 +1187,14 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	client->ps.gravity = g_gravity.value;
+#ifdef USE_ADVANCED_ITEMS
+	if(client->inventory[PW_GRAVITYSUIT]) {
+		client->ps.gravity = g_gravity.value * 0.5f;        //  yeah... this too
+	} else
+#endif
 #ifdef USE_GRAVITY_BOOTS
   if (g_enableBoots.integer && ent->flags & FL_BOOTS) {                  //  umm and this,
-     client->ps.gravity = g_gravity.value * g_bootsGravity.value;        //  yeah... this too
+		client->ps.gravity = g_gravity.value * g_bootsGravity.value;        //  yeah... this too
 	}
 #endif
 
@@ -1658,6 +1686,7 @@ void ClientEndFrame( gentity_t *ent ) {
 
 			client->inventory[i] = 0;
 			client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+			ent->s.powerups = 0;
 		}
 	}
 

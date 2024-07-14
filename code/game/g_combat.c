@@ -1324,7 +1324,14 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		knockback = 0;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if(targ->client->inventory[PW_GRAVITYSUIT]) {
+		knockback *= 0.5f;
+	}
+#endif
+
 #ifdef USE_GRAVITY_BOOTS
+	// TODO: targ->flags & FL_BOOTS?
 	// half the knockback with boots on
 	if(targ->client->ps.gravity && targ->client->ps.gravity != g_gravity.value) {
 		knockback *= 0.5f;
@@ -1396,13 +1403,28 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 	// battlesuit protects from all radius damage (but takes knockback)
 	// and protects 50% against all damage
-	if ( client && client->ps.powerups[PW_BATTLESUIT] ) {
+	if ( client && 
+#ifdef USE_ADVANCED_ITEMS
+	(client->inventory[PW_BATTLESUIT] || client->inventory[PW_GRAVITYSUIT] )
+#else
+	client->ps.powerups[PW_BATTLESUIT] 
+#endif	
+	) {
 		G_AddEvent( targ, EV_POWERUP_BATTLESUIT, 0 );
 		if ( ( dflags & DAMAGE_RADIUS ) || ( mod == MOD_FALLING ) ) {
 			return;
 		}
 		damage *= 0.5;
 	}
+#ifdef USE_ADVANCED_ITEMS
+	// don't play sounds like above
+	else if(client && client->inventory[PW_SUPERMAN]) {
+		if ( ( dflags & DAMAGE_RADIUS ) || ( mod == MOD_FALLING ) ) {
+			return;
+		}
+		damage *= 0.5;
+	}
+#endif
 
 	// always give half damage if hurting self
 	// calculated after knockback, so rocket jumping works

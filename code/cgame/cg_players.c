@@ -1524,7 +1524,12 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 	}
 
 
-	if ( cent->currentState.powerups & ( 1 << PW_HASTE ) ) {
+	if ( cent->currentState.powerups & ( 1 << PW_HASTE ) 
+#ifdef USE_ADVANCED_ITEMS
+		// this is only for local client || cg.inventory[PW_HASTE]
+		// for this i'll use powerups as "styles" for overlapping inventory
+#endif
+	) {
 		speedScale = 1.5;
 	} else {
 		speedScale = 1;
@@ -2141,6 +2146,11 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+
+
+#else
+
 	// quad gives a dlight
 	if ( powerups & ( 1 << PW_QUAD ) ) {
 		if ( cgs.clientinfo[ cent->currentState.clientNum ].team == TEAM_RED ) {
@@ -2218,6 +2228,8 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 	if ( powerups & ( 1 << PW_HASTE ) ) {
 		CG_HasteTrail( cent );
 	}
+
+#endif
 }
 
 
@@ -2471,6 +2483,59 @@ Also called by CG_Missile for quad rockets, but nobody can tell...
 */
 void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int team ) {
 
+#ifdef USE_ADVANCED_ITEMS
+
+//CG_Printf("powerups: %i\n", state->powerups);
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+    if ( state->powerups == PW_FROZEN )
+    {
+      trap_R_AddRefEntityToScene( ent );
+      ent->customShader = cgs.media.frozenShader;
+      trap_R_AddRefEntityToScene( ent );
+      return;
+    }
+#endif
+
+	if ( state->powerups == PW_INVIS ) {
+		ent->customShader = cgs.media.invisShader;
+		trap_R_AddRefEntityToScene( ent );
+	} else {
+		/*
+		if ( state->eFlags & EF_KAMIKAZE ) {
+			if (team == TEAM_BLUE)
+				ent->customShader = cgs.media.blueKamikazeShader;
+			else
+				ent->customShader = cgs.media.redKamikazeShader;
+			trap_R_AddRefEntityToScene( ent );
+		}
+		else {*/
+			trap_R_AddRefEntityToScene( ent );
+		//}
+
+		if ( state->powerups == PW_QUAD )
+		{
+			if (team == TEAM_RED)
+				ent->customShader = cgs.media.redQuadShader;
+			else
+				ent->customShader = cgs.media.quadShader;
+			trap_R_AddRefEntityToScene( ent );
+		}
+		if ( state->powerups == PW_REGEN ) {
+			if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+				ent->customShader = cgs.media.regenShader;
+				trap_R_AddRefEntityToScene( ent );
+			}
+		}
+		if ( state->powerups == PW_BATTLESUIT ) {
+			ent->customShader = cgs.media.battleSuitShader;
+			trap_R_AddRefEntityToScene( ent );
+		}
+	}
+
+#else
+
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
     if ( state->powerups & ( 1 << PW_FROZEN ) )
     {
@@ -2516,6 +2581,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 			trap_R_AddRefEntityToScene( ent );
 		}
 	}
+#endif
 }
 
 
@@ -2602,12 +2668,12 @@ void CG_PlayerStats( centity_t *cent ) {
 	// so it doesn't add too much overdraw
 	VectorSubtract( origin, cg.refdef.vieworg, delta );
 	len = VectorLengthSquared( delta );
-	if ( len < 20*20 || len > 20*600 ) {
+	if ( len < 20*20 || len > 20*4000 ) {
 		return;
 	}
 
-	if (len >= 20*400 && len <= 20*600)
-		re.shaderRGBA[3] = 0xff - (len - 20*400) / (20*200) * 255;
+	if (len >= 20*3800 && len <= 20*4000)
+		re.shaderRGBA[3] = 0xff - (len - 20*3800) / (20*200) * 255;
 	else
 		re.shaderRGBA[3] = 0xAA;
 
@@ -2764,6 +2830,10 @@ void CG_Player( centity_t *cent ) {
 	}
 	legs.shaderRGBA[3] = 255;
 
+#ifdef USE_ADVANCED_ITEMS
+	cent->currentState.powerups = cgs.clientinfo[cent->currentState.clientNum].powerups;
+#endif
+
 	CG_AddRefEntityWithPowerups( &legs, &cent->currentState, ci->team );
 
 	// if the model failed, allow the default nullmodel to be displayed
@@ -2801,6 +2871,7 @@ void CG_Player( centity_t *cent ) {
 	torso.shaderRGBA[3] = 255;
 
 	CG_AddRefEntityWithPowerups( &torso, &cent->currentState, ci->team );
+
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if ( cent->currentState.eFlags & EF_KAMIKAZE ) {
@@ -2917,7 +2988,12 @@ void CG_Player( centity_t *cent ) {
 // TODO: check for powerup in new arrays
 #endif
 
-	if ( cent->currentState.powerups & ( 1 << PW_GUARD ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_GUARD ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_GUARD ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.guardPowerupModel;
 		powerup.frame = 0;
@@ -2925,7 +3001,12 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_SCOUT ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_SCOUT ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_SCOUT ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.scoutPowerupModel;
 		powerup.frame = 0;
@@ -2933,7 +3014,12 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_DOUBLER ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_DOUBLER ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_DOUBLER ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.doublerPowerupModel;
 		powerup.frame = 0;
@@ -2941,7 +3027,12 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_AMMOREGEN ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_AMMOREGEN ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_AMMOREGEN ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.ammoRegenPowerupModel;
 		powerup.frame = 0;
@@ -2951,7 +3042,8 @@ void CG_Player( centity_t *cent ) {
 	}
 	if ( 
 #ifdef USE_ADVANCED_ITEMS
-		cg.inventory[PW_INVULNERABILITY]
+		//cg.inventory[PW_INVULNERABILITY]
+		cent->currentState.powerups == PW_INVULNERABILITY 
 #else
 		cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) 
 #endif
@@ -2966,7 +3058,8 @@ void CG_Player( centity_t *cent ) {
 	}
 	if ( 
 #ifdef USE_ADVANCED_ITEMS
-		cg.inventory[PW_INVULNERABILITY]
+		//cg.inventory[PW_INVULNERABILITY]
+		cent->currentState.powerups == PW_INVULNERABILITY 
 #else
 		(cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) 
 #endif
@@ -3022,6 +3115,7 @@ void CG_Player( centity_t *cent ) {
 		trap_R_AddRefEntityToScene( &powerup );
 	}
 #endif // MISSIONPACK
+
 
 	//
 	// add the head

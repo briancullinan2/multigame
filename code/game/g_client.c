@@ -1156,6 +1156,7 @@ void ClientSpawn(gentity_t *ent) {
 	client->lastkilled_client = -1;
 
 #ifdef USE_ADVANCED_ITEMS
+	ent->s.powerups = 0;
 	memset( client->inventory, 0, sizeof( client->inventory ) );
 	memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
 #endif

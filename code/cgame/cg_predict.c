@@ -394,6 +394,11 @@ static int CG_CheckArmor( int damage ) {
 {
 	int take, asave;
 
+#ifdef USE_ADVANCED_ITEMS
+	if ( cg.inventory[ PW_BATTLESUIT ] || cg.inventory[ PW_GRAVITYSUIT ] || cg.inventory[ PW_SUPERMAN ] )
+		return;
+#endif
+
 	if ( cg.predictedPlayerState.powerups[ PW_BATTLESUIT ] )
 		return;
 

@@ -944,6 +944,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
         if(item->giTag == PW_HASTE
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+					|| item->giTag == PW_SCOUT
+#endif
         ) {
 #ifdef USE_PHYSICS_VARS
           cg.predictedPlayerState.speed *= cg_hasteFactor.value;
@@ -951,6 +954,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
           cg.predictedPlayerState.speed *= 1.3f;
 #endif
         }
+#ifdef USE_ADVANCED_ITEMS
+				if(item->giTag == PW_FLASH) {
+          cg.predictedPlayerState.speed *= 2.6f;
+				}
+#endif
+
 #ifdef USE_WEAPON_ORDER
 				CG_ItemPickup( index, qfalse );
 #else
@@ -1105,13 +1114,24 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_ScorePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		break;
 
-#if defined(USE_DAMAGE_PLUMS) || defined(USE_RPG_STATS)
+#ifdef USE_RPG_STATS
+	case EV_HEALTHPLUM:
+		if(cent->currentState.time) {
+			cgs.clientinfo[cent->currentState.otherEntityNum].health = cent->currentState.time;
+			cgs.clientinfo[cent->currentState.otherEntityNum].powerups = cent->currentState.powerups;
+			cg_entities[cent->currentState.otherEntityNum].currentState.powerups = cent->currentState.powerups;
+			if(cent->currentState.otherEntityNum == cg.snap->ps.clientNum) {
+				cg.snap->entities[cg.snap->ps.clientNum].powerups = cent->currentState.powerups;
+			}
+		}
+		break;
+#endif
+
+
+#ifdef USE_DAMAGE_PLUMS
 	case EV_DAMAGEPLUM:
 		if(cent->currentState.time && cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
 			CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
-		}
-		if(cent->currentState.time2) {
-			cgs.clientinfo[cent->currentState.otherEntityNum].health = cent->currentState.time2;
 		}
 		break;
 #endif

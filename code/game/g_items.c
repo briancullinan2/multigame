@@ -102,6 +102,8 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 #else
 	{
+		other->s.powerups = ent->item->giTag;
+
 		other->client->inventory[ent->item->giTag] = level.time - ( level.time % 1000 );
 
 		if ( ent->count ) {
@@ -181,6 +183,7 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 
 #ifdef USE_ADVANCED_ITEMS
 	{
+		other->s.powerups = ent->item->giTag;
 		other->client->inventory[ent->item->giTag] = 1;
 		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
@@ -370,7 +373,11 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	}
 	else
 #endif
-	if ( ent->item->quantity != 5 && ent->item->quantity != 100 ) {
+	if ( ent->item->quantity != 5 && ent->item->quantity != 100
+#ifdef USE_ADVANCED_ITEMS
+	&& ent->item->quantity != 200 
+#endif
+	) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	} else {
 		max = other->client->ps.stats[STAT_MAX_HEALTH] * 2;

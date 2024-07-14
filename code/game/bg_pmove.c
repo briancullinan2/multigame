@@ -2016,7 +2016,13 @@ static void PM_Weapon( void ) {
   }
   else
 #endif
-	if ( pm->ps->powerups[PW_HASTE] ) {
+	if ( pm->ps->powerups[PW_HASTE] 
+#ifdef USE_ADVANCED_ITEMS
+		|| pm->inventory[PW_HASTE]
+		|| pm->inventory[PW_FLASH]
+		|| pm->inventory[PW_SUPERMAN]
+#endif
+	) {
 #ifdef USE_PHYSICS_VARS
     addTime /= g_hasteFactor.value;
 #else

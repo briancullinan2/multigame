@@ -182,16 +182,18 @@ typedef enum {
 	PW_MAX_POWERUPS = 10,
 	// = 10
 
+	PW_SCOUT = 10,
+	PW_GUARD = 11,
+	PW_DOUBLER = 12,
+	PW_AMMOREGEN = 13,
+	PW_INVULNERABILITY = 14,
+
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
-	PW_GOLDFLAG = 11,
-	PW_GREENFLAG = 12,
+	PW_GOLDFLAG = 15,
+	PW_GREENFLAG = 16,
 #endif
 
-	PW_SCOUT = 13,
-	PW_GUARD = 14,
-	PW_DOUBLER = 15,
-	PW_AMMOREGEN = 16,
-	PW_INVULNERABILITY = 17,
+// memory overflow on everything past this in the default mode
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   PW_FROZEN = 18,
@@ -207,6 +209,7 @@ typedef enum {
 	HI_PORTAL = 23,
 	HI_INVULNERABILITY = 24,
 
+	PW_GRAVITYSUIT = 33,
 	PW_FLASH = 34,
 	PW_VISIBILITY = 35,
 	PW_SUPERMAN = 36,
@@ -676,6 +679,10 @@ typedef enum {
 
 #ifdef USE_DAMAGE_PLUMS
   EV_DAMAGEPLUM,			// damage plum
+#endif
+
+#ifdef USE_RPG_STATS
+	EV_HEALTHPLUM,
 #endif
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)

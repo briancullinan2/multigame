@@ -404,9 +404,11 @@ typedef struct {
 	int         worlds;
 #endif
 
+// TODO: store other client inventory here gotten from processesing STAT_HOLDABLE_UPDATE
+
 
 #ifdef USE_RPG_STATS
-
+// TODO: fix health status
 #endif
 
 } clientInfo_t;
@@ -969,6 +971,11 @@ typedef struct {
 	qhandle_t	regenShader;
 	qhandle_t	battleSuitShader;
 	qhandle_t	battleWeaponShader;
+#ifdef USE_ADVANCED_ITEMS
+	qhandle_t	gravityWeaponShader;
+
+#endif
+
 	qhandle_t	hastePuffShader;
 #ifdef MISSIONPACK
 	qhandle_t	redKamikazeShader;

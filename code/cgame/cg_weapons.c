@@ -1349,13 +1349,58 @@ CG_AddWeaponWithPowerups
 static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 	// add powerup effects
 
+
+#ifdef USE_ADVANCED_ITEMS
+	if(powerups == PW_GRAVITYSUIT) {
+    trap_R_AddRefEntityToScene( gun );
+		gun->customShader = cgs.media.gravityWeaponShader;
+    trap_R_AddRefEntityToScene( gun );
+	}
+
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( powerups == PW_FROZEN ) {
+    trap_R_AddRefEntityToScene( gun );
+    gun->customShader = cgs.media.frozenShader;
+    trap_R_AddRefEntityToScene( gun );
+    return;
+  } else 
+#endif
+
+	if ( powerups == PW_INVIS ) {
+		gun->customShader = cgs.media.invisShader;
+		trap_R_AddRefEntityToScene( gun );
+	} else {
+		trap_R_AddRefEntityToScene( gun );
+
+		if ( powerups == PW_BATTLESUIT ) {
+			gun->customShader = cgs.media.battleWeaponShader;
+			trap_R_AddRefEntityToScene( gun );
+		}
+		if ( powerups == PW_REGEN ) {
+			if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+				gun->customShader = cgs.media.regenShader;
+				trap_R_AddRefEntityToScene( gun );
+			}
+		}
+		if ( powerups == PW_QUAD ) {
+			gun->customShader = cgs.media.quadWeaponShader;
+			trap_R_AddRefEntityToScene( gun );
+		}
+	}
+
+
+
+#else
+
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   if ( powerups & ( 1 << PW_FROZEN ) ) {
     trap_R_AddRefEntityToScene( gun );
     gun->customShader = cgs.media.frozenShader;
     trap_R_AddRefEntityToScene( gun );
     return;
-  }
+  } else 
 #endif
 
 	if ( powerups & ( 1 << PW_INVIS ) ) {
@@ -1373,6 +1418,9 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 			trap_R_AddRefEntityToScene( gun );
 		}
 	}
+
+#endif
+
 }
 
 
@@ -1464,6 +1512,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	gun.customSkin = cg_items[weapon->item - bg_itemlist].customSkin;
 
 	CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups );
+
 
 	// add the spinning barrel
 	if ( weapon->barrelModel ) {

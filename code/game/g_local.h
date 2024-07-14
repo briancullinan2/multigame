@@ -421,7 +421,9 @@ struct gclient_s
 	int inventory[PW_NUM_POWERUPS];
 	qboolean inventoryModified[PW_MAX_ITEMGROUPS];
 #endif
-
+#ifdef USE_RPG_STATS
+	int lastHealthTime;
+#endif
 			char *areabits;
 
 	// unlagged
