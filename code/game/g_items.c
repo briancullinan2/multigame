@@ -86,6 +86,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	int			i;
 	gclient_t	*client;
 
+#ifndef USE_ADVANCED_ITEMS
 	if ( !other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] ) {
 		// round timing to seconds to make multiple powerup timers count in sync
 		other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] = level.time - ( level.time % 1000 );
@@ -99,9 +100,16 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 	other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] += quantity * 1000;
 
-#ifdef USE_ADVANCED_ITEMS
+#else
 	{
 		other->client->inventory[ent->item->giTag] = level.time - ( level.time % 1000 );
+
+		if ( ent->count ) {
+			quantity = ent->count;
+		} else {
+			quantity = ent->item->quantity;
+		}
+
 		other->client->inventory[ent->item->giTag] += quantity * 1000;
 		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);

@@ -1182,6 +1182,14 @@ void ClientThink_real( gentity_t *ent ) {
 #endif
 	} else
 #endif
+#ifdef USE_ADVANCED_ITEMS
+	if(client->inventory[PW_FLASH] || client->inventory[PW_SUPERMAN]) {
+		client->ps.speed *= 2.6;
+	} else
+	if(client->inventory[PW_HASTE]) {
+		client->ps.speed *= 1.3;
+	} else
+#endif
 	if ( client->ps.powerups[PW_HASTE] ) {
 #ifdef USE_PHYSICS_VARS
     client->ps.speed *= g_hasteFactor.value;

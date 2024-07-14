@@ -212,6 +212,13 @@ void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 		&& activator->client->ps.pm_type != PM_PLATFORM ) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_ITEMS
+	if ( activator->client->inventory[PW_FLIGHT] 
+		|| activator->client->inventory[PW_SUPERMAN] ) {
+		return;
+	}
+#endif
 	if ( activator->client->ps.powerups[PW_FLIGHT] ) {
 		return;
 	}

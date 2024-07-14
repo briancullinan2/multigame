@@ -261,6 +261,10 @@ static void PM_Friction( void ) {
 		vel[0] = 0;
 		vel[1] = 0;		// allow sinking underwater
 		// FIXME: still have z friction underwater?
+#ifdef USE_ADVANCED_ITEMS
+		if ( pm->inventory[ PW_FLIGHT ] || pm->inventory[ PW_SUPERMAN ] )
+			vel[2] = 0.0f; 
+#endif
 		if ( pm->ps->pm_type == PM_SPECTATOR || pm->ps->powerups[ PW_FLIGHT ] )
 			vel[2] = 0.0f; // no slow-sinking/raising movements
 		return;
@@ -285,6 +289,11 @@ static void PM_Friction( void ) {
 	}
 
 	// apply flying friction
+#ifdef USE_ADVANCED_ITEMS
+	if ( pm->inventory[PW_FLIGHT] || pm->inventory[PW_SUPERMAN] ) {
+		drop += speed*pm_flightfriction*pml.frametime;
+	} else
+#endif
 	if ( pm->ps->powerups[PW_FLIGHT]) {
 		drop += speed*pm_flightfriction*pml.frametime;
 	}
@@ -2487,7 +2496,12 @@ void PmoveSingle (pmove_t *pmove) {
 		PM_InvulnerabilityMove();
 	} else
 #endif
-	if ( pm->ps->powerups[PW_FLIGHT] ) {
+	if ( pm->ps->powerups[PW_FLIGHT] 
+#ifdef USE_ADVANCED_ITEMS
+		|| pm->inventory[PW_FLIGHT]
+		|| pm->inventory[PW_SUPERMAN]
+#endif
+	) {
 		// flight powerup doesn't allow jump and has different friction
 		PM_FlyMove();
 	} else 
@@ -2532,6 +2546,13 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// entering / leaving water splashes
 	PM_WaterEvents();
+
+#ifdef USE_ADVANCED_ITEMS
+	if ( (pm->inventory[PW_FLIGHT] || pm->inventory[PW_SUPERMAN]) && !pml.groundPlane ) {
+		// don't snap velocity in free-fly or we will be not able to stop via flight friction
+		return;
+	}
+#endif
 
 	if ( pm->ps->powerups[PW_FLIGHT] && !pml.groundPlane ) {
 		// don't snap velocity in free-fly or we will be not able to stop via flight friction

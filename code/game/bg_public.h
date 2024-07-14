@@ -207,11 +207,13 @@ typedef enum {
 	HI_PORTAL = 23,
 	HI_INVULNERABILITY = 24,
 
-	PW_VISIBILITY = 30,
+	PW_FLASH = 34,
+	PW_VISIBILITY = 35,
+	PW_SUPERMAN = 36,
 
 
 
-	PW_NUM_POWERUPS = 31,
+	PW_NUM_POWERUPS = 37,
 
 } powerup_t;
 
