@@ -209,7 +209,7 @@
 // entity 21
 {
 "classname" "item_flight"
-"origin" "688 -2832 -1840"
+"origin" "688 -2928 -1840"
 }
 // entity 22
 {
@@ -264,7 +264,7 @@
 // entity 32
 {
 "classname" "item_flight_long"
-"origin" "688 -2904 -1840"
+"origin" "688 -3000 -1840"
 }
 // entity 33
 {
@@ -328,4 +328,54 @@
 {
 "classname" "holdable_teleporter"
 "origin" "432 -2112 -1840"
+}
+// entity 45
+{
+"classname" "ammo_bfg"
+"origin" "1936 -2320 -1840"
+}
+// entity 46
+{
+"classname" "ammo_bullets"
+"origin" "1936 -2992 -1840"
+}
+// entity 47
+{
+"classname" "ammo_cells"
+"origin" "1936 -2416 -1840"
+}
+// entity 48
+{
+"classname" "ammo_grenades"
+"origin" "1936 -2512 -1840"
+}
+// entity 49
+{
+"classname" "ammo_lightning"
+"origin" "1936 -2608 -1840"
+}
+// entity 50
+{
+"classname" "ammo_rockets"
+"origin" "1936 -2704 -1840"
+}
+// entity 51
+{
+"classname" "ammo_shells"
+"origin" "1936 -2800 -1840"
+}
+// entity 52
+{
+"classname" "ammo_slugs"
+"origin" "1936 -2896 -1840"
+}
+// entity 53
+{
+"classname" "item_regenammo"
+"origin" "688 -2832 -1840"
+}
+// entity 54
+{
+"classname" "holdable_healer"
+"origin" "432 -2016 -1832"
 }

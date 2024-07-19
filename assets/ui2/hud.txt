@@ -1,0 +1,7 @@
+// hud menu defs
+// 
+{
+ 	loadMenu { "ui2/hud.menu" }
+ 	loadMenu { "ui2/score.menu" }
+	loadMenu { "ui2/teamscore.menu" }
+}
