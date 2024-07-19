@@ -32,6 +32,11 @@ typedef struct {
 	vec3_t		previous_origin;
 	vec3_t		previous_velocity;
 	int			previous_waterlevel;
+#ifdef USE_VEHICLES
+// STONELANCE
+	int			physicsSplit;
+// END
+#endif
 } pml_t;
 
 extern	pmove_t		*pm;

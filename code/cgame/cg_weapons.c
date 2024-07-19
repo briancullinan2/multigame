@@ -1279,6 +1279,8 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 }
 */
 
+void CG_OldRailTrail (clientInfo_t *ci, vec3_t start, vec3_t end);
+
 /*
 ===============
 CG_SpawnRailTrail
@@ -1298,7 +1300,11 @@ static void CG_SpawnRailTrail( centity_t *cent, vec3_t origin ) {
 	}
 	cent->pe.railgunFlash = qtrue;
 	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
-	CG_RailTrail( ci, origin, cent->pe.railgunImpact );
+	if(cg_oldRail.integer > 0) {
+		CG_OldRailTrail(ci, origin, cent->pe.railgunImpact);
+	} else {
+		CG_RailTrail( ci, origin, cent->pe.railgunImpact );
+	}
 }
 
 

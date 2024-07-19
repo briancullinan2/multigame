@@ -185,6 +185,9 @@ struct gentity_s
 
 #ifdef USE_SINGLEPLAYER // entity
 	int stop_event;
+	char		   *interfaceEnt;	  // The interface associated with this ent
+	gentity_t *mover;
+	qboolean  trigger_only;
 #endif
 
 	// team for spawn spot

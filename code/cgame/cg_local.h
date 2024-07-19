@@ -256,7 +256,10 @@ typedef enum {
 	LEF_PUFF_DONT_SCALE  = 0x0001,			// do not scale size over time
 	LEF_TUMBLE			 = 0x0002,			// tumble over time, used for ejecting shells
 	LEF_SOUND1			 = 0x0004,			// sound 1 for kamikaze
-	LEF_SOUND2			 = 0x0008			// sound 2 for kamikaze
+	LEF_SOUND2			 = 0x0008,			// sound 2 for kamikaze
+#ifdef USE_VEHICLES
+	LEF_SCALE_FADE_OUT = 0x0010,
+#endif
 } leFlag_t;
 
 typedef enum {
@@ -1205,6 +1208,9 @@ typedef struct {
   sfxHandle_t	unfrozenSound;
 #endif
 
+#ifdef USE_VEHICLES
+qhandle_t sparkShader;
+#endif
 
 	qhandle_t netConnect;
 

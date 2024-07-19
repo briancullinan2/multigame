@@ -69,12 +69,16 @@ cd vm\cgame
 @if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_weapons.c
 @if errorlevel 1 goto quit
+%cc1% %cgamedir%\cg_weapons2.c
+@if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_weaporder.c
 
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_lib.c
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_misc.c
+@if errorlevel 1 goto quit
+%cc1% %gamedir%\bg_physics.c
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_pmove.c
 @if errorlevel 1 goto quit
@@ -124,6 +128,8 @@ cd vm\game
 %cc2% %gamedir%\bg_misc.c 
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\bg_pmove.c
+@if errorlevel 1 goto quit
+%cc2% %gamedir%\bg_physics.c 
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\bg_slidemove.c 
 @if errorlevel 1 goto quit

@@ -272,6 +272,10 @@
 // loads the standard Q3 menu if the mod is missing a menus.txt file.
 #define USE_CLASSIC_MENU 1
 
+// players can get inside vehicles and drive or jet around
+#define USE_VEHICLES 1
+
+
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;
@@ -437,6 +441,26 @@ typedef	int	fixed16_t;
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846f	// matches value in gcc v2 math.h
+#endif
+
+// 180 / pi
+#ifndef M_180_PI
+#define M_180_PI	57.295779513082320876798154814105f
+#endif
+// END
+
+// pi / 180
+#ifndef M_PI_180
+#define M_PI_180	0.017453292519943295769236907684886f
+#endif
+
+#ifndef M_E
+#define M_E         2.71828182845904523536028747135266250   /* e              */
+#endif
+
+// STONELANCE - pi / 2
+#ifndef M_PI_2
+#define M_PI_2		1.57079632679489661923f
 #endif
 
 #define NUMVERTEXNORMALS	162
@@ -659,6 +683,7 @@ void VectorRotate( vec3_t in, vec3_t matrix[3], vec3_t out );
 int Q_log2(int val);
 
 float Q_acos(float c);
+float Q_asin(float c);
 
 int		Q_rand( int *seed );
 float	Q_random( int *seed );
@@ -694,11 +719,35 @@ void MakeNormalVectors( const vec3_t forward, vec3_t right, vec3_t up );
 // perpendicular vector could be replaced by this
 
 //int	PlaneTypeForNormal (vec3_t normal);
+qboolean VectorNAN( const vec3_t vec );
+void MatrixTranspose( float in[3][3], float out[3][3] );
+void MatrixAdd( float in1[3][3], float in2[3][3], float out[3][3] );
+void MatrixScale( float in[3][3], float s, float out[3][3] );
+
+void AnglesToOrientation( const vec3_t angles, float t[3][3] );
+void AnglesToDeltaAngles( vec3_t angles, const vec3_t w, vec3_t delta_angles );
+void OrientationToAngles( float t[3][3], vec3_t angles );
+void OrientationToVectors( float t[3][3], vec3_t forward, vec3_t right, vec3_t up );
+void OrthonormalizeOrientation( float t[3][3] );
+
+void QuaternionMultiply(const vec4_t in1, const vec4_t in2, vec4_t out);
+
 
 void MatrixMultiply(float in1[3][3], float in2[3][3], float out[3][3]);
 void AngleVectors( const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
 void PerpendicularVector( vec3_t dst, const vec3_t src );
 
+
+#ifndef MAX
+#define MAX(x,y) ((x)>(y)?(x):(y))
+#endif
+
+#ifndef MIN
+#define MIN(x,y) ((x)<(y)?(x):(y))
+#endif
+
+#define	ANGLE2BYTE(x)	((int)((x)*256/360) & 255)
+#define	BYTE2ANGLE(x)	((x)*(360.0/256))
 
 //=============================================
 
@@ -1140,10 +1189,10 @@ typedef struct playerState_s {
 #define	BUTTON_ANY			2048			// any key whatsoever
 
 #ifdef USE_ALT_FIRE
-#define BUTTON_ALT_ATTACK	  0x1000      // button3
-#define BUTTON_ALT_2        0x2000      // button4
-#define BUTTON_ALT_3        0x4000      // button5
-#define BUTTON_ALT_4        0x8000      // button6
+#define BUTTON_ALT_ATTACK	  0x1000      // button12
+#define BUTTON_USE          0x2000      // button13
+#define BUTTON_HANDBRAKE    0x4000      // button14
+#define BUTTON_ALT_4        0x8000      // button15
 #endif
 
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,

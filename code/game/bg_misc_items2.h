@@ -301,3 +301,37 @@
         "models/powerups/instant/invis_ring.skin%hue0.10%sat0.80",
         0, 0}},
 
+/*QUAKED item_doubler (.3 .3 1) (-16 -16 -16) (16 16 16) suspended redTeam blueTeam
+*/
+	{
+		"item_regenammo",
+		"sound/items/ammoregen.wav",
+        { "models/powerups/instant/regen.md3",
+         "models/powerups/instant/regen_ring.md3", 0, 0 },
+/* icon */		"icons/regen%hue0.20",
+/* pickup */	"Ammo Regen",
+		30,
+		IT_POWERUP,
+		PW_REGENAMMO,
+/* precache */ "",
+/* sounds */ "sound/items/regen.wav",
+	{"models/powerups/instant/regen.skin%hue0.20", 
+    "models/powerups/instant/regen_ring.skin%hue0.20", NULL, NULL}},
+
+/*QUAKED holdable_medkit (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+{
+  "holdable_healer", 
+  "sound/items/holdable.wav",
+      { 
+  "models/powerups/health/small_cross.md3",
+     "models/powerups/health/small_sphere.md3",
+  0, 0},
+/* icon */		"icons/iconh_green",
+/* pickup */	"Healer",
+  60,
+  IT_HOLDABLE,
+  HI_HEALER,
+/* precache */ "",
+/* sounds */ "sound/items/use_medkit.wav"
+},

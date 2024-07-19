@@ -332,6 +332,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_physics.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_tracemap.c"
 				>
 			</File>
@@ -425,6 +429,10 @@
 			</File>
 			<File
 				RelativePath="..\..\code\cgame\cg_weapons.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_weapons2.c"
 				>
 			</File>
 			<File

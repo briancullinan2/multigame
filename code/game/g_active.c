@@ -150,6 +150,109 @@ void P_WorldEffects( gentity_t *ent ) {
 }
 
 
+/**
+ * G_Use
+ *
+ * Uses something
+ */
+void G_Use(gentity_t *ent) {
+
+	static vec3_t  range = { 40, 40, 52 };
+
+	int 	   i;
+	int 	   num;
+	int 	   touch[MAX_GENTITIES];
+	gentity_t	   *hit;
+	gentity_t	   *interfaceEnt;
+	vec3_t		   mins;
+	vec3_t		   maxs;
+	qboolean	   anim  = qfalse;
+	qboolean	   doingDoor = qfalse;
+	trace_t 	   tr;
+	vec3_t		   reach;
+	gentity_t	   *other;
+	vec3_t		   forward;
+	vec3_t		   right;
+	vec3_t		   up;
+	vec3_t		   muzzle;
+	vec3_t		   origin;
+
+	// dokta8 - work out where player is and where they are facing
+	AngleVectors (ent->client->ps.viewangles, forward, right, up);
+	CalcMuzzlePointOrigin( ent, origin, forward, right, up, muzzle );
+
+	// has to be a meter away from the dude
+	VectorMA(muzzle, 64, forward, reach);
+
+	// dokta8 - Do a trace from player's muzzle to the object they are in front of
+	trap_Trace(&tr, muzzle, NULL, NULL, reach, ent->s.number, MASK_SHOT | CONTENTS_TRIGGER);
+	other = &g_entities[ tr.entityNum ];	//	dokta8 - get the first object in front of the player
+
+	if (other) {
+
+		if (other->item && (other->item->giType == IT_WEAPON || other->item->giType == IT_TEAM || other->item->giType == IT_HOLDABLE)) {
+			//@Fenix - Fix cg_autoPickup 0 bug #392
+			Pickup_Item(other, ent, &tr, -1);
+			return;
+		}
+
+		if (other->classname) {
+			if (!Q_stricmp(other->classname, "func_door")) {
+				doingDoor = qtrue;
+			}
+		}
+	}
+
+	VectorSubtract(ent->client->ps.origin, range, mins);
+	VectorAdd(ent->client->ps.origin, range, maxs);
+
+	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
+
+	for (i = 0; i < num; i++) {
+
+		hit = &g_entities[touch[i]];
+
+		if (!hit->classname) {
+			continue;
+		}
+
+		if (!Q_stricmp(hit->classname, "func_button")) {
+			//Press a button
+			hit->use(hit, hit, ent);
+		}
+		else if (!Q_stricmp(hit->classname, "func_door")) {
+			//Trigger_only is a flag set by the mapper
+			//it prevents doors being opened directly by a player
+			//ie: they have to use a button or another trigger
+			if ((hit->mover->moverState != MOVER_1TO2) && (!hit->mover->trigger_only)) {
+				hit->use(hit, hit, ent);
+				anim = qtrue;
+			}
+		}
+		else if (!Q_stricmp(hit->classname, "func_rotating_door") || !Q_stricmp(hit->classname, "func_door_rotating")) {
+			if (!hit->mover->trigger_only) {
+				hit->use(hit, hit, ent);
+				anim = qtrue;
+			}
+		}
+		else if (!Q_stricmp(hit->classname, "func_keyboard_interface") && !doingDoor) {
+			hit->use(hit, hit, ent);
+		}
+		else if (!Q_stricmp(hit->classname, "func_train") && !doingDoor && hit->interfaceEnt) {
+			if(hit->interfaceEnt){
+				if ((interfaceEnt = G_Find (NULL, FOFS(targetname), hit->interfaceEnt)) != NULL) {
+					interfaceEnt->use(interfaceEnt, interfaceEnt, ent);
+				}
+			}
+		}
+	}
+
+	//Run "use" animation but only if a high priority anim is not already running
+	if (anim && (ent->client->ps.torsoTimer <= 0)) {
+		ent->client->ps.torsoAnim  = TORSO_GESTURE; // TODO: TORSO_USE
+		ent->client->ps.torsoTimer = 1500;
+	}
+}
 
 /*
 ===============
@@ -767,6 +870,13 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			FireWeapon( ent );
 #endif
 			break;
+
+#ifdef USE_SINGLEPLAYER
+		case EV_USE:
+			G_Use(ent);
+			break;
+#endif
+
 
 #ifdef USE_ADVANCED_ITEMS
 		case EV_USE_ITEM5:

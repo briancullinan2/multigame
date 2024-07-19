@@ -4,6 +4,7 @@
 
 // because games can change separately from the main system version, we need a
 // second version that must match between game and cgame
+#include "bg_physics.h"
 
 #define	GAME_VERSION		"baseq3-1"
 
@@ -144,6 +145,11 @@ typedef enum {
   PM_FROZEN,
 #endif
 
+#ifdef USE_VEHICLES
+	PM_VEHICLE,
+	PM_VEHICLEMOUSE,
+#endif
+
 	PM_LOOKSPLINE, // control look angle from spline
 	PM_MOVESPLINE, // control movement from spline
 	PM_BOTHSPLINE, // control both from spline
@@ -208,7 +214,9 @@ typedef enum {
 	HI_KAMIKAZE = 22,
 	HI_PORTAL = 23,
 	HI_INVULNERABILITY = 24,
+	HI_HEALER = 25,
 
+	PW_REGENAMMO = 32,
 	PW_GRAVITYSUIT = 33,
 	PW_FLASH = 34,
 	PW_VISIBILITY = 35,
@@ -279,6 +287,43 @@ typedef struct {
 	int inventory[PW_NUM_POWERUPS];
 #endif
 
+#ifdef USE_VEHICLES
+// STONELANCE
+        car_t           *car;
+        car_t           **cars;
+
+        int                     pDebug;
+
+        qboolean        client;
+
+        int                     controlMode;
+        qboolean        manualShift;
+        collisionDamage_t       damage;
+
+        qboolean        (*frictionFunc)( const carPoint_t *point, float *sCOF, float *kCOF );
+
+        float           car_spring;
+        float           car_shock_up;
+        float           car_shock_down;
+        float           car_swaybar;
+        float           car_wheel;
+        float           car_wheel_damp;
+
+        float           car_frontweight_dist;
+        float           car_IT_xScale;
+        float           car_IT_yScale;
+        float           car_IT_zScale;
+        float           car_body_elasticity;
+
+        float           car_air_cof;
+        float           car_air_frac_to_df;
+        float           car_friction_scale;
+	vec3_t		damageAngles;
+// END
+
+#endif
+
+
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles
@@ -299,7 +344,7 @@ typedef enum {
 #endif
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	STAT_PERSISTANT_POWERUP,
-#ifdef USE_ADVANCED_ITEMS
+#if 0 //def USE_ADVANCED_ITEMS
 	STAT_PERSISTANT_AVAILABLE,
 	STAT_PERSISTANT_UPDATE,
 #endif
@@ -314,7 +359,11 @@ typedef enum {
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
-	STAT_MAX_HEALTH					// health / armor limit, changable by handicap
+	STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
+#ifdef USE_VEHICLES
+	STAT_VEHICLE,
+#endif
+	STAT_NUM_STATS
 } statIndex_t;
 
 
@@ -343,32 +392,40 @@ typedef enum {
 
 
 // entityState_t->eFlags
-#define	EF_DEAD				0x00000001		// don't draw a foe marker over players with EF_DEAD
+#define	EF_DEAD							0x00000001		// don't draw a foe marker over players with EF_DEAD
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
-#define EF_TICKING			0x00000002		// used to make players play the prox mine ticking sound
+#define EF_TICKING					0x00000002		// used to make players play the prox mine ticking sound
 #endif
-#define	EF_TELEPORT_BIT		0x00000004		// toggled every time the origin abruptly changes
+#define	EF_TELEPORT_BIT			0x00000004		// toggled every time the origin abruptly changes
 #define	EF_AWARD_EXCELLENT	0x00000008		// draw an excellent sprite
-#define EF_PLAYER_EVENT		0x00000010
-#define	EF_BOUNCE			0x00000010		// for missiles
-#define	EF_BOUNCE_HALF		0x00000020		// for missiles
-#define	EF_AWARD_GAUNTLET	0x00000040		// draw a gauntlet sprite
-#define	EF_NODRAW			0x00000080		// may have an event, but no model (unspawned items)
-#define	EF_FIRING			0x00000100		// for lightning gun
+#define EF_PLAYER_EVENT			0x00000010
+#define	EF_BOUNCE						0x00000010		// for missiles
+#define	EF_BOUNCE_HALF			0x00000020		// for missiles
+#define	EF_AWARD_GAUNTLET		0x00000040		// draw a gauntlet sprite
+#define	EF_NODRAW						0x00000080		// may have an event, but no model (unspawned items)
+#define	EF_FIRING						0x00000100		// for lightning gun
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
-#define	EF_KAMIKAZE			0x00000200
+#define	EF_KAMIKAZE					0x00000200
 #endif
-#define	EF_MOVER_STOP		0x00000400		// will push otherwise
-#define EF_AWARD_CAP		0x00000800		// draw the capture sprite
-#define	EF_TALK				0x00001000		// draw a talk balloon
-#define	EF_CONNECTION		0x00002000		// draw a connection trouble sprite
-#define	EF_VOTED			0x00004000		// already cast a vote
+#define	EF_MOVER_STOP				0x00000400		// will push otherwise
+#define EF_AWARD_CAP				0x00000800		// draw the capture sprite
+#define	EF_TALK							0x00001000		// draw a talk balloon
+#define	EF_CONNECTION				0x00002000		// draw a connection trouble sprite
+#define	EF_VOTED						0x00004000		// already cast a vote
 #define	EF_AWARD_IMPRESSIVE	0x00008000		// draw an impressive sprite
-#define	EF_AWARD_DEFEND		0x00010000		// draw a defend sprite
-#define	EF_AWARD_ASSIST		0x00020000		// draw a assist sprite
-#define EF_AWARD_DENIED		0x00040000		// denied
-#define EF_TEAMVOTED		0x00080000		// already cast a team vote
-#define EF_TIMER        0x00000082		// 
+#define	EF_AWARD_DEFEND			0x00010000		// draw a defend sprite
+#define	EF_AWARD_ASSIST			0x00020000		// draw a assist sprite
+#define EF_AWARD_DENIED			0x00040000		// denied
+#define EF_TEAMVOTED				0x00080000		// already cast a team vote
+
+#ifdef USE_VEHICLES
+#define EF_REVERSE      		0x00100000
+#define EF_BRAKE        		0x00200000
+#endif
+
+#define EF_NOPICKUP      		0x00400000
+
+#define EF_TIMER        		0x00000082		// 
 
 #define EF_PERSISTANT ( EF_CONNECTION | EF_VOTED | EF_TEAMVOTED )
 #define EF_AWARDS ( EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_GAUNTLET | EF_AWARD_ASSIST | EF_AWARD_DEFEND | EF_AWARD_CAP )
@@ -582,7 +639,6 @@ typedef enum {
 	EV_CHANGE_WEAPON,
 	EV_FIRE_WEAPON,
 
-
 	EV_USE_ITEM0,
 	EV_USE_ITEM1,
 	EV_USE_ITEM2,
@@ -662,6 +718,7 @@ typedef enum {
 #ifdef USE_SINGLEPLAYER // entity
 	EV_PLAYERSTOP,
 	EV_EARTHQUAKE,
+	EV_USE,
 #endif
 
 #ifdef USE_HEADSHOTS
@@ -937,7 +994,13 @@ typedef enum {
 #ifdef USE_HEADSHOTS
   MOD_HEADSHOT,
 #endif
-	MOD_GRAPPLE
+	MOD_GRAPPLE,
+#ifdef USE_VEHICLES
+	MOD_HIGH_FORCES,
+	MOD_BO_SHOCKS,
+	MOD_WORLD_COLLISION,
+#endif
+	MOD_MAX
 } meansOfDeath_t;
 
 

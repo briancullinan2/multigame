@@ -1710,6 +1710,13 @@ static void PM_Weapon( void ) {
 		return;
 	}
 
+#ifdef USE_SINGLEPLAYER
+	if ((pm->cmd.buttons & BUTTON_USE)) {
+		PM_AddEvent(EV_USE);
+	}
+#endif
+
+
 	// check for item using
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
 		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
@@ -2122,7 +2129,8 @@ This can be used as another entry point when only the viewangles
 are being updated instead of a full move
 ================
 */
-void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
+void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) 
+{
 	short		temp;
 	int		i;
 
@@ -2154,6 +2162,7 @@ void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 			}
 		}
 		ps->viewangles[i] = SHORT2ANGLE(temp);
+
 	}
 
 }
@@ -2251,6 +2260,380 @@ PmoveSingle
 ================
 */
 void trap_SnapVector( float *v );
+
+#ifdef USE_VEHICLES
+
+/*
+================
+PmoveSingle
+
+================
+*/
+
+void PmoveVehicle (pmove_t *pmove) {
+// STONELANCE
+	//vec3_t	delta;
+	float	dot;
+	int i;
+// END
+
+	pm = pmove;
+
+	// this counter lets us debug movement problems with a journal
+	// by setting a conditional breakpoint fot the previous frame
+	c_pmove++;
+
+	// clear results
+	pm->numtouch = 0;
+	pm->watertype = 0;
+	pm->waterlevel = 0;
+
+// STONELANCE
+/*
+	if ( pm->ps->stats[STAT_HEALTH] <= 0 ) {
+		pm->tracemask &= ~CONTENTS_BODY;	// corpses can fly through bodies
+	}
+*/
+// END
+
+	// make sure walking button is clear if they are running, to avoid
+	// proxy no-footsteps cheats
+// STONELANCE
+/*
+	if ( abs( pm->cmd.forwardmove ) > 64 || abs( pm->cmd.rightmove ) > 64 ) {
+		pm->cmd.buttons &= ~BUTTON_WALKING;
+	}
+*/
+// END
+
+	// set the talk balloon flag
+	if ( pm->cmd.buttons & BUTTON_TALK ) {
+		pm->ps->eFlags |= EF_TALK;
+	} else {
+		pm->ps->eFlags &= ~EF_TALK;
+	}
+
+	// set the firing flag for continuous beam weapons
+	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] ) {
+		pm->ps->eFlags |= EF_FIRING;
+	} else {
+		pm->ps->eFlags &= ~EF_FIRING;
+	}
+
+	// clear the respawned flag if attack and use are cleared
+	if ( pm->ps->stats[STAT_HEALTH] > 0 && 
+		!( pm->cmd.buttons & (BUTTON_ATTACK | BUTTON_USE_HOLDABLE) ) ) {
+		pm->ps->pm_flags &= ~PMF_RESPAWNED;
+	}
+
+	// if talk button is down, dissallow all other input
+	// this is to prevent any possible intercept proxy from
+	// adding fake talk balloons
+	if ( pmove->cmd.buttons & BUTTON_TALK ) {
+		// keep the talk button set tho for when the cmd.serverTime > 66 msec
+		// and the same cmd is used multiple times in Pmove
+		pmove->cmd.buttons = BUTTON_TALK;
+		pmove->cmd.forwardmove = 0;
+		pmove->cmd.rightmove = 0;
+		pmove->cmd.upmove = 0;
+	}
+
+	// clear all pmove local vars
+	memset (&pml, 0, sizeof(pml));
+
+	// determine the time
+	pml.msec = pmove->cmd.serverTime - pm->ps->commandTime;
+	if ( pml.msec < 1 ) {
+		pml.msec = 1;
+	} else if ( pml.msec > 200 ) {
+		pml.msec = 200;
+	}
+	pm->ps->commandTime = pmove->cmd.serverTime;
+
+	// save old org in case we get stuck
+	VectorCopy (pm->ps->origin, pml.previous_origin);
+
+	// save old velocity for crashlanding
+	VectorCopy (pm->ps->velocity, pml.previous_velocity);
+
+	pml.frametime = pml.msec * 0.001;
+
+	// update the viewangles
+// STONELANCE
+//	PM_UpdateViewAngles( pm->ps, &pm->cmd );
+	PM_UpdateViewAngles( pm->ps, &pm->cmd );
+
+#if 0 //def USE_VEHICLES
+
+	for (i=0 ; i<3 ; i++) {
+// Q3Rally
+//		ps->viewangles[i] = SHORT2ANGLE(temp);
+		if ( pm->controlMode == CT_MOUSE ) {
+			pm->damageAngles[i] = SHORT2ANGLE(temp);
+		}
+// END
+	}
+
+// STONELANCE use damage yaw and pitch for view angles
+	if ( pm->controlMode == CT_MOUSE ) {
+		// camera view angle
+		pm->damagePitch = ANGLE2BYTE( SHORT2ANGLE( ps->damageAngles[PITCH] ) );
+		pm->damageYaw = ANGLE2BYTE( SHORT2ANGLE( ps->damageAngles[YAW] ) );
+	} else /* CT_JOYSTICK */ {
+		// wheel angle
+		pm->damageAngles[PITCH] = BYTE2ANGLE( pm->damagePitch );
+		pm->damageAngles[YAW] = BYTE2ANGLE( pm->damageYaw );
+		pm->damageAngles[ROLL] = 0;
+	}
+// END
+#endif
+
+//	AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
+	AngleVectors (pm->damageAngles, pml.forward, pml.right, pml.up);
+// END
+
+	if ( pm->cmd.upmove < 10 ) {
+		// not holding jump
+		pm->ps->pm_flags &= ~PMF_JUMP_HELD;
+	}
+
+	// decide if backpedaling animations should be used
+// STONELANCE
+/*
+	if ( pm->cmd.forwardmove < 0 ) {
+		pm->ps->pm_flags |= PMF_BACKWARDS_RUN;
+	} else if ( pm->cmd.forwardmove > 0 || ( pm->cmd.forwardmove == 0 && pm->cmd.rightmove ) ) {
+		pm->ps->pm_flags &= ~PMF_BACKWARDS_RUN;
+	}
+*/
+// END
+
+	if ( pm->ps->pm_type >= PM_DEAD ) {
+		pm->cmd.forwardmove = 0;
+		pm->cmd.rightmove = 0;
+		pm->cmd.upmove = 0;
+	}
+
+	if ( pm->ps->pm_type == PM_SPECTATOR ) {
+		PM_CheckDuck ();
+		PM_FlyMove ();
+		PM_DropTimers ();
+		return;
+	}
+
+	if ( pm->ps->pm_type == PM_NOCLIP ) {
+		PM_NoclipMove ();
+		PM_DropTimers ();
+		return;
+	}
+
+	if (pm->ps->pm_type == PM_FREEZE) {
+		return;		// no movement at all
+	}
+
+	if ( pm->ps->pm_type == PM_INTERMISSION || pm->ps->pm_type == PM_SPINTERMISSION) {
+		return;		// no movement at all
+	}
+
+	// set watertype, and waterlevel
+// STONELANCE - FIXME calculate water levels in bg_physics
+	PM_SetWaterLevel();
+	pml.previous_waterlevel = pmove->waterlevel;
+
+	// set mins, maxs, and viewheight
+// STONELANCE
+//	PM_CheckDuck ();
+	VectorSet(pm->mins, -CAR_WIDTH/2, -CAR_WIDTH/2, -CAR_WIDTH/2);
+	VectorSet(pm->maxs, CAR_WIDTH/2, CAR_WIDTH/2, CAR_WIDTH/2);
+	pm->ps->viewheight = 0;
+// END
+
+	// set groundentity
+// STONELANCE
+/*
+	PM_GroundTrace();
+	if ( pm->ps->pm_type == PM_DEAD ) {
+		PM_DeadMove ();
+	}
+*/
+// END
+
+	PM_DropTimers();
+
+// SKWID( PM_DriveMove does it all )
+// STONELANCE
+	// dont do physics if the player has been gibed
+	if ( pm->ps->stats[STAT_HEALTH] > GIB_HEALTH ){
+		int		i;
+
+		pml.physicsSplit = 0;
+		PM_DriveMove(pm->car, pml.frametime, qtrue);
+
+		if( VectorNAN( pm->car->sBody.r ) )
+			VectorClear( pm->car->sBody.r );
+		if( VectorNAN( pm->car->sBody.v ) )
+			VectorClear( pm->car->sBody.v );
+		if( VectorNAN( pm->car->sBody.L ) )
+			VectorClear( pm->car->sBody.L );
+
+		// translate car values to player angles, etc
+		VectorCopy(pm->car->sBody.v, pm->ps->velocity);
+		VectorCopy(pm->car->sBody.r, pm->ps->origin);
+#define angularMomentum grapplePoint
+		VectorCopy(pm->car->sBody.L, pm->ps->angularMomentum); // angularMomentum
+		OrientationToAngles(pm->car->sBody.t, pm->ps->viewangles);
+
+		if( VectorNAN( pm->ps->viewangles ) )
+			VectorClear( pm->ps->viewangles );
+
+//		VectorSubtract(pm->car->sPoints[FL_FRAME].r, pm->car->sPoints[FL_WHEEL].r, delta);
+//		dot = DotProduct(delta, pm->car->sBody.up);
+		dot = pm->car->sBody.curSpringLengths[FL_WHEEL] - CP_SPRING_MINLEN;
+		if (dot > CP_SPRING_MAXLEN - CP_SPRING_MINLEN)
+			dot = CP_SPRING_MAXLEN - CP_SPRING_MINLEN;
+		else if (dot < 0)
+			dot = 0;
+		pm->ps->legsTimer = (int)(CP_SPRING_SCALE * dot);
+
+//		VectorSubtract(pm->car->sPoints[FR_FRAME].r, pm->car->sPoints[FR_WHEEL].r, delta);
+//		dot = DotProduct(delta, pm->car->sBody.up);
+		dot = pm->car->sBody.curSpringLengths[FR_WHEEL] - CP_SPRING_MINLEN;
+		if (dot > CP_SPRING_MAXLEN - CP_SPRING_MINLEN)
+			dot = CP_SPRING_MAXLEN - CP_SPRING_MINLEN;
+		else if (dot < 0)
+			dot = 0;
+		pm->ps->legsAnim = (int)(CP_SPRING_SCALE * dot);
+
+//		VectorSubtract(pm->car->sPoints[RL_FRAME].r, pm->car->sPoints[RL_WHEEL].r, delta);
+//		dot = DotProduct(delta, pm->car->sBody.up);
+		dot = pm->car->sBody.curSpringLengths[RL_WHEEL] - CP_SPRING_MINLEN;
+		if (dot > CP_SPRING_MAXLEN - CP_SPRING_MINLEN)
+			dot = CP_SPRING_MAXLEN - CP_SPRING_MINLEN;
+		else if (dot < 0)
+			dot = 0;
+		pm->ps->torsoTimer = (int)(CP_SPRING_SCALE * dot);
+
+//		VectorSubtract(pm->car->sPoints[RR_FRAME].r, pm->car->sPoints[RR_WHEEL].r, delta);
+//		dot = DotProduct(delta, pm->car->sBody.up);
+		dot = pm->car->sBody.curSpringLengths[RR_WHEEL] - CP_SPRING_MINLEN;
+		if (dot > CP_SPRING_MAXLEN - CP_SPRING_MINLEN)
+			dot = CP_SPRING_MAXLEN - CP_SPRING_MINLEN;
+		else if (dot < 0)
+			dot = 0;
+		pm->ps->torsoAnim = (int)(CP_SPRING_SCALE * dot);
+
+		pm->ps->stats[STAT_VEHICLE] = pm->car->rpm;
+		pm->ps->stats[STAT_VEHICLE] |= (pm->car->gear << 8);
+
+		// used to keep track of time since last onGround for resetCar
+/*
+		VectorSet(delta, 0, 0, 1);
+		for (i = 0; i < NUM_CAR_POINTS; i++){
+			if (pm->car->sPoints[i].onGround && DotProduct(pm->car->sPoints[i].normals[0], delta) > 0.3){
+				pm->car->sPoints[i].onGroundTime = pm->cmd.serverTime;
+				pm->car->tPoints[i].onGroundTime = pm->cmd.serverTime;
+			}
+			else {
+				pm->car->sPoints[i].offGroundTime = pm->cmd.serverTime;
+				pm->car->tPoints[i].offGroundTime = pm->cmd.serverTime;
+			}
+		}
+*/
+
+		for (i = 0; i < FL_FRAME; i++)
+		{
+			if( pm->car->sPoints[i].onGround && pm->car->sPoints[i].normals[0][2] > 0.3f )
+			{
+				pm->car->wheelOnGroundTime = pm->cmd.serverTime;
+				break;
+			}
+		}
+
+		if( pm->car->wheelOnGroundTime != pm->cmd.serverTime )
+			pm->car->wheelsOffGroundTime = pm->cmd.serverTime;
+
+		for (i = FL_FRAME; i < NUM_CAR_POINTS; i++)
+		{
+			if( pm->car->sPoints[i].onGround )
+			{
+				pm->car->onGroundTime = pm->cmd.serverTime;
+				break;
+			}
+		}
+
+		if( pm->car->onGroundTime < pm->cmd.serverTime - 100 )
+			pm->car->offGroundTime = pm->cmd.serverTime;
+	}
+// END
+/*
+
+#ifdef MISSIONPACK
+	if ( pm->ps->powerups[PW_INVULNERABILITY] ) {
+		PM_InvulnerabilityMove();
+	} else
+#endif
+	if ( pm->ps->powerups[PW_FLIGHT] ) {
+		// flight powerup doesn't allow jump and has different friction
+		PM_FlyMove();
+	} else if (pm->ps->pm_flags & PMF_GRAPPLE_PULL) {
+		PM_GrappleMove();
+		// We can wiggle a bit
+		PM_AirMove();
+	} else if (pm->ps->pm_flags & PMF_TIME_WATERJUMP) {
+		PM_WaterJumpMove();
+	} else if ( pm->waterlevel > 1 ) {
+		// swimming
+		PM_WaterMove();
+	} else if ( pml.walking ) {
+		// walking on ground
+		PM_WalkMove();
+	} else {
+		// airborne
+		PM_AirMove();
+	}
+*/
+// END
+
+// STONELANCE
+//	PM_Animate();
+// END
+
+	// set groundentity, watertype, and waterlevel
+	PM_GroundTrace();
+	PM_SetWaterLevel();
+
+	// weapons
+	PM_Weapon();
+	//PM_Alt_Weapon();
+// STONELANCE
+	//PM_RearWeapon();
+// END
+
+	// torso animation
+// STONELANCE
+//	PM_TorsoAnimation();
+// END
+
+	// footstep events / legs animations
+// SKWID( removed function )
+//	PM_Footsteps();
+// END
+
+	// entering / leaving water splashes
+	PM_WaterEvents();
+
+	// snap some parts of playerstate to save network bandwidth
+// STONELANCE
+//	trap_SnapVector( pm->ps->velocity );
+// END
+
+	pm = NULL;
+}
+
+
+#endif
+
 
 void PmoveSingle (pmove_t *pmove) {
 	pm = pmove;
@@ -2614,6 +2997,11 @@ void Pmove (pmove_t *pmove) {
 			}
 		}
 		pmove->cmd.serverTime = pmove->ps->commandTime + msec;
+#ifdef USE_VEHICLES
+		if(pmove->ps->pm_type == PM_VEHICLE || pmove->ps->pm_type == PM_VEHICLEMOUSE) {
+			PmoveVehicle(pmove);
+		} else
+#endif
 		PmoveSingle( pmove );
 
 		if ( pmove->ps->pm_flags & PMF_JUMP_HELD ) {

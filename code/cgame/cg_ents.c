@@ -402,7 +402,7 @@ static void CG_Item( centity_t *cent ) {
 
 		VectorClear( spinAngles );
 
-		if ( item->giType == IT_HEALTH || item->giType == IT_POWERUP )
+		if ( item->giType == IT_HEALTH || item->giType == IT_POWERUP || item->giTag == HI_HEALER )
 		{
 			if ( ( ent.hModel = cg_items[es->modelindex].models[1] ) != 0 )
 			{

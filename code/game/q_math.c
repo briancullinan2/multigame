@@ -1186,6 +1186,22 @@ int	PlaneTypeForNormal (vec3_t normal) {
 */
 
 
+
+// STONELANCE
+/*
+================================================================================
+VectorNAN
+================================================================================
+*/
+qboolean VectorNAN( const vec3_t vec ){
+	if (IS_NAN(vec[0]) || IS_NAN(vec[1]) || IS_NAN(vec[2])){
+		return qtrue;
+	}
+
+	return qfalse;
+}
+
+
 /*
 ================
 MatrixMultiply
@@ -1211,6 +1227,287 @@ void MatrixMultiply(float in1[3][3], float in2[3][3], float out[3][3]) {
 	out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] +
 				in1[2][2] * in2[2][2];
 }
+
+
+
+/*
+================
+MatrixTranspose
+
+  Cant do MatrixTranspose(m, m);
+================
+*/
+void MatrixTranspose( float in[3][3], float out[3][3] ) {
+	out[0][0] = in[0][0];
+	out[0][1] = in[1][0];
+	out[0][2] = in[2][0];
+	out[1][0] = in[0][1];
+	out[1][1] = in[1][1];
+	out[1][2] = in[2][1];
+	out[2][0] = in[0][2];
+	out[2][1] = in[1][2];
+	out[2][2] = in[2][2];
+}
+
+/*
+================
+MatrixAdd
+================
+*/
+void MatrixAdd( float in1[3][3], float in2[3][3], float out[3][3] ) {
+	out[0][0] = in1[0][0] + in2[0][0];
+	out[0][1] = in1[0][1] + in2[0][1];
+	out[0][2] = in1[0][2] + in2[0][2];
+	out[1][0] = in1[1][0] + in2[1][0];
+	out[1][1] = in1[1][1] + in2[1][1];
+	out[1][2] = in1[1][2] + in2[1][2];
+	out[2][0] = in1[2][0] + in2[2][0];
+	out[2][1] = in1[2][1] + in2[2][1];
+	out[2][2] = in1[2][2] + in2[2][2];
+}
+
+/*
+================
+AnglesToOrientation
+  
+Converts car angles to an orientation matrix
+================
+*/
+void AnglesToOrientation( const vec3_t angles, float t[3][3] ) {
+	float		angle;
+	static float		sr, sp, sy, cr, cp, cy;
+	// static to help MS compiler fp bugs
+
+	angle = angles[YAW] * M_PI_180;
+	sy = sin(angle);
+	cy = cos(angle);
+	angle = angles[PITCH] * M_PI_180;
+	sp = sin(angle);
+	cp = cos(angle);
+	angle = angles[ROLL] * M_PI_180;
+	sr = sin(angle);
+	cr = cos(angle);
+
+	t[0][0] = (-1*sr*sp*cy+-1*cr*-sy);	t[1][0] = (-1*sr*sp*sy+-1*cr*cy);	t[2][0] = -1*sr*cp;
+	t[0][1] = cp*cy;					t[1][1] = cp*sy;					t[2][1] = -sp;
+	t[0][2] = (cr*sp*cy+-sr*-sy);		t[1][2] = (cr*sp*sy+-sr*cy);		t[2][2] = cr*cp;
+}
+
+
+/*
+================
+OrientationToVectors
+  
+Converts orientation matrix to angle vectors
+================
+*/
+void OrientationToVectors( float t[3][3], vec3_t forward, vec3_t right, vec3_t up ) {
+	right[0] = t[0][0];		right[1] = t[1][0];		right[2] = t[2][0];
+	forward[0] = t[0][1];	forward[1] = t[1][1];	forward[2] = t[2][1];
+	up[0] = t[0][2];		up[1] = t[1][2];		up[2] = t[2][2];
+
+//	VectorNormalize(right);
+//	VectorNormalize(forward);
+//	VectorNormalize(up);
+}
+
+
+/*
+================
+AnglesToDeltaAngles
+  
+Converts orientation matrix to car angles
+================
+*/
+void AnglesToDeltaAngles( vec3_t angles, const vec3_t w, vec3_t deltaAngles ) {
+/*
+	float	cr, cy;
+	float	sr, sy;
+	float	aaa;
+
+	sy = sin( angles[YAW] * M_180_PI );
+	cy = cos( angles[YAW] * M_180_PI );
+	
+	sr = sin( angles[ROLL] * M_180_PI );
+	cr = cos( angles[ROLL] * M_180_PI );
+
+
+// [ dpsi dtheta dphi ]T = M-1(theta,phi) * Omega
+// 
+// M-1(theta,phi) = [       cos(phi)/cos(theta)           sin(phi)/cos(theta)        0 ]
+//                  [           -sin(phi)                      cos(phi)              0 ]
+//                  [ cos(phi)*sin(theta)/cos(theta) sin(phi)*sin(theta)/cos(theta)  1 ]
+
+	aaa = ( cr + sr ) / cy;
+	delta_angles[0] = ( aaa ) * w[0];
+	delta_angles[1] = ( cr - sr ) * w[1];
+	delta_angles[2] = ( aaa * sy + 1 ) * w[2];
+*/
+
+	float	c1, c2, c3, s1, s2, s3;
+	float	p, sp;
+
+	c1 = cos( angles[0] * M_PI_180 );
+	c2 = cos( angles[1] * M_PI_180 );
+	c3 = cos( angles[2] * M_PI_180 );
+	s1 = sin( angles[0] * M_PI_180 );
+	s2 = sin( angles[1] * M_PI_180 );
+	s3 = sin( angles[2] * M_PI_180 );
+
+	p = 2.0f * Q_acos( c1*c2*c3 - s1*s2*s3 );
+	sp = p / sin( p / 2.0f ) ;
+
+	deltaAngles[0] = (c1*s2*c3 + s1*c2*c3) * sp * M_180_PI;
+	deltaAngles[1] = (s1*s2*c3 + c1*s2*s3) * sp * M_180_PI;
+	deltaAngles[2] = (c1*c2*s3 + s1*s2*c3) * sp * M_180_PI;
+}
+
+
+/*
+================
+OrientationToDeltaAngles
+  
+Converts orientation matrix to car angles
+================
+*/
+void OrientationToDeltaAngles( float t[3][3], const vec3_t w, vec3_t delta_angles ) {
+//	vec3_t	forward, right, up;
+//	float	cp, as;
+
+
+//	OrientationToVectors(t, forward, right, up);
+/*
+	forward[0] = -w[2] * t[1][1] + w[1] * t[1][2];
+	forward[1] =  w[2] * t[1][0] + w[0] * t[1][2];
+	forward[2] = -w[1] * t[1][0] + w[0] * t[1][1];
+	up[2] = -w[1] * t[2][0] + w[0] * t[2][1];
+	right[2] = -w[1] * t[0][0] + w[0] * t[0][1];
+
+	delta_angles[PITCH] = Q_asin( -forward[2] ) * M_180_PI;
+	if (up[2] < 0.0f)
+		delta_angles[PITCH] = 180 - delta_angles[PITCH];
+
+	cp = cos( delta_angles[PITCH] * M_PI_180 );
+	if (cp){
+		// fix small floating point errors that would cause it to
+		// have asin() of a number > 1.00
+		as = forward[1] / cp > 1.00f ? 1.00f : forward[1] / cp;
+		as = as < -1.00f ? -1.00f : as;
+
+		delta_angles[YAW] = Q_asin(as) * M_180_PI;
+		if (forward[0] < 0.0f)
+			delta_angles[YAW] = 180 - delta_angles[YAW];
+		if (up[2] < 0.0f)
+			delta_angles[YAW] = 180 - delta_angles[YAW];
+
+		as = -right[2] / cp > 1.00f ? 1.00f : -right[2] / cp;
+		as = as < -1.00f ? -1.00f : as;
+		delta_angles[ROLL] = Q_asin(as) * M_180_PI;
+	}
+	else {
+		delta_angles[YAW]=0;
+		delta_angles[ROLL]=0;
+	}
+
+	// we still want yaw to be facing the front of the car so spin yaw
+	// 180 and adjust pitch and roll to keep car in the same position
+	if (fabs(delta_angles[PITCH]) > 90){
+		delta_angles[YAW] += 180;
+		delta_angles[PITCH] = 180 - delta_angles[PITCH];
+		delta_angles[ROLL] += 180;
+	}
+*/
+}
+
+
+/*
+================
+OrientationToAngles
+  
+Converts orientation matrix to car angles
+================
+*/
+void OrientationToAngles( float t[3][3], vec3_t angles ) {
+	vec3_t	forward, right, up;
+	float	cp, as;
+
+	OrientationToVectors(t, forward, right, up);
+
+	angles[PITCH] = Q_asin(-forward[2]) * M_180_PI;
+	if (up[2] < 0.0f)
+		angles[PITCH] = 180 - angles[PITCH];
+
+	cp = cos(angles[PITCH] * M_PI_180 );
+	if (cp){
+		// fix small floating point errors that would cause it to
+		// have asin() of a number > 1.00
+		as = forward[1] / cp > 1.00f ? 1.00f : forward[1] / cp;
+		as = as < -1.00f ? -1.00f : as;
+
+		angles[YAW] = Q_asin(as) * M_180_PI;
+		if (forward[0] < 0.0f)
+			angles[YAW] = 180 - angles[YAW];
+		if (up[2] < 0.0f)
+			angles[YAW] = 180 - angles[YAW];
+
+		as = -right[2] / cp > 1.00f ? 1.00f : -right[2] / cp;
+		as = as < -1.00f ? -1.00f : as;
+		angles[ROLL] = Q_asin(as) * M_180_PI;
+	}
+	else {
+		angles[YAW]=0;
+		angles[ROLL]=0;
+	}
+
+	// we still want yaw to be facing the front of the car so spin yaw
+	// 180 and adjust pitch and roll to keep car in the same position
+	if (fabs(angles[PITCH]) > 90){
+		angles[YAW] += 180;
+		angles[PITCH] = 180 - angles[PITCH];
+		angles[ROLL] += 180;
+	}
+}
+
+
+/*
+================
+OrthonormalizeOrientation
+  
+Normalizes orientation matrix
+================
+*/
+void OrthonormalizeOrientation( float t[3][3] ){
+	vec3_t	x, y, z;
+
+	VectorSet(x, t[0][0], t[1][0], t[2][0]);
+	VectorSet(y, t[0][1], t[1][1], t[2][1]);
+
+	// FIXME: check for 0 length?
+	VectorNormalize(x);
+
+	CrossProduct(x, y, z);
+	VectorNormalize(z);
+
+	CrossProduct(z, x, y);
+	VectorNormalize(y);
+
+	t[0][0] = x[0]; t[0][1] = y[0]; t[0][2] = z[0];
+	t[1][0] = x[1]; t[1][1] = y[1]; t[1][2] = z[1];
+	t[2][0] = x[2]; t[2][1] = y[2]; t[2][2] = z[2];
+}
+
+/*
+================
+QuaternionLengthSquared
+  
+Returns the DotProduct(q, q)
+
+================
+*/
+float QuaternionLengthSquared( const vec4_t q ){
+	return q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3];
+}
+
 
 
 void AngleVectors( const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up) {
@@ -1284,4 +1581,53 @@ void PerpendicularVector( vec3_t dst, const vec3_t src )
 	VectorNormalize( dst );
 }
 
+#ifndef Q3_VM
+/*
+=====================
+Q_acos
+
+the msvc acos doesn't always return a value between 0 and PI:
+
+int i;
+i = 1065353246;
+acos(*(float*) &i) == -1.#IND0
+
+=====================
+*/
+float Q_acos(float c) {
+	float angle;
+
+	angle = acos(c);
+
+	if (angle > M_PI) {
+		return M_PI;
+	}
+	if (angle < 0.0f) {
+		return 0.0f;
+	}
+	return angle;
+}
+
+/*
+=====================
+Q_asin
+
+the msvc asin probably has same type of behavior as acos
+
+=====================
+*/
+float Q_asin(float c) {
+	float angle;
+
+	angle = asin(c);
+
+	if (angle > M_PI_2) {
+		return M_PI_2;
+	}
+	if (angle < -M_PI_2) {
+		return -M_PI_2;
+	}
+	return angle;
+}
+#endif
 

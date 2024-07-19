@@ -392,6 +392,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_physics.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_slidemove.c"
 				>
 			</File>

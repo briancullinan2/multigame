@@ -762,6 +762,215 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 }
 
 
+
+/**
+ * Pickup_Item
+ *
+ * Pickup an item but do a few checks before to see whether this is indeed valid
+ */
+void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPickup)
+{
+	int respawn;
+
+	// need a client and dead people can't pickup
+	if (!other->client || other->health < 1)
+	{
+		return;
+	}
+
+	if(ent->s.eFlags & EF_NOPICKUP)
+	{
+		return;
+	}
+
+#if 0 // TODO
+	// owner can't pickup his own items straight away
+	if((ent->lastOwner == other) && (ent->lastOwnerThink > level.time))
+	{
+		return;
+	}
+#endif
+
+	// not allowed to pick up weapons while reloading
+
+	if ((ent->item->giType == IT_WEAPON) && (other->client->ps.weaponstate = WEAPON_DROPPING))
+	{
+		return;
+	}
+
+	// the same pickup rules are used for client side and server side
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ))
+	{
+		return;
+	}
+
+#if 0
+	if(g_gametype.integer == GT_BOMB &&
+		(other->client->sess.sessionTeam != TEAM_RED) && (ent->item->giTag == WP_BOMB))
+	{
+		return;
+	}
+
+	//Somebodys grabbed the bomb
+	if (ent->item->giTag == WP_BOMB)
+	{
+		level.BombHolderLastRound = other->client->ps.clientNum;
+		G_LogPrintf("Bomb has been collected by %i\n", other->client->ps.clientNum);
+		level.UseLastRoundBomber  = qtrue;
+
+		//@Barbatos: be sure we are playing bomb mode
+		if(g_gametype.integer == GT_BOMB)
+			G_AutoRadio(3, other);
+
+		// we have to pickup bombs when we walk over
+		autoPickup = -1;
+	}
+#endif
+
+	// call the item-specific pickup function
+	switch(ent->item->giType)
+	{
+		case IT_WEAPON:
+			if (autoPickup & (1 << (ent->item - bg_itemlist)))
+			{
+				respawn = Pickup_Weapon(ent, other);
+			}
+			else
+			{
+				return;
+			}
+			break;
+
+		case IT_TEAM:
+			respawn = Pickup_Team(ent, other);
+			break;
+
+		case IT_HOLDABLE:
+			// No picking up an item twice.
+			if ((autoPickup & (1 << (ent->item - bg_itemlist))) && other->client->inventory[ent->item->giTag])
+			{
+				respawn = Pickup_Holdable(ent, other);
+			}
+			else
+			{
+				return;
+			}
+
+			break;
+
+		default:
+			return;
+	}
+
+	if (!respawn)
+	{
+		return;
+	}
+
+	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
+
+	// play the normal pickup sound
+	G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
+
+	// powerup pickups are global broadcasts
+	if ((ent->item->giType == IT_POWERUP) || (ent->item->giType == IT_TEAM))
+	{
+		char powerupcmd[32];
+
+		// if we want the global sound to play
+		if (!ent->speed)
+		{
+			gentity_t  *te;
+
+			te		= G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
+			te->s.eventParm = ent->s.modelindex;
+			te->r.svFlags  |= SVF_BROADCAST;
+		}
+		else
+		{
+			gentity_t  *te;
+
+			te		   = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
+			te->s.eventParm    = ent->s.modelindex;
+			// only send this temp entity to a single client
+			te->r.svFlags	  |= SVF_SINGLECLIENT;
+			te->r.singleClient = other->s.number;
+		}
+	/***
+		s.e.t.i. : Use global broadast to generate a cg_followpowerup command
+			Gametypes:
+				* CTF : Flag has been grabbed by other->client->ps.clientNum
+				* Bomb : Bomb has been picked up by other->client->ps.clientNum
+	***/
+		Com_sprintf(powerupcmd, 32, "followpowerup %i", other->client->ps.clientNum);
+
+		//trap_Argv(1, clientnum, sizeof(char)*2);
+		// Send to client -1, which broadcasts to all clients
+		trap_SendServerCommand(-1, powerupcmd);
+	}
+
+	// fire item targets
+	G_UseTargets (ent, other);
+
+	// wait of -1 will not respawn
+	if (ent->wait == -1)
+	{
+		ent->r.svFlags		 	 |= SVF_NOCLIENT;
+		ent->s.eFlags		 		 |= EF_NODRAW | EF_NOPICKUP;
+		ent->r.contents 	    = 0;
+		ent->unlinkAfterEvent = qtrue;
+		return;
+	}
+
+	// non zero wait overrides respawn time
+	if (ent->wait)
+	{
+		respawn = ent->wait;
+	}
+
+	// random can be used to vary the respawn time
+	if (ent->random)
+	{
+		respawn += crandom() * ent->random;
+
+		if (respawn < 1)
+		{
+			respawn = 1;
+		}
+	}
+
+	// dropped items will not respawn
+	if (ent->flags & FL_DROPPED_ITEM)
+	{
+		ent->freeAfterEvent = qtrue;
+	}
+
+	// picked up items still stay around, they just don't
+	// draw anything.  This allows respawnable items
+	// to be placed on movers.
+	ent->r.svFlags |= SVF_NOCLIENT;
+	ent->s.eFlags  |= EF_NODRAW | EF_NOPICKUP;
+	ent->r.contents = 0;
+
+	// ZOID
+	// A negative respawn times means to never respawn this item (but don't
+	// delete it).	This is used by items that are respawned by third party
+	// events such as ctf flags
+	if (respawn <= 0)
+	{
+		ent->nextthink = 0;
+		ent->think	   = 0;
+	}
+	else
+	{
+		ent->nextthink = level.time + respawn * 1000;
+		ent->think	   = RespawnItem;
+	}
+	trap_LinkEntity( ent );
+}
+
+
+
 //======================================================================
 
 /*

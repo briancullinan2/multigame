@@ -395,6 +395,8 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/bg_lib.o \
   $(B)/$(MOD)/cgame/bg_misc.o \
   $(B)/$(MOD)/cgame/bg_pmove.o \
+  $(B)/$(MOD)/cgame/bg_physics.o \
+  $(B)/$(MOD)/cgame/bg_wheel_forces.o \
   $(B)/$(MOD)/cgame/bg_slidemove.o \
   $(B)/$(MOD)/cgame/bg_tracemap.o \
   $(B)/$(MOD)/cgame/cg_atmospheric.o \
@@ -412,12 +414,14 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/cg_playerstate.o \
   $(B)/$(MOD)/cgame/cg_polybus.o \
   $(B)/$(MOD)/cgame/cg_predict.o \
+  $(B)/$(MOD)/cgame/cg_rally.o \
   $(B)/$(MOD)/cgame/cg_scoreboard.o \
   $(B)/$(MOD)/cgame/cg_servercmds.o \
   $(B)/$(MOD)/cgame/cg_snapshot.o \
   $(B)/$(MOD)/cgame/cg_timer.o \
   $(B)/$(MOD)/cgame/cg_view.o \
   $(B)/$(MOD)/cgame/cg_weapons.o \
+  $(B)/$(MOD)/cgame/cg_weapons2.o \
   $(B)/$(MOD)/cgame/cg_weaporder.o \
   \
   $(B)/$(MOD)/cgame/q_math.o \
@@ -455,6 +459,8 @@ QAOBJ_ = \
   $(B)/$(MOD)/game/bg_lib.o \
   $(B)/$(MOD)/game/bg_misc.o \
   $(B)/$(MOD)/game/bg_pmove.o \
+  $(B)/$(MOD)/game/bg_physics.o \
+  $(B)/$(MOD)/game/bg_wheel_forces.o \
   $(B)/$(MOD)/game/bg_slidemove.o \
   $(B)/$(MOD)/game/g_active.o \
   $(B)/$(MOD)/game/g_arenas.o \

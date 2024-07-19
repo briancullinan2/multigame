@@ -191,7 +191,8 @@ void SP_team_blueobelisk( gentity_t *ent );
 void SP_team_redobelisk( gentity_t *ent );
 void SP_team_neutralobelisk( gentity_t *ent );
 #endif
-void SP_item_botroam( gentity_t *ent ) {};
+void SP_item_botroam( gentity_t *ent ) {
+}
 
 #ifdef USE_ROTATING_DOOR
 void SP_func_door_rotating( gentity_t *ent );	// VALKYRIE: for rotating doors
@@ -282,10 +283,12 @@ spawn_t	spawns[] = {
 	{"team_blueobelisk", SP_team_blueobelisk},
 	{"team_neutralobelisk", SP_team_neutralobelisk},
 #endif
+
 	{"item_botroam", SP_item_botroam},
 
 #ifdef USE_ROTATING_DOOR
   {"func_door_rotating", SP_func_door_rotating},	// VALKYRIE: for rotating doors
+  {"func_rotating_door", SP_func_door_rotating},	// VALKYRIE: for rotating doors
 #endif
 
 	{0, 0}
@@ -506,6 +509,10 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	}
 
 	// move editor origin to pos
+	ent->s.origin[0] *= g_scale.value;
+	ent->s.origin[1] *= g_scale.value;
+	ent->s.origin[2] *= g_scale.value;
+
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 	VectorCopy( ent->s.origin, ent->r.currentOrigin );
 

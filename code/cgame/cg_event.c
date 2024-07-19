@@ -575,6 +575,10 @@ int CG_WaterLevel(centity_t *cent) {
 	return waterlevel;
 }
 
+void CG_OldRailTrail (clientInfo_t *ci, vec3_t start, vec3_t end);
+
+
+
 /*
 ================
 CG_PainEvent
@@ -1180,7 +1184,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			VectorCopy( es->origin2, vec );
 
 		// if the end was on a nomark surface, don't make an explosion
-		CG_RailTrail( ci, vec, es->pos.trBase );
+		if(cg_oldRail.integer > 0) {
+			CG_OldRailTrail( ci, vec, es->pos.trBase );
+		} else {
+			CG_RailTrail( ci, vec, es->pos.trBase );
+		}
 
 		if ( es->eventParm != 255 ) {
 			ByteToDir( es->eventParm, dir );

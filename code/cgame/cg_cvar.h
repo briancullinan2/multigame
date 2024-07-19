@@ -233,4 +233,6 @@ CG_CVAR( cgwp_flameCycle, "wp_flameCycle", "40", CVAR_SERVERINFO )
 CG_CVAR( cg_worlds, "worlds", "0", CVAR_USERINFO | CVAR_ROM | CVAR_NORESTART )
 #endif
 
+
+
 #undef CG_CVAR

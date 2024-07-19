@@ -165,6 +165,9 @@ G_CVAR( g_holdMultiple, "g_holdMultiple", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 
 
+G_CVAR( g_scale, "cm_scale", "1.0", 0, 0, qfalse, qfalse )
+
+
 #include "./g_cvar_weapon.h"
 #include "./g_cvar_weapon2.h"
 #include "./g_cvar_weapon3.h"
