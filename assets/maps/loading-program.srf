@@ -1,0 +1,219 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+1 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+2 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+3 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+4 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+5 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+6 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx/fog3
+	sampleSize 0
+}
+
+7 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx/fog3
+	sampleSize 0
+}
+
+8 // ESurfaceType::ForcedMeta V: 543 I: 1176 
+{
+	shader models/mapobjects/podium/podium
+}
+
+9 // ESurfaceType::ForcedMeta V: 160 I: 420 
+{
+	shader models/mapobjects/podium/podskull
+}
+
+10 // ESurfaceType::ForcedMeta V: 18 I: 48 
+{
+	shader models/mapobjects/podium/podiumfx2
+}
+
+11 // ESurfaceType::ForcedMeta V: 18 I: 48 
+{
+	shader models/mapobjects/podium/podiumfx1
+}
+
+12 // ESurfaceType::ForcedMeta V: 18 I: 48 
+{
+	shader models/mapobjects/podium/podiumfx3
+}
+
+13 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+14 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+15 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+16 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+17 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/__TB_empty
+	parent 0
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+18 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 1
+	sampleSize 0
+}
+
+19 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 2
+	sampleSize 0
+}
+
+20 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 3
+	sampleSize 0
+}
+
+21 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 4
+	sampleSize 0
+}
+
+22 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 5
+	sampleSize 0
+}
+
+23 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/sfx/fog3
+	parent 6
+	sampleSize 0
+}
+
+24 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/sfx/fog3
+	parent 7
+	sampleSize 0
+}
+
+25 // ESurfaceType::ForcedMeta V: 543 I: 1176 
+{
+	shader models/mapobjects/podium/podium
+	parent 8
+}
+
+26 // ESurfaceType::ForcedMeta V: 160 I: 420 
+{
+	shader models/mapobjects/podium/podskull
+	parent 9
+}
+
+27 // ESurfaceType::ForcedMeta V: 18 I: 48 
+{
+	shader models/mapobjects/podium/podiumfx2
+	parent 10
+}
+
+28 // ESurfaceType::ForcedMeta V: 18 I: 48 
+{
+	shader models/mapobjects/podium/podiumfx1
+	parent 11
+}
+
+29 // ESurfaceType::ForcedMeta V: 18 I: 48 
+{
+	shader models/mapobjects/podium/podiumfx3
+	parent 12
+}
+
+30 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 13
+	sampleSize 0
+}
+
+31 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 14
+	sampleSize 0
+}
+
+32 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 15
+	sampleSize 0
+}
+
+33 // ESurfaceType::Face V: 4 I: 6 
+{
+	shader textures/skies/portalfog
+	parent 16
+	sampleSize 0
+}
+

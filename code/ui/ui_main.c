@@ -5703,6 +5703,7 @@ void UI_UpdateCvars( void ) {
 					UI_CLASSIC_SetActiveMenu(uiInfo.activeMenu);
 				} else {
 					//if(!uiInfo.startTime) {
+						String_Init();
 						UI_LoadMenus(ui_menuFiles.string, qtrue);
 					//}
 					_UI_SetActiveMenu(uiInfo.activeMenu);
