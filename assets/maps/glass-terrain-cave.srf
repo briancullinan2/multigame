@@ -1,0 +1,1004 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+1 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+2 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+3 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+4 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+5 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+6 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+7 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+8 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+9 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+10 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+11 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+12 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+13 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+14 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+15 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+16 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+17 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+18 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+19 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+20 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+21 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+22 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+23 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+24 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+25 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+26 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+27 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+28 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+29 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+30 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+31 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+32 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+33 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+34 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+35 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+36 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+37 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+38 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+39 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+40 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+41 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+42 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+43 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+44 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+45 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+46 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+47 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+48 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/ut_dville/flame_dark
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+49 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+50 // ESurfaceType::Patch V: 27 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+51 // ESurfaceType::Patch V: 81 I: 0 
+{
+	shader textures/urban_terror2/wood4a
+	longestCurve 124.049751
+}
+
+52 // ESurfaceType::Patch V: 117 I: 0 
+{
+	shader textures/urban_terror2/wood4a
+	longestCurve 48.868740
+}
+
+53 // ESurfaceType::Patch V: 39 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+54 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+55 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+56 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+57 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+58 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+59 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+60 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+61 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+62 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+63 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+64 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+65 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+66 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+67 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+68 // ESurfaceType::Patch V: 27 I: 0 
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+}
+
+69 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+70 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+71 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+72 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+73 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+74 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+75 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+76 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+77 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+78 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+79 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	longestCurve 804.781311
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+80 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+81 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+82 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+83 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+84 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+85 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+86 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+87 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+88 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+89 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+90 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+91 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+92 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+93 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+94 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+95 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+96 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+97 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+98 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+99 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+100 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+101 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+102 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+103 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+104 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+105 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+106 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+107 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+108 // ESurfaceType::Face V: 9 I: 24 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+109 // ESurfaceType::Face V: 9 I: 24 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+110 // ESurfaceType::Face V: 12 I: 30 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+111 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+112 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+113 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+114 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+115 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+116 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+117 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+118 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+119 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+120 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+121 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+122 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+123 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+124 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+125 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+126 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+127 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+128 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+129 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+130 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+131 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+132 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+133 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+134 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+135 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/urban_terror2/wood4a
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+136 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+137 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+138 // ESurfaceType::Face V: 10 I: 24 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+139 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+140 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+141 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+142 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+143 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+144 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+145 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+146 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+147 // ESurfaceType::Face V: 10 I: 24 planar
+{
+	shader textures/ut_commune/black
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+148 // ESurfaceType::Triangles V: 405 I: 1650 
+{
+	shader models/mapobjects/skel/skel
+	sampleSize 0
+}
+
+149 // ESurfaceType::Triangles V: 269 I: 798 
+{
+	shader models/mapobjects/elglight2/elglight2
+	sampleSize 0
+}
+
+150 // ESurfaceType::Triangles V: 269 I: 798 
+{
+	shader models/mapobjects/elglight2/elglight2
+	sampleSize 0
+}
+
+151 // ESurfaceType::Triangles V: 269 I: 798 
+{
+	shader models/mapobjects/elglight2/elglight2
+	sampleSize 0
+}
+
+152 // ESurfaceType::Triangles V: 269 I: 798 
+{
+	shader models/mapobjects/elglight2/elglight2
+	sampleSize 0
+}
+
+153 // ESurfaceType::Triangles V: 269 I: 798 
+{
+	shader models/mapobjects/elglight2/elglight2
+	sampleSize 0
+}
+
+154 // ESurfaceType::Triangles V: 269 I: 798 
+{
+	shader models/mapobjects/elglight2/elglight2
+	sampleSize 0
+}
+
+155 // ESurfaceType::Patch V: 9 I: 0 planar
+{
+	shader textures/bbqmines/stone57
+	entity 1
+	castShadows 0
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+

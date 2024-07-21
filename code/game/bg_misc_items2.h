@@ -282,56 +282,71 @@
 
 #endif
 
-  /*QUAKED item_invis (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-    */
-  {
-      "item_visibility",
-      "sound/items/invisibility.wav",
-      {"models/powerups/instant/invis.md3",
-        "models/powerups/instant/invis_ring.md3",
-        0, 0},
-      /* icon */ "icons/invis",
-      /* pickup */ "Extra Visibility",
-      30,
-      IT_POWERUP,
-      PW_VISIBILITY,
-      /* precache */ "",
-      /* sounds */ "",
-      {"models/powerups/instant/invis.skin%hue0.10%sat0.80",
-        "models/powerups/instant/invis_ring.skin%hue0.10%sat0.80",
-        0, 0}},
+    /*QUAKED item_invis (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+     */
+    {
+        "item_visibility",
+        "sound/items/invisibility.wav",
+        {"models/powerups/instant/invis.md3",
+         "models/powerups/instant/invis_ring.md3",
+         0, 0},
+        /* icon */ "icons/invis",
+        /* pickup */ "Extra Visibility",
+        30,
+        IT_POWERUP,
+        PW_VISIBILITY,
+        /* precache */ "",
+        /* sounds */ "",
+        {"models/powerups/instant/invis.skin%hue0.10%sat0.80",
+         "models/powerups/instant/invis_ring.skin%hue0.10%sat0.80",
+         0, 0}},
 
-/*QUAKED item_doubler (.3 .3 1) (-16 -16 -16) (16 16 16) suspended redTeam blueTeam
-*/
-	{
-		"item_regenammo",
-		"sound/items/ammoregen.wav",
-        { "models/powerups/instant/regen.md3",
-         "models/powerups/instant/regen_ring.md3", 0, 0 },
-/* icon */		"icons/regen%hue0.20",
-/* pickup */	"Ammo Regen",
-		30,
-		IT_POWERUP,
-		PW_REGENAMMO,
-/* precache */ "",
-/* sounds */ "sound/items/regen.wav",
-	{"models/powerups/instant/regen.skin%hue0.20", 
-    "models/powerups/instant/regen_ring.skin%hue0.20", NULL, NULL}},
+    /*QUAKED item_doubler (.3 .3 1) (-16 -16 -16) (16 16 16) suspended redTeam blueTeam
+     */
+    {
+        "item_regenammo",
+        "sound/items/ammoregen.wav",
+        {"models/powerups/instant/regen.md3",
+         "models/powerups/instant/regen_ring.md3", 0, 0},
+        /* icon */ "icons/regen%hue0.20",
+        /* pickup */ "Ammo Regen",
+        30,
+        IT_POWERUP,
+        PW_REGENAMMO,
+        /* precache */ "",
+        /* sounds */ "sound/items/regen.wav",
+        {"models/powerups/instant/regen.skin%hue0.20",
+         "models/powerups/instant/regen_ring.skin%hue0.20", NULL, NULL}},
 
-/*QUAKED holdable_medkit (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-{
-  "holdable_healer", 
-  "sound/items/holdable.wav",
-      { 
-  "models/powerups/health/small_cross.md3",
-     "models/powerups/health/small_sphere.md3",
-  0, 0},
-/* icon */		"icons/iconh_green",
-/* pickup */	"Healer",
-  60,
-  IT_HOLDABLE,
-  HI_HEALER,
-/* precache */ "",
-/* sounds */ "sound/items/use_medkit.wav"
-},
+    /*QUAKED holdable_medkit (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+     */
+    {
+        "holdable_healer",
+        "sound/items/holdable.wav",
+        {"models/powerups/health/small_cross.md3",
+         "models/powerups/health/small_sphere.md3",
+         0, 0},
+        /* icon */ "icons/iconh_green",
+        /* pickup */ "Healer",
+        60,
+        IT_HOLDABLE,
+        HI_HEALER,
+        /* precache */ "",
+        /* sounds */ "sound/items/use_medkit.wav"},
+
+    /*QUAKED holdable_medkit (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+     */
+    {
+        "holdable_camaro",
+        "sound/items/holdable.wav",
+        {"models/players/camaro/body.md3",
+         "models/players/camaro/wheel.md3",
+         0, 0},
+        /* icon */ "models/players/camaro/icon_red",
+        /* pickup */ "Camaro",
+        60,
+        IT_HOLDABLE,
+        HI_VEHICLE,
+        /* precache */ "",
+        /* sounds */ "sound/items/use_medkit.wav",
+        {"models/players/camaro/red.skin", NULL, NULL, NULL}},

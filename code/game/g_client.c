@@ -1423,6 +1423,16 @@ if(g_hotBFG.integer) {
 	trap_GetUsercmd( client - level.clients, &ent->client->pers.cmd );
 	SetClientViewAngle( ent, spawn_angles );
 
+#ifdef USE_VEHICLES
+	ent->client->pers.cmd.buttons = 0;
+	//client->frameNum = 0;
+	//client->pmoveTime = 0;
+	client->car.initializeOnNextMove = qtrue;
+	client->car.onGroundTime = level.time;
+	client->car.offGroundTime = level.time;
+
+#endif
+
 	// entity should be unlinked before calling G_KillBox()	
 	if ( !isSpectator )
 		G_KillBox( ent );

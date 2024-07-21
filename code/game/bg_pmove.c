@@ -2364,22 +2364,20 @@ void PmoveVehicle (pmove_t *pmove) {
 //	PM_UpdateViewAngles( pm->ps, &pm->cmd );
 	PM_UpdateViewAngles( pm->ps, &pm->cmd );
 
-#if 0 //def USE_VEHICLES
-
 	for (i=0 ; i<3 ; i++) {
 // Q3Rally
 //		ps->viewangles[i] = SHORT2ANGLE(temp);
-		if ( pm->controlMode == CT_MOUSE ) {
-			pm->damageAngles[i] = SHORT2ANGLE(temp);
+		if ( pm->ps->pm_type == PM_VEHICLEMOUSE ) {
+			pm->damageAngles[i] = pm->ps->viewangles[i];
 		}
 // END
 	}
 
 // STONELANCE use damage yaw and pitch for view angles
-	if ( pm->controlMode == CT_MOUSE ) {
+	if ( pm->ps->pm_type == PM_VEHICLEMOUSE ) {
 		// camera view angle
-		pm->damagePitch = ANGLE2BYTE( SHORT2ANGLE( ps->damageAngles[PITCH] ) );
-		pm->damageYaw = ANGLE2BYTE( SHORT2ANGLE( ps->damageAngles[YAW] ) );
+		pm->damagePitch = ANGLE2BYTE( SHORT2ANGLE( pm->damageAngles[PITCH] ) );
+		pm->damageYaw = ANGLE2BYTE( SHORT2ANGLE( pm->damageAngles[YAW] ) );
 	} else /* CT_JOYSTICK */ {
 		// wheel angle
 		pm->damageAngles[PITCH] = BYTE2ANGLE( pm->damagePitch );
@@ -2387,7 +2385,6 @@ void PmoveVehicle (pmove_t *pmove) {
 		pm->damageAngles[ROLL] = 0;
 	}
 // END
-#endif
 
 //	AngleVectors (pm->ps->viewangles, pml.forward, pml.right, pml.up);
 	AngleVectors (pm->damageAngles, pml.forward, pml.right, pml.up);
@@ -2478,11 +2475,21 @@ void PmoveVehicle (pmove_t *pmove) {
 			VectorClear( pm->car->sBody.L );
 
 		// translate car values to player angles, etc
-		VectorCopy(pm->car->sBody.v, pm->ps->velocity);
-		VectorCopy(pm->car->sBody.r, pm->ps->origin);
+
+
+
+VectorCopy(pm->car->sBody.v, pm->ps->velocity);
+VectorCopy(pm->car->sBody.r, pm->ps->origin);
+
+
+
 #define angularMomentum grapplePoint
 		VectorCopy(pm->car->sBody.L, pm->ps->angularMomentum); // angularMomentum
-		OrientationToAngles(pm->car->sBody.t, pm->ps->viewangles);
+
+
+//OrientationToAngles(pm->car->sBody.t, pm->ps->viewangles);
+
+
 
 		if( VectorNAN( pm->ps->viewangles ) )
 			VectorClear( pm->ps->viewangles );
@@ -2503,7 +2510,7 @@ void PmoveVehicle (pmove_t *pmove) {
 			dot = CP_SPRING_MAXLEN - CP_SPRING_MINLEN;
 		else if (dot < 0)
 			dot = 0;
-		pm->ps->legsAnim = (int)(CP_SPRING_SCALE * dot);
+		pm->ps->legsAnim = 0; // TODO: (int)(CP_SPRING_SCALE * dot);
 
 //		VectorSubtract(pm->car->sPoints[RL_FRAME].r, pm->car->sPoints[RL_WHEEL].r, delta);
 //		dot = DotProduct(delta, pm->car->sBody.up);
@@ -2521,7 +2528,7 @@ void PmoveVehicle (pmove_t *pmove) {
 			dot = CP_SPRING_MAXLEN - CP_SPRING_MINLEN;
 		else if (dot < 0)
 			dot = 0;
-		pm->ps->torsoAnim = (int)(CP_SPRING_SCALE * dot);
+		pm->ps->torsoAnim = 0; // TODO: (int)(CP_SPRING_SCALE * dot);
 
 		pm->ps->stats[STAT_VEHICLE] = pm->car->rpm;
 		pm->ps->stats[STAT_VEHICLE] |= (pm->car->gear << 8);

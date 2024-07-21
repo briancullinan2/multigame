@@ -449,6 +449,11 @@ struct gclient_s
 	vec3_t frozen_angles;
 #endif
 
+#ifdef USE_VEHICLES
+	car_t car;
+//	gentity_t	*carPoints[4];
+#endif
+
 };
 
 //
@@ -561,6 +566,11 @@ typedef struct
 
 	// unlagged
 	int frameStartTime;
+
+#ifdef USE_VEHICLES
+	car_t		*cars[MAX_CLIENTS];
+
+#endif
 
 } level_locals_t;
 

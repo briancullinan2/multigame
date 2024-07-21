@@ -172,4 +172,29 @@ G_CVAR( g_scale, "cm_scale", "1.0", 0, 0, qfalse, qfalse )
 #include "./g_cvar_weapon2.h"
 #include "./g_cvar_weapon3.h"
 
+#ifdef USE_VEHICLES
+
+	G_CVAR( car_spring, "car_spring", "120", 0, 0, qfalse, qfalse )
+	G_CVAR( car_shock_up, "car_shock_up", "12", 0, 0, qfalse, qfalse )
+	G_CVAR( car_shock_down, "car_shock_down", "11", 0, 0, qfalse, qfalse )
+	G_CVAR( car_swaybar, "car_swaybar", "20", 0, 0, qfalse, qfalse )
+	G_CVAR( car_wheel, "car_wheel", "2400", 0, 0, qfalse, qfalse )
+	G_CVAR( car_wheel_damp, "car_wheel_damp", "140", 0, 0, qfalse, qfalse )
+	
+	G_CVAR( car_frontweight_dist, "car_frontweight_dist", "0.5", 0, 0, qfalse, qfalse )
+	G_CVAR( car_IT_xScale, "car_IT_xScale", "1.0", 0, 0, qfalse, qfalse )
+	G_CVAR( car_IT_yScale, "car_IT_yScale", "1.0", 0, 0, qfalse, qfalse )
+	G_CVAR( car_IT_zScale, "car_IT_zScale", "1.0", 0, 0, qfalse, qfalse )
+	G_CVAR( car_body_elasticity, "car_body_elasticity", "0.5", 0, 0, qfalse, qfalse )
+
+	G_CVAR( car_air_cof, "car_air_cof", "0.31", 0, 0, qfalse, qfalse )
+	G_CVAR( car_air_frac_to_df, "car_air_frac_to_df", "0.5", 0, 0, qfalse, qfalse )
+	G_CVAR( car_friction_scale, "car_friction_scale", "1.1", 0, 0, qfalse, qfalse )
+
+	G_CVAR( g_damageScale, "g_damageScale", "0.3", 0, 0, qfalse, qfalse )
+
+
+#endif
+
+
 #undef G_CVAR

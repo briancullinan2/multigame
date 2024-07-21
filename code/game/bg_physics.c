@@ -2266,6 +2266,10 @@ void PM_DriveMove( car_t *car, float time, qboolean includeBodies )
 	int		i;
 	//int		t, t1, t2, t3, t4, t5;
 
+	if(!car) {
+		return;
+	}
+
 	if( car->initializeOnNextMove )
 	{
 		PM_InitializeVehicle( car, pm->ps->origin, pm->ps->viewangles, pm->ps->velocity );
@@ -2330,12 +2334,9 @@ void PM_DriveMove( car_t *car, float time, qboolean includeBodies )
 	//t2 = trap_Milliseconds();
 
 	// apply frame forces to the body
-//	for (i = FIRST_FRAME_POINT; i < LAST_FRAME_POINT; i++){
 	for (i = FIRST_FRAME_POINT; i < NUM_CAR_POINTS; i++){
 		PM_ApplyForce(&car->sBody, car->sPoints[i].netForce, car->sPoints[i].r);
-//	}
 
-//	for (i = FIRST_FRAME_POINT; i < NUM_CAR_POINTS; i++){
 		if (!car->sPoints[i].onGround) continue;
 
 		PM_CarBodyFrictionForces( car, &car->sBody, car->sPoints, i );
@@ -2343,6 +2344,7 @@ void PM_DriveMove( car_t *car, float time, qboolean includeBodies )
 		if (VectorNAN(car->sPoints[i].netForce))
 			Com_Printf("Blowing up car because of car point force on frame\n");
 	}
+
 
 	//t3 = trap_Milliseconds();
 

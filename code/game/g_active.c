@@ -538,13 +538,13 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 #ifdef USE_AIW
 		if(client->pers.reverseControls) {
 			client->ps.pm_type = PM_REVERSED;
-		}
+		} else
 		if(client->pers.upsidedown || g_upsideDown.integer) {
 			client->ps.pm_type = PM_UPSIDEDOWN;
-		}
+		} else
 		if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
 			client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
-		}
+		} else
 #endif
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed = g_speed.value * 1.25f; // faster than normal
@@ -1268,15 +1268,24 @@ void ClientThink_real( gentity_t *ent ) {
   if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		client->ps.pm_type = PM_DEAD;
 	} else 
+#ifdef USE_VEHICLES
+	if(client->inventory[HI_VEHICLE]) {
+		if(client->pers.showCursor) {
+			client->ps.pm_type = PM_VEHICLEMOUSE;
+		} else {
+			client->ps.pm_type = PM_VEHICLE;
+		}
+	} else
+#endif
 #ifdef USE_BIRDS_EYE
 	if (client->pers.thirdPerson || g_thirdPerson.integer) {
 		client->ps.pm_type = PM_THIRDPERSON;
 	} else if (client->pers.birdsEye || g_birdsEye.integer) {
-			if(client->pers.showCursor) {
-				client->ps.pm_type = PM_FOLLOWCURSOR;
-			} else {
-				client->ps.pm_type = PM_BIRDSEYE;
-			}
+		if(client->pers.showCursor) {
+			client->ps.pm_type = PM_FOLLOWCURSOR;
+		} else {
+			client->ps.pm_type = PM_BIRDSEYE;
+		}
 	} else if (client->pers.sideView || g_sideview.integer) {
 		client->ps.pm_type = PM_PLATFORM;
 	} else
@@ -1441,7 +1450,62 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.pmove_fixed = pmove_fixed.integer;
 	pm.pmove_msec = pmove_msec.integer;
 
+#ifdef USE_VEHICLES
+// STONELANCE
+	// TEMP used to move car around
+/*
+	client->car.sBody.r[2] += 3.0f * (pm.cmd.upmove * msec / 1000.0f);
+	client->car.sBody.CoM[2] += 3.0f * (pm.cmd.upmove * msec / 1000.0f);
+	for (i = 0; i < 8; i++){
+		client->car.sPoints[i].r[2] += 3.0f * (pm.cmd.upmove * msec / 1000.0f);
+	}
+*/
+	// END TEMP
+
+	// load car position etc into pmove
+	level.cars[ent->s.clientNum] = &client->car;
+
+	pm.car = &client->car;
+	pm.cars = level.cars;
+	//pm.pDebug = ent->pDebug;
+
+	//pm.controlMode = client->pers.controlMode;
+	//pm.manualShift = client->pers.manualShift;
+	pm.client = qfalse;
+
+	//if (ent->pDebug > 0){
+	//	Com_LogPrintf("Server Time: %i\n", pm.cmd.serverTime);
+	//	Com_LogPrintf("Source: Debug %d\n", ent->pDebug);
+	//	G_DebugForces(&pm.car->sBody, pm.car->sPoints, ent->pDebug-1);
+	//	G_DebugDynamics(&pm.car->sBody, pm.car->sPoints, ent->pDebug-1);
+	//}
+
+	//start = trap_Milliseconds();
+
+	//oldTime = client->ps.commandTime;
+	//VectorCopy( client->ps.viewangles, oldAngles );
+
+	pm.car_spring = car_spring.value;
+	pm.car_shock_up = car_shock_up.value;
+	pm.car_shock_down = car_shock_down.value;
+	pm.car_swaybar = car_swaybar.value;
+	pm.car_wheel = car_wheel.value;
+	pm.car_wheel_damp = car_wheel_damp.value;
+
+	pm.car_frontweight_dist = car_frontweight_dist.value;
+	pm.car_IT_xScale = car_IT_xScale.value;
+	pm.car_IT_yScale = car_IT_yScale.value;
+	pm.car_IT_zScale = car_IT_zScale.value;
+	pm.car_body_elasticity = car_body_elasticity.value;
+
+	pm.car_air_cof = car_air_cof.value;
+	pm.car_air_frac_to_df = car_air_frac_to_df.value;
+	pm.car_friction_scale = car_friction_scale.value;
+// END
+#endif
+
 	VectorCopy( client->ps.origin, client->oldOrigin );
+
 
 #ifdef USE_PORTALS
 	G_ListPortals( ent, sources, destinations, sourcesAngles, destinationsAngles );

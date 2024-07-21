@@ -6,214 +6,1355 @@ default
 	longestCurve 0.000000
 }
 
-0 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/__TB_empty
-	lightmapAxis ( 0.000000 0.000000 1.000000 )
-}
-
-1 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/skies/portalfog
-	sampleSize 0
-}
-
-2 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/skies/portalfog
-	sampleSize 0
-}
-
-3 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/skies/portalfog
-	sampleSize 0
-}
-
-4 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/skies/portalfog
-	sampleSize 0
-}
-
-5 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/skies/portalfog
-	sampleSize 0
-}
-
-6 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/sfx/fog3
-	sampleSize 0
-}
-
-7 // ESurfaceType::Face V: 4 I: 6 planar
-{
-	shader textures/sfx/fog3
-	sampleSize 0
-}
-
-8 // ESurfaceType::ForcedMeta V: 543 I: 1176 
-{
-	shader models/mapobjects/podium/podium
-}
-
-9 // ESurfaceType::ForcedMeta V: 160 I: 420 
-{
-	shader models/mapobjects/podium/podskull
-}
-
-10 // ESurfaceType::ForcedMeta V: 18 I: 48 
-{
-	shader models/mapobjects/podium/podiumfx2
-}
-
-11 // ESurfaceType::ForcedMeta V: 18 I: 48 
-{
-	shader models/mapobjects/podium/podiumfx1
-}
-
-12 // ESurfaceType::ForcedMeta V: 18 I: 48 
+0 // ESurfaceType::Meta V: 4 I: 6 
 {
 	shader models/mapobjects/podium/podiumfx3
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-13 // ESurfaceType::Face V: 4 I: 6 planar
+1 // ESurfaceType::Meta V: 8 I: 18 
 {
-	shader textures/skies/portalfog
-	sampleSize 0
+	shader models/mapobjects/podium/podiumfx3
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-14 // ESurfaceType::Face V: 4 I: 6 planar
+2 // ESurfaceType::Meta V: 10 I: 18 
 {
-	shader textures/skies/portalfog
-	sampleSize 0
+	shader models/mapobjects/podium/podiumfx3
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-15 // ESurfaceType::Face V: 4 I: 6 planar
+3 // ESurfaceType::Meta V: 4 I: 6 
 {
-	shader textures/skies/portalfog
-	sampleSize 0
+	shader models/mapobjects/podium/podiumfx3
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-16 // ESurfaceType::Face V: 4 I: 6 planar
+4 // ESurfaceType::Meta V: 4 I: 6 
 {
-	shader textures/skies/portalfog
-	sampleSize 0
+	shader models/mapobjects/podium/podiumfx1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-17 // ESurfaceType::Face V: 4 I: 6 
+5 // ESurfaceType::Meta V: 8 I: 18 
 {
-	shader textures/__TB_empty
-	parent 0
+	shader models/mapobjects/podium/podiumfx1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+6 // ESurfaceType::Meta V: 10 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx1
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+7 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx1
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+8 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+9 // ESurfaceType::Meta V: 8 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx2
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+10 // ESurfaceType::Meta V: 10 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx2
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+11 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx2
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+12 // ESurfaceType::Meta V: 24 I: 42 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+13 // ESurfaceType::Meta V: 8 I: 9 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+14 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+15 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+16 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+17 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+18 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+19 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+20 // ESurfaceType::Meta V: 3 I: 3 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+21 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+22 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+23 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-18 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/skies/portalfog
-	parent 1
-	sampleSize 0
-}
-
-19 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/skies/portalfog
-	parent 2
-	sampleSize 0
-}
-
-20 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/skies/portalfog
-	parent 3
-	sampleSize 0
-}
-
-21 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/skies/portalfog
-	parent 4
-	sampleSize 0
-}
-
-22 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/skies/portalfog
-	parent 5
-	sampleSize 0
-}
-
-23 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/sfx/fog3
-	parent 6
-	sampleSize 0
-}
-
-24 // ESurfaceType::Face V: 4 I: 6 
-{
-	shader textures/sfx/fog3
-	parent 7
-	sampleSize 0
-}
-
-25 // ESurfaceType::ForcedMeta V: 543 I: 1176 
-{
-	shader models/mapobjects/podium/podium
-	parent 8
-}
-
-26 // ESurfaceType::ForcedMeta V: 160 I: 420 
+24 // ESurfaceType::Meta V: 4 I: 6 
 {
 	shader models/mapobjects/podium/podskull
-	parent 9
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-27 // ESurfaceType::ForcedMeta V: 18 I: 48 
+25 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+26 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+27 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+28 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+29 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+30 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+31 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+32 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+33 // ESurfaceType::Meta V: 8 I: 9 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+34 // ESurfaceType::Meta V: 3 I: 3 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+35 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+36 // ESurfaceType::Meta V: 24 I: 42 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+37 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+38 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+39 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+40 // ESurfaceType::Meta V: 26 I: 48 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+41 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+42 // ESurfaceType::Meta V: 34 I: 96 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+43 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+44 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+45 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+46 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+47 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+48 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+49 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+50 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+51 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+52 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+53 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+54 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+55 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+56 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+57 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+58 // ESurfaceType::Meta V: 26 I: 48 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+59 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+60 // ESurfaceType::Meta V: 34 I: 96 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+61 // ESurfaceType::Meta V: 10 I: 27 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+62 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+63 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+64 // ESurfaceType::Meta V: 15 I: 27 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+65 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+66 // ESurfaceType::Meta V: 10 I: 18 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+67 // ESurfaceType::Meta V: 13 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+68 // ESurfaceType::Meta V: 8 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+69 // ESurfaceType::Meta V: 8 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+70 // ESurfaceType::Meta V: 14 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+71 // ESurfaceType::Meta V: 5 I: 9 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+72 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+73 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+74 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+75 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+76 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+77 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+78 // ESurfaceType::Meta V: 10 I: 27 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+79 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+80 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+81 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+82 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+83 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+84 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+85 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+86 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+87 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+88 // ESurfaceType::Meta V: 26 I: 48 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+89 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+90 // ESurfaceType::Meta V: 34 I: 96 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+91 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+92 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+93 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/fog3
+	sampleSize 0
+}
+
+94 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/fog3
+	sampleSize 0
+}
+
+95 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+96 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+97 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+98 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+99 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+100 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+101 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+102 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+103 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	sampleSize 0
+}
+
+104 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx3
+	parent 0
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+105 // ESurfaceType::Meta V: 8 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx3
+	parent 1
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+106 // ESurfaceType::Meta V: 10 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx3
+	parent 2
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+107 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx3
+	parent 3
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+108 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx1
+	parent 4
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+109 // ESurfaceType::Meta V: 8 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx1
+	parent 5
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+110 // ESurfaceType::Meta V: 10 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx1
+	parent 6
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+111 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx1
+	parent 7
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+112 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podiumfx2
+	parent 8
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+113 // ESurfaceType::Meta V: 8 I: 18 
+{
+	shader models/mapobjects/podium/podiumfx2
+	parent 9
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+114 // ESurfaceType::Meta V: 10 I: 18 
 {
 	shader models/mapobjects/podium/podiumfx2
 	parent 10
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
 }
 
-28 // ESurfaceType::ForcedMeta V: 18 I: 48 
+115 // ESurfaceType::Meta V: 4 I: 6 
 {
-	shader models/mapobjects/podium/podiumfx1
+	shader models/mapobjects/podium/podiumfx2
 	parent 11
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
 }
 
-29 // ESurfaceType::ForcedMeta V: 18 I: 48 
+116 // ESurfaceType::Meta V: 24 I: 42 
 {
-	shader models/mapobjects/podium/podiumfx3
+	shader models/mapobjects/podium/podskull
 	parent 12
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-30 // ESurfaceType::Face V: 4 I: 6 
+117 // ESurfaceType::Meta V: 8 I: 9 
 {
-	shader textures/skies/portalfog
+	shader models/mapobjects/podium/podskull
 	parent 13
-	sampleSize 0
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
 }
 
-31 // ESurfaceType::Face V: 4 I: 6 
+118 // ESurfaceType::Meta V: 4 I: 6 
 {
-	shader textures/skies/portalfog
+	shader models/mapobjects/podium/podskull
 	parent 14
-	sampleSize 0
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
 }
 
-32 // ESurfaceType::Face V: 4 I: 6 
+119 // ESurfaceType::Meta V: 22 I: 51 
 {
-	shader textures/skies/portalfog
+	shader models/mapobjects/podium/podskull
 	parent 15
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+120 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 16
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+121 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	parent 17
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+122 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 18
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+123 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 19
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+124 // ESurfaceType::Meta V: 3 I: 3 
+{
+	shader models/mapobjects/podium/podskull
+	parent 20
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+125 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 21
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+126 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podskull
+	parent 22
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+127 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 23
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+128 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 24
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+129 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 25
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+130 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podskull
+	parent 26
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+131 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 27
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+132 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	parent 28
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+133 // ESurfaceType::Meta V: 22 I: 51 
+{
+	shader models/mapobjects/podium/podskull
+	parent 29
+	lightmapAxis ( 0.000000 -1.000000 0.000000 )
+}
+
+134 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 30
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+135 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 31
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+136 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 32
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+137 // ESurfaceType::Meta V: 8 I: 9 
+{
+	shader models/mapobjects/podium/podskull
+	parent 33
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+138 // ESurfaceType::Meta V: 3 I: 3 
+{
+	shader models/mapobjects/podium/podskull
+	parent 34
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+139 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 35
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+140 // ESurfaceType::Meta V: 24 I: 42 
+{
+	shader models/mapobjects/podium/podskull
+	parent 36
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+141 // ESurfaceType::Meta V: 6 I: 6 
+{
+	shader models/mapobjects/podium/podskull
+	parent 37
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+142 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 38
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+143 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 39
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+144 // ESurfaceType::Meta V: 26 I: 48 
+{
+	shader models/mapobjects/podium/podium
+	parent 40
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+145 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 41
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+146 // ESurfaceType::Meta V: 34 I: 96 
+{
+	shader models/mapobjects/podium/podium
+	parent 42
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+147 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 43
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+148 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 44
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+149 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 45
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+150 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 46
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+151 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 47
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+152 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 48
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+153 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 49
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+154 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 50
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+155 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 51
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+156 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 52
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+157 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 53
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+158 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 54
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+159 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 55
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+160 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 56
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+161 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 57
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+162 // ESurfaceType::Meta V: 26 I: 48 
+{
+	shader models/mapobjects/podium/podium
+	parent 58
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+163 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 59
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+164 // ESurfaceType::Meta V: 34 I: 96 
+{
+	shader models/mapobjects/podium/podium
+	parent 60
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+165 // ESurfaceType::Meta V: 10 I: 27 
+{
+	shader models/mapobjects/podium/podium
+	parent 61
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+166 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 62
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+167 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 63
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+168 // ESurfaceType::Meta V: 15 I: 27 
+{
+	shader models/mapobjects/podium/podium
+	parent 64
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+169 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 65
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+170 // ESurfaceType::Meta V: 10 I: 18 
+{
+	shader models/mapobjects/podium/podium
+	parent 66
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+171 // ESurfaceType::Meta V: 13 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 67
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+172 // ESurfaceType::Meta V: 8 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 68
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+173 // ESurfaceType::Meta V: 8 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 69
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+174 // ESurfaceType::Meta V: 14 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 70
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+175 // ESurfaceType::Meta V: 5 I: 9 
+{
+	shader models/mapobjects/podium/podium
+	parent 71
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+176 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 72
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+177 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 73
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+178 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 74
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+179 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 75
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+180 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 76
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+181 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 77
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+182 // ESurfaceType::Meta V: 10 I: 27 
+{
+	shader models/mapobjects/podium/podium
+	parent 78
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+183 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 79
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+184 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 80
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+185 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 81
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+186 // ESurfaceType::Meta V: 4 I: 6 
+{
+	shader models/mapobjects/podium/podium
+	parent 82
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+187 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 83
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+188 // ESurfaceType::Meta V: 6 I: 12 
+{
+	shader models/mapobjects/podium/podium
+	parent 84
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+189 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 85
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+190 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 86
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+191 // ESurfaceType::Meta V: 20 I: 30 
+{
+	shader models/mapobjects/podium/podium
+	parent 87
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+192 // ESurfaceType::Meta V: 26 I: 48 
+{
+	shader models/mapobjects/podium/podium
+	parent 88
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+193 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 89
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+194 // ESurfaceType::Meta V: 34 I: 96 
+{
+	shader models/mapobjects/podium/podium
+	parent 90
+	lightmapAxis ( 0.000000 0.000000 -1.000000 )
+}
+
+195 // ESurfaceType::Meta V: 14 I: 24 
+{
+	shader models/mapobjects/podium/podium
+	parent 91
+	lightmapAxis ( -1.000000 0.000000 0.000000 )
+}
+
+196 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	parent 92
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+197 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/fog3
+	parent 93
 	sampleSize 0
 }
 
-33 // ESurfaceType::Face V: 4 I: 6 
+198 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/sfx/fog3
+	parent 94
+	sampleSize 0
+}
+
+199 // ESurfaceType::Meta V: 4 I: 6 planar
 {
 	shader textures/skies/portalfog
-	parent 16
+	parent 95
+	sampleSize 0
+}
+
+200 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 96
+	sampleSize 0
+}
+
+201 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 97
+	sampleSize 0
+}
+
+202 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 98
+	sampleSize 0
+}
+
+203 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 99
+	sampleSize 0
+}
+
+204 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 100
+	sampleSize 0
+}
+
+205 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 101
+	sampleSize 0
+}
+
+206 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 102
+	sampleSize 0
+}
+
+207 // ESurfaceType::Meta V: 4 I: 6 planar
+{
+	shader textures/skies/portalfog
+	parent 103
 	sampleSize 0
 }
 

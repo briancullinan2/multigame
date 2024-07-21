@@ -828,6 +828,11 @@ typedef struct {
 	vec2_t mapcoordsScale;
 	qboolean mapcoordsValid;
 
+#ifdef USE_VEHICLES
+	car_t		car;
+
+#endif
+
 } cg_t;
 
 

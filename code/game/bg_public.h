@@ -216,6 +216,10 @@ typedef enum {
 	HI_INVULNERABILITY = 24,
 	HI_HEALER = 25,
 
+#ifdef USE_VEHICLES
+	HI_VEHICLE = 26,
+#endif
+
 	PW_REGENAMMO = 32,
 	PW_GRAVITYSUIT = 33,
 	PW_FLASH = 34,
@@ -296,7 +300,6 @@ typedef struct {
 
         qboolean        client;
 
-        int                     controlMode;
         qboolean        manualShift;
         collisionDamage_t       damage;
 
@@ -319,6 +322,8 @@ typedef struct {
         float           car_air_frac_to_df;
         float           car_friction_scale;
 	vec3_t		damageAngles;
+	float		  damagePitch;
+	float		  damageYaw;
 // END
 
 #endif

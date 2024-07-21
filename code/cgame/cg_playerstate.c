@@ -194,6 +194,9 @@ void CG_Respawn( void ) {
 #ifdef USE_ADVANCED_WEAPONS
 	cg.weaponClass = floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
 #endif
+#ifdef USE_VEHICLES
+	cg.car.initializeOnNextMove = qtrue;
+#endif
 
 	cg.timeResidual = cg.snap->ps.commandTime + 1000;
 }

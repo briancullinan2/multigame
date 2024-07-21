@@ -379,3 +379,8 @@
 "classname" "holdable_healer"
 "origin" "432 -2016 -1832"
 }
+// entity 55
+{
+"classname" "holdable_camaro"
+"origin" "432 -2864 -1840"
+}
