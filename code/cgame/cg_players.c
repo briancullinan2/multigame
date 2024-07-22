@@ -2750,7 +2750,17 @@ void CG_Player( centity_t *cent ) {
 	// get the player model information
 	renderfx = 0;
 	if ( cent->currentState.number == cg.snap->ps.clientNum) {
-		if (!cg.renderingThirdPerson) {
+#ifdef USE_CLASSIC_HUD
+		if(cg.editPlayerMode) {
+			VectorCopy(cg.refdef.vieworg, cent->lerpOrigin);
+			//cent->lerpOrigin[1] += 300;
+			cent->lerpOrigin[0] += 200;
+			cent->lerpAngles[PITCH] = 0;
+			cent->lerpAngles[YAW] = 180;
+		} else
+#endif
+		if (!cg.renderingThirdPerson
+		) {
 			renderfx = RF_THIRD_PERSON;			// only draw in mirrors
 		}
 		else if (cg_cameraMode.integer) {

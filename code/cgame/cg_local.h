@@ -509,7 +509,7 @@ typedef struct {
 #define MAX_HEADS 64
 #define MAX_ALIASES 64
 #define MAX_TEAMS 64
-#define TEAM_MEMBERS 5
+#define TEAM_MEMBERS 64
 
 typedef struct {
   const char *name;
@@ -517,7 +517,8 @@ typedef struct {
   qhandle_t headImage;
 	const char *base;
 	qboolean active;
-	int reference;
+	qboolean headModel;
+	//int reference;
 } characterInfo;
 
 typedef struct {

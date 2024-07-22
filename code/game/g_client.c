@@ -648,8 +648,13 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	}
 
 	// set max health
-#ifdef MISSIONPACK
-	if (client->ps.powerups[PW_GUARD]) {
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	if (client->inventory[PW_GUARD])
+#else
+	if (client->ps.powerups[PW_GUARD])
+#endif
+	{
 		client->pers.maxHealth = HEALTH_SOFT_LIMIT*2;
 	} else {
 		health = atoi( Info_ValueForKey( userinfo, "handicap" ) );
@@ -667,7 +672,7 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 #endif
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_TEAMS)
 	if (g_gametype.integer >= GT_TEAM) {
 		client->pers.teamInfo = qtrue;
 	} else {

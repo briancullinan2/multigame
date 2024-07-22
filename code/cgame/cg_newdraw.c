@@ -1605,11 +1605,11 @@ int CG_HeadCountByTeam( void ) {
 	c = 0;
 	if (!init) {
 		for (i = 0; i < cg.characterCount; i++) {
-			cg.characterList[i].reference = 0;
+			//cg.characterList[i].reference = 0;
 			for (j = 0; j < cg.teamCount; j++) {
-			  if (CG_hasSkinForBase(cg.characterList[i].base, cg.teamList[j].teamName)) {
-					cg.characterList[i].reference |= (1<<j);
-			  }
+			  //if (CG_hasSkinForBase(cg.characterList[i].base, cg.teamList[j].teamName)) {
+					//cg.characterList[i].reference |= (1<<j);
+			  //}
 			}
 		}
 		init = 1;
@@ -1622,7 +1622,10 @@ int CG_HeadCountByTeam( void ) {
 		cg.characterList[i].active = qfalse;
 		for(j = 0; j < TEAM_MEMBERS; j++) {
 			if (cg.teamList[tIndex].teamMembers[j] != NULL) {
-				if (cg.characterList[i].reference&(1<<tIndex)) {// && Q_stricmp(cg.teamList[tIndex].teamMembers[j], cg.characterList[i].name)==0) {
+				if (
+					//cg.characterList[i].reference&(1<<tIndex) && 
+					Q_stricmp(cg.teamList[tIndex].teamMembers[j], cg.characterList[i].name)==0
+				) {
 					cg.characterList[i].active = qtrue;
 					c++;
 					break;
@@ -1637,7 +1640,9 @@ int CG_HeadCountByTeam( void ) {
 			if (cg.aliasList[k].name != NULL) {
 				if (Q_stricmp(cg.teamList[tIndex].teamMembers[j], cg.aliasList[k].name)==0) {
 					for (i = 0; i < cg.characterCount; i++) {
-						if (cg.characterList[i].headImage != -1 && cg.characterList[i].reference&(1<<tIndex) && Q_stricmp(cg.aliasList[k].ai, cg.characterList[i].name)==0) {
+						if (/* cg.characterList[i].headImage != -1 &&
+							cg.characterList[i].reference&(1<<tIndex) && */ 
+							Q_stricmp(cg.aliasList[k].ai, cg.characterList[i].name)==0) {
 							if (cg.characterList[i].active == qfalse) {
 								cg.characterList[i].active = qtrue;
 								c++;

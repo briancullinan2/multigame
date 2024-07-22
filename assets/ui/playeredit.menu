@@ -128,19 +128,6 @@
 			decoration
 		}
 
-		// itemDef {
-		// 	name playerbar
-		// 	style 2
-		// 	rect 0 0 640 40 
-		// 	backcolor 0 0 .75 0
-		// 	forecolor 1 1 1 1
-		// 	border 4
-		// 	bordercolor 0.5 0.5 0.5 .75
-		// 	bordersize 2
-		// 	visible 1
-		// 	decoration 
-		// }
-
 		itemDef {
 			name namefield
 			group "playersettinggroup"
@@ -150,7 +137,7 @@
 			cvar "ui_Name"
 			textstyle 6
 			maxChars 32
-			rect 0 20 215 22 
+			rect 0 20 155 22 
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 20
 			textaligny 20
@@ -161,8 +148,6 @@
 			border 0
 			bordercolor 0 0 0 0
 			visible 1 
-			//mouseEnter { show message_name } 
-			//mouseExit { hide message_name } 
 		}
 
 		itemDef {
@@ -172,7 +157,7 @@
 			text "Handicap:"
 			ownerdraw UI_HANDICAP
 			textstyle 6
-			rect 0 45 215 22 
+			rect 0 45 155 22 
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 20
 			textaligny 20 
@@ -183,8 +168,6 @@
 			border 0
 			bordercolor 0 0 0 0
 			visible 1 
-			//mouseEnter { show message_handicap } 
-			//mouseExit { hide message_handicap } 
 		}
 
 		itemDef {
@@ -193,7 +176,7 @@
 			style 0	
 			text "Effect:"
 			ownerdraw UI_EFFECTS
-			rect 0 70 215 22 
+			rect 0 70 155 22 
 			textstyle 6
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 20     
@@ -205,8 +188,6 @@
 			border 0
 			bordercolor 0 0 0 0
 			visible 1   
-			//mouseEnter { show message_effect } 
-			//mouseExit { hide message_effect }   
 		}
 
 		itemDef {
@@ -215,41 +196,27 @@
 			ownerdraw UI_CLANNAME
 			text "Clan:"
 			textstyle 6
-			rect 20 95 215 22 
+			rect 20 95 155 22 
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 0
 			textaligny 20 
 			textscale .333        
 			forecolor 1 1 1 1
-			cvarTest "ui_q3model"
-			showCVar { "0" }	
+			// cvarTest "ui_q3model"
+			// showCVar { "0" }	
 			visible 1 
 			action { play "sound/misc/nomenu.wav" }
-			//mouseEnter { show message_clan } 
-			//mouseExit { hide message_clan } 
 		}
 
-
-		// itemDef {
-		// 	name quakeimage
-		// 	group grparenatype
-		// 	cvarTest "ui_q3model"
-		// 	showCVar { "0" }	
-		// 	style WINDOW_STYLE_SHADER	
-		// 	background "ui/assets/playerpi.tga"
-		// 	rect 100 24 128 256
-		// 	visible 1 
-		// 	decoration
-		// }
 
 
 		itemDef {
 			name headlist
 			rect 200 30 400 80
 			group grparenatype	
-			cvarTest "ui_q3model"
-			showCVar { "0" }	
-			hideCvar { "1" }
+			// cvarTest "ui_q3model"
+			// showCVar { "0" }	
+			// hideCvar { "1" }
 			type ITEM_TYPE_LISTBOX
 			style WINDOW_STYLE_FILLED
 			elementwidth 61.75
@@ -266,141 +233,6 @@
 			mouseenter { setitemcolor headlist bordercolor .7 0 0 1 }
 			mouseexit { setitemcolor headlist bordercolor .5 .5 .5 .5 }
 		}
-
-		// itemDef {
-		// 	name headlist
-		// 	rect 10 330 620 80
-		// 	group grpquaketype	
-		// 	cvarTest "ui_q3model"
-		// 	showCVar { "1" }	
-		// 	type ITEM_TYPE_LISTBOX
-		// 	style WINDOW_STYLE_FILLED
-		// 	elementwidth 61.75
-		// 	elementheight 61.75
-		// 	elementtype LISTBOX_IMAGE
-		// 	feeder FEEDER_Q3HEADS
-		// 	horizontalscroll
-		// 	border 1
-		// 	bordersize 1
-		// 	backcolor 0 0 0 .25
-		// 	bordercolor .5 .5 .5 .5
-		// 	forecolor 1 1 1 1
-		// 	visible 1
-		// 	mouseenter { setitemcolor headlist bordercolor .7 0 0 1 ; show message_model }
-		// 	mouseexit { setitemcolor headlist bordercolor .5 .5 .5 .5 ; hide message_model}
-		// }
-
-		// //	MESSAGES	//
-		// itemDef {
-		// 	name message_back
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textstyle 1
-		// 	textalign 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Return to Main Menu"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
-
-		// itemDef {
-		// 	name message_name
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textalign 1
-		// 	textstyle 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Enter Player Name"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
-
-		// itemDef {
-		// 	name message_handicap
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textalign 1
-		// 	textstyle 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Click to Change Handicap"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
-
-		// itemDef {
-		// 	name message_effect
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textalign 1
-		// 	textstyle 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Select Bar to Change Effect Color"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
-
-		// itemDef {
-		// 	name message_clan
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textalign 1
-		// 	textstyle 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Click to Cycle Clan Selection"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
-		// itemDef {
-		// 	name message_type
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textalign 1
-		// 	textstyle 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Click to View Team Arena or Quake III Models"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
-
-		// itemDef {
-		// 	name message_model
-		// 	group grpmessage
-		// 	style 0 
-		// 	rect 320 430 128 30
-		// 	textalign 1
-		// 	textstyle 1
-		// 	textalignx 0
-		// 	textaligny 25
-		// 	textscale .416
-		// 	text "Click to Change Player Model"
-		// 	forecolor 1 1 1 1
-		// 	decoration 
-		// 	visible 0
-		// }
 
 
 	}

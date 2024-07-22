@@ -174,8 +174,8 @@ void CG_RegisterCvars( void ) {
 	trap_Cvar_Register(NULL, "headmodel", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	trap_Cvar_Register(NULL, "cg_birdsEye", "0", CVAR_USERINFO | CVAR_TEMP );
 	trap_Cvar_Register(NULL, "cg_thirdPerson", "0", CVAR_USERINFO | CVAR_TEMP );
-	//trap_Cvar_Register(NULL, "team_model", DEFAULT_TEAM_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
-	//trap_Cvar_Register(NULL, "team_headmodel", DEFAULT_TEAM_HEAD, CVAR_USERINFO | CVAR_ARCHIVE );
+	trap_Cvar_Register(NULL, "team_model", DEFAULT_TEAM_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
+	trap_Cvar_Register(NULL, "team_headmodel", DEFAULT_TEAM_HEAD, CVAR_USERINFO | CVAR_ARCHIVE );
 }
 
 
@@ -1607,6 +1607,8 @@ static qboolean Team_Parse(char **p) {
     }
 
     if (token[0] == '{') {
+			qboolean skipClosing = qfalse;
+
       // seven tokens per line, team name and icon, and 5 team member names
       if (!String_Parse(p, &cg.teamList[cg.teamCount].teamName) || !String_Parse(p, &tempStr)) {
         return qfalse;
@@ -1623,7 +1625,12 @@ static qboolean Team_Parse(char **p) {
 			for (i = 0; i < TEAM_MEMBERS; i++) {
 				cg.teamList[cg.teamCount].teamMembers[i] = NULL;
 				if (!String_Parse(p, &cg.teamList[cg.teamCount].teamMembers[i])) {
-					return qfalse;
+					break;
+				}
+				if(cg.teamList[cg.teamCount].teamMembers[i][0] == '}') {
+					skipClosing = qtrue;
+					cg.teamList[cg.teamCount].teamMembers[i] = NULL;
+					break;
 				}
 			}
 
@@ -1633,6 +1640,9 @@ static qboolean Team_Parse(char **p) {
       } else {
         Com_Printf("Too many teams, last team replaced!\n");
       }
+			if(skipClosing) {
+				continue;
+			}
       token = COM_ParseExt(p, qtrue);
       if (token[0] != '}') {
         return qfalse;
@@ -1666,21 +1676,37 @@ static qboolean Character_Parse(char **p) {
     }
 
     if (token[0] == '{') {
-      // two tokens per line, character name and sex
+      // two tokens per line, character name and base model
       if (!String_Parse(p, &cg.characterList[cg.characterCount].name) || !String_Parse(p, &tempStr)) {
         return qfalse;
       }
+
+			
+			cg.characterList[cg.characterCount].headModel = qfalse;
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] == 'h') {
+				cg.characterList[cg.characterCount].headModel = qtrue;
+				token = COM_ParseExt(p, qtrue);
+			}
+
     
       cg.characterList[cg.characterCount].headImage = -1;
-			cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/heads/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+			if(!cg.characterList[cg.characterCount].headModel) {
+				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+			} else {
+				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/heads/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+			}
 
-	  if (tempStr && (!Q_stricmp(tempStr, "female"))) {
-        cg.characterList[cg.characterCount].base = String_Alloc(va("Janet"));
-      } else if (tempStr && (!Q_stricmp(tempStr, "male"))) {
-        cg.characterList[cg.characterCount].base = String_Alloc(va("James"));
-	  } else {
-        cg.characterList[cg.characterCount].base = String_Alloc(va("%s",tempStr));
-	  }
+
+			if (tempStr && (!Q_stricmp(tempStr, "female"))) {
+					cg.characterList[cg.characterCount].base = String_Alloc(va("Janet"));
+				} else if (tempStr && (!Q_stricmp(tempStr, "male"))) {
+					cg.characterList[cg.characterCount].base = String_Alloc(va("James"));
+			} else {
+					cg.characterList[cg.characterCount].base = String_Alloc(va("%s",tempStr));
+			}
 
       Com_Printf("Loaded %s character %s.\n", cg.characterList[cg.characterCount].base, cg.characterList[cg.characterCount].name);
       if (cg.characterCount < MAX_HEADS) {
@@ -1689,7 +1715,6 @@ static qboolean Character_Parse(char **p) {
         Com_Printf("Too many characters, last character replaced!\n");
       }
      
-      token = COM_ParseExt(p, qtrue);
       if (token[0] != '}') {
         return qfalse;
       }
@@ -1928,28 +1953,38 @@ static qhandle_t CG_FeederItemImage(float feederID, int index) {
 }
 
 void CG_FeederSelection(float feederID, int index) {
-	if ( cgs.gametype >= GT_TEAM ) {
-		int i, count;
-		int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_RED : TEAM_BLUE;
-		count = 0;
-		for (i = 0; i < cg.numScores; i++) {
-			if (cg.scores[i].team == team) {
-				if (index == count) {
-					cg.selectedScore = i;
+	if(FEEDER_REDTEAM_LIST == feederID || FEEDER_BLUETEAM_LIST == feederID) {
+		if ( cgs.gametype >= GT_TEAM ) {
+			int i, count;
+			int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_RED : TEAM_BLUE;
+			count = 0;
+			for (i = 0; i < cg.numScores; i++) {
+				if (cg.scores[i].team == team) {
+					if (index == count) {
+						cg.selectedScore = i;
+					}
+					count++;
 				}
-				count++;
 			}
 		}
 	}
 
 #ifdef USE_CLASSIC_HUD
-  else if (feederID == FEEDER_HEADS) {
+  if (feederID == FEEDER_HEADS) {
 		int actual;
 		CG_SelectedHead(index, &actual);
 		index = actual;
 		if (index >= 0 && index < cg.characterCount) {
 			trap_Cvar_Set( "team_model", va("%s", cg.characterList[index].base));
-			trap_Cvar_Set( "team_headmodel", va("*%s", cg.characterList[index].name)); 
+			trap_Cvar_Set( "model", va("%s", cg.characterList[index].base));
+			// this is for situations like urban error where there is a single female or male model and many textured skins 
+			if(cg.characterList[index].headModel) {
+				trap_Cvar_Set( "team_headmodel", va("*%s", cg.characterList[index].name)); 
+				trap_Cvar_Set( "headmodel", va("*%s", cg.characterList[index].name)); 
+			} else {
+				trap_Cvar_Set( "team_headmodel", cg.characterList[index].name); 
+				trap_Cvar_Set( "headmodel", cg.characterList[index].name); 
+			}
 			updateModel = qtrue;
 		}
   } 
@@ -2028,6 +2063,7 @@ static void CG_RunCinematicFrame(int handle) {
 qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key);
 
 qboolean trap_Key_GetOverstrikeMode( void ) {
+	return qfalse;
 }
 
 void trap_Key_SetOverstrikeMode( qboolean state ) {
