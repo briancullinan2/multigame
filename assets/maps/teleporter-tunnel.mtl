@@ -1,0 +1,35 @@
+newmtl common/WTF
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/common/WTF
+
+newmtl common/nodraw
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/common/nodraw
+
+newmtl common/nodrop
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/common/nodrop
+
+newmtl common/trigger
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/common/trigger
+
+newmtl sfx/swirl_b1
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/sfx/swirl_b1
+newmtl sfx2/bluegoal2
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/sfx2/bluegoal2
+newmtl skies2/nebula2
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/skies2/nebula2
+
+newmtl textures/sfx/swirl_b1
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/sfx/swirl_b1
+newmtl textures/sfx2/bluegoal2
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/sfx2/bluegoal2
+newmtl textures/skies2/nebula2
+Kd 1.000000 1.000000 1.000000
+map_Kd ../textures/skies2/nebula2

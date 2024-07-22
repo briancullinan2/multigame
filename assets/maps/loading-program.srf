@@ -38,104 +38,560 @@ default
 
 5 // ESurfaceType::Face V: 4 I: 6 planar
 {
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+6 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+7 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+8 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+9 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+10 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+11 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+12 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+13 // ESurfaceType::Face V: 4 I: 6 planar
+{
 	shader textures/skies/portalfog
 	sampleSize 0
 }
 
-6 // ESurfaceType::ForcedMeta V: 543 I: 1176 
+14 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+15 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+16 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+17 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+18 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/jumportal02
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+19 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/swirl_b1
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+20 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/jumportal02
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+21 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/jumportal02
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+22 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/swirl_b1
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+23 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/jumportal02
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+24 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+25 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+26 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+27 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+28 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+29 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+30 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+31 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+32 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+33 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+34 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+35 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/skies2/nebula2
+	sampleSize 0
+}
+
+36 // ESurfaceType::ForcedMeta V: 543 I: 1176 
 {
 	shader models/mapobjects/podium/podium
 }
 
-7 // ESurfaceType::ForcedMeta V: 160 I: 420 
+37 // ESurfaceType::ForcedMeta V: 160 I: 420 
 {
 	shader models/mapobjects/podium/podskull
 }
 
-8 // ESurfaceType::ForcedMeta V: 18 I: 48 
+38 // ESurfaceType::ForcedMeta V: 18 I: 48 
 {
 	shader models/mapobjects/podium/podiumfx2
 }
 
-9 // ESurfaceType::ForcedMeta V: 18 I: 48 
+39 // ESurfaceType::ForcedMeta V: 18 I: 48 
 {
 	shader models/mapobjects/podium/podiumfx1
 }
 
-10 // ESurfaceType::ForcedMeta V: 18 I: 48 
+40 // ESurfaceType::ForcedMeta V: 18 I: 48 
 {
 	shader models/mapobjects/podium/podiumfx3
 }
 
-11 // ESurfaceType::Face V: 4 I: 6 
+41 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+42 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+43 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+44 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+45 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+46 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+47 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+48 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+49 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+50 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+51 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+52 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+53 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+54 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+55 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+56 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+57 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/liquids/clear_calm1
+	sampleSize 0
+}
+
+58 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/liquids/clear_calm1
+	sampleSize 0
+}
+
+59 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+60 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+61 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+62 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+63 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+64 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+65 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+66 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+67 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+68 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+69 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+70 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+71 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+72 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_sfx/lig_b064-02a
+	sampleSize 0
+}
+
+73 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/v064-03a
+	sampleSize 0
+}
+
+74 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/egyptsoc_trim/032-04c
+	sampleSize 0
+}
+
+75 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/liquids/clear_calm1
+	sampleSize 0
+}
+
+76 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/liquids/clear_calm1
+	sampleSize 0
+}
+
+77 // ESurfaceType::ForcedMeta V: 1024 I: 1536 
+{
+	shader textures/sfx2/bluegoal2
+	sampleSize 0
+}
+
+78 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+79 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+80 // ESurfaceType::ForcedMeta V: 1024 I: 1536 
+{
+	shader textures/sfx2/bluegoal2
+	sampleSize 0
+}
+
+81 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+82 // ESurfaceType::Triangles V: 4 I: 6 planar
+{
+	shader textures/sfx/swirl_b1
+	sampleSize 0
+}
+
+83 // ESurfaceType::Face V: 4 I: 6 planar
 {
 	shader textures/__TB_empty
-	parent 0
+	entity 62
+	castShadows 0
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+84 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	entity 62
+	castShadows 0
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+85 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	entity 62
+	castShadows 0
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+86 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	entity 62
+	castShadows 0
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+87 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	entity 62
+	castShadows 0
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+88 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/__TB_empty
+	entity 62
+	castShadows 0
 	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 
-12 // ESurfaceType::Face V: 4 I: 6 
+89 // ESurfaceType::Face V: 4 I: 6 planar
 {
-	shader textures/skies/portalfog
-	parent 1
-	sampleSize 0
+	shader textures/__TB_empty
+	entity 64
+	castShadows 0
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
 }
 
-13 // ESurfaceType::Face V: 4 I: 6 
+90 // ESurfaceType::Face V: 4 I: 6 planar
 {
-	shader textures/skies/portalfog
-	parent 2
-	sampleSize 0
+	shader textures/__TB_empty
+	entity 64
+	castShadows 0
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
 }
 
-14 // ESurfaceType::Face V: 4 I: 6 
+91 // ESurfaceType::Face V: 4 I: 6 planar
 {
-	shader textures/skies/portalfog
-	parent 3
-	sampleSize 0
+	shader textures/__TB_empty
+	entity 64
+	castShadows 0
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
 }
 
-15 // ESurfaceType::Face V: 4 I: 6 
+92 // ESurfaceType::Face V: 4 I: 6 planar
 {
-	shader textures/skies/portalfog
-	parent 4
-	sampleSize 0
+	shader textures/__TB_empty
+	entity 64
+	castShadows 0
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
 }
 
-16 // ESurfaceType::Face V: 4 I: 6 
+93 // ESurfaceType::Face V: 4 I: 6 planar
 {
-	shader textures/skies/portalfog
-	parent 5
-	sampleSize 0
+	shader textures/__TB_empty
+	entity 64
+	castShadows 0
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
 }
 
-17 // ESurfaceType::ForcedMeta V: 543 I: 1176 
+94 // ESurfaceType::Face V: 4 I: 6 planar
 {
-	shader models/mapobjects/podium/podium
-	parent 6
-}
-
-18 // ESurfaceType::ForcedMeta V: 160 I: 420 
-{
-	shader models/mapobjects/podium/podskull
-	parent 7
-}
-
-19 // ESurfaceType::ForcedMeta V: 18 I: 48 
-{
-	shader models/mapobjects/podium/podiumfx2
-	parent 8
-}
-
-20 // ESurfaceType::ForcedMeta V: 18 I: 48 
-{
-	shader models/mapobjects/podium/podiumfx1
-	parent 9
-}
-
-21 // ESurfaceType::ForcedMeta V: 18 I: 48 
-{
-	shader models/mapobjects/podium/podiumfx3
-	parent 10
+	shader textures/__TB_empty
+	entity 64
+	castShadows 0
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
 }
 

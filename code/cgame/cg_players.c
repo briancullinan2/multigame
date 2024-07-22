@@ -2752,11 +2752,18 @@ void CG_Player( centity_t *cent ) {
 	if ( cent->currentState.number == cg.snap->ps.clientNum) {
 #ifdef USE_CLASSIC_HUD
 		if(cg.editPlayerMode) {
-			VectorCopy(cg.refdef.vieworg, cent->lerpOrigin);
-			//cent->lerpOrigin[1] += 300;
-			cent->lerpOrigin[0] += 200;
+			vec3_t forward, right, up;
+			AngleVectors (cg.refdefViewAngles, forward, right, up);
+			VectorMA(cg.refdef.vieworg, 200, forward, cent->lerpOrigin);
+			//CG_Printf("wtf: %f %f %f == %f %f %f\n", 
+			//cg.refdef.vieworg[0], cg.refdef.vieworg[1], cg.refdef.vieworg[2],
+			//cent->lerpOrigin[0], cent->lerpOrigin[1], cent->lerpOrigin[2]);
+			//VectorCopy(cg.refdef.vieworg, cent->lerpOrigin);
+			//cent->lerpOrigin[1] -= 300;
+			//cent->lerpOrigin[0] += 200;
+			VectorCopy(cg.refdefViewAngles, cent->lerpAngles);
 			cent->lerpAngles[PITCH] = 0;
-			cent->lerpAngles[YAW] = 180;
+			cent->lerpAngles[YAW] -= 180;
 		} else
 #endif
 		if (!cg.renderingThirdPerson

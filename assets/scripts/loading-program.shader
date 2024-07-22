@@ -9,7 +9,7 @@ textures/skies/portalfog
 
 	q3map_surfacelight 400
 	q3map_sun	1 1 0.5 150	30 60
-//	q3map_sun	1 1 0.5 150	200 85
+	//	q3map_sun	1 1 0.5 150	200 85
 	skyparms - 512 -
 	skyparms env/portalfog 256 -
 
@@ -50,3 +50,62 @@ textures/sfx/fog3
 		tcMod scroll 0.01 -0.01
 	}
 }
+
+textures/sfx2/bluegoal2
+{
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	surfaceparm trans
+	cull twosided
+	{
+		map textures/sfx2/bluegoal2.tga
+		tcGen environment
+		tcmod scale 2 2
+		blendfunc GL_ONE GL_ONE
+		tcMod turb 0 0.25 0 0.5
+	}
+}
+
+textures/sfx/swirl_b1
+{
+	deformVertexes wave 100 sin 1 2 .1 1
+	q3map_surfacelight	300
+
+	surfaceparm	trans
+	surfaceparm nomarks
+	surfaceparm nolightmap
+	surfaceparm nonsolid
+	cull none
+	
+	{
+		clampmap textures/sfx/swirl_b1.tga
+		blendFunc GL_ONE GL_ONE
+		tcMod rotate -188
+	}	
+	{
+		clampmap textures/sfx/swirl_b2.tga
+		blendFunc GL_ONE GL_ONE
+		tcMod rotate 333
+	}
+	//{
+		//	clampmap textures/sfx/swirl_b2.tga
+		//	blendFunc GL_ONE GL_ONE
+		//        tcMod rotate 20
+	//}
+	
+}
+
+textures/skies2/nebula2
+{
+	qer_editorimage textures/skies2/nebula3.tga
+	surfaceparm noimpact
+	surfaceparm nolightmap
+	surfaceparm sky
+	q3map_lightimage textures/skies/stars.tga
+	q3map_sun	.90 .90 .95 80 315 40	
+	q3map_surfacelight 60
+	
+	skyparms textures/skies2/env/nebula2 - -
+	
+}
+
