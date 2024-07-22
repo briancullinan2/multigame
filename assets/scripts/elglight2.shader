@@ -7,7 +7,7 @@ models/lighting/elglight2/elglight2
 	surfaceparm alphashadow
 	surfaceparm trans
 	surfaceparm solid
-      q3map_surfacelight 2000	
+	q3map_surfacelight 2000
 	cull none
 	//nopicmip
 	{

@@ -1,0 +1,956 @@
+default
+{
+	castShadows 1
+	receiveShadows 1
+	sampleSize 16
+	longestCurve 0.000000
+}
+
+0 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+1 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+2 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+3 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+4 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+5 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+6 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+7 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+8 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+9 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+10 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+11 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+12 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+13 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+14 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+15 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+16 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+17 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+18 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+19 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+20 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+21 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+22 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+23 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+24 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+25 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+26 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+27 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+28 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+29 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+30 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+31 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+32 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+33 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+34 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+35 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+36 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+37 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+38 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/bluegoal2
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+39 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/sfx2/bluegoal2
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+40 // ESurfaceType::Face V: 6 I: 12 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+41 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+42 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+43 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+44 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+45 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+46 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+47 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+48 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+49 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+50 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+51 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+52 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+53 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/scuffs1
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+54 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_light/proto_light_2k
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+55 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+56 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+57 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+58 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+59 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_light/proto_light_2k
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+60 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+61 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+62 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+63 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+64 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_light/proto_light_2k
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+65 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+66 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+67 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+68 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+69 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_light/proto_light_2k
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+70 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+71 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+72 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+73 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_trim/pewter_shiney
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+74 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+75 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+76 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+77 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+78 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+79 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+80 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+81 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+82 // ESurfaceType::Face V: 9 I: 21 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+83 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+84 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+85 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+86 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+87 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+88 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+89 // ESurfaceType::Face V: 12 I: 30 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+90 // ESurfaceType::Face V: 10 I: 24 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+91 // ESurfaceType::Face V: 10 I: 24 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+92 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+93 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+94 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+95 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+96 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+97 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+98 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+99 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+100 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+101 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+102 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+103 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+104 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+105 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+106 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+107 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+108 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+109 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+110 // ESurfaceType::Face V: 20 I: 54 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+111 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 1.000000 0.000000 )
+}
+
+112 // ESurfaceType::Face V: 13 I: 36 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+113 // ESurfaceType::Face V: 13 I: 36 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+114 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+115 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+116 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+117 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+118 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+119 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+120 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+121 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+122 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -1.000000 -0.000000 )
+}
+
+123 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+124 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+125 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+126 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+127 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+128 // ESurfaceType::Face V: 12 I: 30 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+129 // ESurfaceType::Face V: 9 I: 21 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+130 // ESurfaceType::Face V: 9 I: 21 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+131 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+132 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+133 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -1.000000 -0.000000 -0.000000 )
+}
+
+134 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+135 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 1.000000 0.000000 0.000000 )
+}
+
+136 // ESurfaceType::Face V: 8 I: 18 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+137 // ESurfaceType::Face V: 7 I: 15 planar
+{
+	shader textures/base_wall2/blue_metal
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+138 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/diamond_ctf_red
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+139 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/diamond_ctf_red
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+140 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+141 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+142 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+143 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+144 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+145 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+146 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+147 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+148 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+149 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+150 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+151 // ESurfaceType::Face V: 3 I: 3 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+152 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+153 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+154 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+155 // ESurfaceType::Face V: 4 I: 6 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+
+156 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( -0.000000 -0.000000 -1.000000 )
+}
+
+157 // ESurfaceType::Face V: 5 I: 9 planar
+{
+	shader textures/base_wall2/space_concrete
+	lightmapAxis ( 0.000000 0.000000 1.000000 )
+}
+

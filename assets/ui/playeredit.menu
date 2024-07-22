@@ -17,7 +17,6 @@
 
 		shadowColor 0.1 0.1 0.1 0.25			// shadow color
 	}
-	
 
 	// menuDef {
 	// 	name "player_menu"
@@ -31,11 +30,11 @@
 		name "player_menu"
 		visible 0
 		fullscreen 0
-		outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
 		rect 0 350 640 200
 		focusColor 1 .75 0 1
 		style 1
 		border 1
+		popup
 		onOpen  { uiScript update "ui_GetName"; captureMouse }
 		onClose { uiScript update "ui_SetName";  }
 		onEsc {uiScript unpauseCamera}
@@ -142,15 +141,6 @@
 		// 	decoration 
 		// }
 
-		// itemDef {
-		// 	name modelselection
-		// 	ownerdraw UI_PLAYERMODEL
-		// 	rect 424 80 260 260
-		// 	style 1
-		// 	decoration 
-		// 	visible 1
-		// }
-
 		itemDef {
 			name namefield
 			group "playersettinggroup"
@@ -160,10 +150,10 @@
 			cvar "ui_Name"
 			textstyle 6
 			maxChars 32
-			rect 0 20 215 32 
+			rect 0 20 215 22 
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 20
-			textaligny 21 
+			textaligny 20
 			textscale .333        
 			outlinecolor 1 .5 .5 .5
 			backcolor 0 0 0 0
@@ -171,8 +161,8 @@
 			border 0
 			bordercolor 0 0 0 0
 			visible 1 
-			mouseEnter { show message_name } 
-			mouseExit { hide message_name } 
+			//mouseEnter { show message_name } 
+			//mouseExit { hide message_name } 
 		}
 
 		itemDef {
@@ -182,10 +172,10 @@
 			text "Handicap:"
 			ownerdraw UI_HANDICAP
 			textstyle 6
-			rect 0 65 215 32 
+			rect 0 45 215 22 
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 20
-			textaligny 0 
+			textaligny 20 
 			textscale .333        
 			outlinecolor 1 .5 .5 .5
 			backcolor 0 0 0 0
@@ -193,8 +183,8 @@
 			border 0
 			bordercolor 0 0 0 0
 			visible 1 
-			mouseEnter { show message_handicap } 
-			mouseExit { hide message_handicap } 
+			//mouseEnter { show message_handicap } 
+			//mouseExit { hide message_handicap } 
 		}
 
 		itemDef {
@@ -203,11 +193,11 @@
 			style 0	
 			text "Effect:"
 			ownerdraw UI_EFFECTS
-			rect 0 90 215 32 
+			rect 0 70 215 22 
 			textstyle 6
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 20     
-			textaligny 0 
+			textaligny 20 
 			textscale .333        
 			outlinecolor 1 .5 .5 .5
 			backcolor 0 0 0 0
@@ -215,8 +205,8 @@
 			border 0
 			bordercolor 0 0 0 0
 			visible 1   
-			mouseEnter { show message_effect } 
-			mouseExit { hide message_effect }   
+			//mouseEnter { show message_effect } 
+			//mouseExit { hide message_effect }   
 		}
 
 		itemDef {
@@ -225,10 +215,10 @@
 			ownerdraw UI_CLANNAME
 			text "Clan:"
 			textstyle 6
-			rect 20 115 215 32 
+			rect 20 95 215 22 
 			textalign ITEM_ALIGN_LEFT		
 			textalignx 0
-			textaligny 0 
+			textaligny 20 
 			textscale .333        
 			forecolor 1 1 1 1
 			cvarTest "ui_q3model"
@@ -240,17 +230,17 @@
 		}
 
 
-		itemDef {
-			name quakeimage
-			group grparenatype
-			cvarTest "ui_q3model"
-			showCVar { "0" }	
-			style WINDOW_STYLE_SHADER	
-			background "ui/assets/playerpi.tga"
-			rect 100 24 128 256
-			visible 1 
-			decoration
-		}
+		// itemDef {
+		// 	name quakeimage
+		// 	group grparenatype
+		// 	cvarTest "ui_q3model"
+		// 	showCVar { "0" }	
+		// 	style WINDOW_STYLE_SHADER	
+		// 	background "ui/assets/playerpi.tga"
+		// 	rect 100 24 128 256
+		// 	visible 1 
+		// 	decoration
+		// }
 
 
 		itemDef {
@@ -273,8 +263,8 @@
 			bordercolor .5 .5 .5 .5
 			forecolor 1 1 1 1
 			visible 1
-			mouseenter { setitemcolor headlist bordercolor .7 0 0 1 ; show message_model }
-			mouseexit { setitemcolor headlist bordercolor .5 .5 .5 .5 ; hide message_model }
+			mouseenter { setitemcolor headlist bordercolor .7 0 0 1 }
+			mouseexit { setitemcolor headlist bordercolor .5 .5 .5 .5 }
 		}
 
 		// itemDef {

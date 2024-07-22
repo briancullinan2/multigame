@@ -124,6 +124,8 @@ an info_notnull
 void SP_misc_teleporter_dest( gentity_t *ent ) {
 }
 
+#endif
+
 
 //===========================================================
 
@@ -132,18 +134,24 @@ void SP_misc_teleporter_dest( gentity_t *ent ) {
 */
 void SP_misc_model( gentity_t *ent ) {
 
-#if 0
-	ent->s.modelindex = G_ModelIndex( ent->model );
-	VectorSet (ent->mins, -16, -16, -16);
-	VectorSet (ent->maxs, 16, 16, 16);
-	trap_LinkEntity (ent);
+	if ( ent->model2 ) { // not build into BSPs
+		ent->r.svFlags = SVF_BROADCAST;
+		ent->s.eType = ET_GENERAL;
+		ent->s.modelindex = G_ModelIndex( ent->model2 );
+		ent->s.number = ent - g_entities;
+		VectorSet (ent->r.mins, -16, -16, -16);
+		VectorSet (ent->r.maxs, 16, 16, 16);
+		trap_LinkEntity (ent);
 
-	G_SetOrigin( ent, ent->s.origin );
-	VectorCopy( ent->s.angles, ent->s.apos.trBase );
-#else
-	G_FreeEntity( ent );
-#endif
+		G_SetOrigin( ent, ent->s.origin );
+		VectorCopy( ent->s.angles, ent->s.apos.trBase );
+	} else
+		G_FreeEntity( ent );
+
 }
+
+
+#ifndef USE_PORTALS
 
 //===========================================================
 

@@ -2027,6 +2027,12 @@ static void CG_RunCinematicFrame(int handle) {
 
 qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key);
 
+qboolean trap_Key_GetOverstrikeMode( void ) {
+}
+
+void trap_Key_SetOverstrikeMode( qboolean state ) {
+}
+
 /*
 =================
 CG_LoadHudMenu();
@@ -2063,8 +2069,8 @@ void CG_LoadHudMenu( void ) {
 	cgDC.getCVarString = trap_Cvar_VariableStringBuffer;
 	cgDC.getCVarValue = CG_Cvar_Get;
 	cgDC.drawTextWithCursor = &CG_Text_PaintWithCursor;
-	//cgDC.setOverstrikeMode = &trap_Key_SetOverstrikeMode;
-	//cgDC.getOverstrikeMode = &trap_Key_GetOverstrikeMode;
+	cgDC.setOverstrikeMode = &trap_Key_SetOverstrikeMode;
+	cgDC.getOverstrikeMode = &trap_Key_GetOverstrikeMode;
 	cgDC.startLocalSound = &trap_S_StartLocalSound;
 	cgDC.ownerDrawHandleKey = &CG_OwnerDrawHandleKey;
 	cgDC.feederCount = &CG_FeederCount;

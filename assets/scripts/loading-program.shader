@@ -11,6 +11,7 @@ textures/skies/portalfog
 	q3map_sun	1 1 0.5 150	30 60
 //	q3map_sun	1 1 0.5 150	200 85
 	skyparms - 512 -
+	skyparms env/portalfog 256 -
 
 	{
 		map textures/skies/portalfog.tga

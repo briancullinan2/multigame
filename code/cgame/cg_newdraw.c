@@ -1674,7 +1674,6 @@ void CG_FeederSelection(float feederID, int index);
 
 
 static qboolean CG_ClanName_HandleKey(int flags, float *special, int key) {
-	CG_Error("Handling key!");
   if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
     int i;
     i = CG_TeamIndexFromName(CG_Cvar_VariableString("ui_teamName"));
@@ -1900,8 +1899,8 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
 	//	return;
 	//}
 
-  rect.x = x;
-  rect.y = y;
+  rect.x = x + text_x;
+  rect.y = y + text_y;
   rect.w = w;
   rect.h = h;
 
@@ -2141,11 +2140,11 @@ void CG_MouseEvent(int x, int y, qboolean absolute) {
 		cgs.activeCursor = cgs.media.sizeCursor;
 	}
 
-  if (cgs.capturedItem) {
-	  Display_MouseMove(cgs.capturedItem, x, y);
-  } else {
+  //if (cgs.capturedItem) {
+	//  Display_MouseMove(cgs.capturedItem, x, y);
+  //} else {
 	  Display_MouseMove(NULL, cgs.cursorX, cgs.cursorY);
-  }
+  //}
 
 }
 
@@ -2171,7 +2170,9 @@ void CG_ShowTeamMenu() {
 }
 
 
-
+#ifdef USE_CLASSIC_HUD
+extern menuDef_t *menuEditPlayer;
+#endif
 
 /*
 ==================
@@ -2252,13 +2253,19 @@ void CG_KeyEvent(int key, qboolean down) {
 
   Display_HandleKey(key, down, cgs.cursorX, cgs.cursorY);
 
-	if (cgs.capturedItem) {
-		cgs.capturedItem = NULL;
-	}	else {
-		if (key == K_MOUSE2 && down) {
+#ifdef USE_CLASSIC_HUD
+	if(cg.editPlayerMode && menuEditPlayer) {
+		Menu_HandleKey(menuEditPlayer, key, down );
+	}
+#endif
+
+	//if (cgs.capturedItem) {
+	//	cgs.capturedItem = NULL;
+	//}	else {
+		if ((key == K_MOUSE2 || key == K_MOUSE1) && down) {
 			cgs.capturedItem = Display_CaptureItem(cgs.cursorX, cgs.cursorY);
 		}
-	}
+	//}
 }
 
 int CG_ClientNumFromName(const char *p) {
