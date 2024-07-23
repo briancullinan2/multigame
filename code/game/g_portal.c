@@ -70,21 +70,32 @@ TELEPORTERS
 */
 #define PORTAL_EXTRA_SPEED 42.0f // two times the size of hit box?
 
-static void TeleportPlayer_real(gentity_t *player,
-                                vec3_t origin, vec3_t angles,
-                                gentity_t *destination, gentity_t *self)
+void TeleportPlayer_real(gentity_t *player,
+                         const vec3_t origin, const vec3_t angles,
+                         qboolean hasDest, qboolean hasSource,
+                         vec3_t destAngles, vec3_t sourceAngles)
 {
   gentity_t *tent;
-  vec3_t angles2;
+  vec3_t vec, angleVelocity;
+  float normal;
+  VectorClear(angleVelocity);
+  VectorCopy(player->client->ps.velocity, vec);
+  vectoangles(vec, angleVelocity);
+  normal = VectorNormalize(vec);
+  if (normal < PORTAL_EXTRA_SPEED)
+  {
+    Com_Printf("Player speed too low: %f\n", normal);
+    normal = PORTAL_EXTRA_SPEED;
+  }
 
   // use temp events at source and destination to prevent the effect
   // from getting dropped by a second player event
-  if (!destination && !self && player->client->sess.sessionTeam != TEAM_SPECTATOR)
+  if (!hasDest && !hasSource && player->client->sess.sessionTeam != TEAM_SPECTATOR)
   {
     tent = G_TempEntity(player->client->ps.origin, EV_PLAYER_TELEPORT_OUT);
     tent->s.clientNum = player->s.clientNum;
 
-    tent = G_TempEntity(origin, EV_PLAYER_TELEPORT_IN);
+    tent = G_TempEntity((float *)origin, EV_PLAYER_TELEPORT_IN);
     tent->s.clientNum = player->s.clientNum;
   }
 
@@ -95,31 +106,21 @@ static void TeleportPlayer_real(gentity_t *player,
   player->client->ps.origin[2] += 1.0f;
 
   // spit the player out
-  if (!destination && !self)
+  if (!hasDest && !hasSource)
   {
     AngleVectors(angles, player->client->ps.velocity, NULL, NULL);
     VectorScale(player->client->ps.velocity, (g_speed.value * 1.25f), player->client->ps.velocity);
-    SetClientViewAngle(player, angles);
+    SetClientViewAngle(player, (float *)angles);
   }
   else
   {
-    float normal;
-    vec3_t angleView, angleVelocity, vec;
-    VectorCopy(player->client->ps.velocity, vec);
-    normal = VectorNormalize(vec);
+    vec3_t angles2;
+    vec3_t angleView;
     VectorClear(angleView);
-    VectorClear(angleVelocity);
-    if (normal < PORTAL_EXTRA_SPEED)
+    if (hasDest)
     {
-      Com_Printf("Player speed too low: %f\n", normal);
-      normal = PORTAL_EXTRA_SPEED;
-    }
-    if (destination->s.eventParm)
-    {
-      ByteToDir(destination->s.eventParm, angles);
-      vectoangles(angles, angles);
       // the destination is a wall view
-      if (self->s.eventParm)
+      if (hasSource)
       {
         Com_Printf("wall -> wall\n");
         // the source portal is also a wall view
@@ -129,22 +130,17 @@ static void TeleportPlayer_real(gentity_t *player,
         // change the direction of the velocity by the same angle so if you enter
         //   while jumping at an angle, it doesn't reset the view straight forward,
         //   A disappointing missing feature from Q3DM0
-        ByteToDir(self->s.eventParm, angles2);
-        vectoangles(angles2, angles2);
 
-        vectoangles(vec, angleVelocity);
-        VectorSubtract(player->client->ps.viewangles, angleVelocity, angleView);
-        VectorSubtract(angleVelocity, angles2, angleVelocity);
-        angleVelocity[1] -= 180; // for the other side of the portal?
-        VectorAdd(angles, angleVelocity, angleVelocity);
+        // VectorSubtract(player->client->ps.viewangles, angleVelocity, angleView);
+        VectorSubtract(angleVelocity, sourceAngles, angleVelocity);
+        //angleVelocity[1] -= 180; // for the other side of the portal?
+        VectorAdd(destAngles, angleVelocity, angleVelocity);
         AngleVectors(angleVelocity, player->client->ps.velocity, NULL, NULL);
         VectorScale(player->client->ps.velocity, normal * 1.25f, player->client->ps.velocity);
         // change client view angle
-        angleView[0] = player->client->ps.viewangles[0];
-        // angleView[0] = angleView[0] + angleVelocity[0];
-        angleView[1] = angleView[1] + angleVelocity[1];
-        angleView[2] = player->client->ps.viewangles[2];
-        // VectorAdd(angleView, angleVelocity, angleView);
+        VectorCopy(player->client->ps.viewangles, angleView);
+        VectorSubtract(angleView, sourceAngles, angleView);
+        VectorAdd(destAngles, angleView, angleView);
         SetClientViewAngle(player, angleView);
       }
       else
@@ -154,10 +150,9 @@ static void TeleportPlayer_real(gentity_t *player,
         // free standing portals don't need angle calculation because
         //   viewangles is assumed, since the portal rotates to face the player
         // get the angle relative to the velocity
-        vectoangles(vec, angleVelocity);
         VectorSubtract(player->client->ps.viewangles, angleVelocity, angleView);
         // change the velocity direction but maintain Z
-        angleVelocity[1] = angles[1];
+        angleVelocity[1] = destAngles[1];
         AngleVectors(angleVelocity, player->client->ps.velocity, NULL, NULL);
         VectorScale(player->client->ps.velocity, normal * 1.25f, player->client->ps.velocity);
         // add the angle to the new velocity
@@ -167,7 +162,7 @@ static void TeleportPlayer_real(gentity_t *player,
     }
     else
     {
-      if (self->s.eventParm)
+      if (hasSource)
       {
         Com_Printf("wall -> free\n");
         // source is a wall view and destination is a free standing,
@@ -215,7 +210,31 @@ static void TeleportPlayer_real(gentity_t *player,
 }
 void TeleportPlayer(gentity_t *player, vec3_t origin, vec3_t angles)
 {
-  TeleportPlayer_real(player, origin, angles, NULL, NULL);
+  TeleportPlayer_real(player, origin, angles, qfalse, qfalse, NULL, NULL);
+}
+
+void TeleportPlayer_entity(gentity_t *player, vec3_t origin, vec3_t angles, gentity_t *dest, gentity_t *source)
+{
+  vec3_t destAngles;
+  vec3_t sourceAngles;
+  qboolean hasDest = qfalse;
+  qboolean hasSource = qfalse;
+  VectorClear(destAngles);
+  VectorClear(sourceAngles);
+  if (dest->s.eventParm)
+  {
+    ByteToDir(dest->s.eventParm, destAngles);
+    vectoangles(destAngles, destAngles);
+    hasDest = qtrue;
+  }
+  if (source->s.eventParm)
+  {
+    ByteToDir(source->s.eventParm, sourceAngles);
+    vectoangles(sourceAngles, sourceAngles);
+    hasSource = qtrue;
+  }
+
+  TeleportPlayer_real(player, origin, angles, hasDest, hasSource, destAngles, sourceAngles);
 }
 
 /*QUAKED misc_teleporter_dest (1 0 0) (-32 -32 -24) (32 32 -16)
@@ -240,7 +259,6 @@ void SP_misc_teleporter_dest(gentity_t *ent)
   G_SpawnInt("world", "0", &ent->world);
 #endif
 }
-
 
 //===========================================================
 
@@ -304,18 +322,52 @@ void locateCamera(gentity_t *ent)
   ent->s.eventParm = DirToByte(dir);
 }
 
+static vec3_t sides[6] = {
+    {0, 1, 0},
+    {1, 0, 0},
+    {0, 0, 1},
+    {0, -1, 0},
+    {-1, 0, 0},
+    {0, 0, -1},
+};
+
 /*QUAKED misc_portal_surface (0 0 1) (-8 -8 -8) (8 8 8)
 The portal surface nearest this entity will show a view from the targeted misc_portal_camera, or a mirror view if untargeted.
 This must be within 64 world units of the surface!
 */
 void SP_misc_portal_surface(gentity_t *ent)
 {
+  vec3_t end;
+  trace_t tr;
+  int i;
+
   VectorClear(ent->r.mins);
   VectorClear(ent->r.maxs);
   trap_LinkEntity(ent);
 
   ent->r.svFlags = SVF_PORTAL;
   ent->s.eType = ET_PORTAL;
+
+  VectorClear(ent->movedir)
+  for (i = 0; i < 6; i++)
+  {
+    end[0] = ent->s.origin[0] + sides[i][0] * 128;
+    end[1] = ent->s.origin[1] + sides[i][1] * 128;
+    end[2] = ent->s.origin[2] + sides[i][2] * 128;
+    trap_Trace(&tr, ent->s.origin, NULL, NULL, end, ent->s.number, MASK_OPAQUE);
+    if (tr.fraction < 1.0f && tr.fraction > 0.0f)
+    {
+      vec3_t angles;
+      VectorCopy(ent->s.angles, angles);
+      if(VectorCompare(angles, vec3_origin)) {
+        angles[0] = 0.001f;
+        angles[1] = 0.001f;
+        angles[2] = 0.001f;
+      }
+      VectorCopy(angles, ent->movedir);
+      break;
+    }
+  }
 
   if (!ent->target)
   {
@@ -454,7 +506,7 @@ static void PortalTouch(gentity_t *self, gentity_t *other, trace_t *trace)
       // VectorAdd(other->client->ps.velocity, vel, other->client->ps.velocity);
     }
 
-    TeleportPlayer_real(other, self->pos1, vec3_origin, destination, self);
+    TeleportPlayer_entity(other, self->pos1, vec3_origin, destination, self);
     return;
   }
   // if there is not one, die!
@@ -471,7 +523,7 @@ static void PortalTouch(gentity_t *self, gentity_t *other, trace_t *trace)
   // TODO: if world != client->world
   //  SendClientCommand("tele ")
   // TODO: update velocity on other entity after they joined with a wait think
-  TeleportPlayer_real(other, destination->s.pos.trBase, other->client->ps.viewangles, destination, self);
+  TeleportPlayer_entity(other, destination->s.pos.trBase, other->client->ps.viewangles, destination, self);
 }
 
 #define AWAY_FROM_WALL 16.0f
@@ -751,7 +803,7 @@ void DropPortalSource(gentity_t *player, vec3_t isWall)
   ent->count = player->client->portalID;
   player->client->portalID = 0;
   //	ent->spawnflags = player->client->ps.persistant[PERS_TEAM];
-    // give the item back so they can drop the source now
+  // give the item back so they can drop the source now
   if (!player->client->portalDestination)
   {
     player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
@@ -760,7 +812,6 @@ void DropPortalSource(gentity_t *player, vec3_t isWall)
     player->client->inventoryModified[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)] = qtrue;
 #endif
   }
-
 }
 
 #endif

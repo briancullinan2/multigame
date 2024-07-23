@@ -258,6 +258,14 @@ void SP_target_push( gentity_t *self ) {
 	self->use = Use_target_push;
 }
 
+
+
+void TeleportPlayer_real(gentity_t *player,
+												const vec3_t origin, const vec3_t angles,
+												qboolean hasDest, qboolean hasSource,
+												vec3_t destAngles, vec3_t sourceAngles);
+
+
 /*
 ==============================================================================
 
@@ -267,7 +275,12 @@ trigger_teleport
 */
 
 void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
-	gentity_t	*dest;
+	vec3_t size;
+	float length;
+	gentity_t	*dest = NULL;
+	gentity_t *surface = NULL;
+	VectorSubtract(self->r.maxs, self->r.mins, size);
+	length = VectorNormalize(size);
 
 	if ( !other->client ) {
 		return;
@@ -287,6 +300,32 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 		G_Printf ("Couldn't find teleporter destination\n");
 		return;
 	}
+
+	// find nearby portal surface for distiny calculations
+
+	if(!self->target_ent) {
+		surface = NULL;
+		while( (surface = G_Find(surface, FOFS(classname), "misc_portal_surface")) != NULL ) {
+			float dist;
+			vec3_t temp; 
+			VectorSubtract(self->r.mins, surface->s.origin, temp);
+			dist = VectorNormalize(temp);
+			if(dist < length + 128) {
+				self->target_ent = surface;
+				break;
+			}
+		}
+	}
+
+	if(self->target_ent && self->target_ent->movedir && !VectorCompare(self->target_ent->movedir, vec3_origin)) {
+		vec3_t angles;
+		VectorCopy(self->target_ent->movedir, angles);
+		G_Printf("angles: %s %f %f %f -> %f %f %f\n", self->target_ent->target, angles[0], angles[1], angles[2],
+		dest->s.angles[0], dest->s.angles[1], dest->s.angles[2]);
+		TeleportPlayer_real( other, dest->s.origin, vec3_origin, qtrue, qtrue, dest->s.angles, angles );
+		return;
+	}
+
 
 	TeleportPlayer( other, dest->s.origin, dest->s.angles );
 }
