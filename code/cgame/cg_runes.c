@@ -178,7 +178,7 @@ qboolean CG_DrawRunesboard(void)
 				continue;
 			}
 
-			item = BG_FindItemForRune(n + 1);
+			item = BG_FindItemForRune(n);
 			CG_RegisterItemVisuals(ITEM_INDEX(item));
 
 			hud_runes(x, y, w, h, item);

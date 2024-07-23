@@ -111,6 +111,10 @@ gitem_t	bg_itemlist[] =
 
 #ifdef USE_ADVANCED_ITEMS
 #include "./bg_misc_items2.h"
+
+#ifdef USE_RUNES
+#include "./bg_misc_runes.h"
+#endif
 #endif
 
 
@@ -999,6 +1003,57 @@ Only in One Flag CTF games
 
 #endif
 
+#ifdef USE_WEAPON_SPREAD
+//Hal9000 spreadfire powerup
+/*QUAKED item_spread (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+  {
+  	"item_spread", 
+  	"sound/items/spread.wav",
+    {"models/powerups/instant/sight.md3", 0, 0, 0 },
+  /* icon */	"icons/spread",  
+  /* pickup */	"Spreadfire",
+  		30,
+  		IT_POWERUP,
+  		PW_SPREAD,
+	},
+#endif
+
+#ifdef USE_FLAME_THROWER
+  /*QUAKED weapon_flamethrower (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+  */
+  {
+  	"weapon_flamethrower",
+  	"sound/misc/w_pkup.wav",
+  	{ "models/weapons2/flamethrower/flamethrower.md3",
+  	0, 0, 0},
+  /* icon */	"icons/iconw_flamethrower",
+  /* pickup */	"Flame Thrower",
+  	20,
+  	IT_WEAPON,
+  	WP_FLAME_THROWER,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+
+
+  /*QUAKED ammo_flame (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+  */
+  {
+  	"ammo_flame",
+  	"sound/misc/am_pkup.wav",
+  	{ "models/powerups/ammo/flameaam.md3", 
+  	0, 0, 0},
+  /* icon */"	icons/icona_flamethrower",
+  /* pickup */	"Flame Ammo",
+  	50,
+  	IT_AMMO,
+  	WP_FLAME_THROWER,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+#endif
+
 #endif
 
 	// end of list marker
@@ -1019,7 +1074,7 @@ gitem_t	*BG_FindItemForRune( int r ) {
 
 	for ( i = 0 ; i < bg_numItems ; i++ ) {
 		if ( bg_itemlist[i].giType == IT_POWERUP
-			&& bg_itemlist[i].giTag == (RUNE_STRENGTH + (r - 1)) ) {
+			&& bg_itemlist[i].giTag == RUNE_STRENGTH + r ) {
 			return &bg_itemlist[i];
 		}
 	}
