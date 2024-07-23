@@ -993,6 +993,16 @@ void CG_RegisterItemVisuals( int itemNum ) {
 		CG_RegisterWeapon( item->giTag );
 	}
 
+#ifdef USE_RUNES
+  // runes have a shader based on system name so the same model can be reused
+  if ( item->giType == IT_POWERUP && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM ) {
+    itemInfo->altShader1 = trap_R_RegisterShader(va( "models/runes/%s", &item->classname[5] ));
+    if ( item->world_model[1] ) {
+      itemInfo->altShader2 = trap_R_RegisterShader(va( "models/runes/%s_2", &item->classname[5] ));
+    }
+    itemInfo->altShader3 = trap_R_RegisterShader(va( "powerups/runes/%s", &item->classname[5] ));
+  }
+#endif
 	//
 	// powerups have an accompanying ring or sphere
 	//
@@ -1423,6 +1433,17 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 			gun->customShader = cgs.media.quadWeaponShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
+#ifdef USE_RUNES
+    if( cent->client->inventory[RUNE_RESIST] ) {
+      gun->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(3)) ].altShader3;
+      trap_R_AddRefEntityToScene( gun );
+    }
+    if( cent->rune == RUNE_STRENGTH 
+      && cent->client->inventory[cent->rune] ) {
+      gun->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(1)) ].altShader3;
+			trap_R_AddRefEntityToScene( gun );
+    }
+#endif
 	}
 
 #endif

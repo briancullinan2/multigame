@@ -126,6 +126,10 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 	if ( !other->client ) {
 		return;
 	}
+#ifdef USE_RUNES
+  if(other->client->inventory[RUNE_FLIGHT])
+    return;
+#endif
   
 #ifdef USE_GRAPPLE
   if (other->client && other->client->hook)

@@ -206,6 +206,10 @@ struct gentity_s
 #ifdef USE_ROTATING_DOOR
 	float distance; // VALKYRIE: for rotating door
 #endif
+
+#if 0 //def USE_RUNES
+  int     rune;
+#endif
 };
 
 typedef enum

@@ -111,6 +111,14 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
 
 	if (ent->client->ps.powerups[PW_QUAD] ) {
 		G_AddEvent( ent, EV_POWERUP_QUAD, 0 );
+#ifdef USE_RUNES
+  if(ent->client->inventory[RUNE_BERSERK]) {
+    s_quadFactor = 6.0;
+  } else
+  if(ent->client->inventory[RUNE_BERSERK]) {
+    s_quadFactor = 2.0;
+  } else
+#endif
 		s_quadFactor = g_quadfactor.value;
 	} else {
 		s_quadFactor = 1.0;

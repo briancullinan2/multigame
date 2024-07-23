@@ -261,9 +261,15 @@ static void PM_Friction( void ) {
 		vel[0] = 0;
 		vel[1] = 0;		// allow sinking underwater
 		// FIXME: still have z friction underwater?
+#ifdef USE_RUNES
+		if ( pm->inventory[RUNE_FLIGHT] )
+			vel[2] = 0.0f;
+		else
+#endif
 #ifdef USE_ADVANCED_ITEMS
 		if ( pm->inventory[ PW_FLIGHT ] || pm->inventory[ PW_SUPERMAN ] )
-			vel[2] = 0.0f; 
+			vel[2] = 0.0f;
+		else
 #endif
 		if ( pm->ps->pm_type == PM_SPECTATOR || pm->ps->powerups[ PW_FLIGHT ] )
 			vel[2] = 0.0f; // no slow-sinking/raising movements
@@ -289,6 +295,11 @@ static void PM_Friction( void ) {
 	}
 
 	// apply flying friction
+#ifdef USE_RUNES
+	if ( pm->inventory[RUNE_FLIGHT] ) {
+		drop += speed*pm_flightfriction*pml.frametime;
+	} else
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	if ( pm->inventory[PW_FLIGHT] || pm->inventory[PW_SUPERMAN] ) {
 		drop += speed*pm_flightfriction*pml.frametime;
@@ -2029,6 +2040,9 @@ static void PM_Weapon( void ) {
 		|| pm->inventory[PW_FLASH]
 		|| pm->inventory[PW_SUPERMAN]
 #endif
+#ifdef USE_RUNES
+    || pm->inventory[RUNE_HASTE]
+#endif
 	) {
 #ifdef USE_PHYSICS_VARS
     addTime /= g_hasteFactor.value;
@@ -2897,6 +2911,9 @@ void PmoveSingle (pmove_t *pmove) {
 		|| pm->inventory[PW_FLIGHT]
 		|| pm->inventory[PW_SUPERMAN]
 #endif
+#ifdef USE_RUNES
+    || pm->inventory[RUNE_FLIGHT]
+#endif
 	) {
 		// flight powerup doesn't allow jump and has different friction
 		PM_FlyMove();
@@ -2943,6 +2960,11 @@ void PmoveSingle (pmove_t *pmove) {
 	// entering / leaving water splashes
 	PM_WaterEvents();
 
+#ifdef USE_RUNES
+  if( pm->inventory[RUNE_FLIGHT] ) {
+		return;
+	}
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	if ( (pm->inventory[PW_FLIGHT] || pm->inventory[PW_SUPERMAN]) && !pml.groundPlane ) {
 		// don't snap velocity in free-fly or we will be not able to stop via flight friction

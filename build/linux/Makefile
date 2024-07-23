@@ -415,6 +415,7 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/cg_polybus.o \
   $(B)/$(MOD)/cgame/cg_predict.o \
   $(B)/$(MOD)/cgame/cg_rally.o \
+  $(B)/$(MOD)/cgame/cg_runes.o \
   $(B)/$(MOD)/cgame/cg_scoreboard.o \
   $(B)/$(MOD)/cgame/cg_servercmds.o \
   $(B)/$(MOD)/cgame/cg_snapshot.o \

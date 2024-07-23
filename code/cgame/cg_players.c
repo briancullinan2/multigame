@@ -1529,6 +1529,9 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 		// this is only for local client || cg.inventory[PW_HASTE]
 		// for this i'll use powerups as "styles" for overlapping inventory
 #endif
+#ifdef USE_RUNES
+    //|| cg_entities[cent->currentState.number].->inventory[RUNE_HASTE]
+#endif
 	) {
 		speedScale = 1.5;
 	} else {
@@ -2225,7 +2228,11 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 	}
 
 	// haste leaves smoke trails
-	if ( powerups & ( 1 << PW_HASTE ) ) {
+	if ( cent->client->inventory[PW_HASTE] 
+#ifdef USE_RUNES
+    || cent->client->inventory[RUNE_HASTE]
+#endif
+  ) {
 		CG_HasteTrail( cent );
 	}
 
@@ -2580,6 +2587,19 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 			ent->customShader = cgs.media.battleSuitShader;
 			trap_R_AddRefEntityToScene( ent );
 		}
+#ifdef USE_RUNES
+    if( cent->client->inventory[RUNE_RESIST] ) {
+      ent->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(3)) ].altShader3;
+      trap_R_AddRefEntityToScene( ent );
+    }
+    if( cent->client->inventory[RUNE_REGEN] 
+      && cent->currentState.eType != ET_MISSILE ) {
+      if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+        ent->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(2)) ].altShader3;
+				trap_R_AddRefEntityToScene( ent );
+			}
+    }
+#endif
 	}
 #endif
 }

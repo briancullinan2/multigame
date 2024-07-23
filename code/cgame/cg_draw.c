@@ -1569,6 +1569,53 @@ static float CG_DrawPowerups( float y ) {
 		active++;
 	}
 
+#ifdef USE_RUNES
+	// always draw rune first if there is one
+	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;
+	if (cg_entities[cg.clientNum].items[cg_entities[cg.clientNum].rune])
+	{
+		item = BG_FindItemForRune(cg_entities[cg.clientNum].rune);
+		if (item)
+		{
+			color = 1;
+
+			y -= ICON_SIZE;
+
+			trap_R_SetColor(colors[color]);
+			CG_DrawField(x, y, 2, sortedTime[i] / 1000);
+
+			t = cg_entities[cg.clientNum].items[cg_entities[cg.clientNum].rune];
+			if (t - cg.time >= POWERUP_BLINKS * POWERUP_BLINK_TIME)
+			{
+				trap_R_SetColor(NULL);
+			}
+			else
+			{
+				vec4_t modulate;
+
+				f = (float)(t - cg.time) / POWERUP_BLINK_TIME;
+				f -= (int)f;
+				modulate[0] = modulate[1] = modulate[2] = modulate[3] = f;
+				trap_R_SetColor(modulate);
+			}
+
+			if (cg.powerupActive == cg_entities[cg.clientNum].rune &&
+					cg.time - cg.powerupTime < PULSE_TIME)
+			{
+				f = 1.0 - ((float)(cg.time - cg.powerupTime) / PULSE_TIME);
+				size = ICON_SIZE * (1.0 + (PULSE_SCALE - 1.0) * f);
+			}
+			else
+			{
+				size = ICON_SIZE;
+			}
+
+			CG_DrawPic(cgs.screenXmax + 1 - size, y + ICON_SIZE / 2 - size / 2,
+								 size, size, trap_R_RegisterShader(item->icon));
+		}
+	}
+#endif
+
 	// draw the icons and timers
 	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;
 	for ( i = 0 ; i < active ; i++ ) {
@@ -2479,6 +2526,9 @@ static void CG_DrawTeamVote(void) {
 	CG_DrawString( cgs.screenXmin - 0, 90, s, colorWhite, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_PROPORTIONAL ); // DF_SHADOW?
 }
 
+#ifdef USE_RUNES
+qboolean CG_DrawRunesboard(void);
+#endif
 
 static qboolean CG_DrawScoreboard( void ) {
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
@@ -2859,6 +2909,9 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 		CG_DrawCrosshairNames();
 	} else {
 		// don't draw any status if dead or the scoreboard is being explicitly shown
+#ifdef USE_RUNES
+		if(!cg.showRunes)
+#endif
 		if ( !cg.showScores && cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
@@ -2937,9 +2990,15 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 	}
 
 	// don't draw center string if scoreboard is up
+#ifdef USE_RUNES
+	cg.runesBoardShowing = CG_DrawRunesboard();
+	if (!cg.runesBoardShowing)
+#endif
+	{
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if ( !cg.scoreBoardShowing ) {
 		CG_DrawCenterString();
+	}
 	}
 
 	if ( cgs.score_catched 

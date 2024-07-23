@@ -399,6 +399,11 @@ static int CG_CheckArmor( int damage ) {
 		return;
 #endif
 
+#ifdef USE_RUNES
+  if ( cg.inventory[ RUNE_RESIST ] )
+    return;
+#endif
+
 	if ( cg.predictedPlayerState.powerups[ PW_BATTLESUIT ] )
 		return;
 
@@ -462,12 +467,20 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 	}
 
 	// powerups prediction
-	if ( item->giType == IT_POWERUP && item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT ) {
+	if ( item->giType == IT_POWERUP && ((item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT) 
+#ifdef USE_RUNES
+    || (item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM)
+#endif
+  )) {
 		// round timing to seconds to make multiple powerup timers count in sync
 		if ( !cg.predictedPlayerState.powerups[ item->giTag ] ) {
 			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
-			if ( item->giTag == PW_HASTE ) {
+			if ( item->giTag == PW_HASTE 
+#ifdef USE_RUNES
+        || item->giTag == RUNE_HASTE
+#endif
+      ) {
 #ifdef USE_PHYSICS_VARS
         cg.predictedPlayerState.speed *= cg_hasteFactor.value;
 #else
@@ -476,6 +489,11 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 			}
 		}
 		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;
+#ifdef USE_RUNES
+    if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+      cg_entities[cg.snap->ps.clientNum].rune = item->giTag;
+    }
+#endif
 	}	
 
 	// holdable prediction
@@ -558,6 +576,14 @@ static void CG_TouchItem( centity_t *cent ) {
 #endif
 	}
 
+#ifdef USE_RUNES
+  // can only pick up one rune at a time
+  if(cg_entities[cg.snap->ps.clientNum].rune
+    && item->giType == IT_POWERUP
+    && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+    return;
+  }
+#endif
 	// grab it
 #ifdef USE_WEAPON_ORDER
   if(item->giType == IT_WEAPON) {
