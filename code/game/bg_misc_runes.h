@@ -646,7 +646,7 @@
     {
         "rune_packrat",
         "sound/items/flight.wav",
-        {"models/backpack.md3", 0, 0, 0},
+        {"models/runes/backpack.md3", 0, 0, 0},
         /* icon */ "icons/packrat",
         /* pickup */ "Pack Rat",
         30,
@@ -760,7 +760,7 @@
     {
         "rune_antipack",
         "sound/items/flight.wav",
-        {"models/backpack.md3", 0, 0, 0},
+        {"models/runes/backpack.md3", 0, 0, 0},
         /* icon */ "icons/icon_backpack",
         /* pickup */ "Anti-Pack",
         30,

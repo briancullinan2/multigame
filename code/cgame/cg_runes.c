@@ -102,7 +102,7 @@ void hud_runes(float x, float y, float w, float h, gitem_t *rune)
 	trap_R_RenderScene(&refdef);
 
 	// draw icon just below and next to the rune
-	CG_DrawString(x + 4, y + 4, va("%i", rune->giTag), color, SMALLCHAR_WIDTH / 2, SMALLCHAR_HEIGHT / 2, 0, DS_SHADOW);
+	CG_DrawString(x + 4, y + 4, va("%i", rune->giTag - RUNE_STRENGTH + 1), color, SMALLCHAR_WIDTH / 2, SMALLCHAR_HEIGHT / 2, 0, DS_SHADOW);
 
 	CG_DrawPic(x + w - 20, y + h - 20, 16, 16, itemInfo->icon);
 
@@ -173,9 +173,8 @@ qboolean CG_DrawRunesboard(void)
 		{
 
 			n = iy * 8 + ix;
-			if (n > PW_NUM_RUNES)
-			{
-				continue;
+			if (n > PW_NUM_RUNES) {
+				break;
 			}
 
 			item = BG_FindItemForRune(n);
