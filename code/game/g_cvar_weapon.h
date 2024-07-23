@@ -11,6 +11,9 @@ G_CVAR( wp_railThruWalls, "wp_railThruWalls", "0", 0, 0, qfalse, qfalse )
 #ifdef USE_BOUNCE_RAIL
 G_CVAR( wp_railBounce, "wp_railBounce", "0", 0, 0, qfalse, qfalse )
 #endif
+#ifdef USE_TELEFRAG_RAIL
+G_CVAR( wp_railTelefrag, "wp_railTelefrag", "0", 0, 0, qfalse, qfalse )
+#endif
 #ifdef USE_HOMING_MISSILE
 G_CVAR( wp_rocketHoming, "wp_rocketHoming", "0", 0, 0, qfalse, qfalse )
 #endif

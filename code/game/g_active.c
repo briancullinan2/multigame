@@ -212,7 +212,7 @@ void G_Use(gentity_t *ent) {
 
 		hit = &g_entities[touch[i]];
 
-		if (!hit->classname) {
+		if (!hit->classname || !hit->use) {
 			continue;
 		}
 
@@ -240,7 +240,8 @@ void G_Use(gentity_t *ent) {
 		}
 		else if (!Q_stricmp(hit->classname, "func_train") && !doingDoor && hit->interfaceEnt) {
 			if(hit->interfaceEnt){
-				if ((interfaceEnt = G_Find (NULL, FOFS(targetname), hit->interfaceEnt)) != NULL) {
+				if ((interfaceEnt = G_Find (NULL, FOFS(targetname), hit->interfaceEnt)) != NULL
+				 && interfaceEnt->use) {
 					interfaceEnt->use(interfaceEnt, interfaceEnt, ent);
 				}
 			}

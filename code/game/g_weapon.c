@@ -1245,6 +1245,11 @@ void FireWeapon( gentity_t *ent )
 			fire_special_railgun( ent );
 		} else
 #endif
+#ifdef USE_TELEFRAG_RAIL
+		if(wp_railTelefrag.integer) {
+			weapon_telefrag_fire( ent,muzzle,forward,right,up );
+		} else
+#endif
 		weapon_railgun_fire( ent );
 		break;
 	case WP_BFG:

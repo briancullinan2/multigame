@@ -195,6 +195,7 @@
 #define USE_BOUNCE_RAIL 1
 // enable rails that go through walls
 //#define USE_INVULN_RAILS 1
+#define USE_TELEFRAG_RAIL 1
 
 // homing rockets look for other people to track and change direction
 #define USE_HOMING_MISSILE 1
