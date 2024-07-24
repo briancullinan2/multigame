@@ -1756,3 +1756,298 @@
 "roll" "180"
 "angles" "0 180 0"
 }
+// entity 134
+{
+"classname" "rune_strength"
+"origin" "2020 -4048 -1616"
+}
+// entity 135
+{
+"classname" "rune_regen"
+"origin" "2020 -4148 -1616"
+}
+// entity 136
+{
+"classname" "rune_resist"
+"origin" "2020 -4248 -1616"
+}
+// entity 137
+{
+"classname" "rune_haste"
+"origin" "2020 -4348 -1616"
+}
+// entity 138
+{
+"classname" "rune_enviro"
+"origin" "2020 -4448 -1616"
+}
+// entity 139
+{
+"classname" "rune_flight"
+"origin" "2020 -4548 -1616"
+}
+// entity 140
+{
+"classname" "rune_berserk"
+"origin" "2020 -4648 -1616"
+}
+// entity 141
+{
+"classname" "rune_recall"
+"origin" "2020 -4748 -1616"
+}
+// entity 142
+{
+"classname" "rune_electric"
+"origin" "2020 -4848 -1616"
+}
+// entity 143
+{
+"classname" "rune_cloak"
+"origin" "2020 -4948 -1616"
+}
+// entity 144
+{
+"classname" "rune_divine"
+"origin" "2020 -5048 -1616"
+}
+// entity 145
+{
+"classname" "rune_death"
+"origin" "2120 -4048 -1616"
+}
+// entity 146
+{
+"classname" "rune_holo"
+"origin" "2120 -4148 -1616"
+}
+// entity 147
+{
+"classname" "rune_orb"
+"origin" "2120 -4248 -1616"
+}
+// entity 148
+{
+"classname" "rune_blink"
+"origin" "2120 -4348 -1616"
+}
+// entity 149
+{
+"classname" "rune_camo"
+"origin" "2120 -4448 -1616"
+}
+// entity 150
+{
+"classname" "rune_jump"
+"origin" "2120 -4548 -1616"
+}
+// entity 151
+{
+"classname" "rune_action"
+"origin" "2120 -4648 -1616"
+}
+// entity 152
+{
+"classname" "rune_vampire"
+"origin" "2120 -4748 -1616"
+}
+// entity 153
+{
+"classname" "rune_shield"
+"origin" "2120 -4848 -1616"
+}
+// entity 154
+{
+"classname" "rune_health"
+"origin" "2120 -4948 -1616"
+}
+// entity 155
+{
+"classname" "rune_radio"
+"origin" "2120 -5048 -1616"
+}
+// entity 156
+{
+"classname" "rune_switch"
+"origin" "2220 -4048 -1616"
+}
+// entity 157
+{
+"classname" "rune_icetrap"
+"origin" "2220 -4148 -1616"
+}
+// entity 158
+{
+"classname" "rune_gravity"
+"origin" "2220 -4248 -1616"
+}
+// entity 159
+{
+"classname" "rune_tele"
+"origin" "2220 -4348 -1616"
+}
+// entity 160
+{
+"classname" "rune_impact"
+"origin" "2220 -4448 -1616"
+}
+// entity 161
+{
+"classname" "rune_vengeance"
+"origin" "2220 -4548 -1616"
+}
+// entity 162
+{
+"classname" "rune_shubhat"
+"origin" "2220 -4648 -1616"
+}
+// entity 163
+{
+"classname" "rune_repulsion"
+"origin" "2220 -4748 -1616"
+}
+// entity 164
+{
+"classname" "rune_phasing"
+"origin" "2220 -4848 -1616"
+}
+// entity 165
+{
+"classname" "rune_shambler"
+"origin" "2220 -4948 -1616"
+}
+// entity 166
+{
+"classname" "rune_dualrecall"
+"origin" "2220 -5048 -1616"
+}
+// entity 167
+{
+"classname" "rune_weirdness"
+"origin" "2320 -4048 -1616"
+}
+// entity 168
+{
+"classname" "rune_phoenix"
+"origin" "2320 -4148 -1616"
+}
+// entity 169
+{
+"classname" "rune_spikecloud"
+"origin" "2320 -4248 -1616"
+}
+// entity 170
+{
+"classname" "rune_firewalk"
+"origin" "2320 -4348 -1616"
+}
+// entity 171
+{
+"classname" "rune_grapple"
+"origin" "2320 -4448 -1616"
+}
+// entity 172
+{
+"classname" "rune_athletic"
+"origin" "2320 -4548 -1616"
+}
+// entity 173
+{
+"classname" "rune_lumberjack"
+"origin" "2320 -4648 -1616"
+}
+// entity 174
+{
+"classname" "rune_houngan"
+"origin" "2320 -4748 -1616"
+}
+// entity 175
+{
+"classname" "rune_piercing"
+"origin" "2320 -4848 -1616"
+}
+// entity 176
+{
+"classname" "rune_preserve"
+"origin" "2320 -4948 -1616"
+}
+// entity 177
+{
+"classname" "rune_zenmonk"
+"origin" "2320 -5048 -1616"
+}
+// entity 178
+{
+"classname" "rune_torch"
+"origin" "2420 -4048 -1616"
+}
+// entity 179
+{
+"classname" "rune_packrat"
+"origin" "2420 -4148 -1616"
+}
+// entity 180
+{
+"classname" "rune_armor"
+"origin" "2420 -4248 -1616"
+}
+// entity 181
+{
+"classname" "rune_quad"
+"origin" "2420 -4348 -1616"
+}
+// entity 182
+{
+"classname" "rune_jack"
+"origin" "2420 -4448 -1616"
+}
+// entity 183
+{
+"classname" "rune_bluegoo"
+"origin" "2420 -4548 -1616"
+}
+// entity 184
+{
+"classname" "rune_blizzard"
+"origin" "2420 -4648 -1616"
+}
+// entity 185
+{
+"classname" "rune_thor"
+"origin" "2420 -4748 -1616"
+}
+// entity 186
+{
+"classname" "rune_sniper"
+"origin" "2420 -4848 -1616"
+}
+// entity 187
+{
+"classname" "rune_antipack"
+"origin" "2420 -4948 -1616"
+}
+// entity 188
+{
+"classname" "rune_antitele"
+"origin" "2420 -5048 -1616"
+}
+// entity 189
+{
+"classname" "rune_cluster"
+"origin" "2520 -4048 -1616"
+}
+// entity 190
+{
+"classname" "rune_tornado"
+"origin" "2520 -4148 -1616"
+}
+// entity 191
+{
+"classname" "rune_requiem"
+"origin" "2520 -4248 -1616"
+}
+// entity 192
+{
+"classname" "rune_lithium"
+"origin" "2520 -4348 -1616"
+}

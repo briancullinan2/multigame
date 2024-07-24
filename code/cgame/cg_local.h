@@ -898,7 +898,7 @@ typedef struct {
 #endif
 	qhandle_t	neutralFlagBaseModel;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	qhandle_t	overloadBaseModel;
 	qhandle_t	overloadTargetModel;
 	qhandle_t	overloadLightsModel;
@@ -996,11 +996,12 @@ typedef struct {
 	qhandle_t	battleWeaponShader;
 #ifdef USE_ADVANCED_ITEMS
 	qhandle_t	gravityWeaponShader;
-
+	qhandle_t	gravitySuitShader;
+	qhandle_t	ammoRegenShader;
 #endif
 
 	qhandle_t	hastePuffShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	qhandle_t	redKamikazeShader;
 	qhandle_t	blueKamikazeShader;
 #endif

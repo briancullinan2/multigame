@@ -80,6 +80,12 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 	}
 } 
 
+#ifdef USE_ADVANCED_ITEMS
+int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS], int team);
+#endif
+
+
+
 
 int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	int			quantity;
@@ -102,8 +108,6 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 #else
 	{
-		other->s.powerups = ent->item->giTag;
-
 		other->client->inventory[ent->item->giTag] = level.time - ( level.time % 1000 );
 
 		if ( ent->count ) {
@@ -115,6 +119,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		other->client->inventory[ent->item->giTag] += quantity * 1000;
 		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+		other->s.powerups = BG_FindPriorityShaderForInventory(ent->item->giTag, other->client->inventory, other->client->sess.sessionTeam);
 	}
 #endif
 
@@ -608,15 +613,21 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 
 #endif
 
-	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
-
 #ifdef USE_RUNES
   // can only pickup one rune at a time
-  if(/*other->rune &&*/ ent->item->giType == IT_POWERUP
+  if(ent->item->giType == IT_POWERUP
     && ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
-    return;
+		int i;
+		for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
+			if(other->client->inventory[i]) {
+				return;
+			}
+		}
   }
 #endif
+
+	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
+
 	predict = other->client->pers.predictItemPickup;
 
 	// call the item-specific pickup function
