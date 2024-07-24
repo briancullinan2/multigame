@@ -4,12 +4,12 @@ cameraPathDef
   camera_Fixed
   {
     name position
-    pos ( 1004 -3060 -1800 )
+    pos ( 1004 -3060 -1560 )
   }
   target_Fixed
   {
     name target1
-    pos ( 1004 -3560 -1800 )
+    pos ( 1004 -3560 -1560 )
   }
   event
   {

@@ -993,6 +993,16 @@ void CG_RegisterItemVisuals( int itemNum ) {
 		CG_RegisterWeapon( item->giTag );
 	}
 
+#ifdef USE_RUNES
+  // runes have a shader based on system name so the same model can be reused
+  if ( item->giType == IT_POWERUP && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM ) {
+    itemInfo->altShader1 = trap_R_RegisterShader(va( "models/runes/%s", &item->classname[5] ));
+    if ( item->world_model[1] ) {
+      itemInfo->altShader2 = trap_R_RegisterShader(va( "models/runes/%s_2", &item->classname[5] ));
+    }
+    itemInfo->altShader3 = trap_R_RegisterShader(va( "powerups/runes/%s", &item->classname[5] ));
+  }
+#endif
 	//
 	// powerups have an accompanying ring or sphere
 	//
@@ -1357,11 +1367,6 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 
 
 #ifdef USE_ADVANCED_ITEMS
-	if(powerups == PW_GRAVITYSUIT) {
-    trap_R_AddRefEntityToScene( gun );
-		gun->customShader = cgs.media.gravityWeaponShader;
-    trap_R_AddRefEntityToScene( gun );
-	}
 
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
@@ -1376,26 +1381,39 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 	if ( powerups == PW_INVIS ) {
 		gun->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( gun );
-	} else {
-		trap_R_AddRefEntityToScene( gun );
+		return;
+	}
+	
+	trap_R_AddRefEntityToScene( gun );
 
-		if ( powerups == PW_BATTLESUIT ) {
-			gun->customShader = cgs.media.battleWeaponShader;
+	if ( powerups == PW_BATTLESUIT ) {
+		gun->customShader = cgs.media.battleWeaponShader;
+		trap_R_AddRefEntityToScene( gun );
+	}
+	if ( powerups == PW_REGEN ) {
+		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			gun->customShader = cgs.media.regenShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
-		if ( powerups == PW_REGEN ) {
-			if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
-				gun->customShader = cgs.media.regenShader;
-				trap_R_AddRefEntityToScene( gun );
-			}
-		}
-		if ( powerups == PW_QUAD ) {
-			gun->customShader = cgs.media.quadWeaponShader;
+	}
+	if ( powerups == PW_QUAD ) {
+		gun->customShader = cgs.media.quadWeaponShader;
+		trap_R_AddRefEntityToScene( gun );
+	}	
+
+	if(powerups == PW_GRAVITYSUIT) {
+		gun->customShader = cgs.media.gravityWeaponShader;
+    trap_R_AddRefEntityToScene( gun );
+	}
+
+	if ( powerups == PW_REGENAMMO ) {
+		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			gun->customShader = cgs.media.ammoRegenShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
 	}
 
-
+	
 
 #else
 
@@ -1423,6 +1441,17 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 			gun->customShader = cgs.media.quadWeaponShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
+#ifdef USE_RUNES
+    if( cent->client->inventory[RUNE_RESIST] ) {
+      gun->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(3)) ].altShader3;
+      trap_R_AddRefEntityToScene( gun );
+    }
+    if( cent->rune == RUNE_STRENGTH 
+      && cent->client->inventory[cent->rune] ) {
+      gun->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(1)) ].altShader3;
+			trap_R_AddRefEntityToScene( gun );
+    }
+#endif
 	}
 
 #endif

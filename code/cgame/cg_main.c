@@ -821,6 +821,8 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 	cgs.media.battleWeaponShader = trap_R_RegisterShader("powerups/battleWeapon" );
 #ifdef USE_ADVANCED_ITEMS
 	cgs.media.gravityWeaponShader = trap_R_RegisterShader("powerups/battleWeapon%hue0.25" );
+	cgs.media.gravitySuitShader = trap_R_RegisterShader("powerups/battleSuit%hue0.25" );
+	cgs.media.ammoRegenShader = trap_R_RegisterShader("powerups/ammoregen" );
 #endif
 	cgs.media.invisShader = trap_R_RegisterShader("powerups/invisibility" );
 	cgs.media.regenShader = trap_R_RegisterShader("powerups/regen" );
@@ -881,7 +883,7 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 #endif
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	if ( cgs.gametype == GT_1FCTF || cg_buildScript.integer ) {
 		cgs.media.neutralFlagModel = trap_R_RegisterModel( "models/flags/n_flag.md3" );
 		cgs.media.flagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_neutral1" );

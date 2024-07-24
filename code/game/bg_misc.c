@@ -111,6 +111,10 @@ gitem_t	bg_itemlist[] =
 
 #ifdef USE_ADVANCED_ITEMS
 #include "./bg_misc_items2.h"
+
+#ifdef USE_RUNES
+#include "./bg_misc_runes.h"
+#endif
 #endif
 
 
@@ -1058,6 +1062,72 @@ Only in One Flag CTF games
 
 int		bg_numItems = ARRAY_LEN( bg_itemlist ) - 1;
 
+
+#ifdef USE_RUNES
+/*
+==============
+BG_FindItemForPowerup
+==============
+*/
+gitem_t	*BG_FindItemForRune( int r ) {
+	int		i;
+
+	for ( i = 0 ; i < bg_numItems ; i++ ) {
+		if ( bg_itemlist[i].giType == IT_POWERUP
+			&& bg_itemlist[i].giTag == RUNE_STRENGTH + r ) {
+			return &bg_itemlist[i];
+		}
+	}
+
+	return NULL;
+}
+#endif
+
+
+#ifdef USE_ADVANCED_ITEMS
+int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS], int team) {
+	int i;
+	int inv;
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+	if(inventory[PW_FROZEN]) {
+		return PW_FROZEN;
+	}
+#endif
+
+	if(inventory[PW_INVIS]) {
+		return PW_INVIS;
+	}
+
+	if ( inventory[PW_QUAD] ) {
+		if (team == TEAM_RED) 
+			return PW_QUAD | (PW_REDFLAG << 8);
+		else
+			return PW_QUAD;
+	}
+
+	if(inventory[PW_REGEN]) {
+		return PW_REGEN;
+	}
+
+	if(inventory[PW_BATTLESUIT]) {
+		return PW_BATTLESUIT;
+	}
+
+	inv = 0;
+	for(i = 0; i < PW_NUM_POWERUPS; i++) {
+		if(inventory[i]) {
+			if(!inv) {
+				inv = i;
+			} else {
+				inv |= (i << 8);
+			}
+		}
+	}
+
+	return inv;
+}
+#endif
 
 /*
 ===============

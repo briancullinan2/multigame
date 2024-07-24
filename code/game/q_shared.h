@@ -146,6 +146,9 @@
 
 //=============================================================
 
+// runes enable little popup powerups in random places on the map, over 60 different effects
+#define USE_RUNES 1
+
 // unholy trinity mode, start with rocket, rails, lightning
 #define USE_TRINITY 1
 // hot rockets do no self-splash damage, infinite rockets, intagib on direct hits

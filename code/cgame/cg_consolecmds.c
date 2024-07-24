@@ -516,6 +516,11 @@ void PrevClass( void );
 void NextClass( void );
 #endif
 
+#ifdef USE_RUNES
+void CG_RunesUp_f( void );
+void CG_RunesDown_f( void );
+#endif
+
 
 typedef struct {
 	const char *cmd;
@@ -532,6 +537,10 @@ static consoleCommand_t	commands[] = {
 	{ "viewpos", CG_Viewpos_f },
 	{ "+scores", CG_ScoresDown_f },
 	{ "-scores", CG_ScoresUp_f },
+#ifdef USE_RUNES
+  { "+runes", CG_RunesDown_f },
+  { "-runes", CG_RunesUp_f },
+#endif
 	{ "+zoom", CG_ZoomDown_f },
 	{ "-zoom", CG_ZoomUp_f },
 	{ "sizeup", CG_SizeUp_f },

@@ -212,6 +212,10 @@ typedef struct centity_s {
 #ifdef USE_MULTIWORLD
 	int world;
 #endif
+
+#ifdef USE_RUNES
+  int       rune;
+#endif
 } centity_t;
 
 
@@ -489,6 +493,11 @@ typedef struct {
 	qhandle_t		icon_df;
 	qhandle_t		customSkin;
 	qhandle_t   customSkin2;
+#ifdef USE_RUNES
+  qhandle_t		altShader1;
+  qhandle_t		altShader2;
+  qhandle_t		altShader3;
+#endif
 } itemInfo_t;
 
 
@@ -668,6 +677,11 @@ typedef struct {
 	qboolean	showScores;
 	qboolean	scoreBoardShowing;
 	int			scoreFadeTime;
+#ifdef USE_RUNES
+  qboolean	showRunes;
+  qboolean  runesBoardShowing;
+  int			runesFadeTime;
+#endif
 	char		killerName[MAX_NAME_LENGTH+32];
 	int			killerTime;
 	char			spectatorList[MAX_STRING_CHARS];		// list of names
@@ -884,7 +898,7 @@ typedef struct {
 #endif
 	qhandle_t	neutralFlagBaseModel;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	qhandle_t	overloadBaseModel;
 	qhandle_t	overloadTargetModel;
 	qhandle_t	overloadLightsModel;
@@ -982,11 +996,12 @@ typedef struct {
 	qhandle_t	battleWeaponShader;
 #ifdef USE_ADVANCED_ITEMS
 	qhandle_t	gravityWeaponShader;
-
+	qhandle_t	gravitySuitShader;
+	qhandle_t	ammoRegenShader;
 #endif
 
 	qhandle_t	hastePuffShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	qhandle_t	redKamikazeShader;
 	qhandle_t	blueKamikazeShader;
 #endif

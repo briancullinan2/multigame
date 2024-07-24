@@ -92,6 +92,9 @@ void P_WorldEffects( gentity_t *ent ) {
 #else
 	envirosuit = ent->client->ps.powerups[PW_BATTLESUIT] > level.time;
 #endif
+#ifdef USE_RUNES
+  envirosuit |= ent->client->inventory[RUNE_RESIST] > 0;
+#endif
 
 	//
 	// check for drowning
@@ -640,6 +643,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
 		}
+#ifdef USE_RUNES
+    else if ( ent->client->inventory[RUNE_REGEN] ) {
+      maxHealth = client->ps.stats[STAT_MAX_HEALTH];
+    }
+#endif
 		else if ( client->ps.powerups[PW_REGEN] 
 #ifdef USE_ADVANCED_ITEMS
 			|| client->inventory[PW_REGEN]
@@ -666,7 +674,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
 			}
 #else
-		if ( client->ps.powerups[PW_REGEN] ) {
+		if ( ent->client->inventory[PW_REGEN] 
+#ifdef USE_RUNES
+      || ent->client->inventory[RUNE_REGEN]
+#endif
+    ) {
 			if ( ent->health < client->ps.stats[STAT_MAX_HEALTH]) {
 				ent->health += 15;
 				if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] * 1.1 ) {
@@ -1330,21 +1342,34 @@ void ClientThink_real( gentity_t *ent ) {
 #endif
 	} else
 #endif
+
 #ifdef USE_ADVANCED_ITEMS
 	if(client->inventory[PW_FLASH] || client->inventory[PW_SUPERMAN]) {
 		client->ps.speed *= 2.6;
 	} else
 	if(client->inventory[PW_HASTE]) {
+#ifdef USE_PHYSICS_VARS
+    client->ps.speed *= g_hasteFactor.value;
+#else
 		client->ps.speed *= 1.3;
-	} else
 #endif
-	if ( client->ps.powerups[PW_HASTE] ) {
+	} else
+
+#else
+
+	if ( client->ps.powerups[PW_HASTE] 
+#ifdef USE_RUNES
+    || ent->client->inventory[RUNE_HASTE]
+#endif
+	) {
 #ifdef USE_PHYSICS_VARS
     client->ps.speed *= g_hasteFactor.value;
 #else
 		client->ps.speed *= 1.3;
 #endif
 	}
+
+#endif
 
 #ifdef USE_LOCAL_DMG
   if(g_locDamage.integer) {
@@ -1850,6 +1875,13 @@ void ClientEndFrame( gentity_t *ent ) {
 			client->ps.powerups[ i ] = 0;
 		}
 	}
+
+#ifdef USE_RUNES
+  // keep rune switch on?
+  //if(ent->client->inventory[ent->rune]) {
+  //  ent->client->inventory[ent->rune] = level.time + 100000;
+  //}
+#endif
 
 #ifdef USE_ADVANCED_ITEMS
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {

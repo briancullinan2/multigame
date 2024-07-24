@@ -29,5 +29,8 @@
 
 #ifdef USE_ADVANCED_ITEMS
 #include "./bg_misc_items2.h"
+#ifdef USE_RUNES
+#include "./bg_misc_runes.h"
+#endif
 #endif
 

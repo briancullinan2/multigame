@@ -134,6 +134,18 @@ void TossClientItems( gentity_t *self ) {
 		drop->s.time2 = item->quantity;
 	}
 
+#ifdef USE_RUNES
+
+	for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+		if(self->client->inventory[i]) {
+			dropWeapon( self, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+			self->client->inventory[i] = 0;
+			self->client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+		}
+	}
+
+#endif
+
 	// drop all the powerups if not in teamplay
 	if ( g_gametype.integer != GT_TEAM ) {
 		angle = 45;
@@ -899,6 +911,10 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
   }
 #endif
 
+#ifdef USE_RUNES
+  //self->rune = 0;
+#endif
+
 	// never gib in a nodrop
 	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP)
     && g_blood.integer
@@ -1406,6 +1422,9 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	if ( client && 
 #ifdef USE_ADVANCED_ITEMS
 	(client->inventory[PW_BATTLESUIT] || client->inventory[PW_GRAVITYSUIT] )
+#ifdef USE_RUNES
+    || client->inventory[RUNE_RESIST]
+#endif
 #else
 	client->ps.powerups[PW_BATTLESUIT] 
 #endif	
