@@ -185,6 +185,17 @@ static void CG_CalcVrect (void) {
 	cg.refdef.height = cgs.glconfig.vidHeight*size/100;
 	cg.refdef.height &= ~1;
 
+#ifdef USE_MULTIWORLD
+	if(cg_splitX.integer < 1) {
+		cg_splitX.integer = 1;
+	}
+	if(cg_splitY.integer < 1) {
+		cg_splitY.integer = 1;
+	}
+	cg.refdef.width /= cg_splitX.integer;
+	cg.refdef.height /= cg_splitY.integer;
+#endif
+
 	cg.refdef.x = (cgs.glconfig.vidWidth - cg.refdef.width)/2;
 	cg.refdef.y = (cgs.glconfig.vidHeight - cg.refdef.height)/2;
 }

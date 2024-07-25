@@ -231,6 +231,8 @@ CG_CVAR( cgwp_flameCycle, "wp_flameCycle", "40", CVAR_SERVERINFO )
 
 #ifdef USE_MULTIWORLD
 CG_CVAR( cg_worlds, "worlds", "0", CVAR_USERINFO | CVAR_ROM | CVAR_NORESTART )
+CG_CVAR( cg_splitX, "cg_splitX", "1", CVAR_USERINFO )
+CG_CVAR( cg_splitY, "cg_splitY", "1", CVAR_USERINFO )
 #endif
 
 

@@ -1647,6 +1647,11 @@ static void PM_BeginWeaponChange( int weapon ) {
 
 	PM_AddEvent( EV_CHANGE_WEAPON );
 	pm->ps->weaponstate = WEAPON_DROPPING;
+#ifdef USE_RUNES
+	if (pm->inventory[RUNE_HASTE])
+		pm->ps->weaponTime += 50;
+	else
+#endif
 	pm->ps->weaponTime += 200;
 	PM_StartTorsoAnim( TORSO_DROP );
 }
@@ -2034,16 +2039,18 @@ static void PM_Weapon( void ) {
   }
   else
 #endif
-	if ( pm->ps->powerups[PW_HASTE] 
 #ifdef USE_ADVANCED_ITEMS
-		|| pm->inventory[PW_HASTE]
+	if (pm->inventory[PW_HASTE]
 		|| pm->inventory[PW_FLASH]
 		|| pm->inventory[PW_SUPERMAN]
-#endif
 #ifdef USE_RUNES
     || pm->inventory[RUNE_HASTE]
 #endif
-	) {
+	)
+#else
+	if ( pm->ps->powerups[PW_HASTE] )
+#endif
+	{
 #ifdef USE_PHYSICS_VARS
     addTime /= g_hasteFactor.value;
 #else
@@ -2840,14 +2847,19 @@ void PmoveSingle (pmove_t *pmove) {
 		&& pm->ps->pm_type != PM_REVERSEDUPSIDEDOWN
 		&& pm->ps->pm_type != PM_UPSIDEDOWN
 #endif
-#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-    || pm->ps->pm_type == PM_FROZEN
-#endif
 	) {
 		pm->cmd.forwardmove = 0;
 		pm->cmd.rightmove = 0;
 		pm->cmd.upmove = 0;
 	}
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if( pm->ps->pm_type == PM_FROZEN ) {
+		pm->cmd.forwardmove = 0;
+		pm->cmd.rightmove = 0;
+		pm->cmd.upmove = 0;
+	}
+#endif
 
 	if ( pm_respawntimer ) {
 		pm_respawntimer -= pml.msec;
@@ -2906,15 +2918,17 @@ void PmoveSingle (pmove_t *pmove) {
 		PM_InvulnerabilityMove();
 	} else
 #endif
-	if ( pm->ps->powerups[PW_FLIGHT] 
 #ifdef USE_ADVANCED_ITEMS
-		|| pm->inventory[PW_FLIGHT]
+	if ( pm->inventory[PW_FLIGHT]
 		|| pm->inventory[PW_SUPERMAN]
-#endif
 #ifdef USE_RUNES
     || pm->inventory[RUNE_FLIGHT]
 #endif
-	) {
+	)
+#else
+	if ( pm->ps->powerups[PW_FLIGHT] )
+#endif
+	{
 		// flight powerup doesn't allow jump and has different friction
 		PM_FlyMove();
 	} else 

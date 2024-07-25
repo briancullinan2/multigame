@@ -704,7 +704,7 @@ static void CG_PersonalPortal(const centity_t *cent) {
   vec3_t		    angles, angles2, vec, velocity;
 	//vec3_t		    origin;
   refEntity_t			ent;
-  qboolean        isMirror;
+  //qboolean        isMirror;
   centity_t       *target;
   //refdef_t		    refdef;
 	float           len;
@@ -778,7 +778,7 @@ static void CG_PersonalPortal(const centity_t *cent) {
     && ent.origin[2] == ent.oldorigin[2]
   ) {
     // is mirror
-		isMirror = qtrue;
+		//isMirror = qtrue;
 		target = &cg_entities[cent->currentState.otherEntityNum];
 		if(target->currentState.eventParm) {
 			AxisClear( ent.axis );

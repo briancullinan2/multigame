@@ -31,6 +31,10 @@ static int raspectModificationCount = -1;
 static int rheightModificationCount = -1;
 static int rwidthModificationCount = -1;
 static int rfullscreenModificationCount = -1;
+#ifdef USE_MULTIWORLD
+static int splitXModificationCount = -1;
+static int splitYModificationCount = -1;
+#endif
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
@@ -273,12 +277,20 @@ void CG_UpdateCvars( void ) {
 		|| rheightModificationCount != cg_height.modificationCount
 		|| rwidthModificationCount != cg_width.modificationCount
 		|| rfullscreenModificationCount != cg_fullscreen.modificationCount
+#ifdef USE_MULTIWORLD
+		|| splitXModificationCount != cg_splitX.modificationCount
+		|| splitYModificationCount != cg_splitY.modificationCount
+#endif
 	) {
 		rmodeModificationCount = cg_mode.modificationCount;
 		raspectModificationCount = cg_aspect.modificationCount;
 		rheightModificationCount = cg_height.modificationCount;
 		rwidthModificationCount = cg_width.modificationCount;
 		rfullscreenModificationCount = cg_fullscreen.modificationCount;
+#ifdef USE_MULTIWORLD
+		splitXModificationCount = cg_splitX.modificationCount;
+		splitYModificationCount = cg_splitY.modificationCount;
+#endif
 		ResizeScreen();
 	}
 
@@ -2176,22 +2188,30 @@ void CG_AssetCache( void ) {
 void CG_EffectParse( const char *effectstr );
 
 void ResizeScreen( void ) {
+	int vidWidth;
+	int vidHeight;
 
 	// get the rendering configuration from the client system
 	trap_GetGlconfig( &cgs.glconfig );
 
 	cgs.screenXBias = 0.0;
 	cgs.screenYBias = 0.0;
+	vidWidth = cgs.glconfig.vidWidth;
+	vidHeight = cgs.glconfig.vidHeight;
+#ifdef USE_MULTIWORLD
+	vidWidth /= cg_splitX.integer;
+	vidHeight /= cg_splitY.integer;
+#endif
 	
-	if ( cgs.glconfig.vidWidth * 480 > cgs.glconfig.vidHeight * 640 ) {
+	if ( vidWidth * 480 > vidHeight * 640 ) {
 		// wide screen, scale by height
-		cgs.screenXScale = cgs.screenYScale = cgs.glconfig.vidHeight * (1.0/480.0);
-		cgs.screenXBias = 0.5 * ( cgs.glconfig.vidWidth - ( cgs.glconfig.vidHeight * (640.0/480.0) ) );
+		cgs.screenXScale = cgs.screenYScale = vidHeight * (1.0/480.0);
+		cgs.screenXBias = 0.5 * ( vidWidth - ( vidHeight * (640.0/480.0) ) );
 	}
 	else {
 		// no wide screen, scale by width
-		cgs.screenXScale = cgs.screenYScale = cgs.glconfig.vidWidth * (1.0/640.0);
-		cgs.screenYBias = 0.5 * ( cgs.glconfig.vidHeight - ( cgs.glconfig.vidWidth * (480.0/640.0) ) );
+		cgs.screenXScale = cgs.screenYScale = vidWidth * (1.0/640.0);
+		cgs.screenYBias = 0.5 * ( vidHeight - ( vidWidth * (480.0/640.0) ) );
 	}
 
 	cgs.screenXmin = 0.0 - (cgs.screenXBias / cgs.screenXScale);

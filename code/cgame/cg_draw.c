@@ -1438,7 +1438,7 @@ static float CG_DrawPowerups( float y ) {
 	// sort the list by time remaining
 	active = 0;
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
-		int itemClass = floor(i / PW_MAX_POWERUPS);
+		//int itemClass = floor(i / PW_MAX_POWERUPS);
 		t = cg.inventory[i];
 		// ZOID--don't draw if the power up has unlimited time (999 seconds)
 		// This is true of the CTF flags
@@ -3246,8 +3246,48 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// add atmospheric effects like rain and snow
 	CG_PB_RenderPolyBuffers();
 
+#ifdef USE_MULTIWORLD
+	if(cg_splitX.integer > 1 || cg_splitY.integer > 1) {
+		cg.refdef.x = 0;
+		cg.refdef.y = 0;
+	}
+#endif
+
 	// draw 3D view
 	trap_R_RenderScene( &cg.refdef );
+
+#ifdef USE_MULTIWORLD
+	if(cg_splitX.integer > 1 || cg_splitY.integer > 1) {
+		int ix, iy;
+		int entityNum = 0;
+		for(ix = 0; ix < cg_splitX.integer; ix++) {
+			for(iy = 0; iy < cg_splitY.integer; iy++) {
+				if(ix == 0 && iy == 0) {
+					continue;
+				}
+
+				for(;entityNum < MAX_GENTITIES; entityNum++) {
+					if(entityNum == cg.snap->ps.clientNum) {
+						continue;
+					}
+					if(!cg_entities[entityNum].currentState.eType) {
+						continue;
+					}
+					break;
+				}
+				// TODO: find a client to show trap_R_RenderScene( &cg_entities[] );
+
+				cg.refdef.x = ix * cgs.glconfig.vidWidth / cg_splitX.integer;
+				cg.refdef.y = iy * cgs.glconfig.vidHeight / cg_splitY.integer;
+				VectorCopy(cg_entities[entityNum].currentState.origin, cg.refdef.vieworg);
+				AnglesToAxis( cg_entities[entityNum].currentState.angles, cg.refdef.viewaxis );
+
+				trap_R_RenderScene( &cg.refdef );
+				entityNum++;
+			}
+		}
+	}
+#endif
 
 	// play warmup sounds and display text
 	CG_WarmupEvents();

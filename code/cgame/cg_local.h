@@ -1415,6 +1415,10 @@ int CG_LastAttacker( void );
 void CG_LoadMenus(const char *menuFile);
 void CG_KeyEvent( int key, qboolean down );
 void CG_MouseEvent( int x, int y, qboolean absolute );
+#ifdef USE_CLASSIC_HUD
+void CG_CLASSIC_KeyEvent( int key, qboolean down );
+void CG_CLASSIC_MouseEvent( int x, int y, qboolean absolute );
+#endif
 void CG_EventHandling( cgame_event_t type );
 void CG_RankRunFrame( void );
 void CG_SetScoreSelection(void *menu);
@@ -1637,7 +1641,7 @@ localEntity_t *CG_SmokePuff( const vec3_t p,
 void CG_BubbleTrail( const vec3_t start, const vec3_t end, float spacing );
 void CG_SpawnEffect( const vec3_t origin );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 void CG_KamikazeEffect( vec3_t org );
 void CG_ObeliskExplode( vec3_t org, int entityNum );
 void CG_ObeliskPain( vec3_t org );

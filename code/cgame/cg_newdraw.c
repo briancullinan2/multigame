@@ -209,12 +209,12 @@ static float healthColors[4][4] = {
 
 static void CG_DrawPlayerAmmoIcon( rectDef_t *rect, qboolean draw2D ) {
 	centity_t	*cent;
-	playerState_t	*ps;
+	//playerState_t	*ps;
 	vec3_t		angles;
 	vec3_t		origin;
 
 	cent = &cg_entities[cg.snap->ps.clientNum];
-	ps = &cg.snap->ps;
+	//ps = &cg.snap->ps;
 
 	if ( draw2D || (!cg_draw3dIcons.integer && cg_drawIcons.integer) ) { // bk001206 - parentheses
 	  qhandle_t	icon;
@@ -1730,7 +1730,7 @@ static qboolean CG_ClanName_HandleKey(int flags, float *special, int key) {
   return qfalse;
 }
 
-static int gamecodetoui[] = {4,2,3,0,5,1,6};
+//static int gamecodetoui[] = {4,2,3,0,5,1,6};
 static int uitogamecode[] = {4,6,2,3,1,5,7};
 
 void CG_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ) {
@@ -2332,7 +2332,7 @@ void CG_Update(const char *name) {
 
 void CG_RunMenuScript(char **args) {
 	const char *name, *name2;
-	char buff[1024];
+	//char buff[1024];
 	if (String_Parse(args, &name)) {
 		if (Q_stricmp(name, "update") == 0) {
 			if (String_Parse(args, &name2)) {

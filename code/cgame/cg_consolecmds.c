@@ -140,6 +140,12 @@ static void CG_LoadHud_f( void) {
   menuScoreboard = NULL;
 }
 
+#endif
+
+
+
+#ifdef MISSIONPACK
+
 
 static void CG_scrollScoresDown_f( void) {
 	if (menuScoreboard && cg.scoreBoardShowing) {
@@ -157,7 +163,6 @@ static void CG_scrollScoresUp_f( void) {
 		Menu_ScrollFeeder(menuScoreboard, FEEDER_BLUETEAM_LIST, qfalse);
 	}
 }
-
 
 static void CG_spWin_f( void) {
 	trap_Cvar_Set("cg_cameraOrbit", "2");
@@ -516,11 +521,6 @@ void PrevClass( void );
 void NextClass( void );
 #endif
 
-#ifdef USE_RUNES
-void CG_RunesUp_f( void );
-void CG_RunesDown_f( void );
-#endif
-
 
 typedef struct {
 	const char *cmd;
@@ -537,10 +537,6 @@ static consoleCommand_t	commands[] = {
 	{ "viewpos", CG_Viewpos_f },
 	{ "+scores", CG_ScoresDown_f },
 	{ "-scores", CG_ScoresUp_f },
-#ifdef USE_RUNES
-  { "+runes", CG_RunesDown_f },
-  { "-runes", CG_RunesUp_f },
-#endif
 	{ "+zoom", CG_ZoomDown_f },
 	{ "-zoom", CG_ZoomUp_f },
 	{ "sizeup", CG_SizeUp_f },
