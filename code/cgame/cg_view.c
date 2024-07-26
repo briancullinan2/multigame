@@ -221,7 +221,7 @@ static void CG_OffsetThirdPersonView( void ) {
 	float		focusDist;
 	float		forwardScale, sideScale;
 
-	cg.refdef.vieworg[2] += cg.predictedPlayerState.viewheight;
+	cg.refdef.vieworg[2] += cg.predictedPlayerState.viewheight * cg_playerScale.value;
 
 	VectorCopy( cg.refdefViewAngles, focusAngles );
 
@@ -240,7 +240,7 @@ static void CG_OffsetThirdPersonView( void ) {
 
 	VectorCopy( cg.refdef.vieworg, view );
 
-	view[2] += 10;
+	view[2] += 10 * cg_playerScale.value;
 
 	cg.refdefViewAngles[PITCH] *= 0.5;
 

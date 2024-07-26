@@ -1,0 +1,23 @@
+# Blender 4.2.0 MTL File: 'mountain_trees.blend'
+# www.blender.org
+
+newmtl juniper_branch
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd /Users/briancullinan/Downloads/mountain-trees/source/FoliageTextures/juniper_foliage_plane.png
+map_d /Users/briancullinan/Downloads/mountain-trees/source/FoliageTextures/juniper_foliage_plane.png
+
+newmtl pine_bark
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd /Users/briancullinan/Downloads/mountain-trees/source/BarkTextures/pine_bark/Bark004_2K_Color.png
+map_Ns /Users/briancullinan/Downloads/mountain-trees/source/BarkTextures/pine_bark/Bark004_2K_Roughness.png
+map_Bump -bm 1.000000 /Users/briancullinan/Downloads/mountain-trees/source/BarkTextures/pine_bark/Bark004_2K_NormalGL.png

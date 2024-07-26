@@ -1,0 +1,9 @@
+newmtl house6/Wood_Floor_Light
+map_Kd textures/house6/Wood_Floor_Light
+
+newmtl urban_objects/bk_sidepanel
+
+newmtl urbanq3_misc/WOOD4
+
+newmtl urbanq3_misc/pak3_rug1_bs1
+

@@ -1,0 +1,23 @@
+# Blender 4.2.0 MTL File: 'LowPolyTrees.blend'
+# www.blender.org
+
+newmtl Bark
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd bark_willow_diff_2k.jpg
+map_Ns bark_willow_rough_2k.exr
+map_Bump -bm 1.000000 bark_willow_nor_gl_2k.exr
+
+newmtl Leaves
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.206201 0.800000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2

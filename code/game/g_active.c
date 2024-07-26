@@ -1382,6 +1382,8 @@ void ClientThink_real( gentity_t *ent ) {
   }
 #endif
 
+client->ps.speed *= g_playerScale.value;
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   if(g_freezeTag.integer && g_thawTime.integer
     && ent->client->ps.powerups[PW_FROZEN]

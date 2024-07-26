@@ -522,6 +522,17 @@ void SP_target_exec( gentity_t *self ) {
 	self->use = target_use_exec;
 } 
 
+
+void target_use_kamikaze( gentity_t *self, gentity_t *other, gentity_t *activator )  {
+	self->activator = self;
+	G_StartKamikaze(self);
+}
+
+void SP_target_kamikaze( gentity_t *self ) {
+	self->use = target_use_kamikaze;
+}
+
+
 // entity
 /*QUAKED target_earthquake (1 0 0) (-16 -16 -24) (16 16 32)
 starts earthquake

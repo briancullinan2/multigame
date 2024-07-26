@@ -1,3 +1,5 @@
+
+
 models/mapobjects/multiplant/fern
 {	
     surfaceparm alphashadow

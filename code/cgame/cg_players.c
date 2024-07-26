@@ -1719,8 +1719,8 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 			CG_Error( "Bad player movement angle" );
 		}
 	}
-	legsAngles[YAW] = headAngles[YAW] + movementOffsets[ dir ];
-	torsoAngles[YAW] = headAngles[YAW] + 0.25 * movementOffsets[ dir ];
+	legsAngles[YAW] = headAngles[YAW] + movementOffsets[ dir ] * cg_playerScale.value;
+	torsoAngles[YAW] = headAngles[YAW] + 0.25 * movementOffsets[ dir ] * cg_playerScale.value;
 
 	CG_SwingAngles( torsoAngles[YAW], 25, 90, cg_swingSpeed.value, &cent->pe.torso.yawAngle, &cent->pe.torso.yawing );
 	CG_SwingAngles( legsAngles[YAW], 40, 90, cg_swingSpeed.value, &cent->pe.legs.yawAngle, &cent->pe.legs.yawing );
@@ -2701,7 +2701,7 @@ void CG_PlayerStats( centity_t *cent ) {
 	re.radius = NUMBER_SIZE / 2;
 
 	VectorCopy(cent->lerpOrigin, origin);
-	origin[2] += 50.0f; // - c * 100.0f;
+	origin[2] += 50.0f * cg_playerScale.value; // - c * 100.0f;
 
 	VectorSubtract(cg.refdef.vieworg, origin, dir);
 	CrossProduct(dir, up, vec);
@@ -2896,6 +2896,9 @@ void CG_Player( centity_t *cent ) {
 	cent->currentState.powerups = cgs.clientinfo[cent->currentState.clientNum].powerups;
 #endif
 
+	VectorScale( legs.axis[0], cg_playerScale.value, legs.axis[0] );
+	VectorScale( legs.axis[1], cg_playerScale.value, legs.axis[1] );
+	VectorScale( legs.axis[2], cg_playerScale.value, legs.axis[2] );
 	CG_AddRefEntityWithPowerups( &legs, &cent->currentState, ci->team );
 
 	// if the model failed, allow the default nullmodel to be displayed

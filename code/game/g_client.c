@@ -1214,8 +1214,10 @@ void ClientSpawn(gentity_t *ent) {
   client->pers.playerclass = client->pers.newplayerclass;  
 #endif
 
-	VectorCopy (playerMins, ent->r.mins);
-	VectorCopy (playerMaxs, ent->r.maxs);
+	//VectorCopy (playerMins, ent->r.mins);
+	//VectorCopy (playerMaxs, ent->r.maxs);
+	VectorScale(playerMins, g_playerScale.value, ent->r.mins);
+	VectorScale(playerMaxs, g_playerScale.value, ent->r.maxs);
 
 	client->ps.clientNum = index;
 

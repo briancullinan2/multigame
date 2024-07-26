@@ -197,4 +197,7 @@ G_CVAR( g_scale, "cm_scale", "1.0", 0, 0, qfalse, qfalse )
 #endif
 
 
+G_CVAR( g_playerScale, "g_playerScale", "1.0", CVAR_SERVERINFO, 0, qfalse, qfalse )
+
+
 #undef G_CVAR

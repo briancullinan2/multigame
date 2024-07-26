@@ -151,6 +151,7 @@ void SP_target_position (gentity_t *ent);
 void SP_target_location (gentity_t *ent);
 void SP_target_push (gentity_t *ent);
 void SP_target_exec (gentity_t *ent);
+void SP_target_kamikaze (gentity_t *ent);
 
 #ifdef USE_SINGLEPLAYER
 void SP_target_earthquake (gentity_t *ent);
@@ -251,6 +252,8 @@ spawn_t	spawns[] = {
 	{"target_earthquake", SP_target_earthquake},
 	{"target_player_stop", SP_target_player_stop},
 #endif
+	{"target_kamikaze", SP_target_kamikaze},
+
 
 	{"light", SP_light},
 	{"path_corner", SP_path_corner},
@@ -641,6 +644,10 @@ void SP_worldspawn( void ) {
 
 	G_SpawnString( "enableBreath", "0", &s );
 	trap_Cvar_Set( "g_enableBreath", s );
+
+
+	G_SpawnString( "_playerscale", "1.0", &s );
+	trap_Cvar_Set( "g_playerScale", s );
 
 	g_entities[ENTITYNUM_WORLD].s.number = ENTITYNUM_WORLD;
 	g_entities[ENTITYNUM_WORLD].r.ownerNum = ENTITYNUM_NONE;

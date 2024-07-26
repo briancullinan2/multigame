@@ -6,6 +6,13 @@
 #include "bg_public.h"
 #include "bg_local.h"
 
+#ifdef CGAME
+#define g_playerScale cg_playerScale
+#endif
+
+extern vmCvar_t g_playerScale;
+
+
 /*
 
 input: origin, velocity, bounds, groundPlane, trace function
@@ -227,7 +234,7 @@ void PM_StepSlideMove( qboolean gravity ) {
 	}
 
 	VectorCopy(start_o, down);
-	down[2] -= PM_STEP_HEIGHT;
+	down[2] -= PM_STEP_HEIGHT * g_playerScale.value;
 	pm->trace (&trace, start_o, pm->mins, pm->maxs, down, pm->ps->clientNum, pm->tracemask);
 	VectorSet(up, 0, 0, 1);
 	// never step up when you still have up velocity
@@ -240,7 +247,7 @@ void PM_StepSlideMove( qboolean gravity ) {
 	//VectorCopy (pm->ps->velocity, down_v);
 
 	VectorCopy (start_o, up);
-	up[2] += PM_STEP_HEIGHT;
+	up[2] += PM_STEP_HEIGHT * g_playerScale.value;
 
 	// test the player position if they were a stepheight higher
 	pm->trace (&trace, start_o, pm->mins, pm->maxs, up, pm->ps->clientNum, pm->tracemask);

@@ -1,0 +1,23 @@
+# Blender 4.2.0 MTL File: 'mountain_trees.blend'
+# www.blender.org
+
+newmtl aspen_bark
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd /Users/briancullinan/Downloads/mountain-trees/source/BarkTextures/BirchBark/wood_0027_color_2k.jpg
+map_Ns /Users/briancullinan/Downloads/mountain-trees/source/BarkTextures/BirchBark/wood_0027_roughness_2k.jpg
+map_Bump -bm 1.000000 /Users/briancullinan/Downloads/mountain-trees/source/BarkTextures/BirchBark/wood_0027_normal_opengl_2k.png
+
+newmtl aspen_branch
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd /Users/briancullinan/Downloads/mountain-trees/source/Photosynth/public/textures/aspen_branch.png
+map_d /Users/briancullinan/Downloads/mountain-trees/source/Photosynth/public/textures/aspen_branch.png

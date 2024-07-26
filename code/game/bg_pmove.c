@@ -11,6 +11,7 @@
 #ifdef USE_GRAPPLE
 
 #ifdef CGAME
+#define g_playerScale cg_playerScale
 #define g_altGrapple cg_altGrapple
 #define wp_grapplePull cgwp_grapplePull
 
@@ -99,6 +100,8 @@ extern vmCvar_t  g_wallWalk;
 extern vmCvar_t wp_portalEnable;
 extern vmCvar_t g_altPortal;
 #endif
+
+extern vmCvar_t g_playerScale;
 
 /*
 ===============
@@ -1421,13 +1424,13 @@ static void PM_CheckDuck (void)
 #endif
 	pm->ps->pm_flags &= ~PMF_INVULEXPAND;
 
-	pm->mins[0] = -15;
-	pm->mins[1] = -15;
+	pm->mins[0] = -15 * g_playerScale.value;
+	pm->mins[1] = -15 * g_playerScale.value;
 
-	pm->maxs[0] = 15;
-	pm->maxs[1] = 15;
+	pm->maxs[0] = 15 * g_playerScale.value;
+	pm->maxs[1] = 15 * g_playerScale.value;
 
-	pm->mins[2] = MINS_Z;
+	pm->mins[2] = MINS_Z * g_playerScale.value;
 
 	if (pm->ps->pm_type == PM_DEAD)
 	{

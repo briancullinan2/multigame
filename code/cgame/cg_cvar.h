@@ -73,9 +73,9 @@ CG_CVAR( cg_footsteps, "cg_footsteps", "1", CVAR_CHEAT )
 CG_CVAR( cg_tracerChance, "cg_tracerchance", "0.4", CVAR_CHEAT )
 CG_CVAR( cg_tracerWidth, "cg_tracerwidth", "1", CVAR_CHEAT )
 CG_CVAR( cg_tracerLength, "cg_tracerlength", "100", CVAR_CHEAT )
-CG_CVAR( cg_thirdPersonRange, "cg_thirdPersonRange", "40", CVAR_CHEAT )
-CG_CVAR( cg_thirdPersonAngle, "cg_thirdPersonAngle", "0", CVAR_CHEAT )
-CG_CVAR( cg_thirdPerson, "cg_thirdPerson", "0", CVAR_USERINFO | CVAR_SERVERINFO )
+CG_CVAR( cg_thirdPersonRange, "cg_thirdPersonRange", "40", CVAR_ARCHIVE )
+CG_CVAR( cg_thirdPersonAngle, "cg_thirdPersonAngle", "0", CVAR_ARCHIVE )
+CG_CVAR( cg_thirdPerson, "cg_thirdPerson", "0", CVAR_ARCHIVE | CVAR_USERINFO | CVAR_SERVERINFO )
 CG_CVAR( cg_teamChatTime, "cg_teamChatTime", "3000", CVAR_ARCHIVE  )
 CG_CVAR( cg_teamChatHeight, "cg_teamChatHeight", "0", CVAR_ARCHIVE  )
 CG_CVAR( cg_forceModel, "cg_forceModel", "0", CVAR_ARCHIVE  )
@@ -235,6 +235,7 @@ CG_CVAR( cg_splitX, "cg_splitX", "1", CVAR_USERINFO )
 CG_CVAR( cg_splitY, "cg_splitY", "1", CVAR_USERINFO )
 #endif
 
+CG_CVAR( cg_playerScale, "g_playerScale", "1.0", CVAR_SERVERINFO )
 
 
 #undef CG_CVAR

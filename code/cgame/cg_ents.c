@@ -795,7 +795,7 @@ static void CG_PersonalPortal(const centity_t *cent) {
 		}
 		*/
   } else {
-		isMirror = qfalse;
+		//isMirror = qfalse;
 		target = &cg_entities[cent->currentState.otherEntityNum];
 		if( target->currentState.eventParm ) {
 			// if it is a wall portal
