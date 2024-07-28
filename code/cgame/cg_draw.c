@@ -355,17 +355,43 @@ void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t head
 	float			len;
 	vec3_t			origin;
 	vec3_t			mins, maxs;
+	qhandle_t		hs;
 
 	ci = &cgs.clientinfo[ clientNum ];
 
 	if ( cg_draw3dIcons.integer ) {
 		cm = ci->headModel;
+		hs = ci->headSkin;
 		if ( !cm ) {
+#ifdef USE_ADVANCED_CLASS
+			if(ci->notq3) {
+				cm = ci->legsModel;
+				hs = ci->legsSkin;
+				if(!cm) {
+					return;
+				}
+			} else
+#endif
 			return;
 		}
 
 		// offset the origin y and z to center the head
 		trap_R_ModelBounds( cm, mins, maxs );
+
+#if 0 //def USE_ADVANCED_CLASS
+		if(ci->notq3) {
+
+			origin[2] = -(mins[2] + maxs[2]);
+			origin[1] = 0.5 * ( mins[1] + maxs[1] );
+
+			len = 0.7 * ( maxs[2] - mins[2] );	//all models combined into 1 file
+			origin[0] = len / 0.268;	// len / tan( fov/2 )
+
+			// allow per-model tweaking
+			VectorAdd( origin, ci->headOffset, origin );
+
+		} else {
+#endif
 
 		origin[2] = -0.5 * ( mins[2] + maxs[2] );
 		origin[1] = 0.5 * ( mins[1] + maxs[1] );
@@ -378,7 +404,11 @@ void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t head
 		// allow per-model tweaking
 		VectorAdd( origin, ci->headOffset, origin );
 
-		CG_Draw3DModelColor( x, y, w, h, ci->headModel, ci->headSkin, origin, headAngles, ci->headColor );
+#if 0 //def USE_ADVANCED_CLASS
+		}
+#endif
+
+		CG_Draw3DModelColor( x, y, w, h, cm, hs, origin, headAngles, ci->headColor );
 	} else if ( cg_drawIcons.integer ) {
 		trap_R_SetColor ( NULL );
 		CG_DrawPic( x, y, w, h, ci->modelIcon );

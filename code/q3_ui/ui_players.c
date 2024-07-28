@@ -695,7 +695,7 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	float			len;
 	float			xx;
 
-	if ( !pi->legsModel || !pi->torsoModel || !pi->headModel || !pi->animations[0].numFrames ) {
+	if ( !pi->legsModel /*|| !pi->torsoModel || !pi->headModel*/ || !pi->animations[0].numFrames ) {
 		return;
 	}
 
@@ -780,39 +780,43 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	//
 	torso.hModel = pi->torsoModel;
 	if (!torso.hModel) {
-		return;
+		//return;
+	} else {
+
+		torso.customSkin = pi->torsoSkin;
+		// for colored skins
+		memset( torso.shaderRGBA, 255, sizeof( torso.shaderRGBA ) );
+
+		VectorCopy( origin, torso.lightingOrigin );
+
+		UI_PositionRotatedEntityOnTag( &torso, &legs, pi->legsModel, "tag_torso" );
+
+		torso.renderfx = renderfx;
+
+		trap_R_AddRefEntityToScene( &torso );
+
 	}
-
-	torso.customSkin = pi->torsoSkin;
-	// for colored skins
-	memset( torso.shaderRGBA, 255, sizeof( torso.shaderRGBA ) );
-
-	VectorCopy( origin, torso.lightingOrigin );
-
-	UI_PositionRotatedEntityOnTag( &torso, &legs, pi->legsModel, "tag_torso" );
-
-	torso.renderfx = renderfx;
-
-	trap_R_AddRefEntityToScene( &torso );
 
 	//
 	// add the head
 	//
 	head.hModel = pi->headModel;
 	if (!head.hModel) {
-		return;
+		//return;
+	} else {
+			
+		head.customSkin = pi->headSkin;
+		// for colored skins
+		memset( head.shaderRGBA, 255, sizeof( head.shaderRGBA ) );
+
+		VectorCopy( origin, head.lightingOrigin );
+
+		UI_PositionRotatedEntityOnTag( &head, &torso, pi->torsoModel, "tag_head" );
+
+		head.renderfx = renderfx;
+
+		trap_R_AddRefEntityToScene( &head );
 	}
-	head.customSkin = pi->headSkin;
-	// for colored skins
-	memset( head.shaderRGBA, 255, sizeof( head.shaderRGBA ) );
-
-	VectorCopy( origin, head.lightingOrigin );
-
-	UI_PositionRotatedEntityOnTag( &head, &torso, pi->torsoModel, "tag_head" );
-
-	head.renderfx = renderfx;
-
-	trap_R_AddRefEntityToScene( &head );
 
 	//
 	// add the gun
@@ -821,6 +825,11 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 		memset( &gun, 0, sizeof(gun) );
 		gun.hModel = pi->weaponModel;
 		VectorCopy( origin, gun.lightingOrigin );
+#ifdef USE_ADVANCED_CLASS
+		if(!pi->torsoModel) {
+			UI_PositionEntityOnTag( &gun, &legs, pi->legsModel, "tag_weapon" );
+		} else
+#endif
 		UI_PositionEntityOnTag( &gun, &torso, pi->torsoModel, "tag_weapon" );
 		gun.renderfx = renderfx;
 		trap_R_AddRefEntityToScene( &gun );
@@ -912,7 +921,7 @@ static qboolean UI_RegisterClientSkin( playerInfo_t *pi, const char *modelName, 
 	Com_sprintf( filename, sizeof( filename ), "models/players/%s/head_%s.skin", modelName, skinName );
 	pi->headSkin = trap_R_RegisterSkin( filename );
 
-	if ( !pi->legsSkin || !pi->torsoSkin || !pi->headSkin ) {
+	if ( !pi->legsSkin /*|| !pi->torsoSkin || !pi->headSkin*/ ) {
 		return qfalse;
 	}
 
@@ -934,6 +943,7 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 	int			skip;
 	char		text[20000];
 	fileHandle_t	f;
+	qboolean notq3 = qfalse;
 
 	memset( animations, 0, sizeof( animation_t ) * MAX_ANIMATIONS );
 
@@ -985,7 +995,11 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 				break;
 			}
 			continue;
+		} else if ( !Q_stricmp( token, "notq3" ) ) {
+			notq3 = qtrue;
+			continue;
 		}
+
 
 		// if it is a number, start parsing animations
 		if ( token[0] >= '0' && token[0] <= '9' ) {
@@ -1014,12 +1028,15 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 			break;
 		}
 		animations[i].firstFrame = atoi( token );
-		// leg only frames are adjusted to not count the upper body only frames
-		if ( i == LEGS_WALKCR ) {
-			skip = animations[LEGS_WALKCR].firstFrame - animations[TORSO_GESTURE].firstFrame;
-		}
-		if ( i >= LEGS_WALKCR ) {
-			animations[i].firstFrame -= skip;
+
+		if(!notq3) {
+			// leg only frames are adjusted to not count the upper body only frames
+			if ( i == LEGS_WALKCR ) {
+				skip = animations[LEGS_WALKCR].firstFrame - animations[TORSO_GESTURE].firstFrame;
+			}
+			if ( i >= LEGS_WALKCR ) {
+				animations[i].firstFrame -= skip;
+			}
 		}
 
 		token = COM_Parse( &text_p );
@@ -1048,7 +1065,7 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 
 	if ( i != MAX_ANIMATIONS ) {
 		Com_Printf( "Error parsing animation file: %s\n", filename );
-		return qfalse;
+		//return qfalse;
 	}
 
 	return qtrue;
@@ -1092,25 +1109,34 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 
 	// load cmodels before models so filecache works
 
-	Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
+	Com_sprintf( filename, sizeof( filename ), "models/players/%s/tris.md3", modelName );
 	pi->legsModel = trap_R_RegisterModel( filename );
 	if ( !pi->legsModel ) {
-		Com_Printf( "Failed to load model file %s\n", filename );
-		return qfalse;
+		Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
+		pi->legsModel = trap_R_RegisterModel( filename );
+		if ( !pi->legsModel ) {
+			Com_Printf( "Failed to load model file %s\n", filename );
+			return qfalse;
+		}
 	}
+
 
 	Com_sprintf( filename, sizeof( filename ), "models/players/%s/upper.md3", modelName );
 	pi->torsoModel = trap_R_RegisterModel( filename );
 	if ( !pi->torsoModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
-		return qfalse;
+		if(!pi->legsModel) {
+			return qfalse;
+		}
 	}
 
 	Com_sprintf( filename, sizeof( filename ), "models/players/%s/head.md3", modelName );
 	pi->headModel = trap_R_RegisterModel( filename );
 	if ( !pi->headModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
-		return qfalse;
+		if(!pi->legsModel) {
+			return qfalse;
+		}
 	}
 
 	// if any skins failed to load, fall back to default

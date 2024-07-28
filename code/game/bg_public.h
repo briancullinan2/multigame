@@ -150,6 +150,11 @@ typedef enum {
 	PM_VEHICLEMOUSE,
 #endif
 
+#ifdef USE_ADVANCED_CLASS
+	PM_MONSTER, // not interested in item pickups, they come with special powerups
+	PM_STUCKDUCK, // some monsters don't move when crouching, it was really funny to watch
+#endif
+
 	PM_LOOKSPLINE, // control look angle from spline
 	PM_MOVESPLINE, // control movement from spline
 	PM_BOTHSPLINE, // control both from spline
@@ -934,6 +939,11 @@ typedef enum {
 	FLAG_STAND,
 	FLAG_STAND2RUN,
 
+	TORSO_ATTACK3,
+	TORSO_ATTACK4,
+	TORSO_ATTACKCR1,
+	TORSO_ATTACKCR2,
+
 	MAX_TOTALANIMATIONS
 } animNumber_t;
 
@@ -972,6 +982,7 @@ typedef enum {
 
 #ifdef USE_ADVANCED_CLASS
 typedef enum {
+	PCLASS_NONE,
 	PCLASS_BFG,
 	PCLASS_LIGHTNING,
 	PCLASS_RAILGUN,
@@ -996,6 +1007,11 @@ typedef enum {
 	PCLASS_WIZARD,
 	PCLASS_FREEZE,
 	PCLASS_ANTIGRAVITY,
+
+	// begin classes of monsters, not interested in item pickups
+	PCLASS_MONSTER,
+	PCLASS_SHAMBLER, // shambler
+
 
 	PCLASS_NUM_CLASSES
 } pclass_t;

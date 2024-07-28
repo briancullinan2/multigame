@@ -418,6 +418,10 @@ typedef struct {
 // TODO: fix health status
 #endif
 
+#ifdef USE_ADVANCED_CLASS
+qboolean notq3;
+#endif
+
 } clientInfo_t;
 
 

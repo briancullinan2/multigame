@@ -770,7 +770,7 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 
 
 #ifdef USE_ADVANCED_CLASS
-  if (!Q_stricmp (model, "sarge"))
+  if (Q_stristr (model, "sarge"))
      client->pers.newplayerclass = PCLASS_RANGER;
   else if (!Q_stricmp (model, "biker/red"))
      client->pers.newplayerclass = PCLASS_BFG;
@@ -778,7 +778,10 @@ qboolean ClientUserinfoChanged( int clientNum ) {
      client->pers.newplayerclass = PCLASS_LIGHTNING;
   else if (!Q_stricmp (model, "grunt/red"))
      client->pers.newplayerclass = PCLASS_RAILGUN;
+  else if (Q_stristr (model, "shambler"))
+     client->pers.newplayerclass = PCLASS_SHAMBLER;
   else {
+     client->pers.newplayerclass = PCLASS_NONE;
      //client->pers.newplayerclass = PCLASS_BFG;
      //Q_strncpyz( model, "biker/red", sizeof( model ) );
   }
@@ -1240,6 +1243,7 @@ void ClientSpawn(gentity_t *ent) {
     client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BFG );
     client->ps.ammo[WP_BFG] = 20;
     break;
+  case PCLASS_SHAMBLER:
   case PCLASS_LIGHTNING:
     client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_LIGHTNING );
     client->ps.ammo[WP_LIGHTNING] = 60;

@@ -279,7 +279,6 @@
 // players can get inside vehicles and drive or jet around
 #define USE_VEHICLES 1
 
-
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

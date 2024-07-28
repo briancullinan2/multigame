@@ -109,7 +109,7 @@ textures/terrain/mpterrax_0
 {
   qer_editorimage textures/terrain/mpterrax_0.tga
 	qer_trans 0.5
-  novlcollapse
+
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -133,7 +133,7 @@ textures/terrain/mpterrax_1
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock12c.tga
-  novlcollapse
+
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -158,7 +158,7 @@ textures/terrain/mpterrax_2
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock10c.tga
-  novlcollapse
+
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -182,7 +182,7 @@ textures/terrain/mpterrax_0to1
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock912c.tga
-  novlcollapse
+
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -213,7 +213,7 @@ textures/terrain/mpterrax_0to2
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock9c.tga
-  novlcollapse
+
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows
@@ -246,7 +246,7 @@ textures/terrain/mpterrax_1to2
 {
   q3map_terrain
   qer_editorimage textures/stone/pjrock1210c.tga
-  novlcollapse
+
   surfaceparm nolightmap
   surfaceparm terrain
   q3map_novertexshadows

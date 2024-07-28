@@ -108,6 +108,9 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 	ci->gender = GENDER_MALE;
 	ci->fixedlegs = qfalse;
 	ci->fixedtorso = qfalse;
+#ifdef USE_ADVANCED_CLASS
+	ci->notq3 = qfalse;
+#endif
 
 	// read optional parameters
 	while ( 1 ) {
@@ -163,7 +166,13 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 		} else if ( !Q_stricmp( token, "fixedtorso" ) ) {
 			ci->fixedtorso = qtrue;
 			continue;
+		} 
+#ifdef USE_ADVANCED_CLASS
+		else if ( !Q_stricmp( token, "notq3" ) ) {
+			ci->notq3 = qtrue;
+			continue;
 		}
+#endif
 
 		// if it is a number, start parsing animations
 		if ( token[0] >= '0' && token[0] <= '9' ) {
@@ -191,6 +200,10 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 			break;
 		}
 		animations[i].firstFrame = atoi( token );
+
+#ifdef USE_ADVANCED_CLASS
+		if(!ci->notq3) {
+#endif
 		// leg only frames are adjusted to not count the upper body only frames
 		if ( i == LEGS_WALKCR ) {
 			skip = animations[LEGS_WALKCR].firstFrame - animations[TORSO_GESTURE].firstFrame;
@@ -198,6 +211,9 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 		if ( i >= LEGS_WALKCR && i<TORSO_GETFLAG) {
 			animations[i].firstFrame -= skip;
 		}
+#ifdef USE_ADVANCED_CLASS
+		}
+#endif
 
 		token = COM_Parse( &text_p );
 		if ( !token[0] ) {
@@ -233,7 +249,7 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 
 	if ( i != MAX_ANIMATIONS ) {
 		CG_Printf( "Error parsing animation file: %s\n", filename );
-		return qfalse;
+		//return qfalse;
 	}
 
 	// crouch backward animation
@@ -272,6 +288,7 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 //	animations[TORSO_AFFIRMATIVE].flipflop = qtrue;
 //	animations[TORSO_NEGATIVE].flipflop = qtrue;
 	//
+
 	return qtrue;
 }
 
@@ -529,7 +546,7 @@ static qboolean	CG_RegisterClientSkin( clientInfo_t *ci, const char *teamName, c
 	}
 
 	// if any skins failed to load
-	if ( !ci->legsSkin || !ci->torsoSkin || !ci->headSkin ) {
+	if ( !ci->legsSkin /*|| !ci->torsoSkin || !ci->headSkin*/ ) {
 		return qfalse;
 	}
 	return qtrue;
@@ -552,14 +569,20 @@ qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, co
 	else {
 		headName = headModelName;
 	}
-	Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
+
+
+	Com_sprintf( filename, sizeof( filename ), "models/players/%s/tris.md3", modelName );
 	ci->legsModel = trap_R_RegisterModel( filename );
 	if ( !ci->legsModel ) {
-		Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/lower.md3", modelName );
+		Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
 		ci->legsModel = trap_R_RegisterModel( filename );
 		if ( !ci->legsModel ) {
-			Com_Printf( "Failed to load model file %s\n", filename );
-			return qfalse;
+			Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/lower.md3", modelName );
+			ci->legsModel = trap_R_RegisterModel( filename );
+			if ( !ci->legsModel ) {
+				Com_Printf( "Failed to load model file %s\n", filename );
+				return qfalse;
+			}
 		}
 	}
 
@@ -570,7 +593,9 @@ qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, co
 		ci->torsoModel = trap_R_RegisterModel( filename );
 		if ( !ci->torsoModel ) {
 			Com_Printf( "Failed to load model file %s\n", filename );
-			return qfalse;
+			if(!ci->legsModel) {
+				return qfalse;
+			}
 		}
 	}
 
@@ -588,7 +613,9 @@ qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, co
 	}
 	if ( !ci->headModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
-		return qfalse;
+		if(!ci->legsModel) {
+			return qfalse;
+		}
 	}
 
 	// if any skins failed to load, return failure
@@ -856,6 +883,9 @@ static void CG_CopyClientInfoModel( const clientInfo_t *from, clientInfo_t *to )
 	VectorCopy( from->headOffset, to->headOffset );
 	to->footsteps = from->footsteps;
 	to->gender = from->gender;
+#ifdef USE_ADVANCED_CLASS
+	to->notq3 = from->notq3;
+#endif
 
 	to->legsModel = from->legsModel;
 	to->legsSkin = from->legsSkin;
@@ -1547,6 +1577,18 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 #endif
 
 	// do the shuffle turn frames locally
+
+#ifdef USE_ADVANCED_CLASS
+	if(ci->notq3) {
+		// make a special exception for monsters, because animations are combined
+		//   if the bot stops moving to attack show that animation instead of walking
+		//CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim, cent->currentState.torsoAnim);
+		if((cent->currentState.legsAnim & ~ANIM_TOGGLEBIT) == LEGS_IDLE) {
+			cent->currentState.legsAnim = cent->currentState.torsoAnim;
+		}
+	}
+#endif
+
 	if ( cent->pe.legs.yawing && ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) == LEGS_IDLE ) {
 		CG_RunLerpFrame( ci, &cent->pe.legs, LEGS_TURN, speedScale );
 	} else {
@@ -2837,7 +2879,8 @@ void CG_Player( centity_t *cent ) {
 
 	// get the rotation information
 	CG_PlayerAngles( cent, legs.axis, torso.axis, head.axis );
-	
+
+
 	// get the animation state (after rotation, to allow feet shuffle)
 	CG_PlayerAnimation( cent, &legs.oldframe, &legs.frame, &legs.backlerp,
 		 &torso.oldframe, &torso.frame, &torso.backlerp );
@@ -2905,6 +2948,10 @@ void CG_Player( centity_t *cent ) {
 	if (!legs.hModel) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_CLASS
+	if(ci->torsoModel) {
+#endif
 
 	//
 	// add the torso
@@ -3181,10 +3228,16 @@ void CG_Player( centity_t *cent ) {
 	}
 #endif // MISSIONPACK
 
+#ifdef USE_ADVANCED_CLASS
+	}
+#endif
 
 	//
 	// add the head
 	//
+#ifdef USE_ADVANCED_CLASS
+	if(ci->headModel) {
+#endif
 #ifdef USE_HEADSHOTS
   if(!cent->pe.noHead)
   {
@@ -3218,6 +3271,9 @@ void CG_Player( centity_t *cent ) {
 #ifdef USE_HEADSHOTS
   }
 #endif
+#ifdef USE_ADVANCED_CLASS
+	}
+#endif
 
 #ifdef MISSIONPACK
 	CG_BreathPuffs(cent, &head);
@@ -3228,6 +3284,11 @@ void CG_Player( centity_t *cent ) {
 	//
 	// add the gun / barrel / flash
 	//
+#ifdef USE_ADVANCED_CLASS
+	if(!ci->torsoModel && ci->legsModel) {
+		CG_AddPlayerWeapon( &legs, NULL, cent, ci->team );
+	} else
+#endif
 	CG_AddPlayerWeapon( &torso, NULL, cent, ci->team );
 
 	// add powerups floating behind the player

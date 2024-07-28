@@ -11,15 +11,14 @@ textures/trees/pine_foliage_plane
     map textures/trees/pine_foliage_plane.tga
     blendFunc GL_ONE GL_ZERO
     alphaFunc GE128
-    depthWrite
     rgbGen identityLighting
   }
-  // {
-    //   	map $lightmap
-    //   	rgbGen identity
-    //   	blendFunc GL_DST_COLOR GL_ZERO
-    //   	depthFunc equal
-  // }
+  {
+    map $lightmap
+    rgbGen identity
+    blendFunc GL_DST_COLOR GL_ZERO
+    depthFunc equal
+  }
 }
 
 textures/house6/Wood_Floor_Light

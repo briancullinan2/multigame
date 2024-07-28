@@ -199,5 +199,9 @@ G_CVAR( g_scale, "cm_scale", "1.0", 0, 0, qfalse, qfalse )
 
 G_CVAR( g_playerScale, "g_playerScale", "1.0", CVAR_SERVERINFO, 0, qfalse, qfalse )
 
+#ifdef USE_MULTIWORLD
+G_CVAR( g_mvproto, "mvproto", "1.0", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse )
+#endif
+
 
 #undef G_CVAR

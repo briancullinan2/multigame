@@ -4235,24 +4235,18 @@ gothic_block/blocks17i
 // entity 76
 {
 "classname" "misc_portal_surface"
-"origin" "-964 272 4"
-"spawnflags" "4"
-}
-// entity 77
-{
-"classname" "misc_portal_surface"
 "origin" "-964 -300 4"
 "world" "1"
 "target" "tig_ra3-succulent"
 "spawnflags" "4"
 }
-// entity 78
+// entity 77
 {
 "classname" "misc_portal_surface"
 "origin" "128 -948 -8"
 "spawnflags" "4"
 }
-// entity 79
+// entity 78
 {
 "origin" "1073 -155 475"
 "classname" "misc_portal_camera"
@@ -4263,33 +4257,33 @@ gothic_block/blocks17i
 "spawnflags" "4"
 "world" "1"
 }
-// entity 80
+// entity 79
 {
 "classname" "item_health_large"
 "origin" "-68 -40 184"
 }
-// entity 81
+// entity 80
 {
 "classname" "trigger_always"
 "origin" "-1080 -364 444"
 "wait" "2"
 "target" "load_map1"
 }
-// entity 82
+// entity 81
 {
 "classname" "target_exec"
 "origin" "-1080 156 408"
 "targetname" "load_map1"
 "message" "load game tig_ra3-succulent"
 }
-// entity 83
+// entity 82
 {
 "classname" "trigger_always"
 "origin" "-1016 -364 444"
 "wait" "3"
 "target" "load_map_client1"
 }
-// entity 84
+// entity 83
 {
 "classname" "target_exec"
 "origin" "-1016 156 408"
@@ -4297,7 +4291,7 @@ gothic_block/blocks17i
 "message" "load tig_ra3-succulent"
 "spawnflags" "32"
 }
-// entity 85
+// entity 84
 {
 "classname" "trigger_multiple"
 "arena" "3"
@@ -4312,21 +4306,21 @@ gothic_block/blocks17i
 ( -892 -428 64 ) ( -892 -172 64 ) ( -892 -172 -64 ) common/trigger -8 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 86
+// entity 85
 {
 "classname" "trigger_always"
 "origin" "-948 -364 444"
 "wait" "4"
 "target" "load_map2"
 }
-// entity 87
+// entity 86
 {
 "classname" "target_exec"
 "origin" "-948 156 408"
 "targetname" "load_map2"
 "message" "load game tig_ra3-quiet"
 }
-// entity 88
+// entity 87
 {
 "arena" "2"
 "classname" "target_exec"
@@ -4335,14 +4329,14 @@ gothic_block/blocks17i
 "origin" "172 832 -8"
 "targetname" "trigger_world_2"
 }
-// entity 89
+// entity 88
 {
 "classname" "trigger_always"
 "origin" "-872 -364 444"
 "wait" "5"
 "target" "load_map_client2"
 }
-// entity 90
+// entity 89
 {
 "classname" "target_exec"
 "origin" "-872 156 408"
@@ -4350,7 +4344,7 @@ gothic_block/blocks17i
 "message" "load tig_ra3-quiet"
 "spawnflags" "32"
 }
-// entity 91
+// entity 90
 {
 "origin" "-996 944 448"
 "message" "Quiet Times"
@@ -4362,19 +4356,19 @@ gothic_block/blocks17i
 "target" "world1_dir"
 "roll" "270"
 }
-// entity 92
+// entity 91
 {
 "classname" "target_position"
 "origin" "424 -84 -144"
 "targetname" "world1_dir"
 }
-// entity 93
+// entity 92
 {
 "classname" "misc_model"
 "origin" "972 -24 -136"
 "model" "models/mapobjects/podium/podium4.md3"
 }
-// entity 94
+// entity 93
 {
 "arena" "4"
 "classname" "trigger_multiple"
@@ -4389,12 +4383,12 @@ gothic_block/blocks17i
 ( 1012 -144 -16 ) ( 1012 112 -16 ) ( 1012 112 -144 ) common/trigger 0 0 0 0.5 0.5 134217728 0 0
 }
 }
-// entity 95
+// entity 94
 {
 "classname" "info_player_intermission"
 "origin" "768 -24 28"
 }
-// entity 96
+// entity 95
 {
 "classname" "target_exec"
 "origin" "996 -76 88"
@@ -4402,14 +4396,14 @@ gothic_block/blocks17i
 "message" "camera tig_ra3-lobby_playeredit"
 "spawnflags" "32"
 }
-// entity 97
+// entity 96
 {
 "classname" "target_push"
 "origin" "980 -20 -8"
 "targetname" "start_playeredit"
 "target" "start_playerwait"
 }
-// entity 98
+// entity 97
 {
 "classname" "target_position"
 "origin" "864 -20 4"

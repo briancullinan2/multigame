@@ -482,6 +482,23 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		}
 	}
 
+#ifdef USE_MULTIWORLD
+	if(g_mvproto.integer > 0) {
+		G_SpawnInt( "notmultiworld", "0", &i );
+		if ( i ) {
+			G_FreeEntity( ent );
+			return;
+		}
+	} else {
+		G_SpawnInt( "multiworld", "0", &i );
+		if ( i ) {
+			G_FreeEntity( ent );
+			return;
+		}
+	}
+
+#endif
+
 #ifdef MISSIONPACK
 	G_SpawnInt( "notta", "0", &i );
 	if ( i ) {
