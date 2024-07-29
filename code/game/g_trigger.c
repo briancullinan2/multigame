@@ -137,7 +137,7 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 #endif
   
 
-	BG_TouchJumpPad( &other->client->ps, &self->s );
+	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory );
 }
 
 
@@ -217,15 +217,22 @@ void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 		return;
 	}
 
+#ifdef USE_ADVANCED_CLASS
+	if ( activator->client->pers.newplayerclass == PCLASS_DRAGON ) {
+		return;
+	}
+#endif
+
 #ifdef USE_ADVANCED_ITEMS
 	if ( activator->client->inventory[PW_FLIGHT] 
 		|| activator->client->inventory[PW_SUPERMAN] ) {
 		return;
 	}
-#endif
+#else
 	if ( activator->client->ps.powerups[PW_FLIGHT] ) {
 		return;
 	}
+#endif
 
 	VectorCopy (self->s.origin2, activator->client->ps.velocity);
 

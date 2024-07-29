@@ -695,7 +695,7 @@ static void CG_TouchTriggerPrediction( void ) {
         continue;
 #endif
 
-			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
+			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory );
 		}
 	}
 

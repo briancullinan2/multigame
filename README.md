@@ -85,6 +85,8 @@ Unofficial Quake III Arena gamecode patch
   * TODO: zombies can't be killed again, immortal, but also walk very slowly, half speed
   * TODO: in the spirit of lame bot code, all the cyborgs should get depth hack powerup after their stamina recharges
   * TODO: add stamina that forces the player to walk instead of run, and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
+  * TODO: make multiplayer monsters like the new Doom game where you can play as the monster with special powers instead of weapons.
+  * TODO: add special ability powerups like Sarge can teleport in Quake Champions after waiting for a minute
 
 
 # Documentation

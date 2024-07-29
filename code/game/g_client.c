@@ -780,6 +780,8 @@ qboolean ClientUserinfoChanged( int clientNum ) {
      client->pers.newplayerclass = PCLASS_RAILGUN;
   else if (Q_stristr (model, "shambler"))
      client->pers.newplayerclass = PCLASS_SHAMBLER;
+  else if (Q_stristr (model, "dragon"))
+     client->pers.newplayerclass = PCLASS_DRAGON;
   else {
      client->pers.newplayerclass = PCLASS_NONE;
      //client->pers.newplayerclass = PCLASS_BFG;
@@ -1239,6 +1241,12 @@ void ClientSpawn(gentity_t *ent) {
 #ifdef USE_ADVANCED_CLASS
   //assign weapons according to class
   switch (client->pers.playerclass){
+  case PCLASS_DRAGON:
+#ifdef USE_FLAME_THROWER
+    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
+    client->ps.ammo[WP_FLAME_THROWER] = 40;
+#endif
+    break;
   case PCLASS_BFG:
     client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BFG );
     client->ps.ammo[WP_BFG] = 20;

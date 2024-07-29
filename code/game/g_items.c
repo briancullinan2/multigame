@@ -649,6 +649,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		break;
 	case IT_POWERUP:
 		respawn = Pickup_Powerup(ent, other);
+		// brian cullinan - why?
 		// allow prediction for some powerups
 		//if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
 		//	predict = qtrue;

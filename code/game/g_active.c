@@ -557,7 +557,8 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		memset( &pm, 0, sizeof( pm ) );
 		pm.ps = &client->ps;
 #ifdef USE_ADVANCED_ITEMS
-		memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
+		// spectators don't have inventory?
+		//memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
 #endif
 		pm.cmd = *ucmd;
 		if ( client->noclip )
@@ -648,14 +649,17 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
       maxHealth = client->ps.stats[STAT_MAX_HEALTH];
     }
 #endif
-		else if ( client->ps.powerups[PW_REGEN] 
 #ifdef USE_ADVANCED_ITEMS
-			|| client->inventory[PW_REGEN]
+		else if ( client->inventory[PW_REGEN]
 			|| client->inventory[PW_SUPERMAN] // obviously because he's healed by sun
-#endif
-		) {
+		){
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH];
 		}
+#else
+		else if ( client->ps.powerups[PW_REGEN] ) {
+			maxHealth = client->ps.stats[STAT_MAX_HEALTH];
+		}
+#endif
 		else {
 			maxHealth = 0;
 		}
@@ -674,11 +678,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
 			}
 #else
-		if ( ent->client->inventory[PW_REGEN] 
-#ifdef USE_RUNES
-      || ent->client->inventory[RUNE_REGEN]
-#endif
-    ) {
+		if ( ent->client->ps.powerups[PW_REGEN] ) {
 			if ( ent->health < client->ps.stats[STAT_MAX_HEALTH]) {
 				ent->health += 15;
 				if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] * 1.1 ) {
@@ -1458,6 +1458,9 @@ client->ps.speed *= g_playerScale.value;
 #endif
 
 	pm.ps = &client->ps;
+#ifdef USE_ADVANCED_CLASS
+	pm.playerClass = client->pers.newplayerclass; // possible for bgmove to change a player class using a powerup?
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
 #endif
@@ -1884,8 +1887,11 @@ void ClientEndFrame( gentity_t *ent ) {
   //  ent->client->inventory[ent->rune] = level.time + 100000;
   //}
 #endif
-
+#ifdef USE_ADVANCED_CLASS
+	//client->pers.newplayerclass = pm.playerClass; // possible for bgmove to change a player class using a powerup?
+#endif
 #ifdef USE_ADVANCED_ITEMS
+	//memcpy(client->inventory, pm.inventory, sizeof(client->inventory));
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
 		gitem_t *item = BG_FindItemForPowerup(i);
 		if(item->giType != IT_HOLDABLE &&

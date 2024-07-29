@@ -269,13 +269,18 @@ static void PM_Friction( void ) {
 			vel[2] = 0.0f;
 		else
 #endif
-#ifdef USE_ADVANCED_ITEMS
-		if ( pm->inventory[ PW_FLIGHT ] || pm->inventory[ PW_SUPERMAN ] )
+#ifdef USE_ADVANCED_CLASS
+		if(pm->playerClass == PCLASS_DRAGON)
 			vel[2] = 0.0f;
 		else
 #endif
+#ifdef USE_ADVANCED_ITEMS
+		if ( pm->ps->pm_type == PM_SPECTATOR || pm->inventory[ PW_FLIGHT ] || pm->inventory[ PW_SUPERMAN ] )
+			vel[2] = 0.0f;
+#else
 		if ( pm->ps->pm_type == PM_SPECTATOR || pm->ps->powerups[ PW_FLIGHT ] )
 			vel[2] = 0.0f; // no slow-sinking/raising movements
+#endif
 		return;
 	}
 
@@ -303,14 +308,20 @@ static void PM_Friction( void ) {
 		drop += speed*pm_flightfriction*pml.frametime;
 	} else
 #endif
+#ifdef USE_ADVANCED_CLASS
+	if(pm->playerClass == PCLASS_DRAGON) {
+		drop += speed*pm_flightfriction*pml.frametime;
+	}
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	if ( pm->inventory[PW_FLIGHT] || pm->inventory[PW_SUPERMAN] ) {
 		drop += speed*pm_flightfriction*pml.frametime;
-	} else
-#endif
+	}
+#else
 	if ( pm->ps->powerups[PW_FLIGHT]) {
 		drop += speed*pm_flightfriction*pml.frametime;
 	}
+#endif
 
 #ifdef USE_LADDERS
   if ( pml.ladder ) // If they're on a ladder... 
@@ -2921,6 +2932,11 @@ void PmoveSingle (pmove_t *pmove) {
 		PM_InvulnerabilityMove();
 	} else
 #endif
+#ifdef USE_ADVANCED_CLASS
+	if(pm->playerClass == PCLASS_DRAGON) {
+		PM_FlyMove();
+	} else
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	if ( pm->inventory[PW_FLIGHT]
 		|| pm->inventory[PW_SUPERMAN]
@@ -2982,17 +2998,23 @@ void PmoveSingle (pmove_t *pmove) {
 		return;
 	}
 #endif
+#ifdef USE_ADVANCED_CLASS
+	if ( pm->playerClass == PCLASS_DRAGON && !pml.groundPlane ) {
+		// don't snap velocity in free-fly or we will be not able to stop via flight friction
+		return;
+	}
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	if ( (pm->inventory[PW_FLIGHT] || pm->inventory[PW_SUPERMAN]) && !pml.groundPlane ) {
 		// don't snap velocity in free-fly or we will be not able to stop via flight friction
 		return;
 	}
-#endif
-
+#else
 	if ( pm->ps->powerups[PW_FLIGHT] && !pml.groundPlane ) {
 		// don't snap velocity in free-fly or we will be not able to stop via flight friction
 		return;
 	}
+#endif
 
 	// snap some parts of playerstate to save network bandwidth
 	trap_SnapVector( pm->ps->velocity );

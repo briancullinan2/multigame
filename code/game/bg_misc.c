@@ -1843,7 +1843,12 @@ void BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm
 BG_TouchJumpPad
 ========================
 */
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
+#ifdef USE_ADVANCED_ITEMS
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory ) 
+#else
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) 
+#endif
+{
 	vec3_t	angles;
 	float p;
 	int effectNum;
@@ -1857,10 +1862,16 @@ void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if ( inventory[PW_FLIGHT] || inventory[PW_SUPERMAN] ) {
+		return;
+	}
+#else
 	// flying characters don't hit bounce pads
 	if ( ps->powerups[PW_FLIGHT] ) {
 		return;
 	}
+#endif
 
 	// if we didn't hit this same jumppad the previous frame
 	// then don't play the event sound again if we are in a fat trigger

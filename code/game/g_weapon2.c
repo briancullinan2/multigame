@@ -837,6 +837,10 @@ FLAME_THROWER
 */
 void Weapon_fire_flame (gentity_t *ent ) {
 	gentity_t *m;
+	// because this is set in another file, i have to copy here
+	AngleVectors( ent->client->ps.viewangles, forward, right, up );
+
+	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
 
 	m = fire_flame(ent, muzzle, forward);
 	m->damage *= s_quadFactor;

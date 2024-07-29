@@ -1587,7 +1587,7 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 	if(ci->notq3) {
 		// make a special exception for monsters, because animations are combined
 		//   if the bot stops moving to attack show that animation instead of walking
-		//CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim, cent->currentState.torsoAnim);
+		CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim, cent->currentState.torsoAnim);
 		if((cent->currentState.legsAnim & ~ANIM_TOGGLEBIT) == LEGS_IDLE) {
 			cent->currentState.legsAnim = cent->currentState.torsoAnim;
 		}

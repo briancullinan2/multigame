@@ -388,6 +388,10 @@ typedef struct {
 	int inventory[PW_NUM_POWERUPS];
 #endif
 
+#ifdef USE_ADVANCED_CLASS
+	int playerClass;
+#endif
+
 #ifdef USE_VEHICLES
 // STONELANCE
         car_t           *car;
@@ -1011,6 +1015,7 @@ typedef enum {
 	// begin classes of monsters, not interested in item pickups
 	PCLASS_MONSTER,
 	PCLASS_SHAMBLER, // shambler
+	PCLASS_DRAGON, // always flies because i lack animation ambition
 
 
 	PCLASS_NUM_CLASSES
@@ -1228,7 +1233,11 @@ void	BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 
 void	BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm, playerState_t *ps, int entityNum );
 
+#ifdef USE_ADVANCED_ITEMS
+void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory );
+#else
 void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
+#endif
 
 void	BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap );
 void	BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );

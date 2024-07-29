@@ -19,7 +19,7 @@ teams {
   { "Champions" "ui/assets/champions" "Sarge" "Crash" "Xaero" "Major" "Doom" "Ranger" "Mynx" }
 	{ "Undead" "ui/assets/undead" "Bones" "Slash" "Razor" "Orbb" "Biker" "Anarki" "Lucy" }
 	{ "Vadrigar" "ui/assets/vadrigar" "Visor" "Klesk" "Uriel" "Hunter" "Sorlag" }
-	{ "Splitgate" "ui/assets/splitgate" "Ranger" "Fiend" "Dog" "Shambler" "Vore" "Slipgate" "Ogre" "Zombie" "Scourge" "Enemy" }
+	{ "Splitgate" "ui/assets/splitgate" "Ranger" "Fiend" "Dog" "Shambler" "Vore" "Slipgate" "Ogre" "Zombie" "Scourge" "Enemy" "Knight" }
 	{ "Troopers" "ui/assets/troopers" "Human" "Battlesuit" "Builder" "Dretch" }
 }
 
@@ -81,6 +81,7 @@ characters {
 	{ "Battlesuit" "battle" }
 	{ "Builder" "builder" }
 	{ "Dretch" "dretch" }
+	{ "Knight" "knight" }
 }
 
 aliases {
