@@ -540,6 +540,8 @@ static qboolean	CG_RegisterClientSkin( clientInfo_t *ci, const char *teamName, c
 
 	if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, headModelName, headSkinName, "head", "skin" ) ) {
 		ci->headSkin = trap_R_RegisterSkin( filename );
+	} else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, modelName, headSkinName, "head", "skin" ) ) {
+		ci->headSkin = trap_R_RegisterSkin( filename );
 	}
 	if (!ci->headSkin) {
 		Com_Printf( "Head skin load failure: %s\n", filename );
@@ -654,7 +656,7 @@ qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, co
 	else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, headName, headSkinName, "icon", "tga" ) ) {
 		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
 	}
-	else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, modelName, headSkinName, "icon", "tga" ) ) {
+	else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, modelName, "default", "icon", "tga" ) ) {
 		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
 	}
 

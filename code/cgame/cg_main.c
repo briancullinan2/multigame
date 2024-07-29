@@ -1703,17 +1703,6 @@ static qboolean Character_Parse(char **p) {
 				token = COM_ParseExt(p, qtrue);
 			}
 
-    
-      cg.characterList[cg.characterCount].headImage = -1;
-			if(!cg.characterList[cg.characterCount].headModel) {
-				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
-				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
-			} else {
-				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/heads/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
-				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
-			}
-
-
 			if (tempStr && (!Q_stricmp(tempStr, "female"))) {
 					cg.characterList[cg.characterCount].base = String_Alloc(va("Janet"));
 				} else if (tempStr && (!Q_stricmp(tempStr, "male"))) {
@@ -1723,6 +1712,24 @@ static qboolean Character_Parse(char **p) {
 			}
 
       Com_Printf("Loaded %s character %s.\n", cg.characterList[cg.characterCount].base, cg.characterList[cg.characterCount].name);
+
+
+      cg.characterList[cg.characterCount].headImage = -1;
+			if(!cg.characterList[cg.characterCount].headModel) {
+				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+				if(!cg.characterList[cg.characterCount].headImage) {
+					cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/%s/icon_default.tga", cg.characterList[cg.characterCount].base));
+					cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+				}
+			} else {
+				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/heads/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+			}
+
+
+
+
       if (cg.characterCount < MAX_HEADS) {
         cg.characterCount++;
       } else {

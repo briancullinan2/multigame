@@ -14,12 +14,12 @@ teams {
   { "Crusaders" "ui/assets/crusaders"  "Darkangel" "Lionheart" "Bradamante" "Furioso" "Aria"  }
   { "Intruders" "ui/assets/intruders" "Morgan" "Punisher" "Gaunt" "November" "Whyrlwnd" }
   { "Pagans"  "ui/assets/pagans" "Khan" "Deadeye" "WarLokk" "Callisto" "Gargouille" }
-  { "Stroggs" "ui/assets/stroggs" "Enforcer" "Icarus" "Gammy" "Gladiator" "Paracyte" "Pi" "Fritzkrieg" "TankJr" }
+  { "Stroggs" "ui/assets/stroggs" "Grunt" "Enforcer" "Icarus" "Gammy" "Gladiator" "Paracyte" "Pi" "Fritzkrieg" "TankJr" "Berserker" "Black Widow" "Insane" "Hover" "Mutant" "Stomper" }
   { "The Fallen" "ui/assets/thefallen" "Neptune" "Stalker" "Ursula" "Abominator" "Sinister" }
   { "Champions" "ui/assets/champions" "Sarge" "Crash" "Xaero" "Major" "Doom" "Ranger" "Mynx" }
 	{ "Undead" "ui/assets/undead" "Bones" "Slash" "Razor" "Orbb" "Biker" "Anarki" "Lucy" }
 	{ "Vadrigar" "ui/assets/vadrigar" "Visor" "Klesk" "Uriel" "Hunter" "Sorlag" }
-	{ "Splitgate" "ui/assets/splitgate" "Fiend" "Dog" "Shambler" "Vore" "Slipgate" "Ogre" }
+	{ "Splitgate" "ui/assets/splitgate" "Ranger" "Fiend" "Dog" "Shambler" "Vore" "Slipgate" "Ogre" "Zombie" "Scourge" "Enemy" }
 }
 
 
@@ -49,6 +49,7 @@ characters {
 	{ "Bones" "bones" }
 	{ "Slash" "slash" }
 	{ "Razor" "razor" }
+	{ "Grunt" "grunt" }
 	{ "Orbb" "orbb" }
 	{ "Biker" "biker" }
 	{ "Anarki" "anarki" }
@@ -64,6 +65,15 @@ characters {
 	{ "Vore" "shalrath" }
 	{ "Slipgate" "slipgate" }
 	{ "Ogre" "ogre" }
+	{ "Zombie" "mummy" }
+	{ "Berserker" "berserker" }
+	{ "Black Widow" "widow" }
+	{ "Scourge" "dragon" }
+	{ "Enemy" "enforcer" }
+	{ "Insane" "insane" }
+	{ "Hover" "hover" }
+	{ "Mutant" "mutant" }
+	{ "Stomper" "gladiatr" }
 }
 
 aliases {

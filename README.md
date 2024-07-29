@@ -82,6 +82,10 @@ Unofficial Quake III Arena gamecode patch
   * automatically generate the rest of team assets like colors players using dynamic skins
   * LookAtKiller and LookAheadOf for aimbot powerup
   * Add spawn point as a target for homing missiles if there are no other players, add homing plasma, homing bullets, homing bfg, etc
+  * TODO: zombies can't be killed again, immortal, but also walk very slowly, half speed
+  * TODO: in the spirit of lame bot code, all the cyborgs should get depth hack powerup after their stamina recharges
+  * TODO: add stamina that forces the player to walk instead of run, and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
+
 
 # Documentation
 
