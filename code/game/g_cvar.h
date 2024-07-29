@@ -158,6 +158,7 @@ G_CVAR( g_supportsWeaponOrder, "g_supportsWeaponOrder", "1", CVAR_SERVERINFO | C
 G_CVAR( g_hordeMode, "g_hordeMode", "0", CVAR_TEMP, 0, qfalse, qfalse )
 G_CVAR( g_hordeRed,  "g_hordeRed", "0", CVAR_TEMP, 0, qfalse, qfalse )
 G_CVAR( g_hordeBlue, "g_hordeBlue", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeBodies, "g_hordeBodies", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 
 #ifdef USE_ADVANCED_ITEMS

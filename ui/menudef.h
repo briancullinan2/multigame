@@ -138,6 +138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define CG_PLAYER_ARMOR_VALUE 2
 #define CG_PLAYER_HEAD 3
 #define CG_PLAYER_HEALTH 4
+#define CG_PLAYER_STAMINA 70
 #define CG_PLAYER_AMMO_ICON 5
 #define CG_PLAYER_AMMO_VALUE 6
 #define CG_SELECTEDPLAYER_HEAD 7

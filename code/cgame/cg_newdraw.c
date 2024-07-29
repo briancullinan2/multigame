@@ -572,6 +572,33 @@ static void CG_DrawSelectedPlayerHead( rectDef_t *rect, qboolean draw2D, qboolea
 }
 
 
+#ifdef USE_RPG_STATS
+static void CG_DrawPlayerStamina(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
+	playerState_t	*ps;
+  int value;
+	char	num[16];
+
+	ps = &cg.snap->ps;
+
+	value = ps->stats[STAT_STAMINA];
+
+	if (shader) {
+		trap_R_SetColor( color );
+		CG_DrawPic(rect->x, rect->y, rect->w, rect->h, shader);
+		trap_R_SetColor( NULL );
+	} else {
+		Com_sprintf (num, sizeof(num), "%i", value);
+	  value = CG_Text_Width(num, scale, 0);
+	  CG_Text_Paint(rect->x + (rect->w - value) / 2, rect->y + rect->h - 20, scale, color, num, 0, 0, textStyle);
+	}
+
+	
+}
+
+#endif
+
+
+
 static void CG_DrawPlayerHealth(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle ) {
 	playerState_t	*ps;
   int value;
@@ -590,6 +617,8 @@ static void CG_DrawPlayerHealth(rectDef_t *rect, float scale, vec4_t color, qhan
 	  value = CG_Text_Width(num, scale, 0);
 	  CG_Text_Paint(rect->x + (rect->w - value) / 2, rect->y + rect->h, scale, color, num, 0, 0, textStyle);
 	}
+
+
 }
 
 
@@ -954,6 +983,11 @@ float CG_GetValue(int ownerDraw) {
   case CG_PLAYER_HEALTH:
 		return ps->stats[STAT_HEALTH];
     break;
+#ifdef USE_RPG_STATS
+  case CG_PLAYER_STAMINA:
+		return ps->stats[STAT_STAMINA];
+    break;
+#endif
   case CG_RED_SCORE:
 		return cgs.scores1;
     break;
@@ -1995,6 +2029,11 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
   case CG_PLAYER_HEALTH:
     CG_DrawPlayerHealth(&rect, scale, color, shader, textStyle);
     break;
+#ifdef USE_RPG_STATS
+  case CG_PLAYER_STAMINA:
+    CG_DrawPlayerStamina(&rect, scale, color, shader, textStyle);
+    break;
+#endif
   case CG_RED_SCORE:
     CG_DrawRedScore(&rect, scale, color, shader, textStyle);
     break;

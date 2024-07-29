@@ -713,6 +713,15 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			}
 		}
 
+// i had a friend Dan in college that added this feature to the half life 2 engine, our plan was to compile target for playstation leaked sdk
+#ifdef USE_RPG_STATS
+		if(!( client->pers.cmd.buttons & BUTTON_WALKING )
+			&& client->pers.cmd.forwardmove != 0
+			&& client->ps.stats[STAT_STAMINA] > 0) {
+			client->ps.stats[STAT_STAMINA]--;
+		}
+#endif
+
 		// count down armor when over max
 		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
 			client->ps.stats[STAT_ARMOR]--;

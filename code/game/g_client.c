@@ -392,8 +392,19 @@ void CopyToBodyQue( gentity_t *ent ) {
 	body->r.contents = CONTENTS_CORPSE;
 	body->r.ownerNum = ent->s.number;
 
+#ifdef USE_HORDES
+	if(g_hordeBodies.integer) {
+
+	} else {
+#endif
+
 	body->nextthink = level.time + 5000;
 	body->think = BodySink;
+
+#ifdef USE_HORDES
+	}
+#endif
+
 
 	body->die = body_die;
 
@@ -1424,6 +1435,9 @@ if(g_hotBFG.integer) {
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+	client->ps.stats[STAT_STAMINA] = 100;
+#endif
 
 #ifdef USE_LOCAL_DMG
   // return to normal speed, McBain

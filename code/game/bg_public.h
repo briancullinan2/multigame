@@ -484,6 +484,9 @@ void Pmove (pmove_t *pmove);
 // NOTE: may not have more than 16
 typedef enum {
 	STAT_HEALTH,
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+	STAT_STAMINA,
+#endif
 	STAT_HOLDABLE_ITEM,
 #ifdef USE_ADVANCED_ITEMS
 	STAT_HOLDABLE_AVAILABLE,
@@ -491,17 +494,11 @@ typedef enum {
 #endif
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	STAT_PERSISTANT_POWERUP,
-#if 0 //def USE_ADVANCED_ITEMS
-	STAT_PERSISTANT_AVAILABLE,
-	STAT_PERSISTANT_UPDATE,
-#endif
 #endif
 	STAT_WEAPONS,					// 16 bit fields
 #ifdef USE_ADVANCED_WEAPONS
 	STAT_WEAPONS_AVAILABLE,
 	STAT_WEAPONS_UPDATE,
-	//STAT_WEAPONS_PREV,
-	//STAT_WEAPONS_NEXT,
 #endif
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)

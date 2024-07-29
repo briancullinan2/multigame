@@ -773,13 +773,48 @@ static void CG_DrawStatusBar( void ) {
 	// stretch the health up when taking damage
 	CG_DrawField( 185, y, 3, value );
 #endif
-	
+
 	CG_ColorForHealth( hcolor );
 	trap_R_SetColor( hcolor );
 
 #ifdef USE_GAME_FREEZETAG
 	}
 #endif
+
+#ifdef USE_RPG_STATS
+
+	//
+	// stamina
+	//
+	value = ps->stats[STAT_STAMINA];
+	if ( value > 100 ) {
+		color = 3; // white
+	} else if ( value > 25 ) {
+		color = 0; 	// yellow
+	} else if (value > 0) {
+		color = (cg.time >> 8) & 1;	// red/yellow flashing
+	} else {
+		color = 1; // red
+	}
+
+	if(value != INFINITE) {
+
+#ifdef USE_NEW_FONT_RENDERER
+		CG_SelectFont( 1 );
+		CG_DrawString( 185 + CHAR_WIDTH*3, y - 20, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
+		CG_SelectFont( 0 );
+#else
+		trap_R_SetColor( colors[ color ] );
+		// stretch the health up when taking damage
+		CG_DrawField( 185, y, 3, value );
+#endif
+
+		CG_ColorForHealth( hcolor );
+		trap_R_SetColor( hcolor );
+	}
+
+#endif
+
 
 	//
 	// armor
