@@ -716,9 +716,12 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 // i had a friend Dan in college that added this feature to the half life 2 engine, our plan was to compile target for playstation leaked sdk
 #ifdef USE_RPG_STATS
 		if(!( client->pers.cmd.buttons & BUTTON_WALKING )
-			&& client->pers.cmd.forwardmove != 0
-			&& client->ps.stats[STAT_STAMINA] > 0) {
-			client->ps.stats[STAT_STAMINA]--;
+			&& client->pers.cmd.forwardmove != 0) {
+			if(client->ps.stats[STAT_STAMINA] > 0) {
+				client->ps.stats[STAT_STAMINA] -= 10;
+			}
+		} else if (client->ps.stats[STAT_STAMINA] < 100) {
+			client->ps.stats[STAT_STAMINA] += 10;
 		}
 #endif
 

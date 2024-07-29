@@ -584,7 +584,7 @@ static void CG_DrawPlayerStamina(rectDef_t *rect, float scale, vec4_t color, qha
 
 	if (shader) {
 		trap_R_SetColor( color );
-		CG_DrawPic(rect->x, rect->y, rect->w, rect->h, shader);
+		CG_DrawPic(rect->x, rect->y, rect->w * value / 100.0f, rect->h, shader);
 		trap_R_SetColor( NULL );
 	} else {
 		Com_sprintf (num, sizeof(num), "%i", value);
