@@ -2869,6 +2869,18 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->cmd.upmove = 0;
 	}
 
+#ifdef USE_ADVANCED_CLASS
+
+	// strogg are funny, if they are ducking or attacking they aren't moving
+	if(pm->playerClass == PCLASS_BERSERKER || pm->playerClass == PCLASS_GUNNER) {
+		if(pm->cmd.upmove < 0 || pm->cmd.buttons & BUTTON_ATTACK) {
+			pm->cmd.forwardmove = 0;
+			pm->cmd.rightmove = 0;
+		}
+	}
+#endif
+
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   if( pm->ps->pm_type == PM_FROZEN ) {
 		pm->cmd.forwardmove = 0;
