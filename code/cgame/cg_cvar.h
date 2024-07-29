@@ -177,17 +177,19 @@ CG_CVAR( cg_damagePlum, "cg_damagePlums", "1", CVAR_USERINFO | CVAR_ARCHIVE)
 
 #ifdef USE_RPG_STATS
 CG_CVAR( cg_healthBar, "cg_healthBar", "1", CVAR_USERINFO | CVAR_TEMP )
+CG_CVAR( cg_staminaBar, "cg_staminaBar", "1", CVAR_USERINFO | CVAR_TEMP )
+CG_CVAR( cg_stamina, "g_stamina", "0", CVAR_SYSTEMINFO )
 #endif
 
 
 #ifdef USE_PHYSICS_VARS
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
-CG_CVAR( cg_scoutFactor, "cg_scoutFactor", "1.5", CVAR_SERVERINFO)
+CG_CVAR( cg_scoutFactor, "g_scoutFactor", "1.5", CVAR_SYSTEMINFO)
 #endif
-CG_CVAR( cg_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO)
-CG_CVAR( cg_jumpVelocity, "g_jumpVelocity", "270", CVAR_SERVERINFO)
-CG_CVAR( cg_gravity, "g_gravity", "800", CVAR_SERVERINFO)
-CG_CVAR( cg_wallWalk, "g_wallWalk", "0.7", CVAR_SERVERINFO)
+CG_CVAR( cg_hasteFactor, "g_hasteFactor", "1.3", CVAR_SYSTEMINFO)
+CG_CVAR( cg_jumpVelocity, "g_jumpVelocity", "270", CVAR_SYSTEMINFO)
+CG_CVAR( cg_gravity, "g_gravity", "800", CVAR_SYSTEMINFO)
+CG_CVAR( cg_wallWalk, "g_wallWalk", "0.7", CVAR_SYSTEMINFO)
 #endif
 
 CG_CVAR( cg_atmosphere, "g_atmosphere", "", CVAR_SERVERINFO | CVAR_TEMP )
@@ -235,7 +237,7 @@ CG_CVAR( cg_splitX, "cg_splitX", "1", CVAR_USERINFO )
 CG_CVAR( cg_splitY, "cg_splitY", "1", CVAR_USERINFO )
 #endif
 
-CG_CVAR( cg_playerScale, "g_playerScale", "1.0", CVAR_SERVERINFO )
+CG_CVAR( cg_playerScale, "g_playerScale", "1.0", CVAR_SYSTEMINFO )
 
 
 #undef CG_CVAR

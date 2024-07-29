@@ -11,6 +11,10 @@
 #ifdef USE_GRAPPLE
 
 #ifdef CGAME
+#ifdef USE_RPG_STATS
+#define g_stamina cg_stamina
+#endif
+
 #define g_playerScale cg_playerScale
 #define g_altGrapple cg_altGrapple
 #define wp_grapplePull cgwp_grapplePull
@@ -95,6 +99,11 @@ extern vmCvar_t  g_wallWalk;
 #endif
 
 #endif // end USE_PHYSICS_VARS
+
+
+#ifdef USE_RPG_STATS
+extern vmCvar_t g_stamina;
+#endif
 
 #ifdef USE_PORTALS
 extern vmCvar_t wp_portalEnable;
@@ -2701,8 +2710,18 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->cmd.buttons &= ~BUTTON_WALKING;
 	}
 
+#ifdef USE_ADVANCED_CLASS
+	if(pm->playerClass >= PCLASS_MONSTER && pm->playerClass <= PCLASS_MONSTER_COUNT 
+	&& pm->ps->stats[STAT_STAMINA] <= 0) {
+		if(!(pm->cmd.buttons & BUTTON_WALKING)) {
+			pm->cmd.forwardmove *= 0.5f;
+			pm->cmd.rightmove *= 0.5f;
+			pm->cmd.buttons |= BUTTON_WALKING;
+		}
+	} else
+#endif
 #ifdef USE_RPG_STATS
-	if(pm->ps->stats[STAT_STAMINA] <= 0) {
+	if(g_stamina.integer && pm->ps->stats[STAT_STAMINA] <= 0) {
 		if(!(pm->cmd.buttons & BUTTON_WALKING)) {
 			pm->cmd.forwardmove *= 0.5f;
 			pm->cmd.rightmove *= 0.5f;

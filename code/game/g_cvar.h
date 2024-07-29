@@ -50,7 +50,7 @@ G_CVAR( g_needpass, "g_needpass", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qf
 G_CVAR( g_dedicated, "dedicated", "0", 0, 0, qfalse, qfalse )
 
 G_CVAR( g_speed, "g_speed", "320", 0, 0, qtrue, qfalse )
-G_CVAR( g_gravity, "g_gravity", "800", 0, 0, qtrue, qfalse )
+G_CVAR( g_gravity, "g_gravity", "800", CVAR_SYSTEMINFO, 0, qtrue, qfalse )
 G_CVAR( g_knockback, "g_knockback", "1000", 0, 0, qtrue, qfalse )
 G_CVAR( g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue, qfalse )
 G_CVAR( g_weaponRespawn, "g_weaponrespawn", "5", 0, 0, qtrue, qfalse )
@@ -130,11 +130,11 @@ G_CVAR( g_thawTime, "g_thawTime", "180", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
 #ifdef USE_PHYSICS_VARS
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
-G_CVAR( g_scoutFactor, "g_scoutFactor", "1.5", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_scoutFactor, "g_scoutFactor", "1.5", CVAR_SYSTEMINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
 #endif
-G_CVAR( g_hasteFactor, "g_hasteFactor", "1.3", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
-G_CVAR( g_jumpVelocity, "g_jumpVelocity", "270", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
-G_CVAR( g_wallWalk, "g_wallWalk", "0.7", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_hasteFactor, "g_hasteFactor", "1.3", CVAR_SYSTEMINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_jumpVelocity, "g_jumpVelocity", "270", CVAR_SYSTEMINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
+G_CVAR( g_wallWalk, "g_wallWalk", "0.7", CVAR_SYSTEMINFO | CVAR_ARCHIVE, 0, qtrue, qfalse )
 #endif
 
 #ifdef USE_WEAPON_DROP
@@ -198,11 +198,15 @@ G_CVAR( g_scale, "cm_scale", "1.0", 0, 0, qfalse, qfalse )
 #endif
 
 
-G_CVAR( g_playerScale, "g_playerScale", "1.0", CVAR_SERVERINFO, 0, qfalse, qfalse )
+G_CVAR( g_playerScale, "g_playerScale", "1.0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 #ifdef USE_MULTIWORLD
-G_CVAR( g_mvproto, "mvproto", "1.0", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse, qfalse )
+G_CVAR( g_mvproto, "mvproto", "1.0", CVAR_SYSTEMINFO | CVAR_ROM, 0, qfalse, qfalse )
 #endif
 
+
+#ifdef USE_RPG_STATS
+G_CVAR( g_stamina, "g_stamina", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+#endif
 
 #undef G_CVAR
