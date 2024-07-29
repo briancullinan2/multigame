@@ -1,0 +1,11 @@
+2000			// health
+1.0			// pain frequency (factor)
+0			// walking speed
+0			// running speed
+120			// field of view (angle)
+0			// max jump height
+0			// walking rotation speed (angle/frame)
+0			// running rotation speed (angle/frame)
+( -16 0 -24 )		// min coords of bounding box
+( 16 24 40 )		// max coords of bounding box
+( 0 0 37 )		// eye coords

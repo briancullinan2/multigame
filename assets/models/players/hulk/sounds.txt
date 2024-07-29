@@ -1,0 +1,18 @@
+1	0	sound/npc/hulk/hulk_death1.wav
+2	7	sound/npc/hulk/hulk_death2.wav
+3	0	sound/npc/hulk/hulk_death3.wav
+4	0	sound/npc/hulk/hulk_taunt.wav
+5	1	sound/npc/hulk/hulk_attack2.wav
+6	0	sound/npc/hulk/hulk_attack1.wav
+10	4	sound/player/footsteps/heavy1.wav
+10	10	sound/player/footsteps/heavy1.wav
+10	4	sound/player/footsteps/heavy2.wav
+10	10	sound/player/footsteps/heavy2.wav
+10	4	sound/player/footsteps/heavy3.wav
+10	10	sound/player/footsteps/heavy3.wav
+10	4	sound/player/footsteps/heavy4.wav
+10	10	sound/player/footsteps/heavy4.wav
+14	0	sound/npc/hulk/hulk_pain1.wav
+14	0	sound/npc/hulk/hulk_pain2.wav
+14	0	sound/npc/hulk/hulk_pain3.wav
+-1

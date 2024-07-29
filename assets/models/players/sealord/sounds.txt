@@ -1,0 +1,24 @@
+1	0	sound/npc/sealord/sealord_death.wav
+2	0	sound/npc/sealord/sealord_death.wav
+3	0	sound/npc/sealord/sealord_death.wav
+4	4	sound/npc/sealord/sealord_taunt.wav
+5	2	sound/npc/sealord/sealord_spit.wav
+6	3	sound/npc/sealord/sealord_charge.wav
+9	6	sound/player/footsteps/heavy1.wav
+9	9	sound/player/footsteps/heavy1.wav
+9	6	sound/player/footsteps/heavy2.wav
+9	9	sound/player/footsteps/heavy2.wav
+9	6	sound/player/footsteps/heavy3.wav
+9	9	sound/player/footsteps/heavy3.wav
+9	6	sound/player/footsteps/heavy4.wav
+9	9	sound/player/footsteps/heavy4.wav
+10	6	sound/player/footsteps/heavy1.wav
+10	9	sound/player/footsteps/heavy1.wav
+10	6	sound/player/footsteps/heavy2.wav
+10	9	sound/player/footsteps/heavy2.wav
+10	6	sound/player/footsteps/heavy3.wav
+10	9	sound/player/footsteps/heavy3.wav
+10	6	sound/player/footsteps/heavy4.wav
+10	9	sound/player/footsteps/heavy4.wav
+14	0	sound/npc/sealord/sealord_pain.wav
+-1

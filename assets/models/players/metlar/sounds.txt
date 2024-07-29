@@ -1,0 +1,22 @@
+1	0	sound/npc/metlar/metlar_death1.wav
+2	0	sound/npc/metlar/metlar_death2.wav
+3	0	sound/npc/metlar/metlar_death3.wav
+4	2	sound/npc/metlar/metlar_melee.wav
+4	9	sound/npc/metlar/metlar_melee.wav
+5	0	sound/npc/metlar/metlar_attack.wav
+6	2	sound/npc/metlar/metlar_melee.wav
+8	2	sound/npc/metlar/metlar_idle.wav
+9	3	sound/player/footsteps/flesh1.wav
+9	7	sound/player/footsteps/flesh1.wav
+9	3	sound/player/footsteps/flesh2.wav
+9	7	sound/player/footsteps/flesh2.wav
+9	3	sound/player/footsteps/flesh3.wav
+9	7	sound/player/footsteps/flesh3.wav
+9	3	sound/player/footsteps/flesh4.wav
+9	7	sound/player/footsteps/flesh4.wav
+12	0	sound/npc/metlar/metlar_jump.wav
+13	0	sound/npc/land.wav
+14	0	sound/npc/metlar/metlar_pain1.wav
+14	0	sound/npc/metlar/metlar_pain2.wav
+14	0	sound/npc/metlar/metlar_pain3.wav
+-1

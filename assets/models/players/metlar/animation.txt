@@ -1,0 +1,17 @@
+// start frame, numframes, looping, frames per second
+
+0	24	0	8	// Death 1
+24	10	0	8	// Death 2
+34	13	0	8	// Death 3
+47	15	0	10	// Taunt
+62	13	0	18	// Attack far (jump attack)
+75	11	0	13	// Attack melee
+86	25	25	5	// Standing inactive (unaware of player presence)*
+112	10	10	8	// Standing active (aware of player presence)*
+122	8	8	5	// Walk (inactive)*
+122	0	0	10	// 
+122	0	0	10	// 
+132	5	0	7	// Jump
+137	5	0	12	// Land
+142	4	0	8	// Pain
+

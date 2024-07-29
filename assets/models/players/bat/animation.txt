@@ -1,0 +1,16 @@
+// start frame, numframes, looping, frames per second
+
+0	16	0	10	// Death 1
+16	12	0	6	// Death 2
+28	11	0	7	// Death 3 (falling from air)
+39	11	0	6	// Taunt
+50	8	0	12	// Attack far (ground)
+58	9	0	13	// Attack far (air)
+67	6	6	5	// Standing inactive (unaware of player presence)*
+73	6	6	7	// Standing active (aware of player presence)*
+87	13	13	13	// Fly (active)*
+79	8	8	12	// Run (active)*
+112	4	0	6	// Pain (ground)
+100	4	0	5	// "Take off"
+109	3	0	8	// "Land"
+116	3	0	5	// Pain (air)

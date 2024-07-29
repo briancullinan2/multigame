@@ -1,0 +1,16 @@
+// start frame, numframes, looping, frames per second
+
+0	42	0	8	// Death 1
+0	42	0	8	// Death 1
+0	42	0	8	// Death 1
+42	10	0	6	// Taunt
+52	4	0	8	// Attack far (shoots fireball)
+62	39	0	12	// Attack far2 (big fireball)
+62	0	0	10	// 
+101	9	9	5	// Standing active (aware of player presence)*
+110	9	9	12	// Sidestep right*
+119	9	9	12	// Sidestep left*
+119	0	0	10	// 
+55	1	1	8	// Attack far (maintain shooting)
+56	6	0	8	// Attack far (after shooting)
+128	6	0	6	// Pain
