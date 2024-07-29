@@ -901,7 +901,7 @@ gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir) {
 #endif
 
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 /*
 =================
 fire_nail

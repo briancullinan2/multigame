@@ -176,7 +176,7 @@ void SnapVectorTowards( vec3_t v, vec3_t to ) {
 	}
 }
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 #define CHAINGUN_SPREAD		600
 #endif
 #define MACHINEGUN_SPREAD	200
@@ -877,7 +877,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 	}
 }
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 /*
 ======================================================================
 
@@ -1282,7 +1282,7 @@ void FireWeapon( gentity_t *ent )
     Weapon_fire_flame( ent );
     break;
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 	case WP_NAILGUN:
 		Weapon_Nailgun_Fire( ent );
 		break;

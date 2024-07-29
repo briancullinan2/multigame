@@ -531,9 +531,21 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.inventory, cg.predictedPlayerState.stats[STAT_PLAYERCLASS]) ) {
+		return;	// can't hold it
+	}
+#else
+	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.inventory ) ) {
+		return;	// can't hold it
+	}
+#endif
+#else
 	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState ) ) {
 		return;	// can't hold it
 	}
+#endif
 
 	item = &bg_itemlist[ cent->currentState.modelindex ];
 
@@ -695,7 +707,15 @@ static void CG_TouchTriggerPrediction( void ) {
         continue;
 #endif
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory, cg.predictedPlayerState.stats[STAT_PLAYERCLASS] );
+#else
 			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory );
+#endif
+#else
+			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
+#endif
 		}
 	}
 

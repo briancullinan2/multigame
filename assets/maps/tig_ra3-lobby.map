@@ -4398,14 +4398,14 @@ gothic_block/blocks17i
 }
 // entity 96
 {
-"classname" "target_push"
+"classname" "target_teleporter"
 "origin" "980 -20 -8"
 "targetname" "start_playeredit"
 "target" "start_playerwait"
 }
 // entity 97
 {
-"classname" "target_position"
-"origin" "864 -20 4"
+"classname" "misc_teleporter_dest"
+"origin" "608 -20 -108"
 "targetname" "start_playerwait"
 }

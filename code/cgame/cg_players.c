@@ -890,6 +890,7 @@ static void CG_CopyClientInfoModel( const clientInfo_t *from, clientInfo_t *to )
 	to->gender = from->gender;
 #ifdef USE_ADVANCED_CLASS
 	to->notq3 = from->notq3;
+	to->playerClass = from->playerClass;
 #endif
 
 	to->legsModel = from->legsModel;
@@ -1366,6 +1367,10 @@ if(newInfo.worlds != atoi( v )) {
 		}
 	}
 
+#ifdef USE_ADVANCED_CLASS
+	newInfo.playerClass = BG_PlayerClassFromModel(newInfo.modelName);
+#endif
+
 	// replace whatever was there with the new one
 	newInfo.infoValid = qtrue;
 	*ci = newInfo;
@@ -1587,7 +1592,7 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 	if(ci->notq3) {
 		// make a special exception for monsters, because animations are combined
 		//   if the bot stops moving to attack show that animation instead of walking
-		CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim, cent->currentState.torsoAnim);
+		//CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim, cent->currentState.torsoAnim);
 		if((cent->currentState.legsAnim & ~ANIM_TOGGLEBIT) == LEGS_IDLE) {
 			cent->currentState.legsAnim = cent->currentState.torsoAnim;
 		}
@@ -3290,6 +3295,9 @@ void CG_Player( centity_t *cent ) {
 	// add the gun / barrel / flash
 	//
 #ifdef USE_ADVANCED_CLASS
+	if(ci->playerClass >= PCLASS_MONSTER && ci->playerClass <= PCLASS_MONSTER_COUNT) {
+		// don't draw a weapon because they generally have them build into the model
+	} else
 	if(!ci->torsoModel && ci->legsModel) {
 		CG_AddPlayerWeapon( &legs, NULL, cent, ci->team );
 	} else

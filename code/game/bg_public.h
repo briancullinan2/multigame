@@ -469,6 +469,9 @@ typedef enum {
 #ifdef USE_VEHICLES
 	STAT_VEHICLE,
 #endif
+#ifdef USE_ADVANCED_CLASS
+	STAT_PLAYERCLASS,
+#endif
 	STAT_NUM_STATS
 } statIndex_t;
 
@@ -673,7 +676,7 @@ typedef enum {
 	WP_PLASMAGUN,
 	WP_BFG,
 	WP_GRAPPLING_HOOK,
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 	WP_NAILGUN,
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
@@ -1016,7 +1019,10 @@ typedef enum {
 	PCLASS_MONSTER,
 	PCLASS_SHAMBLER, // shambler
 	PCLASS_DRAGON, // always flies because i lack animation ambition
+	PCLASS_BERSERKER,
+	PCLASS_GUNNER,
 
+	PCLASS_MONSTER_COUNT,
 
 	PCLASS_NUM_CLASSES
 } pclass_t;
@@ -1175,8 +1181,15 @@ gitem_t	*BG_FindItemForHoldable( holdable_t pw );
 #endif
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory, int playerClass );
+#else
+qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory );
+#endif
+#else
 qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps );
-
+#endif
 
 // g_dmflags->integer flags
 #define	DF_NO_FALLING			8
@@ -1234,7 +1247,11 @@ void	BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 void	BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm, playerState_t *ps, int entityNum );
 
 #ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, int playerClass );
+#else
 void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory );
+#endif
 #else
 void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
 #endif

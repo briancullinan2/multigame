@@ -598,9 +598,21 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;		// dead people can't pickup
 
 	// the same pickup rules are used for client side and server side
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory, other->client->pers.playerclass ) ) {
+		return;
+	}
+#else
+	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory ) ) {
+		return;
+	}
+#endif
+#else
 	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ) ) {
 		return;
 	}
+#endif
 
 #ifdef USE_ADVANCED_ITEMS
 {
@@ -827,11 +839,25 @@ void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPick
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory, other->client->pers.playerclass ))
+	{
+		return;
+	}
+#else
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory ))
+	{
+		return;
+	}
+#endif
+#else
 	// the same pickup rules are used for client side and server side
 	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ))
 	{
 		return;
 	}
+#endif
 
 #if 0
 	if(g_gametype.integer == GT_BOMB &&

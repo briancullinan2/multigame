@@ -668,7 +668,7 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *attacker, float damage, float 
 int G_InvulnerabilityEffect(gentity_t *targ, vec3_t dir, vec3_t point, vec3_t impactpoint, vec3_t bouncedir);
 void body_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath);
 void TossClientItems(gentity_t *self);
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 void TossClientPersistantPowerups(gentity_t *self);
 #endif
 void TossClientCubes(gentity_t *self);
@@ -696,7 +696,7 @@ gentity_t *fire_portal(gentity_t *self, vec3_t start, vec3_t dir, qboolean altFi
 #endif
 gentity_t *fire_bfg(gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_grapple(gentity_t *self, vec3_t start, vec3_t dir);
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 gentity_t *fire_nail(gentity_t *self, vec3_t start, vec3_t forward, vec3_t right, vec3_t up);
 gentity_t *fire_prox(gentity_t *self, vec3_t start, vec3_t aimdir);
 #endif

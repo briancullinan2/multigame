@@ -87,6 +87,7 @@ Unofficial Quake III Arena gamecode patch
   * TODO: add stamina that forces the player to walk instead of run, and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
   * TODO: make multiplayer monsters like the new Doom game where you can play as the monster with special powers instead of weapons.
   * TODO: add special ability powerups like Sarge can teleport in Quake Champions after waiting for a minute
+  * TODO: dragon with quad damage has blue/purple flame like Gozilla
 
 
 # Documentation

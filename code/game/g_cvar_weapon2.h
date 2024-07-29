@@ -46,7 +46,7 @@ G_CVAR( wp_grappleTime,       "wp_grappleDamage", "10.0",   CVAR_ARCHIVE, 0, qfa
 #endif
 
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 G_CVAR( wp_nailCycle,         "wp_nailCycle",         "1000", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
 G_CVAR( wp_nailDamage,        "wp_nailDamage",        "20",   CVAR_ARCHIVE, 0, qfalse, qfalse )
 G_CVAR( wp_nailSpeed,         "wp_nailSpeed",         "555",  CVAR_ARCHIVE, 0, qfalse, qfalse )

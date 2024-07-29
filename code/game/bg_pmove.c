@@ -1500,7 +1500,9 @@ static void PM_Footsteps( void ) {
 	//
 	//xyspeedQ = pm->ps->velocity[0] * pm->ps->velocity[0] 
 	//	+ pm->ps->velocity[1] * pm->ps->velocity[1];
-
+#ifdef USE_ADVANCED_CLASS
+	if(pm->playerClass != PCLASS_DRAGON)
+#endif
 	if ( pm->ps->groundEntityNum == ENTITYNUM_NONE ) {
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
@@ -1927,7 +1929,7 @@ static void PM_Weapon( void ) {
     addTime = wp_grappleCycle.integer;
     break;
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
   case WP_NAILGUN:
     addTime = wp_nailCycle.integer;
     break;
@@ -1998,7 +2000,7 @@ static void PM_Weapon( void ) {
 #endif
 		break;
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 	case WP_NAILGUN:
 		addTime = 1000;
 		break;

@@ -775,7 +775,7 @@ Only in CTF games
 
 #endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_CLASS)
 
 /*QUAKED ammo_nails (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
@@ -945,7 +945,7 @@ Only in One Flag CTF games
 #endif
 
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_CLASS)
 
 
 /*QUAKED weapon_nailgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1081,6 +1081,35 @@ gitem_t	*BG_FindItemForRune( int r ) {
 
 	return NULL;
 }
+#endif
+
+
+#ifdef USE_ADVANCED_CLASS
+
+pclass_t BG_PlayerClassFromModel(const char *model) {
+  if (Q_stristr (model, "sarge"))
+     return PCLASS_RANGER;
+  else if (!Q_stricmp (model, "biker/red"))
+     return PCLASS_BFG;
+  else if (!Q_stricmp (model, "anarki/blue"))
+     return PCLASS_LIGHTNING;
+  else if (!Q_stricmp (model, "grunt/red"))
+     return PCLASS_RAILGUN;
+  else if (Q_stristr (model, "shambler"))
+     return PCLASS_SHAMBLER;
+  else if (Q_stristr (model, "dragon"))
+     return PCLASS_DRAGON;
+  else if (Q_stristr (model, "berserker"))
+     return PCLASS_BERSERKER;
+  else if (Q_stristr (model, "infantry"))
+     return PCLASS_GUNNER;
+  else {
+     return PCLASS_NONE;
+     //return PCLASS_BFG;
+     //Q_strncpyz( model, "biker/red", sizeof( model ) );
+  }
+}
+
 #endif
 
 
@@ -1304,7 +1333,16 @@ Returns false if the item should not be picked up.
 This needs to be the same for client side prediction and server use.
 ================
 */
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps ) {
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory, int playerClass )
+#else
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory )
+#endif
+#else
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps )
+#endif
+{
 	gitem_t	*item;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int		upperBound;
@@ -1318,6 +1356,14 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 
 	switch( item->giType ) {
 	case IT_WEAPON:
+
+#ifdef USE_ADVANCED_CLASS
+		// monsters are stuck with the weapons they spawn with
+		if(playerClass >= PCLASS_MONSTER && playerClass <= PCLASS_MONSTER_COUNT) {
+			return qfalse;
+		}
+#endif
+
 		return qtrue;	// weapons are always picked up
 
 	case IT_AMMO:
@@ -1844,7 +1890,11 @@ BG_TouchJumpPad
 ========================
 */
 #ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, int playerClass ) 
+#else
 void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory ) 
+#endif
 #else
 void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) 
 #endif
@@ -1862,6 +1912,14 @@ void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad )
 		return;
 	}
 
+#ifdef USE_ADVANCED_CLASS
+  if(playerClass = PCLASS_DRAGON)
+    return;
+#endif
+#ifdef USE_RUNES
+  if(inventory[RUNE_FLIGHT])
+    return;
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	if ( inventory[PW_FLIGHT] || inventory[PW_SUPERMAN] ) {
 		return;

@@ -419,7 +419,8 @@ typedef struct {
 #endif
 
 #ifdef USE_ADVANCED_CLASS
-qboolean notq3;
+	qboolean notq3;
+	pclass_t playerClass;
 #endif
 
 } clientInfo_t;

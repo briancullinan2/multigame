@@ -126,10 +126,6 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 	if ( !other->client ) {
 		return;
 	}
-#ifdef USE_RUNES
-  if(other->client->inventory[RUNE_FLIGHT])
-    return;
-#endif
   
 #ifdef USE_GRAPPLE
   if (other->client && other->client->hook)
@@ -137,7 +133,15 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 #endif
   
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory, other->client->pers.playerclass );
+#else
 	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory );
+#endif
+#else
+	BG_TouchJumpPad( &other->client->ps, &self->s );
+#endif
 }
 
 
@@ -218,7 +222,7 @@ void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) 
 	}
 
 #ifdef USE_ADVANCED_CLASS
-	if ( activator->client->pers.newplayerclass == PCLASS_DRAGON ) {
+	if ( activator->client->pers.playerclass == PCLASS_DRAGON ) {
 		return;
 	}
 #endif

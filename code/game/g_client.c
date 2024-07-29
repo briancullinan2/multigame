@@ -770,23 +770,7 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 
 
 #ifdef USE_ADVANCED_CLASS
-  if (Q_stristr (model, "sarge"))
-     client->pers.newplayerclass = PCLASS_RANGER;
-  else if (!Q_stricmp (model, "biker/red"))
-     client->pers.newplayerclass = PCLASS_BFG;
-  else if (!Q_stricmp (model, "anarki/blue"))
-     client->pers.newplayerclass = PCLASS_LIGHTNING;
-  else if (!Q_stricmp (model, "grunt/red"))
-     client->pers.newplayerclass = PCLASS_RAILGUN;
-  else if (Q_stristr (model, "shambler"))
-     client->pers.newplayerclass = PCLASS_SHAMBLER;
-  else if (Q_stristr (model, "dragon"))
-     client->pers.newplayerclass = PCLASS_DRAGON;
-  else {
-     client->pers.newplayerclass = PCLASS_NONE;
-     //client->pers.newplayerclass = PCLASS_BFG;
-     //Q_strncpyz( model, "biker/red", sizeof( model ) );
-  }
+  client->pers.newplayerclass = BG_PlayerClassFromModel(model);
   client->pers.playerclass = client->pers.newplayerclass;
 #endif
 
@@ -1241,7 +1225,19 @@ void ClientSpawn(gentity_t *ent) {
 #ifdef USE_ADVANCED_CLASS
   //assign weapons according to class
   switch (client->pers.playerclass){
+	case PCLASS_GUNNER:
+		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
+		client->ps.ammo[WP_MACHINEGUN] = 0;
+		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_CHAINGUN );
+		client->ps.ammo[WP_CHAINGUN] = 100;
+		break;
+	case PCLASS_BERSERKER:
+		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
+		client->ps.ammo[WP_MACHINEGUN] = 0;
+		break;
   case PCLASS_DRAGON:
+		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
+		client->ps.ammo[WP_MACHINEGUN] = 0;
 #ifdef USE_FLAME_THROWER
     client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
     client->ps.ammo[WP_FLAME_THROWER] = 40;
@@ -1252,6 +1248,8 @@ void ClientSpawn(gentity_t *ent) {
     client->ps.ammo[WP_BFG] = 20;
     break;
   case PCLASS_SHAMBLER:
+		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
+		client->ps.ammo[WP_MACHINEGUN] = 0;
   case PCLASS_LIGHTNING:
     client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_LIGHTNING );
     client->ps.ammo[WP_LIGHTNING] = 60;

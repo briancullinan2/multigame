@@ -205,7 +205,7 @@ CG_CVAR( cgwp_bfgCycle, "wp_bfgCycle", "200", CVAR_SERVERINFO )
 #ifdef USE_GRAPPLE
 CG_CVAR( cgwp_grappleCycle, "wp_grappleCycle", "400", CVAR_SERVERINFO )
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_CLASS)
 CG_CVAR( cgwp_nailCycle, "wp_nailCycle", "1000", CVAR_SERVERINFO )
 CG_CVAR( cgwp_proxCycle, "wp_proxCycle", "800", CVAR_SERVERINFO )
 CG_CVAR( cgwp_chainCycle, "wp_chainCycle", "30", CVAR_SERVERINFO )
