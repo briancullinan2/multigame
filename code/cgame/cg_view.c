@@ -896,6 +896,153 @@ static void CG_PlayBufferedSounds( void ) {
 }
 
 //=========================================================================
+void CG_AddPolyToPool( qhandle_t shader, const polyVert_t *verts );
+
+
+static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, qhandle_t shader ) {
+	// Draw a raindrop
+
+	vec3_t		forward, right;
+	polyVert_t	verts[3];
+	vec2_t		line;
+	float		len, /*frac,*/ dist;
+	vec3_t		start, finish;
+	float		groundHeight;
+//	int			msec = trap_Milliseconds();
+	float height = 8 + random() * 3;
+	float weight = height * 0.5f;
+	vec3_t colour;
+	colour[0] = 0.8 + 0.2 * random() * 0xFF;
+	colour[1] = 0.8 + 0.2 * random() * 0xFF;
+	colour[2] = 0.8 + 0.2 * random() * 0xFF;
+
+	//if( CG_CullPoint( pos ) ) {
+	//	return;
+	//}
+
+	VectorCopy( pos, start );
+
+	dist = DistanceSquared( pos, cg.refdef.vieworg );
+
+	// Make sure it doesn't clip through surfaces
+	len = height;
+
+	if( len <= 0 ) {
+		return;
+	}
+
+	// fade nearby rain particles
+	if ( dist < Square( 128.f ) ) {
+		dist = .25f + .75f * ( dist / Square( 128.f ) );
+	} else {
+		dist = 1.0f;
+	}
+
+	//AngleVectors(cg.refdefViewAngles, forward, NULL, NULL);
+	VectorClear(forward);
+	forward[1] = 1.0f;
+	//VectorCopy( deltaNormalized, forward );
+	VectorMA( start, -len, forward, finish );
+
+	line[0] = DotProduct( forward, cg.refdef.viewaxis[1] );
+	line[1] = DotProduct( forward, cg.refdef.viewaxis[2] );
+
+	VectorScale( cg.refdef.viewaxis[1], line[1], right );
+	VectorMA( right, -line[0], cg.refdef.viewaxis[2], right );
+	VectorNormalize( right );
+	
+	dist = 1.0f;
+	
+	VectorCopy( finish, verts[0].xyz );	
+	verts[0].st[0] = 0.5f;
+	verts[0].st[1] = 0;
+	verts[0].modulate[0] = colour[0];
+	verts[0].modulate[1] = colour[1];
+	verts[0].modulate[2] = colour[2];
+	verts[0].modulate[3] = 100 * dist;
+
+	VectorMA( start, -weight, right, verts[1].xyz );
+	verts[1].st[0] = 0;
+	verts[1].st[1] = 1;
+	verts[1].modulate[0] = colour[0];
+	verts[1].modulate[1] = colour[1];
+	verts[2].modulate[2] = colour[2];
+	verts[1].modulate[3] = 200 * dist;
+
+	VectorMA( start, weight, right, verts[2].xyz );
+	verts[2].st[0] = 1;
+	verts[2].st[1] = 1;
+	verts[2].modulate[0] = colour[0];
+	verts[2].modulate[1] = colour[1];
+	verts[2].modulate[2] = colour[2];
+	verts[2].modulate[3] = 255 * dist;
+
+	CG_AddPolyToPool( shader, verts );
+
+}
+
+#define TRAIL_LENGTH 128
+static int trailLength;
+static int trailHead;
+static vec3_t trailPos[TRAIL_LENGTH];
+
+static void CG_AddTrailEffects( void ) {
+	int i;
+	vec3_t prev;
+	VectorClear(prev);
+	for ( i = 0 ; i < trailLength ; i++ ) {
+		vec3_t temp;
+		int trailI = trailHead - i;
+		if(trailI < 0) {
+			trailI += TRAIL_LENGTH;
+		}
+		VectorSubtract(trailPos[trailI], prev, temp);
+		VectorNormalizeFast(temp);
+		//CG_Printf("pos: %f %f %f\n", trailPos[i][0], trailPos[i][1], trailPos[i][2]);
+		CG_TrailParticleRender(trailPos[trailI], temp, cgs.media.trailShader);
+		VectorCopy(trailPos[i], prev);
+	}
+}
+
+
+void CG_RecordPosition(centity_t *cent, qboolean moving) {
+//	int cmdNum;
+//	usercmd_t cmd;
+	vec3_t temp;
+	//float length;
+	//cmdNum = trap_GetCurrentCmdNumber();
+//#ifdef USE_MULTIWORLD
+//	trap_GetUserCmd( cmdNum, &cmd, NULL );
+//#else
+//	trap_GetUserCmd( cmdNum, &cmd );
+//#endif
+	VectorSubtract(cent->lerpOrigin, trailPos[trailHead], temp);
+	//length = Q_rsqrt( DotProduct( temp, temp ) );
+	if((abs(temp[0]) > 1 || abs(temp[1]) > 1 || abs(temp[2]) > 1)
+	// && fabs(length) > 0.0006f
+	) {
+		if(trailLength + 1 < TRAIL_LENGTH) {
+			trailLength++;
+		}
+	} else {
+		if(trailLength > 0) {
+			trailLength--;
+		}
+		return;
+	}
+	// expand trail length until full, then increment even if the player isn't moving so it disappears
+	//trailTail++;
+	//if(trailTail >= TRAIL_LENGTH) {
+	//	trailTail = 0;
+	//}
+	//CG_Printf("Recorded position %d\n", trailPos[trailHead]);
+	// record position
+	trailHead++;
+	if(trailHead >= TRAIL_LENGTH) {
+		trailHead = 0;
+	}
+	VectorCopy(cent->lerpOrigin, trailPos[trailHead]);
+}
 
 
 /*
@@ -1015,6 +1162,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		CG_AddParticles ();
 		CG_AddLocalEntities();
 		CG_AddAtmosphericEffects();
+		CG_AddTrailEffects();
 	}
 	CG_AddViewWeapon( &cg.predictedPlayerState );
 

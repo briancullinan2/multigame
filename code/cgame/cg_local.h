@@ -929,6 +929,7 @@ typedef struct {
 	qhandle_t	teamStatusBar;
 
 	qhandle_t	deferShader;
+	qhandle_t	trailShader;
 
 	// gib explosions
 	qhandle_t	gibAbdomen;

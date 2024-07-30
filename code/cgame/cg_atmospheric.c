@@ -91,7 +91,7 @@ static void CG_RenderPolyPool( void ) {
 }
 #endif // ATM_NEW
 
-static void CG_AddPolyToPool( qhandle_t shader, const polyVert_t *verts ) {
+void CG_AddPolyToPool( qhandle_t shader, const polyVert_t *verts ) {
 #ifndef ATM_NEW
 		if( atmPolyShader && atmPolyShader != shader ) {
 			CG_RenderPolyPool();
@@ -875,7 +875,6 @@ void CG_EffectParse( const char *effectstr ) {
 	} else if( atmFXType == ATM_SNOW ) {
 		cg_atmFx.numEffectShaders = 1;
 		cg_atmFx.effectshaders[0] = trap_R_RegisterShader( "gfx/misc/snow" );
-Com_Printf("snowing! %i\n", cg_atmFx.effectshaders[0]);
 	}		
 	
 	// This really should never happen

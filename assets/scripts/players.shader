@@ -2,6 +2,17 @@
 // CPM skins
 // KHB  9-Mar-01	single shader for both v and lm, all standard models now supported, and a WICKED trick...  :)
 
+flightTrail
+{
+	cull disable
+	{
+		clampmap models/weapons3/railgun/f_railgun2.tga
+		blendfunc add
+		rgbGen vertex
+		//tcmod rotate 130
+	}
+}
+
 models/players/anarki/pm
 {
 	nopicmip

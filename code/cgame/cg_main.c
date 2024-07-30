@@ -795,6 +795,7 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 	cgs.media.viewBloodShader = trap_R_RegisterShader( "viewBloodBlend" );
 
 	cgs.media.deferShader = trap_R_RegisterShaderNoMip( "gfx/2d/defer.tga" );
+	cgs.media.trailShader = trap_R_RegisterShaderNoMip( "flightTrail" );
 
 	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip( "menu/tab/name.tga" );
 	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip( "menu/tab/ping.tga" );

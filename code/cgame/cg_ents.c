@@ -1199,6 +1199,9 @@ static void CG_LaserSight( centity_t *cent )  {
 
 #endif
 
+void CG_RecordPosition(centity_t *cent);
+
+
 /*
 ===============
 CG_AddCEntity
@@ -1236,6 +1239,9 @@ static void CG_AddCEntity( centity_t *cent ) {
 		CG_General( cent );
 		break;
 	case ET_PLAYER:
+		if(cent->currentState.number == cg.snap->ps.clientNum) {
+			CG_RecordPosition(cent);
+		}
 		CG_Player( cent );
 		break;
 	case ET_ITEM:
