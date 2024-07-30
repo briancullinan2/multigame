@@ -1750,7 +1750,11 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 			legs.hModel = cgs.clientinfo[ps->clientNum].legsModel;
 			legs.customSkin = cgs.clientinfo[ps->clientNum].legsSkin;
 			VectorCopy( ps->origin, legs.origin );
-			VectorAdd(legs.origin, cgs.clientinfo[ps->clientNum].povOffset, legs.origin);
+			VectorMA( legs.origin, cgs.clientinfo[ps->clientNum].povOffset[0], cg.refdef.viewaxis[0], legs.origin );
+			VectorMA( legs.origin, cgs.clientinfo[ps->clientNum].povOffset[1], cg.refdef.viewaxis[1], legs.origin );
+			VectorMA( legs.origin, cgs.clientinfo[ps->clientNum].povOffset[2], cg.refdef.viewaxis[2], legs.origin );
+
+			//VectorAdd(legs.origin, cgs.clientinfo[ps->clientNum].povOffset, legs.origin);
 			// uncomment this line when alignment and animation is working
 			legs.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON | RF_MINLIGHT;
 			//CG_RunLerpFrame( &cgs.clientinfo[ps->clientNum], &cg_entities[ps->clientNum].pe.torso, TORSO_ATTACK, 1 );
