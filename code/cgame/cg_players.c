@@ -147,7 +147,20 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 				ci->headOffset[i] = atof( token );
 			}
 			continue;
-		} else if ( !Q_stricmp( token, "sex" ) ) {
+		} else 
+#ifdef USE_ADVANCED_CLASS
+		if ( !Q_stricmp( token, "povoffset" ) ) {
+			for ( i = 0 ; i < 3 ; i++ ) {
+				token = COM_Parse( &text_p );
+				if ( !token[0] ) {
+					break;
+				}
+				ci->povOffset[i] = atof( token );
+			}
+			continue;
+		} else 
+#endif
+		if ( !Q_stricmp( token, "sex" ) ) {
 			token = COM_Parse( &text_p );
 			if ( !token[0] ) {
 				break;
@@ -889,6 +902,7 @@ static void CG_CopyClientInfoModel( const clientInfo_t *from, clientInfo_t *to )
 	to->footsteps = from->footsteps;
 	to->gender = from->gender;
 #ifdef USE_ADVANCED_CLASS
+	VectorCopy( from->povOffset, to->povOffset );
 	to->notq3 = from->notq3;
 	to->playerClass = from->playerClass;
 #endif
@@ -1450,7 +1464,7 @@ Sets cg.snap, cg.oldFrame, and cg.backlerp
 cg.time should be between oldFrameTime and frameTime after exit
 ===============
 */
-static void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale ) {
+void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale ) {
 	int			f, numFrames;
 	animation_t	*anim;
 
@@ -1550,7 +1564,7 @@ static void CG_ClearLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int animationN
 CG_PlayerAnimation
 ===============
 */
-static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
+void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
 						int *torsoOld, int *torso, float *torsoBackLerp ) {
 	clientInfo_t	*ci;
 	int				clientNum;

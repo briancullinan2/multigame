@@ -384,6 +384,9 @@ typedef struct {
 	qboolean		fixedtorso;		// true if torso never changes yaw
 
 	vec3_t			headOffset;		// move head in icon views
+#ifdef USE_ADVANCED_CLASS
+	vec3_t			povOffset;
+#endif
 	footstep_t		footsteps;
 	gender_t		gender;			// from model
 
@@ -968,6 +971,9 @@ typedef struct {
 	qhandle_t	smokePuffShader;
 	qhandle_t	smokePuffRageProShader;
 	qhandle_t	shotgunSmokePuffShader;
+#ifdef USE_ADVANCED_CLASS
+	qhandle_t	voreBallShader;
+#endif
 	qhandle_t	plasmaBallShader;
 	qhandle_t	waterBubbleShader;
 	qhandle_t	bloodTrailShader;

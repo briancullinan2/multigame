@@ -1692,6 +1692,9 @@ void CG_CenterGun(float *gen_guny, playerState_t *ps) {
 }
 #endif
 
+void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale );
+void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
+						int *torsoOld, int *torso, float *torsoBackLerp );
 
 /*
 ==============
@@ -1707,6 +1710,11 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 	const weaponInfo_t *weapon;
 	vec3_t		fovOffset;
 	vec3_t		angles;
+#ifdef USE_ADVANCED_CLASS
+	refEntity_t		legs;
+	refEntity_t		torso;
+#endif
+
 
 	if ( ps->persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 		return;
@@ -1728,6 +1736,33 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 #ifdef USE_ADVANCED_WEAPONS
 	if(ps->weapon >= WP_NUM_WEAPONS) {
 		return;
+	}
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	if(cgs.clientinfo[ps->clientNum].playerClass == PCLASS_VORE) {
+		memset( &legs, 0, sizeof(legs) );
+		if(cgs.clientinfo[ps->clientNum].legsModel) {
+			vec3_t temp;
+			VectorCopy(ps->viewangles, temp);
+			temp[1] += 45;
+			AnglesToAxis(temp, legs.axis);
+			legs.hModel = cgs.clientinfo[ps->clientNum].legsModel;
+			legs.customSkin = cgs.clientinfo[ps->clientNum].legsSkin;
+			VectorCopy( ps->origin, legs.origin );
+			VectorAdd(legs.origin, cgs.clientinfo[ps->clientNum].povOffset, legs.origin);
+			// uncomment this line when alignment and animation is working
+			legs.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON | RF_MINLIGHT;
+			//CG_RunLerpFrame( &cgs.clientinfo[ps->clientNum], &cg_entities[ps->clientNum].pe.torso, TORSO_ATTACK, 1 );
+			CG_PlayerAnimation( &cg_entities[ps->clientNum], &legs.oldframe, &legs.frame, &legs.backlerp,
+		 		&torso.oldframe, &torso.frame, &torso.backlerp );
+
+			CG_AddRefEntityWithPowerups( &legs, &cg_entities[ps->clientNum].currentState, cgs.clientinfo[ps->clientNum].team );
+		}
+	}
+	if(cgs.clientinfo[ps->clientNum].playerClass >= PCLASS_MONSTER
+		&& cgs.clientinfo[ps->clientNum].playerClass <= PCLASS_MONSTER_COUNT) {
+		return; // monsters have built in weapons, need to be configured above
 	}
 #endif
 

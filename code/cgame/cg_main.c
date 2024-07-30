@@ -812,6 +812,9 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 	cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );
 	cgs.media.lagometerShader = trap_R_RegisterShader("lagometer" );
 	cgs.media.connectionShader = trap_R_RegisterShader( "disconnected" );
+#ifdef USE_ADVANCED_CLASS
+	cgs.media.voreBallShader = trap_R_RegisterShader( "sprites/plasma1%hue0.15" );
+#endif
 
 	cgs.media.waterBubbleShader = trap_R_RegisterShader( "waterBubble" );
 

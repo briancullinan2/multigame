@@ -1235,7 +1235,7 @@ void ClientSpawn(gentity_t *ent) {
 
 #ifdef USE_ADVANCED_CLASS
   //assign weapons according to class
-  switch (client->pers.playerclass){
+  switch (client->pers.playerclass) {
 	case PCLASS_VORE:
 		G_ModelIndex("models/runes/icetrap.md3");
 		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );

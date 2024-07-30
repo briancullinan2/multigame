@@ -528,7 +528,9 @@ static void CG_Missile( centity_t *cent ) {
 	ent.skinNum = cg.clientFrame & 1;
 
 #ifdef USE_ADVANCED_CLASS
-if ( cent->currentState.modelindex ) {
+if ( cent->currentState.modelindex 
+	&& cgs.clientinfo[cent->currentState.otherEntityNum].playerClass == PCLASS_VORE ) {
+	ent.customShader = cgs.media.voreBallShader;
 	ent.hModel = cgs.gameModels[cent->currentState.modelindex];
 } else
 #endif
