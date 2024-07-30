@@ -75,16 +75,20 @@ Unofficial Quake III Arena gamecode patch
   * Campaign mode, playing older engine content and playing as enemy characters, new AI for old enemies
   * Keep away, where one team has to kill the flag carrier and return the flag to score.
   * Add light coming from player to flashlight command so even if you're pointing at the sky it looks like a flashlight is on.
-  * Make "tech-demo" as an example of some game dynamic. Make a Matrix mod that loads the white loading program and jump simulation and UrT subway. Make a space to planet landing sequence with death modes. https://www.youtube.com/watch?v=sLqXFF8mlEU
+  * Make "tech-demo" as an example of some game dynamic. 
+  * DONE: Make a Matrix mod that loads the white loading program 
+  * TODO: and jump simulation and UrT subway. Make a space to planet landing sequence with death modes. https://www.youtube.com/watch?v=sLqXFF8mlEU
   * Quake 5 play on the home-worlds of each species, but in a mistakenly massive defeat of stop the Arenas on Vadrigas, they've expanded to each home world.
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
   * Playing split screen across the network for team based games where you might've been playing next to each other so you can watch your teammate.
   * automatically generate the rest of team assets like colors players using dynamic skins
   * LookAtKiller and LookAheadOf for aimbot powerup
-  * Add spawn point as a target for homing missiles if there are no other players, add homing plasma, homing bullets, homing bfg, etc
+  * DONE: Add spawn point as a target for homing missiles if there are no other players, 
+  * TODO: add homing plasma, homing bullets, homing bfg, etc
   * TODO: zombies can't be killed again, immortal, but also walk very slowly, half speed
   * TODO: in the spirit of lame bot code, all the cyborgs should get depth hack powerup after their stamina recharges
-  * TODO: add stamina that forces the player to walk instead of run, and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
+  * DONE: add stamina that forces the player to walk instead of run, 
+  * TODO: and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
   * TODO: make multiplayer monsters like the new Doom game where you can play as the monster with special powers instead of weapons.
   * TODO: add special ability powerups like Sarge can teleport in Quake Champions after waiting for a minute
   * TODO: dragon with quad damage has blue/purple flame like Gozilla

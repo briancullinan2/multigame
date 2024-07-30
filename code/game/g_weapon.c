@@ -466,7 +466,7 @@ ROCKET
 ======================================================================
 */
 
-#ifdef USE_ADVANCED_ITEMS
+#if defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 void Weapon_RocketLauncher_Fire (gentity_t *ent, qboolean isHoming)
 #else
 void Weapon_RocketLauncher_Fire (gentity_t *ent)
@@ -1232,8 +1232,13 @@ void FireWeapon( gentity_t *ent )
 		weapon_grenadelauncher_fire( ent );
 		break;
 	case WP_ROCKET_LAUNCHER:
-#ifdef USE_ADVANCED_ITEMS
+#if defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 	case WP_HOMING_ROCKET:
+#ifdef USE_ADVANCED_CLASS
+		if(ent->client->pers.playerclass == PCLASS_VORE) {
+			Weapon_RocketLauncher_Fire( ent, WP_HOMING_ROCKET ); // always fires homing rockets, so f-ing annoying
+		} else
+#endif
 		Weapon_RocketLauncher_Fire( ent, ent->s.weapon == WP_HOMING_ROCKET );
 #else
 		Weapon_RocketLauncher_Fire( ent );

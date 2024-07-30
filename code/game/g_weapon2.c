@@ -705,6 +705,11 @@ gentity_t *fire_special_rocket (gentity_t *self, vec3_t start, vec3_t dir,
 
 	bolt = G_Spawn();
 	bolt->classname = "rocket";
+#ifdef USE_ADVANCED_CLASS
+	if(self->client->pers.playerclass == PCLASS_VORE) {
+		bolt->s.modelindex = G_ModelIndex("models/runes/icetrap.md3");
+	}
+#endif
 #ifdef USE_BOUNCE_RPG
   if (self->flags & FL_ROCKETBOUNCE || wp_rocketBounce.integer || bounce) {
   	bolt->s.eFlags = EF_BOUNCE;

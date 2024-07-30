@@ -1103,6 +1103,8 @@ pclass_t BG_PlayerClassFromModel(const char *model) {
      return PCLASS_BERSERKER;
   else if (Q_stristr (model, "infantry"))
      return PCLASS_GUNNER;
+  else if (Q_stristr (model, "shalrath"))
+     return PCLASS_VORE;
   else {
      return PCLASS_NONE;
      //return PCLASS_BFG;

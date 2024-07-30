@@ -502,7 +502,7 @@ static void CG_Missile( centity_t *cent ) {
 	// create the render entity
 	memset (&ent, 0, sizeof(ent));
 	VectorCopy( cent->lerpOrigin, ent.origin);
-	VectorCopy( cent->lerpOrigin, ent.oldorigin);
+	VectorCopy( cent->lerpOrigin, ent.oldorigin);\
 
 	if ( cent->currentState.weapon == WP_PLASMAGUN ) {
 		ent.reType = RT_SPRITE;
@@ -526,6 +526,12 @@ static void CG_Missile( centity_t *cent ) {
 
 	// flicker between two skins
 	ent.skinNum = cg.clientFrame & 1;
+
+#ifdef USE_ADVANCED_CLASS
+if ( cent->currentState.modelindex ) {
+	ent.hModel = cgs.gameModels[cent->currentState.modelindex];
+} else
+#endif
 	ent.hModel = weapon->missileModel;
 	ent.renderfx = weapon->missileRenderfx | RF_NOSHADOW;
 #ifdef USE_PORTALS

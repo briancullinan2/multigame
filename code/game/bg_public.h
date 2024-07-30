@@ -367,6 +367,7 @@ typedef enum {
 	PCLASS_DRAGON, // always flies because i lack animation ambition
 	PCLASS_BERSERKER,
 	PCLASS_GUNNER,
+	PCLASS_VORE,
 
 	PCLASS_MONSTER_COUNT,
 
@@ -722,7 +723,7 @@ typedef enum {
 #ifdef USE_FLAME_THROWER
 	WP_FLAME_THROWER,
 #endif
-#ifdef USE_ADVANCED_ITEMS
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 	WP_HOMING_ROCKET,
 #endif
 
@@ -1170,6 +1171,9 @@ gitem_t	*BG_FindItem( const char *pickupName );
 gitem_t	*BG_FindItemForWeapon( weapon_t weapon );
 gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon );
 gitem_t	*BG_FindItemForPowerup( powerup_t pw );
+#ifdef USE_ADVANCED_CLASS
+pclass_t BG_PlayerClassFromModel(const char *model);
+#endif
 #ifdef USE_RUNES
 gitem_t	*BG_FindItemForRune( int r );
 #endif

@@ -1236,6 +1236,13 @@ void ClientSpawn(gentity_t *ent) {
 #ifdef USE_ADVANCED_CLASS
   //assign weapons according to class
   switch (client->pers.playerclass){
+	case PCLASS_VORE:
+		G_ModelIndex("models/runes/icetrap.md3");
+		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
+		client->ps.ammo[WP_MACHINEGUN] = 0;
+		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_ROCKET_LAUNCHER );
+		client->ps.ammo[WP_ROCKET_LAUNCHER] = 30;
+		break;
 	case PCLASS_GUNNER:
 		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
 		client->ps.ammo[WP_MACHINEGUN] = 0;
