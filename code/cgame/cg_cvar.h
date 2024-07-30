@@ -181,6 +181,9 @@ CG_CVAR( cg_staminaBar, "cg_staminaBar", "1", CVAR_USERINFO | CVAR_TEMP )
 CG_CVAR( cg_stamina, "g_stamina", "0", CVAR_SYSTEMINFO )
 #endif
 
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+CG_CVAR( cg_ability, "g_ability", "100", CVAR_SYSTEMINFO )
+#endif
 
 #ifdef USE_PHYSICS_VARS
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)

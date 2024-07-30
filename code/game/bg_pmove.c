@@ -11,8 +11,9 @@
 #ifdef USE_GRAPPLE
 
 #ifdef CGAME
-#ifdef USE_RPG_STATS
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 #define g_stamina cg_stamina
+#define g_ability cg_ability
 #endif
 
 #define g_playerScale cg_playerScale
@@ -101,8 +102,9 @@ extern vmCvar_t  g_wallWalk;
 #endif // end USE_PHYSICS_VARS
 
 
-#ifdef USE_RPG_STATS
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 extern vmCvar_t g_stamina;
+extern vmCvar_t g_ability;
 #endif
 
 #ifdef USE_PORTALS
@@ -1755,6 +1757,25 @@ static void PM_Weapon( void ) {
 	if ((pm->cmd.buttons & BUTTON_USE)) {
 		PM_AddEvent(EV_USE);
 	}
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
+		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
+			if(pm->ps->stats[STAT_ABILITY] >= g_ability.value
+				&& pm->playerClass == PCLASS_RANGER) {
+				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+#ifdef USE_ADVANCED_ITEMS
+				BG_AddPredictableEventToPlayerstate( EV_USE_ITEM0, PW_SPECIAL_ABILITY, pm->ps, -1 );
+#else
+				PM_AddEvent( EV_USE_ITEM0 + PW_SPECIAL_ABILITY );
+#endif
+				pm->ps->stats[STAT_ABILITY] = 0;
+				return;
+			}
+		}
+	}
+
 #endif
 
 

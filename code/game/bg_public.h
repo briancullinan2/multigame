@@ -204,6 +204,9 @@ typedef enum {
 	PW_GREENFLAG = 16,
 #endif
 
+#ifdef USE_ADVANCED_CLASS
+	PW_SPECIAL_ABILITY = 17,
+#endif
 // memory overflow on everything past this in the default mode
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
@@ -487,6 +490,7 @@ typedef enum {
 	STAT_HEALTH,
 #if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 	STAT_STAMINA,
+	STAT_ABILITY,
 #endif
 	STAT_HOLDABLE_ITEM,
 #ifdef USE_ADVANCED_ITEMS

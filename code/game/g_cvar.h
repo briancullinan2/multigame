@@ -205,8 +205,9 @@ G_CVAR( g_mvproto, "mvproto", "1.0", CVAR_SYSTEMINFO | CVAR_ROM, 0, qfalse, qfal
 #endif
 
 
-#ifdef USE_RPG_STATS
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 G_CVAR( g_stamina, "g_stamina", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( g_ability, "g_ability", "100", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 #endif
 
 #undef G_CVAR

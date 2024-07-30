@@ -722,6 +722,39 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		} else if (client->ps.stats[STAT_STAMINA] < 100) {
 			client->ps.stats[STAT_STAMINA] += 10;
 		}
+
+		if(g_ability.integer > 0) {
+				
+			if (client->ps.stats[STAT_ABILITY] < g_ability.value) {
+				if(client->pers.playerclass == PCLASS_RANGER && !client->inventory[HI_TELEPORTER]) {
+					client->ps.stats[STAT_ABILITY]++;
+				}
+			}
+
+			if(client->ps.stats[STAT_ABILITY] >= g_ability.value) {
+				if(client->pers.playerclass == PCLASS_RANGER && !client->inventory[HI_TELEPORTER]) {
+					gitem_t		*it;
+					gentity_t *it_ent;
+					trace_t		trace;
+					it = BG_FindItemForPowerup (HI_TELEPORTER);
+					if (!it) {
+						return;
+					}
+
+					it_ent = G_Spawn();
+					VectorCopy( ent->r.currentOrigin, it_ent->s.origin );
+					it_ent->classname = it->classname;
+					G_SpawnItem (it_ent, it);
+					FinishSpawningItem(it_ent );
+					memset( &trace, 0, sizeof( trace ) );
+					Touch_Item (it_ent, ent, &trace);
+					if (it_ent->inuse) {
+						G_FreeEntity( it_ent );
+					}
+					client->ps.stats[STAT_ABILITY] = 0;
+				}
+			}
+		}
 #endif
 
 		// count down armor when over max

@@ -383,6 +383,24 @@
 		}
 
 		itemDef {
+			name "abilityok"
+			rect 12 52 63 12
+			visible 1
+			decoration
+			textstyle 3
+			forecolor 1 1 1 1
+			textscale .75
+			background white
+			ownerdraw CG_PLAYER_ABILITY
+			addColorRange -999 25 1 0 0 1
+			addColorRange 26 55 1 0.75 0 1
+			addColorRange 56 75 0.5 1 0.5 1
+			addColorRange 76 999 0.5 0.5 1 1
+			cvarTest "g_ability"
+			hideCvar { "0" }
+		}
+
+		itemDef {
 			name "statusscreen"
 			visible 1
 			style 3

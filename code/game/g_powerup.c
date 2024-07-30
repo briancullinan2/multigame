@@ -15,6 +15,21 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
   ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 
   switch(powerup) {
+
+#ifdef USE_ADVANCED_CLASS
+  case PW_SPECIAL_ABILITY:
+    switch(ent->client->pers.playerclass) {
+    case PCLASS_RANGER:
+      UsePowerup(ent, HI_TELEPORTER);
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+      break;
+    default:
+      break;
+    }
+    break;
+#endif
+
   case HI_TELEPORTER:		// teleporter
     // drop flags in CTF
     item = NULL;

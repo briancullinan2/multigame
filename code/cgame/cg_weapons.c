@@ -1745,7 +1745,8 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 		if(cgs.clientinfo[ps->clientNum].legsModel) {
 			vec3_t temp;
 			VectorCopy(ps->viewangles, temp);
-			temp[1] += 45;
+			temp[1] -= 45;
+			//temp[1] += 45;
 			AnglesToAxis(temp, legs.axis);
 			legs.hModel = cgs.clientinfo[ps->clientNum].legsModel;
 			legs.customSkin = cgs.clientinfo[ps->clientNum].legsSkin;

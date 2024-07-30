@@ -1444,6 +1444,8 @@ if(g_hotBFG.integer) {
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
 #if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 	client->ps.stats[STAT_STAMINA] = 100;
+	// start with ability powerup
+	client->ps.stats[STAT_ABILITY] = g_ability.integer;
 #endif
 
 #ifdef USE_LOCAL_DMG
