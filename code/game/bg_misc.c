@@ -1087,7 +1087,7 @@ gitem_t	*BG_FindItemForRune( int r ) {
 #ifdef USE_ADVANCED_CLASS
 
 pclass_t BG_PlayerClassFromModel(const char *model) {
-     return PCLASS_DRAGON;
+//     return PCLASS_DRAGON;
   if (Q_stristr (model, "sarge"))
      return PCLASS_RANGER;
   else if (!Q_stricmp (model, "biker/red"))

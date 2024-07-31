@@ -920,9 +920,9 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 	colour[1] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
 	colour[2] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
 
-	//if( CG_CullPoint( pos ) ) {
-	//	return;
-	//}
+	if( CG_CullPoint( pos ) ) {
+		return;
+	}
 
 	VectorCopy( pos, start );
 
@@ -932,6 +932,10 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 	len = height;
 
 	if( len <= 0 ) {
+		return;
+	}
+
+	if(dist < Square( 32.f )) {
 		return;
 	}
 
