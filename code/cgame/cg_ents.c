@@ -1239,7 +1239,16 @@ static void CG_AddCEntity( centity_t *cent ) {
 		CG_General( cent );
 		break;
 	case ET_PLAYER:
-		if(cent->currentState.number == cg.snap->ps.clientNum) {
+		if(cent->currentState.number == cg.snap->ps.clientNum
+#ifdef USE_ADVANCED_ITEMS
+			|| cent->currentState.powerups == PW_FLIGHT
+#else
+			|| cent->currentState.powerups & PW_FLIGHT
+#endif
+#ifdef USE_ADVANCED_CLASS
+			|| cgs.clientinfo[cent->currentState.number].playerClass == PCLASS_DRAGON
+#endif
+		) {
 			CG_RecordPosition(cent);
 		}
 		CG_Player( cent );

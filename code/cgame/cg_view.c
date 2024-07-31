@@ -898,8 +898,12 @@ static void CG_PlayBufferedSounds( void ) {
 //=========================================================================
 void CG_AddPolyToPool( qhandle_t shader, const polyVert_t *verts );
 
+#define TRAIL_SPACING 4
+#define TRAIL_LENGTH 64
+#define TRAIL_WIDTH 12
+#define TRAIL_SPEED 20
 
-static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, qhandle_t shader ) {
+static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float length, qhandle_t shader ) {
 	// Draw a raindrop
 
 	vec3_t		forward, right;
@@ -909,12 +913,12 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, qhandle_
 	vec3_t		start, finish;
 	float		groundHeight;
 //	int			msec = trap_Milliseconds();
-	float height = 8 + random() * 3;
+	float height = TRAIL_WIDTH; // + random() * 3;
 	float weight = height * 0.5f;
 	vec3_t colour;
-	colour[0] = 0.8 + 0.2 * random() * 0xFF;
-	colour[1] = 0.8 + 0.2 * random() * 0xFF;
-	colour[2] = 0.8 + 0.2 * random() * 0xFF;
+	colour[0] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
+	colour[1] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
+	colour[2] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
 
 	//if( CG_CullPoint( pos ) ) {
 	//	return;
@@ -951,8 +955,10 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, qhandle_
 	VectorMA( right, -line[0], cg.refdef.viewaxis[2], right );
 	VectorNormalize( right );
 	
-	dist = 1.0f;
-	
+	dist = length; //length / 256.0f;
+
+	//CG_Printf("value: %f\n", dist);
+
 	VectorCopy( finish, verts[0].xyz );	
 	verts[0].st[0] = 0.5f;
 	verts[0].st[1] = 0;
@@ -975,73 +981,80 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, qhandle_
 	verts[2].modulate[0] = colour[0];
 	verts[2].modulate[1] = colour[1];
 	verts[2].modulate[2] = colour[2];
-	verts[2].modulate[3] = 255 * dist;
+	verts[2].modulate[3] = 200 * dist;
 
 	CG_AddPolyToPool( shader, verts );
 
 }
 
-#define TRAIL_LENGTH 128
-static int trailLength;
-static int trailHead;
-static vec3_t trailPos[TRAIL_LENGTH];
+static int trailTime[MAX_CLIENTS];
+static int trailLength[MAX_CLIENTS];
+static int trailHead[MAX_CLIENTS];
+static vec3_t trailPos[MAX_CLIENTS][TRAIL_LENGTH];
 
 static void CG_AddTrailEffects( void ) {
-	int i;
-	vec3_t prev;
-	VectorClear(prev);
-	for ( i = 0 ; i < trailLength ; i++ ) {
-		vec3_t temp;
-		int trailI = trailHead - i;
-		if(trailI < 0) {
-			trailI += TRAIL_LENGTH;
+	int i, j;
+	for(j = 0; j < MAX_CLIENTS; j++) {
+		vec3_t prev;
+		VectorCopy(trailPos[j][trailHead[j]], prev);
+
+		if(cg_entities[j].currentState.eType != ET_PLAYER) {
+			continue;
 		}
-		VectorSubtract(trailPos[trailI], prev, temp);
-		VectorNormalizeFast(temp);
-		//CG_Printf("pos: %f %f %f\n", trailPos[i][0], trailPos[i][1], trailPos[i][2]);
-		CG_TrailParticleRender(trailPos[trailI], temp, cgs.media.trailShader);
-		VectorCopy(trailPos[i], prev);
+
+		for ( i = 0 ; i < trailLength[j] ; i++ ) {
+			vec3_t temp;
+			float length;
+			int trailI = trailHead[j] - i;
+			if(trailI < 0) {
+				trailI += TRAIL_LENGTH;
+			}
+			VectorSubtract(trailPos[j][trailI], prev, temp);
+			length = VectorNormalize(temp);
+			//CG_Printf("pos: %f %f %f\n", trailPos[i][0], trailPos[i][1], trailPos[i][2]);
+			CG_TrailParticleRender(trailPos[j][trailI], temp, 1.0f - (1.0f * i) / trailLength[j], cgs.media.dustPuffShader);
+			VectorCopy(trailPos[j][i], prev);
+		}
 	}
+	
 }
 
 
 void CG_RecordPosition(centity_t *cent, qboolean moving) {
-//	int cmdNum;
-//	usercmd_t cmd;
+	int j;
 	vec3_t temp;
-	//float length;
-	//cmdNum = trap_GetCurrentCmdNumber();
-//#ifdef USE_MULTIWORLD
-//	trap_GetUserCmd( cmdNum, &cmd, NULL );
-//#else
-//	trap_GetUserCmd( cmdNum, &cmd );
-//#endif
-	VectorSubtract(cent->lerpOrigin, trailPos[trailHead], temp);
-	//length = Q_rsqrt( DotProduct( temp, temp ) );
-	if((abs(temp[0]) > 1 || abs(temp[1]) > 1 || abs(temp[2]) > 1)
-	// && fabs(length) > 0.0006f
-	) {
-		if(trailLength + 1 < TRAIL_LENGTH) {
-			trailLength++;
-		}
-	} else {
-		if(trailLength > 0) {
-			trailLength--;
-		}
+	float length;
+	
+	if(cent->currentState.clientNum > MAX_CLIENTS) {
 		return;
 	}
-	// expand trail length until full, then increment even if the player isn't moving so it disappears
-	//trailTail++;
-	//if(trailTail >= TRAIL_LENGTH) {
-	//	trailTail = 0;
-	//}
-	//CG_Printf("Recorded position %d\n", trailPos[trailHead]);
-	// record position
-	trailHead++;
-	if(trailHead >= TRAIL_LENGTH) {
-		trailHead = 0;
+
+	j = cent->currentState.clientNum;
+	
+	VectorSubtract(cent->lerpOrigin, trailPos[j][trailHead[j]], temp);
+	length = VectorNormalize(temp);
+	// reduce the trail when the player stops moving so fast
+	if(cg.time - trailTime[j] > TRAIL_SPEED) {
+		if(trailLength[j] > 0) {
+			trailLength[j]--;
+		}
+		trailTime[j] = cg.time;
 	}
-	VectorCopy(cent->lerpOrigin, trailPos[trailHead]);
+
+	if(abs(length) > TRAIL_SPACING) {
+		if(trailLength[j] + 1 < TRAIL_LENGTH) {
+			trailLength[j]++;
+		}
+	} else {
+		return;
+	}
+
+	// record position
+	trailHead[j]++;
+	if(trailHead[j] >= TRAIL_LENGTH) {
+		trailHead[j] = 0;
+	}
+	VectorCopy(cent->lerpOrigin, trailPos[j][trailHead[j]]);
 }
 
 
@@ -1162,7 +1175,9 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		CG_AddParticles ();
 		CG_AddLocalEntities();
 		CG_AddAtmosphericEffects();
-		CG_AddTrailEffects();
+		if(cg_contrails.integer) {
+			CG_AddTrailEffects();
+		}
 	}
 	CG_AddViewWeapon( &cg.predictedPlayerState );
 

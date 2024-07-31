@@ -1113,7 +1113,7 @@
 }
 // entity 57
 {
-"classname" "target_push"
+"classname" "target_teleporter"
 "origin" "1004 -3376 -1496"
 "targetname" "start_playeredit"
 "target" "start_playerwait"
@@ -1130,8 +1130,8 @@
 }
 // entity 59
 {
-"classname" "target_position"
-"origin" "1004 -3260 -1484"
+"classname" "misc_teleporter_dest"
+"origin" "1004 -2988 -1596"
 "targetname" "start_playerwait"
 "angle" "270"
 }
