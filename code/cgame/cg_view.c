@@ -1033,6 +1033,7 @@ void CG_RecordPosition(centity_t *cent, qboolean moving) {
 	
 	VectorSubtract(cent->lerpOrigin, trailPos[j][trailHead[j]], temp);
 	length = VectorNormalize(temp);
+
 	// reduce the trail when the player stops moving so fast
 	if(cg.time - trailTime[j] > TRAIL_SPEED) {
 		if(trailLength[j] > 0) {
@@ -1041,12 +1042,12 @@ void CG_RecordPosition(centity_t *cent, qboolean moving) {
 		trailTime[j] = cg.time;
 	}
 
-	if(abs(length) > TRAIL_SPACING) {
-		if(trailLength[j] + 1 < TRAIL_LENGTH) {
-			trailLength[j]++;
-		}
-	} else {
+	if(abs(length) < TRAIL_SPACING) {
 		return;
+	}
+
+	if(trailLength[j] + 1 < TRAIL_LENGTH) {
+		trailLength[j]++;
 	}
 
 	// record position
