@@ -1763,7 +1763,9 @@ static void PM_Weapon( void ) {
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
 		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
 			if(pm->ps->stats[STAT_ABILITY] >= g_ability.value
-				&& pm->playerClass == PCLASS_RANGER) {
+				&& (pm->playerClass == PCLASS_RANGER
+				|| pm->playerClass == PCLASS_VISOR)
+			) {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 #ifdef USE_ADVANCED_ITEMS
 				BG_AddPredictableEventToPlayerstate( EV_USE_ITEM0, PW_SPECIAL_ABILITY, pm->ps, -1 );
@@ -2733,6 +2735,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 #ifdef USE_ADVANCED_CLASS
 	if(pm->playerClass >= PCLASS_MONSTER && pm->playerClass <= PCLASS_MONSTER_COUNT 
+	&& pm->playerClass != PCLASS_DRAGON // dragon doesn't have stamina
 	&& pm->ps->stats[STAT_STAMINA] <= 0) {
 		if(!(pm->cmd.buttons & BUTTON_WALKING)) {
 			pm->cmd.forwardmove *= 0.5f;

@@ -2,6 +2,7 @@
 
 #include "g_local.h"
 
+void G_GiveItem(gentity_t *ent, powerup_t pw);
 
 void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	gitem_t *item;
@@ -19,6 +20,10 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 #ifdef USE_ADVANCED_CLASS
   case PW_SPECIAL_ABILITY:
     switch(ent->client->pers.playerclass) {
+    case PCLASS_VISOR:
+      G_GiveItem(ent, PW_VISIBILITY);
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+      break;
     case PCLASS_RANGER:
       UsePowerup(ent, HI_TELEPORTER);
       ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;

@@ -2842,6 +2842,21 @@ void CG_Player( centity_t *cent ) {
 		return;
 	}
 
+
+	if( // cent->currentState.clientNum == cg.snap->ps.clientNum
+#ifdef USE_ADVANCED_ITEMS
+		cent->currentState.powerups == PW_FLIGHT
+#else
+		cent->currentState.powerups & PW_FLIGHT
+#endif
+#ifdef USE_ADVANCED_CLASS
+		|| cgs.clientinfo[cent->currentState.clientNum].playerClass == PCLASS_DRAGON
+#endif
+	) {
+		CG_RecordPosition(cent);
+	}
+
+
 	// the client number is stored in clientNum.  It can't be derived
 	// from the entity number, because a single client may have
 	// multiple corpses on the level using the same clientinfo

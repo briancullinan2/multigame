@@ -1385,6 +1385,29 @@ int G_ItemDisabled( gitem_t *item ) {
 	return trap_Cvar_VariableIntegerValue( name );
 }
 
+
+void G_GiveItem(gentity_t *ent, powerup_t pw) {
+	gitem_t		*it;
+	gentity_t *it_ent;
+	trace_t		trace;
+	it = BG_FindItemForPowerup (pw);
+	if (!it) {
+		return;
+	}
+
+	it_ent = G_Spawn();
+	VectorCopy( ent->r.currentOrigin, it_ent->s.origin );
+	it_ent->classname = it->classname;
+	G_SpawnItem (it_ent, it);
+	FinishSpawningItem(it_ent );
+	memset( &trace, 0, sizeof( trace ) );
+	Touch_Item (it_ent, ent, &trace);
+	if (it_ent->inuse) {
+		G_FreeEntity( it_ent );
+	}
+}
+
+
 /*
 ============
 G_SpawnItem

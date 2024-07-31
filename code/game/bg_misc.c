@@ -1090,6 +1090,8 @@ pclass_t BG_PlayerClassFromModel(const char *model) {
 //     return PCLASS_DRAGON;
   if (Q_stristr (model, "sarge"))
      return PCLASS_RANGER;
+  else if (Q_stristr (model, "visor"))
+     return PCLASS_VISOR;
   else if (!Q_stricmp (model, "biker/red"))
      return PCLASS_BFG;
   else if (!Q_stricmp (model, "anarki/blue"))
