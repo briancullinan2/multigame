@@ -9,7 +9,11 @@
 //==================================================================
 
 // the "gameversion" client command will print this plus compile date
+#ifdef USE_MULTIWORLD
+#define GAMEVERSION "multiworld"
+#else
 #define GAMEVERSION "baseq3"
+#endif
 
 #define BODY_QUEUE_SIZE 8
 

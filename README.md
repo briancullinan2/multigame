@@ -92,6 +92,7 @@ Unofficial Quake III Arena gamecode patch
   * TODO: make multiplayer monsters like the new Doom game where you can play as the monster with special powers instead of weapons.
   * TODO: add special ability powerups like Sarge can teleport in Quake Champions after waiting for a minute
   * TODO: dragon with quad damage has blue/purple flame like Gozilla
+  * TODO: vampire mode where all life forms that "die" respawn exactly as they were before the attack in the same place, temporary ghost shader for respawn timeout time, then popping back in, they can move as a ghost, just like spectators. i think world of warcraft had this feature but you lose equipment in the process and there might have been specific areas you must return to in order to respawn from the spirit realm.
 
 
 # Documentation
