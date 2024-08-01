@@ -3,6 +3,7 @@
 // cg_view.c -- setup all the parameters (position, angle, etc)
 // for a 3D rendering
 #include "cg_local.h"
+#include "../ui/ui_shared.h"
 
 
 /*
@@ -1046,7 +1047,7 @@ void CG_RecordPosition(centity_t *cent, qboolean moving) {
 		trailTime[j] = cg.time;
 	}
 
-	if(abs(length) < TRAIL_SPACING) {
+	if(fabs(length) < TRAIL_SPACING) {
 		return;
 	}
 
