@@ -1141,6 +1141,13 @@ gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir);
 #ifdef USE_FLAME_THROWER
 void Weapon_fire_flame (gentity_t *ent );
 #endif
+#if defined(USE_BOUNCE_RAIL) || defined(USE_INVULN_RAILS)
+void fire_special_railgun( gentity_t *ent );
+#endif
+
+#ifdef USE_TELEFRAG_RAIL
+void weapon_telefrag_fire (gentity_t *ent,vec3_t muzzle,vec3_t forward,vec3_t right,vec3_t up);
+#endif
 
 /*
 ===============

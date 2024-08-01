@@ -86,7 +86,7 @@ static const char *teamoverlay_names[] =
 
 #ifdef USE_CLASSIC_MENU
 
-void UpdatePreferences() {
+void UpdatePreferences( void ) {
 	char menu[MAX_QPATH];
 	if(!s_preferences.crosshairShader[0]) {
 		return;

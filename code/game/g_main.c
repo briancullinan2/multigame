@@ -2178,7 +2178,7 @@ qboolean setup = qfalse;
 int lastTime = 2000;
 void G_AddBot( const char *name, float skill, const char *team, int delay, const char *altname );
 
-static void InitHoards() {
+static void InitHoards( void ) {
 	int i;
 	int blue_count = 0;
 	int red_count = 0;

@@ -778,7 +778,7 @@ void FireWeapon(gentity_t *ent, qboolean altFire);
 void FireWeapon(gentity_t *ent);
 #endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 void G_StartKamikaze(gentity_t *ent);
 #endif
 

@@ -3,6 +3,8 @@
 
 void CalcMuzzlePointOrigin( const gentity_t *ent, vec3_t origin, const vec3_t forward, const vec3_t right, const vec3_t up, vec3_t muzzlePoint );
 void G_ExplodeMissile( gentity_t *ent );
+void G_BounceProjectile( vec3_t start, vec3_t impact, vec3_t dir, vec3_t endout );
+
 #define	MISSILE_PRESTEP_TIME	50
 
 static	float	s_quadFactor;

@@ -36,6 +36,9 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 	ent->s.pos.trTime = level.time;
 }
 
+#ifdef USE_CLUSTER_GRENADES
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster);
+#endif
 
 /*
 ================

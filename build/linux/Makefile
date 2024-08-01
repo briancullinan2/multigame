@@ -521,8 +521,8 @@ UIOBJ_ += \
 
 UIOBJ_ +=   \
   $(B)/$(MOD)/q3_ui/ui_main.o \
-  $(B)/$(MOD)/ui/bg_misc.o \
-  $(B)/$(MOD)/ui/bg_lib.o \
+  $(B)/$(MOD)/q3_ui/bg_misc.o \
+  $(B)/$(MOD)/q3_ui/bg_lib.o \
   $(B)/$(MOD)/q3_ui/ui_atoms.o \
   $(B)/$(MOD)/q3_ui/ui_gameinfo.o \
   $(B)/$(MOD)/q3_ui/ui_players.o \
@@ -564,8 +564,8 @@ UIOBJ_ +=   \
 
 
 UIOBJ_ +=   \
-  $(B)/$(MOD)/ui/q_math.o \
-  $(B)/$(MOD)/ui/q_shared.o
+  $(B)/$(MOD)/q3_ui/q_math.o \
+  $(B)/$(MOD)/q3_ui/q_shared.o
 
 UIOBJ   = $(UIOBJ_) $(B)/$(MOD)/q3_ui/ui_syscalls.o
 _UIASM   = $(subst /q3_ui/,/vm/q3_ui/,$(UIOBJ_:.o=.asm))

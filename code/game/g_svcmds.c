@@ -490,6 +490,7 @@ void Svcmd_Rotate_f( void ) {
 
 
 char	*ConcatArgs( int start );
+void UpdateGameType();
 
 /*
 =================

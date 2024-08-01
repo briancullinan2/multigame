@@ -735,6 +735,46 @@ typedef struct {
 extern uiInfo_t uiInfo;
 
 
+#ifdef USE_CLASSIC_MENU
+
+extern void			UI_CLASSIC_Init( void );
+extern void			UI_CLASSIC_Shutdown( void );
+extern void			UI_CLASSIC_KeyEvent( int key, int down );
+extern void			UI_CLASSIC_MouseEvent( int dx, int dy, qboolean absolute );
+extern void			UI_CLASSIC_Refresh( int realtime );
+extern qboolean		UI_CLASSIC_ConsoleCommand( int realTime );
+extern float		UI_CLASSIC_ClampCvar( float min, float max, float value );
+extern void			UI_CLASSIC_DrawNamedPic( float x, float y, float width, float height, const char *picname );
+extern void			UI_CLASSIC_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader ); 
+extern void			UI_CLASSIC_FillRect( float x, float y, float width, float height, const float *color );
+extern void			UI_CLASSIC_DrawRect( float x, float y, float width, float height, const float *color );
+extern void			UI_CLASSIC_UpdateScreen( void );
+extern void			UI_CLASSIC_SetColor( const float *rgba );
+extern void			UI_CLASSIC_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
+extern void			UI_CLASSIC_DrawBannerString( int x, int y, const char* str, int style, vec4_t color );
+extern float		UI_CLASSIC_ProportionalSizeScale( int style );
+extern void			UI_CLASSIC_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color );
+extern void			UI_DrawProportionalString_AutoWrapped( int x, int ystart, int xmax, int ystep, const char* str, int style, vec4_t color );
+extern int			UI_CLASSIC_ProportionalStringWidth( const char* str );
+extern void			UI_CLASSIC_DrawString( int x, int y, const char* str, int style, vec4_t color );
+extern void			UI_CLASSIC_DrawChar( int x, int y, int ch, int style, vec4_t color );
+extern qboolean 	UI_CLASSIC_CursorInRect (int x, int y, int width, int height);
+extern void			UI_CLASSIC_AdjustFrom640( float *x, float *y, float *w, float *h );
+extern void			UI_CLASSIC_DrawTextBox (int x, int y, int width, int lines);
+extern qboolean		UI_CLASSIC_IsFullscreen( void );
+extern void			UI_CLASSIC_SetActiveMenu( uiMenuCommand_t menu );
+extern void			UI_CLASSIC_PushMenu ( menuframework_s *menu );
+extern void			UI_CLASSIC_PopMenu (void);
+extern void			UI_CLASSIC_ForceMenuOff (void);
+extern char			*UI_Argv( int arg );
+extern char			*UI_Cvar_VariableString( const char *var_name );
+extern void			UI_CLASSIC_Refresh( int time );
+extern void			UI_StartDemoLoop( void );
+
+#endif
+
+
+
 extern void			UI_Init( void );
 extern void			UI_Shutdown( void );
 extern void			UI_KeyEvent( int key, int down );
