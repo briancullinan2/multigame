@@ -153,7 +153,7 @@ void P_WorldEffects( gentity_t *ent ) {
 }
 
 void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPickup);
-
+void CalcMuzzlePointOrigin( const gentity_t *ent, vec3_t origin, const vec3_t forward, const vec3_t right, const vec3_t up, vec3_t muzzlePoint );
 
 /**
  * G_Use
