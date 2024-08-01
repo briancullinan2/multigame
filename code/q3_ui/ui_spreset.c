@@ -14,8 +14,10 @@ RESET MENU
 #define UI_DrawChar UI_CLASSIC_DrawChar
 #define UI_DrawString UI_CLASSIC_DrawString
 #define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_ProportionalStringWidth UI_CLASSIC_ProportionalStringWidth
 #define UI_PushMenu UI_CLASSIC_PushMenu
 #define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_DrawNamedPic UI_CLASSIC_DrawNamedPic
 #endif
 
 #define ART_FRAME					"menu/art/cut_frame"
