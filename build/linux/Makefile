@@ -511,10 +511,10 @@ $(B)/$(MOD)/qagame$(SHLIBNAME): $(QAOBJ)
 #$(B)/$(MOD)/ui/bg_misc.o
 #$(B)/$(MOD)/ui/bg_lib.o
 UIOBJ_ += \
-  $(B)/$(MOD)/ui/ui_main.o \
-  $(B)/$(MOD)/ui/ui_atoms.o \
-  $(B)/$(MOD)/ui/ui_gameinfo.o \
-  $(B)/$(MOD)/ui/ui_players.o \
+  $(B)/$(MOD)/ui/sui_main.o \
+  $(B)/$(MOD)/ui/sui_atoms.o \
+  $(B)/$(MOD)/ui/sui_gameinfo.o \
+  $(B)/$(MOD)/ui/sui_players.o \
   $(B)/$(MOD)/ui/ui_shared.o
 #endif
 
