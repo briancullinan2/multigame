@@ -7,3 +7,4 @@
 .DS_Store
 /assets/*.pk3dir
 assets/maps/autosave
+**/.vs

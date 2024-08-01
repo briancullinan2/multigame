@@ -297,10 +297,18 @@
     <ClCompile Include="..\..\code\q3_ui\ui_video.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\code\ui\ui_main.c" />
-    <ClCompile Include="..\..\code\ui\ui_atoms.c" />
-    <ClCompile Include="..\..\code\ui\ui_gameinfo.c" />
-    <ClCompile Include="..\..\code\ui\ui_players.c" />
+    <ClCompile Include="..\..\code\ui\ui_main.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/ui</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\code\ui\ui_atoms.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/ui</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\code\ui\ui_gameinfo.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/ui</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\code\ui\ui_players.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/ui</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="..\..\code\ui\ui_shared.c" />
   </ItemGroup>
   <ItemGroup>
