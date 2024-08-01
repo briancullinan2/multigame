@@ -47,6 +47,9 @@ void AddScore( gentity_t *ent, vec3_t origin, int score ) {
 	CalculateRanks();
 }
 
+gentity_t *dropWeapon( gentity_t *ent, gitem_t *item, float angle, int xr_flags );
+
+
 /*
 =================
 TossClientItems
