@@ -1199,7 +1199,6 @@ static void CG_LaserSight( centity_t *cent )  {
 
 #endif
 
-void CG_RecordPosition(centity_t *cent);
 
 
 /*

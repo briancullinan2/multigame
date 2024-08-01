@@ -2745,6 +2745,9 @@ int CG_LightVerts( vec3_t normal, int numVerts, polyVert_t *verts )
 
 #ifdef USE_RPG_STATS
 
+void ChooseDamageColor(int damage, byte* rgba);
+
+
 #define NUMBER_SIZE		8
 void CG_PlayerStats( centity_t *cent ) {
 	clientInfo_t	*ci;
@@ -2812,6 +2815,7 @@ void CG_PlayerStats( centity_t *cent ) {
 }
 #endif
 
+void CG_RecordPosition(centity_t *cent);
 
 
 /*
