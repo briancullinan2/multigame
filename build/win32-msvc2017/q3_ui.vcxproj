@@ -295,11 +295,17 @@
     <ClCompile Include="..\..\code\q3_ui\ui_team.c" />
     <ClCompile Include="..\..\code\q3_ui\ui_teamorders.c" />
     <ClCompile Include="..\..\code\q3_ui\ui_video.c" />
+    <ClCompile Include="..\..\code\ui\ui_main.c" />
+    <ClCompile Include="..\..\code\ui\ui_atoms.c" />
+    <ClCompile Include="..\..\code\ui\ui_gameinfo.c" />
+    <ClCompile Include="..\..\code\ui\ui_players.c" />
+    <ClCompile Include="..\..\code\ui\ui_shared.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\code\game\bg_lib.h" />
     <ClInclude Include="..\..\code\game\bg_public.h" />
     <ClInclude Include="..\..\code\q3_ui\keycodes.h" />
+    <ClInclude Include="..\..\code\ui\ui_shared.h" />
     <ClInclude Include="..\..\code\game\match.h" />
     <ClInclude Include="..\..\code\game\q_shared.h" />
     <ClInclude Include="..\..\code\q3_ui\ui_local.h" />
