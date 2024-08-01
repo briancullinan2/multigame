@@ -34,6 +34,10 @@ static cvarTable_t gameCvarTable[] = {
 
 };
 
+#ifdef USE_MULTIWORLD
+vmCvar_t mapnames[MAX_WORLDS];
+int mapnamesModificationCounts[MAX_WORLDS];
+#endif
 
 static void G_InitGame( int levelTime, int randomSeed, int restart );
 static void G_RunFrame( int levelTime );
@@ -233,11 +237,21 @@ void G_RegisterCvars( void ) {
 		}
 	}
 
+#ifdef USE_MULTIWORLD
+	// give the game basic awareness of other maps that are loaded since we're already sharing entities
+	for(i = 0; i < MAX_WORLDS; i++) {
+		trap_Cvar_Register(&mapnames[i], va("mapname_%i", i), "", CVAR_ROM);
+		mapnamesModificationCounts[i] = mapnames[i].modificationCount;
+	}
+#endif
+
+
 	if (remapped) {
 		G_RemapTeamShaders();
 	}
 
 	// check some things
+	//g_gametype.integer = trap_Cvar_VariableIntegerValue( "g_gametype" );
 	if ( g_gametype.integer < 0 || g_gametype.integer >= GT_MAX_GAME_TYPE ) {
 		G_Printf( "g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer );
 		trap_Cvar_Set( "g_gametype", "0" );
@@ -250,6 +264,149 @@ void G_RegisterCvars( void ) {
 	trap_Cvar_Register( NULL, "g_doWarmup", "1", CVAR_ROM );
 	trap_Cvar_Set( "g_doWarmup", "1" );
 }
+
+static void G_LocateSpawnSpots( void );
+
+void UpdateGameType() {
+	int i;
+static char *gametypeNames[] = {"ffa", "tournament", "single", "team", "ctf", "oneflag", "obelisk", "harvester", "teamtournament"};
+	gentity_t *ent;
+	char *gametypeName;
+	// nope, server controls entity spawning
+	// G_InitGame(level.time, level.time, qtrue);
+	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
+
+	// TODO: loop through entities and re-enable to ones that were disabled when the map spawned
+	ent = g_entities + MAX_CLIENTS;
+	for ( i = MAX_CLIENTS; i < MAX_GENTITIES; i++, ent++ ) {
+		if(ent->not[0]) {
+
+			if( strstr( ent->not, "notsingle" ) ) {
+				if(g_gametype.integer == GT_SINGLE_PLAYER) {
+					ent->r.svFlags = SVF_NOCLIENT;
+					ent->s.eFlags |= EF_NODRAW;
+					ent->tag = TAG_DONTSPAWN;
+				} else {
+					ent->r.svFlags = SVF_BROADCAST;
+					ent->s.eFlags &= ~EF_NODRAW;
+					ent->tag = 0;
+				}
+			} else 
+
+			if( strstr( ent->not, "notteam" ) ) {
+				if(g_gametype.integer >= GT_TEAM) {
+					ent->r.svFlags = SVF_NOCLIENT;
+					ent->s.eFlags |= EF_NODRAW;
+					ent->tag = TAG_DONTSPAWN;
+				} else {
+					ent->r.svFlags = SVF_BROADCAST;
+					ent->s.eFlags &= ~EF_NODRAW;
+					ent->tag = 0;
+				}
+			} else 
+
+			if( strstr( ent->not, "notfree" ) ) {
+				if(g_gametype.integer < GT_TEAM) {
+					ent->r.svFlags = SVF_NOCLIENT;
+					ent->s.eFlags |= EF_NODRAW;
+					ent->tag = TAG_DONTSPAWN;
+				} else {
+					ent->r.svFlags = SVF_BROADCAST;
+					ent->s.eFlags &= ~EF_NODRAW;
+					ent->tag = 0;
+				}
+			} else {
+				
+			}
+
+		}
+
+
+		if(ent->nothot) {
+			if(qfalse
+#ifdef USE_TRINITY
+			|| g_unholyTrinity.integer 
+#endif
+#ifdef USE_INSTAGIB
+			|| g_instagib.integer
+#endif
+#ifdef USE_HOTBFG
+			|| g_hotBFG.integer
+#endif
+#ifdef USE_HOTRPG
+			|| g_hotRockets.integer 
+#endif
+			) {
+				ent->r.svFlags = SVF_NOCLIENT;
+				ent->s.eFlags |= EF_NODRAW;
+				ent->tag = TAG_DONTSPAWN;
+			} else {
+				ent->r.svFlags = SVF_BROADCAST;
+				ent->s.eFlags &= ~EF_NODRAW;
+				ent->tag = 0;
+			}
+		}
+
+
+		if(ent->gametype[0]) {
+			if( g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE ) {
+				gametypeName = gametypeNames[g_gametype.integer];
+
+				if( !strstr( ent->gametype, gametypeName ) ) {
+					//G_FreeEntity( ent );
+					//return;
+					ent->r.svFlags = SVF_NOCLIENT;
+					ent->s.eFlags |= EF_NODRAW;
+					ent->tag = TAG_DONTSPAWN;
+				} else {
+					ent->r.svFlags = SVF_BROADCAST;
+					ent->s.eFlags &= ~EF_NODRAW;
+					ent->tag = 0;
+				}
+			}
+
+		}
+	}
+
+
+	G_FindTeams();
+
+	if( g_gametype.integer >= GT_TEAM ) {
+		G_CheckTeamItems();
+	}
+
+	SaveRegisteredItems();
+
+	G_LocateSpawnSpots();
+
+	ent = g_entities;
+	for ( i = 0; i < MAX_CLIENTS; i++, ent++ ) {
+		if(g_gametype.integer >= GT_TEAM) {
+			if(!ent->client) {
+				continue;
+			}
+
+			if(!ent->client->sess.sessionTeam) {
+				if(rand() * 3 % 2 == 1) {
+					ent->client->sess.sessionTeam = TEAM_BLUE;
+					ent->client->ps.persistant[ PERS_TEAM ] = TEAM_BLUE;
+				} else {
+					ent->client->sess.sessionTeam = TEAM_RED;
+					ent->client->ps.persistant[ PERS_TEAM ] = TEAM_RED;
+				}
+			}
+		} else {
+			if(ent->client->sess.sessionTeam && ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
+					ent->client->sess.sessionTeam = TEAM_FREE;
+					ent->client->ps.persistant[ PERS_TEAM ] = TEAM_FREE;
+			}
+		}
+	}
+
+	CalculateRanks();
+
+}
+
 
 
 /*
@@ -269,6 +426,24 @@ static void G_UpdateCvars( void ) {
 			if ( cv->modificationCount != cv->vmCvar->modificationCount ) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 
+				if(cv->vmCvar == &g_gametype
+#ifdef USE_INSTAGIB
+					|| cv->vmCvar == &g_instagib
+#endif
+#ifdef USE_HOTBFG
+					|| cv->vmCvar == &g_hotBFG
+#endif
+#ifdef USE_HOTRPG
+					|| cv->vmCvar == &g_hotRockets
+#endif
+#ifdef USE_TRINITY
+					|| cv->vmCvar == &g_unholyTrinity
+#endif
+				) {
+					UpdateGameType();
+
+				}
+
 				if ( cv->trackChange ) {
 					G_BroadcastServerCommand( -1, va("print \"Server: %s changed to %s\n\"", 
 						cv->cvarName, cv->vmCvar->string ) );
@@ -280,6 +455,17 @@ static void G_UpdateCvars( void ) {
 			}
 		}
 	}
+
+#ifdef USE_MULTIWORLD
+	for(i = 0; i < MAX_WORLDS; i++) {
+		trap_Cvar_Update(&mapnames[i]);
+		if ( cv->modificationCount != cv->vmCvar->modificationCount ) {
+			// TODO: check that it matched "\load game" command expectations from mappers
+			//   should have a consistent loading order, and me offeset by some time or 
+			//   location in game or trigger, but it should be useful to know this.
+		}
+	}
+#endif
 
 	if (remapped) {
 		G_RemapTeamShaders();
@@ -352,6 +538,38 @@ static void G_LocateSpawnSpots( void )
 				ent->count = 0;
 				continue;
 			}
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			if ( !Q_stricmp( ent->classname+9, "goldspawn" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GOLD;
+				ent->count = 1; // means its not initial spawn point
+				continue;
+			}
+			if ( !Q_stricmp( ent->classname+9, "greenspawn" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GREEN;
+				ent->count = 1;
+				continue;
+			}
+			// base spawn spots
+			if ( !Q_stricmp( ent->classname+9, "goldplayer" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GOLD;
+				ent->count = 0;
+				continue;
+			}
+			if ( !Q_stricmp( ent->classname+9, "greenplayer" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GREEN;
+				ent->count = 0;
+				continue;
+			}
+
+#endif
 		}
 	}
 	level.numSpawnSpots = n;
@@ -364,11 +582,16 @@ G_InitGame
 
 ============
 */
-static void G_InitGame( int levelTime, int randomSeed, int restart ) {
+#ifdef USE_MULTIWORLD
+static void G_InitGame( int levelTime, int randomSeed, int restart ) 
+#else
+static void G_InitGame( int levelTime, int randomSeed, qboolean restart ) 
+#endif
+{
 	char value[ MAX_CVAR_VALUE_STRING ];
 	int	i;
 
-	G_Printf ("------- Game Initialization -------\n");
+	G_Printf ("------- Game Initialization (%i) -------\n", restart);
 	G_Printf ("gamename: %s\n", GAMEVERSION);
 	G_Printf ("gamedate: %s\n", __DATE__);
 
@@ -390,6 +613,7 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	srand( randomSeed );
 
 	G_RegisterCvars();
+	trap_Cvar_Set("g_gametype", va("%i", g_gametype.integer));
 
 	G_ProcessIPBans();
 
@@ -398,6 +622,9 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// set some level globals
 	memset( &level, 0, sizeof( level ) );
 	level.time = levelTime;
+#ifdef USE_MULTIWORLD
+	level.world = restart;
+#endif
 
 	level.startTime = levelTime;
 
@@ -481,6 +708,10 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		G_ModelIndex( SP_PODIUM_MODEL );
 	}
 
+#ifdef USE_PORTALS
+	G_ModelIndex( "models/portal/portal_blue.md3" );
+	G_ModelIndex( "models/portal/portal_red.md3" );
+#endif
 	if ( trap_Cvar_VariableIntegerValue( "bot_enable" ) ) {
 		BotAISetup( restart );
 		BotAILoadMap( restart );
@@ -847,16 +1078,32 @@ void CalculateRanks( void ) {
 	if ( g_gametype.integer >= GT_TEAM ) {
 		trap_SetConfigstring( CS_SCORES1, va("%i", level.teamScores[TEAM_RED] ) );
 		trap_SetConfigstring( CS_SCORES2, va("%i", level.teamScores[TEAM_BLUE] ) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		trap_SetConfigstring( CS_SCORES3, va("%i", level.teamScores[TEAM_GOLD] ) );
+		trap_SetConfigstring( CS_SCORES4, va("%i", level.teamScores[TEAM_GREEN] ) );
+#endif
 	} else {
 		if ( level.numConnectedClients == 0 ) {
 			trap_SetConfigstring( CS_SCORES1, va("%i", SCORE_NOT_PRESENT) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", SCORE_NOT_PRESENT) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", SCORE_NOT_PRESENT) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", SCORE_NOT_PRESENT) );
+#endif
 		} else if ( level.numConnectedClients == 1 ) {
 			trap_SetConfigstring( CS_SCORES1, va("%i", level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] ) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", SCORE_NOT_PRESENT) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", SCORE_NOT_PRESENT) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", SCORE_NOT_PRESENT) );
+#endif
 		} else {
 			trap_SetConfigstring( CS_SCORES1, va("%i", level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] ) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", level.clients[ level.sortedClients[1] ].ps.persistant[PERS_SCORE] ) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", level.clients[ level.sortedClients[2] ].ps.persistant[PERS_SCORE] ) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", level.clients[ level.sortedClients[3] ].ps.persistant[PERS_SCORE] ) );
+#endif
 		}
 	}
 
@@ -924,6 +1171,10 @@ void MoveClientToIntermission( gentity_t *ent ) {
 
 	// clean up powerup info
 	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+	memset( client->inventory, 0, sizeof( client->inventory ) );
+	memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
+#endif
 
 	client->ps.eFlags = ( client->ps.eFlags & ~EF_PERSISTANT ) | ( client->ps.eFlags & EF_PERSISTANT );
 
@@ -1450,6 +1701,10 @@ static void G_WarmupEnd( void )
 
 	trap_SetConfigstring( CS_SCORES1, "0" );
 	trap_SetConfigstring( CS_SCORES2, "0" );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	trap_SetConfigstring( CS_SCORES3, "0" );
+	trap_SetConfigstring( CS_SCORES4, "0" );
+#endif
 	trap_SetConfigstring( CS_WARMUP, "" );
 	trap_SetConfigstring( CS_LEVEL_START_TIME, va( "%i", level.startTime ) );
 	
@@ -1477,6 +1732,11 @@ static void G_WarmupEnd( void )
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 
 		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+		memset( client->inventory, 0, sizeof( client->inventory ) );
+		memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
+#endif
+
 
 		ClientUserinfoChanged( i ); // set max.health etc.
 
@@ -1504,6 +1764,10 @@ static void G_WarmupEnd( void )
 			// already processed in Team_ResetFlags()
 			if ( ent->item->giTag == PW_NEUTRALFLAG || ent->item->giTag == PW_REDFLAG || ent->item->giTag == PW_BLUEFLAG )
 				continue;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			if ( ent->item->giTag == PW_GOLDFLAG || ent->item->giTag == PW_GREENFLAG )
+				continue;
+#endif
 
 			// remove dropped items
 			if ( ent->flags & FL_DROPPED_ITEM ) {
@@ -1649,7 +1913,12 @@ static void CheckTournament( void ) {
 
 		// if all players have arrived, start the countdown
 		if ( level.warmupTime < 0 ) {
-			if ( g_warmup.integer > 0 ) {
+			if (
+#ifdef USE_HORDES
+				!g_hordeMode.integer && 
+#endif
+			 	g_warmup.integer > 0 
+			) {
 				level.warmupTime = level.time + g_warmup.integer * 1000;
 			} else {
 				level.warmupTime = 0;
@@ -1904,6 +2173,58 @@ void G_RunThink( gentity_t *ent ) {
 }
 
 
+#ifdef USE_HORDES
+qboolean setup = qfalse;
+int lastTime = 2000;
+void G_AddBot( const char *name, float skill, const char *team, int delay, const char *altname );
+
+static void InitHoards() {
+	int i;
+	int blue_count = 0;
+	int red_count = 0;
+	int player_count = 0;
+	if(!g_hordeMode.integer) {
+		return;
+	}
+	if(level.time - lastTime < 300) {
+		return;
+	}
+	lastTime = level.time;
+	for ( i=0; i < MAX_CLIENTS ; i++ ){
+		if(!g_entities[i].inuse) {
+			continue;
+		}
+		if ( g_entities[i].r.svFlags & SVF_BOT ) {
+			if(level.clients[i].sess.sessionTeam == TEAM_BLUE) {
+				blue_count++;
+			} else if (level.clients[i].sess.sessionTeam == TEAM_RED) {
+				red_count++;
+			}
+		}
+		player_count++;
+	}
+
+	// don't continue here if server is full
+	if(player_count >= g_maxclients.integer) {
+		return;
+	}
+
+	if(g_hordeRed.integer > red_count) {
+		for(i = 0; i < g_hordeRed.integer - red_count; i++) {
+			G_AddBot( "sarge", 5, "red", i, 0 );
+			return;
+		}
+	}
+	if(g_hordeBlue.integer > blue_count) {
+		for(i = 0; i < g_hordeBlue.integer - blue_count; i++) {
+			G_AddBot( "sarge", 5, "blue", i, 0 );
+			return;
+		}
+	}
+}
+#endif
+
+
 /*
 ================
 G_RunFrame
@@ -1917,7 +2238,7 @@ static void G_RunFrame( int levelTime ) {
 	gclient_t	*client;
 	static	gentity_t *missiles[ MAX_GENTITIES - MAX_CLIENTS ];
 	int		numMissiles;
-	
+
 	// if we are waiting for the level to restart, do nothing
 	if ( level.restarted ) {
 		return;
@@ -1999,6 +2320,7 @@ static void G_RunFrame( int levelTime ) {
 		}
 
 		G_RunThink( ent );
+
 	}
 
 	if ( numMissiles ) {
@@ -2019,6 +2341,13 @@ static void G_RunFrame( int levelTime ) {
 		}
 	}
 
+#ifdef USE_HORDES
+	if(g_hordeMode.integer) {
+		InitHoards();
+	}
+#endif
+
+
 	// see if it is time to do a tournement restart
 	CheckTournament();
 
@@ -2034,6 +2363,10 @@ static void G_RunFrame( int levelTime ) {
 	// check team votes
 	CheckTeamVote( TEAM_RED );
 	CheckTeamVote( TEAM_BLUE );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	CheckTeamVote( TEAM_GOLD );
+	CheckTeamVote( TEAM_GREEN );
+#endif
 
 	// for tracking changes
 	CheckCvars();

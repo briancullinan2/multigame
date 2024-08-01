@@ -3,7 +3,7 @@
 // cg_main.c -- initialization and primary entry point for cgame
 #include "cg_local.h"
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../ui/ui_shared.h"
 // display context for new ui stuff
 displayContextDef_t cgDC;
@@ -14,6 +14,27 @@ static int enemyModelModificationCount  = -1;
 static int enemyColorsModificationCount = -1;
 static int teamModelModificationCount  = -1;
 static int teamColorsModificationCount = -1;
+static int atmosphereModificationCount = -1;
+static int weaponsOrderModificationCount = -1; //WarZone
+static int gametypeModificationCount = -1;
+
+#ifdef USE_CLASSIC_HUD
+const char *CG_SelectedHead(int index, int *actual);
+int CG_HeadCountByTeam( void );
+char *CG_Cvar_VariableString( const char *var_name );
+extern qboolean updateModel;
+static int hudFilesModificationCount = -1;
+#endif
+
+static int rmodeModificationCount = -1;
+static int raspectModificationCount = -1;
+static int rheightModificationCount = -1;
+static int rwidthModificationCount = -1;
+static int rfullscreenModificationCount = -1;
+#ifdef USE_MULTIWORLD
+static int splitXModificationCount = -1;
+static int splitYModificationCount = -1;
+#endif
 
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum );
 void CG_Shutdown( void );
@@ -26,10 +47,14 @@ qboolean linearLight = qfalse;
 qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
 void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 void (*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
+void (*trap_R_AddPolyBufferToScene)( polyBuffer_t* pPolyBuffer );
+void (*trap_R_SwitchWorld)( int world );
 #else
 int dll_com_trapGetValue;
 int dll_trap_R_AddRefEntityToScene2;
 int dll_trap_R_AddLinearLightToScene;
+int dll_trap_R_AddPolyBufferToScene;
+int dll_trap_R_SwitchWorld;
 #endif
 
 /*
@@ -66,11 +91,11 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 		CG_KeyEvent(arg0, arg1);
 		return 0;
 	case CG_MOUSE_EVENT:
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
 #endif
-		CG_MouseEvent(arg0, arg1);
+		CG_MouseEvent(arg0, arg1, arg2);
 		return 0;
 	case CG_EVENT_HANDLING:
 		CG_EventHandling(arg0);
@@ -86,12 +111,15 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 cg_t				cg;
 cgs_t				cgs;
 centity_t			cg_entities[MAX_GENTITIES];
-weaponInfo_t		cg_weapons[MAX_WEAPONS];
+weaponInfo_t		cg_weapons[WP_NUM_WEAPONS];
 itemInfo_t			cg_items[MAX_ITEMS];
 
 #define DECLARE_CG_CVAR
 	#include "cg_cvar.h"
 #undef DECLARE_CG_CVAR
+
+
+
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -133,12 +161,25 @@ void CG_RegisterCvars( void ) {
 	enemyColorsModificationCount = cg_enemyColors.modificationCount;
 	teamModelModificationCount = cg_teamModel.modificationCount;
 	teamColorsModificationCount = cg_teamColors.modificationCount;
+	atmosphereModificationCount = cg_atmosphere.modificationCount;
+	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
+	gametypeModificationCount = cg_gametype.modificationCount; 
+#ifdef USE_CLASSIC_HUD
+	hudFilesModificationCount = cg_hudFiles.modificationCount;
+#endif
 
+	rmodeModificationCount = cg_mode.modificationCount;
+	raspectModificationCount = cg_aspect.modificationCount;
+	rheightModificationCount = cg_height.modificationCount;
+	rwidthModificationCount = cg_width.modificationCount;
+	rfullscreenModificationCount = cg_fullscreen.modificationCount;
 
 	trap_Cvar_Register(NULL, "model", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
 	trap_Cvar_Register(NULL, "headmodel", DEFAULT_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
-	//trap_Cvar_Register(NULL, "team_model", DEFAULT_TEAM_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
-	//trap_Cvar_Register(NULL, "team_headmodel", DEFAULT_TEAM_HEAD, CVAR_USERINFO | CVAR_ARCHIVE );
+	trap_Cvar_Register(NULL, "cg_birdsEye", "0", CVAR_USERINFO | CVAR_TEMP );
+	trap_Cvar_Register(NULL, "cg_thirdPerson", "0", CVAR_USERINFO | CVAR_TEMP );
+	trap_Cvar_Register(NULL, "team_model", DEFAULT_TEAM_MODEL, CVAR_USERINFO | CVAR_ARCHIVE );
+	trap_Cvar_Register(NULL, "team_headmodel", DEFAULT_TEAM_HEAD, CVAR_USERINFO | CVAR_ARCHIVE );
 }
 
 
@@ -161,6 +202,15 @@ void CG_ForceModelChange( void ) {
 }
 
 
+
+#ifdef USE_WEAPON_ORDER
+void UpdateWeaponOrder (void);
+#endif
+
+static void CG_RegisterSounds( void );
+static void CG_RegisterGraphics( qboolean firstTime );
+void ResizeScreen( void );
+
 /*
 =================
 CG_UpdateCvars
@@ -176,6 +226,15 @@ void CG_UpdateCvars( void ) {
 
 	// check for modications here
 
+#ifdef USE_CLASSIC_HUD
+	if(hudFilesModificationCount != cg_hudFiles.modificationCount) {
+		hudFilesModificationCount = cg_hudFiles.modificationCount;
+		if(cg_hudFiles.string[0] == '\0') {
+			CG_LoadMenus(cg_hudFiles.string);
+		}
+	}
+#endif
+
 	// If team overlay is on, ask for updates from the server.  If its off,
 	// let the server know so we don't receive it
 	if ( drawTeamOverlayModificationCount != cg_drawTeamOverlay.modificationCount ) {
@@ -189,6 +248,50 @@ void CG_UpdateCvars( void ) {
 #endif
 		// FIXME E3 HACK
 		trap_Cvar_Set( "teamoverlay", "1" );
+	}
+
+
+	if(atmosphereModificationCount != cg_atmosphere.modificationCount) {
+		atmosphereModificationCount = cg_atmosphere.modificationCount;
+		CG_EffectParse(cg_atmosphere.string);
+	}
+#ifdef USE_WEAPON_ORDER
+  //WarZone 
+  if ( weaponsOrderModificationCount != cg_weaponOrder.modificationCount ) 
+  { 
+    UpdateWeaponOrder(); 
+    weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
+  } 
+#endif
+
+	if(gametypeModificationCount != cg_gametype.modificationCount) {
+		gametypeModificationCount = cg_gametype.modificationCount;
+		cgs.gametype = atoi(cg_gametype.string);
+		CG_RegisterGraphics(qfalse);
+		CG_RegisterSounds();
+		CG_LoadingString( "" );
+	}
+
+	if(	rmodeModificationCount != cg_mode.modificationCount
+		|| raspectModificationCount != cg_aspect.modificationCount
+		|| rheightModificationCount != cg_height.modificationCount
+		|| rwidthModificationCount != cg_width.modificationCount
+		|| rfullscreenModificationCount != cg_fullscreen.modificationCount
+#ifdef USE_MULTIWORLD
+		|| splitXModificationCount != cg_splitX.modificationCount
+		|| splitYModificationCount != cg_splitY.modificationCount
+#endif
+	) {
+		rmodeModificationCount = cg_mode.modificationCount;
+		raspectModificationCount = cg_aspect.modificationCount;
+		rheightModificationCount = cg_height.modificationCount;
+		rwidthModificationCount = cg_width.modificationCount;
+		rfullscreenModificationCount = cg_fullscreen.modificationCount;
+#ifdef USE_MULTIWORLD
+		splitXModificationCount = cg_splitX.modificationCount;
+		splitYModificationCount = cg_splitY.modificationCount;
+#endif
+		ResizeScreen();
 	}
 
 	// if model changed
@@ -448,7 +551,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.gibBounce2Sound = trap_S_RegisterSound( "sound/player/gibimp2.wav", qfalse );
 	cgs.media.gibBounce3Sound = trap_S_RegisterSound( "sound/player/gibimp3.wav", qfalse );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	cgs.media.useInvulnerabilitySound = trap_S_RegisterSound( "sound/items/invul_activate.wav", qfalse );
 	cgs.media.invulnerabilityImpactSound1 = trap_S_RegisterSound( "sound/items/invul_impact_01.wav", qfalse );
 	cgs.media.invulnerabilityImpactSound2 = trap_S_RegisterSound( "sound/items/invul_impact_02.wav", qfalse );
@@ -561,13 +664,16 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.flightSound = trap_S_RegisterSound( "sound/items/flight.wav", qfalse );
 	cgs.media.medkitSound = trap_S_RegisterSound ("sound/items/use_medkit.wav", qfalse);
 	cgs.media.quadSound = trap_S_RegisterSound("sound/items/damage3.wav", qfalse);
+#if 0
 	cgs.media.sfx_ric1 = trap_S_RegisterSound ("sound/weapons/machinegun/ric1.wav", qfalse);
 	cgs.media.sfx_ric2 = trap_S_RegisterSound ("sound/weapons/machinegun/ric2.wav", qfalse);
 	cgs.media.sfx_ric3 = trap_S_RegisterSound ("sound/weapons/machinegun/ric3.wav", qfalse);
 	//cgs.media.sfx_railg = trap_S_RegisterSound ("sound/weapons/railgun/railgf1a.wav", qfalse);
 	cgs.media.sfx_rockexp = trap_S_RegisterSound ("sound/weapons/rocket/rocklx1a.wav", qfalse);
 	cgs.media.sfx_plasmaexp = trap_S_RegisterSound ("sound/weapons/plasma/plasmx1a.wav", qfalse);
-#ifdef MISSIONPACK
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if 0
 	cgs.media.sfx_proxexp = trap_S_RegisterSound( "sound/weapons/proxmine/wstbexpl.wav" , qfalse);
 	cgs.media.sfx_nghit = trap_S_RegisterSound( "sound/weapons/nailgun/wnalimpd.wav" , qfalse);
 	cgs.media.sfx_nghitflesh = trap_S_RegisterSound( "sound/weapons/nailgun/wnalimpl.wav" , qfalse);
@@ -576,23 +682,28 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.sfx_chghitflesh = trap_S_RegisterSound( "sound/weapons/vulcan/wvulimpl.wav", qfalse );
 	cgs.media.sfx_chghitmetal = trap_S_RegisterSound( "sound/weapons/vulcan/wvulimpm.wav", qfalse );
 	cgs.media.weaponHoverSound = trap_S_RegisterSound( "sound/weapons/weapon_hover.wav", qfalse );
+#endif
 	cgs.media.kamikazeExplodeSound = trap_S_RegisterSound( "sound/items/kam_explode.wav", qfalse );
 	cgs.media.kamikazeImplodeSound = trap_S_RegisterSound( "sound/items/kam_implode.wav", qfalse );
 	cgs.media.kamikazeFarSound = trap_S_RegisterSound( "sound/items/kam_explode_far.wav", qfalse );
 	cgs.media.winnerSound = trap_S_RegisterSound( "sound/feedback/voc_youwin.wav", qfalse );
 	cgs.media.loserSound = trap_S_RegisterSound( "sound/feedback/voc_youlose.wav", qfalse );
 
+#if 0
 	cgs.media.wstbimplSound = trap_S_RegisterSound("sound/weapons/proxmine/wstbimpl.wav", qfalse);
 	cgs.media.wstbimpmSound = trap_S_RegisterSound("sound/weapons/proxmine/wstbimpm.wav", qfalse);
 	cgs.media.wstbimpdSound = trap_S_RegisterSound("sound/weapons/proxmine/wstbimpd.wav", qfalse);
 	cgs.media.wstbactvSound = trap_S_RegisterSound("sound/weapons/proxmine/wstbactv.wav", qfalse);
 #endif
+#endif
 
 	cgs.media.regenSound = trap_S_RegisterSound("sound/items/regen.wav", qfalse);
 	cgs.media.protectSound = trap_S_RegisterSound("sound/items/protect3.wav", qfalse);
 	cgs.media.n_healthSound = trap_S_RegisterSound("sound/items/n_health.wav", qfalse );
+#if 0
 	cgs.media.hgrenb1aSound = trap_S_RegisterSound("sound/weapons/grenade/hgrenb1a.wav", qfalse);
 	cgs.media.hgrenb2aSound = trap_S_RegisterSound("sound/weapons/grenade/hgrenb2a.wav", qfalse);
+#endif
 
 #ifdef MISSIONPACK
 	trap_S_RegisterSound("sound/player/james/death1.wav", qfalse );
@@ -635,7 +746,7 @@ CG_RegisterGraphics
 This function may execute for a couple of minutes with a slow disk.
 =================
 */
-static void CG_RegisterGraphics( void ) {
+static void CG_RegisterGraphics( qboolean firstTime ) {
 	int			i;
 	char		items[MAX_ITEMS+1];
 	static char		*sb_nums[11] = {
@@ -652,20 +763,28 @@ static void CG_RegisterGraphics( void ) {
 		"gfx/2d/numbers/minus_32b",
 	};
 
-	// clear any references to old media
-	memset( &cg.refdef, 0, sizeof( cg.refdef ) );
-	trap_R_ClearScene();
+	if(firstTime) {
+		// clear any references to old media
+		memset( &cg.refdef, 0, sizeof( cg.refdef ) );
+		trap_R_ClearScene();
 
-	CG_LoadingString( cgs.mapname );
+		CG_LoadingString( cgs.mapname );
 
-	trap_R_LoadWorldMap( cgs.mapname );
+		trap_R_LoadWorldMap( cgs.mapname );
 
-	// precache status bar pics
-	CG_LoadingString( "game media" );
+		// precache status bar pics
+		CG_LoadingString( "game media" );
+	}
+
 
 	for ( i = 0 ; i < ARRAY_LEN( sb_nums ) ; i++ ) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader( sb_nums[i] );
 	}
+  //cgs.media.timerSlices[i] = trap_R_RegisterShader( sb_nums[i] );
+  cgs.media.timerSlices[0] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice5" );
+  cgs.media.timerSlices[1] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice7" );
+  cgs.media.timerSlices[2] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice12" );
+  cgs.media.timerSlices[3] = trap_R_RegisterShaderNoMip( "gfx/2d/timer/slice24" );
 
 	cgs.media.botSkillShaders[0] = trap_R_RegisterShader( "menu/art/skill1.tga" );
 	cgs.media.botSkillShaders[1] = trap_R_RegisterShader( "menu/art/skill2.tga" );
@@ -676,6 +795,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.viewBloodShader = trap_R_RegisterShader( "viewBloodBlend" );
 
 	cgs.media.deferShader = trap_R_RegisterShaderNoMip( "gfx/2d/defer.tga" );
+	cgs.media.trailShader = trap_R_RegisterShaderNoMip( "flightTrail" );
 
 	cgs.media.scoreboardName = trap_R_RegisterShaderNoMip( "menu/tab/name.tga" );
 	cgs.media.scoreboardPing = trap_R_RegisterShaderNoMip( "menu/tab/ping.tga" );
@@ -685,7 +805,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.smokePuffShader = trap_R_RegisterShader( "smokePuff" );
 	cgs.media.smokePuffRageProShader = trap_R_RegisterShader( "smokePuffRagePro" );
 	cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader( "shotgunSmokePuff" );
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	cgs.media.nailPuffShader = trap_R_RegisterShader( "nailtrail" );
 	cgs.media.blueProxMine = trap_R_RegisterModel( "models/weaphits/proxmineb.md3" );
 #endif
@@ -693,6 +813,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );
 	cgs.media.lagometerShader = trap_R_RegisterShader("lagometer" );
 	cgs.media.connectionShader = trap_R_RegisterShader( "disconnected" );
+#ifdef USE_ADVANCED_CLASS
+	cgs.media.voreBallShader = trap_R_RegisterShader( "sprites/plasma1%hue0.15" );
+#endif
 
 	cgs.media.waterBubbleShader = trap_R_RegisterShader( "waterBubble" );
 
@@ -702,6 +825,7 @@ static void CG_RegisterGraphics( void ) {
 	for ( i = 0 ; i < NUM_CROSSHAIRS ; i++ ) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader( va("gfx/2d/crosshair%c", 'a'+i) );
 	}
+	cgs.media.crosshairShader[i] = trap_R_RegisterShader( "menu/art/3_cursor2" );
 
 	cgs.media.backTileShader = trap_R_RegisterShader( "gfx/2d/backtile" );
 	cgs.media.noammoShader = trap_R_RegisterShader( "icons/noammo" );
@@ -711,6 +835,11 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.quadWeaponShader = trap_R_RegisterShader("powerups/quadWeapon" );
 	cgs.media.battleSuitShader = trap_R_RegisterShader("powerups/battleSuit" );
 	cgs.media.battleWeaponShader = trap_R_RegisterShader("powerups/battleWeapon" );
+#ifdef USE_ADVANCED_ITEMS
+	cgs.media.gravityWeaponShader = trap_R_RegisterShader("powerups/battleWeapon%hue0.25" );
+	cgs.media.gravitySuitShader = trap_R_RegisterShader("powerups/battleSuit%hue0.25" );
+	cgs.media.ammoRegenShader = trap_R_RegisterShader("powerups/ammoregen" );
+#endif
 	cgs.media.invisShader = trap_R_RegisterShader("powerups/invisibility" );
 	cgs.media.regenShader = trap_R_RegisterShader("powerups/regen" );
 	cgs.media.hastePuffShader = trap_R_RegisterShader("hasteSmokePuff" );
@@ -739,21 +868,38 @@ static void CG_RegisterGraphics( void ) {
 		cgs.media.blueFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_blu1" );
 		cgs.media.blueFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_blu2" );
 		cgs.media.blueFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_blu3" );
-
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		cgs.media.goldFlagModel = trap_R_RegisterModel( "models/flags/k_flag.md3" );
+		cgs.media.greenFlagModel = trap_R_RegisterModel( "models/flags/g_flag.md3" );
+		cgs.media.goldFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_gold1" );
+		cgs.media.goldFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_gold2" );
+		cgs.media.goldFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_gold3" );
+		cgs.media.greenFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_green1" );
+		cgs.media.greenFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_green2" );
+		cgs.media.greenFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_green3" );
+#endif
 		cgs.media.flagPoleModel = trap_R_RegisterModel( "models/flag2/flagpole.md3" );
 		cgs.media.flagFlapModel = trap_R_RegisterModel( "models/flag2/flagflap3.md3" );
 
 		cgs.media.redFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/red.skin" );
 		cgs.media.blueFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/blue.skin" );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		cgs.media.goldFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/gold.skin" );
+		cgs.media.greenFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/green.skin" );
+#endif
 		cgs.media.neutralFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/white.skin" );
 #ifdef MISSIONPACK
 		cgs.media.redFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/red_base.md3" );
 		cgs.media.blueFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/blue_base.md3" );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		cgs.media.goldFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/gold_base.md3" );
+		cgs.media.greenFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/green_base.md3" );
+#endif
 		cgs.media.neutralFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/ntrl_base.md3" );
 #endif
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	if ( cgs.gametype == GT_1FCTF || cg_buildScript.integer ) {
 		cgs.media.neutralFlagModel = trap_R_RegisterModel( "models/flags/n_flag.md3" );
 		cgs.media.flagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_neutral1" );
@@ -821,7 +967,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.teleportEffectModel = trap_R_RegisterModel( "models/misc/telep.md3" );
 	cgs.media.teleportEffectShader = trap_R_RegisterShader( "teleportEffect" );
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	cgs.media.kamikazeEffectModel = trap_R_RegisterModel( "models/weaphits/kamboom2.md3" );
 	cgs.media.kamikazeShockWave = trap_R_RegisterModel( "models/weaphits/kamwave.md3" );
 	cgs.media.kamikazeHeadModel = trap_R_RegisterModel( "models/powerups/kamikazi.md3" );
@@ -835,6 +981,23 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.medkitUsageModel = trap_R_RegisterModel( "models/powerups/regen.md3" );
 	cgs.media.heartShader = trap_R_RegisterShaderNoMip( "ui/assets/statusbar/selectedhealth.tga" );
 	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
+#endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  cgs.media.frozenShader = trap_R_RegisterShader("freezeShader" );
+	cgs.media.freezeMarkShader = trap_R_RegisterShader( "freezeMarkShader" );
+  cgs.media.frozenSound = trap_S_RegisterSound("sound/teamplay/freezing.wav", qfalse);
+  cgs.media.unfrozenSound = trap_S_RegisterSound("sound/teamplay/xunfreeze.wav", qfalse);
+#endif
+
+#ifdef USE_FLAME_THROWER
+	if(!cgs.media.flameBallShader) {
+  	cgs.media.flameBallShader = trap_R_RegisterShader( "sprites/flameball" );
+  }
+#endif
+#ifdef USE_LASER_SIGHT
+	if(!cgs.media.laserShader) {
+  	cgs.media.laserShader = trap_R_RegisterShader( "sprites/laser" );
+	}
 #endif
 
 	cgs.media.medalImpressive = trap_R_RegisterShaderNoMip( "medal_impressive" );
@@ -1022,7 +1185,10 @@ void CG_StartMusic( void ) {
 
 	trap_S_StartBackgroundTrack( parm1, parm2 );
 }
-#ifdef MISSIONPACK
+
+
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
+
 char *CG_GetMenuBuffer(const char *filename) {
 	int	len;
 	fileHandle_t	f;
@@ -1283,11 +1449,21 @@ void CG_LoadMenus(const char *menuFile) {
 
 	len = trap_FS_FOpenFile( menuFile, &f, FS_READ );
 	if ( !f ) {
+#ifdef USE_CLASSIC_HUD
+		trap_Print( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
+		len = trap_FS_FOpenFile( "ui/hud.txt", &f, FS_READ );
+		if (!f) {
+			trap_Print( va( S_COLOR_RED "default menu file not found: ui/hud.txt, using vanilla hud!\n", menuFile ) );
+			trap_Cvar_Set( "cg_hudFiles", "" );
+			return;
+		}
+#else
 		trap_Error( va( S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile ) );
 		len = trap_FS_FOpenFile( "ui/hud.txt", &f, FS_READ );
 		if (!f) {
 			trap_Error( va( S_COLOR_RED "default menu file not found: ui/hud.txt, unable to continue!\n", menuFile ) );
 		}
+#endif
 	}
 
 	if ( len >= MAX_MENUDEFFILE ) {
@@ -1340,12 +1516,6 @@ void CG_LoadMenus(const char *menuFile) {
 }
 
 
-
-static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
-	return qfalse;
-}
-
-
 static int CG_FeederCount(float feederID) {
 	int i, count;
 	count = 0;
@@ -1363,7 +1533,14 @@ static int CG_FeederCount(float feederID) {
 		}
 	} else if (feederID == FEEDER_SCOREBOARD) {
 		return cg.numScores;
-	}
+	} 
+#ifdef USE_CLASSIC_HUD
+	else if (feederID == FEEDER_HEADS) {
+		return CG_HeadCountByTeam();
+	}// else if (feederID == FEEDER_Q3HEADS) {
+	//	return cg.q3HeadCount;
+	//}
+#endif
 	return count;
 }
 
@@ -1421,6 +1598,279 @@ static clientInfo_t * CG_InfoFromScoreIndex(int index, int team, int *scoreIndex
 	return &cgs.clientinfo[ cg.scores[index].client ];
 }
 
+#ifdef USE_CLASSIC_HUD
+
+
+static qboolean Team_Parse(char **p) {
+  char *token;
+  const char *tempStr;
+	int i;
+
+  token = COM_ParseExt(p, qtrue);
+
+  if (token[0] != '{') {
+    return qfalse;
+  }
+
+  while ( 1 ) {
+
+    token = COM_ParseExt(p, qtrue);
+    
+    if (Q_stricmp(token, "}") == 0) {
+      return qtrue;
+    }
+
+    if ( !token || token[0] == 0 ) {
+      return qfalse;
+    }
+
+    if (token[0] == '{') {
+			qboolean skipClosing = qfalse;
+
+      // seven tokens per line, team name and icon, and 5 team member names
+      if (!String_Parse(p, &cg.teamList[cg.teamCount].teamName) || !String_Parse(p, &tempStr)) {
+        return qfalse;
+      }
+    
+
+			cg.teamList[cg.teamCount].imageName = tempStr;
+	    cg.teamList[cg.teamCount].teamIcon = trap_R_RegisterShaderNoMip(cg.teamList[cg.teamCount].imageName);
+		  cg.teamList[cg.teamCount].teamIcon_Metal = trap_R_RegisterShaderNoMip(va("%s_metal",cg.teamList[cg.teamCount].imageName));
+			cg.teamList[cg.teamCount].teamIcon_Name = trap_R_RegisterShaderNoMip(va("%s_name", cg.teamList[cg.teamCount].imageName));
+
+			cg.teamList[cg.teamCount].cinematic = -1;
+
+			for (i = 0; i < TEAM_MEMBERS; i++) {
+				cg.teamList[cg.teamCount].teamMembers[i] = NULL;
+				if (!String_Parse(p, &cg.teamList[cg.teamCount].teamMembers[i])) {
+					break;
+				}
+				if(cg.teamList[cg.teamCount].teamMembers[i][0] == '}') {
+					skipClosing = qtrue;
+					cg.teamList[cg.teamCount].teamMembers[i] = NULL;
+					break;
+				}
+			}
+
+      Com_Printf("Loaded team %s with team icon %s.\n", cg.teamList[cg.teamCount].teamName, tempStr);
+      if (cg.teamCount < MAX_TEAMS) {
+        cg.teamCount++;
+      } else {
+        Com_Printf("Too many teams, last team replaced!\n");
+      }
+			if(skipClosing) {
+				continue;
+			}
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] != '}') {
+        return qfalse;
+      }
+    }
+  }
+
+  return qfalse;
+}
+
+static qboolean Character_Parse(char **p) {
+  char *token;
+  const char *tempStr;
+
+  token = COM_ParseExt(p, qtrue);
+
+  if (token[0] != '{') {
+    return qfalse;
+  }
+
+
+  while ( 1 ) {
+    token = COM_ParseExt(p, qtrue);
+
+    if (Q_stricmp(token, "}") == 0) {
+      return qtrue;
+    }
+
+    if ( !token || token[0] == 0 ) {
+      return qfalse;
+    }
+
+    if (token[0] == '{') {
+      // two tokens per line, character name and base model
+      if (!String_Parse(p, &cg.characterList[cg.characterCount].name) || !String_Parse(p, &tempStr)) {
+        return qfalse;
+      }
+
+			
+			cg.characterList[cg.characterCount].headModel = qfalse;
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] == 'h') {
+				cg.characterList[cg.characterCount].headModel = qtrue;
+				token = COM_ParseExt(p, qtrue);
+			}
+
+			if (tempStr && (!Q_stricmp(tempStr, "female"))) {
+					cg.characterList[cg.characterCount].base = String_Alloc(va("Janet"));
+				} else if (tempStr && (!Q_stricmp(tempStr, "male"))) {
+					cg.characterList[cg.characterCount].base = String_Alloc(va("James"));
+			} else {
+					cg.characterList[cg.characterCount].base = String_Alloc(va("%s",tempStr));
+			}
+
+      Com_Printf("Loaded %s character %s.\n", cg.characterList[cg.characterCount].base, cg.characterList[cg.characterCount].name);
+
+
+      cg.characterList[cg.characterCount].headImage = -1;
+			if(!cg.characterList[cg.characterCount].headModel) {
+				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+				if(!cg.characterList[cg.characterCount].headImage) {
+					cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/%s/icon_default.tga", cg.characterList[cg.characterCount].base));
+					cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+				}
+			} else {
+				cg.characterList[cg.characterCount].imageName = String_Alloc(va("models/players/heads/%s/icon_default.tga", cg.characterList[cg.characterCount].name));
+				cg.characterList[cg.characterCount].headImage = trap_R_RegisterShaderNoMip(cg.characterList[cg.characterCount].imageName);
+			}
+
+
+
+
+      if (cg.characterCount < MAX_HEADS) {
+        cg.characterCount++;
+      } else {
+        Com_Printf("Too many characters, last character replaced!\n");
+      }
+     
+      if (token[0] != '}') {
+        return qfalse;
+      }
+    }
+  }
+
+  return qfalse;
+}
+
+
+static qboolean Alias_Parse(char **p) {
+  char *token;
+
+  token = COM_ParseExt(p, qtrue);
+
+  if (token[0] != '{') {
+    return qfalse;
+  }
+
+  while ( 1 ) {
+    token = COM_ParseExt(p, qtrue);
+
+    if (Q_stricmp(token, "}") == 0) {
+      return qtrue;
+    }
+
+    if ( !token || token[0] == 0 ) {
+      return qfalse;
+    }
+
+    if (token[0] == '{') {
+      // three tokens per line, character name, bot alias, and preferred action a - all purpose, d - defense, o - offense
+      if (!String_Parse(p, &cg.aliasList[cg.aliasCount].name) || !String_Parse(p, &cg.aliasList[cg.aliasCount].ai) || !String_Parse(p, &cg.aliasList[cg.aliasCount].action)) {
+        return qfalse;
+      }
+    
+      Com_Printf("Loaded character alias %s using character ai %s.\n", cg.aliasList[cg.aliasCount].name, cg.aliasList[cg.aliasCount].ai);
+      if (cg.aliasCount < MAX_ALIASES) {
+        cg.aliasCount++;
+      } else {
+        Com_Printf("Too many aliases, last alias replaced!\n");
+      }
+     
+      token = COM_ParseExt(p, qtrue);
+      if (token[0] != '}') {
+        return qfalse;
+      }
+    }
+  }
+
+  return qfalse;
+}
+
+
+// mode 
+// 0 - high level parsing
+// 1 - team parsing
+// 2 - character parsing
+static void CG_ParseTeamInfo(const char *teamFile) {
+	char	*token;
+  char *p;
+  char *buff = NULL;
+  //static int mode = 0; TTimo: unused
+
+  buff = CG_GetMenuBuffer(teamFile);
+  if (!buff) {
+    return;
+  }
+
+  p = buff;
+
+	while ( 1 ) {
+		token = COM_ParseExt( &p, qtrue );
+		if( !token || token[0] == 0 || token[0] == '}') {
+			break;
+		}
+
+		if ( Q_stricmp( token, "}" ) == 0 ) {
+      break;
+    }
+
+    if (Q_stricmp(token, "teams") == 0) {
+
+      if (Team_Parse(&p)) {
+        continue;
+      } else {
+        break;
+      }
+    }
+
+    if (Q_stricmp(token, "characters") == 0) {
+      Character_Parse(&p);
+    }
+
+    if (Q_stricmp(token, "aliases") == 0) {
+      Alias_Parse(&p);
+    }
+
+  }
+
+}
+
+
+
+/*
+===============
+UI_LoadTeams
+===============
+*/
+#if 0
+static void CG_LoadTeams( void ) {
+	char	teamList[4096];
+	char	*teamName;
+	int		i, len, count;
+
+	count = trap_FS_GetFileList( "", "team", teamList, 4096 );
+
+	if (count) {
+		teamName = teamList;
+		for ( i = 0; i < count; i++ ) {
+			len = strlen( teamName );
+			CG_ParseTeamInfo(teamName);
+			teamName += len + 1;
+		}
+	}
+
+}
+#endif
+
+#endif
+
 static const char *CG_FeederItemText(float feederID, int index, int column, qhandle_t *handle) {
 	gitem_t *item;
 	int scoreIndex = 0;
@@ -1429,6 +1879,13 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 	score_t *sp = NULL;
 
 	*handle = -1;
+
+#ifdef USE_CLASSIC_HUD
+	if (feederID == FEEDER_HEADS) {
+		int actual;
+		return CG_SelectedHead(index, &actual);
+	}
+#endif
 
 	if (feederID == FEEDER_REDTEAM_LIST) {
 		team = TEAM_RED;
@@ -1506,38 +1963,81 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 }
 
 static qhandle_t CG_FeederItemImage(float feederID, int index) {
+	if (feederID == FEEDER_HEADS) {
+		int actual;
+		CG_SelectedHead(index, &actual);
+		index = actual;
+		if (index >= 0 && index < cg.characterCount) {
+			if (cg.characterList[index].headImage == -1) {
+				cg.characterList[index].headImage = trap_R_RegisterShaderNoMip(cg.characterList[index].imageName);
+			}
+			return cg.characterList[index].headImage;
+		}
+  }
 	return 0;
 }
 
-static void CG_FeederSelection(float feederID, int index) {
-	if ( cgs.gametype >= GT_TEAM ) {
-		int i, count;
-		int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_RED : TEAM_BLUE;
-		count = 0;
-		for (i = 0; i < cg.numScores; i++) {
-			if (cg.scores[i].team == team) {
-				if (index == count) {
-					cg.selectedScore = i;
+void CG_FeederSelection(float feederID, int index) {
+	if(FEEDER_REDTEAM_LIST == feederID || FEEDER_BLUETEAM_LIST == feederID) {
+		if ( cgs.gametype >= GT_TEAM ) {
+			int i, count;
+			int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_RED : TEAM_BLUE;
+			count = 0;
+			for (i = 0; i < cg.numScores; i++) {
+				if (cg.scores[i].team == team) {
+					if (index == count) {
+						cg.selectedScore = i;
+					}
+					count++;
 				}
-				count++;
 			}
 		}
-	} else {
+	}
+
+#ifdef USE_CLASSIC_HUD
+  if (feederID == FEEDER_HEADS) {
+		int actual;
+		CG_SelectedHead(index, &actual);
+		index = actual;
+		if (index >= 0 && index < cg.characterCount) {
+			trap_Cvar_Set( "team_model", va("%s", cg.characterList[index].base));
+			trap_Cvar_Set( "model", va("%s", cg.characterList[index].base));
+			// this is for situations like urban error where there is a single female or male model and many textured skins 
+			if(cg.characterList[index].headModel) {
+				trap_Cvar_Set( "team_headmodel", va("*%s", cg.characterList[index].name)); 
+				trap_Cvar_Set( "headmodel", va("*%s", cg.characterList[index].name)); 
+			} else {
+				trap_Cvar_Set( "team_headmodel", cg.characterList[index].name); 
+				trap_Cvar_Set( "headmodel", cg.characterList[index].name); 
+			}
+			updateModel = qtrue;
+		}
+  } 
+	/*else if (feederID == FEEDER_Q3HEADS) {
+    if (index >= 0 && index < cg.q3HeadCount) {
+      trap_Cvar_Set( "model", cg.q3HeadNames[index]);
+      trap_Cvar_Set( "headmodel", cg.q3HeadNames[index]);
+			updateModel = qtrue;
+		}
+  }*/
+
+#endif
+
+
+	 else {
 		cg.selectedScore = index;
 	}
 }
-#endif
 
-#ifdef MISSIONPACK
+
 static float CG_Cvar_Get(const char *cvar) {
 	char buff[128];
 	memset(buff, 0, sizeof(buff));
 	trap_Cvar_VariableStringBuffer(cvar, buff, sizeof(buff));
 	return atof(buff);
 }
-#endif
 
-#ifdef MISSIONPACK
+
 void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
 	CG_Text_Paint(x, y, scale, color, text, 0, limit, style);
 }
@@ -1558,7 +2058,11 @@ static int CG_OwnerDrawWidth(int ownerDraw, float scale) {
 	  case CG_BLUE_NAME:
 			return CG_Text_Width(cg_blueTeamName.string, scale, 0);
 			break;
-
+#ifdef USE_CLASSIC_HUD
+    case UI_CLANNAME:
+			return CG_Text_Width(CG_Cvar_VariableString("ui_teamName"), scale, 0);
+      break;
+#endif
 
 	}
 	return 0;
@@ -1579,6 +2083,15 @@ static void CG_DrawCinematic(int handle, float x, float y, float w, float h) {
 
 static void CG_RunCinematicFrame(int handle) {
   trap_CIN_RunCinematic(handle);
+}
+
+qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key);
+
+qboolean trap_Key_GetOverstrikeMode( void ) {
+	return qfalse;
+}
+
+void trap_Key_SetOverstrikeMode( qboolean state ) {
 }
 
 /*
@@ -1617,8 +2130,8 @@ void CG_LoadHudMenu( void ) {
 	cgDC.getCVarString = trap_Cvar_VariableStringBuffer;
 	cgDC.getCVarValue = CG_Cvar_Get;
 	cgDC.drawTextWithCursor = &CG_Text_PaintWithCursor;
-	//cgDC.setOverstrikeMode = &trap_Key_SetOverstrikeMode;
-	//cgDC.getOverstrikeMode = &trap_Key_GetOverstrikeMode;
+	cgDC.setOverstrikeMode = &trap_Key_SetOverstrikeMode;
+	cgDC.getOverstrikeMode = &trap_Key_GetOverstrikeMode;
 	cgDC.startLocalSound = &trap_S_StartLocalSound;
 	cgDC.ownerDrawHandleKey = &CG_OwnerDrawHandleKey;
 	cgDC.feederCount = &CG_FeederCount;
@@ -1677,8 +2190,56 @@ void CG_AssetCache( void ) {
 	cgDC.Assets.scrollBarThumb = trap_R_RegisterShaderNoMip( ASSET_SCROLL_THUMB );
 	cgDC.Assets.sliderBar = trap_R_RegisterShaderNoMip( ASSET_SLIDER_BAR );
 	cgDC.Assets.sliderThumb = trap_R_RegisterShaderNoMip( ASSET_SLIDER_THUMB );
+
 }
+
 #endif
+
+
+void CG_EffectParse( const char *effectstr );
+
+void ResizeScreen( void ) {
+	int vidWidth;
+	int vidHeight;
+
+	// get the rendering configuration from the client system
+	trap_GetGlconfig( &cgs.glconfig );
+
+	cgs.screenXBias = 0.0;
+	cgs.screenYBias = 0.0;
+	vidWidth = cgs.glconfig.vidWidth;
+	vidHeight = cgs.glconfig.vidHeight;
+#ifdef USE_MULTIWORLD
+	vidWidth /= cg_splitX.integer;
+	vidHeight /= cg_splitY.integer;
+#endif
+	
+	if ( vidWidth * 480 > vidHeight * 640 ) {
+		// wide screen, scale by height
+		cgs.screenXScale = cgs.screenYScale = vidHeight * (1.0/480.0);
+		cgs.screenXBias = 0.5 * ( vidWidth - ( vidHeight * (640.0/480.0) ) );
+	}
+	else {
+		// no wide screen, scale by width
+		cgs.screenXScale = cgs.screenYScale = vidWidth * (1.0/640.0);
+		cgs.screenYBias = 0.5 * ( vidHeight - ( vidWidth * (480.0/640.0) ) );
+	}
+
+	cgs.screenXmin = 0.0 - (cgs.screenXBias / cgs.screenXScale);
+	cgs.screenXmax = 640.0 + (cgs.screenXBias / cgs.screenXScale);
+
+	cgs.screenYmin = 0.0 - (cgs.screenYBias / cgs.screenYScale);
+	cgs.screenYmax = 480.0 + (cgs.screenYBias / cgs.screenYScale);
+
+	cgs.cursorScaleR = 1.0 / cgs.screenXScale;
+	if ( cgs.cursorScaleR < 0.5 ) {
+		cgs.cursorScaleR = 0.5;
+	}
+
+}
+
+
+
 /*
 =================
 CG_Init
@@ -1690,6 +2251,7 @@ Will perform callbacks to make the loading info screen update.
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	char  value[MAX_CVAR_VALUE_STRING];
 	const char	*s;
+	vec3_t mins, maxs;
 
 	// clear everything
 	memset( &cgs, 0, sizeof( cgs ) );
@@ -1715,6 +2277,20 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 			trap_R_AddLinearLightToScene = (void*)~atoi( value );
 			linearLight = qtrue;
 		}
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddPolyBufferToScene" ) ) {
+			trap_R_AddPolyBufferToScene = (void*)~atoi( value );
+			trap_Cvar_Set("cg_atmosphericEffects", "1");
+		} else {
+			trap_Cvar_Set("cg_atmosphericEffects", "0");
+		}
+#ifdef USE_MULTIWORLD
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_SwitchWorld" ) ) {
+			trap_R_SwitchWorld = (void*)~atoi( value );
+			cg.multiworld = qtrue;
+		} else {
+			cg.multiworld = qfalse;
+		}
+#endif
 #else
 		dll_com_trapGetValue = atoi( value );
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddRefEntityToScene2" ) ) {
@@ -1725,6 +2301,20 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 			dll_trap_R_AddLinearLightToScene = atoi( value );
 			linearLight = qtrue;
 		}
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddPolyBufferToScene" ) ) {
+			dll_trap_R_AddPolyBufferToScene = atoi( value );
+			trap_Cvar_Set("cg_atmosphericEffects", "1");
+		} else {
+			trap_Cvar_Set("cg_atmosphericEffects", "0");
+		}
+#ifdef USE_MULTIWORLD
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_SwitchWorld" ) ) {
+			dll_trap_R_SwitchWorld = atoi( value );
+			cg.multiworld = qtrue;
+		} else {
+			cg.multiworld = qfalse;
+		}
+#endif
 #endif
 	}
 
@@ -1742,6 +2332,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	cg.weaponSelect = WP_MACHINEGUN;
 
 	cgs.redflag = cgs.blueflag = -1; // For compatibily, default to unset for
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	cgs.goldflag = cgs.greenflag = -1; // For compatibily, default to unset for
+#endif
 	cgs.flagStatus = -1;
 	// old servers
 
@@ -1801,7 +2394,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 
 	trap_CM_LoadMap( cgs.mapname );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	String_Init();
 #endif
 
@@ -1813,15 +2406,37 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 
 	CG_LoadingString( "graphics" );
 
-	CG_RegisterGraphics();
+	CG_RegisterGraphics(qtrue);
+
+	trap_R_ModelBounds( 0, mins, maxs );
+	cg.mapcoordsMins[0] = (int)mins[0];
+	cg.mapcoordsMaxs[0] = (int)maxs[0];
+	cg.mapcoordsMins[1] = (int)mins[1];
+	cg.mapcoordsMaxs[1] = (int)maxs[1];
+	if(cg.mapcoordsMaxs[1] - cg.mapcoordsMins[1] > cg.mapcoordsMaxs[0] - cg.mapcoordsMins[0]) {
+		int dif = (int)((cg.mapcoordsMaxs[1] - cg.mapcoordsMins[1]) - (cg.mapcoordsMaxs[0] - cg.mapcoordsMins[0]));
+		cg.mapcoordsMins[0] -= dif / 2.0f;
+		cg.mapcoordsMaxs[0] += dif / 2.0f;
+	} else {
+		int dif = (int)((cg.mapcoordsMaxs[0] - cg.mapcoordsMins[0]) - (cg.mapcoordsMaxs[1] - cg.mapcoordsMins[1]));
+		cg.mapcoordsMins[1] -= dif / 2.0f;
+		cg.mapcoordsMaxs[1] += dif / 2.0f;
+	}
+	cg.mapcoordsValid = qtrue;
+	CG_EffectParse(cg_atmosphere.string);
 
 	CG_LoadingString( "clients" );
 
 	CG_RegisterClients();		// if low on memory, some clients will be deferred
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	CG_AssetCache();
 	CG_LoadHudMenu();      // load new hud stuff
+#endif
+
+#if defined(USE_CLASSIC_HUD)
+	CG_ParseTeamInfo("teaminfo.txt");
+	//CG_LoadTeams();
 #endif
 
 	cg.loading = qfalse;	// future players will be deferred
@@ -1872,12 +2487,12 @@ CG_EventHandling
       2 - scoreboard
       3 - hud editor
 */
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU) && !defined(USE_CLASSIC_HUD)
 void CG_EventHandling( cgame_event_t type ) 
 {
 
 }
-
+#endif
 
 void CG_SetScoreCatcher( qboolean enable )
 {
@@ -1916,8 +2531,13 @@ void CG_SetScoreCatcher( qboolean enable )
 	}
 }
 
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_MENU) || defined(USE_CLASSIC_HUD)
 
+#ifdef USE_CLASSIC_HUD
+void CG_CLASSIC_KeyEvent( int key, qboolean down ) 
+#else
 void CG_KeyEvent( int key, qboolean down ) 
+#endif
 {
 	// process scoreboard clicks etc.
 	if ( cgs.score_catched && down ) 
@@ -1932,10 +2552,25 @@ void CG_KeyEvent( int key, qboolean down )
 }
 
 
-void CG_MouseEvent( int x, int y )
+#ifdef USE_CLASSIC_HUD
+void CG_CLASSIC_MouseEvent( int x, int y, qboolean absolute )
+#else
+void CG_MouseEvent( int x, int y, qboolean absolute )
+#endif
 {
-	cgs.cursorX += x * cgs.cursorScaleR;
-	cgs.cursorY += y * cgs.cursorScaleR;
+	if(x == -10000 && y == -10000) {
+		cgs.cursorX = 0;
+		cgs.cursorY = 0;
+		cgs.absolute = qtrue;
+	} else if(cgs.absolute) {
+		cgs.cursorX = x;
+		cgs.cursorY = y;
+		cgs.absolute = qfalse;
+	} else {
+		cgs.absolute = qfalse;
+		cgs.cursorX += x * cgs.cursorScaleR;
+		cgs.cursorY += y * cgs.cursorScaleR;
+	}
 
 	if ( cgs.cursorX < cgs.screenXmin ) {
 		cgs.cursorX = cgs.screenXmin;

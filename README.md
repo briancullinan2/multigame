@@ -28,7 +28,7 @@ Unofficial Quake III Arena gamecode patch
  * add shrinking and growing effects through a limited number of red and blue pill commands
  * ant-man style shrinking where the player doesn't get slower as they get smaller, larger players move slower because of larger metabolisms
  * king of the hill with portals. instead of rounds, levels run continuously, each time a player makes it to first place or hits the score limit, only they are teleported to the next map and the other players remain, the game is won by rotating through all the maps hitting the score limit in each one. kings can move because worlds using interdimensional portals, non-kings get blended.
- * many many weapons from every other mod, need a handy way to do this with data
+ * DONE: many many weapons from every other mod, need a handy way to do this with data
  * walking on walls. possible way to implement, load the world in 6 orientations along each axis, then estimate the intersections of each corner
  * puzzles like the one in myst to solve, add EngineOfCreation
 
@@ -75,10 +75,41 @@ Unofficial Quake III Arena gamecode patch
   * Campaign mode, playing older engine content and playing as enemy characters, new AI for old enemies
   * Keep away, where one team has to kill the flag carrier and return the flag to score.
   * Add light coming from player to flashlight command so even if you're pointing at the sky it looks like a flashlight is on.
-  * Make "tech-demo" as an example of some game dynamic. Make a Matrix mod that loads the white loading program and jump simulation and UrT subway. Make a space to planet landing sequence with death modes. https://www.youtube.com/watch?v=sLqXFF8mlEU
+  * Make "tech-demo" as an example of some game dynamic. 
+  * DONE: Make a Matrix mod that loads the white loading program 
+  * TODO: and jump simulation and UrT subway. Make a space to planet landing sequence with death modes. https://www.youtube.com/watch?v=sLqXFF8mlEU
   * Quake 5 play on the home-worlds of each species, but in a mistakenly massive defeat of stop the Arenas on Vadrigas, they've expanded to each home world.
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
+  * quake team racing, like crash team racing with a car power up
+  * add level loading lobbies poke the old crash bandicoot gamea
+  * use it as a game bowrd for dungeons and drangons and model scenese and entities for dnd players
+  * model the entire city of flagstaff as a metaverse proof of concept
+  * remove weapons from 0 and replace with hand base melee attack, good for matcbing tremulous
+  * vehicle power ups with origin in model for cockpit
+  * finish seamless portals between worlds
+  * turn maze generator into a proper dungeon generator now with working geometries included as models entiee rooms can be referenced by shape, calculated and aligned automatically
+  * make a simpsons spin off but include and entire neighborhood of portals into even bigger spaces
+  * make a portal in this tree woolands area
+  * use camera based portals for a 4 person map but make it clever
+  * add scene lights to portals
+  * grab some alice and star wars content to test with multiworld portals particularly for teleports
+ 
+
   
+  * Playing split screen across the network for team based games where you might've been playing next to each other so you can watch your teammate.
+  * automatically generate the rest of team assets like colors players using dynamic skins
+  * LookAtKiller and LookAheadOf for aimbot powerup
+  * DONE: Add spawn point as a target for homing missiles if there are no other players, 
+  * TODO: add homing plasma, homing bullets, homing bfg, etc
+  * TODO: zombies can't be killed again, immortal, but also walk very slowly, half speed
+  * TODO: in the spirit of lame bot code, all the cyborgs should get depth hack powerup after their stamina recharges
+  * DONE: add stamina that forces the player to walk instead of run, 
+  * TODO: and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
+  * TODO: make multiplayer monsters like the new Doom game where you can play as the monster with special powers instead of weapons.
+  * TODO: add special ability powerups like Sarge can teleport in Quake Champions after waiting for a minute
+  * TODO: dragon with quad damage has blue/purple flame like Gozilla
+  * TODO: vampire mode where all life forms that "die" respawn exactly as they were before the attack in the same place, temporary ghost shader for respawn timeout time, then popping back in, they can move as a ghost, just like spectators. i think world of warcraft had this feature but you lose equipment in the process and there might have been specific areas you must return to in order to respawn from the spirit realm.
+
 
 # Documentation
 

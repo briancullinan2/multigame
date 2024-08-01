@@ -12,7 +12,7 @@
 CG_ResetEntity
 ==================
 */
-static void CG_ResetEntity( centity_t *cent ) {
+void CG_ResetEntity( centity_t *cent ) {
 	// if the previous snapshot this entity was updated in is at least
 	// an event window back in time then we can reset the previous event
 	if ( cent->snapShotTime < cg.time - EVENT_VALID_MSEC ) {
@@ -165,6 +165,88 @@ static void CG_TransitionSnapshot( void ) {
 			|| cg_nopredict.integer || cgs.synchronousClients ) {
 			CG_TransitionPlayerState( ps, ops );
 		}
+
+
+
+#ifdef USE_ADVANCED_WEAPONS
+	{
+		//cg.weaponClass = cg.snap->ps.stats[STAT_WEAPONS] >> 9;
+		int newClass = floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
+		if(newClass < 0) {
+			newClass = WP_MAX_CLASSES + newClass;
+		}
+
+		if(newClass != cg.weaponClass || cg.weaponChange
+			|| cg.snap->ps.stats[STAT_WEAPONS] != oldFrame->ps.stats[STAT_WEAPONS]) {
+			cg.weaponClass = newClass;
+			if(cg.weaponChange < 0 && !CG_WeaponSelectable( cg.weaponSelect )) {
+				PrevClass();
+				//CG_PrevWeapon_f();
+				cg.weaponChange = 0;
+			}
+			if(cg.weaponChange > 0 && !CG_WeaponSelectable( cg.weaponSelect )) {
+				NextClass();
+				//CG_NextWeapon_f();
+				cg.weaponChange = 0;
+			}
+		}
+
+		if(cg.snap->ps.stats[STAT_WEAPONS] != oldFrame->ps.stats[STAT_WEAPONS]
+			//oldFrame->ps.weapon != cg.snap->ps.weapon || cg.weaponClass != newClass
+			) {
+			
+			/*CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n%i %i %i %i %i %i %i %i %i %i\n", 
+				cg.weaponClass,
+				cg.snap->ps.ammo[0],
+				cg.snap->ps.ammo[1],
+				cg.snap->ps.ammo[2],
+				cg.snap->ps.ammo[3],
+				cg.snap->ps.ammo[4],
+				cg.snap->ps.ammo[5],
+				cg.snap->ps.ammo[6],
+				cg.snap->ps.ammo[7],
+				cg.snap->ps.ammo[8],
+				cg.snap->ps.ammo[9],
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 0)) >> 0,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 1)) >> 1,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 2)) >> 2,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 3)) >> 3,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 4)) >> 4,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 5)) >> 5,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 6)) >> 6,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 7)) >> 7,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 8)) >> 8,
+				(cg.snap->ps.stats[STAT_WEAPONS] & (1 << 9)) >> 9
+			);*/
+		}
+	}
+	if(cg.weaponClass >= WP_MAX_CLASSES) {
+		CG_Error("CG_TransitionSnapshot: out of range weapon class %d", cg.weaponClass);
+	}
+#endif
+
+
+#ifdef USE_ADVANCED_ITEMS
+		if(ps->stats[STAT_HOLDABLE_UPDATE] != ops->stats[STAT_HOLDABLE_UPDATE]
+			|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) {
+			int j;
+			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
+			CG_Printf("items %i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
+			for(j = 0; j < PW_MAX_POWERUPS; j++) {
+				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
+					CG_Printf("1");
+					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 1;
+				} else {
+					CG_Printf("0");
+					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 0;
+				}
+			}
+			CG_Printf("\n");
+		}
+
+#endif
+
+
 	}
 }
 
@@ -374,6 +456,32 @@ void CG_ProcessSnapshots( void ) {
 		// we have passed the transition from nextFrame to frame
 		CG_TransitionSnapshot();
 	} while ( 1 );
+
+
+	//CG_Printf("worlds: %i\n", cgs.clientinfo[cg.snap->ps.clientNum].worlds);
+
+#ifdef USE_MULTIWORLD
+// TODO: use this same method serverside to spy on and modify entity trajectories, like rockets and moving players
+	// spy on snapshots from other CGVMs
+	if(cg.multiworld) {
+		int i;
+		for(i = 0; i < MAX_WORLDS; i++) {
+			int latest, latestTime;
+			trap_R_SwitchWorld(i);
+			trap_GetCurrentSnapshotNumber( &latest, &latestTime );
+			if(cg.snapshotNumWorlds[i] < latest) {
+				cg.snapshotNumWorlds[i] = latest;
+				trap_GetSnapshot( latest, &cg.snapshotWorlds[i] );
+			}
+		}
+		trap_R_SwitchWorld(cgs.selectedWorld);
+
+	}
+#endif
+
+
+
+
 
 	// assert our valid conditions upon exiting
 	if ( cg.snap == NULL ) {

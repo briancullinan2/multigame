@@ -3,6 +3,17 @@
 // cg_weapons.c -- events and effects dealing with weapons
 #include "cg_local.h"
 
+#ifdef USE_ADVANCED_WEAPONS
+
+#define WEAPON_CLASS (cg.weaponClass * WP_MAX_WEAPONS)
+
+#else
+
+#define WEAPON_CLASS 
+
+#endif
+
+
 /*
 ==========================
 CG_MachineGunEjectBrass
@@ -153,7 +164,7 @@ static void CG_ShotgunEjectBrass( centity_t *cent ) {
 }
 
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 ==========================
 CG_NailgunEjectBrass
@@ -218,7 +229,7 @@ void CG_RailTrail( const clientInfo_t *ci, const vec3_t start, const vec3_t end 
 		re->u.shaderTime = cg.time / 1000.0f;
 
 	re->reType = RT_RAIL_CORE;
-	re->customShader = cgs.media.railCoreShader;
+	re->customShader = cg_weapons[WP_RAILGUN].extraShader[3];
  
 	VectorCopy(start, re->origin);
 	VectorCopy(end, re->oldorigin);
@@ -276,7 +287,7 @@ void CG_RailTrail( const clientInfo_t *ci, const vec3_t start, const vec3_t end 
 
 			re->reType = RT_SPRITE;
 			re->radius = 1.1f;
-			re->customShader = cgs.media.railRingsShader;
+			re->customShader = cg_weapons[WP_RAILGUN].extraShader[2];
 
 			re->shaderRGBA[0] = ci->color2[0] * 255;
 			re->shaderRGBA[1] = ci->color2[1] * 255;
@@ -374,7 +385,7 @@ static void CG_RocketTrail( centity_t *ent, const weaponInfo_t *wi ) {
 
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 ==========================
 CG_NailTrail
@@ -515,7 +526,7 @@ static void CG_PlasmaTrail( centity_t *cent, const weaponInfo_t *wi ) {
 
     re->reType = RT_SPRITE;
     re->radius = 0.25f;
-	re->customShader = cgs.media.railRingsShader;
+	re->customShader = cg_weapons[WP_PLASMAGUN].extraShader[2];
 	le->bounceFactor = 0.3f;
 
     re->shaderRGBA[0] = wi->flashDlightColor[0] * 63;
@@ -567,7 +578,7 @@ void CG_GrappleTrail( centity_t *ent, const weaponInfo_t *wi ) {
 		return; // Don't draw if close
 
 	beam.reType = RT_LIGHTNING;
-	beam.customShader = cgs.media.lightningShader;
+	beam.customShader = cg_weapons[WP_GRAPPLING_HOOK].extraShader[1];
 
 	AxisClear( beam.axis );
 	beam.shaderRGBA[0] = 0xff;
@@ -587,6 +598,18 @@ static void CG_GrenadeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 }
 
 
+#ifdef USE_ADVANCED_WEAPONS
+
+weaponInfo_t bg_weaponlist[] = {
+#include "./cg_weapons.h"
+#include "./cg_weapons2.h"
+	// end of list marker
+	{WP_NONE}
+};
+
+#endif
+
+
 /*
 =================
 CG_RegisterWeapon
@@ -601,6 +624,10 @@ void CG_RegisterWeapon( int weaponNum ) {
 	vec3_t			mins, maxs;
 	int				i;
 
+	if(weaponNum >= WP_NUM_WEAPONS) {
+		return;
+	}
+
 	weaponInfo = &cg_weapons[weaponNum];
 
 	if ( weaponNum == 0 ) {
@@ -611,6 +638,19 @@ void CG_RegisterWeapon( int weaponNum ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
+	for(i = 0; i < ARRAY_LEN(bg_weaponlist); i++) {
+		if(bg_weaponlist[i].giTag == weaponNum) {
+			break;
+		}
+	}
+#endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	if(i < ARRAY_LEN(bg_weaponlist)) {
+		memcpy(weaponInfo, &bg_weaponlist[i], sizeof( *weaponInfo ));
+	} else
+#endif
 	memset( weaponInfo, 0, sizeof( *weaponInfo ) );
 	weaponInfo->registered = qtrue;
 
@@ -621,7 +661,8 @@ void CG_RegisterWeapon( int weaponNum ) {
 		}
 	}
 	if ( !item->classname ) {
-		CG_Error( "Couldn't find weapon %i", weaponNum );
+		CG_Printf( "Couldn't find weapon %i", weaponNum );
+		return;
 	}
 	CG_RegisterItemVisuals( item - bg_itemlist );
 
@@ -664,6 +705,63 @@ void CG_RegisterWeapon( int weaponNum ) {
 
 	weaponInfo->loopFireSound = qfalse;
 
+#ifdef USE_ADVANCED_WEAPONS
+
+	if(weaponInfo->firingFile) {
+		weaponInfo->firingSound = trap_S_RegisterSound( weaponInfo->firingFile, qfalse );
+	}
+
+	if(weaponInfo->readyFile) {
+		weaponInfo->readySound = trap_S_RegisterSound( weaponInfo->readyFile, qfalse );
+	}
+
+	for(i = 0; i < ARRAY_LEN(weaponInfo->flashSoundFile); i++) {
+		if(weaponInfo->flashSoundFile[i]) {
+			weaponInfo->flashSound[i] = trap_S_RegisterSound(weaponInfo->flashSoundFile[i], qfalse);
+		}
+	}
+
+	if(weaponInfo->missileFile) {
+		weaponInfo->missileSound = trap_S_RegisterSound( weaponInfo->missileFile, qfalse );
+	}
+
+	if(weaponInfo->missileModelFile) {
+		weaponInfo->missileModel = trap_R_RegisterModel( weaponInfo->missileModelFile );
+	}
+
+	if (weaponInfo->handsFile) {
+		weaponInfo->handsModel = trap_R_RegisterModel( weaponInfo->handsFile );
+	}
+
+	if (weaponInfo->weaponFile) {
+		weaponInfo->weaponModel = trap_R_RegisterModel( weaponInfo->weaponFile );
+	}
+
+	if (weaponInfo->barrelFile) {
+		weaponInfo->barrelModel = trap_R_RegisterModel( weaponInfo->barrelFile );
+	}
+
+
+	for(i = 0; i < ARRAY_LEN(weaponInfo->extraModelFile); i++) {
+		if(weaponInfo->extraModelFile[i]) {
+			weaponInfo->extraModel[i] = trap_R_RegisterModel(weaponInfo->extraModelFile[i]);
+		}
+	}
+
+	for(i = 0; i < ARRAY_LEN(weaponInfo->extraSoundFile); i++) {
+		if(weaponInfo->extraSoundFile[i]) {
+			weaponInfo->extraSound[i] = trap_S_RegisterSound(weaponInfo->extraSoundFile[i], qfalse);
+		}
+	}
+
+	for(i = 0; i < ARRAY_LEN(weaponInfo->extraShaderFile); i++) {
+		if(weaponInfo->extraShaderFile[i]) {
+			weaponInfo->extraShader[i] = trap_R_RegisterShader(weaponInfo->extraShaderFile[i]);
+		}
+	}
+
+#else
+
 	switch ( weaponNum ) {
 	case WP_GAUNTLET:
 		MAKERGB( weaponInfo->flashDlightColor, 0.6f, 0.6f, 1.0f );
@@ -685,7 +783,9 @@ void CG_RegisterWeapon( int weaponNum ) {
 
 		break;
 
+#ifdef USE_GRAPPLE
 	case WP_GRAPPLING_HOOK:
+    cgs.media.lightningShader = trap_R_RegisterShader( "lightningBoltNew");
 		MAKERGB( weaponInfo->flashDlightColor, 0.6f, 0.6f, 1.0f );
 		weaponInfo->missileModel = trap_R_RegisterModel( "models/ammo/rocket/rocket.md3" );
 		weaponInfo->missileTrailFunc = CG_GrappleTrail;
@@ -696,8 +796,9 @@ void CG_RegisterWeapon( int weaponNum ) {
 		weaponInfo->readySound = trap_S_RegisterSound( "sound/weapons/melee/fsthum.wav", qfalse );
 		weaponInfo->firingSound = trap_S_RegisterSound( "sound/weapons/melee/fstrun.wav", qfalse );
 		break;
+#endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_CHAINGUN:
 		weaponInfo->firingSound = trap_S_RegisterSound( "sound/weapons/vulcan/wvulfire.wav", qfalse );
 		weaponInfo->loopFireSound = qtrue;
@@ -742,7 +843,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		cgs.media.rocketExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
 		break;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_PROX_LAUNCHER:
 		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaphits/proxmine.md3" );
 		weaponInfo->missileTrailFunc = CG_GrenadeTrail;
@@ -764,7 +865,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		cgs.media.grenadeExplosionShader = trap_R_RegisterShader( "grenadeExplosion" );
 		break;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_NAILGUN:
 		weaponInfo->ejectBrassFunc = CG_NailgunEjectBrass;
 		weaponInfo->missileTrailFunc = CG_NailTrail;
@@ -813,13 +914,28 @@ void CG_RegisterWeapon( int weaponNum ) {
 		cgs.media.bfgExplosionShader = trap_R_RegisterShader( "bfgExplosion" );
 		weaponInfo->missileModel = trap_R_RegisterModel( "models/weaphits/bfg.md3" );
 		weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/rocket/rockfly.wav", qfalse );
+#ifdef USE_PORTALS
+    cgs.media.redBFG = trap_R_RegisterShader( "textures/portal/redBFG" );
+    cgs.media.blueBFG = trap_R_RegisterShader( "textures/portal/blueBFG" );
+#endif
 		break;
+
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+  	weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/plasma/lasfly.wav", qfalse );
+  	MAKERGB( weaponInfo->flashDlightColor, 0.6, 0.6, 1 );
+  	weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/plasma/hyprbf1a.wav", qfalse );
+  	cgs.media.flameExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
+    break; 
+#endif
 
 	 default:
 		MAKERGB( weaponInfo->flashDlightColor, 1, 1, 1 );
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/rocket/rocklf1a.wav", qfalse );
 		break;
 	}
+
+#endif
 }
 
 /*
@@ -848,6 +964,10 @@ void CG_RegisterItemVisuals( int itemNum ) {
 	itemInfo->registered = qtrue;
 
 	itemInfo->models[0] = trap_R_RegisterModel( item->world_model[0] );
+	if(item->skinNames[0]) {
+		itemInfo->customSkin = trap_R_RegisterSkin( item->skinNames[0] );
+	}
+
 
 	itemInfo->icon = trap_R_RegisterShaderNoMip( item->icon );
 
@@ -873,6 +993,16 @@ void CG_RegisterItemVisuals( int itemNum ) {
 		CG_RegisterWeapon( item->giTag );
 	}
 
+#ifdef USE_RUNES
+  // runes have a shader based on system name so the same model can be reused
+  if ( item->giType == IT_POWERUP && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM ) {
+    itemInfo->altShader1 = trap_R_RegisterShader(va( "models/runes/%s", &item->classname[5] ));
+    if ( item->world_model[1] ) {
+      itemInfo->altShader2 = trap_R_RegisterShader(va( "models/runes/%s_2", &item->classname[5] ));
+    }
+    itemInfo->altShader3 = trap_R_RegisterShader(va( "powerups/runes/%s", &item->classname[5] ));
+  }
+#endif
 	//
 	// powerups have an accompanying ring or sphere
 	//
@@ -880,6 +1010,9 @@ void CG_RegisterItemVisuals( int itemNum ) {
 		item->giType == IT_ARMOR || item->giType == IT_HOLDABLE ) {
 		if ( item->world_model[1] ) {
 			itemInfo->models[1] = trap_R_RegisterModel( item->world_model[1] );
+		}
+		if(item->skinNames[1]) {
+			itemInfo->customSkin2 = trap_R_RegisterSkin( item->skinNames[1] );
 		}
 	}
 }
@@ -1048,6 +1181,11 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 
 	VectorMA( muzzlePoint, 14, forward, muzzlePoint );
 
+#ifdef USE_LV_DISCHARGE
+  // The SARACEN's Lightning Discharge
+	if (trap_CM_PointContents (muzzlePoint, 0) & MASK_WATER) return;
+#endif
+
 	// project forward by the lightning range
 	VectorMA( muzzlePoint, LIGHTNING_RANGE, forward, endPoint );
 
@@ -1063,7 +1201,7 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 	VectorCopy( origin, beam.origin );
 
 	beam.reType = RT_LIGHTNING;
-	beam.customShader = cgs.media.lightningShader;
+	beam.customShader = cg_weapons[WP_LIGHTNING].extraShader[1];
 	trap_R_AddRefEntityToScene( &beam );
 
 	// add the impact flare if it hit something
@@ -1075,7 +1213,7 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 		VectorNormalize( dir );
 
 		memset( &beam, 0, sizeof( beam ) );
-		beam.hModel = cgs.media.lightningExplosionModel;
+		beam.hModel = cg_weapons[WP_LIGHTNING].extraModel[0];
 
 		VectorMA( trace.endpos, -16, dir, beam.origin );
 
@@ -1151,6 +1289,8 @@ static void CG_LightningBolt( centity_t *cent, vec3_t origin ) {
 }
 */
 
+void CG_OldRailTrail (clientInfo_t *ci, vec3_t start, vec3_t end);
+
 /*
 ===============
 CG_SpawnRailTrail
@@ -1170,7 +1310,11 @@ static void CG_SpawnRailTrail( centity_t *cent, vec3_t origin ) {
 	}
 	cent->pe.railgunFlash = qtrue;
 	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
-	CG_RailTrail( ci, origin, cent->pe.railgunImpact );
+	if(cg_oldRail.integer > 0) {
+		CG_OldRailTrail(ci, origin, cent->pe.railgunImpact);
+	} else {
+		CG_RailTrail( ci, origin, cent->pe.railgunImpact );
+	}
 }
 
 
@@ -1202,7 +1346,7 @@ static float	CG_MachinegunSpinAngle( centity_t *cent ) {
 		cent->pe.barrelTime = cg.time;
 		cent->pe.barrelAngle = AngleMod( angle );
 		cent->pe.barrelSpinning = !!(cent->currentState.eFlags & EF_FIRING);
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 		if ( cent->currentState.weapon == WP_CHAINGUN && !cent->pe.barrelSpinning ) {
 			trap_S_StartSound( NULL, cent->currentState.number, CHAN_WEAPON, trap_S_RegisterSound( "sound/weapons/vulcan/wvulwind.wav", qfalse ) );
 		}
@@ -1220,6 +1364,69 @@ CG_AddWeaponWithPowerups
 */
 static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 	// add powerup effects
+
+
+#ifdef USE_ADVANCED_ITEMS
+
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( powerups == PW_FROZEN ) {
+    trap_R_AddRefEntityToScene( gun );
+    gun->customShader = cgs.media.frozenShader;
+    trap_R_AddRefEntityToScene( gun );
+    return;
+  } else 
+#endif
+
+	if ( powerups == PW_INVIS ) {
+		gun->customShader = cgs.media.invisShader;
+		trap_R_AddRefEntityToScene( gun );
+		return;
+	}
+	
+	trap_R_AddRefEntityToScene( gun );
+
+	if ( powerups == PW_BATTLESUIT ) {
+		gun->customShader = cgs.media.battleWeaponShader;
+		trap_R_AddRefEntityToScene( gun );
+	}
+	if ( powerups == PW_REGEN ) {
+		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			gun->customShader = cgs.media.regenShader;
+			trap_R_AddRefEntityToScene( gun );
+		}
+	}
+	if ( powerups == PW_QUAD ) {
+		gun->customShader = cgs.media.quadWeaponShader;
+		trap_R_AddRefEntityToScene( gun );
+	}	
+
+	if(powerups == PW_GRAVITYSUIT) {
+		gun->customShader = cgs.media.gravityWeaponShader;
+    trap_R_AddRefEntityToScene( gun );
+	}
+
+	if ( powerups == PW_REGENAMMO ) {
+		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			gun->customShader = cgs.media.ammoRegenShader;
+			trap_R_AddRefEntityToScene( gun );
+		}
+	}
+
+	
+
+#else
+
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( powerups & ( 1 << PW_FROZEN ) ) {
+    trap_R_AddRefEntityToScene( gun );
+    gun->customShader = cgs.media.frozenShader;
+    trap_R_AddRefEntityToScene( gun );
+    return;
+  } else 
+#endif
+
 	if ( powerups & ( 1 << PW_INVIS ) ) {
 		gun->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( gun );
@@ -1234,7 +1441,21 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 			gun->customShader = cgs.media.quadWeaponShader;
 			trap_R_AddRefEntityToScene( gun );
 		}
+#ifdef USE_RUNES
+    if( cent->client->inventory[RUNE_RESIST] ) {
+      gun->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(3)) ].altShader3;
+      trap_R_AddRefEntityToScene( gun );
+    }
+    if( cent->rune == RUNE_STRENGTH 
+      && cent->client->inventory[cent->rune] ) {
+      gun->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(1)) ].altShader3;
+			trap_R_AddRefEntityToScene( gun );
+    }
+#endif
 	}
+
+#endif
+
 }
 
 
@@ -1259,9 +1480,23 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	const	clientInfo_t	*ci;
 
 	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
-	weaponNum = cent->currentState.weapon;
+	weaponNum = cent->currentState.weapon & 0x1FF;
+
+#ifdef USE_ADVANCED_WEAPONS
+	if(weaponNum >= WP_NUM_WEAPONS) {
+		return;
+	}
+#endif
 
 	CG_RegisterWeapon( weaponNum );
+#ifdef USE_PORTALS
+  if(cg_altPortal.integer)
+    CG_RegisterWeapon( WP_BFG );
+#endif
+#if defined(USE_GRAPPLE) && defined(USE_ALT_FIRE)
+  if(cg_altGrapple.integer)
+    CG_RegisterWeapon( WP_GRAPPLING_HOOK );
+#endif
 	weapon = &cg_weapons[weaponNum];
 
 	// add the weapon
@@ -1309,7 +1544,10 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 
 	CG_PositionEntityOnTag( &gun, parent, parent->hModel, "tag_weapon");
 
+	gun.customSkin = cg_items[weapon->item - bg_itemlist].customSkin;
+
 	CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups );
+
 
 	// add the spinning barrel
 	if ( weapon->barrelModel ) {
@@ -1325,6 +1563,8 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		AnglesToAxis( angles, barrel.axis );
 
 		CG_PositionRotatedEntityOnTag( &barrel, &gun, weapon->weaponModel, "tag_barrel" );
+	
+		barrel.customSkin = cg_items[weapon->item - bg_itemlist].customSkin2;
 
 		CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups );
 	}
@@ -1340,8 +1580,11 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	}
 
 	// add the flash
-	if ( ( weaponNum == WP_LIGHTNING || weaponNum == WP_GAUNTLET || weaponNum == WP_GRAPPLING_HOOK )
-		&& ( nonPredictedCent->currentState.eFlags & EF_FIRING ) ) 
+	if ( ( weaponNum == WP_LIGHTNING || weaponNum == WP_GAUNTLET 
+#ifdef USE_GRAPPLE
+	|| weaponNum == WP_GRAPPLING_HOOK 
+#endif
+	) && ( nonPredictedCent->currentState.eFlags & EF_FIRING ) ) 
 	{
 		// continuous flash
 	} else {
@@ -1419,6 +1662,40 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 }
 
 
+#ifdef USE_WEAPON_CENTER
+void CG_CenterGun(float *gen_guny, playerState_t *ps) {
+  switch (ps->weapon)
+	{
+    default:
+		case WP_MACHINEGUN:
+		case WP_SHOTGUN:
+		case WP_LIGHTNING:
+			*gen_guny = cg_gun_y.value + 3 * cg_gunCenter.value;
+			break;
+    case WP_GAUNTLET:
+		case WP_PLASMAGUN:
+#ifdef USE_FLAME_THROWER
+    case WP_FLAME_THROWER:
+#endif
+#ifdef USE_GRAPPLE
+    case WP_GRAPPLING_HOOK:
+#endif
+			*gen_guny = cg_gun_y.value + 4 * cg_gunCenter.value;
+			break;
+    case WP_GRENADE_LAUNCHER:
+		case WP_ROCKET_LAUNCHER:
+		case WP_RAILGUN:
+		case WP_BFG:
+			*gen_guny = cg_gun_y.value + 5 * cg_gunCenter.value;
+			break;
+	}
+}
+#endif
+
+void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale );
+void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
+						int *torsoOld, int *torso, float *torsoBackLerp );
+
 /*
 ==============
 CG_AddViewWeapon
@@ -1433,6 +1710,11 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 	const weaponInfo_t *weapon;
 	vec3_t		fovOffset;
 	vec3_t		angles;
+#ifdef USE_ADVANCED_CLASS
+	refEntity_t		legs;
+	refEntity_t		torso;
+#endif
+
 
 	if ( ps->persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 		return;
@@ -1443,10 +1725,51 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 	}
 
 	// no gun if in third person view or a camera is active
-	//if ( cg.renderingThirdPerson || cg.cameraMode) {
-	if ( cg.renderingThirdPerson ) {
+	if ( cg.renderingThirdPerson 
+#ifdef USE_SINGLEPLAYER
+	|| cg.cameraMode 
+#endif
+	) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_WEAPONS
+	if(ps->weapon >= WP_NUM_WEAPONS) {
+		return;
+	}
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	if(cgs.clientinfo[ps->clientNum].playerClass == PCLASS_VORE) {
+		memset( &legs, 0, sizeof(legs) );
+		if(cgs.clientinfo[ps->clientNum].legsModel) {
+			vec3_t temp;
+			VectorCopy(ps->viewangles, temp);
+			temp[1] -= 45;
+			//temp[1] += 45;
+			AnglesToAxis(temp, legs.axis);
+			legs.hModel = cgs.clientinfo[ps->clientNum].legsModel;
+			legs.customSkin = cgs.clientinfo[ps->clientNum].legsSkin;
+			VectorCopy( ps->origin, legs.origin );
+			VectorMA( legs.origin, cgs.clientinfo[ps->clientNum].povOffset[0], cg.refdef.viewaxis[0], legs.origin );
+			VectorMA( legs.origin, cgs.clientinfo[ps->clientNum].povOffset[1], cg.refdef.viewaxis[1], legs.origin );
+			VectorMA( legs.origin, cgs.clientinfo[ps->clientNum].povOffset[2], cg.refdef.viewaxis[2], legs.origin );
+
+			//VectorAdd(legs.origin, cgs.clientinfo[ps->clientNum].povOffset, legs.origin);
+			// uncomment this line when alignment and animation is working
+			legs.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON | RF_MINLIGHT;
+			//CG_RunLerpFrame( &cgs.clientinfo[ps->clientNum], &cg_entities[ps->clientNum].pe.torso, TORSO_ATTACK, 1 );
+			CG_PlayerAnimation( &cg_entities[ps->clientNum], &legs.oldframe, &legs.frame, &legs.backlerp,
+		 		&torso.oldframe, &torso.frame, &torso.backlerp );
+
+			CG_AddRefEntityWithPowerups( &legs, &cg_entities[ps->clientNum].currentState, cgs.clientinfo[ps->clientNum].team );
+		}
+	}
+	if(cgs.clientinfo[ps->clientNum].playerClass >= PCLASS_MONSTER
+		&& cgs.clientinfo[ps->clientNum].playerClass <= PCLASS_MONSTER_COUNT) {
+		return; // monsters have built in weapons, need to be configured above
+	}
+#endif
 
 
 	// allow the gun to be completely removed
@@ -1477,18 +1800,35 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 		fovOffset[2] = 0;
 	}
 
+#ifdef USE_WEAPON_CENTER
+  if(cg_gunCenter.integer) {
+		fovOffset[0] -= (2 - cgs.glconfig.windowAspect) * 10 - 5;
+	}
+#endif
+
 	cent = &cg.predictedPlayerEntity;	// &cg_entities[cg.snap->ps.clientNum];
 	CG_RegisterWeapon( ps->weapon );
-	weapon = &cg_weapons[ ps->weapon ];
+	weapon = &cg_weapons[  ps->weapon ];
 
 	memset (&hand, 0, sizeof(hand));
 
 	// set up gun position
 	CG_CalculateWeaponPosition( hand.origin, angles );
 
-	VectorMA( hand.origin, (cg_gun_x.value+fovOffset[0]), cg.refdef.viewaxis[0], hand.origin );
-	VectorMA( hand.origin, cg_gun_y.value, cg.refdef.viewaxis[1], hand.origin );
-	VectorMA( hand.origin, (cg_gun_z.value+fovOffset[2]), cg.refdef.viewaxis[2], hand.origin );
+#ifdef USE_WEAPON_CENTER
+  if(cg_gunCenter.integer) {
+    float gen_guny;
+    CG_CenterGun(&gen_guny, ps);
+    VectorMA( hand.origin, (cg_gun_x.value+fovOffset[0]), cg.refdef.viewaxis[0], hand.origin );
+  	VectorMA( hand.origin, gen_guny, cg.refdef.viewaxis[1], hand.origin );
+  	VectorMA( hand.origin, (cg_gun_z.value+fovOffset[2]), cg.refdef.viewaxis[2], hand.origin );
+  } else
+#endif
+  {
+  	VectorMA( hand.origin, (cg_gun_x.value+fovOffset[0]), cg.refdef.viewaxis[0], hand.origin );
+  	VectorMA( hand.origin, cg_gun_y.value, cg.refdef.viewaxis[1], hand.origin );
+  	VectorMA( hand.origin, (cg_gun_z.value+fovOffset[2]), cg.refdef.viewaxis[2], hand.origin );
+  }
 
 	AnglesToAxis( angles, hand.axis );
 
@@ -1519,7 +1859,17 @@ WEAPON SELECTION
 
 ==============================================================================
 */
+#ifdef USE_3D_WEAPONS
+void hud_weapons(float x, float y, weaponInfo_t *weapon);
+#endif
+#ifdef USE_WEAPON_ORDER
+extern int weaponOrder[WP_NUM_WEAPONS]; 
+extern int weaponRawOrder[WP_NUM_WEAPONS]; 
 
+int NextWeapon (int curr);
+int PrevWeapon (int curr);
+
+#endif
 
 /*
 ===================
@@ -1529,6 +1879,9 @@ CG_DrawWeaponSelect
 #define AMMO_FONT_SIZE 12
 void CG_DrawWeaponSelect( void ) {
 	int		i;
+#ifdef USE_WEAPON_ORDER
+  int  weap; 
+#endif
 	int		bits;
 	int		count;
 	int		x, y;
@@ -1561,11 +1914,54 @@ void CG_DrawWeaponSelect( void ) {
 	// count the number of weapons owned
 	bits = cg.snap->ps.stats[ STAT_WEAPONS ];
 	count = 0;
-	for ( i = WP_GAUNTLET ; i < MAX_WEAPONS ; i++ ) {
+#ifdef USE_WEAPON_ORDER
+  for ( i = WP_GAUNTLET ; i < WP_MAX_WEAPONS ; i++ ) {
+    if(cg_autoswitch.integer == 2)
+      weap = NextWeapon( weaponRawOrder[WP_NUM_WEAPONS - i] ) % WP_MAX_WEAPONS;
+    else
+      weap = i % WP_MAX_WEAPONS;
+    if ( bits & ( 1 << weap ) ) {
+			gitem_t *item = BG_FindItemForWeapon(WEAPON_CLASS + weap);
+			if(!item || !item->icon) {
+				continue;
+			}
+
+			if(WEAPON_CLASS + weap >= WP_NUM_WEAPONS) {
+				continue;
+			}
+
+			CG_RegisterWeapon( WEAPON_CLASS + weap );
+
+			if(!cg_weapons[WEAPON_CLASS + weap].weaponIcon) {
+				continue;
+			}
+
+      count++;
+    }
+  }
+#else
+	//CG_Printf("weapon class: %i\n", cg.weaponClass);
+	for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
 		if ( bits & ( 1 << i ) ) {
+			gitem_t *item = BG_FindItemForWeapon(WEAPON_CLASS + i);
+			if(!item || !item->icon) {
+				continue;
+			}
+
+			if(WEAPON_CLASS + i >= WP_NUM_WEAPONS) {
+				continue;
+			}
+
+			CG_RegisterWeapon( WEAPON_CLASS + i );
+
+			if(!cg_weapons[WEAPON_CLASS + i].weaponIcon) {
+				continue;
+			}
+
 			count++;
 		}
 	}
+#endif
 
 	if ( weaponSelect < 3 ) {
 		x = 320 - count * 20;
@@ -1579,18 +1975,38 @@ void CG_DrawWeaponSelect( void ) {
 		dy = 40;
 	}
 
-	for ( i = WP_GAUNTLET ; i < MAX_WEAPONS ; i++ ) {
+	for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
+#ifdef USE_WEAPON_ORDER
+    if(cg_autoswitch.integer == 2)
+      weap = NextWeapon( weaponRawOrder[WP_NUM_WEAPONS - i] ) % WP_MAX_WEAPONS;
+    else
+      weap = i % WP_MAX_WEAPONS;
+#define i weap
+#endif
 		if ( !( bits & ( 1 << i ) ) ) {
 			continue;
 		}
 
-		CG_RegisterWeapon( i );
+		if(WEAPON_CLASS + i >= WP_NUM_WEAPONS) {
+			continue;
+		}
+
+		if(!cg_weapons[WEAPON_CLASS + i].weaponIcon) {
+			continue;
+		}
 
 		// draw weapon icon
-		CG_DrawPic( x, y, 32, 32, cg_weapons[i].weaponIcon );
+#ifdef USE_3D_WEAPONS
+    if(cg_draw3dIcons.integer > 1) {
+      hud_weapons(x, y, &cg_weapons[WEAPON_CLASS + i]);
+    }
+#endif
+		if(cg_draw3dIcons.integer <= 1 || !cg_weapons[i].weaponModel) {
+		CG_DrawPic( x, y, 32, 32, cg_weapons[WEAPON_CLASS + i].weaponIcon );
+    }
 
 		// draw selection marker
-		if ( i == cg.weaponSelect ) {
+		if ( i == cg.weaponSelect % WP_MAX_WEAPONS ) {
 			CG_DrawPic( x-4, y-4, 32+8, 32+8, cgs.media.selectShader );
 		}
 
@@ -1611,11 +2027,15 @@ void CG_DrawWeaponSelect( void ) {
 
 		x += dx;
 		y += dy;
+#ifdef USE_WEAPON_ORDER
+#undef i
+#endif
 	}
 
 	// draw the selected name
-	if ( cg_weapons[ cg.weaponSelect ].item && weaponSelect == 1 ) {
-		name = cg_weapons[ cg.weaponSelect ].item->pickup_name;
+	if ( WEAPON_CLASS + cg.weaponSelect < WP_NUM_WEAPONS
+		&& cg_weapons[ WEAPON_CLASS + cg.weaponSelect ].item && weaponSelect == 1 ) {
+		name = cg_weapons[ WEAPON_CLASS + cg.weaponSelect ].item->pickup_name;
 		if ( name ) {
 			CG_DrawString( 320, y - 22, name, color, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_PROPORTIONAL | DS_CENTER | DS_FORCE_COLOR );
 		}
@@ -1630,11 +2050,22 @@ void CG_DrawWeaponSelect( void ) {
 CG_WeaponSelectable
 ===============
 */
-static qboolean CG_WeaponSelectable( int i ) {
-	if ( !cg.snap->ps.ammo[i] ) {
+qboolean CG_WeaponSelectable( int i ) {
+	int weapon = WEAPON_CLASS + i % WP_MAX_WEAPONS;
+	if(weapon >= WP_NUM_WEAPONS) {
+		//CG_Printf("hit!\n");
 		return qfalse;
 	}
-	if ( ! (cg.snap->ps.stats[ STAT_WEAPONS ] & ( 1 << i ) ) ) {
+	if ( !cg.snap->ps.ammo[i % WP_MAX_WEAPONS] ) {
+		//CG_Printf("no ammo\n");
+		return qfalse;
+	}
+	if ( ! (cg.snap->ps.stats[ STAT_WEAPONS ] & ( 1 << (i % WP_MAX_WEAPONS) ) ) ) {
+		//CG_Printf("no weapon\n");
+		return qfalse;
+	}
+	if(!cg_weapons[weapon].registered || !cg_weapons[weapon].weaponIcon) {
+		//CG_Printf("no registration %i\n", weapon);
 		return qfalse;
 	}
 
@@ -1663,9 +2094,14 @@ void CG_NextWeapon_f( void ) {
 
 	original = cg.weaponSelect;
 
-	for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
+	for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
+#ifdef USE_WEAPON_ORDER
+    if(cg_autoswitch.integer == 2)
+      cg.weaponSelect = NextWeapon( cg.weaponSelect ); //WarZone 
+    else
+#endif
 		cg.weaponSelect++;
-		if ( cg.weaponSelect == MAX_WEAPONS ) {
+		if ( cg.weaponSelect == WP_MAX_WEAPONS ) {
 			cg.weaponSelect = 0;
 		}
 		if ( cg.weaponSelect == WP_GAUNTLET ) {
@@ -1675,7 +2111,7 @@ void CG_NextWeapon_f( void ) {
 			break;
 		}
 	}
-	if ( i == MAX_WEAPONS ) {
+	if ( i == WP_MAX_WEAPONS ) {
 		cg.weaponSelect = original;
 	}
 }
@@ -1702,10 +2138,15 @@ void CG_PrevWeapon_f( void ) {
 
 	original = cg.weaponSelect;
 
-	for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
+	for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
+#ifdef USE_WEAPON_ORDER
+    if(cg_autoswitch.integer == 2)
+      cg.weaponSelect = PrevWeapon( cg.weaponSelect ); //WarZone 
+    else
+#endif
 		cg.weaponSelect--;
 		if ( cg.weaponSelect == -1 ) {
-			cg.weaponSelect = MAX_WEAPONS - 1;
+			cg.weaponSelect = WP_MAX_WEAPONS - 1;
 		}
 		if ( cg.weaponSelect == WP_GAUNTLET ) {
 			continue;		// never cycle to gauntlet
@@ -1714,19 +2155,22 @@ void CG_PrevWeapon_f( void ) {
 			break;
 		}
 	}
-	if ( i == MAX_WEAPONS ) {
+	if ( i == WP_MAX_WEAPONS ) {
 		cg.weaponSelect = original;
 	}
 }
 
 
+#ifdef USE_ADVANCED_WEAPONS
+
 /*
 ===============
-CG_Weapon_f
+CG_NextWeapon_f
 ===============
 */
-void CG_Weapon_f( void ) {
-	int		num;
+void NextClass( void ) {
+	int		i;
+	int		original;
 
 	if ( !cg.snap ) {
 		return;
@@ -1738,9 +2182,99 @@ void CG_Weapon_f( void ) {
 		return;
 	}
 
+	original = cg.weaponSelect;
+
+	for ( i = 0 ; i < WP_MAX_WEAPONS * WP_MAX_CLASSES ; i++ ) {
+		cg.weaponSelect++;
+		if ( cg.weaponSelect == WP_MAX_WEAPONS ) {
+			cg.weaponSelect = 0;
+			cg.weaponChange = 1;
+			trap_SendClientCommand( "nextclass" );
+			i = WP_MAX_WEAPONS * WP_MAX_CLASSES;
+			break;
+		}
+		if ( cg.weaponClass == 0 && cg.weaponSelect == WP_GAUNTLET ) {
+			continue;		// never cycle to gauntlet
+		}
+		if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
+			break;
+		}
+	}
+	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
+		cg.weaponSelect = original;
+	}
+}
+
+
+/*
+===============
+CG_PrevWeapon_f
+===============
+*/
+void PrevClass( void ) {
+	int		i;
+	int		original;
+
+	if ( !cg.snap ) {
+		return;
+	}
+
+	cg.weaponSelectTime = cg.time;
+
+	if ( cg.snap->ps.pm_flags & PMF_FOLLOW || cg.demoPlayback ) {
+		return;
+	}
+
+	original = cg.weaponSelect;
+
+	for ( i = 0 ; i < WP_MAX_WEAPONS * WP_MAX_CLASSES ; i++ ) {
+		cg.weaponSelect--;
+		if ( cg.weaponSelect == -1 ) {
+			cg.weaponSelect = WP_MAX_WEAPONS - 1;
+			cg.weaponChange = -1;
+			trap_SendClientCommand( "prevclass" );
+			i = WP_MAX_WEAPONS * WP_MAX_CLASSES;
+			break;
+		}
+		if ( cg.weaponClass == 0 && cg.weaponSelect == WP_GAUNTLET ) {
+			continue;		// never cycle to gauntlet
+		}
+		if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
+			break;
+		}
+	}
+	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
+		cg.weaponSelect = original;
+	}
+}
+
+#endif
+
+
+
+/*
+===============
+CG_Weapon_f
+===============
+*/
+void CG_Weapon_f( void ) {
+	int		num;
+  qboolean isRecent;
+
+	if ( !cg.snap ) {
+		return;
+	}
+
+  isRecent = cg.time - cg.weaponSelectTime < 1000;
+	cg.weaponSelectTime = cg.time;
+
+	if ( cg.snap->ps.pm_flags & PMF_FOLLOW || cg.demoPlayback ) {
+		return;
+	}
+
 	num = atoi( CG_Argv( 1 ) );
 
-	if ( num < 1 || num > MAX_WEAPONS-1 ) {
+	if ( num < 1 || num > WP_MAX_WEAPONS-1 ) {
 		return;
 	}
 
@@ -1748,7 +2282,15 @@ void CG_Weapon_f( void ) {
 		return;		// don't have the weapon
 	}
 
-	cg.weaponSelect = num;
+  if(num < 16 && num == (cg.weaponSelect & 0xF) && isRecent) {
+    int class = cg.weaponSelect >> 4;
+    class = (class + 1) % MAX_CLASSES;
+    cg.weaponSelect = (class << 4) | (cg.weaponSelect & 0xF);
+    CG_Printf("weapon: %i\n", cg.weaponSelect);
+  } else if (num < 16 && (cg.weaponSelect & 0xF) == num) {
+    cg.weaponSelect = (cg.weaponSelect & 0xF0) | (cg.weaponSelect & 0xF);
+  } else
+	 cg.weaponSelect = num;
 }
 
 
@@ -1761,14 +2303,21 @@ The current weapon has just run out of ammo
 */
 void CG_OutOfAmmoChange( void ) {
 	int		i;
+#ifdef USE_WEAPON_ORDER
+  int weap;
+#endif
 
 	cg.weaponSelectTime = cg.time;
+#ifdef USE_WEAPON_ORDER
+  if(cg_autoswitch.integer == 2)
+    weap = weaponRawOrder[WP_NUM_WEAPONS - 1]; //WarZone -- pick the best weapon they have 
+#endif
 
 	if ( cg.snap->ps.pm_flags & PMF_FOLLOW || cg.demoPlayback ) {
 		return;
 	}
 
-	for ( i = MAX_WEAPONS-1 ; i > 0 ; i-- ) {
+	for ( i = WP_MAX_WEAPONS-1 ; i > 0 ; i-- ) {
 		if ( CG_WeaponSelectable( i ) ) {
 			cg.weaponSelect = i;
 			break;
@@ -1802,9 +2351,10 @@ void CG_FireWeapon( centity_t *cent ) {
 		return;
 	}
 	if ( ent->weapon >= WP_NUM_WEAPONS ) {
-		CG_Error( "CG_FireWeapon: ent->weapon >= WP_NUM_WEAPONS" );
+		//CG_Error( "CG_FireWeapon: ent->weapon >= WP_NUM_WEAPONS" );
 		return;
 	}
+
 	weap = &cg_weapons[ ent->weapon ];
 
 	if ( ent->number >= 0 && ent->number < MAX_CLIENTS && cent != &cg.predictedPlayerEntity ) {
@@ -1849,6 +2399,268 @@ void CG_FireWeapon( centity_t *cent ) {
 }
 
 
+#ifdef USE_ADVANCED_WEAPONS
+
+
+
+/*
+=================
+CG_MissileHitWall
+
+Caused by an EV_MISSILE_MISS event, or directly by local bullet tracing
+=================
+*/
+void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t dir, impactSound_t soundType ) {
+	qhandle_t		mod;
+	qhandle_t		mark;
+	qhandle_t		shader;
+	sfxHandle_t		sfx;
+	float			radius;
+	float			light;
+	vec3_t			lightColor;
+	localEntity_t	*le;
+	int				r;
+	qboolean		alphaFade;
+	qboolean		isSprite;
+	int				duration;
+	vec3_t			sprOrg;
+	vec3_t			sprVel;
+	weaponInfo_t	*weaponInfo;
+
+	if(weapon == 0) {
+		return;
+	}
+
+	weaponInfo = &cg_weapons[weapon];
+
+	mark = 0;
+	radius = 32;
+	sfx = 0;
+	mod = 0;
+	shader = 0;
+	light = 0;
+	lightColor[0] = 1;
+	lightColor[1] = 1;
+	lightColor[2] = 0;
+
+	// set defaults
+	isSprite = qfalse;
+	duration = 600;
+
+	/////////
+	// sfx / sound
+	/////////
+	switch ( weapon ) {
+	default:
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_NAILGUN:
+	case WP_CHAINGUN:
+#endif
+		if( soundType == IMPACTSOUND_FLESH ) {
+			sfx = weaponInfo->extraSound[2];
+		} else if( soundType == IMPACTSOUND_METAL ) {
+			sfx = weaponInfo->extraSound[1];
+		} else {
+			sfx = weaponInfo->extraSound[0];
+		}
+		break;
+
+	case WP_MACHINEGUN:
+	case WP_LIGHTNING:
+		// no explosion at LG impact, it is added with the beam
+		r = rand() & 3;
+		if ( r < 2 ) {
+			sfx = weaponInfo->extraSound[1];
+		} else if ( r == 2 ) {
+			sfx = weaponInfo->extraSound[0];
+		} else {
+			sfx = weaponInfo->extraSound[2];
+		}
+		break;
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_PROX_LAUNCHER:
+#endif
+#ifdef USE_FLAME_THROWER
+	case WP_FLAME_THROWER:
+#endif
+	case WP_GRENADE_LAUNCHER:
+	case WP_ROCKET_LAUNCHER:
+	case WP_RAILGUN:
+	case WP_PLASMAGUN:
+	case WP_BFG:
+		sfx = weaponInfo->extraSound[0];
+		break;
+	case WP_SHOTGUN:
+		sfx = 0;
+		break;
+	}
+
+	/////////
+	// mark
+	/////////
+	switch ( weapon ) {
+	default:
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_PROX_LAUNCHER:
+	case WP_CHAINGUN:
+	case WP_NAILGUN:
+#endif
+#ifdef USE_FLAME_THROWER
+	case WP_FLAME_THROWER:
+#endif
+	case WP_LIGHTNING:
+	case WP_GRENADE_LAUNCHER:
+	case WP_ROCKET_LAUNCHER:
+	case WP_RAILGUN:
+	case WP_PLASMAGUN:
+	case WP_BFG:
+	case WP_SHOTGUN:
+	case WP_MACHINEGUN:
+		mark = weaponInfo->extraShader[0];
+		break;
+	}
+
+	////////
+	// model
+	////////
+
+	switch ( weapon ) {
+	default:
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_NAILGUN:
+#endif
+	case WP_LIGHTNING:
+		break;
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_PROX_LAUNCHER:
+	case WP_CHAINGUN:
+#endif
+#ifdef USE_FLAME_THROWER
+	case WP_FLAME_THROWER:
+#endif
+	case WP_GRENADE_LAUNCHER:
+	case WP_ROCKET_LAUNCHER:
+	case WP_RAILGUN:
+	case WP_PLASMAGUN:
+	case WP_BFG:
+	case WP_SHOTGUN:
+	case WP_MACHINEGUN:
+		mod = weaponInfo->extraModel[0];
+		shader = weaponInfo->extraShader[1];
+		break;
+	}
+
+	switch ( weapon ) {
+	default: // 32 set above
+		break;
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_CHAINGUN:
+	case WP_NAILGUN:
+	case WP_PROX_LAUNCHER:
+#endif
+#ifdef USE_FLAME_THROWER
+	case WP_FLAME_THROWER:
+#endif
+	case WP_LIGHTNING:
+	case WP_GRENADE_LAUNCHER:
+	case WP_ROCKET_LAUNCHER:
+	case WP_RAILGUN:
+	case WP_PLASMAGUN:
+	case WP_BFG:
+	case WP_MACHINEGUN:
+	case WP_SHOTGUN:
+		radius = weaponInfo->explosionRadius;
+		break;
+	}
+
+
+	if(weapon == WP_LIGHTNING) {
+		if(radius != 12) {
+			CG_Error("Lightning gun radius is wrong!!");
+		}
+	}
+	if(radius == 0) {
+		CG_Error("Radius is zero for weapon %i!!", weapon);
+	}
+
+	////////
+	// light
+	//////// 
+
+
+	switch ( weapon ) {
+	default:
+		break;
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	case WP_PROX_LAUNCHER:
+#endif
+	case WP_BFG:
+	case WP_ROCKET_LAUNCHER:
+	case WP_GRENADE_LAUNCHER:
+		light = weaponInfo->light;
+		isSprite = qtrue;
+		lightColor[0] = weaponInfo->lightColor[0];
+		lightColor[1] = weaponInfo->lightColor[1];
+		lightColor[2] = weaponInfo->lightColor[2];
+		break;
+	}
+
+
+	if(weapon == WP_ROCKET_LAUNCHER) {
+		duration = 1000;
+		if (cg_oldRocket.integer == 0) {
+			// explosion sprite animation
+			VectorMA( origin, 24, dir, sprOrg );
+			VectorScale( dir, 64, sprVel );
+
+			CG_ParticleExplosion( "explode1", sprOrg, sprVel, 1400, 20, 30 );
+		}
+	}
+
+	if ( sfx ) {
+		trap_S_StartSound( origin, ENTITYNUM_WORLD, CHAN_AUTO, sfx );
+	}
+
+	//
+	// create the explosion
+	//
+	if ( mod ) {
+		le = CG_MakeExplosion( origin, dir, mod, shader, duration, isSprite );
+		le->light = light;
+		VectorCopy( lightColor, le->lightColor );
+		if ( weapon == WP_RAILGUN ) {
+			// colorize with client color
+			VectorCopy( cgs.clientinfo[clientNum].color1, le->color );
+			le->refEntity.shaderRGBA[0] = le->color[0] * 255;
+			le->refEntity.shaderRGBA[1] = le->color[1] * 255;
+			le->refEntity.shaderRGBA[2] = le->color[2] * 255;
+			le->refEntity.shaderRGBA[3] = 255;
+		}
+	}
+
+	//
+	// impact mark
+	//
+	alphaFade = (mark == cgs.media.energyMarkShader);	// plasma fades alpha, all others fade color
+	if ( weapon == WP_RAILGUN ) {
+		float	*color;
+
+		// colorize with client color
+		color = cgs.clientinfo[ clientNum ].color1; // was color2
+
+		CG_ImpactMark( mark, origin, dir, random()*360, color[0], color[1], color[2], 1.0, alphaFade, radius, qfalse );
+	} else {
+		CG_ImpactMark( mark, origin, dir, random()*360, 1.0, 1.0, 1.0, 1.0, alphaFade, radius, qfalse );
+	}
+}
+
+
+
+#else
+
+
 /*
 =================
 CG_MissileHitWall
@@ -1888,7 +2700,7 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 
 	switch ( weapon ) {
 	default:
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_NAILGUN:
 		if( soundType == IMPACTSOUND_FLESH ) {
 			sfx = cgs.media.sfx_nghitflesh;
@@ -1914,7 +2726,7 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 		mark = cgs.media.holeMarkShader;
 		radius = 12;
 		break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_PROX_LAUNCHER:
 		mod = cgs.media.dishFlashModel;
 		shader = cgs.media.grenadeExplosionShader;
@@ -1988,7 +2800,7 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 		radius = 4;
 		break;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_CHAINGUN:
 		mod = cgs.media.bulletFlashModel;
 		if( soundType == IMPACTSOUND_FLESH ) {
@@ -2029,6 +2841,16 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 
 		radius = 8;
 		break;
+
+#ifdef USE_FLAME_THROWER
+  case WP_FLAME_THROWER:
+  	mod = cgs.media.dishFlashModel;
+  	shader = cgs.media.flameExplosionShader;
+  	sfx = cgs.media.sfx_plasmaexp;
+  	mark = cgs.media.burnMarkShader;
+  	radius = 16;
+    break;
+#endif
 	}
 
 	if ( sfx ) {
@@ -2068,6 +2890,7 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 	}
 }
 
+#endif
 
 /*
 =================
@@ -2084,7 +2907,7 @@ void CG_MissileHitPlayer( int weapon, vec3_t origin, vec3_t dir, int entityNum )
 	case WP_ROCKET_LAUNCHER:
 	case WP_PLASMAGUN:
 	case WP_BFG:
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	case WP_NAILGUN:
 	case WP_CHAINGUN:
 	case WP_PROX_LAUNCHER:

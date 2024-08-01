@@ -13,6 +13,8 @@
 #define	RF_FIRST_PERSON		4		// only draw through eyes (view weapon, damage blood blob)
 #define	RF_DEPTHHACK		8		// for view weapon Z crunching
 #define	RF_NOSHADOW			64		// don't add stencil shadows
+#define RF_STENCIL      0x0010
+#define RF_DEPTHEXTRAHACKY 0x0020
 
 #define RF_LIGHTING_ORIGIN	128		// use refEntity->lightingOrigin instead of refEntity->origin
 									// for lighting.  This allows entities to sink into the floor
@@ -184,6 +186,24 @@ typedef struct {
 	qboolean				stereoEnabled;
 	qboolean				smpActive;		// dual processor
 } glconfig_t;
+
+// =========================================
+// Gordon, these MUST NOT exceed the values for SHADER_MAX_VERTEXES/SHADER_MAX_INDEXES
+#define MAX_PB_VERTS    1024
+#define MAX_PB_INDICIES ( MAX_PB_VERTS * 6 )
+
+typedef struct polyBuffer_s {
+	vec4_t xyz[MAX_PB_VERTS];
+	vec2_t st[MAX_PB_VERTS];
+	byte color[MAX_PB_VERTS][4];
+	int numVerts;
+
+	int indicies[MAX_PB_INDICIES];
+	int numIndicies;
+
+	qhandle_t shader;
+} polyBuffer_t;
+// =========================================
 
 #endif	// __TR_TYPES_H
 

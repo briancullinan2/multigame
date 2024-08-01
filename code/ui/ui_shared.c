@@ -6,6 +6,8 @@
 #include "../cgame/cg_local.h"
 #endif
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+
 #define SCROLL_TIME_START					500
 #define SCROLL_TIME_ADJUST				150
 #define SCROLL_TIME_ADJUSTOFFSET	40
@@ -63,7 +65,10 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y);
 #endif
 
 static char		memoryPool[MEM_POOL_SIZE];
-static int		allocPoint, outOfMemory;
+#ifndef USE_CLASSIC_MENU
+static 
+#endif
+int		allocPoint, outOfMemory;
 
 
 /*
@@ -1375,7 +1380,7 @@ qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
 			}
 		}
 	} else {
-	    item->window.flags |= WINDOW_HASFOCUS;
+		item->window.flags |= WINDOW_HASFOCUS;
 		if (item->onFocus) {
 			Item_RunScript(item, item->onFocus);
 		}
@@ -3143,6 +3148,9 @@ static bind_t g_bindings[] =
 	{"+mlook", 			 '/',					-1,		-1, -1},
 	{"centerview", 	 K_END,				-1,		-1, -1},
 	{"+zoom", 			 -1,						-1,		-1, -1},
+#ifdef USE_RUNES
+  {"+runes", 			 -1,						-1,		-1, -1},
+#endif
 	{"weapon 1",		 '1',					-1,		-1, -1},
 	{"weapon 2",		 '2',					-1,		-1, -1},
 	{"weapon 3",		 '3',					-1,		-1, -1},
@@ -5698,7 +5706,10 @@ void Display_HandleKey(int key, qboolean down, int x, int y) {
 		menu = Menu_GetFocused();
 	}
 	if (menu) {
-		Menu_HandleKey(menu, key, down );
+		if (key == K_ESCAPE && down && !Menus_AnyFullScreenVisible()) {
+			Menus_CloseAll();
+		} else
+			Menu_HandleKey(menu, key, down );
 	}
 }
 
@@ -5776,4 +5787,6 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	}
 	return qfalse;
 }
+
+#endif
 

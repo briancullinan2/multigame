@@ -5,3 +5,5 @@
 /build/*/Makefile.local
 */**/.DS_Store
 .DS_Store
+/assets/*.pk3dir
+assets/maps/autosave

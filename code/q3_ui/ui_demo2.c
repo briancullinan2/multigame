@@ -13,6 +13,16 @@ DEMOS MENU
 #include "../game/q_shared.h"
 
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#endif
+
+
 #define ART_BACK0			"menu/art/back_0"
 #define ART_BACK1			"menu/art/back_1"	
 #define ART_GO0				"menu/art/play_0"

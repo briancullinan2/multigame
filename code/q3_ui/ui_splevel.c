@@ -11,6 +11,19 @@ SINGLE PLAYER LEVEL SELECT MENU
 #include "ui_local.h"
 
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_GetBotInfoByName UI_CLASSIC_GetBotInfoByName
+#define UI_FillRect UI_CLASSIC_FillRect
+#define UI_DrawHandlePic UI_CLASSIC_DrawHandlePic
+#endif
+
+
 #define ART_LEVELFRAME_FOCUS		"menu/art/maps_select"
 #define ART_LEVELFRAME_SELECTED		"menu/art/maps_selected"
 #define ART_ARROW					"menu/art/narrow_0"

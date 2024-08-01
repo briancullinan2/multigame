@@ -54,11 +54,21 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 		Team_ReturnFlag( TEAM_RED );
 	} else if( activator->client->ps.powerups[PW_BLUEFLAG] ) {
 		Team_ReturnFlag( TEAM_BLUE );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	} else if( activator->client->ps.powerups[PW_GOLDFLAG] ) {
+		Team_ReturnFlag( TEAM_GOLD );
+	} else if( activator->client->ps.powerups[PW_GREENFLAG] ) {
+		Team_ReturnFlag( TEAM_GREEN );
+
+#endif
 	} else if( activator->client->ps.powerups[PW_NEUTRALFLAG] ) {
 		Team_ReturnFlag( TEAM_FREE );
 	}
 
 	memset( activator->client->ps.powerups, 0, sizeof( activator->client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+		memset( activator->client->inventory, 0, sizeof( activator->client->inventory ) );
+#endif
 }
 
 void SP_target_remove_powerups( gentity_t *ent ) {
@@ -452,3 +462,128 @@ void SP_target_location( gentity_t *self ){
 	G_SetOrigin( self, self->s.origin );
 }
 
+#ifdef USE_SINGLEPLAYER 
+
+char target_execs[MAX_WORLDS][MAX_QPATH]; // max of 10 level change entities per level
+int num_target_execs=0;
+
+void target_use_exec( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	//char buf[MAX_QPATH];
+	//char *nx= target_execs[self->health];
+	G_Printf("using exec: %s\n", self->message);
+	// the higher the spawnflag the stranger this gets
+	// default: Exec Server command like an admin would but from a map trigger
+	// 4: send server command to all clients, stuff like \say to print messages
+	// 8: send a command to the specific client that activates it
+	// 16: send a command to the console of the client that activates it, by prefixing "exec"
+	// 32: send a command to the console of all clients by prefixing "exec"
+	// the last two are important because it creates a full loop and makes it look
+	//   like a server command came from a specific client, covering all bases/entries
+	//   16 is how we transfer a client using the \game command to subsequent worlds
+
+
+	if((self->spawnflags & 32)) {
+		trap_SendServerCommand( -1, va("exec %s", self->message ));
+	}
+	if((self->spawnflags & 16)) {
+		trap_SendServerCommand( activator->client - level.clients, va("exec %s", self->message ));
+		return;
+	}
+	if((self->spawnflags & 8)) {
+		trap_SendServerCommand( activator->client - level.clients, va("%s", self->message ));
+		return;
+	}
+	if((self->spawnflags & 4)) {
+		trap_SendServerCommand( -1, va("%s", self->message ));
+		return;
+	}
+	trap_SendConsoleCommand( EXEC_APPEND, va("%s\n", self->message ) );
+}
+
+
+void SP_target_exec( gentity_t *self ) {
+	char *buf;
+	char *nx=target_execs[num_target_execs];
+	G_SpawnString( "message", "print no command", &buf);
+
+	Com_sprintf(nx,sizeof(target_execs[0]),"load game %s",buf);
+	if(nx[0]) {
+		if(num_target_execs == MAX_WORLDS) {
+			// this should be a strange occurance if it happens
+			// TODO: demonstrate how to unload worlds in the case of the lobby level changer / select
+			G_Printf("MAX_WORLDS reached, not loading %s\n", nx);
+			return;
+		}
+		G_Printf("mapCommand (%d): %s\n",num_target_execs,buf);
+		self->world=num_target_execs;
+		num_target_execs++;
+	}
+
+	self->use = target_use_exec;
+} 
+
+
+void target_use_kamikaze( gentity_t *self, gentity_t *other, gentity_t *activator )  {
+	self->activator = self;
+	G_StartKamikaze(self);
+}
+
+void SP_target_kamikaze( gentity_t *self ) {
+	self->use = target_use_kamikaze;
+}
+
+
+// entity
+/*QUAKED target_earthquake (1 0 0) (-16 -16 -24) (16 16 32)
+starts earthquake
+"length" - length in  seconds (2-32, in steps of 2)
+"intensity" - strength of earthquake (1-16)
+*/
+
+void target_earthquake( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	G_AddEvent(self, EV_EARTHQUAKE, self->s.generic1);
+}
+
+void SP_target_earthquake( gentity_t *self ) {
+	int param;
+	float length;		// length in seconds (2 to 32)
+	float intensity;	// intensity (1 to 16)
+	int length_;
+	int intensity_;
+	// read parameters
+	G_SpawnFloat( "length", "1000", &length);
+	G_SpawnFloat( "intensity", "50", &intensity);
+	if (length<2) length=2;
+	if (length>32) length=32;
+	if (intensity<1) intensity=1;
+	if (intensity>16) intensity=16;
+	// adjust parameters
+	length_ =  ((int)(length) - 2)/2;
+	intensity_ = (int)intensity-1;
+	param = ( intensity_ | (length_<<4) );
+	self->s.generic1=param;
+	self->use = target_earthquake;
+	self->s.eType = ET_EVENTS;
+	trap_LinkEntity (self);
+}
+
+/*QUAKED target_player_stop (1 0 0) (-16 -16 -24) (16 16 32)
+stops player for "wait"*2 seconds
+*/
+
+void target_player_stop( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	activator->stop_event=level.time+((int)(self->wait) & 0x7F)*2000;
+	G_AddEvent(activator, EV_PLAYERSTOP, self->wait);
+}
+
+void SP_target_player_stop( gentity_t *self ) {
+	G_SpawnFloat( "wait", "1", &self->wait);
+	if (self->spawnflags & 1)
+	{
+		if (self->wait>127)
+			self->wait=127;
+		self->wait  += 128;
+	}
+	self->use = target_player_stop;
+}
+#endif

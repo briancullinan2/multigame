@@ -11,6 +11,17 @@ GAME OPTIONS MENU
 
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_FillRect UI_CLASSIC_FillRect
+#define UI_DrawHandlePic UI_CLASSIC_DrawHandlePic
+#endif
+
 
 #define ART_FRAMEL				"menu/art/frame2_l"
 #define ART_FRAMER				"menu/art/frame1_r"
@@ -30,6 +41,7 @@ GAME OPTIONS MENU
 #define ID_FORCEMODEL			135
 #define ID_DRAWTEAMOVERLAY		136
 #define ID_ALLOWDOWNLOAD			137
+#define ID_MENUSTYLE			139
 #define ID_BACK					138
 
 #define	NUM_CROSSHAIRS			10
@@ -53,9 +65,12 @@ typedef struct {
 	menuradiobutton_s	forcemodel;
 	menulist_s			drawteamoverlay;
 	menuradiobutton_s	allowdownload;
+#ifdef USE_CLASSIC_MENU
+	menulist_s			menustyle;
+#endif
 	menubitmap_s		back;
 
-	qhandle_t			crosshairShader[NUM_CROSSHAIRS];
+	qhandle_t			crosshairShader[NUM_CROSSHAIRS + 1];
 } preferences_t;
 
 static preferences_t s_preferences;
@@ -69,8 +84,26 @@ static const char *teamoverlay_names[] =
 	NULL
 };
 
+#ifdef USE_CLASSIC_MENU
+
+void UpdatePreferences() {
+	char menu[MAX_QPATH];
+	if(!s_preferences.crosshairShader[0]) {
+		return;
+	}
+
+	trap_Cvar_VariableStringBuffer( "ui_menuFiles", (char*)&menu, MAX_QPATH );
+	if(menu[0] == '\0')
+	s_preferences.menustyle.curvalue	= 0;
+	else
+	s_preferences.menustyle.curvalue	= 1;
+
+}
+#endif
+
+
 static void Preferences_SetMenuItems( void ) {
-	s_preferences.crosshair.curvalue		= (int)trap_Cvar_VariableValue( "cg_drawCrosshair" ) % NUM_CROSSHAIRS;
+	s_preferences.crosshair.curvalue		= (int)trap_Cvar_VariableValue( "cg_drawCrosshair" ) % (NUM_CROSSHAIRS + 1);
 	s_preferences.simpleitems.curvalue		= trap_Cvar_VariableValue( "cg_simpleItems" ) != 0;
 	s_preferences.brass.curvalue			= trap_Cvar_VariableValue( "cg_brassTime" ) != 0;
 	s_preferences.wallmarks.curvalue		= trap_Cvar_VariableValue( "cg_marks" ) != 0;
@@ -81,8 +114,10 @@ static void Preferences_SetMenuItems( void ) {
 	s_preferences.forcemodel.curvalue		= trap_Cvar_VariableValue( "cg_forcemodel" ) != 0;
 	s_preferences.drawteamoverlay.curvalue	= Com_Clamp( 0, 3, trap_Cvar_VariableValue( "cg_drawTeamOverlay" ) );
 	s_preferences.allowdownload.curvalue	= trap_Cvar_VariableValue( "cl_allowDownload" ) != 0;
+#ifdef USE_CLASSIC_MENU
+	UpdatePreferences();
+#endif
 }
-
 
 static void Preferences_Event( void* ptr, int notification ) {
 	if( notification != QM_ACTIVATED ) {
@@ -92,7 +127,7 @@ static void Preferences_Event( void* ptr, int notification ) {
 	switch( ((menucommon_s*)ptr)->id ) {
 	case ID_CROSSHAIR:
 		s_preferences.crosshair.curvalue++;
-		if( s_preferences.crosshair.curvalue == NUM_CROSSHAIRS ) {
+		if( s_preferences.crosshair.curvalue == NUM_CROSSHAIRS + 1 ) {
 			s_preferences.crosshair.curvalue = 0;
 		}
 		trap_Cvar_SetValue( "cg_drawCrosshair", s_preferences.crosshair.curvalue );
@@ -141,6 +176,16 @@ static void Preferences_Event( void* ptr, int notification ) {
 		trap_Cvar_SetValue( "cl_allowDownload", s_preferences.allowdownload.curvalue );
 		trap_Cvar_SetValue( "sv_allowDownload", s_preferences.allowdownload.curvalue );
 		break;
+
+#ifdef USE_CLASSIC_MENU
+	case ID_MENUSTYLE:
+		if(s_preferences.menustyle.curvalue == 0)
+			trap_Cvar_Set( "ui_menuFiles", "" );
+		else if (s_preferences.menustyle.curvalue == 1)
+			trap_Cvar_Set( "ui_menuFiles", "ui/menus.txt" );
+		break;
+
+#endif
 
 	case ID_BACK:
 		UI_PopMenu();
@@ -197,6 +242,13 @@ static void Crosshair_Draw( void *self ) {
 	UI_DrawHandlePic( x + SMALLCHAR_WIDTH, y - 4, 24, 24, s_preferences.crosshairShader[s->curvalue] );
 }
 
+
+static const char *menu_names[] =
+{
+	"Classic",
+	"Team Arena",
+	0
+};
 
 static void Preferences_MenuInit( void ) {
 	int				y;
@@ -336,6 +388,19 @@ static void Preferences_MenuInit( void ) {
 	s_preferences.allowdownload.generic.x	       = PREFERENCES_X_POS;
 	s_preferences.allowdownload.generic.y	       = y;
 
+#ifdef USE_CLASSIC_MENU
+	// references/modifies "r_vertexLight"
+	y += BIGCHAR_HEIGHT+2;
+	s_preferences.menustyle.generic.type  = MTYPE_SPINCONTROL;
+	s_preferences.menustyle.generic.name	 = "Menu:";
+	s_preferences.menustyle.generic.flags = QMF_PULSEIFFOCUS|QMF_SMALLFONT;
+	s_preferences.menustyle.generic.callback = Preferences_Event;
+	s_preferences.menustyle.generic.id       = ID_MENUSTYLE;
+	s_preferences.menustyle.generic.x	 = PREFERENCES_X_POS;
+	s_preferences.menustyle.generic.y	 = y;
+	s_preferences.menustyle.itemnames     = menu_names;
+#endif
+
 	y += BIGCHAR_HEIGHT+2;
 	s_preferences.back.generic.type	    = MTYPE_BITMAP;
 	s_preferences.back.generic.name     = ART_BACK0;
@@ -363,6 +428,7 @@ static void Preferences_MenuInit( void ) {
 	Menu_AddItem( &s_preferences.menu, &s_preferences.forcemodel );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.drawteamoverlay );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.allowdownload );
+	Menu_AddItem( &s_preferences.menu, &s_preferences.menustyle );
 
 	Menu_AddItem( &s_preferences.menu, &s_preferences.back );
 
@@ -385,6 +451,7 @@ void Preferences_Cache( void ) {
 	for( n = 0; n < NUM_CROSSHAIRS; n++ ) {
 		s_preferences.crosshairShader[n] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c", 'a' + n ) );
 	}
+	s_preferences.crosshairShader[n] = trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
 }
 
 

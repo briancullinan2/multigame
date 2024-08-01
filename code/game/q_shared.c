@@ -1337,3 +1337,39 @@ qboolean Info_SetValueForKey_Big( char *s, const char *key, const char *value ) 
 	strcpy( s + len1, newi );
 	return qtrue;
 }
+
+#ifdef USE_VEHICLES
+
+/*
+==============
+WheelAngle
+
+calculates the angle of the wheels from the car yaw and view yaw
+==============
+*/
+float WheelAngle(float carYaw, float viewYaw){
+	float angleDiff;
+
+	angleDiff = AngleNormalize180(carYaw - viewYaw);
+
+	if (angleDiff > 90){
+		angleDiff = 180 - angleDiff;
+	}
+	if (angleDiff < -90){
+		angleDiff = -180 - angleDiff;
+	}
+
+	if (angleDiff < -30){
+		angleDiff = -30;
+	}
+	if (angleDiff > 30){
+		angleDiff = 30;
+	}
+
+	return angleDiff;
+}
+// END
+
+
+
+#endif

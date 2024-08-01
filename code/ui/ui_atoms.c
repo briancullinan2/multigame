@@ -7,7 +7,11 @@
 **********************************************************************/
 #include "ui_local.h"
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+
+#ifndef USE_CLASSIC_MENU
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
+#endif
 
 #ifndef BUILD_GAME_STATIC
 // these are here so the functions in q_shared.c can link
@@ -322,6 +326,12 @@ qboolean UI_ConsoleCommand( int realTime ) {
 	uiInfo.uiDC.frameTime = realTime - uiInfo.uiDC.realTime;
 	uiInfo.uiDC.realTime = realTime;
 
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		return UI_CLASSIC_ConsoleCommand( realTime );
+	}
+#endif
+
 	cmd = UI_Argv( 0 );
 
 	// ensure minimum menu data is available
@@ -513,3 +523,6 @@ qboolean UI_CursorInRect (int x, int y, int width, int height)
 
 	return qtrue;
 }
+
+#endif
+

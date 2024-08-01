@@ -108,6 +108,9 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 	ci->gender = GENDER_MALE;
 	ci->fixedlegs = qfalse;
 	ci->fixedtorso = qfalse;
+#ifdef USE_ADVANCED_CLASS
+	ci->notq3 = qfalse;
+#endif
 
 	// read optional parameters
 	while ( 1 ) {
@@ -144,7 +147,20 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 				ci->headOffset[i] = atof( token );
 			}
 			continue;
-		} else if ( !Q_stricmp( token, "sex" ) ) {
+		} else 
+#ifdef USE_ADVANCED_CLASS
+		if ( !Q_stricmp( token, "povoffset" ) ) {
+			for ( i = 0 ; i < 3 ; i++ ) {
+				token = COM_Parse( &text_p );
+				if ( !token[0] ) {
+					break;
+				}
+				ci->povOffset[i] = atof( token );
+			}
+			continue;
+		} else 
+#endif
+		if ( !Q_stricmp( token, "sex" ) ) {
 			token = COM_Parse( &text_p );
 			if ( !token[0] ) {
 				break;
@@ -163,7 +179,13 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 		} else if ( !Q_stricmp( token, "fixedtorso" ) ) {
 			ci->fixedtorso = qtrue;
 			continue;
+		} 
+#ifdef USE_ADVANCED_CLASS
+		else if ( !Q_stricmp( token, "notq3" ) ) {
+			ci->notq3 = qtrue;
+			continue;
 		}
+#endif
 
 		// if it is a number, start parsing animations
 		if ( token[0] >= '0' && token[0] <= '9' ) {
@@ -191,6 +213,10 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 			break;
 		}
 		animations[i].firstFrame = atoi( token );
+
+#ifdef USE_ADVANCED_CLASS
+		if(!ci->notq3) {
+#endif
 		// leg only frames are adjusted to not count the upper body only frames
 		if ( i == LEGS_WALKCR ) {
 			skip = animations[LEGS_WALKCR].firstFrame - animations[TORSO_GESTURE].firstFrame;
@@ -198,6 +224,9 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 		if ( i >= LEGS_WALKCR && i<TORSO_GETFLAG) {
 			animations[i].firstFrame -= skip;
 		}
+#ifdef USE_ADVANCED_CLASS
+		}
+#endif
 
 		token = COM_Parse( &text_p );
 		if ( !token[0] ) {
@@ -233,7 +262,7 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 
 	if ( i != MAX_ANIMATIONS ) {
 		CG_Printf( "Error parsing animation file: %s\n", filename );
-		return qfalse;
+		//return qfalse;
 	}
 
 	// crouch backward animation
@@ -272,6 +301,7 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 //	animations[TORSO_AFFIRMATIVE].flipflop = qtrue;
 //	animations[TORSO_NEGATIVE].flipflop = qtrue;
 	//
+
 	return qtrue;
 }
 
@@ -400,6 +430,16 @@ static qboolean	CG_FindClientHeadFile( char *filename, int length, clientInfo_t 
 				team = "blue";
 				break;
 			}
+#if 0 //def USE_ADVANCED_GAMES
+			case TEAM_GOLD: {
+				team = "gold";
+				break;
+			}
+			case TEAM_GREEN: {
+				team = "green";
+				break;
+			}
+#endif
 			default: {
 				team = "default";
 				break;
@@ -513,13 +553,15 @@ static qboolean	CG_RegisterClientSkin( clientInfo_t *ci, const char *teamName, c
 
 	if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, headModelName, headSkinName, "head", "skin" ) ) {
 		ci->headSkin = trap_R_RegisterSkin( filename );
+	} else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, modelName, headSkinName, "head", "skin" ) ) {
+		ci->headSkin = trap_R_RegisterSkin( filename );
 	}
 	if (!ci->headSkin) {
 		Com_Printf( "Head skin load failure: %s\n", filename );
 	}
 
 	// if any skins failed to load
-	if ( !ci->legsSkin || !ci->torsoSkin || !ci->headSkin ) {
+	if ( !ci->legsSkin /*|| !ci->torsoSkin || !ci->headSkin*/ ) {
 		return qfalse;
 	}
 	return qtrue;
@@ -531,7 +573,7 @@ static qboolean	CG_RegisterClientSkin( clientInfo_t *ci, const char *teamName, c
 CG_RegisterClientModelname
 ==========================
 */
-static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, const char *skinName, const char *headModelName, const char *headSkinName, const char *teamName ) {
+qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelName, const char *skinName, const char *headModelName, const char *headSkinName, const char *teamName ) {
 	char	filename[MAX_QPATH];
 	const char		*headName;
 	char newTeamName[MAX_QPATH];
@@ -542,14 +584,20 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 	else {
 		headName = headModelName;
 	}
-	Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
+
+
+	Com_sprintf( filename, sizeof( filename ), "models/players/%s/tris.md3", modelName );
 	ci->legsModel = trap_R_RegisterModel( filename );
 	if ( !ci->legsModel ) {
-		Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/lower.md3", modelName );
+		Com_sprintf( filename, sizeof( filename ), "models/players/%s/lower.md3", modelName );
 		ci->legsModel = trap_R_RegisterModel( filename );
 		if ( !ci->legsModel ) {
-			Com_Printf( "Failed to load model file %s\n", filename );
-			return qfalse;
+			Com_sprintf( filename, sizeof( filename ), "models/players/characters/%s/lower.md3", modelName );
+			ci->legsModel = trap_R_RegisterModel( filename );
+			if ( !ci->legsModel ) {
+				Com_Printf( "Failed to load model file %s\n", filename );
+				return qfalse;
+			}
 		}
 	}
 
@@ -560,7 +608,9 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 		ci->torsoModel = trap_R_RegisterModel( filename );
 		if ( !ci->torsoModel ) {
 			Com_Printf( "Failed to load model file %s\n", filename );
-			return qfalse;
+			if(!ci->legsModel) {
+				return qfalse;
+			}
 		}
 	}
 
@@ -578,7 +628,9 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 	}
 	if ( !ci->headModel ) {
 		Com_Printf( "Failed to load model file %s\n", filename );
-		return qfalse;
+		if(!ci->legsModel) {
+			return qfalse;
+		}
 	}
 
 	// if any skins failed to load, return failure
@@ -615,6 +667,9 @@ static qboolean CG_RegisterClientModelname( clientInfo_t *ci, const char *modelN
 		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
 	}
 	else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, headName, headSkinName, "icon", "tga" ) ) {
+		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
+	}
+	else if ( CG_FindClientHeadFile( filename, sizeof(filename), ci, teamName, modelName, "default", "icon", "tga" ) ) {
 		ci->modelIcon = trap_R_RegisterShaderNoMip( filename );
 	}
 
@@ -846,6 +901,11 @@ static void CG_CopyClientInfoModel( const clientInfo_t *from, clientInfo_t *to )
 	VectorCopy( from->headOffset, to->headOffset );
 	to->footsteps = from->footsteps;
 	to->gender = from->gender;
+#ifdef USE_ADVANCED_CLASS
+	VectorCopy( from->povOffset, to->povOffset );
+	to->notq3 = from->notq3;
+	to->playerClass = from->playerClass;
+#endif
 
 	to->legsModel = from->legsModel;
 	to->legsSkin = from->legsSkin;
@@ -1288,6 +1348,15 @@ void CG_NewClientInfo( int clientNum ) {
 	CG_SetSkinAndModel( &newInfo, ci, v, allowNativeModel, clientNum, myClientNum, myTeam, qfalse, 
 		newInfo.headModelName, sizeof( newInfo.headModelName ),	newInfo.headSkinName, sizeof( newInfo.headSkinName ) );
 
+
+#ifdef USE_MULTIWORLD
+	v = Info_ValueForKey( configstring, "worlds" );
+if(newInfo.worlds != atoi( v )) {
+	newInfo.worlds = atoi( v );
+	//Com_Printf("Adding world to client: %i in %i\n", clientNum, newInfo.worlds);
+}
+#endif
+
 	// allow deferred load at some conditions
 	can_defer = cg_deferPlayers.integer == 2 || ( cg_deferPlayers.integer == 1 && myTeam != TEAM_SPECTATOR && team == TEAM_SPECTATOR );
 
@@ -1311,6 +1380,10 @@ void CG_NewClientInfo( int clientNum ) {
 			CG_LoadClientInfo( &newInfo );
 		}
 	}
+
+#ifdef USE_ADVANCED_CLASS
+	newInfo.playerClass = BG_PlayerClassFromModel(newInfo.modelName);
+#endif
 
 	// replace whatever was there with the new one
 	newInfo.infoValid = qtrue;
@@ -1391,7 +1464,7 @@ Sets cg.snap, cg.oldFrame, and cg.backlerp
 cg.time should be between oldFrameTime and frameTime after exit
 ===============
 */
-static void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale ) {
+void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale ) {
 	int			f, numFrames;
 	animation_t	*anim;
 
@@ -1491,7 +1564,7 @@ static void CG_ClearLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int animationN
 CG_PlayerAnimation
 ===============
 */
-static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
+void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
 						int *torsoOld, int *torso, float *torsoBackLerp ) {
 	clientInfo_t	*ci;
 	int				clientNum;
@@ -1504,7 +1577,16 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 		return;
 	}
 
-	if ( cent->currentState.powerups & ( 1 << PW_HASTE ) ) {
+
+	if ( cent->currentState.powerups & ( 1 << PW_HASTE ) 
+#ifdef USE_ADVANCED_ITEMS
+		// this is only for local client || cg.inventory[PW_HASTE]
+		// for this i'll use powerups as "styles" for overlapping inventory
+#endif
+#ifdef USE_RUNES
+    //|| cg_entities[cent->currentState.number].->inventory[RUNE_HASTE]
+#endif
+	) {
 		speedScale = 1.5;
 	} else {
 		speedScale = 1;
@@ -1512,12 +1594,36 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 
 	ci = &cgs.clientinfo[ clientNum ];
 
+
+	// torso
+#ifdef USE_GAME_FREEZETAG
+	if(!(cent->currentState.powerups & ( 1 << PW_FROZEN ))) {
+#endif
+
 	// do the shuffle turn frames locally
+
+#ifdef USE_ADVANCED_CLASS
+	if(ci->notq3) {
+		// make a special exception for monsters, because animations are combined
+		//   if the bot stops moving to attack show that animation instead of walking
+		//CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim & ~ANIM_TOGGLEBIT, cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT);
+		if((cent->currentState.legsAnim & ~ANIM_TOGGLEBIT) == LEGS_IDLE) {
+			cent->currentState.legsAnim = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
+		}
+	}
+#endif
+
 	if ( cent->pe.legs.yawing && ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) == LEGS_IDLE ) {
 		CG_RunLerpFrame( ci, &cent->pe.legs, LEGS_TURN, speedScale );
 	} else {
 		CG_RunLerpFrame( ci, &cent->pe.legs, cent->currentState.legsAnim, speedScale );
 	}
+
+	// torso
+#ifdef USE_GAME_FREEZETAG
+	}
+#endif
+
 
 	*legsOld = cent->pe.legs.oldFrame;
 	*legs = cent->pe.legs.frame;
@@ -1654,6 +1760,11 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 
 	// --------- yaw -------------
 
+	// torso
+#ifdef USE_GAME_FREEZETAG
+	if(!(cent->currentState.powerups & ( 1 << PW_FROZEN ))) {
+#endif
+
 	// allow yaw to drift a bit
 	if ( ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) != LEGS_IDLE 
 		|| ((cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT) != TORSO_STAND 
@@ -1674,16 +1785,14 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 			CG_Error( "Bad player movement angle" );
 		}
 	}
-	legsAngles[YAW] = headAngles[YAW] + movementOffsets[ dir ];
-	torsoAngles[YAW] = headAngles[YAW] + 0.25 * movementOffsets[ dir ];
+	legsAngles[YAW] = headAngles[YAW] + movementOffsets[ dir ] * cg_playerScale.value;
+	torsoAngles[YAW] = headAngles[YAW] + 0.25 * movementOffsets[ dir ] * cg_playerScale.value;
 
-	// torso
 	CG_SwingAngles( torsoAngles[YAW], 25, 90, cg_swingSpeed.value, &cent->pe.torso.yawAngle, &cent->pe.torso.yawing );
 	CG_SwingAngles( legsAngles[YAW], 40, 90, cg_swingSpeed.value, &cent->pe.legs.yawAngle, &cent->pe.legs.yawing );
 
 	torsoAngles[YAW] = cent->pe.torso.yawAngle;
 	legsAngles[YAW] = cent->pe.legs.yawAngle;
-
 
 	// --------- pitch -------------
 
@@ -1735,6 +1844,10 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 			legsAngles[ROLL] = 0.0f;
 		}
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	}
+#endif
 
 	// pain twitch
 	CG_AddPainTwitch( cent, torsoAngles );
@@ -2102,6 +2215,11 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+
+
+#else
+
 	// quad gives a dlight
 	if ( powerups & ( 1 << PW_QUAD ) ) {
 		if ( cgs.clientinfo[ cent->currentState.clientNum ].team == TEAM_RED ) {
@@ -2139,6 +2257,31 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
 	}
 
+
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	// goldflag
+	if ( powerups & ( 1 << PW_GOLDFLAG ) ) {
+		if (ci->newAnims) {
+			CG_PlayerFlag( cent, cgs.media.goldFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.goldFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 1.0f, 0.2f, 0.2f );
+	}
+
+	// greenflag
+	if ( powerups & ( 1 << PW_GREENFLAG ) ) {
+		if (ci->newAnims){
+			CG_PlayerFlag( cent, cgs.media.greenFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.greenFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
+	}
+#endif
+
 	// neutralflag
 	if ( powerups & ( 1 << PW_NEUTRALFLAG ) ) {
 		if (ci->newAnims) {
@@ -2151,9 +2294,15 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 	}
 
 	// haste leaves smoke trails
-	if ( powerups & ( 1 << PW_HASTE ) ) {
+	if ( cent->client->inventory[PW_HASTE] 
+#ifdef USE_RUNES
+    || cent->client->inventory[RUNE_HASTE]
+#endif
+  ) {
 		CG_HasteTrail( cent );
 	}
+
+#endif
 }
 
 
@@ -2290,7 +2439,7 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 
 	*shadowPlane = trace.endpos[2] + 1;
 
-	if ( cg_shadows.integer != 1 ) {	// no mark for stencil or projection shadows
+	if ( cg_shadows.integer == 0 ) {	// no mark for stencil or projection shadows
 		return qtrue;
 	}
 
@@ -2407,6 +2556,94 @@ Also called by CG_Missile for quad rockets, but nobody can tell...
 */
 void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int team ) {
 
+#ifdef USE_ADVANCED_ITEMS
+
+//CG_Printf("powerups: %i\n", state->powerups);
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+    if ( state->powerups == PW_FROZEN )
+    {
+      trap_R_AddRefEntityToScene( ent );
+      ent->customShader = cgs.media.frozenShader;
+      trap_R_AddRefEntityToScene( ent );
+      return;
+    }
+#endif
+
+	if ( state->powerups == PW_INVIS ) {
+		ent->customShader = cgs.media.invisShader;
+		trap_R_AddRefEntityToScene( ent );
+		return;
+	} 
+
+	if ( state->eFlags & EF_KAMIKAZE ) {
+		if (team == TEAM_BLUE)
+			ent->customShader = cgs.media.blueKamikazeShader;
+		else
+			ent->customShader = cgs.media.redKamikazeShader;
+		trap_R_AddRefEntityToScene( ent );
+	}
+
+
+	if ( state->powerups >= RUNE_STRENGTH && state->powerups <= RUNE_LITHIUM ) {
+		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(state->powerups-RUNE_STRENGTH)) ];
+		ent->customShader = item->altShader1;
+		trap_R_AddRefEntityToScene( ent );
+		if(item->altShader2) {
+      ent->customShader = item->altShader2;
+      trap_R_AddRefEntityToScene( ent );
+    }
+		return;
+	}
+
+	trap_R_AddRefEntityToScene( ent );
+
+
+	if ( state->powerups == PW_QUAD || state->powerups == (PW_QUAD | (PW_REDFLAG << 8)) )
+	{
+		if (team == TEAM_RED)
+			ent->customShader = cgs.media.redQuadShader;
+		else
+			ent->customShader = cgs.media.quadShader;
+		trap_R_AddRefEntityToScene( ent );
+	}
+
+	if ( state->powerups == PW_REGEN ) {
+		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			ent->customShader = cgs.media.regenShader;
+			trap_R_AddRefEntityToScene( ent );
+		}
+	}
+	if ( state->powerups == PW_BATTLESUIT ) {
+		ent->customShader = cgs.media.battleSuitShader;
+		trap_R_AddRefEntityToScene( ent );
+	}
+
+	if ( state->powerups == PW_GRAVITYSUIT ) {
+		ent->customShader = cgs.media.gravitySuitShader;
+		trap_R_AddRefEntityToScene( ent );
+	}
+
+	if ( state->powerups == PW_REGENAMMO ) {
+		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			ent->customShader = cgs.media.ammoRegenShader;
+			trap_R_AddRefEntityToScene( ent );
+		}
+	}
+
+#else
+
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+    if ( state->powerups & ( 1 << PW_FROZEN ) )
+    {
+      trap_R_AddRefEntityToScene( ent );
+      ent->customShader = cgs.media.frozenShader;
+      trap_R_AddRefEntityToScene( ent );
+      return;
+    }
+#endif
+
 	if ( state->powerups & ( 1 << PW_INVIS ) ) {
 		ent->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( ent );
@@ -2441,7 +2678,21 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 			ent->customShader = cgs.media.battleSuitShader;
 			trap_R_AddRefEntityToScene( ent );
 		}
+#ifdef USE_RUNES
+    if( cent->client->inventory[RUNE_RESIST] ) {
+      ent->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(3)) ].altShader3;
+      trap_R_AddRefEntityToScene( ent );
+    }
+    if( cent->client->inventory[RUNE_REGEN] 
+      && cent->currentState.eType != ET_MISSILE ) {
+      if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
+        ent->customShader = cg_items[ ITEM_INDEX(BG_FindItemForRune(2)) ].altShader3;
+				trap_R_AddRefEntityToScene( ent );
+			}
+    }
+#endif
 	}
+#endif
 }
 
 
@@ -2492,6 +2743,76 @@ int CG_LightVerts( vec3_t normal, int numVerts, polyVert_t *verts )
 	return qtrue;
 }
 
+#ifdef USE_RPG_STATS
+
+#define NUMBER_SIZE		8
+void CG_PlayerStats( centity_t *cent ) {
+	clientInfo_t	*ci;
+	refEntity_t	re;
+	vec3_t		origin, delta, dir, vec, up = {0, 0, 1};
+	float		c, len;
+	int			i, health, digits[10], numdigits, negative;
+
+	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
+
+	re.reType = RT_SPRITE;
+  re.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON;
+	re.radius = 16;
+
+	//c = ( le->endTime - cg.time ) * le->lifeRate;
+
+	health = ci->health;
+  ChooseDamageColor(100 - health, re.shaderRGBA);
+
+	re.radius = NUMBER_SIZE / 2;
+
+	VectorCopy(cent->lerpOrigin, origin);
+	origin[2] += 50.0f * cg_playerScale.value; // - c * 100.0f;
+
+	VectorSubtract(cg.refdef.vieworg, origin, dir);
+	CrossProduct(dir, up, vec);
+	VectorNormalize(vec);
+
+	//VectorMA(origin, -10.0f + 20 * sin(c * 2 * M_PI), vec, origin);
+
+	// if the view would be "inside" the sprite, kill the sprite
+	// so it doesn't add too much overdraw
+	VectorSubtract( origin, cg.refdef.vieworg, delta );
+	len = VectorLengthSquared( delta );
+	if ( len < 20*20 || len > 20*4000 ) {
+		return;
+	}
+
+	if (len >= 20*3800 && len <= 20*4000)
+		re.shaderRGBA[3] = 0xff - (len - 20*3800) / (20*200) * 255;
+	else
+		re.shaderRGBA[3] = 0xAA;
+
+	negative = qfalse;
+	if (health < 0) {
+		negative = qtrue;
+		health = -health;
+	}
+
+	for (numdigits = 0; !(numdigits && !health); numdigits++) {
+		digits[numdigits] = health % 10;
+		health = health / 10;
+	}
+
+	if (negative) {
+		digits[numdigits] = 10;
+		numdigits++;
+	}
+
+	for (i = 0; i < numdigits; i++) {
+		VectorMA(origin, (float) (((float) numdigits / 2) - i) * NUMBER_SIZE, vec, re.origin);
+		re.customShader = cgs.media.numberShaders[digits[numdigits-1-i]];
+		trap_R_AddRefEntityToScene( &re );
+	}
+}
+#endif
+
+
 
 /*
 ===============
@@ -2507,7 +2828,7 @@ void CG_Player( centity_t *cent ) {
 	int				renderfx;
 	qboolean		shadow;
 	float			shadowPlane;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	refEntity_t		skull;
 	refEntity_t		powerup;
 	int				t;
@@ -2516,6 +2837,25 @@ void CG_Player( centity_t *cent ) {
 	vec3_t			dir, angles;
 #endif
 	qboolean		darken;
+
+	if ( cg.levelShot ) {
+		return;
+	}
+
+
+	if( // cent->currentState.clientNum == cg.snap->ps.clientNum
+#ifdef USE_ADVANCED_ITEMS
+		cent->currentState.powerups == PW_FLIGHT
+#else
+		cent->currentState.powerups & PW_FLIGHT
+#endif
+#ifdef USE_ADVANCED_CLASS
+		|| cgs.clientinfo[cent->currentState.clientNum].playerClass == PCLASS_DRAGON
+#endif
+	) {
+		CG_RecordPosition(cent);
+	}
+
 
 	// the client number is stored in clientNum.  It can't be derived
 	// from the entity number, because a single client may have
@@ -2532,17 +2872,40 @@ void CG_Player( centity_t *cent ) {
 		return;
 	}
 
+
 	// get the player model information
 	renderfx = 0;
 	if ( cent->currentState.number == cg.snap->ps.clientNum) {
-		if (!cg.renderingThirdPerson) {
+#ifdef USE_CLASSIC_HUD
+		if(cg.editPlayerMode) {
+			vec3_t forward, right, up;
+			AngleVectors (cg.refdefViewAngles, forward, right, up);
+			VectorMA(cg.refdef.vieworg, 200, forward, cent->lerpOrigin);
+			//CG_Printf("wtf: %f %f %f == %f %f %f\n", 
+			//cg.refdef.vieworg[0], cg.refdef.vieworg[1], cg.refdef.vieworg[2],
+			//cent->lerpOrigin[0], cent->lerpOrigin[1], cent->lerpOrigin[2]);
+			//VectorCopy(cg.refdef.vieworg, cent->lerpOrigin);
+			//cent->lerpOrigin[1] -= 300;
+			//cent->lerpOrigin[0] += 200;
+			VectorCopy(cg.refdefViewAngles, cent->lerpAngles);
+			cent->lerpAngles[PITCH] = 0;
+			cent->lerpAngles[YAW] -= 180;
+		} else
+#endif
+		if (!cg.renderingThirdPerson
+		) {
 			renderfx = RF_THIRD_PERSON;			// only draw in mirrors
-		} else {
-			if (cg_cameraMode.integer) {
-				return;
-			}
+		}
+		else if (cg_cameraMode.integer) {
+			return;
 		}
 	}
+
+#ifdef USE_ADVANCED_ITEMS
+	if(cg.inventory[PW_VISIBILITY]) {
+		renderfx |= RF_DEPTHEXTRAHACKY | RF_STENCIL;
+	}
+#endif
 
 	if ( cg_deadBodyDarken.integer && cent->currentState.eFlags & EF_DEAD )
 		darken = qtrue;
@@ -2555,7 +2918,8 @@ void CG_Player( centity_t *cent ) {
 
 	// get the rotation information
 	CG_PlayerAngles( cent, legs.axis, torso.axis, head.axis );
-	
+
+
 	// get the animation state (after rotation, to allow feet shuffle)
 	CG_PlayerAnimation( cent, &legs.oldframe, &legs.frame, &legs.backlerp,
 		 &torso.oldframe, &torso.frame, &torso.backlerp );
@@ -2563,13 +2927,20 @@ void CG_Player( centity_t *cent ) {
 	// add the talk baloon or disconnect icon
 	CG_PlayerSprites( cent );
 
+#ifdef USE_RPG_STATS
+	// draw little health bars for players
+	if(cg_healthBar.integer) {
+		CG_PlayerStats( cent );
+	}
+#endif
+
 	// add the shadow
 	shadow = CG_PlayerShadow( cent, &shadowPlane );
 
 	// add a water splash if partially in and out of water
 	CG_PlayerSplash( cent );
 
-	if ( cg_shadows.integer == 3 && shadow ) {
+	if ( cg_shadows.integer && shadow ) {
 		renderfx |= RF_SHADOW_PLANE;
 	}
 	renderfx |= RF_LIGHTING_ORIGIN;			// use the same origin for all
@@ -2603,12 +2974,23 @@ void CG_Player( centity_t *cent ) {
 	}
 	legs.shaderRGBA[3] = 255;
 
+#ifdef USE_ADVANCED_ITEMS
+	cent->currentState.powerups = cgs.clientinfo[cent->currentState.clientNum].powerups;
+#endif
+
+	VectorScale( legs.axis[0], cg_playerScale.value, legs.axis[0] );
+	VectorScale( legs.axis[1], cg_playerScale.value, legs.axis[1] );
+	VectorScale( legs.axis[2], cg_playerScale.value, legs.axis[2] );
 	CG_AddRefEntityWithPowerups( &legs, &cent->currentState, ci->team );
 
 	// if the model failed, allow the default nullmodel to be displayed
 	if (!legs.hModel) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_CLASS
+	if(ci->torsoModel) {
+#endif
 
 	//
 	// add the torso
@@ -2641,7 +3023,8 @@ void CG_Player( centity_t *cent ) {
 
 	CG_AddRefEntityWithPowerups( &torso, &cent->currentState, ci->team );
 
-#ifdef MISSIONPACK
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if ( cent->currentState.eFlags & EF_KAMIKAZE ) {
 
 		memset( &skull, 0, sizeof(skull) );
@@ -2751,7 +3134,17 @@ void CG_Player( centity_t *cent ) {
 		}
 	}
 
-	if ( cent->currentState.powerups & ( 1 << PW_GUARD ) ) {
+
+#ifdef USE_ADVANCED_ITEMS
+// TODO: check for powerup in new arrays
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_GUARD ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_GUARD ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.guardPowerupModel;
 		powerup.frame = 0;
@@ -2759,7 +3152,12 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_SCOUT ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_SCOUT ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_SCOUT ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.scoutPowerupModel;
 		powerup.frame = 0;
@@ -2767,7 +3165,12 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_DOUBLER ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_DOUBLER ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_DOUBLER ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.doublerPowerupModel;
 		powerup.frame = 0;
@@ -2775,7 +3178,12 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_AMMOREGEN ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_AMMOREGEN ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_AMMOREGEN ) ) 
+#endif
+	{
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.ammoRegenPowerupModel;
 		powerup.frame = 0;
@@ -2783,7 +3191,14 @@ void CG_Player( centity_t *cent ) {
 		powerup.customSkin = 0;
 		trap_R_AddRefEntityToScene( &powerup );
 	}
-	if ( cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) {
+	if ( 
+#ifdef USE_ADVANCED_ITEMS
+		//cg.inventory[PW_INVULNERABILITY]
+		cent->currentState.powerups == PW_INVULNERABILITY 
+#else
+		cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) 
+#endif
+	) {
 		if ( !ci->invulnerabilityStartTime ) {
 			ci->invulnerabilityStartTime = cg.time;
 		}
@@ -2792,8 +3207,15 @@ void CG_Player( centity_t *cent ) {
 	else {
 		ci->invulnerabilityStartTime = 0;
 	}
-	if ( (cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) ||
-		cg.time - ci->invulnerabilityStopTime < 250 ) {
+	if ( 
+#ifdef USE_ADVANCED_ITEMS
+		//cg.inventory[PW_INVULNERABILITY]
+		cent->currentState.powerups == PW_INVULNERABILITY 
+#else
+		(cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) 
+#endif
+		|| cg.time - ci->invulnerabilityStopTime < 250
+	) {
 
 		memcpy(&powerup, &torso, sizeof(torso));
 		powerup.hModel = cgs.media.invulnerabilityPowerupModel;
@@ -2845,9 +3267,20 @@ void CG_Player( centity_t *cent ) {
 	}
 #endif // MISSIONPACK
 
+#ifdef USE_ADVANCED_CLASS
+	}
+#endif
+
 	//
 	// add the head
 	//
+#ifdef USE_ADVANCED_CLASS
+	if(ci->headModel) {
+#endif
+#ifdef USE_HEADSHOTS
+  if(!cent->pe.noHead)
+  {
+#endif
 	head.hModel = ci->headModel;
 	if (!head.hModel) {
 		return;
@@ -2874,6 +3307,12 @@ void CG_Player( centity_t *cent ) {
 	head.shaderRGBA[3] = 255;
 	
 	CG_AddRefEntityWithPowerups( &head, &cent->currentState, ci->team );
+#ifdef USE_HEADSHOTS
+  }
+#endif
+#ifdef USE_ADVANCED_CLASS
+	}
+#endif
 
 #ifdef MISSIONPACK
 	CG_BreathPuffs(cent, &head);
@@ -2884,6 +3323,14 @@ void CG_Player( centity_t *cent ) {
 	//
 	// add the gun / barrel / flash
 	//
+#ifdef USE_ADVANCED_CLASS
+	if(ci->playerClass >= PCLASS_MONSTER && ci->playerClass <= PCLASS_MONSTER_COUNT) {
+		// don't draw a weapon because they generally have them build into the model
+	} else
+	if(!ci->torsoModel && ci->legsModel) {
+		CG_AddPlayerWeapon( &legs, NULL, cent, ci->team );
+	} else
+#endif
 	CG_AddPlayerWeapon( &torso, NULL, cent, ci->team );
 
 	// add powerups floating behind the player
@@ -2924,6 +3371,10 @@ void CG_ResetPlayerEntity( centity_t *cent ) {
 	cent->pe.torso.yawing = qfalse;
 	cent->pe.torso.pitchAngle = cent->rawAngles[PITCH];
 	cent->pe.torso.pitching = qfalse;
+  
+#ifdef USE_HEADSHOTS
+  cent->pe.noHead = qfalse;
+#endif
 
 	if ( cg_debugPosition.integer ) {
 		CG_Printf("%i ResetPlayerEntity yaw=%f\n", cent->currentState.number, cent->pe.torso.yawAngle );

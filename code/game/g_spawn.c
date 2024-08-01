@@ -96,6 +96,12 @@ const field_t fields[] = {
 	{"angle", FOFS(s.angles), F_ANGLEHACK},
 	{"targetShaderName", FOFS(targetShaderName), F_LSTRING},
 	{"targetShaderNewName", FOFS(targetShaderNewName), F_LSTRING},
+#ifdef USE_ROTATING_DOOR
+  {"distance", FOFS(distance), F_FLOAT},	// VALKYRIE: for rotating doors
+#endif
+#ifdef USE_MULTIWORLD
+	{"world", FOFS(world), F_INT},
+#endif
 
 	{NULL}
 };
@@ -144,7 +150,13 @@ void SP_target_kill (gentity_t *ent);
 void SP_target_position (gentity_t *ent);
 void SP_target_location (gentity_t *ent);
 void SP_target_push (gentity_t *ent);
+void SP_target_exec (gentity_t *ent);
+void SP_target_kamikaze (gentity_t *ent);
 
+#ifdef USE_SINGLEPLAYER
+void SP_target_earthquake (gentity_t *ent);
+void SP_target_player_stop (gentity_t *ent);
+#endif
 void SP_light (gentity_t *self);
 void SP_info_null (gentity_t *self);
 void SP_info_notnull (gentity_t *self);
@@ -166,12 +178,26 @@ void SP_team_CTF_blueplayer( gentity_t *ent );
 void SP_team_CTF_redspawn( gentity_t *ent );
 void SP_team_CTF_bluespawn( gentity_t *ent );
 
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+void SP_team_CTF_goldplayer( gentity_t *ent );
+void SP_team_CTF_greenplayer( gentity_t *ent );
+
+void SP_team_CTF_goldspawn( gentity_t *ent );
+void SP_team_CTF_greenspawn( gentity_t *ent );
+
+#endif
+
 #ifdef MISSIONPACK
 void SP_team_blueobelisk( gentity_t *ent );
 void SP_team_redobelisk( gentity_t *ent );
 void SP_team_neutralobelisk( gentity_t *ent );
 #endif
-void SP_item_botroam( gentity_t *ent ) {};
+void SP_item_botroam( gentity_t *ent ) {
+}
+
+#ifdef USE_ROTATING_DOOR
+void SP_func_door_rotating( gentity_t *ent );	// VALKYRIE: for rotating doors
+#endif
 
 spawn_t	spawns[] = {
 	// info entities don't do anything at all, but provide positional
@@ -221,11 +247,20 @@ spawn_t	spawns[] = {
 	{"target_location", SP_target_location},
 	{"target_push", SP_target_push},
 
+#ifdef USE_SINGLEPLAYER // entity
+	{"target_exec", SP_target_exec},
+	{"target_earthquake", SP_target_earthquake},
+	{"target_player_stop", SP_target_player_stop},
+#endif
+	{"target_kamikaze", SP_target_kamikaze},
+
+
 	{"light", SP_light},
 	{"path_corner", SP_path_corner},
 
 	{"misc_teleporter_dest", SP_misc_teleporter_dest},
 	{"misc_model", SP_misc_model},
+	{"misc_model2", SP_misc_model},
 	{"misc_portal_surface", SP_misc_portal_surface},
 	{"misc_portal_camera", SP_misc_portal_camera},
 
@@ -239,12 +274,26 @@ spawn_t	spawns[] = {
 	{"team_CTF_redspawn", SP_team_CTF_redspawn},
 	{"team_CTF_bluespawn", SP_team_CTF_bluespawn},
 
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	{"team_CTF_goldplayer", SP_team_CTF_goldplayer},
+	{"team_CTF_greenplayer", SP_team_CTF_greenplayer},
+
+	{"team_CTF_goldspawn", SP_team_CTF_goldspawn},
+	{"team_CTF_greenspawn", SP_team_CTF_greenspawn},
+#endif
+
 #ifdef MISSIONPACK
 	{"team_redobelisk", SP_team_redobelisk},
 	{"team_blueobelisk", SP_team_blueobelisk},
 	{"team_neutralobelisk", SP_team_neutralobelisk},
 #endif
+
 	{"item_botroam", SP_item_botroam},
+
+#ifdef USE_ROTATING_DOOR
+  {"func_door_rotating", SP_func_door_rotating},	// VALKYRIE: for rotating doors
+  {"func_rotating_door", SP_func_door_rotating},	// VALKYRIE: for rotating doors
+#endif
 
 	{0, 0}
 };
@@ -402,24 +451,53 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
 		G_SpawnInt( "notsingle", "0", &i );
 		if ( i ) {
-			G_FreeEntity( ent );
-			return;
+			Q_strcpy(ent->not, "notsingle");
+			//G_FreeEntity( ent );
+			//return;
+			ent->r.svFlags = SVF_NOCLIENT;
+			ent->s.eFlags |= EF_NODRAW;
+			ent->tag = TAG_DONTSPAWN;
 		}
 	}
 	// check for "notteam" flag (GT_FFA, GT_TOURNAMENT, GT_SINGLE_PLAYER)
 	if ( g_gametype.integer >= GT_TEAM ) {
 		G_SpawnInt( "notteam", "0", &i );
 		if ( i ) {
+			Q_strcpy(ent->not, "notteam");
+			//G_FreeEntity( ent );
+			//return;
+			ent->r.svFlags = SVF_NOCLIENT;
+			ent->s.eFlags |= EF_NODRAW;
+			ent->tag = TAG_DONTSPAWN;
+		}
+	} else {
+		G_SpawnInt( "notfree", "0", &i );
+		if ( i ) {
+			Q_strcpy(ent->not, "notfree");
+			//G_FreeEntity( ent );
+			//return;
+			ent->r.svFlags = SVF_NOCLIENT;
+			ent->s.eFlags |= EF_NODRAW;
+			ent->tag = TAG_DONTSPAWN;
+		}
+	}
+
+#ifdef USE_MULTIWORLD
+	if(g_mvproto.integer > 0) {
+		G_SpawnInt( "notmultiworld", "0", &i );
+		if ( i ) {
 			G_FreeEntity( ent );
 			return;
 		}
 	} else {
-		G_SpawnInt( "notfree", "0", &i );
+		G_SpawnInt( "multiworld", "0", &i );
 		if ( i ) {
 			G_FreeEntity( ent );
 			return;
 		}
 	}
+
+#endif
 
 #ifdef MISSIONPACK
 	G_SpawnInt( "notta", "0", &i );
@@ -430,8 +508,8 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 #else
 	G_SpawnInt( "notq3a", "0", &i );
 	if ( i ) {
-		G_FreeEntity( ent );
-		return;
+		//G_FreeEntity( ent );
+		//return;
 	}
 #endif
 
@@ -441,13 +519,21 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 
 			s = strstr( value, gametypeName );
 			if( !s ) {
-				G_FreeEntity( ent );
-				return;
+				//G_FreeEntity( ent );
+				//return;
+				Q_strcpy(ent->gametype, value);
+				ent->r.svFlags = SVF_NOCLIENT;
+				ent->s.eFlags |= EF_NODRAW;
+				ent->tag = TAG_DONTSPAWN;
 			}
 		}
 	}
 
 	// move editor origin to pos
+	ent->s.origin[0] *= g_scale.value;
+	ent->s.origin[1] *= g_scale.value;
+	ent->s.origin[2] *= g_scale.value;
+
 	VectorCopy( ent->s.origin, ent->s.pos.trBase );
 	VectorCopy( ent->s.origin, ent->r.currentOrigin );
 
@@ -576,6 +662,10 @@ void SP_worldspawn( void ) {
 	G_SpawnString( "enableBreath", "0", &s );
 	trap_Cvar_Set( "g_enableBreath", s );
 
+
+	G_SpawnString( "_playerscale", "1.0", &s );
+	trap_Cvar_Set( "g_playerScale", s );
+
 	g_entities[ENTITYNUM_WORLD].s.number = ENTITYNUM_WORLD;
 	g_entities[ENTITYNUM_WORLD].r.ownerNum = ENTITYNUM_NONE;
 	g_entities[ENTITYNUM_WORLD].classname = "worldspawn";
@@ -592,7 +682,12 @@ void SP_worldspawn( void ) {
 	} else {
 		// assume that g_doWarmup is always 1
 		level.warmupTime = -1;
-		if ( g_warmup.integer > 0 ) {
+		if ( 
+#ifdef USE_HORDES
+			!g_hordeMode.integer && 
+#endif
+			g_warmup.integer > 0 
+		) {
 			trap_SetConfigstring( CS_WARMUP, va( "%i", level.warmupTime ) );
 		} else {
 			trap_SetConfigstring( CS_WARMUP, "" );

@@ -64,21 +64,66 @@ void TossClientItems( gentity_t *self ) {
 	// drop the weapon if not a gauntlet or machinegun
 	weapon = self->s.weapon;
 
+#ifdef USE_CLOAK_CMD
+  if (self->flags & FL_CLOAK) {
+  	// remove the invisible powerup if the player is cloaked.
+  	self->client->ps.powerups[PW_INVIS] = level.time;
+  } 
+#endif
+
 	// make a special check to see if they are changing to a new
 	// weapon that isn't the mg or gauntlet.  Without this, a client
 	// can pick up a weapon, be killed, and not drop the weapon because
 	// their weapon change hasn't completed yet and they are still holding the MG.
-	if ( weapon == WP_MACHINEGUN || weapon == WP_GRAPPLING_HOOK ) {
+	if ( weapon == WP_MACHINEGUN 
+#ifdef USE_GRAPPLE
+		|| weapon == WP_GRAPPLING_HOOK 
+#endif
+#ifdef USE_FLAME_THROWER
+		|| weapon == WP_FLAME_THROWER
+#endif
+  ) {
 		if ( self->client->ps.weaponstate == WEAPON_DROPPING ) {
 			weapon = self->client->pers.cmd.weapon;
 		}
-		if ( !( self->client->ps.stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+		if ( !( self->client->ps.stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 			weapon = WP_NONE;
 		}
 	}
 
 	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
-		self->client->ps.ammo[ weapon ] ) {
+		self->client->ps.ammo[ weapon ]
+#ifdef USE_TRINITY
+    // don't drop anything in instagib mode
+    && !g_unholyTrinity.integer
+#endif
+#ifdef USE_HOTRPG
+    // don't drop anything in hot-rockets mode
+    && !g_hotRockets.integer
+#endif
+#ifdef USE_HOTBFG
+    // don't drop anything in hot-rockets mode
+    && !g_hotBFG.integer
+#endif
+#ifdef USE_INSTAGIB
+    // don't drop anything in instagib mode
+    && !g_instagib.integer
+#endif
+#ifdef USE_PORTALS
+		// don't drop portal guns
+		&& (!wp_portalEnable.integer || weapon != WP_BFG)
+#endif
+#ifdef USE_WEAPON_VARS
+		&& self->client->ps.ammo[ weapon ] != INFINITE
+#endif
+#ifdef USE_GRAPPLE
+		&& weapon != WP_GRAPPLING_HOOK 
+#endif
+#ifdef USE_FLAME_THROWER
+		// don't drop flame thrower power-up
+    && weapon != WP_FLAME_THROWER
+#endif
+	) {
 		// find the item type for this weapon
 		item = BG_FindItemForWeapon( weapon );
 
@@ -89,10 +134,22 @@ void TossClientItems( gentity_t *self ) {
 		drop->s.time2 = item->quantity;
 	}
 
+#ifdef USE_RUNES
+
+	for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+		if(self->client->inventory[i]) {
+			dropWeapon( self, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+			self->client->inventory[i] = 0;
+			self->client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+		}
+	}
+
+#endif
+
 	// drop all the powerups if not in teamplay
 	if ( g_gametype.integer != GT_TEAM ) {
 		angle = 45;
-		for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+		for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
 			if ( self->client->ps.powerups[ i ] > level.time ) {
 				item = BG_FindItemForPowerup( i );
 				if ( !item ) {
@@ -158,12 +215,22 @@ void TossClientCubes( gentity_t *self ) {
 		VectorClear( origin ) ;
 	}
 
+#ifdef USE_WEAPON_DROP
+  drop = LaunchItem( item, origin, velocity, FL_DROPPED_ITEM );
+#else
 	drop = LaunchItem( item, origin, velocity );
+#endif
 
 	drop->nextthink = level.time + g_cubeTimeout.integer * 1000;
 	drop->think = G_FreeEntity;
 	drop->spawnflags = self->client->sess.sessionTeam;
 }
+
+#endif
+
+
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 
 
 /*
@@ -291,16 +358,31 @@ char	*modNames[] = {
 	"MOD_SUICIDE",
 	"MOD_TARGET_LASER",
 	"MOD_TRIGGER_HURT",
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	"MOD_NAIL",
 	"MOD_CHAINGUN",
 	"MOD_PROXIMITY_MINE",
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
+#ifdef USE_FLAME_THROWER
+  "MOD_FLAME_THROWER",
+#endif
+#endif
+#ifdef USE_LV_DISCHARGE
+  "MOD_LV_DISCHARGE",
+#endif
+#ifdef USE_HEADSHOTS
+  "MOD_HEADSHOT",
+#endif
+#ifdef USE_HEADSHOTS
+  "MOD_HEADSHOT",
 #endif
 	"MOD_GRAPPLE"
 };
 
+#ifdef USE_PORTALS
+void PortalDestroy( gentity_t *self );
+#endif
 #ifdef MISSIONPACK
 /*
 ==================
@@ -415,6 +497,149 @@ void CheckAlmostScored( gentity_t *self, gentity_t *attacker ) {
 	}
 }
 
+
+
+#ifdef USE_DAMAGE_PLUMS
+void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
+  gentity_t *plum;
+
+  if ( self->client->ps.pm_type == PM_DEAD ) {
+		return;
+	}
+  
+  if ( !attacker || !attacker->client || self->client == attacker->client ) {
+    return;
+  }
+
+  plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
+  // only send this temp entity to a single client
+  plum->r.svFlags |= SVF_SINGLECLIENT;
+  plum->r.singleClient = attacker->s.number;
+  //
+  plum->s.otherEntityNum2 = attacker->s.number;
+  plum->s.otherEntityNum = self->s.number;
+  plum->s.time = damage;
+}
+#endif
+
+
+
+#ifdef USE_GAME_FREEZETAG
+
+void CheckFrozen() {
+	int redCount = 0, blueCount = 0, frozenCount = 0, clientCount = 0;
+	int redTeam = 0, blueTeam = 0;
+	gentity_t	*lastAlive;
+	gentity_t	*ent;
+	int i;
+	qboolean unfreezeAll = qfalse;
+
+	ent = &g_entities[0];
+	for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
+		if ( !ent->inuse ) {
+			continue;
+		}
+		if ( !ent->r.linked ) {
+			continue;
+		}
+		if( ent->client->pers.connected == CON_CONNECTED ) {
+			clientCount++;
+			if (ent->client->sess.sessionTeam == TEAM_RED) {
+				redTeam++;
+				if(ent->client->ps.powerups[PW_FROZEN]) {
+					redCount++;
+				}
+			} 
+			if (ent->client->sess.sessionTeam == TEAM_BLUE) {
+				blueTeam++;
+				if(ent->client->ps.powerups[PW_FROZEN]) {
+					blueCount++;
+				}
+			}
+			if (ent->client->ps.powerups[PW_FROZEN] ) {
+				frozenCount++;
+			} else {
+				lastAlive = ent;
+			}
+		}
+	}
+
+	if(frozenCount > 0 && frozenCount == clientCount - 1) {
+		AddScore(lastAlive, lastAlive->r.currentOrigin, frozenCount);
+		unfreezeAll = qtrue;
+	}
+	if(!(redTeam == 0 || blueTeam == 0)) {
+		if(redCount == clientCount || redCount == redTeam ) {
+			AddScore(lastAlive, lastAlive->r.currentOrigin, redCount);
+			unfreezeAll = qtrue;
+		}
+		if(blueCount == clientCount || blueCount == blueTeam) {
+			AddScore(lastAlive, lastAlive->r.currentOrigin, blueCount);
+			unfreezeAll = qtrue;
+		}
+	}
+
+	if(unfreezeAll) {
+		ent = &g_entities[0];
+		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
+			if(ent->inuse && ent->client && (ent->client->ps.powerups[PW_FROZEN]
+				|| ent->client->ps.pm_type == PM_FROZEN)) {
+				G_AddEvent( ent, EV_UNFROZEN, 0 );
+				// TODO: decide if they die or gib or come back to life
+				ent->client->ps.pm_type = PM_DEAD;
+				ent->client->ps.stats[STAT_HEALTH] = 0;
+				ent->client->ps.powerups[PW_FROZEN] = 0;
+				ent->health = 0;
+				//SetClientViewAngle(ent, ent->client->frozen_angles);
+			}
+		}
+	}
+
+
+}
+
+
+void player_frozen(gentity_t *self, int killer) {
+  gentity_t *plum;
+
+	if(!g_freezeTag.integer) {
+		return;
+	}
+
+  if ( self->client->ps.pm_type != PM_DEAD
+		&& self->client->ps.pm_type != PM_FROZEN ) {
+		return;
+	}
+
+	plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
+	plum->s.time2 = g_thawTime.integer - (level.time - self->client->ps.powerups[PW_FROZEN]) / 1000.0f;
+  plum->s.otherEntityNum = self->s.number;
+	plum->r.svFlags |= SVF_BROADCAST;
+	self->client->lastFreezeTime = level.time;
+
+	CheckFrozen();
+
+  if ( self->client->ps.pm_type == PM_FROZEN ) {
+		return;
+	}
+
+	self->client->ps.pm_type = PM_FROZEN;
+	self->client->ps.torsoAnim = TORSO_STAND;
+	self->client->ps.legsAnim = LEGS_IDLE;
+
+	self->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+
+	self->takedamage = qfalse;	// can still be gibbed
+	self->health = INFINITE;
+	self->client->ps.stats[STAT_HEALTH] = INFINITE;
+
+	G_AddEvent( self, EV_FROZEN, killer );
+
+}
+#endif
+
+
+
 /*
 ==================
 player_die
@@ -436,6 +661,14 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		return;
 	}
 
+#ifdef USE_BIRDS_EYE
+	if(self->client->cursorEnt) {
+		trap_UnlinkEntity(self->client->cursorEnt);
+		G_FreeEntity(self->client->cursorEnt);
+		self->client->cursorEnt = NULL;
+	}
+#endif
+
 	//unlag the client
 	G_UnTimeShiftClient( self );
 
@@ -444,9 +677,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	// check for a player that almost brought in cubes
 	CheckAlmostScored( self, attacker );
 
+#ifdef USE_GRAPPLE
 	if (self->client && self->client->hook) {
 		Weapon_HookFree(self->client->hook);
 	}
+#endif
 #ifdef MISSIONPACK
 	if ((self->client->ps.eFlags & EF_TICKING) && self->activator) {
 		self->client->ps.eFlags &= ~EF_TICKING;
@@ -454,6 +689,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		self->activator->nextthink = level.time;
 	}
 #endif
+
 	self->client->ps.pm_type = PM_DEAD;
 
 	if ( attacker ) {
@@ -467,6 +703,18 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		killer = ENTITYNUM_WORLD;
 		killerName = "<world>";
 	}
+#ifdef USE_MODES_DEATH
+  if (attacker && attacker->health < 0 ) {
+    meansOfDeath = MOD_FROM_GRAVE;
+  }
+  if (level.time - self->splashTime < 4000
+    && meansOfDeath == MOD_VOID) {
+    attacker = self->splashAttacker;
+    killer = self->splashAttacker->s.number;
+    killerName = self->splashAttacker->client->pers.netname;
+    meansOfDeath = MOD_RING_OUT;
+	}
+#endif
 
 	if ( killer < 0 || killer >= MAX_CLIENTS ) {
 		killer = ENTITYNUM_WORLD;
@@ -500,6 +748,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		if ( attacker == self || OnSameTeam (self, attacker ) ) {
 			AddScore( attacker, self->r.currentOrigin, -1 );
 		} else {
+#ifdef USE_MODES_DEATH
+      if(meansOfDeath == MOD_RING_OUT) {
+        AddScore( self, self->r.currentOrigin, -1 );
+      }
+#endif
 			AddScore( attacker, self->r.currentOrigin, 1 );
 
 			if( meansOfDeath == MOD_GAUNTLET ) {
@@ -538,7 +791,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	Team_FragBonuses(self, inflictor, attacker);
 
 	// if I committed suicide, the flag does not fall, it returns.
-	if (meansOfDeath == MOD_SUICIDE) {
+	if (meansOfDeath == MOD_SUICIDE
+#ifdef USE_MODES_DEATH
+		|| meansOfDeath == MOD_SPECTATE
+#endif
+	) {
 #ifdef MISSIONPACK
 		if ( self->client->ps.powerups[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
@@ -553,6 +810,16 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			Team_ReturnFlag( TEAM_BLUE );
 			self->client->ps.powerups[PW_BLUEFLAG] = 0;
 		}
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		else if ( self->client->ps.powerups[PW_GOLDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GOLD );
+			self->client->ps.powerups[PW_GOLDFLAG] = 0;
+		}
+		else if ( self->client->ps.powerups[PW_GREENFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GREEN );
+			self->client->ps.powerups[PW_GREENFLAG] = 0;
+		}
+#endif
 	}
 
 	// if client is in a nodrop area, don't drop anything (but return CTF flags!)
@@ -570,12 +837,23 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		else if ( self->client->ps.powerups[PW_BLUEFLAG] ) {	// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
 		}
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		else if ( self->client->ps.powerups[PW_GOLDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GOLD );
+		}
+		else if ( self->client->ps.powerups[PW_GREENFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GREEN );
+		}
+
+#endif
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	TossClientPersistantPowerups( self );
+#ifdef MISSIONPACK // TODO || USE_ADVANCED_GAMES
 	if( g_gametype.integer == GT_HARVESTER ) {
 		TossClientCubes( self );
 	}
+#endif
 #endif
 
 	Cmd_Score_f( self );		// show scores
@@ -595,6 +873,10 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			Cmd_Score_f( g_entities + i );
 		}
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer || meansOfDeath == MOD_TRIGGER_HURT || meansOfDeath == MOD_VOID) {
+#endif
 
 	self->takedamage = qtrue;	// can still be gibbed
 
@@ -618,9 +900,32 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	// remove powerups
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
+#ifdef USE_ADVANCED_ITEMS
+	memset( self->client->inventory, 0, sizeof( self->client->inventory ) );
+	memset( self->client->inventoryModified, 1, sizeof( self->client->inventoryModified ) );
+#endif
+
+#ifdef USE_PORTALS
+  if(self->client->portalDestination) {
+    PortalDestroy(self->client->portalDestination);
+  }
+#endif
+
+#ifdef USE_RUNES
+  //self->rune = 0;
+#endif
 
 	// never gib in a nodrop
-	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP) && g_blood.integer) || meansOfDeath == MOD_SUICIDE) {
+	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP)
+    && g_blood.integer
+#ifdef USE_HEADSHOTS
+    && meansOfDeath != MOD_HEADSHOT
+#endif
+    ) || meansOfDeath == MOD_SUICIDE
+#ifdef USE_MODES_DEATH
+		|| meansOfDeath == MOD_SPECTATE
+#endif
+  ) {
 		// gib death
 		GibEntity( self, killer );
 	} else {
@@ -651,6 +956,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		self->client->ps.torsoAnim = 
 			( ( self->client->ps.torsoAnim & ANIM_TOGGLEBIT ) ^ ANIM_TOGGLEBIT ) | anim;
 
+#ifdef USE_HEADSHOTS
+    if(meansOfDeath == MOD_HEADSHOT) {
+      G_AddEvent( self, EV_GIB_PLAYER_HEADSHOT, killer );
+    } else
+#endif
 		G_AddEvent( self, EV_DEATH1 + i, killer );
 
 		// the body can still be gibbed
@@ -665,6 +975,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		}
 #endif
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	} else {
+		player_frozen(self, killer);
+	}
+#endif
 
 	trap_LinkEntity (self);
 
@@ -744,7 +1060,7 @@ int RaySphereIntersections( vec3_t origin, float radius, vec3_t point, vec3_t di
 	return 0;
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 /*
 ================
 G_InvulnerabilityEffect
@@ -783,6 +1099,133 @@ int G_InvulnerabilityEffect( gentity_t *targ, vec3_t dir, vec3_t point, vec3_t i
 	}
 }
 #endif
+
+
+#ifdef USE_LOCAL_DMG
+/* 
+============
+G_LocationDamage
+============
+*/
+int G_LocationDamage(vec3_t point, gentity_t* targ, gentity_t* attacker, int take) {
+	vec3_t bulletPath;
+	vec3_t bulletAngle;
+
+	int clientHeight;
+	int clientFeetZ;
+	int clientRotation;
+	int bulletHeight;
+	int bulletRotation;	// Degrees rotation around client.
+				// used to check Back of head vs. Face
+	int impactRotation;
+
+
+	// First things first.  If we're not damaging them, why are we here? 
+	if (!take) 
+		return 0;
+    
+	// Point[2] is the REAL world Z. We want Z relative to the clients feet
+	
+	// Where the feet are at [real Z]
+	clientFeetZ  = targ->r.currentOrigin[2] + targ->r.mins[2];	
+	// How tall the client is [Relative Z]
+	clientHeight = targ->r.maxs[2] - targ->r.mins[2];
+	// Where the bullet struck [Relative Z]
+	bulletHeight = point[2] - clientFeetZ;
+
+	// Get a vector aiming from the client to the bullet hit 
+	VectorSubtract(targ->r.currentOrigin, point, bulletPath); 
+	// Convert it into PITCH, ROLL, YAW
+	vectoangles(bulletPath, bulletAngle);
+
+	clientRotation = targ->client->ps.viewangles[YAW];
+	bulletRotation = bulletAngle[YAW];
+
+	impactRotation = abs(clientRotation-bulletRotation);
+	
+	impactRotation += 45; // just to make it easier to work with
+	impactRotation = impactRotation % 360; // Keep it in the 0-359 range
+
+	if (impactRotation < 90)
+		targ->client->lasthurt_location = LOCATION_BACK;
+	else if (impactRotation < 180)
+		targ->client->lasthurt_location = LOCATION_RIGHT;
+	else if (impactRotation < 270)
+		targ->client->lasthurt_location = LOCATION_FRONT;
+	else if (impactRotation < 360)
+		targ->client->lasthurt_location = LOCATION_LEFT;
+	else
+		targ->client->lasthurt_location = LOCATION_NONE;
+
+	// The upper body never changes height, just distance from the feet
+		if (bulletHeight > clientHeight - 2)
+			targ->client->lasthurt_location |= LOCATION_HEAD;
+		else if (bulletHeight > clientHeight - 8)
+			targ->client->lasthurt_location |= LOCATION_FACE;
+		else if (bulletHeight > clientHeight - 10)
+			targ->client->lasthurt_location |= LOCATION_SHOULDER;
+		else if (bulletHeight > clientHeight - 16)
+			targ->client->lasthurt_location |= LOCATION_CHEST;
+		else if (bulletHeight > clientHeight - 26)
+			targ->client->lasthurt_location |= LOCATION_STOMACH;
+		else if (bulletHeight > clientHeight - 29)
+			targ->client->lasthurt_location |= LOCATION_GROIN;
+		else if (bulletHeight < 4)
+			targ->client->lasthurt_location |= LOCATION_FOOT;
+		else
+			// The leg is the only thing that changes size when you duck,
+			// so we check for every other parts RELATIVE location, and
+			// whats left over must be the leg. 
+			targ->client->lasthurt_location |= LOCATION_LEG; 
+
+
+		
+		// Check the location ignoring the rotation info
+		switch ( targ->client->lasthurt_location & 
+				~(LOCATION_BACK | LOCATION_LEFT | LOCATION_RIGHT | LOCATION_FRONT) )
+		{
+		case LOCATION_HEAD:
+			take *= 1.8;
+			break;
+		case LOCATION_FACE:
+			if (targ->client->lasthurt_location & LOCATION_FRONT)
+				take *= 5.0; // Faceshots REALLY suck
+			else
+				take *= 1.8;
+			break;
+		case LOCATION_SHOULDER:
+			if (targ->client->lasthurt_location & (LOCATION_FRONT | LOCATION_BACK))
+				take *= 1.4; // Throat or nape of neck
+			else
+				take *= 1.1; // Shoulders
+			break;
+		case LOCATION_CHEST:
+			if (targ->client->lasthurt_location & (LOCATION_FRONT | LOCATION_BACK))
+				take *= 1.3; // Belly or back
+			else
+				take *= 0.8; // Arms
+			break;
+		case LOCATION_STOMACH:
+			take *= 1.2;
+			break;
+		case LOCATION_GROIN:
+			if (targ->client->lasthurt_location & LOCATION_FRONT)
+				take *= 1.3; // Groin shot
+			break;
+		case LOCATION_LEG:
+			take *= 0.7;
+			break;
+		case LOCATION_FOOT:
+			take *= 0.5;
+			break;
+
+		}
+	return take;
+
+}
+#endif
+
+
 /*
 ============
 G_Damage
@@ -846,7 +1289,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 	// shootable doors / buttons don't actually have any health
 	if ( targ->s.eType == ET_MOVER ) {
-		if ( targ->use && targ->moverState == MOVER_POS1 ) {
+		if ( targ->use && (targ->moverState == MOVER_POS1 
+#ifdef USE_ROTATING_DOOR
+			|| targ->moverState == ROTATOR_POS1
+#endif
+    )) {
 			targ->use( targ, inflictor, attacker );
 		}
 		return;
@@ -860,7 +1307,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	// unless they are rocket jumping
 	if ( attacker->client && attacker != targ ) {
 		max = attacker->client->ps.stats[STAT_MAX_HEALTH];
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[attacker->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			max /= 2;
 		}
@@ -893,6 +1340,20 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		knockback = 0;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if(targ->client->inventory[PW_GRAVITYSUIT]) {
+		knockback *= 0.5f;
+	}
+#endif
+
+#ifdef USE_GRAVITY_BOOTS
+	// TODO: targ->flags & FL_BOOTS?
+	// half the knockback with boots on
+	if(targ->client->ps.gravity && targ->client->ps.gravity != g_gravity.value) {
+		knockback *= 0.5f;
+	}
+#endif
+
 	// figure momentum add, even if the damage won't be taken
 	if ( knockback && targ->client ) {
 		vec3_t	kvel;
@@ -902,6 +1363,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 		VectorScale (dir, g_knockback.value * (float)knockback / mass, kvel);
 		VectorAdd (targ->client->ps.velocity, kvel, targ->client->ps.velocity);
+
+#ifdef USE_MODES_DEATH
+    targ->splashAttacker = attacker;
+    targ->splashTime = level.time;
+#endif
 
 		// set the timer so that the other client can't cancel
 		// out the movement immediately
@@ -953,18 +1419,51 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 	// battlesuit protects from all radius damage (but takes knockback)
 	// and protects 50% against all damage
-	if ( client && client->ps.powerups[PW_BATTLESUIT] ) {
+	if ( client && 
+#ifdef USE_ADVANCED_ITEMS
+	(client->inventory[PW_BATTLESUIT] || client->inventory[PW_GRAVITYSUIT] )
+#ifdef USE_RUNES
+    || client->inventory[RUNE_RESIST]
+#endif
+#else
+	client->ps.powerups[PW_BATTLESUIT] 
+#endif	
+	) {
 		G_AddEvent( targ, EV_POWERUP_BATTLESUIT, 0 );
 		if ( ( dflags & DAMAGE_RADIUS ) || ( mod == MOD_FALLING ) ) {
 			return;
 		}
 		damage *= 0.5;
 	}
+#ifdef USE_ADVANCED_ITEMS
+	// don't play sounds like above
+	else if(client && client->inventory[PW_SUPERMAN]) {
+		if ( ( dflags & DAMAGE_RADIUS ) || ( mod == MOD_FALLING ) ) {
+			return;
+		}
+		damage *= 0.5;
+	}
+#endif
 
 	// always give half damage if hurting self
 	// calculated after knockback, so rocket jumping works
 	if ( targ == attacker) {
 		damage *= 0.5;
+#ifdef USE_TRINITY
+    if(g_unholyTrinity.integer && targ == attacker) {
+      return;
+    }
+#endif
+#ifdef USE_HOTRPG
+    if(g_hotRockets.integer && targ == attacker) {
+      return;
+    }
+#endif
+#ifdef USE_HOTBFG
+    if(g_hotBFG.integer && targ == attacker) {
+      return;
+    }
+#endif
 	}
 
 	if ( damage < 1 ) {
@@ -1040,6 +1539,59 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		// set the last client who damaged the target
 		targ->client->lasthurt_client = attacker->s.number;
 		targ->client->lasthurt_mod = mod;
+
+#ifdef USE_LOCAL_DMG
+    if(g_locDamage.integer) {
+  		// Modify the damage for location damage
+  		if (point && targ && targ->health > 0 && attacker && take)
+  			take = G_LocationDamage(point, targ, attacker, take);
+  		if (targ && targ->health > 0 && mod == MOD_FALLING && take) {
+        if(take >= 15)
+          targ->client->lasthurt_location = LOCATION_FOOT | LOCATION_LEG;
+        else if (take >= 10)
+          targ->client->lasthurt_location = LOCATION_FOOT;
+        else if (take >= 5)
+          targ->client->lasthurt_location = LOCATION_LEG;
+      }
+      if(targ && (!point || !attacker || targ->health <= 0 || !take))
+  			targ->client->lasthurt_location = LOCATION_NONE;
+    }
+#endif
+
+#ifdef USE_HEADSHOTS
+    if (attacker->client && targ && targ->health > 0
+      && inflictor && inflictor->s.weapon == WP_RAILGUN) {
+    	// let's say only railgun can do head shots
+    	if((targ->client->lasthurt_location & LOCATION_HEAD)
+        || (targ->client->lasthurt_location & LOCATION_FACE)) {
+        /*
+        float	z_ratio;
+        float	z_rel;
+        int	height;
+        float	targ_maxs2;
+        targ_maxs2 = targ->r.maxs[2];
+    	
+    		// handling crouching
+    		if(targ->client->ps.pm_flags & PMF_DUCKED){
+    			height = (abs(targ->r.mins[2]) + targ_maxs2)*(0.75);
+    		}
+    		else
+    			height = abs(targ->r.mins[2]) + targ_maxs2; 
+    			
+    		// project the z component of point 
+    		// onto the z component of the model's origin
+    		// this results in the z component from the origin at 0
+    		z_rel = point[2] - targ->r.currentOrigin[2] + abs(targ->r.mins[2]);
+    		z_ratio = z_rel / height;
+    	
+    		if (z_ratio > 0.90) {
+        */
+  			take = 9999; // head shot is a sure kill
+  			targ->client->lasthurt_mod = mod = MOD_HEADSHOT;
+        // }
+    	}
+    }
+#endif
 	}
 
 	// do the damage
@@ -1188,6 +1740,15 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 	for ( e = 0 ; e < numListedEntities ; e++ ) {
 		ent = &g_entities[entityList[ e ]];
 
+#ifdef USE_GAME_FREEZETAG
+		if(g_freezeTag.integer) {
+			// don't do radius damage to frozen players, like they turned into a brick of ice
+			if(ent->client->ps.pm_type == PM_FROZEN) {
+				continue;
+			}
+		}
+#endif
+
 		if (ent == ignore)
 			continue;
 		if (!ent->takedamage)
@@ -1225,3 +1786,71 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 
 	return hitClient;
 }
+
+
+#ifdef USE_LV_DISCHARGE
+/*
+============
+G_WaterRadiusDamage for The SARACEN's Lightning Discharge
+============
+*/
+qboolean G_WaterRadiusDamage (vec3_t origin, gentity_t *attacker, float damage, float radius,
+					 gentity_t *ignore, int mod)
+{
+	float		points, dist;
+	gentity_t	*ent;
+	int		entityList[MAX_GENTITIES];
+	int		numListedEntities;
+	vec3_t		mins, maxs;
+	vec3_t		v;
+	vec3_t		dir;
+	int		i, e;
+	qboolean	hitClient = qfalse;
+
+	if (!(trap_PointContents (origin, -1) & MASK_WATER)) return qfalse;
+		// if we're not underwater, forget it!
+
+	if (radius < 1) radius = 1;
+
+	for (i = 0 ; i < 3 ; i++)
+	{
+		mins[i] = origin[i] - radius;
+		maxs[i] = origin[i] + radius;
+	}
+
+	numListedEntities = trap_EntitiesInBox (mins, maxs, entityList, MAX_GENTITIES);
+
+	for (e = 0 ; e < numListedEntities ; e++)
+	{
+		ent = &g_entities[entityList[e]];
+
+		if (ent == ignore)			continue;
+		if (!ent->takedamage)		continue;
+
+		// find the distance from the edge of the bounding box
+		for (i = 0 ; i < 3 ; i++)
+		{
+			     if (origin[i] < ent->r.absmin[i]) v[i] = ent->r.absmin[i] - origin[i];
+			else if (origin[i] > ent->r.absmax[i]) v[i] = origin[i] - ent->r.absmax[i];
+			else v[i] = 0;
+		}
+
+		dist = VectorLength(v);
+		if (dist >= radius)			continue;
+
+		points = damage * (1.0 - dist / radius);
+
+		if (CanDamage (ent, origin) && ent->waterlevel) 	// must be in the water, somehow!
+		{
+			if (LogAccuracyHit (ent, attacker)) hitClient = qtrue;
+			VectorSubtract (ent->r.currentOrigin, origin, dir);
+			// push the center of mass higher than the origin so players
+			// get knocked into the air more
+			dir[2] += 24;
+			G_Damage (ent, NULL, attacker, dir, origin, (int)points, DAMAGE_RADIUS, mod);
+		}
+	}
+
+	return hitClient;
+}
+#endif

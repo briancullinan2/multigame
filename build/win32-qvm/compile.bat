@@ -63,14 +63,22 @@ cd vm\cgame
 @if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_snapshot.c
 @if errorlevel 1 goto quit
+%cc1% %cgamedir%\cg_timer.c
+@if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_view.c
 @if errorlevel 1 goto quit
 %cc1% %cgamedir%\cg_weapons.c
+@if errorlevel 1 goto quit
+%cc1% %cgamedir%\cg_weapons2.c
+@if errorlevel 1 goto quit
+%cc1% %cgamedir%\cg_weaporder.c
 
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_lib.c
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_misc.c
+@if errorlevel 1 goto quit
+%cc1% %gamedir%\bg_physics.c
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_pmove.c
 @if errorlevel 1 goto quit
@@ -121,6 +129,8 @@ cd vm\game
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\bg_pmove.c
 @if errorlevel 1 goto quit
+%cc2% %gamedir%\bg_physics.c 
+@if errorlevel 1 goto quit
 %cc2% %gamedir%\bg_slidemove.c 
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_active.c
@@ -145,6 +155,10 @@ cd vm\game
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_mover.c
 @if errorlevel 1 goto quit
+%cc2% %gamedir%\g_portal.c
+@if errorlevel 1 goto quit
+%cc2% %gamedir%\g_powerup.c
+@if errorlevel 1 goto quit
 %cc2% %gamedir%\g_rotation.c
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_session.c
@@ -164,6 +178,8 @@ cd vm\game
 %cc2% %gamedir%\g_utils.c
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_weapon.c
+@if errorlevel 1 goto quit
+%cc2% %gamedir%\g_weapon2.c
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\q_math.c
 @if errorlevel 1 goto quit

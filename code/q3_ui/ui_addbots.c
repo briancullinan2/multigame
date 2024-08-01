@@ -11,6 +11,14 @@ ADD BOTS MENU
 
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu 
+#define UI_DrawBannerString UI_CLASSIC_DrawBannerString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_GetBotInfoByNumber UI_CLASSIC_GetBotInfoByNumber
+#define UI_DrawNamedPic UI_CLASSIC_DrawNamedPic
+#define UI_GetNumBots UI_CLASSIC_GetNumBots
+#endif
 
 #define ART_BACK0			"menu/art/back_0"
 #define ART_BACK1			"menu/art/back_1"	

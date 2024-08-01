@@ -35,7 +35,7 @@
 #include "match.h"				//string matching types and vars
 
 // for the voice chats
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../../ui/menudef.h" // sos001205 - for q3_ui also
 #endif
 
@@ -64,6 +64,7 @@ vmCvar_t bot_testrchat;
 vmCvar_t bot_challenge;
 vmCvar_t bot_predictobstacles;
 vmCvar_t bot_spSkill;
+vmCvar_t bot_instagib;
 
 extern vmCvar_t bot_developer;
 
@@ -1575,6 +1576,11 @@ void BotChooseWeapon(bot_state_t *bs) {
 		trap_EA_SelectWeapon(bs->client, bs->weaponnum);
 	}
 	else {
+#ifdef USE_INSTAGIB
+    if(bot_instagib.integer)
+		  newweaponnum = WP_RAILGUN;
+    else
+#endif
 		newweaponnum = trap_BotChooseBestFightWeapon(bs->ws, bs->inventory);
 		if (bs->weaponnum != newweaponnum) bs->weaponchange_time = FloatTime();
 		bs->weaponnum = newweaponnum;
@@ -1595,6 +1601,14 @@ void BotSetupForMovement(bot_state_t *bs) {
 	VectorCopy(bs->cur_ps.origin, initmove.origin);
 	VectorCopy(bs->cur_ps.velocity, initmove.velocity);
 	VectorClear(initmove.viewoffset);
+  
+#ifdef USE_GRAPPLE
+	// KILDEREAN : changed by Mr E to fix bot grapple
+	// VectorCopy(bs->cur_ps.origin, initmove.viewoffset);
+	VectorClear(initmove.viewoffset);
+	// END KILDEREAN
+#endif
+
 	initmove.viewoffset[2] += bs->cur_ps.viewheight;
 	initmove.entitynum = bs->entitynum;
 	initmove.client = bs->client;
@@ -1743,8 +1757,10 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_RAILGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_RAILGUN)) != 0;
 	bs->inventory[INVENTORY_PLASMAGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PLASMAGUN)) != 0;
 	bs->inventory[INVENTORY_BFG10K] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_BFG)) != 0;
+#ifdef USE_GRAPPLE
 	bs->inventory[INVENTORY_GRAPPLINGHOOK] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_GRAPPLING_HOOK)) != 0;
-#ifdef MISSIONPACK
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	bs->inventory[INVENTORY_NAILGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_NAILGUN)) != 0;;
 	bs->inventory[INVENTORY_PROXLAUNCHER] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_PROX_LAUNCHER)) != 0;;
 	bs->inventory[INVENTORY_CHAINGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_CHAINGUN)) != 0;;
@@ -1758,7 +1774,7 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_ROCKETS] = bs->cur_ps.ammo[WP_ROCKET_LAUNCHER];
 	bs->inventory[INVENTORY_SLUGS] = bs->cur_ps.ammo[WP_RAILGUN];
 	bs->inventory[INVENTORY_BFGAMMO] = bs->cur_ps.ammo[WP_BFG];
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	bs->inventory[INVENTORY_NAILS] = bs->cur_ps.ammo[WP_NAILGUN];
 	bs->inventory[INVENTORY_MINES] = bs->cur_ps.ammo[WP_PROX_LAUNCHER];
 	bs->inventory[INVENTORY_BELT] = bs->cur_ps.ammo[WP_CHAINGUN];
@@ -1778,7 +1794,7 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_INVISIBILITY] = bs->cur_ps.powerups[PW_INVIS] != 0;
 	bs->inventory[INVENTORY_REGEN] = bs->cur_ps.powerups[PW_REGEN] != 0;
 	bs->inventory[INVENTORY_FLIGHT] = bs->cur_ps.powerups[PW_FLIGHT] != 0;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	bs->inventory[INVENTORY_SCOUT] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_SCOUT;
 	bs->inventory[INVENTORY_GUARD] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_GUARD;
 	bs->inventory[INVENTORY_DOUBLER] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_DOUBLER;
@@ -2209,6 +2225,13 @@ BotAggression
 ==================
 */
 float BotAggression(bot_state_t *bs) {
+#ifdef USE_INSTAGIB
+  if(bot_instagib.integer) {
+    //if the enemy is located way higher than the bot
+    if (bs->inventory[ENEMY_HEIGHT] > 200) return 0;
+    return 95;
+  }
+#endif
 	//if the bot has quad
 	if (bs->inventory[INVENTORY_QUAD]) {
 		//if the bot is not holding the gauntlet or the enemy is really nearby
@@ -4731,7 +4754,7 @@ void BotCheckForGrenades(bot_state_t *bs, entityState_t *state) {
 	trap_BotAddAvoidSpot(bs->ms, state->pos.trBase, 160, AVOID_ALWAYS);
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 /*
 ==================
 BotCheckForProxMines
@@ -4758,7 +4781,8 @@ void BotCheckForProxMines(bot_state_t *bs, entityState_t *state) {
 	bs->proxmines[bs->numproxmines] = state->number;
 	bs->numproxmines++;
 }
-
+#endif
+#if defined(MISSIONPACK) 
 /*
 ==================
 BotCheckForKamikazeBody
@@ -5419,6 +5443,7 @@ void BotSetupDeathmatchAI(void) {
 	trap_Cvar_Register(&bot_challenge, "bot_challenge", "0", 0);
 	trap_Cvar_Register(&bot_predictobstacles, "bot_predictobstacles", "1", 0);
 	trap_Cvar_Register(&bot_spSkill, "g_spSkill", "2", 0);
+  trap_Cvar_Register(&bot_instagib, "g_instagib", "0", 0);
 	//
 	if (gametype == GT_CTF) {
 		if (trap_BotGetLevelItemGoal(-1, "Red Flag", &ctf_redflag) < 0)

@@ -107,7 +107,8 @@ This trigger will always fire.  It is activated by the world.
 */
 void SP_trigger_always (gentity_t *ent) {
 	// we must have some delay to make sure our use targets are present
-	ent->nextthink = level.time + 300;
+	G_SpawnFloat( "wait", "0.3", &ent->wait );
+	ent->nextthink = level.time + ent->wait * 1000;
 	ent->think = trigger_always_think;
 }
 
@@ -125,8 +126,22 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 	if ( !other->client ) {
 		return;
 	}
+  
+#ifdef USE_GRAPPLE
+  if (other->client && other->client->hook)
+    return;
+#endif
+  
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory, other->client->pers.playerclass );
+#else
+	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory );
+#endif
+#else
 	BG_TouchJumpPad( &other->client->ps, &self->s );
+#endif
 }
 
 
@@ -194,16 +209,38 @@ void SP_trigger_push( gentity_t *self ) {
 
 
 void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+
 	if ( !activator->client ) {
 		return;
 	}
 
-	if ( activator->client->ps.pm_type != PM_NORMAL ) {
+	if ( activator->client->ps.pm_type != PM_NORMAL
+#ifdef USE_BIRDS_EYE
+		&& activator->client->ps.pm_type != PM_BIRDSEYE
+		&& activator->client->ps.pm_type != PM_FOLLOWCURSOR
+		&& activator->client->ps.pm_type != PM_THIRDPERSON
+		&& activator->client->ps.pm_type != PM_PLATFORM 
+#endif
+	) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_CLASS
+	if ( activator->client->pers.playerclass == PCLASS_DRAGON ) {
+		return;
+	}
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+	if ( activator->client->inventory[PW_FLIGHT] 
+		|| activator->client->inventory[PW_SUPERMAN] ) {
+		return;
+	}
+#else
 	if ( activator->client->ps.powerups[PW_FLIGHT] ) {
 		return;
 	}
+#endif
 
 	VectorCopy (self->s.origin2, activator->client->ps.velocity);
 
@@ -240,6 +277,14 @@ void SP_target_push( gentity_t *self ) {
 	self->use = Use_target_push;
 }
 
+
+
+void TeleportPlayer_real(gentity_t *player,
+												const vec3_t origin, const vec3_t angles,
+												qboolean hasDest, qboolean hasSource,
+												vec3_t destAngles, vec3_t sourceAngles);
+
+
 /*
 ==============================================================================
 
@@ -249,7 +294,12 @@ trigger_teleport
 */
 
 void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
-	gentity_t	*dest;
+	vec3_t size;
+	float length;
+	gentity_t	*dest = NULL;
+	gentity_t *surface = NULL;
+	VectorSubtract(self->r.maxs, self->r.mins, size);
+	length = VectorNormalize(size);
 
 	if ( !other->client ) {
 		return;
@@ -269,6 +319,33 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 		G_Printf ("Couldn't find teleporter destination\n");
 		return;
 	}
+
+	// find nearby portal surface for distiny calculations
+
+	if(!self->target_ent) {
+		surface = NULL;
+		while( (surface = G_Find(surface, FOFS(classname), "misc_portal_surface")) != NULL ) {
+			float dist;
+			vec3_t temp; 
+			VectorSubtract(self->r.mins, surface->s.origin, temp);
+			dist = VectorNormalize(temp);
+			if(dist < length + 128) {
+				self->target_ent = surface;
+				break;
+			}
+		}
+	}
+
+	// TODO: make this a spawn flag?
+	if(self->target_ent && self->target_ent->movedir && !VectorCompare(self->target_ent->movedir, vec3_origin)) {
+		vec3_t angles;
+		VectorCopy(self->target_ent->movedir, angles);
+		G_Printf("angles: %s %f %f %f -> %f %f %f\n", self->target_ent->target, angles[0], angles[1], angles[2],
+		dest->s.angles[0], dest->s.angles[1], dest->s.angles[2]);
+		TeleportPlayer_real( other, dest->s.origin, vec3_origin, qtrue, qtrue, dest->s.angles, angles );
+		return;
+	}
+
 
 	TeleportPlayer( other, dest->s.origin, dest->s.angles );
 }
@@ -357,6 +434,14 @@ void hurt_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		dflags = DAMAGE_NO_PROTECTION;
 	else
 		dflags = 0;
+
+#ifdef USE_MODES_DEATH
+  if(other->client && other->client->ps.velocity[2] < -1000
+    && other->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+    //Com_DPrintf("void death: %f\n", other->client->ps.velocity[2]);
+    G_Damage (other, self, self, NULL, NULL, self->damage, dflags, MOD_VOID);
+  } else
+#endif
 	G_Damage (other, self, self, NULL, NULL, self->damage, dflags, MOD_TRIGGER_HURT);
 }
 

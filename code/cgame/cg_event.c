@@ -5,7 +5,7 @@
 #include "cg_local.h"
 
 // for the voice chats
-#ifdef MISSIONPACK // bk001205
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD) // bk001205
 #include "../../ui/menudef.h"
 #endif
 //==========================================================================
@@ -98,6 +98,9 @@ static void CG_Obituary( entityState_t *ent ) {
 	strcat( targetName, S_COLOR_WHITE );
 
 	following = cg.snap->ps.pm_flags & PMF_FOLLOW;
+#ifdef USE_RUNES
+  cg_entities[target].rune = 0;
+#endif
 
 	message2 = "";
 
@@ -125,6 +128,11 @@ static void CG_Obituary( entityState_t *ent ) {
 	case MOD_TARGET_LASER:
 		message = "saw the light";
 		break;
+#ifdef USE_MODES_DEATH
+  case MOD_VOID:
+    message = "fell into the void";
+    break;
+#endif
 	case MOD_TRIGGER_HURT:
 		message = "was in the wrong place";
 		break;
@@ -178,6 +186,29 @@ static void CG_Obituary( entityState_t *ent ) {
 				message = "found his prox mine";
 			}
 			break;
+#ifdef USE_FLAME_THROWER
+    case MOD_FLAME_THROWER:
+      message = "was fried by";
+      break;
+#endif
+#endif
+#ifdef USE_HEADSHOTS
+    case MOD_HEADSHOT:
+      gender = ci->gender;
+      if(gender==GENDER_FEMALE)
+      message = "got her head blown off by";
+      else{
+      if(gender==GENDER_NEUTER)
+        message = "got its head blown off by";
+      else
+        message = "got his head blown off by";
+      }
+      break;
+#endif
+#ifdef USE_MODES_DEATH
+		case MOD_SPECTATE:
+			message = "left to spectate";
+			break;
 #endif
 		default:
 			if ( gender == GENDER_FEMALE )
@@ -206,6 +237,17 @@ static void CG_Obituary( entityState_t *ent ) {
 	if ( attacker == cg.snap->ps.clientNum ) {
 		char	*s;
 
+#ifdef USE_HEADSHOTS
+    if(mod == MOD_HEADSHOT) {
+      if ( cgs.gametype < GT_TEAM ) {
+        s = va("Headshot!\n\nYou fragged %s\n%s place with %i", targetName, 
+		      CG_PlaceString( cg.snap->ps.persistant[PERS_RANK] + 1 ),
+		      cg.snap->ps.persistant[PERS_SCORE] );
+  		} else {
+  			s = va("Headshot!\n\nYou fragged %s", targetName );
+  		}
+    } else
+#endif
 		if ( cgs.gametype < GT_TEAM ) {
 			s = va("You fragged %s\n%s place with %i", targetName, 
 				CG_PlaceString( cg.snap->ps.persistant[PERS_RANK] + 1 ),
@@ -286,15 +328,27 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_RAILGUN:
 			message = "was railed by";
 			break;
+#ifdef USE_LV_DISCHARGE
+// The SARACEN's Lightning Discharge - START
+    // Classic Quake style obituary - the original and the best!!!
+		case MOD_LIGHTNING:
+			message = "was shafted by";
+			break;
+		case MOD_LV_DISCHARGE:
+			message = "was discharged by";
+			break;
+// The SARACEN's Lightning Discharge - END
+#else
 		case MOD_LIGHTNING:
 			message = "was electrocuted by";
 			break;
+#endif
 		case MOD_BFG:
 		case MOD_BFG_SPLASH:
 			message = "was blasted by";
 			message2 = "'s BFG";
 			break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 		case MOD_NAIL:
 			message = "was nailed by";
 			break;
@@ -313,6 +367,15 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_JUICED:
 			message = "was juiced by";
 			break;
+#endif
+#ifdef USE_MODES_DEATH
+    case MOD_FROM_GRAVE:
+      message = "was killed by";
+      message2 = " from the grave";
+      break;
+    case MOD_RING_OUT:
+      message = "was forced out of the ring by";
+      break;
 #endif
 		case MOD_TELEFRAG:
 			message = "tried to invade";
@@ -347,34 +410,51 @@ static void CG_Obituary( entityState_t *ent ) {
 CG_UseItem
 ===============
 */
-static void CG_UseItem( centity_t *cent ) {
+#ifdef USE_ADVANCED_ITEMS
+static void CG_UseItem( centity_t *cent, int itemNum ) 
+#else
+static void CG_UseItem( centity_t *cent ) 
+#endif
+{
 	clientInfo_t *ci;
+#ifdef USE_ADVANCED_ITEMS
+	int			clientNum;
+#else
 	int			itemNum, clientNum;
+#endif
 	gitem_t		*item;
 	entityState_t *es;
 
 	es = &cent->currentState;
 	
+#ifndef USE_ADVANCED_ITEMS
 	itemNum = (es->event & ~EV_EVENT_BITS) - EV_USE_ITEM0;
 	if ( itemNum < 0 || itemNum > HI_NUM_HOLDABLE ) {
 		itemNum = 0;
 	}
+#endif
 
 	// print a message if the local player
 	if ( es->number == cg.snap->ps.clientNum ) {
 		if ( !itemNum ) {
 			CG_CenterPrint( "No item to use", SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		} else {
+#ifdef USE_ADVANCED_ITEMS
+			item = BG_FindItemForPowerup( itemNum );
+#else
 			item = BG_FindItemForHoldable( itemNum );
+#endif
 			CG_CenterPrint( va("Use %s", item->pickup_name), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		}
 	}
 
 	switch ( itemNum ) {
 	default:
+#ifndef USE_ADVANCED_ITEMS
 	case HI_NONE:
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.useNothingSound );
 		break;
+#endif
 
 	case HI_TELEPORTER:
 		break;
@@ -388,7 +468,7 @@ static void CG_UseItem( centity_t *cent ) {
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.medkitSound );
 		break;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case HI_KAMIKAZE:
 		break;
 
@@ -409,7 +489,13 @@ CG_ItemPickup
 A new item was picked up this frame
 ================
 */
-static void CG_ItemPickup( int itemNum ) {
+#ifdef USE_WEAPON_ORDER
+int RateWeapon (int weapon);
+static void CG_ItemPickup( int itemNum, qboolean alreadyHad )
+#else
+static void CG_ItemPickup( int itemNum ) 
+#endif
+{
 	static int oldItem = -1;
 	
 	cg.itemPickup = itemNum;
@@ -427,6 +513,12 @@ static void CG_ItemPickup( int itemNum ) {
 	if ( bg_itemlist[itemNum].giType == IT_WEAPON ) {
 		// select it immediately
 		if ( cg_autoswitch.integer && bg_itemlist[itemNum].giTag != WP_MACHINEGUN ) {
+#ifdef USE_WEAPON_ORDER
+      if(cg_autoswitch.integer == 2 && alreadyHad) {
+        if(RateWeapon( bg_itemlist[itemNum].giTag) < RateWeapon( cg.weaponSelect ))
+          return;
+      }
+#endif
 			cg.weaponSelectTime = cg.time;
 			cg.weaponSelect = bg_itemlist[itemNum].giTag;
 		}
@@ -486,6 +578,10 @@ int CG_WaterLevel(centity_t *cent) {
 	return waterlevel;
 }
 
+void CG_OldRailTrail (clientInfo_t *ci, vec3_t start, vec3_t end);
+
+
+
 /*
 ================
 CG_PainEvent
@@ -534,6 +630,12 @@ void CG_PainEvent( centity_t *cent, int health ) {
 }
 
 
+#ifdef USE_HEADSHOTS
+void CG_GibPlayerHeadshot( vec3_t playerOrigin );
+#endif
+#ifdef USE_LV_DISCHARGE
+void CG_Lightning_Discharge (vec3_t origin, int msec);
+#endif
 
 /*
 ==============
@@ -753,6 +855,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, CG_CustomSound( es->number, "*gasp.wav" ) );
 		break;
 
+#ifdef USE_WEAPON_ORDER
+  case EV_ITEM_PICKUP2:
+#endif
 	case EV_ITEM_PICKUP:
 		{
 			gitem_t	*item;
@@ -781,7 +886,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			if ( item->giType == IT_POWERUP || item->giType == IT_TEAM) {
 				trap_S_StartSound (NULL, es->number, CHAN_AUTO,	cgs.media.n_healthSound );
 			} else if (item->giType == IT_PERSISTANT_POWERUP) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 				switch (item->giTag ) {
 					case PW_SCOUT:
 						trap_S_StartSound (NULL, es->number, CHAN_AUTO,	cgs.media.scoutSound );
@@ -801,9 +906,18 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 				trap_S_StartSound (NULL, es->number, CHAN_AUTO,	trap_S_RegisterSound( item->pickup_sound, qfalse ) );
 			}
 
+#ifdef USE_RUNES
+        if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+          cg_entities[es->number].rune = item->giTag;
+        }
+#endif
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
-				CG_ItemPickup( index );
+#ifdef USE_WEAPON_ORDER
+				CG_ItemPickup( index, event == EV_ITEM_PICKUP2 );
+#else
+        CG_ItemPickup( index );
+#endif
 			}
 
 			if ( ce ) {
@@ -841,7 +955,31 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
-				CG_ItemPickup( index );
+        if(item->giTag == PW_HASTE
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+					|| item->giTag == PW_SCOUT
+#endif
+#ifdef USE_RUNES
+          || item->giTag == RUNE_HASTE
+#endif
+        ) {
+#ifdef USE_PHYSICS_VARS
+          cg.predictedPlayerState.speed *= cg_hasteFactor.value;
+#else
+          cg.predictedPlayerState.speed *= 1.3f;
+#endif
+        }
+#ifdef USE_ADVANCED_ITEMS
+				if(item->giTag == PW_FLASH) {
+          cg.predictedPlayerState.speed *= 2.6f;
+				}
+#endif
+
+#ifdef USE_WEAPON_ORDER
+				CG_ItemPickup( index, qfalse );
+#else
+        CG_ItemPickup( index );
+#endif
 			}
 
 			if ( ce ) {
@@ -864,6 +1002,20 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.selectSound );
 		break;
 
+#ifdef USE_ALT_FIRE
+  case EV_ALTFIRE_WEAPON:
+#ifdef USE_GRAPPLE
+    if(cg_altGrapple.integer) {
+      // don't play firing animation
+		break;
+	}
+#endif
+#ifdef USE_PORTALS
+    if(cg_altPortal.integer) {
+      break;
+    }
+#endif
+#endif
 	case EV_FIRE_WEAPON:
 		CG_FireWeapon( cent );
 		break;
@@ -884,10 +1036,21 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	case EV_USE_ITEM13:
 	case EV_USE_ITEM14:
 	case EV_USE_ITEM15:
+#ifdef USE_ADVANCED_ITEMS
+		CG_UseItem( cent, es->eventParm );
+#else
 		CG_UseItem( cent );
+#endif
 		break;
 
 	//=================================================================
+
+#ifdef USE_SINGLEPLAYER // entity
+	case EV_PLAYERSTOP:
+		player_stop = cg.time + (es->eventParm & 0x7F) * 2000;
+		if (es->eventParm & 0x80) black_bars = 1;
+		break;
+#endif
 
 	//
 	// other events
@@ -934,6 +1097,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.wstbactvSound );
 		break;
 
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+
 	case EV_KAMIKAZE:
 		CG_KamikazeEffect( cent->lerpOrigin );
 		break;
@@ -963,6 +1129,28 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_ScorePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		break;
 
+#ifdef USE_RPG_STATS
+	case EV_HEALTHPLUM:
+		if(cent->currentState.time) {
+			cgs.clientinfo[cent->currentState.otherEntityNum].health = cent->currentState.time;
+			cgs.clientinfo[cent->currentState.otherEntityNum].powerups = cent->currentState.powerups;
+			cg_entities[cent->currentState.otherEntityNum].currentState.powerups = cent->currentState.powerups;
+			if(cent->currentState.otherEntityNum == cg.snap->ps.clientNum) {
+				cg.snap->entities[cg.snap->ps.clientNum].powerups = cent->currentState.powerups;
+			}
+		}
+		break;
+#endif
+
+
+#ifdef USE_DAMAGE_PLUMS
+	case EV_DAMAGEPLUM:
+		if(cent->currentState.time && cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
+			CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
+		}
+		break;
+#endif
+
 	//
 	// missile impacts
 	//
@@ -990,15 +1178,28 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			fovOffset = -0.2f * ( cgs.fov - 90.0f );
 
 			// 13.5, -5.5, -6.0
-			VectorMA( vec, cg_gun_x.value + 13.5f, cg.refdef.viewaxis[0], vec );
-			VectorMA( vec, cg_gun_y.value - 5.5f, cg.refdef.viewaxis[1], vec );
-			VectorMA( vec, cg_gun_z.value + fovOffset - 6.0f, cg.refdef.viewaxis[2], vec );
+#ifdef USE_WEAPON_CENTER
+      if(cg_gunCenter.integer) {
+        VectorMA( vec, cg_gun_x.value + 13.5f, cg.refdef.viewaxis[0], vec );
+  			VectorMA( vec, (cg_gun_y.value + 5*cg_gunCenter.value) - 5.5f, cg.refdef.viewaxis[1], vec );
+  			VectorMA( vec, cg_gun_z.value + fovOffset - 6.0f, cg.refdef.viewaxis[2], vec );
+      } else
+#endif
+      {
+        VectorMA( vec, cg_gun_x.value + 13.5f, cg.refdef.viewaxis[0], vec );
+  			VectorMA( vec, cg_gun_y.value - 5.5f, cg.refdef.viewaxis[1], vec );
+  			VectorMA( vec, cg_gun_z.value + fovOffset - 6.0f, cg.refdef.viewaxis[2], vec );
+      }
 		}
 		else
 			VectorCopy( es->origin2, vec );
 
 		// if the end was on a nomark surface, don't make an explosion
-		CG_RailTrail( ci, vec, es->pos.trBase );
+		if(cg_oldRail.integer > 0) {
+			CG_OldRailTrail( ci, vec, es->pos.trBase );
+		} else {
+			CG_RailTrail( ci, vec, es->pos.trBase );
+		}
 
 		if ( es->eventParm != 255 ) {
 			ByteToDir( es->eventParm, dir );
@@ -1018,6 +1219,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	case EV_SHOTGUN:
 		CG_ShotgunFire( es );
 		break;
+
+#ifdef USE_LV_DISCHARGE
+// The SARACEN's Lightning Discharge - START
+	case EV_LV_DISCHARGE:
+		CG_Lightning_Discharge (position, es->eventParm);	// eventParm is duration/size
+		break;
+// The SARACEN's Lightning Discharge - END
+#endif
 
 	case EV_GENERAL_SOUND:
 		if ( cgs.gameSounds[ es->eventParm ] ) {
@@ -1143,7 +1352,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 				case GTS_TEAMS_ARE_TIED:
 					CG_AddBufferedSound( cgs.media.teamsTiedSound );
 					break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 				case GTS_KAMIKAZE:
 					trap_S_StartLocalSound(cgs.media.kamikazeFarSound, CHAN_ANNOUNCER);
 					break;
@@ -1194,6 +1403,25 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			cg.powerupTime = cg.time;
 		}
 		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.protectSound );
+#ifdef USE_RUNES
+//Com_Printf("powerup: %i -> %i -> %i\n", es->eventParm, es->otherEntityNum, es->time);
+    if(es->eventParm >= RUNE_STRENGTH && es->eventParm <= RUNE_LITHIUM
+      && cg_entities[es->otherEntityNum].rune != es->eventParm) {
+      gitem_t *item;
+      item = BG_FindItemForRune(es->eventParm);
+      CG_RegisterItemVisuals( ITEM_INDEX(item) );
+      cg_entities[es->otherEntityNum].rune = es->eventParm;
+    }
+    /*
+      if(cg.snap->ps.powerups[index] == 0) {
+        cg_entities[cent->currentState.otherEntityNum].rune = 0
+      } else {
+        
+      }
+      cg_entities[cent->currentState.otherEntityNum].rune = item->giTag;
+    }
+    */
+#endif
 		break;
 
 	case EV_POWERUP_REGEN:
@@ -1204,11 +1432,29 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.regenSound );
 		break;
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  case EV_FROZEN:
+		if ( es->number == cg.snap->ps.clientNum ) {
+			cg.powerupActive = PW_FROZEN;
+			cg.powerupTime = cg.time;
+		}
+		cgs.clientinfo[es->number].health = 0;
+		cg_entities[es->number].currentState.powerups |= (1 << PW_FROZEN);
+		trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.frozenSound );
+		break;
+  case EV_UNFROZEN:
+    // TODO: play unfreeze sound
+    //cg_entities[es->number].items[PW_FROZEN] = 0;
+		cg_entities[es->number].currentState.powerups &= ~(1 << PW_FROZEN);
+    trap_S_StartSound (NULL, es->number, CHAN_ITEM, cgs.media.unfrozenSound );
+    break;
+#endif
+
 	case EV_GIB_PLAYER:
 		// don't play gib sound when using the kamikaze because it interferes
 		// with the kamikaze sound, downside is that the gib sound will also
 		// not be played when someone is gibbed while just carrying the kamikaze
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if ( !(es->eFlags & EF_KAMIKAZE) ) {
 			trap_S_StartSound( NULL, es->number, CHAN_BODY, cgs.media.gibSound );
 		}
@@ -1217,6 +1463,17 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 #endif
 		CG_GibPlayer( cent->lerpOrigin );
 		break;
+
+#ifdef USE_HEADSHOTS
+  case EV_GIB_PLAYER_HEADSHOT:
+    trap_S_StartSound( NULL, es->number, CHAN_BODY, cgs.media.gibSound );
+    cent->pe.noHead = qtrue;
+    CG_GibPlayerHeadshot( cent->lerpOrigin );
+    break;
+  case EV_BODY_NOHEAD:
+    cent->pe.noHead = qtrue;
+    break;
+#endif
 
 	case EV_STOPLOOPINGSOUND:
 		trap_S_StopLoopingSound( es->number );
@@ -1227,8 +1484,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		CG_Beam( cent );
 		break;
 
-	case EV_PROXIMITY_MINE_STICK:
-	case EV_PROXIMITY_MINE_TRIGGER:
+
+	case EV_CURSORSTART:
+		CG_Printf("Start cursor\n");
 		break;
 
 	default:

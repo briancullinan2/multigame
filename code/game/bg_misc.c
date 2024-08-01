@@ -5,6 +5,20 @@
 #include "q_shared.h"
 #include "bg_public.h"
 
+#ifdef CGAME
+
+#define g_gravity      cg_gravity
+extern vmCvar_t  cg_gravity;
+#else
+extern vmCvar_t  g_gravity;
+#endif // end USE_PHYSICS_VARS
+
+#ifdef QAGAME
+#ifdef USE_ADVANCED_ITEMS
+extern vmCvar_t  g_holdMultiple;
+#endif
+#endif
+
 /*QUAKED item_***** ( 0 0 0 ) (-16 -16 -16) (16 16 16) suspended
 DO NOT USE THIS CLASS, IT JUST HOLDS GENERAL INFORMATION.
 The suspended flag will allow items to hang in the air, otherwise they are dropped to the next surface.
@@ -23,6 +37,9 @@ An item fires all of its targets when it is picked up.  If the toucher can't car
 
 gitem_t	bg_itemlist[] = 
 {
+#ifdef USE_ADVANCED_WEAPONS
+#include "./bg_misc.h"
+#else
 	{
 		NULL,
 		NULL,
@@ -88,8 +105,19 @@ gitem_t	bg_itemlist[] =
 		IT_ARMOR,
 		0,
 /* precache */ "",
-/* sounds */ ""
+/* sounds */ "",
+//		"models/powerups/armor/armor_red.skin%rainbow"
 	},
+
+#ifdef USE_ADVANCED_ITEMS
+#include "./bg_misc_items2.h"
+
+#ifdef USE_RUNES
+#include "./bg_misc_runes.h"
+#endif
+#endif
+
+
 
 	//
 	// health
@@ -311,6 +339,7 @@ gitem_t	bg_itemlist[] =
 /* sounds */ ""
 	},
 
+#ifdef USE_GRAPPLE
 /*QUAKED weapon_grapplinghook (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -326,6 +355,7 @@ gitem_t	bg_itemlist[] =
 /* precache */ "",
 /* sounds */ ""
 	},
+#endif
 
 	//
 	// AMMO ITEMS
@@ -634,7 +664,67 @@ Only in CTF games
 /* sounds */ ""
 	},
 
-#ifdef MISSIONPACK
+#ifdef USE_ADVANCED_GAMES
+
+/*QUAKED team_CTF_goldflag (1 0 0) (-16 -16 -16) (16 16 16)
+Only in CTF games
+*/
+	{
+		"team_CTF_goldflag",
+		NULL,
+        { "models/flags/k_flag.md3",
+		0, 0, 0 },
+/* icon */		"icons/iconf_gold1",
+/* pickup */	"Gold Flag",
+		0,
+		IT_TEAM,
+		PW_GOLDFLAG,
+/* precache */ "",
+/* sounds */ ""
+	},
+
+/*QUAKED team_CTF_greenflag (0 0 1) (-16 -16 -16) (16 16 16)
+Only in CTF games
+*/
+	{
+		"team_CTF_greenflag",
+		NULL,
+        { "models/flags/g_flag.md3",
+		0, 0, 0 },
+/* icon */		"icons/iconf_green1",
+/* pickup */	"Green Flag",
+		0,
+		IT_TEAM,
+		PW_GREENFLAG,
+/* precache */ "",
+/* sounds */ ""
+	},
+#endif
+
+
+#ifdef USE_PORTALS
+#ifndef MISSIONPACK
+
+/*QUAKED holdable_portal (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+	{
+		"holdable_portal", 
+		"sound/items/holdable.wav",
+        { "models/powerups/holdable/porter.md3",
+		0, 0, 0},
+/* icon */		"icons/portal",
+/* pickup */	"Portal",
+		60,
+		IT_HOLDABLE,
+		HI_PORTAL,
+/* precache */ "",
+/* sounds */ ""
+	},
+
+#endif
+#endif
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -683,6 +773,10 @@ Only in CTF games
 /* sounds */ ""
 	},
 
+#endif
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_CLASS)
+
 /*QUAKED ammo_nails (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -730,6 +824,10 @@ Only in CTF games
 /* precache */ "",
 /* sounds */ ""
 	},
+
+#endif
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 
 	//
 	// PERSISTANT POWERUP ITEMS
@@ -842,6 +940,14 @@ Only in One Flag CTF games
 /* precache */ "",
 /* sounds */ ""
 	},
+
+
+#endif
+
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_CLASS)
+
+
 /*QUAKED weapon_nailgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -894,6 +1000,60 @@ Only in One Flag CTF games
 /* precache */ "",
 /* sounds */ "sound/weapons/vulcan/wvulwind.wav"
 	},
+
+#endif
+
+#ifdef USE_WEAPON_SPREAD
+//Hal9000 spreadfire powerup
+/*QUAKED item_spread (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+  {
+  	"item_spread", 
+  	"sound/items/spread.wav",
+    {"models/powerups/instant/sight.md3", 0, 0, 0 },
+  /* icon */	"icons/spread",  
+  /* pickup */	"Spreadfire",
+  		30,
+  		IT_POWERUP,
+  		PW_SPREAD,
+	},
+#endif
+
+#ifdef USE_FLAME_THROWER
+  /*QUAKED weapon_flamethrower (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+  */
+  {
+  	"weapon_flamethrower",
+  	"sound/misc/w_pkup.wav",
+  	{ "models/weapons2/flamethrower/flamethrower.md3",
+  	0, 0, 0},
+  /* icon */	"icons/iconw_flamethrower",
+  /* pickup */	"Flame Thrower",
+  	20,
+  	IT_WEAPON,
+  	WP_FLAME_THROWER,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+
+
+  /*QUAKED ammo_flame (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+  */
+  {
+  	"ammo_flame",
+  	"sound/misc/am_pkup.wav",
+  	{ "models/powerups/ammo/flameaam.md3", 
+  	0, 0, 0},
+  /* icon */"	icons/icona_flamethrower",
+  /* pickup */	"Flame Ammo",
+  	50,
+  	IT_AMMO,
+  	WP_FLAME_THROWER,
+  /* precache */ "",
+  /* sounds */ ""
+  },
+#endif
+
 #endif
 
 	// end of list marker
@@ -901,6 +1061,145 @@ Only in One Flag CTF games
 };
 
 int		bg_numItems = ARRAY_LEN( bg_itemlist ) - 1;
+
+
+#ifdef USE_RUNES
+/*
+==============
+BG_FindItemForPowerup
+==============
+*/
+gitem_t	*BG_FindItemForRune( int r ) {
+	int		i;
+
+	for ( i = 0 ; i < bg_numItems ; i++ ) {
+		if ( bg_itemlist[i].giType == IT_POWERUP
+			&& bg_itemlist[i].giTag == RUNE_STRENGTH + r ) {
+			return &bg_itemlist[i];
+		}
+	}
+
+	return NULL;
+}
+#endif
+
+
+#ifdef USE_ADVANCED_CLASS
+
+pclass_t BG_PlayerClassFromModel(const char *model) {
+//     return PCLASS_DRAGON;
+  if (Q_stristr (model, "sarge"))
+     return PCLASS_RANGER;
+  else if (Q_stristr (model, "visor"))
+     return PCLASS_VISOR;
+  else if (!Q_stricmp (model, "biker/red"))
+     return PCLASS_BFG;
+  else if (!Q_stricmp (model, "anarki/blue"))
+     return PCLASS_LIGHTNING;
+  else if (!Q_stricmp (model, "grunt/red"))
+     return PCLASS_RAILGUN;
+  else if (Q_stristr (model, "shambler"))
+     return PCLASS_SHAMBLER;
+  else if (Q_stristr (model, "dragon"))
+     return PCLASS_DRAGON;
+  else if (Q_stristr (model, "berserker"))
+     return PCLASS_BERSERKER;
+  else if (Q_stristr (model, "infantry"))
+     return PCLASS_GUNNER;
+  else if (Q_stristr (model, "shalrath"))
+     return PCLASS_VORE;
+  else {
+     return PCLASS_NONE;
+     //return PCLASS_BFG;
+     //Q_strncpyz( model, "biker/red", sizeof( model ) );
+  }
+}
+
+#endif
+
+
+#ifdef USE_ADVANCED_ITEMS
+int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS], int team) {
+	int i;
+	int inv;
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+	if(inventory[PW_FROZEN]) {
+		return PW_FROZEN;
+	}
+#endif
+
+	if(inventory[PW_INVIS]) {
+		return PW_INVIS;
+	}
+
+	if ( inventory[PW_QUAD] ) {
+		if (team == TEAM_RED) 
+			return PW_QUAD | (PW_REDFLAG << 8);
+		else
+			return PW_QUAD;
+	}
+
+	if(inventory[PW_REGEN]) {
+		return PW_REGEN;
+	}
+
+	if(inventory[PW_BATTLESUIT]) {
+		return PW_BATTLESUIT;
+	}
+
+	inv = 0;
+	for(i = 0; i < PW_NUM_POWERUPS; i++) {
+		if(inventory[i]) {
+			if(!inv) {
+				inv = i;
+			} else {
+				inv |= (i << 8);
+			}
+		}
+	}
+
+	return inv;
+}
+#endif
+
+/*
+===============
+BG_FindItemForWeapon
+
+===============
+*/
+gitem_t	*BG_FindItemForHealth( int amount ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_HEALTH && it->quantity == amount ) {
+			return it;
+		}
+	}
+
+	Com_Error( ERR_DROP, "Couldn't find item for health %i", amount);
+	return NULL;
+}
+
+/*
+===============
+BG_FindItemForWeapon
+
+===============
+*/
+gitem_t	*BG_FindItemForAmmo( weapon_t weapon ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_AMMO && it->giTag == weapon ) {
+			return it;
+		}
+	}
+
+	Com_Error( ERR_DROP, "Couldn't find ammo for weapon %i", weapon);
+	return NULL;
+}
 
 
 /*
@@ -913,6 +1212,9 @@ gitem_t	*BG_FindItemForPowerup( powerup_t pw ) {
 
 	for ( i = 0 ; i < bg_numItems ; i++ ) {
 		if ( (bg_itemlist[i].giType == IT_POWERUP || 
+#ifdef USE_ADVANCED_ITEMS
+					bg_itemlist[i].giType == IT_HOLDABLE || 
+#endif
 					bg_itemlist[i].giType == IT_TEAM ||
 					bg_itemlist[i].giType == IT_PERSISTANT_POWERUP) && 
 			bg_itemlist[i].giTag == pw ) {
@@ -923,6 +1225,7 @@ gitem_t	*BG_FindItemForPowerup( powerup_t pw ) {
 	return NULL;
 }
 
+#ifndef USE_ADVANCED_ITEMS
 
 /*
 ==============
@@ -943,6 +1246,7 @@ gitem_t	*BG_FindItemForHoldable( holdable_t pw ) {
 	return NULL;
 }
 
+#endif
 
 /*
 ===============
@@ -959,7 +1263,25 @@ gitem_t	*BG_FindItemForWeapon( weapon_t weapon ) {
 		}
 	}
 
-	Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon);
+	//Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon);
+	return NULL;
+}
+
+/*
+===============
+BG_FindItem
+
+===============
+*/
+gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon ) {
+	gitem_t	*it;
+	
+	for ( it = bg_itemlist + 1 ; it->classname ; it++) {
+		if ( it->giType == IT_AMMO && it->giTag == weapon ) {
+			return it;
+		}
+	}
+
 	return NULL;
 }
 
@@ -1016,9 +1338,18 @@ Returns false if the item should not be picked up.
 This needs to be the same for client side prediction and server use.
 ================
 */
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps ) {
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory, int playerClass )
+#else
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory )
+#endif
+#else
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps )
+#endif
+{
 	gitem_t	*item;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int		upperBound;
 #endif
 
@@ -1030,16 +1361,28 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 
 	switch( item->giType ) {
 	case IT_WEAPON:
+
+#ifdef USE_ADVANCED_CLASS
+		// monsters are stuck with the weapons they spawn with
+		if(playerClass >= PCLASS_MONSTER && playerClass <= PCLASS_MONSTER_COUNT) {
+			return qfalse;
+		}
+#endif
+
 		return qtrue;	// weapons are always picked up
 
 	case IT_AMMO:
+
+#ifdef USE_ADVANCED_WEAPONS
+// TODO: fix this, add check for class and client array
+#endif
 		if ( ps->ammo[ item->giTag ] >= 200 ) {
 			return qfalse;		// can't hold any more
 		}
 		return qtrue;
 
 	case IT_ARMOR:
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 			return qfalse;
 		}
@@ -1065,14 +1408,18 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 	case IT_HEALTH:
 		// small and mega healths will go over the max, otherwise
 		// don't pick up if already at max
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			upperBound = ps->stats[STAT_MAX_HEALTH];
 		}
 		else
 #endif
-		if ( item->quantity == 5 || item->quantity == 100 ) {
-			if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] * 2 ) {
+		if ( item->quantity == 5 || item->quantity == 100 
+#ifdef USE_ADVANCED_ITEMS
+			|| item->quantity == 200 
+#endif
+		) {
+			if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] * 2 - 2 ) {
 				return qfalse;
 			}
 			return qtrue;
@@ -1086,7 +1433,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 	case IT_POWERUP:
 		return qtrue;	// powerups are always picked up
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		// can only hold one item at a time
 		if ( ps->stats[STAT_PERSISTANT_POWERUP] ) {
@@ -1137,6 +1484,45 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) )
 					return qtrue;
 			}
+#ifdef USE_ADVANCED_GAMES
+			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
+				if (item->giTag == PW_BLUEFLAG ||
+					item->giTag == PW_GOLDFLAG ||
+					item->giTag == PW_GREENFLAG ||
+					(item->giTag == PW_REDFLAG && ent->modelindex2) ||
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) ||
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_GOLDFLAG]) ||
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_GREENFLAG]) )
+					return qtrue;
+			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
+				if (item->giTag == PW_REDFLAG ||
+					item->giTag == PW_GOLDFLAG ||
+					item->giTag == PW_GREENFLAG ||
+					(item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) ||
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GOLDFLAG]) ||
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GREENFLAG]) )
+					return qtrue;
+			} else if (ps->persistant[PERS_TEAM] == TEAM_GOLD) {
+				if (item->giTag == PW_REDFLAG ||
+					item->giTag == PW_BLUEFLAG ||
+					item->giTag == PW_GREENFLAG ||
+					(item->giTag == PW_GOLDFLAG && ent->modelindex2) ||
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_REDFLAG]) ||
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_BLUEFLAG]) ||
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_GREENFLAG]) )
+					return qtrue;
+			} else if (ps->persistant[PERS_TEAM] == TEAM_GREEN) {
+				if (item->giTag == PW_REDFLAG ||
+					item->giTag == PW_BLUEFLAG ||
+					item->giTag == PW_GOLDFLAG ||
+					(item->giTag == PW_GREENFLAG && ent->modelindex2) ||
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_REDFLAG]) ||
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_BLUEFLAG]) ||
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_GOLDFLAG]) )
+					return qtrue;
+			}
+#endif
 		}
 
 #ifdef MISSIONPACK
@@ -1148,6 +1534,11 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 
 	case IT_HOLDABLE:
 		// can only hold one item at a time
+#ifdef QAGAME
+#ifdef USE_ADVANCED_ITEMS
+		if(!g_holdMultiple.integer)
+#endif
+#endif
 		if ( ps->stats[STAT_HOLDABLE_ITEM] ) {
 			return qfalse;
 		}
@@ -1206,8 +1597,40 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result ) 
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+#if defined(USE_PHYSICS_VARS) && (defined(CGAME) || defined(QAGAME))
+    result[2] -= 0.5 * g_gravity.value * deltaTime * deltaTime;
+#else
 		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;		// FIXME: local gravity...
+#endif
 		break;
+#ifdef USE_ACCEL_RPG
+  case TR_ACCEL:
+    {
+      vec3_t		dir;
+      // time since missile fired in seconds
+      deltaTime = ( atTime - tr->trTime ) * 0.001;
+
+      // the .5*a*t^2 part. trDuration = acceleration,
+      // phase gives the magnitude of the distance
+      // we need to move
+      phase = (tr->trDuration / 2) * (deltaTime * deltaTime);
+
+      // Make dir equal to the velocity of the object
+      VectorCopy (tr->trDelta, dir);
+
+      // Sets the magnitude of vector dir to 1
+      VectorNormalize (dir);
+
+      // Move a distance "phase" in the direction "dir"
+      // from our starting point
+      VectorMA (tr->trBase, phase, dir, result);
+
+      // The u*t part. Adds the velocity of the object
+      // multiplied by the time to the last result.
+      VectorMA (result, deltaTime, tr->trDelta, result);
+    }
+    break;
+#endif
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trType );
 		break;
@@ -1249,8 +1672,29 @@ void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 	case TR_GRAVITY:
 		deltaTime = ( atTime - tr->trTime ) * 0.001;	// milliseconds to seconds
 		VectorCopy( tr->trDelta, result );
+#if defined(USE_PHYSICS_VARS) && (defined(CGAME) || defined(QAGAME))
+    result[2] -= g_gravity.value * deltaTime;
+#else
 		result[2] -= DEFAULT_GRAVITY * deltaTime;		// FIXME: local gravity...
+#endif
 		break;
+#ifdef USE_ACCEL_RPG
+  case TR_ACCEL:
+    {
+      vec3_t		dir;
+      // time since missile fired in seconds
+      deltaTime = ( atTime - tr->trTime ) * 0.001;
+
+      // Turn magnitude of acceleration into a vector
+      VectorCopy(tr->trDelta,dir);
+      VectorNormalize (dir);
+      VectorScale (dir, tr->trDuration, dir);
+
+      // u + t * a = v
+      VectorMA (tr->trDelta, deltaTime, dir, result);
+    }
+    break;
+#endif
 	default:
 		Com_Error( ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trType );
 		break;
@@ -1363,6 +1807,47 @@ const char *eventnames[EV_MAX] = {
 	"EV_TAUNT_GUARDBASE",
 	"EV_TAUNT_PATROL"
 
+#ifdef USE_HEADSHOTS
+  "EV_GIB_PLAYER_HEADSHOT",
+  "EV_BODY_NOHEAD",
+#endif
+
+#ifdef USE_LV_DISCHARGE
+  "EV_LV_DISCHARGE",
+#endif
+
+#ifdef USE_BIRDS_EYE
+	"EV_CURSORSTART",
+#endif
+
+#ifdef USE_DAMAGE_PLUMS
+  "EV_DAMAGEPLUM",			// damage plum
+#endif
+
+#ifdef USE_RPG_STATS
+	"EV_HEALTHPLUM",
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  "EV_FROZEN",
+  "EV_UNFROZEN",
+#endif
+
+#ifdef USE_ALT_FIRE
+  "EV_ALTFIRE_WEAPON",
+  "EV_ALTFIRE_BOTH",
+#endif
+
+#ifdef USE_SINGLEPLAYER // entity
+	"EV_PLAYERSTOP",
+	"EV_EARTHQUAKE",
+#endif
+
+
+#ifdef USE_WEAPON_ORDER
+  "EV_ITEM_PICKUP2",			// had items
+#endif
+
 };
 
 /*
@@ -1409,20 +1894,47 @@ void BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm
 BG_TouchJumpPad
 ========================
 */
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, const int playerClass ) 
+#else
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory ) 
+#endif
+#else
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) 
+#endif
+{
 	vec3_t	angles;
 	float p;
 	int effectNum;
 
 	// spectators don't use jump pads
-	if ( ps->pm_type != PM_NORMAL ) {
+	if ( ps->pm_type != PM_NORMAL
+		&& ps->pm_type != PM_BIRDSEYE
+		&& ps->pm_type != PM_FOLLOWCURSOR
+		&& ps->pm_type != PM_PLATFORM
+		&& ps->pm_type != PM_THIRDPERSON ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_CLASS
+  if(playerClass == PCLASS_DRAGON)
+    return;
+#endif
+#ifdef USE_RUNES
+  if(inventory[RUNE_FLIGHT])
+    return;
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	if ( inventory[PW_FLIGHT] || inventory[PW_SUPERMAN] ) {
+		return;
+	}
+#else
 	// flying characters don't hit bounce pads
 	if ( ps->powerups[PW_FLIGHT] ) {
 		return;
 	}
+#endif
 
 	// if we didn't hit this same jumppad the previous frame
 	// then don't play the event sound again if we are in a fat trigger
@@ -1509,15 +2021,18 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 	s->weapon = ps->weapon;
 	s->groundEntityNum = ps->groundEntityNum;
 
+#ifndef USE_ADVANCED_ITEMS
 	s->powerups = 0;
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( ps->powerups[ i ] ) {
 			s->powerups |= 1 << i;
 		}
 	}
+#endif
 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
+
 }
 
 /*
@@ -1589,12 +2104,14 @@ void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s
 	s->weapon = ps->weapon;
 	s->groundEntityNum = ps->groundEntityNum;
 
+#ifndef USE_ADVANCED_ITEMS
 	s->powerups = 0;
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( ps->powerups[ i ] ) {
 			s->powerups |= 1 << i;
 		}
 	}
+#endif
 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;

@@ -66,7 +66,7 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 	case IT_POWERUP:
 		return firstSpawn ? SPAWN_POWERUP : RESPAWN_POWERUP;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		return -1;
 		break;
@@ -80,15 +80,22 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 	}
 } 
 
+#ifdef USE_ADVANCED_ITEMS
+int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS], int team);
+#endif
+
+
+
 
 int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	int			quantity;
 	int			i;
 	gclient_t	*client;
 
-	if ( !other->client->ps.powerups[ent->item->giTag] ) {
+#ifndef USE_ADVANCED_ITEMS
+	if ( !other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] ) {
 		// round timing to seconds to make multiple powerup timers count in sync
-		other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
+		other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] = level.time - ( level.time % 1000 );
 	}
 
 	if ( ent->count ) {
@@ -97,7 +104,30 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		quantity = ent->item->quantity;
 	}
 
-	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
+	other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] += quantity * 1000;
+
+#else
+	{
+		other->client->inventory[ent->item->giTag] = level.time - ( level.time % 1000 );
+
+		if ( ent->count ) {
+			quantity = ent->count;
+		} else {
+			quantity = ent->item->quantity;
+		}
+
+		other->client->inventory[ent->item->giTag] += quantity * 1000;
+		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
+		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+		other->s.powerups = BG_FindPriorityShaderForInventory(ent->item->giTag, other->client->inventory, other->client->sess.sessionTeam);
+	}
+#endif
+
+#ifdef USE_RUNES
+  //if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
+  //  other->rune = ent->item->giTag;
+  //}
+#endif
 
 	// give any nearby players a "denied" anti-reward
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
@@ -152,7 +182,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 //======================================================================
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 	int		clientNum;
 	char	userinfo[MAX_INFO_STRING];
@@ -161,6 +191,16 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 
 	other->client->ps.stats[STAT_PERSISTANT_POWERUP] = ent->item - bg_itemlist;
 	other->client->persistantPowerup = ent;
+
+#ifdef USE_ADVANCED_ITEMS
+	{
+		other->s.powerups = ent->item->giTag;
+		other->client->inventory[ent->item->giTag] = 1;
+		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
+		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+	}
+#endif
+
 
 	switch( ent->item->giTag ) {
 	case PW_GUARD:
@@ -229,9 +269,19 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 
 int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
+#ifdef USE_ADVANCED_ITEMS
+	{
+		other->client->inventory[ent->item->giTag] = 1;
+		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
+		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+	}
+#endif
+
 	other->client->ps.stats[STAT_HOLDABLE_ITEM] = ent->item - bg_itemlist;
 
-#ifdef MISSIONPACK	
+
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( ent->item->giTag == HI_KAMIKAZE ) {
 		other->client->ps.eFlags |= EF_KAMIKAZE;
 	}
@@ -246,10 +296,13 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 static void Add_Ammo( gentity_t *ent, int weapon, int count )
 {
-	ent->client->ps.ammo[weapon] += count;
-	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
-		ent->client->ps.ammo[weapon] = AMMO_HARD_LIMIT;
+	ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] += count;
+	if ( ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
+		ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
 	}
+#ifdef USE_ADVANCED_WEAPONS
+	ent->client->ammo[ent->client->weaponClass][weapon % WP_MAX_WEAPONS] = ent->client->ps.ammo[weapon % WP_MAX_WEAPONS];
+#endif
 }
 
 
@@ -296,12 +349,17 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 	}
 
 	// add the weapon
-	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << ent->item->giTag );
+	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+#ifdef USE_ADVANCED_WEAPONS
+	other->client->weapons[other->client->weaponClass] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+#endif
 
 	Add_Ammo( other, ent->item->giTag, quantity );
 
+#ifdef USE_GRAPPLE
 	if (ent->item->giTag == WP_GRAPPLING_HOOK)
-		other->client->ps.ammo[ent->item->giTag] = -1; // unlimited ammo
+		other->client->ps.ammo[ent->item->giTag] = INFINITE; // unlimited ammo
+#endif
 
 	// team deathmatch has slow weapon respawns
 	//if ( g_gametype.integer == GT_TEAM ) {
@@ -320,13 +378,17 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	int			quantity;
 
 	// small and mega healths will go over the max
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( other->client && bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	}
 	else
 #endif
-	if ( ent->item->quantity != 5 && ent->item->quantity != 100 ) {
+	if ( ent->item->quantity != 5 && ent->item->quantity != 100
+#ifdef USE_ADVANCED_ITEMS
+	&& ent->item->quantity != 200 
+#endif
+	) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	} else {
 		max = other->client->ps.stats[STAT_MAX_HEALTH] * 2;
@@ -339,6 +401,37 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	}
 
 	other->health += quantity;
+
+#ifdef USE_LOCAL_DMG
+  if(g_locDamage.integer) {
+    // return speed upon health pickup or more than maximum health, McBain
+    other->client->lasthurt_location = LOCATION_NONE;
+  	other->client->ps.speed += quantity;
+  	if (other->client->ps.speed > g_speed.value) {
+  		other->client->ps.speed = g_speed.value;
+  	}
+
+  	if (other->health >= other->client->ps.stats[STAT_MAX_HEALTH]) {
+  		other->client->ps.speed = g_speed.value;
+  	}
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+  	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+  		other->client->ps.speed *= 1.5;
+  	}
+  	else
+#endif
+    if ( other->client->ps.powerups[PW_HASTE] 
+#ifdef USE_RUNES
+      || other->client->inventory[RUNE_HASTE]
+#endif
+    ) {
+      other->client->ps.speed *= 1.3;
+    }
+
+  	// end McBain
+  }
+#endif
 
 	if (other->health > max ) {
 		other->health = max;
@@ -357,7 +450,7 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 //======================================================================
 
 int Pickup_Armor( gentity_t *ent, gentity_t *other ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int		upperBound;
 
 	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
@@ -424,6 +517,9 @@ void RespawnItem( gentity_t *ent ) {
 
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->s.eFlags &= ~EF_NODRAW;
+#ifdef USE_ITEM_TIMERS
+  ent->s.eFlags &= ~EF_TIMER;
+#endif
 	ent->r.svFlags &= ~SVF_NOCLIENT;
 	trap_LinkEntity( ent );
 
@@ -473,6 +569,28 @@ Touch_Item
 void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int			respawn;
 	qboolean	predict;
+#ifdef USE_WEAPON_ORDER
+  qboolean alreadyHad = qfalse;
+#endif
+
+#ifdef USE_INSTAGIB
+	//SCO if ent-item is some sort of team item.
+	if (g_instagib.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
+
+#ifdef USE_TRINITY
+	if (g_unholyTrinity.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
+#ifdef USE_HOTRPG
+	if (g_hotRockets.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
+#ifdef USE_HOTBFG
+	if (g_hotBFG.integer && ent->item->giType != IT_TEAM)
+		return;
+#endif
 
 	if (!other->client)
 		return;
@@ -480,9 +598,45 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;		// dead people can't pickup
 
 	// the same pickup rules are used for client side and server side
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory, other->client->pers.playerclass ) ) {
+		return;
+	}
+#else
+	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory ) ) {
+		return;
+	}
+#endif
+#else
 	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ) ) {
 		return;
 	}
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+{
+	int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
+	if(ent->item->giType == IT_HOLDABLE && 
+		other->client->inventory[ent->item->giTag]) {
+		return;
+	}
+}
+
+#endif
+
+#ifdef USE_RUNES
+  // can only pickup one rune at a time
+  if(ent->item->giType == IT_POWERUP
+    && ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
+		int i;
+		for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
+			if(other->client->inventory[i]) {
+				return;
+			}
+		}
+  }
+#endif
 
 	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
 
@@ -491,6 +645,9 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// call the item-specific pickup function
 	switch( ent->item->giType ) {
 	case IT_WEAPON:
+#ifdef USE_WEAPON_ORDER
+    alreadyHad = other->client->ps.stats[STAT_WEAPONS] & (1 << ent->item->giTag);
+#endif
 		respawn = Pickup_Weapon(ent, other);
 		break;
 	case IT_AMMO:
@@ -504,13 +661,18 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		break;
 	case IT_POWERUP:
 		respawn = Pickup_Powerup(ent, other);
+		// brian cullinan - why?
 		// allow prediction for some powerups
-		if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
-			predict = qtrue;
-		else
-			predict = qfalse;
+		//if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
+		//	predict = qtrue;
+		//else
+		//	predict = qfalse;
+#ifdef USE_RUNES
+    if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM)
+      predict = qtrue;
+#endif
 		break;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		respawn = Pickup_PersistantPowerup(ent, other);
 		break;
@@ -530,11 +692,21 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 
 	// play the normal pickup sound
+#ifdef USE_WEAPON_ORDER
+  if ( predict ) {
+		G_AddPredictableEvent( other, alreadyHad 
+      ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, ent->s.modelindex );
+	} else {
+		G_AddEvent( other, alreadyHad 
+      ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, ent->s.modelindex );
+	}
+#else
 	if ( predict ) {
 		G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
 	} else {
 		G_AddEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
 	}
+#endif
 
 	// powerup pickups are global broadcasts
 	if ( ent->item->giType == IT_POWERUP || ent->item->giType == IT_TEAM) {
@@ -590,6 +762,11 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// picked up items still stay around, they just don't
 	// draw anything.  This allows respawnable items
 	// to be placed on movers.
+#ifdef USE_ITEM_TIMERS
+	if(ent->item->giType != IT_TEAM && respawn != -1) {
+		ent->r.svFlags |= SVF_BROADCAST;
+	} else
+#endif
 	ent->r.svFlags |= SVF_NOCLIENT;
 	ent->s.eFlags |= EF_NODRAW;
 	ent->r.contents = 0;
@@ -601,13 +778,252 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if ( respawn <= 0 ) {
 		ent->nextthink = 0;
 		ent->think = 0;
+#ifdef USE_ITEM_TIMERS
+    ent->s.eFlags &= ~EF_TIMER;
+#endif
 	} else {
 		ent->nextthink = level.time + respawn;
 		ent->think = RespawnItem;
+#ifdef USE_ITEM_TIMERS
+		/* 
+		if ( cg_itemTimer->integer && (
+			(ent->item->giType == IT_ARMOR) ||
+			(ent->item->giType == IT_POWERUP) ||
+			(ent->item->giType == IT_HOLDABLE) ||
+			(ent->item->giType == IT_PERSISTANT_POWERUP))) {
+		*/
+		//}
+    ent->s.eFlags |= EF_TIMER;
+    ent->s.time = level.time;
+    ent->s.frame = respawn / 1000; // save bandwidth
+#endif
 	}
 
 	trap_LinkEntity( ent );
 }
+
+
+
+/**
+ * Pickup_Item
+ *
+ * Pickup an item but do a few checks before to see whether this is indeed valid
+ */
+void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPickup)
+{
+	int respawn;
+
+	// need a client and dead people can't pickup
+	if (!other->client || other->health < 1)
+	{
+		return;
+	}
+
+	if(ent->s.eFlags & EF_NOPICKUP)
+	{
+		return;
+	}
+
+#if 0 // TODO
+	// owner can't pickup his own items straight away
+	if((ent->lastOwner == other) && (ent->lastOwnerThink > level.time))
+	{
+		return;
+	}
+#endif
+
+	// not allowed to pick up weapons while reloading
+
+	if ((ent->item->giType == IT_WEAPON) && (other->client->ps.weaponstate = WEAPON_DROPPING))
+	{
+		return;
+	}
+
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory, other->client->pers.playerclass ))
+	{
+		return;
+	}
+#else
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory ))
+	{
+		return;
+	}
+#endif
+#else
+	// the same pickup rules are used for client side and server side
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ))
+	{
+		return;
+	}
+#endif
+
+#if 0
+	if(g_gametype.integer == GT_BOMB &&
+		(other->client->sess.sessionTeam != TEAM_RED) && (ent->item->giTag == WP_BOMB))
+	{
+		return;
+	}
+
+	//Somebodys grabbed the bomb
+	if (ent->item->giTag == WP_BOMB)
+	{
+		level.BombHolderLastRound = other->client->ps.clientNum;
+		G_LogPrintf("Bomb has been collected by %i\n", other->client->ps.clientNum);
+		level.UseLastRoundBomber  = qtrue;
+
+		//@Barbatos: be sure we are playing bomb mode
+		if(g_gametype.integer == GT_BOMB)
+			G_AutoRadio(3, other);
+
+		// we have to pickup bombs when we walk over
+		autoPickup = -1;
+	}
+#endif
+
+	// call the item-specific pickup function
+	switch(ent->item->giType)
+	{
+		case IT_WEAPON:
+			if (autoPickup & (1 << (ent->item - bg_itemlist)))
+			{
+				respawn = Pickup_Weapon(ent, other);
+			}
+			else
+			{
+				return;
+			}
+			break;
+
+		case IT_TEAM:
+			respawn = Pickup_Team(ent, other);
+			break;
+
+		case IT_HOLDABLE:
+			// No picking up an item twice.
+			if ((autoPickup & (1 << (ent->item - bg_itemlist))) && other->client->inventory[ent->item->giTag])
+			{
+				respawn = Pickup_Holdable(ent, other);
+			}
+			else
+			{
+				return;
+			}
+
+			break;
+
+		default:
+			return;
+	}
+
+	if (!respawn)
+	{
+		return;
+	}
+
+	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
+
+	// play the normal pickup sound
+	G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
+
+	// powerup pickups are global broadcasts
+	if ((ent->item->giType == IT_POWERUP) || (ent->item->giType == IT_TEAM))
+	{
+		char powerupcmd[32];
+
+		// if we want the global sound to play
+		if (!ent->speed)
+		{
+			gentity_t  *te;
+
+			te		= G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
+			te->s.eventParm = ent->s.modelindex;
+			te->r.svFlags  |= SVF_BROADCAST;
+		}
+		else
+		{
+			gentity_t  *te;
+
+			te		   = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
+			te->s.eventParm    = ent->s.modelindex;
+			// only send this temp entity to a single client
+			te->r.svFlags	  |= SVF_SINGLECLIENT;
+			te->r.singleClient = other->s.number;
+		}
+	/***
+		s.e.t.i. : Use global broadast to generate a cg_followpowerup command
+			Gametypes:
+				* CTF : Flag has been grabbed by other->client->ps.clientNum
+				* Bomb : Bomb has been picked up by other->client->ps.clientNum
+	***/
+		Com_sprintf(powerupcmd, 32, "followpowerup %i", other->client->ps.clientNum);
+
+		//trap_Argv(1, clientnum, sizeof(char)*2);
+		// Send to client -1, which broadcasts to all clients
+		trap_SendServerCommand(-1, powerupcmd);
+	}
+
+	// fire item targets
+	G_UseTargets (ent, other);
+
+	// wait of -1 will not respawn
+	if (ent->wait == -1)
+	{
+		ent->r.svFlags		 	 |= SVF_NOCLIENT;
+		ent->s.eFlags		 		 |= EF_NODRAW | EF_NOPICKUP;
+		ent->r.contents 	    = 0;
+		ent->unlinkAfterEvent = qtrue;
+		return;
+	}
+
+	// non zero wait overrides respawn time
+	if (ent->wait)
+	{
+		respawn = ent->wait;
+	}
+
+	// random can be used to vary the respawn time
+	if (ent->random)
+	{
+		respawn += crandom() * ent->random;
+
+		if (respawn < 1)
+		{
+			respawn = 1;
+		}
+	}
+
+	// dropped items will not respawn
+	if (ent->flags & FL_DROPPED_ITEM)
+	{
+		ent->freeAfterEvent = qtrue;
+	}
+
+	// picked up items still stay around, they just don't
+	// draw anything.  This allows respawnable items
+	// to be placed on movers.
+	ent->r.svFlags |= SVF_NOCLIENT;
+	ent->s.eFlags  |= EF_NODRAW | EF_NOPICKUP;
+	ent->r.contents = 0;
+
+	// ZOID
+	// A negative respawn times means to never respawn this item (but don't
+	// delete it).	This is used by items that are respawned by third party
+	// events such as ctf flags
+	if (respawn <= 0)
+	{
+		ent->nextthink = 0;
+		ent->think	   = 0;
+	}
+	else
+	{
+		ent->nextthink = level.time + respawn * 1000;
+		ent->think	   = RespawnItem;
+	}
+	trap_LinkEntity( ent );
+}
+
 
 
 //======================================================================
@@ -619,7 +1035,12 @@ LaunchItem
 Spawns an item and tosses it forward
 ================
 */
-gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity ) {
+#ifdef USE_WEAPON_DROP
+gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity, int xr_flags )
+#else
+gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity )
+#endif
+{
 	gentity_t	*dropped;
 
 	dropped = G_Spawn();
@@ -645,20 +1066,36 @@ gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity ) {
 	VectorCopy( velocity, dropped->s.pos.trDelta );
 
 	dropped->s.eFlags |= EF_BOUNCE_HALF;
+	if ((g_gametype.integer == GT_CTF 
 #ifdef MISSIONPACK
-	if ((g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF)			&& item->giType == IT_TEAM) { // Special case for CTF flags
-#else
-	if (g_gametype.integer == GT_CTF && item->giType == IT_TEAM) { // Special case for CTF flags
+    || g_gametype.integer == GT_1FCTF
 #endif
+  ) && item->giType == IT_TEAM) {// Special case for CTF flags
 		dropped->think = Team_DroppedFlagThink;
-		dropped->nextthink = level.time + 30000;
+#ifdef USE_TEAM_VARS
+    dropped->nextthink = level.time + g_flagReturn.integer;
+#else
+    dropped->nextthink = level.time + DROPPED_TIME;
+#endif
 		Team_CheckDroppedItem( dropped );
 	} else { // auto-remove after 30 seconds
 		dropped->think = G_FreeEntity;
-		dropped->nextthink = level.time + 30000;
+    dropped->nextthink = level.time + DROPPED_TIME;
 	}
 
+#ifdef USE_WEAPON_DROP
+	dropped->flags = xr_flags; // FL_DROPPED_ITEM; // XRAY FMJ FL_THROWN_ITEM
+
+  if( xr_flags & FL_THROWN_ITEM) {
+    dropped->clipmask = MASK_SHOT; // XRAY FMJ
+    dropped->s.pos.trTime = level.time - 100;	// move a bit on the very first frame
+    VectorScale( velocity, 200, dropped->s.pos.trDelta ); // 700
+    SnapVector( dropped->s.pos.trDelta );		// save net bandwidth
+    dropped->physicsBounce = 0.5;
+  }
+#else
 	dropped->flags = FL_DROPPED_ITEM;
+#endif
 
 	trap_LinkEntity (dropped);
 
@@ -684,7 +1121,12 @@ gentity_t *Drop_Item( gentity_t *ent, gitem_t *item, float angle ) {
 	VectorScale( velocity, 150, velocity );
 	velocity[2] += 200 + crandom() * 50;
 	
+
+#ifdef USE_WEAPON_DROP
+  return LaunchItem( item, ent->s.pos.trBase, velocity, FL_DROPPED_ITEM );
+#else
 	return LaunchItem( item, ent->s.pos.trBase, velocity );
+#endif
 }
 
 
@@ -859,11 +1301,31 @@ void ClearRegisteredItems( void ) {
 	// players always start with the base weapon
 	RegisterItem( BG_FindItemForWeapon( WP_MACHINEGUN ) );
 	RegisterItem( BG_FindItemForWeapon( WP_GAUNTLET ) );
+#ifdef USE_FLAME_THROWER
+  RegisterItem( BG_FindItemForWeapon( WP_FLAME_THROWER) );
+#endif
 #ifdef MISSIONPACK
 	if( g_gametype.integer == GT_HARVESTER ) {
 		RegisterItem( BG_FindItem( "Red Cube" ) );
 		RegisterItem( BG_FindItem( "Blue Cube" ) );
 	}
+#endif
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+	  RegisterItem( BG_FindItemForWeapon( WP_RAILGUN ) );
+    RegisterItem( BG_FindItemForWeapon( WP_LIGHTNING ) );
+    RegisterItem( BG_FindItemForWeapon( WP_ROCKET_LAUNCHER ) );
+  }
+#endif
+#ifdef USE_ROTRPG
+  if(g_hotRockets.integer) {
+    RegisterItem( BG_FindItemForWeapon( WP_ROCKET_LAUNCHER ) );
+  }
+#endif
+#ifdef USE_INSTAGIB
+  if(g_instagib.integer)
+  //register that rail gun
+	  RegisterItem( BG_FindItemForWeapon( WP_RAILGUN ) );
 #endif
 }
 
@@ -923,6 +1385,29 @@ int G_ItemDisabled( gitem_t *item ) {
 	return trap_Cvar_VariableIntegerValue( name );
 }
 
+
+void G_GiveItem(gentity_t *ent, powerup_t pw) {
+	gitem_t		*it;
+	gentity_t *it_ent;
+	trace_t		trace;
+	it = BG_FindItemForPowerup (pw);
+	if (!it) {
+		return;
+	}
+
+	it_ent = G_Spawn();
+	VectorCopy( ent->r.currentOrigin, it_ent->s.origin );
+	it_ent->classname = it->classname;
+	G_SpawnItem (it_ent, it);
+	FinishSpawningItem(it_ent );
+	memset( &trace, 0, sizeof( trace ) );
+	Touch_Item (it_ent, ent, &trace);
+	if (it_ent->inuse) {
+		G_FreeEntity( it_ent );
+	}
+}
+
+
 /*
 ============
 G_SpawnItem
@@ -938,12 +1423,36 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 	G_SpawnFloat( "random", "0", &ent->random );
 	G_SpawnFloat( "wait", "0", &ent->wait );
 
+	if(item->giType != IT_TEAM) {
+		ent->nothot = qtrue;
+	}
+
+  if(item->giType != IT_TEAM && (qfalse
+#ifdef USE_INSTAGIB
+		|| g_instagib.integer 
+#endif
+#ifdef USE_HOTRPG
+		|| g_hotRockets.integer
+#endif
+#ifdef USE_HOTBFG
+		|| g_hotBFG.integer
+#endif
+#ifdef USE_TRINITY
+		|| g_unholyTrinity.integer
+#endif
+	)) {
+		// don't send items to clients
+		ent->r.svFlags = SVF_NOCLIENT;
+		ent->s.eFlags |= EF_NODRAW;
+    ent->tag = TAG_DONTSPAWN;
+	} else {
 	RegisterItem( item );
 
 	if ( G_ItemDisabled( item ) ) {
 		ent->tag = TAG_DONTSPAWN;
 		return;
 	}
+  }
 
 	ent->item = item;
 	// some movers spawn on the second frame, so delay item
@@ -958,7 +1467,7 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 		G_SpawnFloat( "noglobalsound", "0", &ent->speed);
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if ( item->giType == IT_PERSISTANT_POWERUP ) {
 		ent->s.generic1 = ent->spawnflags;
 	}

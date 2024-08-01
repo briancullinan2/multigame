@@ -121,6 +121,12 @@ void G_InitSessionData( gclient_t *client, const char *team, qboolean isBot ) {
 						sess->sessionTeam = TEAM_RED;
 					} else if ( team[0] == 'b' || team[0] == 'B' ) {
 						sess->sessionTeam = TEAM_BLUE;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+					} else if ( team[0] == 'k' || team[0] == 'K' ) {
+						sess->sessionTeam = TEAM_GOLD;
+					} else if ( team[0] == 'g' || team[0] == 'G' ) {
+						sess->sessionTeam = TEAM_GREEN;
+#endif
 					} else {
 						// or choose new
 						sess->sessionTeam = PickTeam( -1 );

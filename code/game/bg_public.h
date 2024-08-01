@@ -4,6 +4,7 @@
 
 // because games can change separately from the main system version, we need a
 // second version that must match between game and cgame
+#include "bg_physics.h"
 
 #define	GAME_VERSION		"baseq3-1"
 
@@ -69,6 +70,11 @@
 
 #define	CS_ITEMS				27		// string of 0's and 1's that tell which items are present
 
+#ifdef USE_ADVANCED_GAMES
+#define	CS_SCORES3				28
+#define	CS_SCORES4				29
+#endif
+
 #define	CS_MODELS				32
 #define	CS_SOUNDS				(CS_MODELS+MAX_MODELS)
 #define	CS_PLAYERS				(CS_SOUNDS+MAX_SOUNDS)
@@ -90,11 +96,14 @@ typedef enum {
 
 	GT_TEAM,			// team deathmatch
 	GT_CTF,				// capture the flag
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU) || defined(USE_ADVANCED_ITEMS)
 	GT_1FCTF,
 	GT_OBELISK,
 	GT_HARVESTER,
 #endif
+
+
+
 	GT_MAX_GAME_TYPE
 } gametype_t;
 
@@ -113,12 +122,47 @@ movement on the server game.
 
 typedef enum {
 	PM_NORMAL,		// can accelerate and turn
+#ifdef USE_BIRDS_EYE
+	PM_PLATFORM,
+	PM_BIRDSEYE,
+	PM_THIRDPERSON,
+	PM_FOLLOWCURSOR,
+#endif
+
+#ifdef USE_AIW
+	PM_UPSIDEDOWN,
+	PM_REVERSED,
+	PM_REVERSEDUPSIDEDOWN,
+#endif
+
 	PM_NOCLIP,		// noclip movement
 	PM_SPECTATOR,	// still run into walls
 	PM_DEAD,		// no acceleration or turning, but free falling
 	PM_FREEZE,		// stuck in place with no control
 	PM_INTERMISSION,	// no movement or status bar
-	PM_SPINTERMISSION	// no movement or status bar
+	PM_SPINTERMISSION,	// no movement or status bar
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PM_FROZEN,
+#endif
+
+#ifdef USE_VEHICLES
+	PM_VEHICLE,
+	PM_VEHICLEMOUSE,
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	PM_MONSTER, // not interested in item pickups, they come with special powerups
+	PM_STUCKDUCK, // some monsters don't move when crouching, it was really funny to watch
+#endif
+
+	PM_LOOKSPLINE, // control look angle from spline
+	PM_MOVESPLINE, // control movement from spline
+	PM_BOTHSPLINE, // control both from spline
+	PM_LOOKQUARTER,
+	PM_LOOKHALF, // allow for 180 degree freelook from the angle 
+	// specified by camera spline nearest current location
+
+	NUM_PLAYERMOVE,
 } pmtype_t;
 
 typedef enum {
@@ -127,6 +171,213 @@ typedef enum {
 	WEAPON_DROPPING,
 	WEAPON_FIRING
 } weaponstate_t;
+
+#ifdef USE_ADVANCED_ITEMS
+
+
+// NOTE: may not have more than 16
+typedef enum {
+	PW_NONE,
+
+	PW_QUAD = 1,
+	PW_REGEN = 2,
+	PW_BATTLESUIT = 3,
+	PW_HASTE = 4,
+	PW_INVIS = 5,
+	PW_FLIGHT = 6,
+
+	PW_REDFLAG = 7,
+	PW_BLUEFLAG = 8,
+	PW_NEUTRALFLAG = 9,
+
+	PW_MAX_POWERUPS = 10,
+	// = 10
+
+	PW_SCOUT = 10,
+	PW_GUARD = 11,
+	PW_DOUBLER = 12,
+	PW_AMMOREGEN = 13,
+	PW_INVULNERABILITY = 14,
+
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	PW_GOLDFLAG = 15,
+	PW_GREENFLAG = 16,
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	PW_SPECIAL_ABILITY = 17,
+#endif
+// memory overflow on everything past this in the default mode
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PW_FROZEN = 18,
+#endif
+
+#ifdef USE_WEAPON_SPREAD
+  PW_SPREAD = 19,  //Hal9000 spreadfire
+#endif
+
+	HI_TELEPORTER = 20,
+	HI_MEDKIT = 21,
+	HI_KAMIKAZE = 22,
+	HI_PORTAL = 23,
+	HI_INVULNERABILITY = 24,
+	HI_HEALER = 25,
+
+#ifdef USE_VEHICLES
+	HI_VEHICLE = 26,
+#endif
+
+	PW_REGENAMMO = 32,
+	PW_GRAVITYSUIT = 33,
+	PW_FLASH = 34,
+	PW_VISIBILITY = 35,
+	PW_SUPERMAN = 36,
+
+
+#ifdef USE_RUNES
+  // 1 - 4
+  RUNE_STRENGTH,     // black
+  RUNE_REGEN,        // hell
+  RUNE_RESIST,       // elder
+  RUNE_HASTE,        // earth
+  
+  // 5 - 8
+  RUNE_ENVIRO,       // black
+  RUNE_FLIGHT,       // hell
+  RUNE_BERSERK,      // elder
+  RUNE_RECALL,       // earth
+  
+  // 9 - 12
+  RUNE_ELECTRIC,     // black
+  RUNE_CLOAK,        // hell
+  RUNE_DIVINE,       // elder
+  RUNE_DEATH,        // earth
+  
+  // 13 - 16
+  RUNE_HOLO,         // black
+  RUNE_ORB,          // hell
+  RUNE_BLINK,        // elder
+  RUNE_CAMO,         // earth
+  
+  // 17 - 20
+  RUNE_JUMP,         // black
+  RUNE_ACTION,       // hell
+  RUNE_VAMPIRE,      // elder
+  RUNE_SHIELD,       // earth
+  
+  // 21 - 24
+  RUNE_HEALTH,       // black
+  RUNE_RADIO,        // hell
+  RUNE_SWITCH,       // elder
+  RUNE_ICETRAP,      // earth
+  
+  // 25 - 28
+  RUNE_GRAVITY,      // black
+  RUNE_TELE,         // hell
+  RUNE_IMPACT,       // elder
+  RUNE_VENGEANCE,    // earth
+  
+  // 29 - 32
+  RUNE_SHUBHAT,      // black
+  RUNE_REPULSION,    // hell
+  RUNE_PHASING,      // elder
+  RUNE_SHAMBLER,     // earth
+  
+  // 33 - 36
+  RUNE_DUALRECALL,   // black
+  RUNE_WEIRDNESS,    // hell
+  RUNE_PHOENIX,      // elder
+  RUNE_SPIKECLOUD,   // earth
+  
+  // 37 - 40
+  RUNE_FIREWALK,     // black
+  RUNE_GRAPPLE,      // hell
+  RUNE_ATHLETIC,     // elder
+  RUNE_LUMBERJACK,   // earth
+  
+  // 41 - 44
+  RUNE_HOUNGAN,      // black
+  RUNE_PIERCING,     // hell
+  RUNE_PRESERVE,     // elder
+  RUNE_ZENMONK,      // earth
+  
+  // 45 - 48
+  RUNE_TORCH,        // black
+  RUNE_PACKRAT,      // hell
+  RUNE_ARMOR,        // elder
+  RUNE_QUAD,         // earth
+  
+  // 49 - 52
+  RUNE_JACK,         // black
+  RUNE_BLUEGOO,      // hell
+  RUNE_BLIZZARD,     // elder
+  RUNE_THOR,         // earth
+  
+  // 53 - 56
+  RUNE_SNIPER,       // black
+  RUNE_ANTIPACK,     // hell
+  RUNE_ANTITELE,     // elder
+  RUNE_CLUSTER,      // earth
+  
+  // 57 - 59
+  RUNE_TORNADO,      // black 
+  RUNE_REQUIEM,      // hell
+  RUNE_LITHIUM,      // elder
+
+#define PW_NUM_RUNES RUNE_LITHIUM-RUNE_STRENGTH
+#endif
+
+	PW_NUM_POWERUPS // = 37,
+
+} powerup_t;
+
+#define PW_MAX_ITEMGROUPS (1 << (MAX_POWERUPS - PW_MAX_POWERUPS - 1))
+
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+typedef enum {
+	PCLASS_NONE,
+	PCLASS_BFG,
+	PCLASS_LIGHTNING,
+	PCLASS_RAILGUN,
+	PCLASS_LIGHTWEIGHT,
+	PCLASS_HEAVYWEIGHT,
+	PCLASS_RPG,
+	PCLASS_SCOUT,
+	PCLASS_GUARD,
+	PCLASS_DOUBLER = PCLASS_HEAVYWEIGHT,
+	PCLASS_AMMOREGEN = PCLASS_LIGHTWEIGHT,
+	PCLASS_BARBARIAN,
+	PCLASS_BARD,
+	PCLASS_CLERIC,
+	PCLASS_DRUID,
+	PCLASS_FIGHTER,
+	PCLASS_MONK,
+	PCLASS_PALADIN,
+	PCLASS_VISOR,
+	PCLASS_RANGER,
+	PCLASS_ROGUE,
+	PCLASS_SORCERER,
+	PCLASS_WARLOCK,
+	PCLASS_WIZARD,
+	PCLASS_FREEZE,
+	PCLASS_ANTIGRAVITY,
+
+	// begin classes of monsters, not interested in item pickups
+	PCLASS_MONSTER,
+	PCLASS_SHAMBLER, // shambler
+	PCLASS_DRAGON, // always flies because i lack animation ambition
+	PCLASS_BERSERKER,
+	PCLASS_GUNNER,
+	PCLASS_VORE,
+
+	PCLASS_MONSTER_COUNT,
+
+	PCLASS_NUM_CLASSES
+} pclass_t;
+#endif
 
 // pmove->pm_flags
 #define	PMF_DUCKED			1
@@ -173,10 +424,58 @@ typedef struct {
 	int			pmove_fixed;
 	int			pmove_msec;
 
+
 	// callbacks to test the world
 	// these will be different functions during game and cgame
 	void		(*trace)( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask );
 	int			(*pointcontents)( const vec3_t point, int passEntityNum );
+
+#ifdef USE_ADVANCED_ITEMS
+	int inventory[PW_NUM_POWERUPS];
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	pclass_t playerClass;
+#endif
+
+#ifdef USE_VEHICLES
+// STONELANCE
+        car_t           *car;
+        car_t           **cars;
+
+        int                     pDebug;
+
+        qboolean        client;
+
+        qboolean        manualShift;
+        collisionDamage_t       damage;
+
+        qboolean        (*frictionFunc)( const carPoint_t *point, float *sCOF, float *kCOF );
+
+        float           car_spring;
+        float           car_shock_up;
+        float           car_shock_down;
+        float           car_swaybar;
+        float           car_wheel;
+        float           car_wheel_damp;
+
+        float           car_frontweight_dist;
+        float           car_IT_xScale;
+        float           car_IT_yScale;
+        float           car_IT_zScale;
+        float           car_body_elasticity;
+
+        float           car_air_cof;
+        float           car_air_frac_to_df;
+        float           car_friction_scale;
+	vec3_t		damageAngles;
+	float		  damagePitch;
+	float		  damageYaw;
+// END
+
+#endif
+
+
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles
@@ -190,15 +489,34 @@ void Pmove (pmove_t *pmove);
 // NOTE: may not have more than 16
 typedef enum {
 	STAT_HEALTH,
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+	STAT_STAMINA,
+	STAT_ABILITY,
+#endif
 	STAT_HOLDABLE_ITEM,
-#ifdef MISSIONPACK
+#ifdef USE_ADVANCED_ITEMS
+	STAT_HOLDABLE_AVAILABLE,
+	STAT_HOLDABLE_UPDATE,
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	STAT_PERSISTANT_POWERUP,
 #endif
 	STAT_WEAPONS,					// 16 bit fields
+#ifdef USE_ADVANCED_WEAPONS
+	STAT_WEAPONS_AVAILABLE,
+	STAT_WEAPONS_UPDATE,
+#endif
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
-	STAT_MAX_HEALTH					// health / armor limit, changable by handicap
+	STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
+#ifdef USE_VEHICLES
+	STAT_VEHICLE,
+#endif
+#ifdef USE_ADVANCED_CLASS
+	STAT_PLAYERCLASS,
+#endif
+	STAT_NUM_STATS
 } statIndex_t;
 
 
@@ -227,36 +545,49 @@ typedef enum {
 
 
 // entityState_t->eFlags
-#define	EF_DEAD				0x00000001		// don't draw a foe marker over players with EF_DEAD
-#ifdef MISSIONPACK
-#define EF_TICKING			0x00000002		// used to make players play the prox mine ticking sound
+#define	EF_DEAD							0x00000001		// don't draw a foe marker over players with EF_DEAD
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#define EF_TICKING					0x00000002		// used to make players play the prox mine ticking sound
 #endif
-#define	EF_TELEPORT_BIT		0x00000004		// toggled every time the origin abruptly changes
+#define	EF_TELEPORT_BIT			0x00000004		// toggled every time the origin abruptly changes
 #define	EF_AWARD_EXCELLENT	0x00000008		// draw an excellent sprite
-#define EF_PLAYER_EVENT		0x00000010
-#define	EF_BOUNCE			0x00000010		// for missiles
-#define	EF_BOUNCE_HALF		0x00000020		// for missiles
-#define	EF_AWARD_GAUNTLET	0x00000040		// draw a gauntlet sprite
-#define	EF_NODRAW			0x00000080		// may have an event, but no model (unspawned items)
-#define	EF_FIRING			0x00000100		// for lightning gun
-#ifdef MISSIONPACK
-#define	EF_KAMIKAZE			0x00000200
+#define EF_PLAYER_EVENT			0x00000010
+#define	EF_BOUNCE						0x00000010		// for missiles
+#define	EF_BOUNCE_HALF			0x00000020		// for missiles
+#define	EF_AWARD_GAUNTLET		0x00000040		// draw a gauntlet sprite
+#define	EF_NODRAW						0x00000080		// may have an event, but no model (unspawned items)
+#define	EF_FIRING						0x00000100		// for lightning gun
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#define	EF_KAMIKAZE					0x00000200
 #endif
-#define	EF_MOVER_STOP		0x00000400		// will push otherwise
-#define EF_AWARD_CAP		0x00000800		// draw the capture sprite
-#define	EF_TALK				0x00001000		// draw a talk balloon
-#define	EF_CONNECTION		0x00002000		// draw a connection trouble sprite
-#define	EF_VOTED			0x00004000		// already cast a vote
+#define	EF_MOVER_STOP				0x00000400		// will push otherwise
+#define EF_AWARD_CAP				0x00000800		// draw the capture sprite
+#define	EF_TALK							0x00001000		// draw a talk balloon
+#define	EF_CONNECTION				0x00002000		// draw a connection trouble sprite
+#define	EF_VOTED						0x00004000		// already cast a vote
 #define	EF_AWARD_IMPRESSIVE	0x00008000		// draw an impressive sprite
-#define	EF_AWARD_DEFEND		0x00010000		// draw a defend sprite
-#define	EF_AWARD_ASSIST		0x00020000		// draw a assist sprite
-#define EF_AWARD_DENIED		0x00040000		// denied
-#define EF_TEAMVOTED		0x00080000		// already cast a team vote
+#define	EF_AWARD_DEFEND			0x00010000		// draw a defend sprite
+#define	EF_AWARD_ASSIST			0x00020000		// draw a assist sprite
+#define EF_AWARD_DENIED			0x00040000		// denied
+#define EF_TEAMVOTED				0x00080000		// already cast a team vote
+
+#ifdef USE_VEHICLES
+#define EF_REVERSE      		0x00100000
+#define EF_BRAKE        		0x00200000
+#endif
+
+#define EF_NOPICKUP      		0x00400000
+
+#define EF_TIMER        		0x00000082		// 
 
 #define EF_PERSISTANT ( EF_CONNECTION | EF_VOTED | EF_TEAMVOTED )
 #define EF_AWARDS ( EF_AWARD_IMPRESSIVE | EF_AWARD_EXCELLENT | EF_AWARD_GAUNTLET | EF_AWARD_ASSIST | EF_AWARD_DEFEND | EF_AWARD_CAP )
 
 #define EF_NOPREDICT ( EF_AWARDS | EF_PERSISTANT | EF_TALK )
+
+
+#ifndef USE_ADVANCED_ITEMS
+
 
 // NOTE: may not have more than 16
 typedef enum {
@@ -273,15 +604,34 @@ typedef enum {
 	PW_BLUEFLAG,
 	PW_NEUTRALFLAG,
 
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	PW_GOLDFLAG,
+	PW_GREENFLAG,
+#endif
+
+#ifdef MISSIONPACK
 	PW_SCOUT,
 	PW_GUARD,
 	PW_DOUBLER,
 	PW_AMMOREGEN,
 	PW_INVULNERABILITY,
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  PW_FROZEN,
+#endif
+
+#ifdef USE_WEAPON_SPREAD
+  PW_SPREAD,  //Hal9000 spreadfire
+#endif
 
 	PW_NUM_POWERUPS
 
 } powerup_t;
+
+#endif
+
+#ifndef USE_ADVANCED_ITEMS
 
 typedef enum {
 	HI_NONE,
@@ -295,6 +645,67 @@ typedef enum {
 	HI_NUM_HOLDABLE
 } holdable_t;
 
+#endif
+
+#ifdef USE_ADVANCED_WEAPONS
+
+typedef enum {
+	WP_NONE,
+	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
+
+	WP_GAUNTLET = 1,
+	WP_MACHINEGUN = 2,
+	WP_SHOTGUN = 3,
+	WP_GRENADE_LAUNCHER = 4,
+	WP_ROCKET_LAUNCHER = 5,
+	WP_LIGHTNING = 6,
+	WP_RAILGUN = 7,
+	WP_PLASMAGUN = 8,
+
+	WP_CROWBAR = 9,
+
+	WP_MOD_CLASSES = 10,
+
+#ifdef USE_PORTALS
+	WP_PORTAL_GUN = 10,
+#endif
+	WP_CHAINSAW = 11,
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+	WP_CHAINGUN = 12,
+	WP_NAILGUN = 13,
+	WP_PROX_LAUNCHER = 14,
+#endif
+	WP_HOMING_ROCKET = 15,
+	WP_THORS_HAMMER = 16,
+#ifdef USE_FLAME_THROWER
+	WP_FLAME_THROWER = 17,
+#endif
+	WP_BFG = 18,
+#ifdef USE_GRAPPLE
+	WP_GRAPPLING_HOOK = 19,
+#endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	WP_GAUNTLET2 = 21,
+	WP_MACHINEGUN2 = 22,
+	WP_SHOTGUN2 = 23,
+	WP_GRENADE_LAUNCHER2 = 24,
+	WP_ROCKET_LAUNCHER2 = 25,
+	WP_LIGHTNING2 = 26,
+	WP_RAILGUN2 = 27,
+	WP_PLASMAGUN2 = 28,
+	WP_BFG2 = 29,
+#endif
+
+	WP_NUM_WEAPONS = 30,
+	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
+	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
+	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools
+} weapon_t;
+
+#define WP_MAX_CLASSES (1 << (MAX_WEAPONS - WP_MAX_WEAPONS - 1))
+
+#else
 
 typedef enum {
 	WP_NONE,
@@ -309,10 +720,16 @@ typedef enum {
 	WP_PLASMAGUN,
 	WP_BFG,
 	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 	WP_NAILGUN,
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
+#endif
+#ifdef USE_FLAME_THROWER
+	WP_FLAME_THROWER,
+#endif
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
+	WP_HOMING_ROCKET,
 #endif
 
 	WP_NUM_WEAPONS,
@@ -320,6 +737,7 @@ typedef enum {
 	WP_MAX_WEAPONS = 16
 } weapon_t;
 
+#endif
 
 // reward sounds (stored in ps->persistant[PERS_PLAYEREVENTS])
 #define	PLAYEREVENT_DENIEDREWARD		0x0001
@@ -445,8 +863,49 @@ typedef enum {
 	EV_TAUNT_GETFLAG,
 	EV_TAUNT_GUARDBASE,
 	EV_TAUNT_PATROL,
-	EV_MAX
+	
+#ifdef USE_WEAPON_ORDER
+  EV_ITEM_PICKUP2,			// had items
+#endif
 
+#ifdef USE_SINGLEPLAYER // entity
+	EV_PLAYERSTOP,
+	EV_EARTHQUAKE,
+	EV_USE,
+#endif
+
+#ifdef USE_HEADSHOTS
+  EV_GIB_PLAYER_HEADSHOT,
+  EV_BODY_NOHEAD,
+#endif
+
+#ifdef USE_LV_DISCHARGE
+  EV_LV_DISCHARGE,
+#endif
+
+#ifdef USE_BIRDS_EYE
+	EV_CURSORSTART,
+#endif
+
+#ifdef USE_DAMAGE_PLUMS
+  EV_DAMAGEPLUM,			// damage plum
+#endif
+
+#ifdef USE_RPG_STATS
+	EV_HEALTHPLUM,
+#endif
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  EV_FROZEN,
+  EV_UNFROZEN,
+#endif
+
+#ifdef USE_ALT_FIRE
+  EV_ALTFIRE_WEAPON,
+  EV_ALTFIRE_BOTH,
+#endif
+
+	EV_MAX,
 } entity_event_t;
 
 
@@ -464,6 +923,18 @@ typedef enum {
 	GTS_REDTEAM_TOOK_LEAD,
 	GTS_BLUETEAM_TOOK_LEAD,
 	GTS_TEAMS_ARE_TIED,
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	GTS_GOLD_CAPTURE,
+	GTS_GREEN_CAPTURE,
+	GTS_GOLD_RETURN,
+	GTS_GREEN_RETURN,
+	GTS_GOLD_TAKEN,
+	GTS_GREEN_TAKEN,
+	GTS_GOLDTEAM_SCORED,
+	GTS_GREENTEAM_SCORED,
+	GTS_GOLDTEAM_TOOK_LEAD,
+	GTS_GREENTEAM_TOOK_LEAD,
+#endif
 	GTS_KAMIKAZE
 } global_team_sound_t;
 
@@ -519,6 +990,11 @@ typedef enum {
 	FLAG_STAND,
 	FLAG_STAND2RUN,
 
+	TORSO_ATTACK3,
+	TORSO_ATTACK4,
+	TORSO_ATTACKCR1,
+	TORSO_ATTACKCR2,
+
 	MAX_TOTALANIMATIONS
 } animNumber_t;
 
@@ -543,10 +1019,17 @@ typedef enum {
 	TEAM_FREE,
 	TEAM_RED,
 	TEAM_BLUE,
+
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	TEAM_GOLD,
+	TEAM_GREEN,
+#endif
+
 	TEAM_SPECTATOR,
 
 	TEAM_NUM_TEAMS
 } team_t;
+
 
 typedef enum {
 	TAG_NONE = 0,
@@ -570,6 +1053,26 @@ typedef enum {
 	TEAMTASK_ESCORT,
 	TEAMTASK_CAMP
 } teamtask_t;
+
+#ifdef USE_LOCAL_DMG
+#define LOCATION_NONE		0x00000000
+
+// Height layers
+#define LOCATION_HEAD		0x00000001 // [F,B,L,R] Top of head
+#define LOCATION_FACE		0x00000002 // [F] Face [B,L,R] Head
+#define LOCATION_SHOULDER	0x00000004 // [L,R] Shoulder [F] Throat, [B] Neck
+#define LOCATION_CHEST		0x00000008 // [F] Chest [B] Back [L,R] Arm
+#define LOCATION_STOMACH	0x00000010 // [L,R] Sides [F] Stomach [B] Lower Back
+#define LOCATION_GROIN		0x00000020 // [F] Groin [B] Butt [L,R] Hip
+#define LOCATION_LEG		0x00000040 // [F,B,L,R] Legs
+#define LOCATION_FOOT		0x00000080 // [F,B,L,R] Bottom of Feet
+
+// Relative direction strike came from
+#define LOCATION_LEFT		0x00000100
+#define LOCATION_RIGHT		0x00000200
+#define LOCATION_FRONT		0x00000400
+#define LOCATION_BACK		0x00000800
+#endif
 
 // means of death
 typedef enum {
@@ -595,15 +1098,36 @@ typedef enum {
 	MOD_FALLING,
 	MOD_SUICIDE,
 	MOD_TARGET_LASER,
+#ifdef USE_MODES_DEATH
+	MOD_SPECTATE,
+  MOD_VOID,
+  MOD_RING_OUT,
+  MOD_FROM_GRAVE,
+#endif
 	MOD_TRIGGER_HURT,
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	MOD_NAIL,
 	MOD_CHAINGUN,
 	MOD_PROXIMITY_MINE,
 	MOD_KAMIKAZE,
 	MOD_JUICED,
 #endif
-	MOD_GRAPPLE
+#ifdef USE_FLAME_THROWER
+  MOD_FLAME_THROWER,
+#endif
+#ifdef USE_LV_DISCHARGE
+  MOD_LV_DISCHARGE,
+#endif
+#ifdef USE_HEADSHOTS
+  MOD_HEADSHOT,
+#endif
+	MOD_GRAPPLE,
+#ifdef USE_VEHICLES
+	MOD_HIGH_FORCES,
+	MOD_BO_SHOCKS,
+	MOD_WORLD_COLLISION,
+#endif
+	MOD_MAX
 } meansOfDeath_t;
 
 
@@ -641,6 +1165,7 @@ typedef struct gitem_s {
 
 	char		const *precaches;		// string of all models and images this item will use
 	char		const *sounds;		// string of all sounds this item will use
+	char		*skinNames[MAX_ITEM_MODELS];
 } gitem_t;
 
 // included in both the game dll and the client
@@ -649,12 +1174,28 @@ extern	int		bg_numItems;
 
 gitem_t	*BG_FindItem( const char *pickupName );
 gitem_t	*BG_FindItemForWeapon( weapon_t weapon );
+gitem_t	*BG_FindAmmoForWeapon( weapon_t weapon );
 gitem_t	*BG_FindItemForPowerup( powerup_t pw );
+#ifdef USE_ADVANCED_CLASS
+pclass_t BG_PlayerClassFromModel(const char *model);
+#endif
+#ifdef USE_RUNES
+gitem_t	*BG_FindItemForRune( int r );
+#endif
+#ifndef USE_ADVANCED_ITEMS
 gitem_t	*BG_FindItemForHoldable( holdable_t pw );
+#endif
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory, int playerClass );
+#else
+qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory );
+#endif
+#else
 qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps );
-
+#endif
 
 // g_dmflags->integer flags
 #define	DF_NO_FALLING			8
@@ -688,6 +1229,12 @@ typedef enum {
 	ET_INVISIBLE,
 	ET_GRAPPLE,				// grapple hooked on wall
 	ET_TEAM,
+#ifdef USE_LASER_SIGHT
+  ET_LASER,         // lasersight entity type
+#endif
+#ifdef USE_BIRDS_EYE
+	ET_CURSOR,
+#endif
 
 	ET_EVENTS				// any of the EV_* events can be added freestanding
 							// by setting eType to ET_EVENTS + eventNum
@@ -705,7 +1252,15 @@ void	BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 
 void	BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm, playerState_t *ps, int entityNum );
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, const int playerClass );
+#else
+void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory );
+#endif
+#else
 void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
+#endif
 
 void	BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap );
 void	BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );
@@ -743,6 +1298,9 @@ qboolean	BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 #define KAMI_BOOMSPHERE_MAXRADIUS		720
 #define KAMI_SHOCKWAVE2_MAXRADIUS		704
 
+
+#define MAX_MAP_SIZE 65536
+
 // custom functions
 #ifdef BUILD_GAME_STATIC
 intptr_t CG_Call( int command, int arg0, int arg1, int arg2 );
@@ -769,3 +1327,15 @@ qboolean replace1( const char match, const char replace, char *str );
 qboolean  BigEndian( void );
 
 //#endif // __BG_PUBLIC_H
+#define MAX_MAP_SIZE 65536
+
+// Tracemap
+#ifdef CGAME
+void CG_GenerateTracemap( void );
+#endif // CGAMEDLL
+qboolean BG_LoadTraceMap( char *rawmapname, vec2_t world_mins, vec2_t world_maxs );
+float BG_GetSkyHeightAtPoint( vec3_t pos );
+float BG_GetSkyGroundHeightAtPoint( vec3_t pos );
+float BG_GetGroundHeightAtPoint( vec3_t pos );
+int BG_GetTracemapGroundFloor( void );
+int BG_GetTracemapGroundCeil( void );

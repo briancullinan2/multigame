@@ -12,6 +12,14 @@ CREDITS
 #include "ui_local.h"
 
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#endif
+
 typedef struct {
 	menuframework_s	menu;
 } creditsmenu_t;

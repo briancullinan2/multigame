@@ -7,6 +7,24 @@
 **********************************************************************/
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_DrawBannerString UI_CLASSIC_DrawBannerString
+#define UI_ProportionalSizeScale UI_CLASSIC_ProportionalSizeScale
+#define UI_ProportionalStringWidth UI_CLASSIC_ProportionalStringWidth
+#define UI_DrawHandlePic UI_CLASSIC_DrawHandlePic
+#define UI_FillRect UI_CLASSIC_FillRect
+#define UI_SetColor UI_CLASSIC_SetColor
+#define UI_CursorInRect UI_CLASSIC_CursorInRect
+#define UI_DrawRect UI_CLASSIC_DrawRect
+#endif
+
+
 sfxHandle_t menu_in_sound;
 sfxHandle_t menu_move_sound;
 sfxHandle_t menu_out_sound;

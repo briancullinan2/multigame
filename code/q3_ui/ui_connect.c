@@ -2,6 +2,18 @@
 //
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ProportionalStringWidth UI_CLASSIC_ProportionalStringWidth
+#define UI_ProportionalSizeScale UI_CLASSIC_ProportionalSizeScale
+#define UI_SetColor UI_CLASSIC_SetColor
+#endif
+
+
 /*
 ===============================================================================
 
@@ -168,7 +180,12 @@ This will also be overlaid on the cgame info screen during loading
 to prevent it from blinking away too rapidly on local or lan games.
 ========================
 */
-void UI_DrawConnectScreen( qboolean overlay ) {
+#ifdef USE_CLASSIC_MENU
+void UI_CLASSIC_DrawConnectScreen( qboolean overlay )
+#else 
+void UI_DrawConnectScreen( qboolean overlay )
+#endif
+{
 	char			*s;
 	uiClientState_t	cstate;
 	char			info[MAX_INFO_VALUE];

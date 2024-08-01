@@ -11,6 +11,20 @@ START SERVER MENU *****
 
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_GetBotInfoByName UI_CLASSIC_GetBotInfoByName
+#define UI_GetBotInfoByNumber UI_CLASSIC_GetBotInfoByNumber
+#define UI_DrawHandlePic UI_CLASSIC_DrawHandlePic
+#define UI_FillRect UI_CLASSIC_FillRect
+#define UI_GetNumBots UI_CLASSIC_GetNumBots
+#endif
+
 
 #define GAMESERVER_BACK0		"menu/art/back_0"
 #define GAMESERVER_BACK1		"menu/art/back_1"

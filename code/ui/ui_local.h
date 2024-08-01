@@ -725,6 +725,9 @@ typedef struct {
 	int effectsColor;
 
 	qboolean inGameLoad;
+#ifdef USE_CLASSIC_MENU
+	qboolean activeMenu;
+#endif
 	int startTime;
 
 }	uiInfo_t;

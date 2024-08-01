@@ -1,5 +1,6 @@
 cg_main
 ../../../../code/cgame/cg_syscalls
+cg_atmospheric
 cg_consolecmds
 cg_draw
 cg_drawtools
@@ -12,14 +13,20 @@ cg_marks
 cg_players
 cg_playerstate
 cg_predict
+cg_polybus
+cg_portal
 cg_scoreboard
 cg_servercmds
 cg_snapshot
+cg_timer
 cg_view
 cg_weapons
+cg_weapons2
+cg_weaporder
 bg_slidemove
 bg_pmove
 bg_lib
 bg_misc
+bg_physics
 q_math
 q_shared

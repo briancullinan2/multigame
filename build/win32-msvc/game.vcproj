@@ -392,6 +392,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_physics.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_slidemove.c"
 				>
 			</File>
@@ -436,11 +440,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\g_portal.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\g_missile.c"
 				>
 			</File>
 			<File
 				RelativePath="..\..\code\game\g_mover.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\g_portal.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\g_powerup.c"
 				>
 			</File>
 			<File
@@ -485,6 +501,10 @@
 			</File>
 			<File
 				RelativePath="..\..\code\game\g_weapon.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\g_weapon2.c"
 				>
 			</File>
 			<File

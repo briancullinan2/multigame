@@ -185,6 +185,17 @@ static void CG_CalcVrect (void) {
 	cg.refdef.height = cgs.glconfig.vidHeight*size/100;
 	cg.refdef.height &= ~1;
 
+#ifdef USE_MULTIWORLD
+	if(cg_splitX.integer < 1) {
+		cg_splitX.integer = 1;
+	}
+	if(cg_splitY.integer < 1) {
+		cg_splitY.integer = 1;
+	}
+	cg.refdef.width /= cg_splitX.integer;
+	cg.refdef.height /= cg_splitY.integer;
+#endif
+
 	cg.refdef.x = (cgs.glconfig.vidWidth - cg.refdef.width)/2;
 	cg.refdef.y = (cgs.glconfig.vidHeight - cg.refdef.height)/2;
 }
@@ -210,7 +221,7 @@ static void CG_OffsetThirdPersonView( void ) {
 	float		focusDist;
 	float		forwardScale, sideScale;
 
-	cg.refdef.vieworg[2] += cg.predictedPlayerState.viewheight;
+	cg.refdef.vieworg[2] += cg.predictedPlayerState.viewheight * cg_playerScale.value;
 
 	VectorCopy( cg.refdefViewAngles, focusAngles );
 
@@ -229,7 +240,7 @@ static void CG_OffsetThirdPersonView( void ) {
 
 	VectorCopy( cg.refdef.vieworg, view );
 
-	view[2] += 8;
+	view[2] += 10 * cg_playerScale.value;
 
 	cg.refdefViewAngles[PITCH] *= 0.5;
 
@@ -258,6 +269,20 @@ static void CG_OffsetThirdPersonView( void ) {
 	}
 
 
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+			|| cg_birdsEye.integer) {
+		// Zygote - Out 300 units to the right
+		view[2] += 300;
+	} else
+	if(cg.predictedPlayerState.pm_type == PM_PLATFORM
+			|| cg_sideview.integer) {
+		// Zygote - Out 300 units to the right
+		view[1] += 300;
+	}
+#endif
+
 	VectorCopy( view, cg.refdef.vieworg );
 
 	// select pitch to look at focus point from vieword
@@ -266,8 +291,26 @@ static void CG_OffsetThirdPersonView( void ) {
 	if ( focusDist < 1 ) {
 		focusDist = 1;	// should never happen
 	}
+
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+			|| cg_birdsEye.integer) {
+		cg.refdefViewAngles[PITCH] = 89.9;
+		cg.refdefViewAngles[YAW] = 0;
+	} else 
+	if(cg.predictedPlayerState.pm_type == PM_PLATFORM
+			|| cg_sideview.integer) {
+		// Zygote - These values are locked in place
+		cg.refdefViewAngles[PITCH] = 0;		// locked at level view of players head
+		cg.refdefViewAngles[YAW] = 270.9;		// looking in!
+	} else {
+#endif
 	cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2( focusPoint[2], focusDist );
 	cg.refdefViewAngles[YAW] -= cg_thirdPersonAngle.value;
+#ifdef USE_BIRDS_EYE
+	}
+#endif
 }
 
 
@@ -315,6 +358,22 @@ static void CG_OffsetFirstPersonView( void ) {
 		origin[2] += cg.predictedPlayerState.viewheight;
 		return;
 	}
+
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE 
+		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR || cg_birdsEye.integer) {
+		angles[PITCH] = 0;
+		cg.refdefViewAngles[PITCH] = 1;
+	}
+#endif
+
+#ifdef USE_AIW
+	if(cg.predictedPlayerState.pm_type == PM_UPSIDEDOWN || cg_upsideDown.integer) {
+		angles[ROLL] = 180;
+		cg.refdefViewAngles[ROLL] = 180;
+	}
+#endif
+
 
 	// add angles based on weapon kick
 	VectorAdd (angles, cg.kick_angles, angles);
@@ -407,6 +466,14 @@ static void CG_OffsetFirstPersonView( void ) {
 
 	VectorAdd (origin, cg.kick_origin, origin);
 
+#ifdef USE_AIW
+	//if(cg_reverseControls.integer) {
+	//	cg.refdef.vieworg[YAW] -= cg.refdef.vieworg[YAW];
+	//	cg.refdef.vieworg[PITCH] -= cg.refdef.vieworg[PITCH];
+	//}
+#endif
+
+
 	// pivot the eye based on a neck length
 #if 0
 	{
@@ -424,21 +491,38 @@ static void CG_OffsetFirstPersonView( void ) {
 //======================================================================
 
 void CG_ZoomDown_f( void ) { 
-	if ( cg.zoomed ) {
-		return;
-	}
-	cg.zoomed = qtrue;
-	cg.zoomTime = cg.time;
+#ifdef USE_ADVANCED_ZOOM
+  if ( cg.zoomed && !cg.zooming ) {
+    cg.zoomed = qfalse;
+    cg.zoomTime = cg.time;
+  } else
+#endif
+  {
+  	if ( cg.zoomed ) {
+  		return;
+  	}
+  	cg.zoomed = qtrue;
+#ifdef USE_ADVANCED_ZOOM
+    cg.zooming = qtrue;
+#endif
+  	cg.zoomTime = cg.time;
+  }
 }
 
-void CG_ZoomUp_f( void ) { 
+void CG_ZoomUp_f( void ) {
+#ifdef USE_ADVANCED_ZOOM
+  if(cg.zoomed) {
+    cg.zoomTime = 0;
+    cg.zooming = qfalse;
+  }
+#else
 	if ( !cg.zoomed ) {
 		return;
 	}
 	cg.zoomed = qfalse;
 	cg.zoomTime = cg.time;
+#endif
 }
-
 
 /*
 ====================
@@ -459,6 +543,15 @@ static int CG_CalcFov( void ) {
 	float	zoomFov;
 	float	f;
 	int		inwater;
+
+#ifdef USE_BIRDS_EYE
+	if(cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+		|| cg.predictedPlayerState.pm_type == PM_PLATFORM
+		|| cg_birdsEye.integer) {
+		cgs.fov = cg_fov.value + 20;
+	} else
+#endif
 
 	cgs.fov = cg_fov.value;
 	if ( cgs.fov < 1.0 )
@@ -481,7 +574,32 @@ static int CG_CalcFov( void ) {
 
 		// account for zooms
 		zoomFov = cgs.zoomFov;
-
+#ifdef USE_ADVANCED_ZOOM
+    // TODO: use prediction for zooming and let the server know when it happens
+    if ( cg.zoomed ) {
+    	if (cg.zoomTime != 0)
+    		f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
+    	else
+    		f=-1;
+    	if ( f > 1.0 ) {
+    		fov_x = zoomFov;
+    		cg.setZoomFov = fov_x;
+    	} else {
+    		if(f!=-1){
+    			fov_x = fov_x + f * ( zoomFov - fov_x );
+    			cg.setZoomFov = fov_x;
+    		}
+    		else
+    			fov_x = cg.setZoomFov;
+    	}
+    } else {
+    	f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME_OUT;
+    	if ( f > 1.0 ) {
+    	} else {
+    		fov_x = cg.setZoomFov + f * ( fov_x - cg.setZoomFov );
+    	}
+    }
+#else
 		if ( cg.zoomed ) {
 			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
 			if ( f > 1.0 ) {
@@ -497,6 +615,7 @@ static int CG_CalcFov( void ) {
 				fov_x = zoomFov + f * ( fov_x - zoomFov );
 			}
 		}
+#endif
 	}
 
 	if ( cg_fovAdjust.integer ) {
@@ -562,9 +681,9 @@ static void CG_DamageBlendBlob( void ) {
 		return;
 	}
 
-	//if (cg.cameraMode) {
-	//	return;
-	//}
+	if (cg.cameraMode) {
+		return;
+	}
 
 	// ragePro systems can't fade blends, so don't obscure the screen
 	if ( cgs.glconfig.hardwareType == GLHW_RAGEPRO ) {
@@ -616,20 +735,35 @@ static int CG_CalcViewValues( void ) {
 	CG_CalcVrect();
 
 	ps = &cg.predictedPlayerState;
-/*
+
 	if (cg.cameraMode) {
 		vec3_t origin, angles;
-		if (trap_getCameraInfo(cg.time, &origin, &angles)) {
+		float fov = 90;
+		if (trap_getCameraInfo(cg.currentCamera, cg.time - cg.pausedTime, &origin, &angles, &fov)) {
 			VectorCopy(origin, cg.refdef.vieworg);
 			angles[ROLL] = 0;
+			angles[PITCH] = -angles[PITCH];
 			VectorCopy(angles, cg.refdefViewAngles);
 			AnglesToAxis( cg.refdefViewAngles, cg.refdef.viewaxis );
 			return CG_CalcFov();
 		} else {
 			cg.cameraMode = qfalse;
+			cg.pauseBreak = 0;
+			CG_Fade(255, 0, 0);				// go black
+			CG_Fade(0, cg.time + 200, 1500);	// then fadeup
+			// 
+			// letterbox look
+			//
+			black_bars = 0;
+#ifdef USE_CLASSIC_HUD
+			if(cg.editPlayerMode) {
+				cg.editPlayerMode = qfalse;
+				Menus_CloseByName("player_menu"); // because stupid hud is using Menus_PaintAll
+			}
+#endif
 		}
 	}
-*/
+
 	// intermission view
 	if ( ps->pm_type == PM_INTERMISSION ) {
 		VectorCopy( ps->origin, cg.refdef.vieworg );
@@ -667,7 +801,13 @@ static int CG_CalcViewValues( void ) {
 		}
 	}
 
-	if ( cg.renderingThirdPerson ) {
+	if ( cg.renderingThirdPerson
+		|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+		|| cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+		|| cg_birdsEye.integer
+		|| cg.predictedPlayerState.pm_type == PM_PLATFORM 
+		|| cg_sideview.integer
+	) {
 		// back away from character
 		CG_OffsetThirdPersonView();
 	} else {
@@ -756,6 +896,171 @@ static void CG_PlayBufferedSounds( void ) {
 }
 
 //=========================================================================
+void CG_AddPolyToPool( qhandle_t shader, const polyVert_t *verts );
+
+#define TRAIL_SPACING 4
+#define TRAIL_LENGTH 64
+#define TRAIL_WIDTH 12
+#define TRAIL_SPEED 20
+
+static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float length, qhandle_t shader ) {
+	// Draw a raindrop
+
+	vec3_t		forward, right;
+	polyVert_t	verts[3];
+	vec2_t		line;
+	float		len, /*frac,*/ dist;
+	vec3_t		start, finish;
+	float		groundHeight;
+//	int			msec = trap_Milliseconds();
+	float height = TRAIL_WIDTH; // + random() * 3;
+	float weight = height * 0.5f;
+	vec3_t colour;
+	colour[0] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
+	colour[1] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
+	colour[2] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
+
+	if( CG_CullPoint( pos ) ) {
+		return;
+	}
+
+	VectorCopy( pos, start );
+
+	dist = DistanceSquared( pos, cg.refdef.vieworg );
+
+	// Make sure it doesn't clip through surfaces
+	len = height;
+
+	if( len <= 0 ) {
+		return;
+	}
+
+	if(dist < Square( 32.f )) {
+		return;
+	}
+
+	// fade nearby rain particles
+	if ( dist < Square( 128.f ) ) {
+		dist = .25f + .75f * ( dist / Square( 128.f ) );
+	} else {
+		dist = 1.0f;
+	}
+
+	//AngleVectors(cg.refdefViewAngles, forward, NULL, NULL);
+	VectorClear(forward);
+	forward[1] = 1.0f;
+	//VectorCopy( deltaNormalized, forward );
+	VectorMA( start, -len, forward, finish );
+
+	line[0] = DotProduct( forward, cg.refdef.viewaxis[1] );
+	line[1] = DotProduct( forward, cg.refdef.viewaxis[2] );
+
+	VectorScale( cg.refdef.viewaxis[1], line[1], right );
+	VectorMA( right, -line[0], cg.refdef.viewaxis[2], right );
+	VectorNormalize( right );
+	
+	dist = length; //length / 256.0f;
+
+	//CG_Printf("value: %f\n", dist);
+
+	VectorCopy( finish, verts[0].xyz );	
+	verts[0].st[0] = 0.5f;
+	verts[0].st[1] = 0;
+	verts[0].modulate[0] = colour[0];
+	verts[0].modulate[1] = colour[1];
+	verts[0].modulate[2] = colour[2];
+	verts[0].modulate[3] = 100 * dist;
+
+	VectorMA( start, -weight, right, verts[1].xyz );
+	verts[1].st[0] = 0;
+	verts[1].st[1] = 1;
+	verts[1].modulate[0] = colour[0];
+	verts[1].modulate[1] = colour[1];
+	verts[2].modulate[2] = colour[2];
+	verts[1].modulate[3] = 200 * dist;
+
+	VectorMA( start, weight, right, verts[2].xyz );
+	verts[2].st[0] = 1;
+	verts[2].st[1] = 1;
+	verts[2].modulate[0] = colour[0];
+	verts[2].modulate[1] = colour[1];
+	verts[2].modulate[2] = colour[2];
+	verts[2].modulate[3] = 200 * dist;
+
+	CG_AddPolyToPool( shader, verts );
+
+}
+
+static int trailTime[MAX_CLIENTS];
+static int trailLength[MAX_CLIENTS];
+static int trailHead[MAX_CLIENTS];
+static vec3_t trailPos[MAX_CLIENTS][TRAIL_LENGTH];
+
+static void CG_AddTrailEffects( void ) {
+	int i, j;
+	for(j = 0; j < MAX_CLIENTS; j++) {
+		vec3_t prev;
+		VectorCopy(trailPos[j][trailHead[j]], prev);
+
+		if(cg_entities[j].currentState.eType != ET_PLAYER) {
+			continue;
+		}
+
+		for ( i = 0 ; i < trailLength[j] ; i++ ) {
+			vec3_t temp;
+			float length;
+			int trailI = trailHead[j] - i;
+			if(trailI < 0) {
+				trailI += TRAIL_LENGTH;
+			}
+			VectorSubtract(trailPos[j][trailI], prev, temp);
+			length = VectorNormalize(temp);
+			//CG_Printf("pos: %f %f %f\n", trailPos[i][0], trailPos[i][1], trailPos[i][2]);
+			CG_TrailParticleRender(trailPos[j][trailI], temp, 1.0f - (1.0f * i) / trailLength[j], cgs.media.dustPuffShader);
+			VectorCopy(trailPos[j][i], prev);
+		}
+	}
+	
+}
+
+
+void CG_RecordPosition(centity_t *cent, qboolean moving) {
+	int j;
+	vec3_t temp;
+	float length;
+	
+	if(cent->currentState.clientNum > MAX_CLIENTS) {
+		return;
+	}
+
+	j = cent->currentState.clientNum;
+	
+	VectorSubtract(cent->lerpOrigin, trailPos[j][trailHead[j]], temp);
+	length = VectorNormalize(temp);
+
+	// reduce the trail when the player stops moving so fast
+	if(cg.time - trailTime[j] > TRAIL_SPEED) {
+		if(trailLength[j] > 0) {
+			trailLength[j]--;
+		}
+		trailTime[j] = cg.time;
+	}
+
+	if(abs(length) < TRAIL_SPACING) {
+		return;
+	}
+
+	if(trailLength[j] + 1 < TRAIL_LENGTH) {
+		trailLength[j]++;
+	}
+
+	// record position
+	trailHead[j]++;
+	if(trailHead[j] >= TRAIL_LENGTH) {
+		trailHead[j] = 0;
+	}
+	VectorCopy(cent->lerpOrigin, trailPos[j][trailHead[j]]);
+}
 
 
 /*
@@ -780,6 +1085,7 @@ static void CG_FirstFrame( void )
 		cgs.voteModified = qfalse;
 }
 
+void CG_SetupFrustum( void );
 
 /*
 =================
@@ -790,6 +1096,12 @@ Generates and draws a game scene and status information at the given time.
 */
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback ) {
 	int		inwater;
+
+	if (cg.cameraMode && cg.pauseBreak) {
+		if(cg.time > cg.pauseBreak) {
+			cg.pausedTime += (serverTime - cg.time);
+		}
+	}
 
 	cg.time = serverTime;
 	cg.demoPlayback = demoPlayback;
@@ -803,6 +1115,8 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		CG_DrawInformation();
 		return;
 	}
+
+	CG_PB_ClearPolyBuffers();
 
 	// any looped sounds will be respecified as entities
 	// are added to the render list
@@ -822,7 +1136,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	}
 
 	// let the client system know what our weapon and zoom settings are
-	trap_SetUserCmdValue( cg.weaponSelect, cg.zoomSensitivity );
+	trap_SetUserCmdValue( cg.weaponSelect % WP_MAX_WEAPONS, cg.zoomSensitivity );
 
 	if ( cg.clientFrame == 0 )
 		CG_FirstFrame();
@@ -831,7 +1145,14 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_PredictPlayerState();
 
 	// decide on third person view
-	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+	cg.renderingThirdPerson = cg_thirdPerson.integer 
+		|| cg_sideview.integer
+		|| cg_birdsEye.integer
+		|| cg.snap->ps.pm_type == PM_BIRDSEYE
+		|| cg.snap->ps.pm_type == PM_FOLLOWCURSOR
+		|| cg.snap->ps.pm_type == PM_PLATFORM
+		|| cg.snap->ps.pm_type == PM_THIRDPERSON
+		|| (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 
 	CG_TrackClientTeamChange();
 
@@ -845,6 +1166,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	// build cg.refdef
 	inwater = CG_CalcViewValues();
+	CG_SetupFrustum();
 
 	// first person blend blobs, done after AnglesToAxis
 	if ( !cg.renderingThirdPerson ) {
@@ -857,6 +1179,10 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		CG_AddMarks();
 		CG_AddParticles ();
 		CG_AddLocalEntities();
+		CG_AddAtmosphericEffects();
+		if(cg_contrails.integer) {
+			CG_AddTrailEffects();
+		}
 	}
 	CG_AddViewWeapon( &cg.predictedPlayerState );
 
@@ -915,4 +1241,86 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	if ( cg_stats.integer ) {
 		CG_Printf( "cg.clientFrame:%i\n", cg.clientFrame );
 	}
+}
+
+//=========================================================================
+
+/*
+**  Frustum code
+*/
+
+// some culling bits
+typedef struct plane_s {
+	vec3_t normal;
+	float dist;
+} plane_t;
+
+static plane_t frustum[4];
+
+//
+//	CG_SetupFrustum
+//
+void CG_SetupFrustum( void ) {
+	int i;
+	float xs, xc;
+	float ang;
+
+	ang = cg.refdef.fov_x / 180 * M_PI * 0.5f;
+	xs = sin( ang );
+	xc = cos( ang );
+
+	VectorScale( cg.refdef.viewaxis[0], xs, frustum[0].normal );
+	VectorMA( frustum[0].normal, xc, cg.refdef.viewaxis[1], frustum[0].normal );
+
+	VectorScale( cg.refdef.viewaxis[0], xs, frustum[1].normal );
+	VectorMA( frustum[1].normal, -xc, cg.refdef.viewaxis[1], frustum[1].normal );
+
+	ang = cg.refdef.fov_y / 180 * M_PI * 0.5f;
+	xs = sin( ang );
+	xc = cos( ang );
+
+	VectorScale( cg.refdef.viewaxis[0], xs, frustum[2].normal );
+	VectorMA( frustum[2].normal, xc, cg.refdef.viewaxis[2], frustum[2].normal );
+
+	VectorScale( cg.refdef.viewaxis[0], xs, frustum[3].normal );
+	VectorMA( frustum[3].normal, -xc, cg.refdef.viewaxis[2], frustum[3].normal );
+
+	for ( i = 0 ; i < 4 ; i++ ) {
+		frustum[i].dist = DotProduct( cg.refdef.vieworg, frustum[i].normal );
+	}
+}
+
+//
+//	CG_CullPoint - returns true if culled
+//
+qboolean CG_CullPoint( vec3_t pt ) {
+	int i;
+	plane_t *frust;
+
+	// check against frustum planes
+	for ( i = 0 ; i < 4 ; i++ ) {
+		frust = &frustum[i];
+
+		if ( ( DotProduct( pt, frust->normal ) - frust->dist ) < 0 ) {
+			return( qtrue );
+		}
+	}
+
+	return( qfalse );
+}
+
+qboolean CG_CullPointAndRadius( const vec3_t pt, vec_t radius ) {
+	int i;
+	plane_t *frust;
+
+	// check against frustum planes
+	for ( i = 0 ; i < 4 ; i++ ) {
+		frust = &frustum[i];
+
+		if ( ( DotProduct( pt, frust->normal ) - frust->dist ) < -radius ) {
+			return( qtrue );
+		}
+	}
+
+	return( qfalse );
 }

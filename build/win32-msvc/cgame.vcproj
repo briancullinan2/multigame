@@ -332,7 +332,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_physics.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\game\bg_tracemap.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_slidemove.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_atmospheric.c"
 				>
 			</File>
 			<File
@@ -388,6 +400,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\cgame\cg_polybus.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_portal.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\cgame\cg_scoreboard.c"
 				>
 			</File>
@@ -400,6 +420,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\cgame\cg_timer.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\cgame\cg_syscalls.c"
 				>
 			</File>
@@ -409,6 +433,14 @@
 			</File>
 			<File
 				RelativePath="..\..\code\cgame\cg_weapons.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_weapons2.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\code\cgame\cg_weaporder.c"
 				>
 			</File>
 			<File

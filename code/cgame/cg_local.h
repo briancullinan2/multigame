@@ -30,7 +30,12 @@
 #define	PAIN_TWITCH_TIME	200
 #define	WEAPON_SELECT_TIME	1400
 #define	ITEM_SCALEUP_TIME	1000
+#ifdef USE_ADVANCED_ZOOM
+#define	ZOOM_TIME			500
+#define	ZOOM_TIME_OUT	200
+#else
 #define	ZOOM_TIME			150
+#endif
 #define	ITEM_BLOB_TIME		200
 #define	MUZZLE_FLASH_TIME	20
 #define	SINK_TIME			1000		// time for fragments to sink into ground before going away
@@ -160,6 +165,9 @@ typedef struct {
 	float			barrelAngle;
 	int				barrelTime;
 	qboolean		barrelSpinning;
+#ifdef USE_HEADSHOTS
+  qboolean	noHead;
+#endif
 } playerEntity_t;
 
 //=================================================
@@ -201,6 +209,13 @@ typedef struct centity_s {
 	// exact interpolated position of entity on this frame
 	vec3_t			lerpOrigin;
 	vec3_t			lerpAngles;
+#ifdef USE_MULTIWORLD
+	int world;
+#endif
+
+#ifdef USE_RUNES
+  int       rune;
+#endif
 } centity_t;
 
 
@@ -230,7 +245,10 @@ typedef enum {
 	LE_FADE_RGB,
 	LE_SCALE_FADE,
 	LE_SCOREPLUM,
-#ifdef MISSIONPACK
+#ifdef USE_DAMAGE_PLUMS
+  LE_DAMAGEPLUM,
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	LE_KAMIKAZE,
 	LE_INVULIMPACT,
 	LE_INVULJUICED,
@@ -242,7 +260,10 @@ typedef enum {
 	LEF_PUFF_DONT_SCALE  = 0x0001,			// do not scale size over time
 	LEF_TUMBLE			 = 0x0002,			// tumble over time, used for ejecting shells
 	LEF_SOUND1			 = 0x0004,			// sound 1 for kamikaze
-	LEF_SOUND2			 = 0x0008			// sound 2 for kamikaze
+	LEF_SOUND2			 = 0x0008,			// sound 2 for kamikaze
+#ifdef USE_VEHICLES
+	LEF_SCALE_FADE_OUT = 0x0010,
+#endif
 } leFlag_t;
 
 typedef enum {
@@ -363,6 +384,9 @@ typedef struct {
 	qboolean		fixedtorso;		// true if torso never changes yaw
 
 	vec3_t			headOffset;		// move head in icon views
+#ifdef USE_ADVANCED_CLASS
+	vec3_t			povOffset;
+#endif
 	footstep_t		footsteps;
 	gender_t		gender;			// from model
 
@@ -386,6 +410,22 @@ typedef struct {
 	vec3_t			bodyColor;
 	vec3_t			legsColor;
 
+#ifdef USE_MULTIWORLD
+	int         worlds;
+#endif
+
+// TODO: store other client inventory here gotten from processesing STAT_HOLDABLE_UPDATE
+
+
+#ifdef USE_RPG_STATS
+// TODO: fix health status
+#endif
+
+#ifdef USE_ADVANCED_CLASS
+	qboolean notq3;
+	pclass_t playerClass;
+#endif
+
 } clientInfo_t;
 
 
@@ -393,6 +433,34 @@ typedef struct {
 // that contains media references necessary to present the
 // weapon and its effects
 typedef struct weaponInfo_s {
+	// moving data to front of struct so everything else remains empty and we can load from a prepopulated array of weaponInfo_s similar to bg_itemlist
+	weapon_t  giTag; // for matching up with items
+	char *readyFile;
+	char *firingFile;
+	int		loopFireSound;
+	char *flashSoundFile[4];
+	float			flashDlight;
+	vec3_t			flashDlightColor;
+	char *missileFile;
+	char *missileModelFile;
+	void			(*missileTrailFunc)( centity_t *, const struct weaponInfo_s *wi );
+	float			missileDlight;
+	vec3_t			missileDlightColor;
+	int				missileRenderfx;
+	void			(*ejectBrassFunc)( centity_t * );
+	float			trailRadius;
+	float			wiTrailTime;
+	char *handsFile;
+	char *weaponFile;
+	char *barrelFile;
+	char *extraShaderFile[4];
+	char *extraModelFile[4];
+	char *extraSoundFile[4];
+	int explosionRadius;
+	int light;
+	vec3_t	lightColor;
+
+
 	qboolean		registered;
 	gitem_t			*item;
 
@@ -403,8 +471,6 @@ typedef struct weaponInfo_s {
 
 	vec3_t			weaponMidpoint;		// so it will rotate centered instead of by tag
 
-	float			flashDlight;
-	vec3_t			flashDlightColor;
 	sfxHandle_t		flashSound[4];		// fast firing weapons randomly choose
 
 	qhandle_t		weaponIcon;
@@ -414,19 +480,14 @@ typedef struct weaponInfo_s {
 
 	qhandle_t		missileModel;
 	sfxHandle_t		missileSound;
-	void			(*missileTrailFunc)( centity_t *, const struct weaponInfo_s *wi );
-	float			missileDlight;
-	vec3_t			missileDlightColor;
-	int				missileRenderfx;
-
-	void			(*ejectBrassFunc)( centity_t * );
-
-	float			trailRadius;
-	float			wiTrailTime;
 
 	sfxHandle_t		readySound;
 	sfxHandle_t		firingSound;
-	qboolean		loopFireSound;
+
+	qhandle_t		extraShader[4];
+	qhandle_t		extraModel[4];
+	sfxHandle_t		extraSound[4];		// fast firing weapons randomly choose
+	
 } weaponInfo_t;
 
 
@@ -438,6 +499,13 @@ typedef struct {
 	qhandle_t		models[MAX_ITEM_MODELS];
 	qhandle_t		icon;
 	qhandle_t		icon_df;
+	qhandle_t		customSkin;
+	qhandle_t   customSkin2;
+#ifdef USE_RUNES
+  qhandle_t		altShader1;
+  qhandle_t		altShader2;
+  qhandle_t		altShader3;
+#endif
 } itemInfo_t;
 
 
@@ -452,6 +520,41 @@ typedef struct {
 	vec3_t positions[MAX_SKULLTRAIL];
 	int numpositions;
 } skulltrail_t;
+
+
+#ifdef USE_CLASSIC_HUD
+#define MAX_HEADS 64
+#define MAX_ALIASES 64
+#define MAX_TEAMS 64
+#define TEAM_MEMBERS 64
+
+typedef struct {
+  const char *name;
+	const char *imageName;
+  qhandle_t headImage;
+	const char *base;
+	qboolean active;
+	qboolean headModel;
+	//int reference;
+} characterInfo;
+
+typedef struct {
+	const char *name;
+	const char *ai;
+	const char *action;
+} aliasInfo;
+
+typedef struct {
+  const char *teamName;
+	const char *imageName;
+	const char *teamMembers[TEAM_MEMBERS];
+  qhandle_t teamIcon;
+  qhandle_t teamIcon_Metal;
+  qhandle_t teamIcon_Name;
+	int cinematic;
+} teamInfo;
+
+#endif
 
 
 #define MAX_REWARDSTACK		10
@@ -486,6 +589,15 @@ typedef struct {
 	snapshot_t	*snap;				// cg.snap->serverTime <= cg.time
 	snapshot_t	*nextSnap;			// cg.nextSnap->serverTime > cg.time, or NULL
 	snapshot_t	activeSnapshots[2];
+
+#ifdef USE_MULTIWORLD
+	// there are only one or two snapshot_t that are relevent at a time
+	int					snapshotNumWorlds[MAX_WORLDS];	// the number of snapshots the client system has received
+	//int				snapshotTimeWorlds[MAX_WORLDS];	// the time from latestSnapshotNum, so we don't need to read the snapshot yet
+	snapshot_t	snapshotWorlds[MAX_WORLDS];
+	qboolean    multiworld;
+#endif
+
 
 	float		frameInterpolation;	// (float)( cg.time - cg.frame->serverTime ) / (cg.nextFrame->serverTime - cg.frame->serverTime)
 
@@ -529,6 +641,18 @@ typedef struct {
 
 	// input state sent to server
 	int			weaponSelect;
+#ifdef USE_ADVANCED_WEAPONS
+	int			weaponClass;
+	int			weaponChange;
+	// MORE STATS for switching weapons, this is transfered to player state
+	//int			ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
+	//int			weapons[WP_MAX_CLASSES];
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+
+	int inventory[PW_NUM_POWERUPS];
+#endif
 
 	// auto rotating items
 	vec3_t		autoAngles;
@@ -542,8 +666,12 @@ typedef struct {
 
 	// zoom key
 	qboolean	zoomed;
-	int			zoomTime;
-	float		zoomSensitivity;
+	int			  zoomTime;
+	float		  zoomSensitivity;
+#ifdef USE_ADVANCED_ZOOM
+  qboolean	zooming;
+  int		    setZoomFov;
+#endif
 
 	// information screen text during loading
 	char		infoScreenText[MAX_STRING_CHARS];
@@ -557,6 +685,11 @@ typedef struct {
 	qboolean	showScores;
 	qboolean	scoreBoardShowing;
 	int			scoreFadeTime;
+#ifdef USE_RUNES
+  qboolean	showRunes;
+  qboolean  runesBoardShowing;
+  int			runesFadeTime;
+#endif
 	char		killerName[MAX_NAME_LENGTH+32];
 	int			killerTime;
 	char			spectatorList[MAX_STRING_CHARS];		// list of names
@@ -665,7 +798,33 @@ typedef struct {
 	float		xyspeed;
 	int			nextOrbitTime;
 
-	//qboolean cameraMode;		// if rendering from a loaded camera
+	qboolean cameraMode;		// if rendering from a loaded camera
+	int      currentCamera;
+
+#ifdef USE_CLASSIC_HUD
+	int      pauseBreak;
+	int      pausedTime;
+	qboolean editPlayerMode;
+		
+	int characterCount;
+	characterInfo characterList[MAX_HEADS];
+
+	int aliasCount;
+	aliasInfo aliasList[MAX_ALIASES];
+
+	int teamCount;
+	teamInfo teamList[MAX_TEAMS];
+
+	int playerCount;
+	int myTeamCount;
+	int playerNumber; 
+	qboolean teamLeader;
+	char playerNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	char teamNames[MAX_CLIENTS][MAX_NAME_LENGTH];
+	int teamClientNums[MAX_CLIENTS];
+	int effectsColor;
+
+#endif
 
 	// development tool
 	refEntity_t		testModelEntity;
@@ -686,6 +845,17 @@ typedef struct {
 	int				followClient;
 
 	qboolean		skipDFshaders;
+
+	vec2_t mapcoordsMins;
+	vec2_t mapcoordsMaxs;
+	vec2_t mapcoordsScale;
+	qboolean mapcoordsValid;
+
+#ifdef USE_VEHICLES
+	car_t		car;
+
+#endif
+
 } cg_t;
 
 
@@ -709,6 +879,12 @@ typedef struct {
 	qhandle_t	neutralFlagModel;
 	qhandle_t	redFlagShader[3];
 	qhandle_t	blueFlagShader[3];
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	qhandle_t	goldFlagModel;
+	qhandle_t	greenFlagModel;
+	qhandle_t	goldFlagShader[3];
+	qhandle_t	greenFlagShader[3];
+#endif
 	qhandle_t	flagShader[4];
 
 	qhandle_t	flagPoleModel;
@@ -716,13 +892,21 @@ typedef struct {
 
 	qhandle_t	redFlagFlapSkin;
 	qhandle_t	blueFlagFlapSkin;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	qhandle_t	goldFlagFlapSkin;
+	qhandle_t	greenFlagFlapSkin;
+#endif
 	qhandle_t	neutralFlagFlapSkin;
 
 	qhandle_t	redFlagBaseModel;
 	qhandle_t	blueFlagBaseModel;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	qhandle_t	goldFlagBaseModel;
+	qhandle_t	greenFlagBaseModel;
+#endif
 	qhandle_t	neutralFlagBaseModel;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	qhandle_t	overloadBaseModel;
 	qhandle_t	overloadTargetModel;
 	qhandle_t	overloadLightsModel;
@@ -734,12 +918,18 @@ typedef struct {
 	qhandle_t	harvesterNeutralModel;
 #endif
 
+#ifdef USE_FLAME_THROWER
+  qhandle_t flameBallShader;
+  qhandle_t flameExplosionShader;
+#endif
+
 	qhandle_t	armorModel;
 	qhandle_t	armorIcon;
 
 	qhandle_t	teamStatusBar;
 
 	qhandle_t	deferShader;
+	qhandle_t	trailShader;
 
 	// gib explosions
 	qhandle_t	gibAbdomen;
@@ -771,7 +961,10 @@ typedef struct {
 	qhandle_t	selectShader;
 	qhandle_t	viewBloodShader;
 	qhandle_t	tracerShader;
-	qhandle_t	crosshairShader[NUM_CROSSHAIRS];
+	qhandle_t	crosshairShader[NUM_CROSSHAIRS + 1];
+#ifdef USE_LASER_SIGHT
+  qhandle_t	laserShader;
+#endif
 	qhandle_t	lagometerShader;
 	qhandle_t	backTileShader;
 	qhandle_t	noammoShader;
@@ -779,15 +972,19 @@ typedef struct {
 	qhandle_t	smokePuffShader;
 	qhandle_t	smokePuffRageProShader;
 	qhandle_t	shotgunSmokePuffShader;
+#ifdef USE_ADVANCED_CLASS
+	qhandle_t	voreBallShader;
+#endif
 	qhandle_t	plasmaBallShader;
 	qhandle_t	waterBubbleShader;
 	qhandle_t	bloodTrailShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	qhandle_t	nailPuffShader;
 	qhandle_t	blueProxMine;
 #endif
 
 	qhandle_t	numberShaders[11];
+  qhandle_t	timerSlices[4];
 
 	qhandle_t	shadowMarkShader;
 
@@ -809,8 +1006,14 @@ typedef struct {
 	qhandle_t	regenShader;
 	qhandle_t	battleSuitShader;
 	qhandle_t	battleWeaponShader;
+#ifdef USE_ADVANCED_ITEMS
+	qhandle_t	gravityWeaponShader;
+	qhandle_t	gravitySuitShader;
+	qhandle_t	ammoRegenShader;
+#endif
+
 	qhandle_t	hastePuffShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	qhandle_t	redKamikazeShader;
 	qhandle_t	blueKamikazeShader;
 #endif
@@ -828,12 +1031,16 @@ typedef struct {
 	qhandle_t	rocketExplosionShader;
 	qhandle_t	grenadeExplosionShader;
 	qhandle_t	bfgExplosionShader;
+#ifdef USE_PORTALS
+  qhandle_t	redBFG;
+  qhandle_t	blueBFG;
+#endif
 	qhandle_t	bloodExplosionShader;
 
 	// special effects models
 	qhandle_t	teleportEffectModel;
 	qhandle_t	teleportEffectShader;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	qhandle_t	kamikazeEffectModel;
 	qhandle_t	kamikazeShockWave;
 	qhandle_t	kamikazeHeadModel;
@@ -880,7 +1087,7 @@ typedef struct {
 	sfxHandle_t	sfx_railg;
 	sfxHandle_t	sfx_rockexp;
 	sfxHandle_t	sfx_plasmaexp;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	sfxHandle_t	sfx_proxexp;
 	sfxHandle_t	sfx_nghit;
 	sfxHandle_t	sfx_nghitflesh;
@@ -956,7 +1163,7 @@ typedef struct {
 	sfxHandle_t flightSound;
 	sfxHandle_t medkitSound;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	sfxHandle_t weaponHoverSound;
 #endif
 
@@ -995,7 +1202,7 @@ typedef struct {
 	sfxHandle_t	countFightSound;
 	sfxHandle_t	countPrepareSound;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	// new stuff
 	qhandle_t patrolShader;
 	qhandle_t assaultShader;
@@ -1014,6 +1221,8 @@ typedef struct {
 	sfxHandle_t scoutSound;
 #endif
 	qhandle_t cursor;
+  qhandle_t selectCursor;
+	qhandle_t sizeCursor;
 
 	sfxHandle_t	regenSound;
 	sfxHandle_t	protectSound;
@@ -1025,6 +1234,19 @@ typedef struct {
 	sfxHandle_t	wstbimpdSound;
 	sfxHandle_t	wstbactvSound;
 
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  sfxHandle_t frozenSound;
+  qhandle_t	frozenShader;
+	qhandle_t	freezeMarkShader;
+  sfxHandle_t	unfrozenSound;
+#endif
+
+#ifdef USE_VEHICLES
+qhandle_t sparkShader;
+#endif
+
+	qhandle_t netConnect;
+
 } cgMedia_t;
 
 
@@ -1035,6 +1257,8 @@ typedef struct {
 typedef struct {
 	gameState_t		gameState;			// gamestate from server
 	glconfig_t		glconfig;			// rendering configuration
+
+	qboolean  absolute;
 	float			screenXScale;		// derived from glconfig
 	float			screenYScale;
 	
@@ -1063,6 +1287,7 @@ typedef struct {
 	int				timelimit;
 	int				maxclients;
 	char			mapname[MAX_QPATH];
+	char 			rawmapname[MAX_QPATH];
 	char			redTeam[MAX_QPATH];
 	char			blueTeam[MAX_QPATH];
 
@@ -1082,6 +1307,10 @@ typedef struct {
 
 	int				scores1, scores2;		// from configstrings
 	int				redflag, blueflag;		// flag status from configstrings
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	int				scores3, scores4;		// from configstrings
+	int				greenflag, goldflag;		// flag status from configstrings
+#endif
 	int				flagStatus;
 
 	qboolean  newHud;
@@ -1104,7 +1333,7 @@ typedef struct {
 	int				teamChatPos;
 	int				teamLastChatPos;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	qboolean eventHandling;
 	qboolean mouseCaptured;
 	qboolean sizingHud;
@@ -1121,6 +1350,10 @@ typedef struct {
 	int acceptLeader;
 	char acceptVoice[MAX_NAME_LENGTH];
 #endif
+
+	float	scrFadeAlpha, scrFadeAlphaCurrent;
+	int		scrFadeStartTime;
+	int		scrFadeDuration;
 
 	// media
 	cgMedia_t		media;
@@ -1142,20 +1375,36 @@ typedef struct {
 
 	float			cursorX;
 	float			cursorY;
+
+#ifdef USE_MULTIWORLD
+	int selectedWorld;
+#endif
+
+
 } cgs_t;
 
 //==============================================================================
 
+#define MAX_CLASSES 2
+
+#ifdef USE_SINGLEPLAYER // entity
+extern	int player_stop;
+extern	int black_bars;
+#endif
+
 extern	cgs_t			cgs;
 extern	cg_t			cg;
 extern	centity_t		cg_entities[MAX_GENTITIES];
-extern	weaponInfo_t	cg_weapons[MAX_WEAPONS];
+extern	weaponInfo_t	cg_weapons[WP_NUM_WEAPONS];
 extern	itemInfo_t		cg_items[MAX_ITEMS];
 extern	markPoly_t		cg_markPolys[MAX_MARK_POLYS];
 
 #define EXTERN_CG_CVAR
 	#include "cg_cvar.h"
 #undef EXTERN_CG_CVAR
+
+
+extern  vmCvar_t    cg_birdsEye;
 
 extern const char		*eventnames[EV_MAX];
 
@@ -1177,7 +1426,11 @@ int CG_CrosshairPlayer( void );
 int CG_LastAttacker( void );
 void CG_LoadMenus(const char *menuFile);
 void CG_KeyEvent( int key, qboolean down );
-void CG_MouseEvent( int x, int y );
+void CG_MouseEvent( int x, int y, qboolean absolute );
+#ifdef USE_CLASSIC_HUD
+void CG_CLASSIC_KeyEvent( int key, qboolean down );
+void CG_CLASSIC_MouseEvent( int x, int y, qboolean absolute );
+#endif
 void CG_EventHandling( cgame_event_t type );
 void CG_RankRunFrame( void );
 void CG_SetScoreSelection(void *menu);
@@ -1200,6 +1453,9 @@ void CG_TestModelPrevSkin_f (void);
 void CG_ZoomDown_f( void );
 void CG_ZoomUp_f( void );
 void CG_AddBufferedSound( sfxHandle_t sfx);
+
+qboolean CG_CullPoint( vec3_t pt );
+qboolean CG_CullPointAndRadius( const vec3_t pt, vec_t radius );
 
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback );
 
@@ -1229,6 +1485,8 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 void CG_DrawRect( float x, float y, float width, float height, float size, const float *color );
 void CG_DrawSides(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom(float x, float y, float w, float h, float size);
+void CG_Fade( int a, int time, int duration );
+void CG_DrawFlashFade( void );
 
 #define USE_NEW_FONT_RENDERER
 
@@ -1380,6 +1638,9 @@ void	CG_AddLocalEntities( void );
 //
 // cg_effects.c
 //
+#ifdef USE_SINGLEPLAYER // entity
+void CG_BlackBars(void);
+#endif
 localEntity_t *CG_SmokePuff( const vec3_t p, 
 				   const vec3_t vel, 
 				   float radius,
@@ -1392,7 +1653,7 @@ localEntity_t *CG_SmokePuff( const vec3_t p,
 void CG_BubbleTrail( const vec3_t start, const vec3_t end, float spacing );
 void CG_SpawnEffect( const vec3_t origin );
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 void CG_KamikazeEffect( vec3_t org );
 void CG_ObeliskExplode( vec3_t org, int entityNum );
 void CG_ObeliskPain( vec3_t org );
@@ -1401,6 +1662,9 @@ void CG_InvulnerabilityJuiced( vec3_t org );
 void CG_LightningBoltBeam( vec3_t start, vec3_t end );
 #endif
 void CG_ScorePlum( int client, const vec3_t origin, int score );
+#ifdef USE_DAMAGE_PLUMS
+void CG_DamagePlum( int client, const vec3_t origin, int damage );
+#endif
 
 void CG_GibPlayer( const vec3_t playerOrigin );
 void CG_BigExplode( vec3_t playerOrigin );
@@ -1458,6 +1722,21 @@ void CG_Respawn( void );
 void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops );
 void CG_CheckChangedPredictableEvents( playerState_t *ps );
 
+
+//
+// cg_atmospheric.c
+//
+void CG_GenerateTracemap( void );
+void CG_EffectParse( const char *effectstr );
+void CG_AddAtmosphericEffects( void );
+
+//
+// cg_polybus.c
+//
+
+polyBuffer_t* CG_PB_FindFreePolyBuffer( qhandle_t shader, int numVerts, int numIndicies );
+void CG_PB_ClearPolyBuffers( void );
+void CG_PB_RenderPolyBuffers( void );
 
 //===============================================
 
@@ -1623,7 +1902,11 @@ qboolean	trap_GetServerCommand( int serverCommandNumber );
 // a lagged connection
 int			trap_GetCurrentCmdNumber( void );	
 
+#ifdef USE_MULTIWORLD
+qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd, int *world );
+#else
 qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd );
+#endif
 
 // used for the weapon select and zoom
 void		trap_SetUserCmdValue( int stateValue, float sensitivityScale );
@@ -1656,10 +1939,12 @@ void trap_CIN_SetExtents (int handle, int x, int y, int w, int h);
 void		trap_SnapVector( float *v );
 
 qboolean	trap_loadCamera(const char *name);
-void		trap_startCamera(int time);
-qboolean	trap_getCameraInfo(int time, vec3_t *origin, vec3_t *angles);
-
+void		trap_startCamera(int camNum, int time);
+qboolean	trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov);
+void		CG_StartCamera(const char *name, qboolean startBlack );
 qboolean	trap_GetEntityToken( char *buffer, int bufferSize );
+void trap_stopCamera(int camNum);
+
 
 void	CG_ClearParticles (void);
 void	CG_AddParticles (void);
@@ -1682,11 +1967,21 @@ extern  qboolean linearLight;
 #ifdef Q3_VM
 extern void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 extern void	(*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
+extern void	(*trap_R_AddPolyBufferToScene)( polyBuffer_t *pPolyBuffer );
+#ifdef USE_MULTIWORLD
+extern void	(*trap_R_SwitchWorld)( int world );
+#endif
 #else
 qboolean trap_GetValue( char *value, int valueSize, const char *key );
 void trap_R_AddRefEntityToScene2( const refEntity_t *re );
 void trap_R_AddLinearLightToScene( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
+void	trap_R_AddPolyBufferToScene( polyBuffer_t *pPolyBuffer );
+#ifdef USE_MULTIWORLD
+void	trap_R_SwitchWorld( int world );
+extern int dll_trap_R_SwitchWorld;
+#endif
 extern int dll_com_trapGetValue;
 extern int dll_trap_R_AddRefEntityToScene2;
 extern int dll_trap_R_AddLinearLightToScene;
+extern int dll_trap_R_AddPolyBufferToScene;
 #endif

@@ -9,6 +9,11 @@
 
 static	pmove_t		cg_pmove;
 
+#ifdef USE_SINGLEPLAYER // entity
+int player_stop = 0;
+int black_bars = 0;
+#endif
+
 static	int			cg_numSolidEntities;
 static	centity_t	*cg_solidEntities[MAX_ENTITIES_IN_SNAPSHOT];
 static	int			cg_numTriggerEntities;
@@ -206,7 +211,11 @@ static void CG_InterpolatePlayerState( qboolean grabAngles ) {
 		int			cmdNum;
 
 		cmdNum = trap_GetCurrentCmdNumber();
+#ifdef USE_MULTIWORLD
+		trap_GetUserCmd( cmdNum, &cmd, NULL );
+#else
 		trap_GetUserCmd( cmdNum, &cmd );
+#endif
 
 		PM_UpdateViewAngles( out, &cmd );
 	}
@@ -322,13 +331,17 @@ static void CG_AddArmor( const gitem_t *item, int quantity ) {
 
 static void CG_AddAmmo( int weapon, int count )
 {
-	if ( weapon == WP_GAUNTLET || weapon == WP_GRAPPLING_HOOK ) {
-		cg.predictedPlayerState.ammo[weapon] = -1;
+	if ( weapon == WP_GAUNTLET 
+#ifdef USE_GRAPPLE
+		|| weapon == WP_GRAPPLING_HOOK 
+#endif
+	) {
+		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = -1;
 	} else {
-		cg.predictedPlayerState.ammo[weapon] += count;
+		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] += count;
 		if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG ) {
-			if ( cg.predictedPlayerState.ammo[weapon] > AMMO_HARD_LIMIT ) {
-				cg.predictedPlayerState.ammo[weapon] = AMMO_HARD_LIMIT;
+			if ( cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
+				cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
 			}
 		}
 	}
@@ -343,15 +356,15 @@ static void CG_AddWeapon( int weapon, int quantity, qboolean dropped )
 
 	// dropped items and teamplay weapons always have full ammo
 	if ( !dropped && cgs.gametype != GT_TEAM ) {
-		if ( cg.predictedPlayerState.ammo[ weapon ] < quantity ) {
-			quantity = quantity - cg.predictedPlayerState.ammo[ weapon ];
+		if ( cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ] < quantity ) {
+			quantity = quantity - cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ];
 		} else {
 			quantity = 1;
 		}
 	}
 
 	// add the weapon
-	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << weapon );
+	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << (weapon % WP_MAX_WEAPONS) );
 
 	CG_AddAmmo( weapon, quantity );
 }
@@ -380,6 +393,16 @@ static int CG_CheckArmor( int damage ) {
  void CG_AddFallDamage( int damage ) 
 {
 	int take, asave;
+
+#ifdef USE_ADVANCED_ITEMS
+	if ( cg.inventory[ PW_BATTLESUIT ] || cg.inventory[ PW_GRAVITYSUIT ] || cg.inventory[ PW_SUPERMAN ] )
+		return;
+#endif
+
+#ifdef USE_RUNES
+  if ( cg.inventory[ RUNE_RESIST ] )
+    return;
+#endif
 
 	if ( cg.predictedPlayerState.powerups[ PW_BATTLESUIT ] )
 		return;
@@ -444,16 +467,33 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 	}
 
 	// powerups prediction
-	if ( item->giType == IT_POWERUP && item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT ) {
+	if ( item->giType == IT_POWERUP && ((item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT) 
+#if 0 //def USE_RUNES
+    || (item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM)
+#endif
+  )) {
 		// round timing to seconds to make multiple powerup timers count in sync
 		if ( !cg.predictedPlayerState.powerups[ item->giTag ] ) {
 			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
-			if ( item->giTag == PW_HASTE ) {
+			if ( item->giTag == PW_HASTE 
+#ifdef USE_RUNES
+        || item->giTag == RUNE_HASTE
+#endif
+      ) {
+#ifdef USE_PHYSICS_VARS
+        cg.predictedPlayerState.speed *= cg_hasteFactor.value;
+#else
 				cg.predictedPlayerState.speed *= 1.3f;
+#endif
 			}
 		}
 		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;
+#ifdef USE_RUNES
+    if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+      cg_entities[cg.snap->ps.clientNum].rune = item->giTag;
+    }
+#endif
 	}	
 
 	// holdable prediction
@@ -470,6 +510,9 @@ CG_TouchItem
 */
 static void CG_TouchItem( centity_t *cent ) {
 	const gitem_t *item;
+#ifdef USE_WEAPON_ORDER
+  qboolean alreadyHad = qfalse;
+#endif
 
 	if ( cg.allowPickupPrediction && cg.allowPickupPrediction > cg.time ) {
 		return;
@@ -488,11 +531,41 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.inventory, cg.predictedPlayerState.stats[STAT_PLAYERCLASS]) ) {
+		return;	// can't hold it
+	}
+#else
+	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.inventory ) ) {
+		return;	// can't hold it
+	}
+#endif
+#else
 	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState ) ) {
 		return;	// can't hold it
 	}
+#endif
 
 	item = &bg_itemlist[ cent->currentState.modelindex ];
+
+#ifdef USE_ADVANCED_ITEMS
+	{
+		int tag = item->giTag;
+		int itemClass = floor(tag / PW_MAX_POWERUPS);
+		if(item->giType == IT_HOLDABLE && cg.inventory[tag]) {
+			return;
+		}
+	}
+#endif
+
+#ifdef USE_RUNES
+  // can only pick up one rune at a time
+  if(item->giType == IT_POWERUP
+    && item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
+    return;
+  }
+#endif
 
 	// Special case for flags.  
 	// We don't predict touching our own flag
@@ -512,10 +585,30 @@ static void CG_TouchItem( centity_t *cent ) {
 		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_BLUE &&
 			item->giType == IT_TEAM && item->giTag == PW_BLUEFLAG)
 			return;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_GOLD &&
+			item->giType == IT_TEAM && item->giTag == PW_GOLDFLAG)
+			return;
+		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_GREEN &&
+			item->giType == IT_TEAM && item->giTag == PW_GREENFLAG)
+			return;
+#endif
 	}
 
 	// grab it
+#ifdef USE_WEAPON_ORDER
+  if(item->giType == IT_WEAPON) {
+#ifdef USE_ADVANCED_WEAPONS
+    alreadyHad = cg.snap->weapons[(int)floor(item->giTag / WP_MAX_WEAPONS)] & (1 << (item->giTag % WP_MAX_WEAPONS));
+#else
+    alreadyHad = cg.snap->ps.stats[STAT_WEAPONS] & (1 << item->giTag);
+#endif
+  }
+	//if(item->giTag )
+  BG_AddPredictableEventToPlayerstate( alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
+#else
 	BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
+#endif
 
 	// perform prediction
 	CG_PickupPrediction( cent, item );
@@ -533,8 +626,8 @@ static void CG_TouchItem( centity_t *cent ) {
 	// if it's a weapon, give them some predicted ammo so the autoswitch will work
 	if ( item->giType == IT_WEAPON ) {
 		cg.predictedPlayerState.stats[ STAT_WEAPONS ] |= 1 << item->giTag;
-		if ( !cg.predictedPlayerState.ammo[ item->giTag ] ) {
-			cg.predictedPlayerState.ammo[ item->giTag ] = 1;
+		if ( !cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] ) {
+			cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] = 1;
 		}
 	}
 }
@@ -562,7 +655,20 @@ static void CG_TouchTriggerPrediction( void ) {
 
 	spectator = ( cg.predictedPlayerState.pm_type == PM_SPECTATOR );
 
-	if ( cg.predictedPlayerState.pm_type != PM_NORMAL && !spectator ) {
+	if ( cg.predictedPlayerState.pm_type != PM_NORMAL
+#ifdef USE_BIRDS_EYE
+		&& cg.predictedPlayerState.pm_type != PM_BIRDSEYE
+		&& cg.predictedPlayerState.pm_type != PM_FOLLOWCURSOR
+		&& cg.predictedPlayerState.pm_type != PM_PLATFORM
+		&& cg.predictedPlayerState.pm_type != PM_THIRDPERSON
+#endif
+
+#ifdef USE_AIW
+		&& cg.predictedPlayerState.pm_type != PM_UPSIDEDOWN
+		&& cg.predictedPlayerState.pm_type != PM_REVERSED
+		&& cg.predictedPlayerState.pm_type != PM_REVERSEDUPSIDEDOWN
+#endif
+		&& !spectator ) {
 		return;
 	}
 
@@ -570,7 +676,7 @@ static void CG_TouchTriggerPrediction( void ) {
 		cent = cg_triggerEntities[ i ];
 		ent = &cent->currentState;
 
-		if ( ent->eType == ET_ITEM && !spectator ) {
+		if ( ent->eType == ET_ITEM && !(ent->eFlags & EF_TIMER) && !spectator ) {
 			CG_TouchItem( cent );
 			continue;
 		}
@@ -594,7 +700,22 @@ static void CG_TouchTriggerPrediction( void ) {
 		if ( ent->eType == ET_TELEPORT_TRIGGER ) {
 			cg.hyperspace = qtrue;
 		} else if ( ent->eType == ET_PUSH_TRIGGER ) {
+        
+#ifdef USE_GRAPPLE
+      if(cg.predictedPlayerState.weapon == WP_GRAPPLING_HOOK
+        && ent->eFlags & EF_FIRING)
+        continue;
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_CLASS
+			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory, cg.predictedPlayerState.stats[STAT_PLAYERCLASS] );
+#else
+			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory );
+#endif
+#else
 			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
+#endif
 		}
 	}
 
@@ -650,6 +771,11 @@ static void CG_CheckTimers( void ) {
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( !cg.predictedPlayerState.powerups[ i ] )
 			continue;
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+      if(i == PW_FROZEN) {
+        continue;      
+      }
+#endif
 		if ( cg.predictedPlayerState.powerups[ i ] < cg.predictedPlayerState.commandTime ) {
 			cg.predictedPlayerState.powerups[ i ] = 0;
 		}
@@ -833,7 +959,7 @@ static int CG_IsUnacceptableError( playerState_t *ps, playerState_t *pps, qboole
 		}
 	}
 
-	for( i = 0; i < MAX_WEAPONS; i++ ) {
+	for( i = 0; i < WP_MAX_WEAPONS; i++ ) {
 		if( pps->ammo[ i ] != ps->ammo[ i ] ) {
 			if ( cg_showmiss.integer > 1 ) {
 				CG_Printf( "ammo[%i] %i => %i ", i, pps->ammo[ i ], ps->ammo[ i ] );
@@ -917,6 +1043,13 @@ void CG_PredictPlayerState( void ) {
 
 	// prepare for pmove
 	cg_pmove.ps = &cg.predictedPlayerState;
+#ifdef USE_ADVANCED_ITEMS
+	memcpy(cg_pmove.inventory, cg.inventory, sizeof(cg.inventory));
+#endif
+#ifdef USE_ADVANCED_CLASS
+	cg_pmove.playerClass = cgs.clientinfo[cg.clientNum].playerClass;
+#endif
+
 	cg_pmove.trace = CG_Trace;
 	cg_pmove.pointcontents = CG_PointContents;
 	if ( cg_pmove.ps->pm_type == PM_DEAD ) {
@@ -938,7 +1071,11 @@ void CG_PredictPlayerState( void ) {
 	// can't accurately predict a current position, so just freeze at
 	// the last good position we had
 	cmdNum = current - CMD_BACKUP + 1;
+#ifdef USE_MULTIWORLD
+	trap_GetUserCmd( cmdNum, &oldestCmd, NULL );
+#else
 	trap_GetUserCmd( cmdNum, &oldestCmd );
+#endif
 	if ( oldestCmd.serverTime > cg.snap->ps.commandTime
 		&& oldestCmd.serverTime < cg.time ) {	// special check for map_restart
 		if ( cg_showmiss.integer ) {
@@ -948,7 +1085,11 @@ void CG_PredictPlayerState( void ) {
 	}
 
 	// get the latest command so we can know which commands are from previous map_restarts
+#ifdef USE_MULTIWORLD
+	trap_GetUserCmd( current, &latestCmd, NULL );
+#else
 	trap_GetUserCmd( current, &latestCmd );
+#endif
 
 	// get the most recent information we have, even if
 	// the server time is beyond our current cg.time,
@@ -1061,7 +1202,11 @@ void CG_PredictPlayerState( void ) {
 
 	for ( /* cmdNum = current - CMD_BACKUP + 1 */; cmdNum <= current ; cmdNum++ ) {
 		// get the command
+#ifdef USE_MULTIWORLD
+		trap_GetUserCmd( cmdNum, &cg_pmove.cmd, NULL );
+#else
 		trap_GetUserCmd( cmdNum, &cg_pmove.cmd );
+#endif
 
 		if ( cgs.pmove_fixed ) {
 			PM_UpdateViewAngles( cg_pmove.ps, &cg_pmove.cmd );
@@ -1171,6 +1316,58 @@ void CG_PredictPlayerState( void ) {
 			*cg_pmove.ps = cg.savedPmoveStates[ stateIndex ];
 			stateIndex = ( stateIndex + 1 ) % NUM_SAVED_STATES;
 		}
+
+#ifdef USE_BIRDS_EYE
+		// ZYGOTE START
+		if(cg.predictedPlayerState.pm_type == PM_BIRDSEYE
+			|| cg.predictedPlayerState.pm_type == PM_FOLLOWCURSOR
+			|| cg_birdsEye.integer) {
+			// Copy modified YAW into viewangles
+			//cg_pmove.ps->viewangles[ROLL] = cg_pmove.cmd.angles[PITCH] + cg_pmove.ps->delta_angles[PITCH];
+			cg_pmove.ps->viewangles[PITCH] = -SHORT2ANGLE(cg_pmove.ps->delta_angles[PITCH]);
+			//cg_pmove.ps->delta_angles[ROLL] = cg_pmove.ps->delta_angles[PITCH];
+			cg_pmove.ps->delta_angles[PITCH] = 0;
+		} else 
+		if(cg.predictedPlayerState.pm_type == PM_PLATFORM
+			|| cg_sideview.integer) {
+			short		temp;
+			// Setup temp
+			temp = cg_pmove.cmd.angles[YAW] + cg_pmove.ps->delta_angles[YAW];
+			
+			if ( (temp > -30000) && (temp < 0) ) {
+				cg_pmove.ps->delta_angles[YAW] = -1000 - cg_pmove.cmd.angles[YAW];
+				temp = 0; // RIGHT
+			}
+			if ( (temp < 30000) && (temp > 0) ) {
+				cg_pmove.ps->delta_angles[YAW] = 1000 - cg_pmove.cmd.angles[YAW];
+				temp = 32000; // LEFT
+			}	
+
+			// Copy modified YAW into viewangles
+			cg_pmove.ps->viewangles[YAW] = SHORT2ANGLE(temp);
+		}
+		// ZYGOTE FINISH
+#endif
+
+/*
+#ifdef USE_AIW
+		if(cg.predictedPlayerState.pm_type == PM_REVERSED || cg_reverseControls.integer
+		|| (cg.predictedPlayerState.pm_type == PM_REVERSEDUPSIDEDOWN && cg_upsideDown.integer && cg_reverseControls.integer)) {
+			cg_pmove.cmd.rightmove = -cg_pmove.cmd.rightmove;
+			cg_pmove.cmd.forwardmove = -cg_pmove.cmd.forwardmove;
+			//cg_pmove.ps->delta_angles[PITCH] = -cg_pmove.ps->delta_angles[PITCH];
+			cg_pmove.ps->viewangles[PITCH] = -cg_pmove.ps->viewangles[PITCH];
+			//cg_pmove.ps->delta_angles[YAW] = -cg_pmove.ps->delta_angles[YAW];
+			cg_pmove.ps->viewangles[YAW] = -cg_pmove.ps->viewangles[YAW];
+		}
+
+		if(cg.predictedPlayerState.pm_type == PM_UPSIDEDOWN || cg_upsideDown.integer
+			|| (cg.predictedPlayerState.pm_type == PM_REVERSEDUPSIDEDOWN && cg_upsideDown.integer && cg_reverseControls.integer)) {
+			cg_pmove.ps->viewangles[ROLL] = SHORT2ANGLE(180);
+			cg_pmove.ps->delta_angles[ROLL] = 180;
+		}
+#endif
+*/
 
 		moved = qtrue;
 	}

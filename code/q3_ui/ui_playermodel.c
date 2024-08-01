@@ -2,6 +2,17 @@
 //
 #include "ui_local.h"
 
+#ifdef USE_CLASSIC_MENU
+#define UI_PopMenu UI_CLASSIC_PopMenu
+#define UI_DrawChar UI_CLASSIC_DrawChar
+#define UI_DrawString UI_CLASSIC_DrawString
+#define UI_DrawProportionalString UI_CLASSIC_DrawProportionalString
+#define UI_PushMenu UI_CLASSIC_PushMenu
+#define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
+#define UI_PlayerInfo_SetModel UI_CLASSIC_PlayerInfo_SetModel
+#define UI_PlayerInfo_SetInfo UI_CLASSIC_PlayerInfo_SetInfo
+#endif
+
 #define MODEL_BACK0			"menu/art/back_0"
 #define MODEL_BACK1			"menu/art/back_1"
 #define MODEL_SELECT		"menu/art/opponents_select"
@@ -355,7 +366,11 @@ static void PlayerModel_DrawPlayer( void *self )
 		return;
 	}
 
+#ifdef USE_CLASSIC_MENU
+	UI_CLASSIC_DrawPlayer( b->generic.x, b->generic.y, b->width, b->height, &s_playermodel.playerinfo, uis.realtime/2 );
+#else
 	UI_DrawPlayer( b->generic.x, b->generic.y, b->width, b->height, &s_playermodel.playerinfo, uis.realtime/2 );
+#endif
 }
 
 /*

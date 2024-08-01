@@ -4,7 +4,6 @@
 
 #include "g_local.h"
 
-
 /*QUAKED func_group (0 0 0) ?
 Used to group brushes together just for editor convenience.  They are turned into normal brushes by the utilities.
 */
@@ -47,6 +46,8 @@ void SP_light( gentity_t *self ) {
 }
 
 
+
+#ifndef USE_PORTALS
 
 /*
 =================================================================================
@@ -123,6 +124,8 @@ an info_notnull
 void SP_misc_teleporter_dest( gentity_t *ent ) {
 }
 
+#endif
+
 
 //===========================================================
 
@@ -131,18 +134,24 @@ void SP_misc_teleporter_dest( gentity_t *ent ) {
 */
 void SP_misc_model( gentity_t *ent ) {
 
-#if 0
-	ent->s.modelindex = G_ModelIndex( ent->model );
-	VectorSet (ent->mins, -16, -16, -16);
-	VectorSet (ent->maxs, 16, 16, 16);
-	trap_LinkEntity (ent);
+	if ( ent->model2 ) { // not build into BSPs
+		ent->r.svFlags = SVF_BROADCAST;
+		ent->s.eType = ET_GENERAL;
+		ent->s.modelindex = G_ModelIndex( ent->model2 );
+		ent->s.number = ent - g_entities;
+		VectorSet (ent->r.mins, -16, -16, -16);
+		VectorSet (ent->r.maxs, 16, 16, 16);
+		trap_LinkEntity (ent);
 
-	G_SetOrigin( ent, ent->s.origin );
-	VectorCopy( ent->s.angles, ent->s.apos.trBase );
-#else
-	G_FreeEntity( ent );
-#endif
+		G_SetOrigin( ent, ent->s.origin );
+		VectorCopy( ent->s.angles, ent->s.apos.trBase );
+	} else
+		G_FreeEntity( ent );
+
 }
+
+
+#ifndef USE_PORTALS
 
 //===========================================================
 
@@ -227,6 +236,8 @@ void SP_misc_portal_camera(gentity_t *ent) {
 
 	ent->s.clientNum = roll/360.0 * 256;
 }
+
+#endif
 
 /*
 ======================================================================
@@ -327,7 +338,7 @@ void SP_shooter_grenade( gentity_t *ent ) {
 	InitShooter( ent, WP_GRENADE_LAUNCHER);
 }
 
-
+#ifndef USE_PORTALS
 #ifdef MISSIONPACK
 static void PortalDie (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	G_FreeEntity( self );
@@ -470,4 +481,6 @@ void DropPortalSource( gentity_t *player ) {
 	}
 
 }
+#endif
+
 #endif

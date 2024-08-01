@@ -2,7 +2,7 @@
 //
 #include "g_local.h"
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 #include "../../ui/menudef.h"			// for the voice chats
 #endif
 
@@ -247,22 +247,62 @@ void Cmd_Give_f( gentity_t *ent )
 			return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
+
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
-		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_NUM_WEAPONS) - 1 - 
+		int i, j;
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				gitem_t *it = BG_FindItemForWeapon(i * WP_MAX_WEAPONS + j);
+				if(it && it->icon) {
+					ent->client->weapons[i] |= (1 << j);
+				}
+			}
+		}
+	}
+
+	if (give_all || Q_stricmp(name, "ammo") == 0)
+	{
+		int i, j;
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			for ( j = 0 ; j < WP_MAX_WEAPONS ; j++ ) {
+				gitem_t *it = BG_FindAmmoForWeapon(i * WP_MAX_WEAPONS + j);
+				if(i * WP_MAX_WEAPONS + j == WP_GAUNTLET
+					|| i * WP_MAX_WEAPONS + j == WP_GAUNTLET2
+					|| i * WP_MAX_WEAPONS + j == WP_GRAPPLING_HOOK) {
+					ent->client->ammo[i][j] = -1;
+				} else 
+				if(it && it->icon) {
+					ent->client->ammo[i][j] = 999;
+				}
+			}
+		}
+	}
+#else
+
+	if (give_all || Q_stricmp(name, "weapons") == 0)
+	{
+#ifdef USE_GRAPPLE
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_MAX_WEAPONS) - 1 - 
 			( 1 << WP_GRAPPLING_HOOK ) - ( 1 << WP_NONE );
+#else
+		ent->client->ps.stats[STAT_WEAPONS] = (1 << WP_MAX_WEAPONS) - 1 - ( 1 << WP_NONE );
+#endif
 		if (!give_all)
 			return;
 	}
 
 	if (give_all || Q_stricmp(name, "ammo") == 0)
 	{
-		for ( i = 0 ; i < MAX_WEAPONS ; i++ ) {
+		for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
 			ent->client->ps.ammo[i] = 999;
 		}
 		if (!give_all)
 			return;
 	}
+
+#endif
 
 	if (give_all || Q_stricmp(name, "armor") == 0)
 	{
@@ -295,6 +335,21 @@ void Cmd_Give_f( gentity_t *ent )
 
 	// spawn a specific item right on the player
 	if ( !give_all ) {
+#ifdef USE_RUNES
+    char	arg[MAX_TOKEN_CHARS];
+    trap_Argv( 1, arg, sizeof( arg ) );
+    if(	Q_stricmp(arg, "rune") == 0 ) {
+      name = ConcatArgs(2);
+      it = BG_FindItemForRune(atoi(name));
+      if(!it) {
+        Com_Printf("Unknown rune: %s\n", name);
+        return;
+      }
+      //if(ent->rune)
+      //  ent->client->inventory[ent->rune] = 0;
+      //ent->rune = 0;
+    } else
+#endif
 		it = BG_FindItem (name);
 		if (!it) {
 			return;
@@ -548,6 +603,12 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 			team = TEAM_RED;
 		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
 			team = TEAM_BLUE; 
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		} else if ( !Q_stricmp( s, "yellow" ) || !Q_stricmp( s, "y" ) || !Q_stricmp( s, "gold" ) || !Q_stricmp( s, "k" ) ) {
+			team = TEAM_GOLD;
+		} else if ( !Q_stricmp( s, "green" ) || !Q_stricmp( s, "g" ) ) {
+			team = TEAM_GREEN; 
+#endif
 		} else {
 			team = -1;
 		}
@@ -584,6 +645,13 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 			team = TEAM_RED;
 		} else if ( !Q_stricmp( s, "blue" ) || !Q_stricmp( s, "b" ) ) {
 			team = TEAM_BLUE;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		} else if ( !Q_stricmp( s, "yellow" ) || !Q_stricmp( s, "y" ) || !Q_stricmp( s, "gold" ) || !Q_stricmp( s, "k" ) ) {
+			team = TEAM_GOLD;
+		} else if ( !Q_stricmp( s, "green" ) || !Q_stricmp( s, "g" ) ) {
+			team = TEAM_GREEN;
+
+#endif
 		} else {
 			// pick the team with the least number of players
 			team = PickTeam( clientNum );
@@ -652,7 +720,11 @@ qboolean SetTeam( gentity_t *ent, const char *s ) {
 		// Kill him (makes sure he loses flags, etc)
 		ent->flags &= ~FL_GODMODE;
 		ent->client->ps.stats[STAT_HEALTH] = ent->health = 0;
+#ifdef USE_MODES_DEATH
+		player_die (ent, ent, ent, 100000, MOD_SPECTATE);
+#else
 		player_die (ent, ent, ent, 100000, MOD_SUICIDE);
+#endif
 	}
 
 	// they go to the end of the line for tournements
@@ -716,6 +788,9 @@ void StopFollowing( gentity_t *ent, qboolean release ) {
 	if ( release ) {
 		client->ps.stats[STAT_HEALTH] = ent->health = 1;
 		memset( client->ps.powerups, 0, sizeof ( client->ps.powerups ) );
+#ifdef USE_ADVANCED_ITEMS
+		memset( client->inventory, 0, sizeof( client->inventory ) );
+#endif
 	}
 	SetClientViewAngle( ent, client->ps.viewangles );
 
@@ -743,6 +818,14 @@ static void Cmd_Team_f( gentity_t *ent ) {
 		case TEAM_RED:
 			trap_SendServerCommand( ent-g_entities, "print \"Red team\n\"" );
 			break;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		case TEAM_GOLD:
+			trap_SendServerCommand( ent-g_entities, "print \"Gold team\n\"" );
+			break;
+		case TEAM_GREEN:
+			trap_SendServerCommand( ent-g_entities, "print \"Green team\n\"" );
+			break;
+#endif
 		case TEAM_FREE:
 			trap_SendServerCommand( ent-g_entities, "print \"Free team\n\"" );
 			break;
@@ -1768,6 +1851,340 @@ static void Cmd_SetViewpos_f( gentity_t *ent ) {
 }
 
 
+gentity_t *dropWeapon( gentity_t *ent, gitem_t *item, float angle, int xr_flags );
+gitem_t	*BG_FindItemForHealth( int amount );
+gitem_t	*BG_FindItemForAmmo( weapon_t weapon );
+gentity_t *ThrowWeapon( gentity_t *ent );
+
+
+#ifdef USE_FLAG_DROP
+void Cmd_DropFlag_f(gentity_t *ent) {
+  if(ent->client->ps.powerups[PW_REDFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+  } else if(ent->client->ps.powerups[PW_GOLDFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->ps.powerups[PW_GREENFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_GREENFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+
+#endif
+  } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  }
+  ent->client->ps.powerups[PW_REDFLAG] =
+  ent->client->ps.powerups[PW_BLUEFLAG] =
+  ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
+}
+#endif
+
+
+
+#ifdef USE_RUNES
+void Cmd_DropRune_f(gentity_t *ent) {
+	int i;
+  int contents;
+  contents = trap_PointContents( ent->r.currentOrigin, -1 );
+  if (contents & CONTENTS_NODROP)
+    return;
+
+	for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+		if(ent->client->inventory[i]) {
+			dropWeapon( ent, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+			ent->client->inventory[i] = 0;
+			ent->client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+			return;
+		}
+	}
+}
+#endif
+
+
+#ifdef USE_POWERUP_DROP
+void Cmd_DropPowerup_f(gentity_t *ent) {
+#ifdef MISSIONPACK
+  // if there are persistant power-ups drop those
+  if(ent->client->persistantPowerup) {
+    TossClientPersistantPowerups(ent);
+    return;
+  } else
+#endif
+  {
+    gentity_t	*drop;
+    int i;
+    for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
+      if ( ent->client->ps.powerups[i ] > level.time ) {
+        drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+        // decide how many seconds it has left
+        drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
+        if ( drop->count < 1 ) {
+          drop->count = 1;
+        }
+        // for pickup prediction
+        drop->s.time2 = drop->count;
+        ent->client->ps.powerups[i] = 0;
+        return;
+      }
+    }
+  }
+}
+#endif
+
+
+
+#ifdef USE_ITEM_DROP
+void Cmd_DropItem_f(gentity_t *ent) {
+  // check if there are some holdable items to toss
+  if(ent->client->ps.stats[STAT_HOLDABLE_ITEM]) {
+    dropWeapon( ent, &bg_itemlist[ent->client->ps.stats[STAT_HOLDABLE_ITEM]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+    return;
+  }
+}
+#endif
+
+
+#ifdef USE_AMMO_DROP
+void Cmd_DropAmmo_f(gentity_t *ent) {
+  // drop ammo for current weapon, total / default pack size
+  gitem_t *item;
+  int i = ent->s.weapon;
+	if(ent->client->ps.ammo[i] == INFINITE)
+		return;
+  item = BG_FindItemForAmmo(i);
+  if(floor(ent->client->ps.ammo[i] / item->quantity) > 1) {
+    dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->ps.ammo[i] -= item->quantity;
+    return;
+  }
+}
+#endif
+
+
+#ifdef USE_HEALTH_DROP
+void Cmd_DropHealth_f(gentity_t *ent) {
+  gitem_t *item;
+	// TODO: infinite version of health 999 like DOOM?
+	if(ent->health == INFINITE)
+		return;
+	item = BG_FindItemForHealth(25);
+	if(floor(ent->health / item->quantity) > 1) {
+		dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+		ent->health -= item->quantity;
+		return;
+	}
+}
+#endif
+
+
+
+#ifdef USE_WEAPON_DROP
+
+/*
+=================
+Cmd_Drop_f XRAY FMJ
+=================
+*/
+void Cmd_Drop_f( gentity_t *ent ) {
+  gentity_t	*drop;
+  int contents;
+  contents = trap_PointContents( ent->r.currentOrigin, -1 );
+	if (contents & CONTENTS_NODROP)
+    return;
+
+  if(!g_dropWeapon.integer)
+    return;
+
+  if(g_dropWeapon.integer == 1)
+    ThrowWeapon( ent );
+
+#ifdef USE_FLAG_DROP
+  if((g_dropWeapon.integer & 2)
+    && (ent->client->ps.powerups[PW_REDFLAG]
+      || ent->client->ps.powerups[PW_BLUEFLAG]
+      || ent->client->ps.powerups[PW_NEUTRALFLAG])) {
+    if(ent->client->ps.powerups[PW_REDFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    }
+    ent->client->ps.powerups[PW_REDFLAG] =
+    ent->client->ps.powerups[PW_BLUEFLAG] =
+    ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
+    return;
+  }
+#endif
+#ifdef USE_RUNES
+  if((g_dropWeapon.integer & 8)) {
+		int i;
+		for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+			if(ent->client->inventory[i]) {
+				dropWeapon( ent, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+				ent->client->inventory[i] = 0;
+				ent->client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+				return;
+			}
+		}
+	}
+#endif
+#ifdef USE_POWERUP_DROP
+  if(g_dropWeapon.integer & 4) {
+#ifdef MISSIONPACK
+    // if there are persistant power-ups drop those
+    if(ent->client->persistantPowerup) {
+      TossClientPersistantPowerups(ent);
+      return;
+    } else
+#endif
+    {
+      int i;
+      for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
+        if ( ent->client->ps.powerups[i ] > level.time ) {
+          drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+          // decide how many seconds it has left
+          drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
+          if ( drop->count < 1 ) {
+            drop->count = 1;
+          }
+          // for pickup prediction
+          drop->s.time2 = drop->count;
+          ent->client->ps.powerups[i] = 0;
+          return;
+        }
+      }
+    }
+  }
+#endif
+#ifdef USE_ITEM_DROP
+  // check if there are some holdable items to toss
+  if(g_dropWeapon.integer & 16
+    && ent->client->ps.stats[STAT_HOLDABLE_ITEM]) {
+    dropWeapon( ent, &bg_itemlist[ent->client->ps.stats[STAT_HOLDABLE_ITEM]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+    return;
+  }
+#endif
+#ifdef USE_AMMO_DROP
+  // drop ammo for current weapon, total / default pack size
+  if(g_dropWeapon.integer & 32) {
+    gitem_t *item;
+    int i = ent->s.weapon;
+		if(ent->client->ps.ammo[i] != -1 && ent->client->ps.ammo[i] != INFINITE) {
+			item = BG_FindItemForAmmo(i);
+			if(floor(ent->client->ps.ammo[i] / item->quantity) > 0) {
+				dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+				ent->client->ps.ammo[i] -= item->quantity;
+				if(ent->client->ps.ammo[i] == 0) {
+					G_AddEvent( ent, EV_NOAMMO, 0 );
+					ent->client->ps.weaponTime += 500;
+				}
+				return;
+			}
+		}
+  }
+#endif
+  // TODO: fix weapon switch animation
+  drop = ThrowWeapon( ent );
+#ifdef USE_HEALTH_DROP
+  if(!drop && g_dropWeapon.integer & 64) {
+    gitem_t *item;
+    item = BG_FindItemForHealth(25);
+    if(floor(ent->health / item->quantity) > 1) {
+      dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+      ent->health -= item->quantity;
+      return;
+    }
+  }
+#endif
+}
+#endif
+
+
+#ifdef USE_BOUNCE_CMD
+/*
+=================
+Cmd_RBounce_f
+=================
+*/
+void Cmd_RBounce_f( gentity_t *ent ) {
+
+	char *msg; // message to player
+
+	if (ent->flags & FL_ROCKETBOUNCE) {
+		msg = "Rocket Bounce OFF\n";
+    ent->flags &= ~FL_ROCKETBOUNCE;
+	} else {
+	  msg = "Rocket Bounce ON\n";
+    ent->flags |= FL_ROCKETBOUNCE;
+  }
+	trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_CLOAK_CMD
+/*
+=================
+Cmd_Cloak_f
+=================
+*/
+void Cmd_Cloak_f( gentity_t *ent ) {
+
+	char *msg; // message to player
+
+  
+  if(!g_enableCloak.integer) {
+    msg = "Cloaking not enabled\n";
+	} else if (ent->flags & FL_CLOAK) {
+		msg = "Cloaking OFF\n";
+    ent->flags &= ~FL_CLOAK;
+		ent->client->ps.powerups[PW_INVIS] = level.time;
+		// Removes the invisible powerup from the player
+	}        
+	else {
+		msg = "Cloaking ON\n";
+    ent->flags |= FL_CLOAK;
+		ent->client->ps.powerups[PW_INVIS] = level.time + 1000000000;
+		// Gives the invisible powerup to the player
+	}
+
+	trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_GRAVITY_BOOTS
+/*
+=================
+Cmd_Boots_f          function for turning boots on/off
+=================
+*/
+void Cmd_Boots_f( gentity_t *ent ) {
+  char *msg; // message to player
+
+  if(!g_enableBoots.integer) {
+    msg = "Gravity boots not enabled\n";
+  } else if (ent->flags & FL_BOOTS) {
+    msg = "Anti Gravity boots OFF\n";
+    ent->flags &= ~FL_BOOTS;
+  } else {
+    msg = "Anti Gravity boots ON\n";
+    ent->flags |= FL_BOOTS;
+  }
+
+  trap_SendServerCommand( ent-g_entities, va("print \"%s\"", msg));
+}
+#endif
+
+
+#ifdef USE_LASER_SIGHT
+// in g_weapon.c
+void Laser_Gen( gentity_t *ent, int type );
+#endif
+
 
 /*
 =================
@@ -1792,6 +2209,65 @@ static void Cmd_Stats_f( gentity_t *ent ) {
 }
 
 
+#ifdef USE_RUNES
+gitem_t	*BG_FindItemForRune( int r );
+
+static void Cmd_Rune_f( gentity_t *ent ) {
+  char		buffer[MAX_TOKEN_CHARS];
+  vec3_t		dir, delta;
+  int i, r;
+  int v = random() * 4;
+  gentity_t	*e;
+  gitem_t *item;
+  float nearestDist = 100000;
+  float dist;
+  vec3_t nearest;
+
+  // select the item location nearest the player
+  for (i = 0; i < level.num_entities; i++) {
+    e = &g_entities[i];
+    if(!e->inuse || e->client || !e->item) {
+      continue;
+    }
+    VectorSubtract( e->s.origin, ent->s.pos.trBase, delta );
+    dist = VectorLength( delta );
+    if(dist < nearestDist && dist > 0) {
+      VectorCopy(e->s.origin, nearest);
+      nearestDist = dist;
+    }
+  }
+  if(nearestDist == 100000) {
+    Com_Printf("Error: couldn't find good spawn location\n");
+  } else {
+    Com_Printf("Launching rune: %f: %f, %f, %f\n", 
+      nearestDist, nearest[0], nearest[1], nearest[2]);
+  }
+  nearest[2] += 4;
+  if(v == 0)
+    VectorSet(dir, .5, .5, 2.0);
+  else if(v == 1)
+    VectorSet(dir, -.5, .5, 2.0);
+  else if(v == 2)
+    VectorSet(dir, .5, -.5, 2.0);
+  else
+    VectorSet(dir, -.5, -.5, 2.0);
+  VectorMA( nearest, 10, dir, nearest );
+  VectorNormalize( dir );
+
+  trap_Argv( 1, buffer, sizeof( buffer ) );
+	r = atof( buffer );
+  item = BG_FindItemForRune( r );
+  if(!r || !item) {
+    Com_Printf("Unknown rune: \"%s\"\n", buffer);
+    return;
+  }
+
+  // pop the rune out of that location
+  RegisterItem( item );
+  e = LaunchItem( item, nearest, dir, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  G_AddEvent( e, EV_ITEM_RESPAWN, 0 );
+}
+#endif
 /*
 =================
 ClientCommand
@@ -1869,6 +2345,41 @@ void ClientCommand( int clientNum ) {
 		return;
 	}
 
+#ifdef USE_ADVANCED_WEAPONS
+	// cycle classes just like we do with weapons but server side
+	if (Q_stricmp (cmd, "prevclass") == 0) {
+		int i;
+		int prevClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			prevClass--;
+			if(prevClass < 0) {
+				prevClass = WP_MAX_CLASSES - 1;
+			}
+			if(ent->client->weapons[prevClass] > 0) {
+				break;
+			}
+		}
+		ent->s.weapon = ent->client->ps.weapon = WP_MAX_CLASSES - 1 + prevClass * WP_MAX_WEAPONS;
+		ent->client->weaponClass = prevClass;
+	}
+	else if (Q_stricmp (cmd, "nextclass") == 0) {
+		int i;
+		int nextClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
+		for(i = 0; i < WP_MAX_CLASSES; i++) {
+			nextClass++;
+			if(nextClass >= WP_MAX_CLASSES) {
+				nextClass = 0;
+			}
+			if(ent->client->weapons[nextClass] > 0) {
+				break;
+			}
+		}
+		ent->s.weapon = ent->client->ps.weapon = 0 + nextClass * WP_MAX_WEAPONS;
+		ent->client->weaponClass = nextClass;
+	}
+	else
+#endif
+
 	if (Q_stricmp (cmd, "give") == 0)
 		Cmd_Give_f (ent);
 	else if (Q_stricmp (cmd, "god") == 0)
@@ -1905,6 +2416,57 @@ void ClientCommand( int clientNum ) {
 		Cmd_GameCommand_f( ent );
 	else if (Q_stricmp (cmd, "setviewpos") == 0)
 		Cmd_SetViewpos_f( ent );
+#ifdef USE_WEAPON_DROP
+  else if (Q_stricmp (cmd, "drop") == 0)  // XRAY FMJ
+    Cmd_Drop_f( ent );
+#endif
+#ifdef USE_POWERUP_DROP
+  else if (Q_stricmp (cmd, "droppowerup") == 0)
+    Cmd_DropPowerup_f( ent );
+#endif
+#ifdef USE_FLAG_DROP
+  else if (Q_stricmp (cmd, "dropflag") == 0)
+    Cmd_DropFlag_f( ent );
+#endif
+#ifdef USE_ITEM_DROP
+  else if (Q_stricmp (cmd, "dropitem") == 0)
+    Cmd_DropItem_f( ent );
+#endif
+#ifdef USE_AMMO_DROP // for heavys
+  else if (Q_stricmp (cmd, "dropammo") == 0)
+    Cmd_DropAmmo_f( ent );
+#endif
+#ifdef USE_HEALTH_DROP // for medics
+	else if (Q_stricmp (cmd, "drophealth") == 0)
+		Cmd_DropHealth_f( ent );
+#endif
+
+#ifdef USE_BOUNCE_CMD
+  else if (Q_stricmp (cmd, "rbounce") == 0)
+    Cmd_RBounce_f( ent );
+#endif
+#ifdef USE_CLOAK_CMD
+  else if (Q_stricmp (cmd, "cloak") == 0)
+  	Cmd_Cloak_f( ent );
+#endif
+#ifdef USE_GRAVITY_BOOTS
+  else if (Q_stricmp (cmd, "boots") == 0)
+     Cmd_Boots_f( ent );
+#endif
+#ifdef USE_LASER_SIGHT
+  else if (Q_stricmp (cmd, "laser") == 0)
+		Laser_Gen( ent, 1 );//1=Laser, 2=Flashlight
+	else if (Q_stricmp (cmd, "flashlight") == 0)
+		Laser_Gen( ent, 2 );
+#endif
+
+#ifdef USE_RUNES
+  else if (Q_stricmp (cmd, "rune") == 0)
+    Cmd_Rune_f( ent );
+  else if (Q_stricmp (cmd, "droprune") == 0)
+    Cmd_DropRune_f( ent );
+#endif
+
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
 	else

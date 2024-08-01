@@ -10,6 +10,7 @@ ai_vcmd
 bg_lib
 bg_misc
 bg_pmove
+bg_physics
 bg_slidemove
 g_active
 g_arenas
@@ -22,6 +23,8 @@ g_mem
 g_misc
 g_missile
 g_mover
+g_portal
+g_powerup
 g_rotation
 g_session
 g_spawn
@@ -32,5 +35,6 @@ g_trigger
 g_unlagged
 g_utils
 g_weapon
+g_weapon2
 q_math
 q_shared

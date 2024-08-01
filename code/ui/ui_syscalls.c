@@ -2,6 +2,8 @@
 //
 #include "ui_local.h"
 
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+
 // this file is only included when building a dll
 // syscalls.asm is included instead when building a qvm
 #ifdef Q3_VM
@@ -383,3 +385,6 @@ qboolean trap_VerifyCDKey( const char *key, const char *chksum) {
 void trap_SetPbClStatus( int status ) {
 	syscall( UI_SET_PBCLSTATUS, status );
 }
+
+#endif
+

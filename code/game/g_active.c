@@ -87,7 +87,14 @@ void P_WorldEffects( gentity_t *ent ) {
 
 	waterlevel = ent->waterlevel;
 
+#ifdef USE_ADVANCED_ITEMS
+	envirosuit = (ent->client->inventory[PW_BATTLESUIT] || ent->client->inventory[PW_GRAVITYSUIT] || ent->client->inventory[PW_SUPERMAN]);
+#else
 	envirosuit = ent->client->ps.powerups[PW_BATTLESUIT] > level.time;
+#endif
+#ifdef USE_RUNES
+  envirosuit |= ent->client->inventory[RUNE_RESIST] > 0;
+#endif
 
 	//
 	// check for drowning
@@ -146,6 +153,110 @@ void P_WorldEffects( gentity_t *ent ) {
 }
 
 
+/**
+ * G_Use
+ *
+ * Uses something
+ */
+void G_Use(gentity_t *ent) {
+
+	static vec3_t  range = { 40, 40, 52 };
+
+	int 	   i;
+	int 	   num;
+	int 	   touch[MAX_GENTITIES];
+	gentity_t	   *hit;
+	gentity_t	   *interfaceEnt;
+	vec3_t		   mins;
+	vec3_t		   maxs;
+	qboolean	   anim  = qfalse;
+	qboolean	   doingDoor = qfalse;
+	trace_t 	   tr;
+	vec3_t		   reach;
+	gentity_t	   *other;
+	vec3_t		   forward;
+	vec3_t		   right;
+	vec3_t		   up;
+	vec3_t		   muzzle;
+	vec3_t		   origin;
+
+	// dokta8 - work out where player is and where they are facing
+	AngleVectors (ent->client->ps.viewangles, forward, right, up);
+	CalcMuzzlePointOrigin( ent, origin, forward, right, up, muzzle );
+
+	// has to be a meter away from the dude
+	VectorMA(muzzle, 64, forward, reach);
+
+	// dokta8 - Do a trace from player's muzzle to the object they are in front of
+	trap_Trace(&tr, muzzle, NULL, NULL, reach, ent->s.number, MASK_SHOT | CONTENTS_TRIGGER);
+	other = &g_entities[ tr.entityNum ];	//	dokta8 - get the first object in front of the player
+
+	if (other) {
+
+		if (other->item && (other->item->giType == IT_WEAPON || other->item->giType == IT_TEAM || other->item->giType == IT_HOLDABLE)) {
+			//@Fenix - Fix cg_autoPickup 0 bug #392
+			Pickup_Item(other, ent, &tr, -1);
+			return;
+		}
+
+		if (other->classname) {
+			if (!Q_stricmp(other->classname, "func_door")) {
+				doingDoor = qtrue;
+			}
+		}
+	}
+
+	VectorSubtract(ent->client->ps.origin, range, mins);
+	VectorAdd(ent->client->ps.origin, range, maxs);
+
+	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
+
+	for (i = 0; i < num; i++) {
+
+		hit = &g_entities[touch[i]];
+
+		if (!hit->classname || !hit->use) {
+			continue;
+		}
+
+		if (!Q_stricmp(hit->classname, "func_button")) {
+			//Press a button
+			hit->use(hit, hit, ent);
+		}
+		else if (!Q_stricmp(hit->classname, "func_door")) {
+			//Trigger_only is a flag set by the mapper
+			//it prevents doors being opened directly by a player
+			//ie: they have to use a button or another trigger
+			if ((hit->mover->moverState != MOVER_1TO2) && (!hit->mover->trigger_only)) {
+				hit->use(hit, hit, ent);
+				anim = qtrue;
+			}
+		}
+		else if (!Q_stricmp(hit->classname, "func_rotating_door") || !Q_stricmp(hit->classname, "func_door_rotating")) {
+			if (!hit->mover->trigger_only) {
+				hit->use(hit, hit, ent);
+				anim = qtrue;
+			}
+		}
+		else if (!Q_stricmp(hit->classname, "func_keyboard_interface") && !doingDoor) {
+			hit->use(hit, hit, ent);
+		}
+		else if (!Q_stricmp(hit->classname, "func_train") && !doingDoor && hit->interfaceEnt) {
+			if(hit->interfaceEnt){
+				if ((interfaceEnt = G_Find (NULL, FOFS(targetname), hit->interfaceEnt)) != NULL
+				 && interfaceEnt->use) {
+					interfaceEnt->use(interfaceEnt, interfaceEnt, ent);
+				}
+			}
+		}
+	}
+
+	//Run "use" animation but only if a high priority anim is not already running
+	if (anim && (ent->client->ps.torsoTimer <= 0)) {
+		ent->client->ps.torsoAnim  = TORSO_GESTURE; // TODO: TORSO_USE
+		ent->client->ps.torsoTimer = 1500;
+	}
+}
 
 /*
 ===============
@@ -204,6 +315,120 @@ void ClientImpacts( gentity_t *ent, pmove_t *pm ) {
 	}
 
 }
+
+#ifdef USE_PORTALS
+/*
+============
+G_ListPortals
+
+Find all personal portals so they don't affect Pmove physics negatively
+============
+*/
+void	G_ListPortals( gentity_t *ent, vec3_t *sources, vec3_t *destinations
+	, vec3_t *sourcesAngles, vec3_t *destinationsAngles ) {
+	int			i, num;
+	int			touch[MAX_GENTITIES];
+	gentity_t	*hit;
+	vec3_t		mins, maxs;
+	int         count = 0;
+  //vec3_t    velocity;
+	static vec3_t	range = { 80, 80, 104 };
+
+	if ( !ent->client ) {
+		return;
+	}
+
+	// dead clients don't activate triggers!
+	if ( ent->client->ps.stats[STAT_HEALTH] <= 0 ) {
+		return;
+	}
+
+	VectorSubtract( ent->client->ps.origin, range, mins );
+	VectorAdd( ent->client->ps.origin, range, maxs );
+  //VectorCopy(ent->client->ps.velocity, velocity);
+  //VectorScale( velocity, 52, velocity );
+  //VectorSubtract( mins, velocity, mins );
+  //VectorSubtract( maxs, velocity, maxs );
+
+	num = trap_EntitiesInBox( mins, maxs, touch, MAX_GENTITIES );
+
+	// can't use ent->absmin, because that has a one unit pad
+	VectorAdd( ent->client->ps.origin, ent->r.mins, mins );
+	VectorAdd( ent->client->ps.origin, ent->r.maxs, maxs );
+
+	for ( i=0 ; i<num ; i++ ) {
+		hit = &g_entities[touch[i]];
+
+		if ( !hit->touch && !ent->touch ) {
+			continue;
+		}
+		if ( !( hit->r.contents & CONTENTS_TRIGGER ) ) {
+			continue;
+		}
+
+		if ( hit->s.eType != ET_TELEPORT_TRIGGER ) {
+			continue;
+		}
+
+		if ( !trap_EntityContact( mins, maxs, hit ) ) {
+			continue;
+		}
+
+		//pm->
+		if( hit->pos1[0] || hit->pos1[1] || hit->pos1[2] ) {
+			gentity_t *destination;
+			gclient_t *client = &level.clients[hit->r.ownerNum];
+			if(hit == client->portalSource) {
+				destination = client->portalDestination;
+			} else {
+				destination = client->portalSource;
+			}
+
+			if(destination->s.eventParm) {
+				vec3_t angles;
+				ByteToDir( destination->s.eventParm, angles );
+				vectoangles( angles, angles );
+				if(hit->s.eventParm) {
+					vec3_t angles2;
+					ByteToDir( hit->s.eventParm, angles2 );
+					vectoangles( angles2, angles2 );
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(angles2, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(angles, destinationsAngles[count]);
+				} else {
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(vec3_origin, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(angles, destinationsAngles[count]);
+				}
+			} else {
+				if(hit->s.eventParm) {
+					vec3_t angles2;
+					ByteToDir( hit->s.eventParm, angles2 );
+					vectoangles( angles2, angles2 );
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(angles2, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(vec3_origin, destinationsAngles[count]);
+				} else {
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(vec3_origin, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(vec3_origin, destinationsAngles[count]);
+				}
+			}
+
+			count++;
+		}
+	}
+	VectorCopy(vec3_origin, sources[count]);
+	VectorCopy(vec3_origin, destinations[count]);
+	VectorCopy(vec3_origin, sourcesAngles[count]);
+	VectorCopy(vec3_origin, destinationsAngles[count]);
+	//Com_Printf("%i portals detected\n", count);
+}
+#endif
 
 /*
 ============
@@ -301,12 +526,40 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	client = ent->client;
 
 	if ( client->sess.spectatorState != SPECTATOR_FOLLOW ) {
+#ifdef USE_BIRDS_EYE
+		if (client->pers.thirdPerson || g_thirdPerson.integer) {
+			client->ps.pm_type = PM_THIRDPERSON;
+		} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+		} else if (client->pers.sideView || g_sideview.integer) {
+			client->ps.pm_type = PM_PLATFORM;
+		} else
+#endif
+#ifdef USE_AIW
+		if(client->pers.reverseControls) {
+			client->ps.pm_type = PM_REVERSED;
+		} else
+		if(client->pers.upsidedown || g_upsideDown.integer) {
+			client->ps.pm_type = PM_UPSIDEDOWN;
+		} else
+		if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+			client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+		} else
+#endif
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed = g_speed.value * 1.25f; // faster than normal
 
 		// set up for pmove
 		memset( &pm, 0, sizeof( pm ) );
 		pm.ps = &client->ps;
+#ifdef USE_ADVANCED_ITEMS
+		// spectators don't have inventory?
+		//memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
+#endif
 		pm.cmd = *ucmd;
 		if ( client->noclip )
 			pm.tracemask = 0;
@@ -367,6 +620,10 @@ qboolean ClientInactivityTimer( gclient_t *client ) {
 	return qtrue;
 }
 
+
+void G_GiveItem(gentity_t *ent, powerup_t pw);
+
+
 /*
 ==================
 ClientTimerActions
@@ -376,7 +633,7 @@ Actions that happen once a second
 */
 void ClientTimerActions( gentity_t *ent, int msec ) {
 	gclient_t	*client;
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int			maxHealth;
 #endif
 
@@ -387,13 +644,26 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		client->timeResidual -= 1000;
 
 		// regenerate
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
 		}
+#ifdef USE_RUNES
+    else if ( ent->client->inventory[RUNE_REGEN] ) {
+      maxHealth = client->ps.stats[STAT_MAX_HEALTH];
+    }
+#endif
+#ifdef USE_ADVANCED_ITEMS
+		else if ( client->inventory[PW_REGEN]
+			|| client->inventory[PW_SUPERMAN] // obviously because he's healed by sun
+		){
+			maxHealth = client->ps.stats[STAT_MAX_HEALTH];
+		}
+#else
 		else if ( client->ps.powerups[PW_REGEN] ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH];
 		}
+#endif
 		else {
 			maxHealth = 0;
 		}
@@ -412,7 +682,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
 			}
 #else
-		if ( client->ps.powerups[PW_REGEN] ) {
+		if ( ent->client->ps.powerups[PW_REGEN] ) {
 			if ( ent->health < client->ps.stats[STAT_MAX_HEALTH]) {
 				ent->health += 15;
 				if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] * 1.1 ) {
@@ -429,17 +699,60 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #endif
 		} else {
 			// count down health when over max
+#ifdef USE_GAME_FREEZETAG
+			if(!g_freezeTag.integer || ent->health != INFINITE)
+#endif
+#ifdef USE_CLOAK_CMD
+      if (ent->flags & FL_CLOAK) {
+        // count down health when cloaked.
+      	ent->health--;
+      	if ( ent->health < 11) {
+      		ent->flags ^= FL_CLOAK;
+      		ent->client->ps.powerups[PW_INVIS] = level.time;
+      	}
+      } else
+#endif
 			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
 		}
+
+// i had a friend Dan in college that added this feature to the half life 2 engine, our plan was to compile target for playstation leaked sdk
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+		if(!( client->pers.cmd.buttons & BUTTON_WALKING )
+			&& (client->pers.cmd.forwardmove != 0 || client->pers.cmd.rightmove != 0 || client->pers.cmd.upmove > 0)
+			&& client->ps.stats[STAT_STAMINA] > 0) {
+			client->ps.stats[STAT_STAMINA] -= 10;
+		} else if (client->ps.stats[STAT_STAMINA] < 100) {
+			client->ps.stats[STAT_STAMINA] += 10;
+		}
+
+		if(g_ability.integer > 0) {
+				
+			if (client->ps.stats[STAT_ABILITY] < g_ability.value) {
+				if(client->pers.playerclass == PCLASS_RANGER && !client->inventory[HI_TELEPORTER]) {
+					client->ps.stats[STAT_ABILITY]++;
+				}
+				if(client->pers.playerclass == PCLASS_VISOR) {
+					client->ps.stats[STAT_ABILITY]++;
+				}
+			}
+
+			if(client->ps.stats[STAT_ABILITY] >= g_ability.value) {
+				if(client->pers.playerclass == PCLASS_RANGER && !client->inventory[HI_TELEPORTER]) {
+					G_GiveItem(ent, HI_TELEPORTER);
+					client->ps.stats[STAT_ABILITY] = 0;
+				}
+			}
+		}
+#endif
 
 		// count down armor when over max
 		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
 	}
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
 		int w, max, inc, t, i;
     int weapList[]={WP_MACHINEGUN,WP_SHOTGUN,WP_GRENADE_LAUNCHER,WP_ROCKET_LAUNCHER,WP_LIGHTNING,WP_RAILGUN,WP_PLASMAGUN,WP_BFG,WP_NAILGUN,WP_PROX_LAUNCHER,WP_CHAINGUN};
@@ -489,6 +802,30 @@ void ClientIntermissionThink( gclient_t *client ) {
 	client->ps.eFlags &= ~EF_FIRING;
 
 	// the level will exit when everyone wants to or after timeouts
+#ifdef USE_BIRDS_EYE
+	if (client->pers.thirdPerson || g_thirdPerson.integer) {
+		client->ps.pm_type = PM_THIRDPERSON;
+	} else if (client->pers.birdsEye || g_birdsEye.integer) {
+			if(client->pers.showCursor) {
+				client->ps.pm_type = PM_FOLLOWCURSOR;
+			} else {
+				client->ps.pm_type = PM_BIRDSEYE;
+			}
+	} else if (client->pers.sideView || g_sideview.integer) {
+		client->ps.pm_type = PM_PLATFORM;
+	}
+#endif
+#ifdef USE_AIW
+	if(client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSED;
+	}
+	if(client->pers.upsidedown || g_upsideDown.integer) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+	}
+	if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	}
+#endif
 
 	// swap and latch button actions
 	client->oldbuttons = client->buttons;
@@ -498,6 +835,11 @@ void ClientIntermissionThink( gclient_t *client ) {
 		client->readyToExit = 1;
 	}
 }
+
+
+#ifdef USE_ADVANCED_ITEMS
+void UsePowerup( gentity_t *ent, powerup_t powerup );
+#endif
 
 
 /*
@@ -544,10 +886,55 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			G_Damage (ent, NULL, NULL, NULL, NULL, damage, 0, MOD_FALLING);
 			break;
 
+#ifdef USE_ALT_FIRE
+    case EV_ALTFIRE_BOTH:
+    case EV_ALTFIRE_WEAPON:
+#ifdef USE_PORTALS
+      if(g_altPortal.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_BFG;
+				FireWeapon( ent, qtrue );
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
+#ifdef USE_GRAPPLE
+      if(g_altGrapple.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_GRAPPLING_HOOK;
+        FireWeapon( ent, qtrue );
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
+      FireWeapon( ent, qtrue );
+
+		if(event != EV_ALTFIRE_BOTH)
+      break;        
+#endif
 		case EV_FIRE_WEAPON:
+#ifdef USE_ALT_FIRE
+			FireWeapon( ent, qfalse );
+#else
 			FireWeapon( ent );
+#endif
 			break;
 
+#ifdef USE_SINGLEPLAYER
+		case EV_USE:
+			G_Use(ent);
+			break;
+#endif
+
+
+#ifdef USE_ADVANCED_ITEMS
+		case EV_USE_ITEM5:
+		case EV_USE_ITEM4:
+		case EV_USE_ITEM3:
+		case EV_USE_ITEM2:
+		case EV_USE_ITEM1:
+		case EV_USE_ITEM0:
+			UsePowerup(ent, client->ps.eventParms[ i & (MAX_PS_EVENTS-1) ]);
+			break;
+#else
 		case EV_USE_ITEM1:		// teleporter
 			// drop flags in CTF
 			item = NULL;
@@ -559,6 +946,14 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			} else if ( ent->client->ps.powerups[ PW_BLUEFLAG ] ) {
 				item = BG_FindItemForPowerup( PW_BLUEFLAG );
 				j = PW_BLUEFLAG;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			} else if ( ent->client->ps.powerups[ PW_GOLDFLAG ] ) {
+				item = BG_FindItemForPowerup( PW_GOLDFLAG );
+				j = PW_GOLDFLAG;
+			} else if ( ent->client->ps.powerups[ PW_GREENFLAG ] ) {
+				item = BG_FindItemForPowerup( PW_GREENFLAG );
+				j = PW_GREENFLAG;
+#endif
 			} else if ( ent->client->ps.powerups[ PW_NEUTRALFLAG ] ) {
 				item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
 				j = PW_NEUTRALFLAG;
@@ -615,18 +1010,22 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			// start the kamikze
 			G_StartKamikaze( ent );
 			break;
-
-		case EV_USE_ITEM4:		// portal
-			if( ent->client->portalID ) {
-				DropPortalSource( ent );
-			}
-			else {
-				DropPortalDestination( ent );
-			}
-			break;
 		case EV_USE_ITEM5:		// invulnerability
 			ent->client->invulnerabilityTime = level.time + 10000;
 			break;
+#endif
+
+#ifdef USE_PORTALS
+		case EV_USE_ITEM4:		// portal
+			if( ent->client->portalID ) {
+				DropPortalSource( ent, qfalse );
+			}
+			else {
+				DropPortalDestination( ent, qfalse );
+			}
+			break;
+#endif
+
 #endif
 
 		default:
@@ -636,7 +1035,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 }
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 /*
 ==============
 StuckInOtherClient
@@ -716,6 +1115,12 @@ void SendPendingPredictableEvents( playerState_t *ps ) {
 	}
 }
 
+
+#ifdef USE_GAME_FREEZETAG
+void player_frozen(gentity_t *self, int killer);
+#endif
+
+
 /*
 ==============
 ClientThink
@@ -733,6 +1138,12 @@ void ClientThink_real( gentity_t *ent ) {
 	int			oldEventSequence;
 	int			msec;
 	usercmd_t	*ucmd;
+#ifdef USE_PORTALS
+	vec3_t sources[32], destinations[32], sourcesAngles[32], destinationsAngles[32];
+#endif
+#ifdef USE_ADVANCED_WEAPONS
+	int i;
+#endif
 
 	client = ent->client;
 
@@ -742,6 +1153,89 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	// mark the time, so the connection sprite can be removed
 	ucmd = &ent->client->pers.cmd;
+
+#ifdef USE_ADVANCED_WEAPONS
+	//G_Printf("game class: %i\n", weaponClass);
+	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
+	client->ps.stats[STAT_WEAPONS] = client->weapons[client->weaponClass];
+	for(i = 0; i < WP_MAX_WEAPONS; i++) {
+		client->ps.ammo[i] = client->ammo[client->weaponClass][i];
+	}
+		/*G_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
+		client->weaponClass,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 0)) >> 0,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 1)) >> 1,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 2)) >> 2,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 3)) >> 3,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 4)) >> 4,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 5)) >> 5,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 6)) >> 6,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 7)) >> 7,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 8)) >> 8,
+		(client->ps.stats[STAT_WEAPONS] & (1 << 9)) >> 9
+		);*/
+
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+	// update item classes but actually store them on the client
+	// TODO: use these techniques to improve weapon switching without delay
+	if(client->lastItemTime + 30 < level.time) {
+		int i, j;
+		int itemBits;
+		qboolean hasItems = qfalse;
+		// TODO: find the next item in inventory and switch to that class for updates
+		int prevItemClass = client->ps.stats[STAT_HOLDABLE_UPDATE];
+		for(i = 0; i < 2 * PW_NUM_POWERUPS; i++) {
+			prevItemClass++;
+			if(prevItemClass == PW_MAX_ITEMGROUPS) {
+				prevItemClass = 0;
+			}
+			if(!client->inventoryModified[prevItemClass]) {
+				continue;
+			}
+			itemBits = 0;
+			hasItems = qfalse;
+			for(j = 0; j < PW_MAX_POWERUPS; j++) {
+				//gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
+				//if(!item || !item->giTag) {
+				//	continue;
+				//}
+				if(prevItemClass * PW_MAX_POWERUPS + j >= PW_NUM_POWERUPS) {
+					continue;
+				}
+				hasItems = qtrue;
+				if(client->inventory[prevItemClass * PW_MAX_POWERUPS + j] > 0) {
+					itemBits |= (1 << j);
+				}
+			}
+			if(hasItems) {
+				break;
+			}
+		}
+
+		if(i < 2 * PW_NUM_POWERUPS) {
+			client->ps.stats[STAT_HOLDABLE_UPDATE] = prevItemClass;
+			client->ps.stats[STAT_HOLDABLE_AVAILABLE] = itemBits;
+			client->inventoryModified[prevItemClass] = qfalse;
+		}
+		client->lastItemTime = level.time;
+	}
+#endif
+
+#ifdef USE_RPG_STATS
+	if(client->lastHealthTime + 1000 < level.time) {
+		gentity_t *plum;
+		plum = G_TempEntity( ent->r.currentOrigin, EV_HEALTHPLUM );
+		// only send this temp entity to a single client
+		plum->r.svFlags |= SVF_BROADCAST;
+		ent->s.eFlags |= EF_NODRAW;
+		plum->s.otherEntityNum = ent->s.number;
+		plum->s.time = ent->health;
+		plum->s.powerups = ent->s.powerups;
+		client->lastHealthTime = level.time;
+	}
+#endif
 
 	// sanity check the command time to prevent speedup cheating
 	if ( ucmd->serverTime > level.time + 200 ) {
@@ -811,32 +1305,142 @@ void ClientThink_real( gentity_t *ent ) {
 
 	if ( client->noclip ) {
 		client->ps.pm_type = PM_NOCLIP;
-	} else if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
+  } else
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if ( g_freezeTag.integer && client->ps.powerups[PW_FROZEN] ) {
+    client->ps.pm_type = PM_FROZEN;
+		//client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+  } else
+#endif
+  if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		client->ps.pm_type = PM_DEAD;
-	} else {
+	} else 
+#ifdef USE_VEHICLES
+	if(client->inventory[HI_VEHICLE]) {
+		if(client->pers.showCursor) {
+			client->ps.pm_type = PM_VEHICLEMOUSE;
+		} else {
+			client->ps.pm_type = PM_VEHICLE;
+		}
+	} else
+#endif
+#ifdef USE_BIRDS_EYE
+	if (client->pers.thirdPerson || g_thirdPerson.integer) {
+		client->ps.pm_type = PM_THIRDPERSON;
+	} else if (client->pers.birdsEye || g_birdsEye.integer) {
+		if(client->pers.showCursor) {
+			client->ps.pm_type = PM_FOLLOWCURSOR;
+		} else {
+			client->ps.pm_type = PM_BIRDSEYE;
+		}
+	} else if (client->pers.sideView || g_sideview.integer) {
+		client->ps.pm_type = PM_PLATFORM;
+	} else
+#endif
+#ifdef USE_AIW
+	if(client->pers.reverseControls && (client->pers.upsidedown || g_upsideDown.integer)) {
+		client->ps.pm_type = PM_REVERSEDUPSIDEDOWN;
+	} else
+	if(client->pers.reverseControls) {
+		client->ps.pm_type = PM_REVERSED;
+	} else 
+	if(client->pers.upsidedown || g_upsideDown.integer) {
+		client->ps.pm_type = PM_UPSIDEDOWN;
+	} else 
+#endif
+	{
 		client->ps.pm_type = PM_NORMAL;
 	}
 
 	client->ps.gravity = g_gravity.value;
+#ifdef USE_ADVANCED_ITEMS
+	if(client->inventory[PW_GRAVITYSUIT]) {
+		client->ps.gravity = g_gravity.value * 0.5f;        //  yeah... this too
+	} else
+#endif
+#ifdef USE_GRAVITY_BOOTS
+  if (g_enableBoots.integer && ent->flags & FL_BOOTS) {                  //  umm and this,
+		client->ps.gravity = g_gravity.value * g_bootsGravity.value;        //  yeah... this too
+	}
+#endif
 
 	// set speed
 	client->ps.speed = g_speed.value;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+#ifdef USE_PHYSICS_VARS
+    client->ps.speed *= g_scoutFactor.value;
+#else
 		client->ps.speed *= 1.5;
-	}
-	else
 #endif
-	if ( client->ps.powerups[PW_HASTE] ) {
+	} else
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+	if(client->inventory[PW_FLASH] || client->inventory[PW_SUPERMAN]) {
+		client->ps.speed *= 2.6;
+	} else
+	if(client->inventory[PW_HASTE]) {
+#ifdef USE_PHYSICS_VARS
+    client->ps.speed *= g_hasteFactor.value;
+#else
 		client->ps.speed *= 1.3;
+#endif
+	} else
+
+#else
+
+	if ( client->ps.powerups[PW_HASTE] 
+#ifdef USE_RUNES
+    || ent->client->inventory[RUNE_HASTE]
+#endif
+	) {
+#ifdef USE_PHYSICS_VARS
+    client->ps.speed *= g_hasteFactor.value;
+#else
+		client->ps.speed *= 1.3;
+#endif
 	}
 
+#endif
+
+#ifdef USE_LOCAL_DMG
+  if(g_locDamage.integer) {
+    if(client->lasthurt_location == LOCATION_LEG) {
+      client->ps.speed *= 0.7;
+    }
+    if(client->lasthurt_location == LOCATION_FOOT) {
+      client->ps.speed *= 0.5;
+    }
+  }
+#endif
+
+client->ps.speed *= g_playerScale.value;
+
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+  if(g_freezeTag.integer && g_thawTime.integer
+    && ent->client->ps.powerups[PW_FROZEN]
+    && level.time >= ent->client->ps.powerups[PW_FROZEN]
+  ) {
+    G_AddEvent( ent, EV_UNFROZEN, 0 );
+    ent->client->ps.powerups[PW_FROZEN] = 0;
+    SetClientViewAngle(ent, client->frozen_angles);
+  }
+#endif
+#ifdef USE_GRAPPLE
 	// Let go of the hook if we aren't firing
+#ifdef USE_ALT_FIRE
+  if ( g_altGrapple.integer 
+    && client->hook && !( ucmd->buttons & BUTTON_ALT_ATTACK ) ) {
+    Weapon_HookFree(client->hook);
+  } else
+#endif
 	if ( client->ps.weapon == WP_GRAPPLING_HOOK &&
 		client->hook && !( ucmd->buttons & BUTTON_ATTACK ) ) {
 		Weapon_HookFree(client->hook);
 	}
+#endif
 
 	// set up for pmove
 	oldEventSequence = client->ps.eventSequence;
@@ -855,9 +1459,14 @@ void ClientThink_real( gentity_t *ent ) {
 		ent->client->pers.cmd.buttons |= BUTTON_GESTURE;
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	// check for invulnerability expansion before doing the Pmove
-	if (client->ps.powerups[PW_INVULNERABILITY] ) {
+#ifdef USE_ADVANCED_ITEMS
+	if (client->inventory[PW_INVULNERABILITY] ) 
+#else
+	if (client->ps.powerups[PW_INVULNERABILITY] ) 
+#endif
+	{
 		if ( !(client->ps.pm_flags & PMF_INVULEXPAND) ) {
 			vec3_t mins = { -42, -42, -42 };
 			vec3_t maxs = { 42, 42, 42 };
@@ -883,6 +1492,12 @@ void ClientThink_real( gentity_t *ent ) {
 #endif
 
 	pm.ps = &client->ps;
+#ifdef USE_ADVANCED_CLASS
+	pm.playerClass = client->pers.newplayerclass; // possible for bgmove to change a player class using a powerup?
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
+#endif
 	pm.cmd = *ucmd;
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
@@ -900,8 +1515,66 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.pmove_fixed = pmove_fixed.integer;
 	pm.pmove_msec = pmove_msec.integer;
 
+#ifdef USE_VEHICLES
+// STONELANCE
+	// TEMP used to move car around
+/*
+	client->car.sBody.r[2] += 3.0f * (pm.cmd.upmove * msec / 1000.0f);
+	client->car.sBody.CoM[2] += 3.0f * (pm.cmd.upmove * msec / 1000.0f);
+	for (i = 0; i < 8; i++){
+		client->car.sPoints[i].r[2] += 3.0f * (pm.cmd.upmove * msec / 1000.0f);
+	}
+*/
+	// END TEMP
+
+	// load car position etc into pmove
+	level.cars[ent->s.clientNum] = &client->car;
+
+	pm.car = &client->car;
+	pm.cars = level.cars;
+	//pm.pDebug = ent->pDebug;
+
+	//pm.controlMode = client->pers.controlMode;
+	//pm.manualShift = client->pers.manualShift;
+	pm.client = qfalse;
+
+	//if (ent->pDebug > 0){
+	//	Com_LogPrintf("Server Time: %i\n", pm.cmd.serverTime);
+	//	Com_LogPrintf("Source: Debug %d\n", ent->pDebug);
+	//	G_DebugForces(&pm.car->sBody, pm.car->sPoints, ent->pDebug-1);
+	//	G_DebugDynamics(&pm.car->sBody, pm.car->sPoints, ent->pDebug-1);
+	//}
+
+	//start = trap_Milliseconds();
+
+	//oldTime = client->ps.commandTime;
+	//VectorCopy( client->ps.viewangles, oldAngles );
+
+	pm.car_spring = car_spring.value;
+	pm.car_shock_up = car_shock_up.value;
+	pm.car_shock_down = car_shock_down.value;
+	pm.car_swaybar = car_swaybar.value;
+	pm.car_wheel = car_wheel.value;
+	pm.car_wheel_damp = car_wheel_damp.value;
+
+	pm.car_frontweight_dist = car_frontweight_dist.value;
+	pm.car_IT_xScale = car_IT_xScale.value;
+	pm.car_IT_yScale = car_IT_yScale.value;
+	pm.car_IT_zScale = car_IT_zScale.value;
+	pm.car_body_elasticity = car_body_elasticity.value;
+
+	pm.car_air_cof = car_air_cof.value;
+	pm.car_air_frac_to_df = car_air_frac_to_df.value;
+	pm.car_friction_scale = car_friction_scale.value;
+// END
+#endif
+
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
+
+#ifdef USE_PORTALS
+	G_ListPortals( ent, sources, destinations, sourcesAngles, destinationsAngles );
+#endif
 #ifdef MISSIONPACK
 		if (level.intermissionQueued != 0 && g_singlePlayer.integer) {
 			if ( level.time - level.intermissionQueued >= 1000  ) {
@@ -920,6 +1593,83 @@ void ClientThink_real( gentity_t *ent ) {
 		Pmove (&pm);
 #endif
 
+#ifdef USE_BIRDS_EYE
+	if(pm.ps->pm_type == PM_FOLLOWCURSOR
+		|| pm.ps->pm_type == PM_PLATFORM) {
+		if(!ent->client->cursorEnt || ent->client->cursorEnt->r.ownerNum != ent->client->ps.clientNum 
+			|| level.time - ent->client->cursorEnt->eventTime > 1000) {
+			gentity_t *pent;
+			if(ent->client->cursorEnt && ent->client->cursorEnt->r.ownerNum == ent->client->ps.clientNum) {
+				G_FreeEntity(ent->client->cursorEnt);
+			}
+			ent->client->cursorEnt = pent = G_TempEntity( client->ps.origin, EV_CURSORSTART );
+			pent->s.clientNum = client - level.clients;
+			pent->r.singleClient = client - level.clients;
+			pent->r.svFlags |= SVF_SINGLECLIENT;
+			pent->freeAfterEvent = qfalse;
+			pent->s.eType = ET_CURSOR;
+			pent->eventTime = level.time;
+			pent->freetime = level.time + 1000;
+			pent->r.ownerNum = ent->client->ps.clientNum;
+		} else {
+			gentity_t *pent;
+			pent = ent->client->cursorEnt;
+			//pent->eventTime = level.time;
+			//pent->s.event++;
+			//G_AddEvent(pent, EV_EVENT_BITS, 0);
+			pent->s.pos.trBase[0] = SHORT2ANGLE(ucmd->angles[YAW]);
+			pent->s.pos.trBase[1] = SHORT2ANGLE(ucmd->angles[PITCH]);
+			
+			
+			VectorCopy(pent->s.pos.trBase, pent->s.origin);
+		}
+	}
+
+
+
+
+	if(pm.ps->pm_type == PM_FOLLOWCURSOR && !(ent->r.svFlags & SVF_BOT)) {
+		ent->client->ps.delta_angles[PITCH] = 0;
+		ent->s.angles[PITCH] = SHORT2ANGLE(1);
+	} else
+	if(pm.ps->pm_type == PM_BIRDSEYE && !(ent->r.svFlags & SVF_BOT)) {
+		ent->client->ps.delta_angles[PITCH] = 0;
+		ent->s.angles[PITCH] = SHORT2ANGLE(1);
+	} else
+	if(pm.ps->pm_type == PM_PLATFORM && !(ent->r.svFlags & SVF_BOT)) {
+		// ZYGOTE START
+		// (Human) NOT A BOT
+		short		temp;
+
+		// Setup temp
+		temp = ent->client->pers.cmd.angles[YAW]; // + ent->client->ps.delta_angles[YAW];		
+		
+		// Some ugly shit, but it works :)
+		if ( (temp > -30000) && (temp < 0) ) {
+			ent->client->ps.delta_angles[YAW] = -1000 - ent->client->pers.cmd.angles[YAW];
+			temp = 0; // RIGHT
+		}
+		if ( (temp < 30000) && (temp > 0) ) {
+			ent->client->ps.delta_angles[YAW] = 1000 - ent->client->pers.cmd.angles[YAW];
+			temp = 32000; // LEFT
+		}	
+
+		// Copy modified YAW into viewangles
+		//G_Printf("view: %f\n", SHORT2ANGLE(temp));
+		ent->client->ps.delta_angles[YAW] = 0;
+		//ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp) < 0 ? 270 : 90;
+		ent->client->ps.viewangles[YAW] = SHORT2ANGLE(temp);
+		// ZYGOTE FINISH
+	}
+#endif
+#ifdef USE_AIW
+	if(pm.ps->pm_type == PM_UPSIDEDOWN && !(ent->r.svFlags & SVF_BOT)) {
+		// Copy modified YAW into viewangles
+		ent->client->ps.delta_angles[ROLL] = 180;
+		ent->client->ps.viewangles[ROLL] = SHORT2ANGLE(180);
+	}
+#endif
+
 	// save results of pmove
 	if ( ent->client->ps.eventSequence != oldEventSequence ) {
 		ent->eventTime = level.time;
@@ -927,17 +1677,33 @@ void ClientThink_real( gentity_t *ent ) {
 
 	BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
 
+#ifdef USE_ADVANCED_WEAPONS
+	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
+	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
+	client->ammo[client->weaponClass][ client->ps.weapon % WP_MAX_WEAPONS ] = client->ps.ammo[client->ps.weapon % WP_MAX_WEAPONS];
+#endif
+
 	SendPendingPredictableEvents( &ent->client->ps );
 
-	if ( !( ent->client->ps.eFlags & EF_FIRING ) ) {
+#ifdef USE_GRAPPLE
+	if ( !( ent->client->ps.eFlags & EF_FIRING ) 
+#ifdef USE_ALT_FIRE
+    || (g_altGrapple.integer && !(pm.cmd.buttons & BUTTON_ALT_ATTACK))
+#endif
+  ) {
 		client->fireHeld = qfalse;		// for grapple
 	}
+#endif
 
 	// use the snapped origin for linking so it matches client predicted versions
 	VectorCopy( ent->s.pos.trBase, ent->r.currentOrigin );
 
 	VectorCopy (pm.mins, ent->r.mins);
 	VectorCopy (pm.maxs, ent->r.maxs);
+
+#ifdef USE_ADVANCED_CLASS
+	ent->client->ps.stats[STAT_PLAYERCLASS] = pm.playerClass;
+#endif
 
 	ent->waterlevel = pm.waterlevel;
 	ent->watertype = pm.watertype;
@@ -971,12 +1737,19 @@ void ClientThink_real( gentity_t *ent ) {
 	client->latched_buttons |= client->buttons & ~client->oldbuttons;
 
 	// check for respawning
+#ifdef USE_GAME_FREEZETAG
+	if(!g_freezeTag.integer
+		 || client->ps.stats[STAT_HEALTH] != INFINITE
+		 || client->ps.pm_type != PM_FROZEN
+	) {
+#endif
+
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		// wait for the attack button to be pressed
 		if ( level.time > client->respawnTime ) {
 			// forcerespawn is to prevent users from waiting out powerups
-			if ( g_forcerespawn.integer > 0 && 
-				( level.time - client->respawnTime ) > g_forcerespawn.integer * 1000 ) {
+			if ( g_forcerespawn.value > 0 && 
+				( level.time - client->respawnTime ) > g_forcerespawn.value * 1000 ) {
 				respawn( ent );
 				return;
 			}
@@ -988,6 +1761,19 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 		return;
 	}
+
+#ifdef USE_GAME_FREEZETAG
+	} else {
+		//if(level.time - client->ps.powerups[PW_FROZEN] >= 0) {
+		//	client->ps.pm_type = PM_DEAD;
+		//	respawn( ent );
+		//}
+		//if(level.time - client->lastFreezeTime >= 1000) {
+		//	player_frozen(ent, 0);
+		//}
+	}
+#endif
+
 
 	// perform once-a-second actions
 	ClientTimerActions( ent, msec );
@@ -1005,6 +1791,25 @@ void ClientThink( int clientNum ) {
 	gentity_t *ent;
 
 	ent = g_entities + clientNum;
+
+#ifdef USE_GAME_FREEZETAG
+	if(ent->client->pers.connected == CON_CONNECTED) {
+		if(g_freezeTag.integer &&
+			(ent->client->ps.stats[STAT_HEALTH] == INFINITE
+			|| ent->client->ps.powerups[PW_FROZEN])) {
+			if(level.time - ent->client->ps.powerups[PW_FROZEN] >= 0) {
+				ent->client->ps.pm_type = PM_DEAD;
+				respawn( ent );
+			}
+			if(level.time - ent->client->lastFreezeTime >= 1000) {
+				player_frozen(ent, 0);
+			}
+		}
+	}
+#endif
+
+
+
 	trap_GetUsercmd( clientNum, &ent->client->pers.cmd );
 
 	// mark the time we got info, so we can display the
@@ -1020,6 +1825,7 @@ void ClientThink( int clientNum ) {
 
 
 void G_RunClient( gentity_t *ent ) {
+
 	if ( !(ent->r.svFlags & SVF_BOT) && !g_synchronousClients.integer ) {
 		return;
 	}
@@ -1090,6 +1896,9 @@ void ClientEndFrame( gentity_t *ent ) {
 	gclient_t	*client;
 	// unlagged
 	int			frames;
+#ifdef USE_ADVANCED_WEAPONS
+	int weaponClass;
+#endif
 
 	if ( !ent->client )
 		return;
@@ -1110,6 +1919,51 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
+#ifdef USE_RUNES
+  // keep rune switch on?
+  //if(ent->client->inventory[ent->rune]) {
+  //  ent->client->inventory[ent->rune] = level.time + 100000;
+  //}
+#endif
+#ifdef USE_ADVANCED_CLASS
+	//client->pers.newplayerclass = pm.playerClass; // possible for bgmove to change a player class using a powerup?
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	//memcpy(client->inventory, pm.inventory, sizeof(client->inventory));
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		gitem_t *item = BG_FindItemForPowerup(i);
+		if(item->giType != IT_HOLDABLE &&
+			item->giType != IT_PERSISTANT_POWERUP &&
+			client->inventory[i] && 
+			client->inventory[i] < client->pers.cmd.serverTime) {
+
+			client->inventory[i] = 0;
+			client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+			ent->s.powerups = 0;
+		}
+	}
+
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
+		ent->client->inventory[PW_GUARD] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+		ent->client->inventory[PW_SCOUT] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_SCOUT / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_DOUBLER ) {
+		ent->client->inventory[PW_DOUBLER] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_DOUBLER / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
+		ent->client->inventory[PW_AMMOREGEN] = level.time;
+		ent->client->inventoryModified[(int)floor(PW_AMMOREGEN / PW_MAX_POWERUPS)] = qtrue;
+	}
+	if ( ent->client->invulnerabilityTime > level.time ) {
+		ent->client->inventory[PW_INVULNERABILITY] = 1;
+		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
+	}
+#else
 #ifdef MISSIONPACK
 	// set powerup for player animation
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
@@ -1127,6 +1981,7 @@ void ClientEndFrame( gentity_t *ent ) {
 	if ( ent->client->invulnerabilityTime > level.time ) {
 		ent->client->ps.powerups[PW_INVULNERABILITY] = level.time;
 	}
+#endif
 #endif
 
 	// save network bandwidth

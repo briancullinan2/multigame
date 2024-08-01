@@ -309,7 +309,12 @@ int			trap_GetCurrentCmdNumber( void ) {
 	return syscall( CG_GETCURRENTCMDNUMBER );
 }
 
-qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd ) {
+#ifdef USE_MULTIWORLD
+qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd, int *world ) 
+#else
+qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t *ucmd ) 
+#endif
+{
 	return syscall( CG_GETUSERCMD, cmdNumber, ucmd );
 }
 
@@ -406,19 +411,21 @@ void trap_CIN_SetExtents (int handle, int x, int y, int w, int h) {
   syscall(CG_CIN_SETEXTENTS, handle, x, y, w, h);
 }
 
-/*
 qboolean trap_loadCamera( const char *name ) {
 	return syscall( CG_LOADCAMERA, name );
 }
 
-void trap_startCamera(int time) {
+void trap_startCamera(int camNum, int time) {
 	syscall(CG_STARTCAMERA, time);
 }
 
-qboolean trap_getCameraInfo( int time, vec3_t *origin, vec3_t *angles) {
-	return syscall( CG_GETCAMERAINFO, time, origin, angles );
+qboolean trap_getCameraInfo( int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov) {
+	return syscall( CG_GETCAMERAINFO, time, origin, angles, fov );
 }
-*/
+
+void trap_stopCamera(int camNum) {
+	syscall(CG_STOPCAMERA, camNum);
+}
 
 qboolean trap_GetEntityToken( char *buffer, int bufferSize ) {
 	return syscall( CG_GET_ENTITY_TOKEN, buffer, bufferSize );
@@ -441,3 +448,13 @@ void trap_R_AddRefEntityToScene2( const refEntity_t *re ) {
 void trap_R_AddLinearLightToScene( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b ) {
 	syscall( dll_trap_R_AddLinearLightToScene, start, end, intensity, r, g, b );
 }
+
+void    trap_R_AddPolyBufferToScene( polyBuffer_t* pPolyBuffer ) {
+	syscall( dll_trap_R_AddPolyBufferToScene, pPolyBuffer );
+}
+
+#ifdef USE_MULTIWORLD
+void    trap_R_SwitchWorld( int world ) {
+	syscall( dll_trap_R_SwitchWorld, world );
+}
+#endif

@@ -6,7 +6,7 @@
 
 #include "cg_local.h"
 
-#ifdef MISSIONPACK // bk001204
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD) // bk001204
 #include "../../ui/menudef.h" // bk001205 - for Q3_ui as well
 
 typedef struct {
@@ -130,7 +130,7 @@ void CG_ParseServerinfo( void ) {
 	char	*mapname;
 
 	info = CG_ConfigString( CS_SERVERINFO );
-	cgs.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );
+	cgs.gametype = atoi( Info_ValueForKey( info, "gametype" ) );
 	trap_Cvar_Set( "ui_gametype", va( "%i", cgs.gametype ) );
 	cgs.dmflags = atoi( Info_ValueForKey( info, "dmflags" ) );
 	cgs.teamflags = atoi( Info_ValueForKey( info, "teamflags" ) );
@@ -139,6 +139,7 @@ void CG_ParseServerinfo( void ) {
 	cgs.timelimit = atoi( Info_ValueForKey( info, "timelimit" ) );
 	cgs.maxclients = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
 	mapname = Info_ValueForKey( info, "mapname" );
+	Q_strncpyz( cgs.rawmapname, mapname, sizeof( cgs.rawmapname ) );
 	Com_sprintf( cgs.mapname, sizeof( cgs.mapname ), "maps/%s.bsp", mapname );
 	Q_strncpyz( cgs.redTeam, Info_ValueForKey( info, "g_redTeam" ), sizeof(cgs.redTeam) );
 	Q_strncpyz( cgs.blueTeam, Info_ValueForKey( info, "g_blueTeam" ), sizeof(cgs.blueTeam) );
@@ -225,11 +226,19 @@ void CG_SetConfigValues( void ) {
 
 	cgs.scores1 = atoi( CG_ConfigString( CS_SCORES1 ) );
 	cgs.scores2 = atoi( CG_ConfigString( CS_SCORES2 ) );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	cgs.scores3 = atoi( CG_ConfigString( CS_SCORES3 ) );
+	cgs.scores4 = atoi( CG_ConfigString( CS_SCORES4 ) );
+#endif
 	cgs.levelStartTime = atoi( CG_ConfigString( CS_LEVEL_START_TIME ) );
 	if( cgs.gametype == GT_CTF ) {
 		s = CG_ConfigString( CS_FLAGSTATUS );
 		cgs.redflag = s[0] - '0';
 		cgs.blueflag = s[1] - '0';
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		cgs.goldflag = s[2] - '0';
+		cgs.greenflag = s[3] - '0';
+#endif
 	}
 #ifdef MISSIONPACK
 	else if( cgs.gametype == GT_1FCTF ) {
@@ -314,6 +323,12 @@ static void CG_ConfigStringModified( void ) {
 		cgs.scores1 = atoi( str );
 	} else if ( num == CS_SCORES2 ) {
 		cgs.scores2 = atoi( str );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	} else if ( num == CS_SCORES3 ) {
+		cgs.scores3 = atoi( str );
+	} else if ( num == CS_SCORES4 ) {
+		cgs.scores4 = atoi( str );
+#endif
 	} else if ( num == CS_LEVEL_START_TIME ) {
 		cgs.levelStartTime = atoi( str );
 	} else if ( num == CS_VOTE_TIME ) {
@@ -360,6 +375,10 @@ static void CG_ConfigStringModified( void ) {
 			// format is rb where its red/blue, 0 is at base, 1 is taken, 2 is dropped
 			cgs.redflag = str[0] - '0';
 			cgs.blueflag = str[1] - '0';
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			cgs.goldflag = str[2] - '0';
+			cgs.greenflag = str[3] - '0';
+#endif
 		}
 #ifdef MISSIONPACK
 		else if( cgs.gametype == GT_1FCTF ) {
@@ -1022,6 +1041,10 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	if ( !strcmp( cmd, "startCam" ) ) {
+		CG_StartCamera( CG_Argv(1), atoi(CG_Argv(2)) );
+		return;
+	}
 	if ( !strcmp( cmd, "cp" ) ) {
 		CG_CenterPrint( CG_Argv(1), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		return;
@@ -1141,6 +1164,16 @@ static void CG_ServerCommand( void ) {
 			return;
 		}
 	}
+
+#ifdef USE_MULTIWORLD
+	if ( !strcmp( cmd, "exec" ) ) {
+		char	message[256];
+		trap_Args( message, sizeof( message ) );
+		trap_SendConsoleCommand(message);
+		return;
+	}
+
+#endif
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
