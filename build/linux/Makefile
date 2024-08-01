@@ -599,7 +599,13 @@ $(B)/$(MOD)/vm/game/%.asm: $(QADIR)/%.c
 $(B)/$(MOD)/vm/ui/bg_%.asm: $(QADIR)/bg_%.c
 	$(DO_UI_LCC)
 
+$(B)/$(MOD)/vm/q3_ui/bg_%.asm: $(QADIR)/bg_%.c
+	$(DO_UI_LCC)
+
 $(B)/$(MOD)/vm/ui/q_%.asm: $(QADIR)/q_%.c
+	$(DO_UI_LCC)
+
+$(B)/$(MOD)/vm/q3_ui/q_%.asm: $(QADIR)/q_%.c
 	$(DO_UI_LCC)
 
 $(B)/$(MOD)/vm/ui/%.asm: $(UIDIR)/%.c
