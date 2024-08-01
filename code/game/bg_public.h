@@ -1254,7 +1254,7 @@ void	BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm
 
 #ifdef USE_ADVANCED_ITEMS
 #ifdef USE_ADVANCED_CLASS
-void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, int playerClass );
+void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, const int playerClass );
 #else
 void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory );
 #endif

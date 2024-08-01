@@ -1896,7 +1896,7 @@ BG_TouchJumpPad
 */
 #ifdef USE_ADVANCED_ITEMS
 #ifdef USE_ADVANCED_CLASS
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, int playerClass ) 
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, const int playerClass ) 
 #else
 void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory ) 
 #endif
@@ -1918,7 +1918,7 @@ void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad )
 	}
 
 #ifdef USE_ADVANCED_CLASS
-  if(playerClass = PCLASS_DRAGON)
+  if(playerClass == PCLASS_DRAGON)
     return;
 #endif
 #ifdef USE_RUNES
