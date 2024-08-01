@@ -295,6 +295,8 @@
     <ClCompile Include="..\..\code\q3_ui\ui_team.c" />
     <ClCompile Include="..\..\code\q3_ui\ui_teamorders.c" />
     <ClCompile Include="..\..\code\q3_ui\ui_video.c" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="..\..\code\ui\ui_main.c" />
     <ClCompile Include="..\..\code\ui\ui_atoms.c" />
     <ClCompile Include="..\..\code\ui\ui_gameinfo.c" />
