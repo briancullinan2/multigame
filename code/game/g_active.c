@@ -152,6 +152,8 @@ void P_WorldEffects( gentity_t *ent ) {
 	}
 }
 
+void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPickup);
+
 
 /**
  * G_Use
