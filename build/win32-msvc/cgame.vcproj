@@ -444,6 +444,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\cgame\cg_runes.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\q_shared.c"
 				>
 			</File>

@@ -2534,7 +2534,7 @@ void PmoveVehicle (pmove_t *pmove) {
 		int		i;
 
 		pml.physicsSplit = 0;
-		PM_DriveMove(pm->car, pml.frametime, qtrue);
+		//PM_DriveMove(pm->car, pml.frametime, qtrue);
 
 		if( VectorNAN( pm->car->sBody.r ) )
 			VectorClear( pm->car->sBody.r );

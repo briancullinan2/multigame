@@ -18,6 +18,7 @@ cg_scoreboard
 cg_servercmds
 cg_snapshot
 cg_timer
+cg_runes
 cg_view
 cg_weapons
 cg_weapons2

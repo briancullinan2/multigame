@@ -278,7 +278,9 @@
     <ClCompile Include="..\..\code\cgame\cg_timer.c" />
     <ClCompile Include="..\..\code\cgame\cg_view.c" />
     <ClCompile Include="..\..\code\cgame\cg_weapons.c" />
+    <ClCompile Include="..\..\code\cgame\cg_weapons2.c" />
     <ClCompile Include="..\..\code\cgame\cg_weaporder.c" />
+    <ClCompile Include="..\..\code\cgame\cg_runes.c" />
     <ClCompile Include="..\..\code\ui\ui_shared.c" />
     <ClCompile Include="..\..\code\game\q_math.c" />
     <ClCompile Include="..\..\code\game\q_shared.c" />
