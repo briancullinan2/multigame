@@ -270,7 +270,6 @@
     <ClCompile Include="..\..\code\cgame\cg_playerstate.c" />
     <ClCompile Include="..\..\code\cgame\cg_predict.c" />
     <ClCompile Include="..\..\code\cgame\cg_polybus.c" />
-    <ClCompile Include="..\..\code\cgame\cg_portal.c" />
     <ClCompile Include="..\..\code\cgame\cg_scoreboard.c" />
     <ClCompile Include="..\..\code\cgame\cg_servercmds.c" />
     <ClCompile Include="..\..\code\cgame\cg_snapshot.c" />

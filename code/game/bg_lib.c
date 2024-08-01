@@ -641,6 +641,7 @@ double atof( const char *string ) {
 	return value * sign;
 }
 
+#if defined ( Q3_VM )
 
 
 float exptable[] = {
@@ -774,6 +775,7 @@ float exptable[] = {
 2.69974515,2.70238549,2.70502841,2.70767391,2.71032200,2.71297269,2.71562596,2.71828183,
 };
 
+
 double exp( double x )
 {
 	int index;
@@ -855,6 +857,7 @@ double _atof( const char **stringPtr ) {
 	return value * sign;
 }
 
+#endif
 
 #if defined ( Q3_VM )
 int atoi( const char *string ) {

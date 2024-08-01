@@ -404,10 +404,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\code\cgame\cg_portal.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\code\cgame\cg_scoreboard.c"
 				>
 			</File>

@@ -14,7 +14,6 @@ cg_players
 cg_playerstate
 cg_predict
 cg_polybus
-cg_portal
 cg_scoreboard
 cg_servercmds
 cg_snapshot
