@@ -2193,10 +2193,9 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
 void CG_MouseEvent(int x, int y, qboolean absolute) {
 	int n;
 #ifdef USE_CLASSIC_HUD
-		if(cg_hudFiles.string[0] == '\0') {
-			CG_CLASSIC_MouseEvent(x, y, absolute);
-			return;
-		}
+	if(cg_hudFiles.string[0] == '\0') {
+		CG_CLASSIC_MouseEvent(x, y, absolute);
+	}
 #endif
 
 
@@ -2221,12 +2220,18 @@ void CG_MouseEvent(int x, int y, qboolean absolute) {
 		return;
 	}
 
+	if(absolute) {
+		cgs.cursorX = (x - cgs.screenXBias) / cgs.screenXScale;
+	} else
 	cgs.cursorX+= x;
 	if (cgs.cursorX < 0)
 		cgs.cursorX = 0;
 	else if (cgs.cursorX > 640)
 		cgs.cursorX = 640;
 
+	if(absolute) {
+		cgs.cursorY = (y - cgs.screenYBias) / cgs.screenYScale;
+	} else
 	cgs.cursorY += y;
 	if (cgs.cursorY < 0)
 		cgs.cursorY = 0;
@@ -2314,9 +2319,7 @@ void CG_KeyEvent(int key, qboolean down) {
 #ifdef USE_CLASSIC_HUD
 		if(cg_hudFiles.string[0] == '\0') {
 			CG_CLASSIC_KeyEvent(key, down);
-			return;
 		}
-
 #else
 
 	if (!down) {

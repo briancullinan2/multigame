@@ -2562,9 +2562,9 @@ void CG_MouseEvent( int x, int y, qboolean absolute )
 		cgs.cursorX = 0;
 		cgs.cursorY = 0;
 		cgs.absolute = qtrue;
-	} else if(cgs.absolute) {
-		cgs.cursorX = x;
-		cgs.cursorY = y;
+	} else if(cgs.absolute || absolute) {
+		cgs.cursorX = (x - cgs.screenXBias) / cgs.screenXScale;
+		cgs.cursorY = (y - cgs.screenYBias) / cgs.screenYScale;
 		cgs.absolute = qfalse;
 	} else {
 		cgs.absolute = qfalse;
