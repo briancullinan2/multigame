@@ -1380,6 +1380,7 @@ typedef struct {
 	int selectedWorld;
 #endif
 
+	int registerModels;
 
 } cgs_t;
 
@@ -1971,6 +1972,7 @@ extern void	(*trap_R_AddPolyBufferToScene)( polyBuffer_t *pPolyBuffer );
 #ifdef USE_MULTIWORLD
 extern void	(*trap_R_SwitchWorld)( int world );
 #endif
+extern int	(*trap_GetAsyncFiles)( const char **files, int max );
 #else
 qboolean trap_GetValue( char *value, int valueSize, const char *key );
 void trap_R_AddRefEntityToScene2( const refEntity_t *re );
@@ -1980,8 +1982,10 @@ void	trap_R_AddPolyBufferToScene( polyBuffer_t *pPolyBuffer );
 void	trap_R_SwitchWorld( int world );
 extern int dll_trap_R_SwitchWorld;
 #endif
+int	trap_GetAsyncFiles( const char **files, int max );
 extern int dll_com_trapGetValue;
 extern int dll_trap_R_AddRefEntityToScene2;
 extern int dll_trap_R_AddLinearLightToScene;
 extern int dll_trap_R_AddPolyBufferToScene;
+extern int dll_trap_GetAsyncFiles;
 #endif

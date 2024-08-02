@@ -1088,6 +1088,8 @@ static void CG_FirstFrame( void )
 
 void CG_SetupFrustum( void );
 
+void CG_ReregisterModels( void );
+
 /*
 =================
 CG_DrawActiveFrame
@@ -1097,6 +1099,8 @@ Generates and draws a game scene and status information at the given time.
 */
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback ) {
 	int		inwater;
+	int count, i;
+	const char *files[16];
 
 	if (cg.cameraMode && cg.pauseBreak) {
 		if(cg.time > cg.pauseBreak) {
@@ -1128,6 +1132,18 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	// set up cg.snap and possibly cg.nextSnap
 	CG_ProcessSnapshots();
+
+
+	if(trap_GetAsyncFiles) {
+		if((count = trap_GetAsyncFiles(files, 16)) && !cgs.registerModels) {
+			cgs.registerModels = cg.time + 1000;
+		}
+
+		if(cgs.registerModels != 0 && cg.time > cgs.registerModels) {
+			CG_ReregisterModels();
+			cgs.registerModels = 0;
+		}
+	}
 
 	// if we haven't received any snapshots yet, all
 	// we can draw is the information screen

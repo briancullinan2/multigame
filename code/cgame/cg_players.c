@@ -793,7 +793,7 @@ Load it now, taking the disk hits.
 This will usually be deferred to a safe time
 ===================
 */
-static void CG_LoadClientInfo( clientInfo_t *ci ) {
+void CG_LoadClientInfo( clientInfo_t *ci ) {
 	const char	*dir;
 	int			i, modelloaded;
 	const char	*s;

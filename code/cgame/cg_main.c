@@ -48,13 +48,19 @@ qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
 void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
 void (*trap_R_AddLinearLightToScene)( const vec3_t start, const vec3_t end, float intensity, float r, float g, float b );
 void (*trap_R_AddPolyBufferToScene)( polyBuffer_t* pPolyBuffer );
+#ifdef USE_MULTIWORLD
 void (*trap_R_SwitchWorld)( int world );
+#endif
+int (*trap_GetAsyncFiles)( const char **files, int max );
 #else
 int dll_com_trapGetValue;
 int dll_trap_R_AddRefEntityToScene2;
 int dll_trap_R_AddLinearLightToScene;
 int dll_trap_R_AddPolyBufferToScene;
+#ifdef USE_MULTIWORLD
 int dll_trap_R_SwitchWorld;
+#endif
+int dll_trap_GetAsyncFiles;
 #endif
 
 /*
@@ -731,6 +737,127 @@ static void CG_RegisterSounds( void ) {
 	trap_S_RegisterSound("sound/player/janet/drown.wav", qfalse );
 	trap_S_RegisterSound("sound/player/janet/fall1.wav", qfalse );
 	trap_S_RegisterSound("sound/player/janet/taunt.wav", qfalse );
+#endif
+
+}
+
+void CG_LoadClientInfo( clientInfo_t *ci );
+
+
+void CG_ReregisterModels( void ) {
+	int		i;
+	clientInfo_t	*match;
+	weaponInfo_t	*weaponInfo;
+
+	for ( i = 0 ; i < cgs.maxclients ; i++ ) {
+		match = &cgs.clientinfo[ i ];
+		if ( !match->infoValid ) {
+			continue;
+		}
+		// just load the real info cause it uses the same models and skins
+		CG_LoadClientInfo( match );
+	}
+
+	
+	for ( i = 1 ; i < bg_numItems ; i++ ) {
+		cg_items[ i ].registered = qfalse;
+		if(bg_itemlist[i].giType == IT_WEAPON) {
+			weaponInfo = &cg_weapons[bg_itemlist[i].giTag];
+			weaponInfo->registered = qfalse;
+			CG_RegisterWeapon(bg_itemlist[i].giTag);
+		} else {
+			CG_RegisterItemVisuals( i );
+		}
+	}
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+	cgs.media.blueProxMine = trap_R_RegisterModel( "models/weaphits/proxmineb.md3" );
+#endif
+	cgs.media.redCubeModel = trap_R_RegisterModel( "models/powerups/orb/r_orb.md3" );
+	cgs.media.blueCubeModel = trap_R_RegisterModel( "models/powerups/orb/b_orb.md3" );
+	cgs.media.redFlagModel = trap_R_RegisterModel( "models/flags/r_flag.md3" );
+	cgs.media.blueFlagModel = trap_R_RegisterModel( "models/flags/b_flag.md3" );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	cgs.media.goldFlagModel = trap_R_RegisterModel( "models/flags/k_flag.md3" );
+	cgs.media.greenFlagModel = trap_R_RegisterModel( "models/flags/g_flag.md3" );
+#endif
+	cgs.media.flagPoleModel = trap_R_RegisterModel( "models/flag2/flagpole.md3" );
+	cgs.media.flagFlapModel = trap_R_RegisterModel( "models/flag2/flagflap3.md3" );
+#ifdef MISSIONPACK
+	cgs.media.redFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/red_base.md3" );
+	cgs.media.blueFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/blue_base.md3" );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	cgs.media.goldFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/gold_base.md3" );
+	cgs.media.greenFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/green_base.md3" );
+#endif
+	cgs.media.neutralFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/ntrl_base.md3" );
+#endif
+	cgs.media.overloadBaseModel = trap_R_RegisterModel( "models/powerups/overload_base.md3" );
+	cgs.media.overloadTargetModel = trap_R_RegisterModel( "models/powerups/overload_target.md3" );
+	cgs.media.overloadLightsModel = trap_R_RegisterModel( "models/powerups/overload_lights.md3" );
+	cgs.media.overloadEnergyModel = trap_R_RegisterModel( "models/powerups/overload_energy.md3" );
+	cgs.media.harvesterModel = trap_R_RegisterModel( "models/powerups/harvester/harvester.md3" );
+	cgs.media.harvesterNeutralModel = trap_R_RegisterModel( "models/powerups/obelisk/obelisk.md3" );
+	cgs.media.armorModel = trap_R_RegisterModel( "models/powerups/armor/armor_yel.md3" );
+	cgs.media.gibAbdomen = trap_R_RegisterModel( "models/gibs/abdomen.md3" );
+	cgs.media.gibArm = trap_R_RegisterModel( "models/gibs/arm.md3" );
+	cgs.media.gibChest = trap_R_RegisterModel( "models/gibs/chest.md3" );
+	cgs.media.gibFist = trap_R_RegisterModel( "models/gibs/fist.md3" );
+	cgs.media.gibFoot = trap_R_RegisterModel( "models/gibs/foot.md3" );
+	cgs.media.gibForearm = trap_R_RegisterModel( "models/gibs/forearm.md3" );
+	cgs.media.gibIntestine = trap_R_RegisterModel( "models/gibs/intestine.md3" );
+	cgs.media.gibLeg = trap_R_RegisterModel( "models/gibs/leg.md3" );
+	cgs.media.gibSkull = trap_R_RegisterModel( "models/gibs/skull.md3" );
+	cgs.media.gibBrain = trap_R_RegisterModel( "models/gibs/brain.md3" );
+
+	cgs.media.smoke2 = trap_R_RegisterModel( "models/weapons2/shells/s_shell.md3" );
+
+	cgs.media.gibAbdomen = trap_R_RegisterModel( "models/gibs/abdomen.md3" );
+	cgs.media.gibArm = trap_R_RegisterModel( "models/gibs/arm.md3" );
+	cgs.media.gibChest = trap_R_RegisterModel( "models/gibs/chest.md3" );
+	cgs.media.gibFist = trap_R_RegisterModel( "models/gibs/fist.md3" );
+	cgs.media.gibFoot = trap_R_RegisterModel( "models/gibs/foot.md3" );
+	cgs.media.gibForearm = trap_R_RegisterModel( "models/gibs/forearm.md3" );
+	cgs.media.gibIntestine = trap_R_RegisterModel( "models/gibs/intestine.md3" );
+	cgs.media.gibLeg = trap_R_RegisterModel( "models/gibs/leg.md3" );
+	cgs.media.gibSkull = trap_R_RegisterModel( "models/gibs/skull.md3" );
+	cgs.media.gibBrain = trap_R_RegisterModel( "models/gibs/brain.md3" );
+
+	cgs.media.smoke2 = trap_R_RegisterModel( "models/weapons2/shells/s_shell.md3" );
+
+	cgs.media.bulletFlashModel = trap_R_RegisterModel("models/weaphits/bullet.md3");
+	cgs.media.ringFlashModel = trap_R_RegisterModel("models/weaphits/ring02.md3");
+	cgs.media.dishFlashModel = trap_R_RegisterModel("models/weaphits/boom01.md3");
+#ifdef MISSIONPACK
+	cgs.media.teleportEffectModel = trap_R_RegisterModel( "models/powerups/pop.md3" );
+#else
+	cgs.media.teleportEffectModel = trap_R_RegisterModel( "models/misc/telep.md3" );
+#endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+	cgs.media.kamikazeEffectModel = trap_R_RegisterModel( "models/weaphits/kamboom2.md3" );
+	cgs.media.kamikazeShockWave = trap_R_RegisterModel( "models/weaphits/kamwave.md3" );
+	cgs.media.kamikazeHeadModel = trap_R_RegisterModel( "models/powerups/kamikazi.md3" );
+	cgs.media.kamikazeHeadTrail = trap_R_RegisterModel( "models/powerups/trailtest.md3" );
+	cgs.media.guardPowerupModel = trap_R_RegisterModel( "models/powerups/guard_player.md3" );
+	cgs.media.scoutPowerupModel = trap_R_RegisterModel( "models/powerups/scout_player.md3" );
+	cgs.media.doublerPowerupModel = trap_R_RegisterModel( "models/powerups/doubler_player.md3" );
+	cgs.media.ammoRegenPowerupModel = trap_R_RegisterModel( "models/powerups/ammo_player.md3" );
+	cgs.media.invulnerabilityImpactModel = trap_R_RegisterModel( "models/powerups/shield/impact.md3" );
+	cgs.media.invulnerabilityJuicedModel = trap_R_RegisterModel( "models/powerups/shield/juicer.md3" );
+	cgs.media.medkitUsageModel = trap_R_RegisterModel( "models/powerups/regen.md3" );
+	cgs.media.heartShader = trap_R_RegisterShaderNoMip( "ui/assets/statusbar/selectedhealth.tga" );
+	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
+#endif
+
+#ifdef MISSIONPACK
+
+	trap_R_RegisterModel( "models/players/james/lower.md3" );
+	trap_R_RegisterModel( "models/players/james/upper.md3" );
+	trap_R_RegisterModel( "models/players/heads/james/james.md3" );
+
+	trap_R_RegisterModel( "models/players/janet/lower.md3" );
+	trap_R_RegisterModel( "models/players/janet/upper.md3" );
+	trap_R_RegisterModel( "models/players/heads/janet/janet.md3" );
 #endif
 
 }
@@ -2291,6 +2418,10 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 			cg.multiworld = qfalse;
 		}
 #endif
+		if ( trap_GetValue( value, sizeof( value ), "trap_GetAsyncFiles" ) ) {
+			trap_GetAsyncFiles = (void*)~atoi( value );
+		}
+
 #else
 		dll_com_trapGetValue = atoi( value );
 		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddRefEntityToScene2" ) ) {
@@ -2315,6 +2446,11 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 			cg.multiworld = qfalse;
 		}
 #endif
+
+		if ( trap_GetValue( value, sizeof( value ), "trap_GetAsyncFiles" ) ) {
+			dll_trap_GetAsyncFiles = atoi( value );
+		}
+
 #endif
 	}
 
