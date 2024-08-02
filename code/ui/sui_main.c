@@ -5537,6 +5537,14 @@ void UI_DrawConnectScreen( qboolean overlay ) {
 	
 	menuDef_t *menu = Menus_FindByName("Connect");
 
+#ifdef USE_CLASSIC_MENU
+	if(!menu || *UI_Cvar_VariableString("ui_menuFiles") == '\0')
+	{
+		UI_CLASSIC_DrawConnectScreen(overlay);
+		return;
+	}
+#endif
+
 
 	if ( !overlay && menu ) {
 		Menu_Paint(menu, qtrue);
