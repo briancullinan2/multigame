@@ -2355,13 +2355,13 @@ void CG_KeyEvent(int key, qboolean down) {
   //  trap_Key_SetCatcher(0);
   //}
 
-  Display_HandleKey(key, down, cgs.cursorX, cgs.cursorY);
-
 #ifdef USE_CLASSIC_HUD
 	if(cg.editPlayerMode && menuEditPlayer) {
 		Menu_HandleKey(menuEditPlayer, key, down );
 	}
 #endif
+
+  Display_HandleKey(key, down, cgs.cursorX, cgs.cursorY);
 
 	//if (cgs.capturedItem) {
 	//	cgs.capturedItem = NULL;

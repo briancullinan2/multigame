@@ -210,4 +210,7 @@ G_CVAR( g_stamina, "g_stamina", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 G_CVAR( g_ability, "g_ability", "100", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 #endif
 
+G_CVAR( g_developer, "developer", "0", CVAR_TEMP, 0, qfalse, qfalse )
+
+
 #undef G_CVAR

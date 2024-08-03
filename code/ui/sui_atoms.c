@@ -410,6 +410,11 @@ void UI_AdjustFrom640( float *x, float *y, float *w, float *h ) {
 	*h *= uiInfo.uiDC.scale;
 #endif
 
+	//*x = *x * uiInfo.uiDC.scale + uiInfo.uiDC.biasX;
+	//*y = *y * uiInfo.uiDC.scale + uiInfo.uiDC.biasY;
+	//*w *= uiInfo.uiDC.scale;
+	//*h *= uiInfo.uiDC.scale;
+
 	*x *= uiInfo.uiDC.xscale;
 	*y *= uiInfo.uiDC.yscale;
 	*w *= uiInfo.uiDC.xscale;

@@ -97,11 +97,11 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 		CG_KeyEvent(arg0, arg1);
 		return 0;
 	case CG_MOUSE_EVENT:
+		CG_MouseEvent(arg0, arg1, arg2);
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
 #endif
-		CG_MouseEvent(arg0, arg1, arg2);
 		return 0;
 	case CG_EVENT_HANDLING:
 		CG_EventHandling(arg0);

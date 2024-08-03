@@ -231,17 +231,17 @@ static void CG_TransitionSnapshot( void ) {
 			|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) {
 			int j;
 			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
-			CG_Printf("items %i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
+			//CG_Printf("items %i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
 			for(j = 0; j < PW_MAX_POWERUPS; j++) {
 				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
-					CG_Printf("1");
+					//CG_Printf("1");
 					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 1;
 				} else {
-					CG_Printf("0");
+					//CG_Printf("0");
 					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 0;
 				}
 			}
-			CG_Printf("\n");
+			//CG_Printf("\n");
 		}
 
 #endif

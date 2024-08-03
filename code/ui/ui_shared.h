@@ -362,6 +362,20 @@ typedef struct {
   qhandle_t cursor;
 	float FPS;
 
+	float				scale;
+	float				biasX;
+	float				biasY;
+
+	float				cursorScaleR;		// clamped 1/scale for mouse
+
+	float				screenXmin;
+	float				screenXmax;
+
+	float				screenYmin;
+	float				screenYmax;
+
+	int					lastVideoCheck;
+
 } displayContextDef_t;
 
 const char *String_Alloc(const char *p);

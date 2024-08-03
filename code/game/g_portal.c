@@ -272,7 +272,9 @@ void locateCamera(gentity_t *ent)
   if (!owner)
   {
     ent->nextthink = level.time + 500;
-    G_Printf("Couldn't find target for misc_partal_surface\n");
+		if(g_developer.integer) {
+      G_Printf("Couldn't find target for misc_partal_surface\n");
+    }
     // G_FreeEntity( ent );
     return;
   }

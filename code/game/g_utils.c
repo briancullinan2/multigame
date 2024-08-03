@@ -198,7 +198,9 @@ gentity_t *G_PickTarget( const char *targetname )
 
 	if (!num_choices)
 	{
-		G_Printf("G_PickTarget: target %s not found\n", targetname);
+		if(g_developer.integer) {
+			G_Printf("G_PickTarget: target %s not found\n", targetname);
+		}
 		return NULL;
 	}
 

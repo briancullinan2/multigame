@@ -577,6 +577,10 @@ void UI_ShowPostGame(qboolean newHigh) {
 	uiInfo.soundHighScore = newHigh;
   _UI_SetActiveMenu(UIMENU_POSTGAME);
 }
+
+
+void UI_NEW_VideoCheck( int time );
+
 /*
 =================
 _UI_Refresh
@@ -624,6 +628,8 @@ void _UI_Refresh( int realtime )
 
 	UI_UpdateCvars();
 
+	UI_NEW_VideoCheck( realtime );
+
 
 #ifdef USE_CLASSIC_MENU
 	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
@@ -642,11 +648,11 @@ void _UI_Refresh( int realtime )
 		// refresh find player list
 		UI_BuildFindPlayerList(qfalse);
 	} 
-	
+
 	// draw cursor
 	UI_SetColor( NULL );
 	if (Menu_Count() > 0) {
-		UI_DrawHandlePic( uiInfo.uiDC.cursorx-16, uiInfo.uiDC.cursory-16, 32, 32, uiInfo.uiDC.Assets.cursor);
+		UI_DrawHandlePic( uiInfo.uiDC.cursorx - 16, uiInfo.uiDC.cursory - 16, 32, 32, uiInfo.uiDC.Assets.cursor);
 	}
 
 #ifndef NDEBUG
@@ -654,7 +660,7 @@ void _UI_Refresh( int realtime )
 	{
 		// cursor coordinates
 		//FIXME
-		//UI_DrawString( 0, 0, va("(%d,%d)",uis.cursorx,uis.cursory), UI_LEFT|UI_SMALLFONT, colorRed );
+		//UI_DrawString( 0, 0, va("(%d,%d)",uiInfo.uiDC.cursorx,uiInfo.uiDC.cursory), UI_LEFT|UI_SMALLFONT, colorRed );
 	}
 #endif
 
@@ -5047,20 +5053,7 @@ void _UI_Init( qboolean inGameLoad ) {
 	UI_RegisterCvars();
 	UI_InitMemory();
 
-	// cache redundant calulations
-	trap_GetGlconfig( &uiInfo.uiDC.glconfig );
-
-	// for 640x480 virtualized screen
-	uiInfo.uiDC.yscale = uiInfo.uiDC.glconfig.vidHeight * (1.0/480.0);
-	uiInfo.uiDC.xscale = uiInfo.uiDC.glconfig.vidWidth * (1.0/640.0);
-	if ( uiInfo.uiDC.glconfig.vidWidth * 480 > uiInfo.uiDC.glconfig.vidHeight * 640 ) {
-		// wide screen
-		uiInfo.uiDC.bias = 0.5 * ( uiInfo.uiDC.glconfig.vidWidth - ( uiInfo.uiDC.glconfig.vidHeight * (640.0/480.0) ) );
-	}
-	else {
-		// no wide screen
-		uiInfo.uiDC.bias = 0;
-	}
+	UI_NEW_VideoCheck( -99999 );
 
 
   //UI_Load();
@@ -5229,17 +5222,22 @@ void _UI_MouseEvent( int dx, int dy, qboolean absolute )
 #ifdef USE_CLASSIC_MENU
 	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
 		UI_CLASSIC_MouseEvent( dx, dy, absolute );
-		return;
 	}
 #endif
 
 	// update mouse screen position
+	if(absolute) {
+		uiInfo.uiDC.cursorx = dx / uiInfo.uiDC.xscale;
+	} else
 	uiInfo.uiDC.cursorx += dx;
 	if (uiInfo.uiDC.cursorx < 0)
 		uiInfo.uiDC.cursorx = 0;
 	else if (uiInfo.uiDC.cursorx > SCREEN_WIDTH)
 		uiInfo.uiDC.cursorx = SCREEN_WIDTH;
 
+	if(absolute) {
+		uiInfo.uiDC.cursory = dy / uiInfo.uiDC.yscale;
+	} else
 	uiInfo.uiDC.cursory += dy;
 	if (uiInfo.uiDC.cursory < 0)
 		uiInfo.uiDC.cursory = 0;
@@ -5705,7 +5703,7 @@ void UI_UpdateCvars( void ) {
 
 			if(cv->vmCvar == &ui_menuFiles) {
 				if(ui_menuFiles.string[0] == '\0') {
-					//if(!uis.charset) {
+					//if(!uiInfo.uiDC.charset) {
 						UI_CLASSIC_Init();
 					//}
 					UI_CLASSIC_SetActiveMenu(uiInfo.activeMenu);
@@ -5865,6 +5863,55 @@ static void UI_StartServerRefresh(qboolean full)
 		else {
 			trap_Cmd_ExecuteText( EXEC_NOW, va( "globalservers %d %d full empty\n", i, (int)trap_Cvar_VariableValue( "protocol" ) ) );
 		}
+	}
+}
+
+/*
+=================
+UI_VideoCheck
+=================
+*/
+void UI_NEW_VideoCheck( int time ) 
+{
+	if ( abs( time - uiInfo.uiDC.lastVideoCheck ) > 1000 ) {
+		
+		int oldWidth, oldHeight;
+		oldWidth = uiInfo.uiDC.glconfig.vidWidth;
+		oldHeight = uiInfo.uiDC.glconfig.vidHeight;
+
+		trap_GetGlconfig( &uiInfo.uiDC.glconfig );
+
+		if ( uiInfo.uiDC.glconfig.vidWidth != oldWidth || uiInfo.uiDC.glconfig.vidHeight != oldHeight ) {
+			uiInfo.uiDC.biasY = 0.0;
+			uiInfo.uiDC.biasX = 0.0;
+			uiInfo.uiDC.yscale = uiInfo.uiDC.glconfig.vidHeight * (1.0/480.0);
+			uiInfo.uiDC.xscale = uiInfo.uiDC.glconfig.vidWidth * (1.0/640.0);
+
+			// for 640x480 virtualized screen
+			if ( uiInfo.uiDC.glconfig.vidWidth * 480 > uiInfo.uiDC.glconfig.vidHeight * 640 ) {
+				// wide screen, scale by height
+				uiInfo.uiDC.scale = uiInfo.uiDC.glconfig.vidHeight * (1.0/480.0);
+				uiInfo.uiDC.bias = uiInfo.uiDC.biasX = 0.5 * ( uiInfo.uiDC.glconfig.vidWidth - ( uiInfo.uiDC.glconfig.vidHeight * (640.0/480.0) ) );
+			} else {
+				// no wide screen, scale by width
+				uiInfo.uiDC.scale = uiInfo.uiDC.glconfig.vidWidth * (1.0/640.0);
+				uiInfo.uiDC.biasY = 0.5 * ( uiInfo.uiDC.glconfig.vidHeight - ( uiInfo.uiDC.glconfig.vidWidth * (480.0/640) ) );
+				uiInfo.uiDC.bias = 0;
+			}
+
+			uiInfo.uiDC.screenXmin = 0.0 - (uiInfo.uiDC.biasX / uiInfo.uiDC.scale);
+			uiInfo.uiDC.screenXmax = 640.0 + (uiInfo.uiDC.biasX / uiInfo.uiDC.scale);
+
+			uiInfo.uiDC.screenYmin = 0.0 - (uiInfo.uiDC.biasY / uiInfo.uiDC.scale);
+			uiInfo.uiDC.screenYmax = 480.0 + (uiInfo.uiDC.biasY / uiInfo.uiDC.scale);
+
+			uiInfo.uiDC.cursorScaleR = 1.0 / uiInfo.uiDC.scale;
+			if ( uiInfo.uiDC.cursorScaleR < 0.5 ) {
+				uiInfo.uiDC.cursorScaleR = 0.5;
+			}
+		}
+
+		uiInfo.uiDC.lastVideoCheck = time;
 	}
 }
 
