@@ -1354,7 +1354,6 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.pm_type = PM_NORMAL;
 	}
 
-	client->ps.gravity = g_gravity.value;
 #ifdef USE_ADVANCED_ITEMS
 	if(client->inventory[PW_GRAVITYSUIT]) {
 		client->ps.gravity = g_gravity.value * 0.5f;        //  yeah... this too
@@ -1363,8 +1362,12 @@ void ClientThink_real( gentity_t *ent ) {
 #ifdef USE_GRAVITY_BOOTS
   if (g_enableBoots.integer && ent->flags & FL_BOOTS) {                  //  umm and this,
 		client->ps.gravity = g_gravity.value * g_bootsGravity.value;        //  yeah... this too
-	}
+	} else
 #endif
+	if(client->altGravity) {
+		client->ps.gravity = client->altGravity;
+	} else
+	client->ps.gravity = g_gravity.value;
 
 	// set speed
 	client->ps.speed = g_speed.value;

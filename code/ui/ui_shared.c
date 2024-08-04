@@ -1721,7 +1721,6 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 	int count = DC->feederCount(item->special);
 	int max, viewmax;
-Com_Printf("item 5: %i %i\n", DC->cursorx, DC->cursory);
 
 	if (force || (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS)) {
 		max = Item_ListBox_MaxScroll(item);

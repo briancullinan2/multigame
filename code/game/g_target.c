@@ -586,4 +586,183 @@ void SP_target_player_stop( gentity_t *self ) {
 	}
 	self->use = target_player_stop;
 }
+
+#define MAX_SETTINGS 64
+#define MAX_SETTING_TARGETS 64
+#define PSOFS(x) ((intptr_t) & (((gclient_t *)0)->x))
+
+typedef enum {
+	F_NONE = 0,
+	F_INT, 
+	F_FLOAT,
+	F_LSTRING,			// string on disk, pointer in memory, TAG_LEVEL
+	F_GSTRING,			// string on disk, pointer in memory, TAG_GAME
+	F_VECTOR,
+	F_ANGLEHACK,
+	F_ENTITY,			// index on disk, pointer in memory
+	F_ITEM,				// index on disk, pointer in memory
+	F_CLIENT,			// index on disk, pointer in memory
+	F_IGNORE
+} fieldtype_t;
+
+typedef struct
+{
+	const char *name;
+	int		ofs;
+	fieldtype_t	type;
+	byte value[12];
+	//int		flags;
+} playerSetting_t;
+
+const playerSetting_t playerSettings[] = {
+	{"altGravity", PSOFS(altGravity), F_FLOAT},
+	{"ps.gravity", PSOFS(altGravity), F_FLOAT},
+//	{"origin", PSOFS(s.origin), F_VECTOR},
+//	{"model", PSOFS(model), F_LSTRING},
+//	{"model2", PSOFS(model2), F_LSTRING},
+//	{"spawnflags", PSOFS(spawnflags), F_INT},
+};
+
+static playerSetting_t player_targets[MAX_SETTING_TARGETS][MAX_SETTINGS];
+
+static playerSetting_t old_player_targets[MAX_CLIENTS][MAX_SETTINGS];
+
+static int numPlayerTargets = 0;
+
+
+void target_player_setting( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	playerSetting_t *settings;
+	int i;
+	byte discard[12];
+	byte	*b;
+	byte	*o;
+	qboolean isReset;
+	settings = player_targets[self->s.generic1];
+
+	isReset = Q_stricmpn(self->classname, "target_reset", 12) == 0;
+
+	if(!activator->client) {
+		return;
+	}
+
+	b = (byte *)activator->client;
+
+	for(i = 0; i < MAX_SETTINGS; i++) {
+		playerSetting_t *f;
+		if(settings[i].type == F_NONE) break;
+
+		// store the old values so they can be reset
+		// TODO: this is going to work because triggers fire multiple times
+		//if(isReset) {
+		//	o = (byte *)&discard;
+		//	f = &old_player_targets[activator->s.number][i];
+		//} else {
+			o = (byte *)old_player_targets[activator->s.number][i].value;
+			f = &settings[i];
+		//}
+
+		switch( settings[i].type ) {
+		case F_LSTRING:
+			*(char **)(o) = *(char **)(b+settings[i].ofs);
+			*(char **)(b+settings[i].ofs) = *(char **)(f->value);
+			break;
+		case F_ANGLEHACK:
+		case F_VECTOR:
+			((float *)(o))[0] = ((float *)(b+settings[i].ofs))[0];
+			((float *)(o))[1] = ((float *)(b+settings[i].ofs))[1];
+			((float *)(o))[2] = ((float *)(b+settings[i].ofs))[2];
+			((float *)(b+settings[i].ofs))[0] = ((float *)(f->value))[0];
+			((float *)(b+settings[i].ofs))[1] = ((float *)(f->value))[1];
+			((float *)(b+settings[i].ofs))[2] = ((float *)(f->value))[2];
+			break;
+		case F_INT:
+			*(int *)(o) = *(int *)(b+settings[i].ofs);
+			*(int *)(b+settings[i].ofs) = *(int *)(f->value);
+			break;
+		case F_FLOAT:
+			*(float *)(o) = *(float *)(b+settings[i].ofs);
+			*(float *)(b+settings[i].ofs) = *(float *)(f->value);
+			break;
+		default:
+		case F_IGNORE:
+			break;
+		}
+
+	}
+
+
+	//G_Printf("Setting settings %i: %f\n", isReset, activator->client->altGravity);
+
+}
+
+void SP_target_setting( gentity_t *self ) {
+	int numSettings;
+	const playerSetting_t *f;
+	byte	*b;
+	float	v;
+	vec3_t	vec;
+	int i;
+	const char *value;
+
+	if(numPlayerTargets == MAX_SETTING_TARGETS) {
+		G_FreeEntity(self);
+		return;
+	}
+	numPlayerTargets++;
+
+
+	G_SpawnFloat( "wait", "1", &self->wait);
+	if (self->spawnflags & 1)
+	{
+		if (self->wait>127)
+			self->wait=127;
+		self->wait  += 128;
+	}
+
+	self->s.generic1 = numPlayerTargets;
+	self->use = target_player_setting;
+
+	numSettings = 0;
+	for ( i = 0 ; i < level.numSpawnVars ; i++ ) {
+		for ( f=playerSettings ; f->name ; f++ ) {
+			if ( !Q_stricmp(f->name, level.spawnVars[i][0]) ) {
+				// found it
+				Com_Memcpy((void *)&player_targets[numPlayerTargets][numSettings], f, sizeof(playerSetting_t));
+				b = (byte *)player_targets[numPlayerTargets][numSettings].value;
+				value = level.spawnVars[i][1];
+
+				switch( f->type ) {
+				case F_LSTRING:
+					*(char **)(b) = G_NewString (value);
+					break;
+				case F_VECTOR:
+					Q_sscanf (value, "%f %f %f", &vec[0], &vec[1], &vec[2]);
+					((float *)(b))[0] = vec[0];
+					((float *)(b))[1] = vec[1];
+					((float *)(b))[2] = vec[2];
+					break;
+				case F_INT:
+					*(int *)(b) = atoi(value);
+					break;
+				case F_FLOAT:
+					*(float *)(b) = atof(value);
+					break;
+				case F_ANGLEHACK:
+					v = atof(value);
+					((float *)(b))[0] = 0;
+					((float *)(b))[1] = v;
+					((float *)(b))[2] = 0;
+					break;
+				default:
+				case F_IGNORE:
+					break;
+				}
+				numSettings++;
+				break;
+			}
+		}
+	}
+}
+
+
 #endif

@@ -462,6 +462,8 @@ struct gclient_s
 //	gentity_t	*carPoints[4];
 #endif
 
+	float altGravity;
+
 };
 
 //

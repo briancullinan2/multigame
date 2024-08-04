@@ -21,6 +21,7 @@ teams {
 	{ "Vadrigar" "ui/assets/vadrigar" "Visor" "Klesk" "Uriel" "Hunter" "Sorlag" }
 	{ "Splitgate" "ui/assets/splitgate" "Ranger" "Fiend" "Dog" "Shambler" "Vore" "Slipgate" "Ogre" "Zombie" "Scourge" "Enemy" "Knight" }
 	{ "Troopers" "ui/assets/troopers" "Human" "Battlesuit" "Builder" "Dretch" }
+	{ "Monsters" "ui/assets/monsters" "Metlar" "Enyo" "Sealord" "Wrath" }
 }
 
 
@@ -82,6 +83,10 @@ characters {
 	{ "Builder" "builder" }
 	{ "Dretch" "dretch" }
 	{ "Knight" "knight" }
+	{ "Metlar" "metlar" }
+	{ "Enyo" "enyo" }
+	{ "Sealord" "sealord" }
+	{ "Wrath" "wrath" }
 }
 
 aliases {

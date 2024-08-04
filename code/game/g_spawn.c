@@ -154,6 +154,7 @@ void SP_target_exec (gentity_t *ent);
 void SP_target_kamikaze (gentity_t *ent);
 
 #ifdef USE_SINGLEPLAYER
+void SP_target_setting (gentity_t *ent);
 void SP_target_earthquake (gentity_t *ent);
 void SP_target_player_stop (gentity_t *ent);
 #endif
@@ -251,7 +252,10 @@ spawn_t	spawns[] = {
 	{"target_exec", SP_target_exec},
 	{"target_earthquake", SP_target_earthquake},
 	{"target_player_stop", SP_target_player_stop},
+	{"target_setting", SP_target_setting},
+	{"target_reset", SP_target_setting},
 #endif
+
 	{"target_kamikaze", SP_target_kamikaze},
 
 

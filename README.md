@@ -82,7 +82,7 @@ Unofficial Quake III Arena gamecode patch
   * 2001 Space Odyssey to meet VEGA aka HAL aka SKYNET
   * quake team racing, like crash team racing with a car power up
   * add level loading lobbies poke the old crash bandicoot gamea
-  * use it as a game bowrd for dungeons and drangons and model scenese and entities for dnd players
+  * use it as a game board for dungeons and drangons and model scenese and entities for dnd players
   * model the entire city of flagstaff as a metaverse proof of concept
   * remove weapons from 0 and replace with hand base melee attack, good for matcbing tremulous
   * vehicle power ups with origin in model for cockpit
@@ -104,7 +104,7 @@ Unofficial Quake III Arena gamecode patch
   * TODO: zombies can't be killed again, immortal, but also walk very slowly, half speed
   * TODO: in the spirit of lame bot code, all the cyborgs should get depth hack powerup after their stamina recharges
   * DONE: add stamina that forces the player to walk instead of run, 
-  * TODO: and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
+  * DONE: and double stamina, or double the charge time they get a special class based powerup to use, "HOLDABLE_GIVE"ETC
   * TODO: make multiplayer monsters like the new Doom game where you can play as the monster with special powers instead of weapons.
   * TODO: add special ability powerups like Sarge can teleport in Quake Champions after waiting for a minute
   * TODO: dragon with quad damage has blue/purple flame like Gozilla
