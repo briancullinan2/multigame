@@ -1889,7 +1889,7 @@ void Cmd_DropRune_f(gentity_t *ent) {
   if (contents & CONTENTS_NODROP)
     return;
 
-	for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+	for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
 		if(ent->client->inventory[i]) {
 			dropWeapon( ent, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
 			ent->client->inventory[i] = 0;
@@ -2020,7 +2020,7 @@ void Cmd_Drop_f( gentity_t *ent ) {
 #ifdef USE_RUNES
   if((g_dropWeapon.integer & 8)) {
 		int i;
-		for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+		for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
 			if(ent->client->inventory[i]) {
 				dropWeapon( ent, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
 				ent->client->inventory[i] = 0;

@@ -421,8 +421,8 @@ static void weapon_supershotgun_fire( gentity_t *ent ) {
 	ShotgunPattern( muzzle_origin, tent->s.origin2, tent->s.eventParm, ent );
 }
 
-#ifdef USE_CLUSTER_GRENADES
-gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster);
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster, qboolean isVortex);
 #endif
 
 /*
@@ -440,9 +440,14 @@ void weapon_grenadelauncher_fire (gentity_t *ent) {
 	forward[2] += 0.2f;
 	VectorNormalize( forward );
 
-#ifdef USE_CLUSTER_GRENADES
-	if(wp_grenadeCluster.integer) {
-		m = fire_special_grenade (ent, muzzle, forward, qtrue);
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
+#ifdef USE_RUNES
+	if(ent->client->inventory[RUNE_CLUSTER]) {
+		m = fire_special_grenade (ent, muzzle, forward, qtrue, wp_grenadeVortex.integer);
+	} else
+#endif
+	if(wp_grenadeCluster.integer || wp_grenadeVortex.integer) {
+		m = fire_special_grenade (ent, muzzle, forward, wp_grenadeCluster.integer, wp_grenadeVortex.integer);
 	} else
 #endif
 	m = fire_grenade (ent, muzzle, forward);
@@ -1132,10 +1137,10 @@ qboolean LogAccuracyHit( gentity_t *target, gentity_t *attacker ) {
 #ifdef USE_PORTALS
 gentity_t *fire_portal (gentity_t *self, vec3_t start, vec3_t dir, qboolean altFire);
 #endif
-#ifdef USE_WEAPON_SPREAD
+#if defined(USE_WEAPON_SPREAD) || defined(USE_RUNES)
 void SpreadFire_Powerup(gentity_t* ent, gentity_t* (*fireFunc)(gentity_t*, vec3_t, vec3_t) );
 #endif
-#ifdef USE_CLUSTER_GRENADES
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
 gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir);
 #endif
 #ifdef USE_FLAME_THROWER
@@ -1225,10 +1230,15 @@ void FireWeapon( gentity_t *ent )
 #endif
 		break;
 	case WP_GRENADE_LAUNCHER:
-#ifdef USE_WEAPON_SPREAD
+#if defined(USE_WEAPON_SPREAD) || defined(USE_RUNES)
   //Hal9000 spreadfire
-  if ( ent->client->ps.powerups[PW_SPREAD] ) {
-#ifdef USE_CLUSTER_GRENADES
+#ifdef USE_ADVANCED_ITEMS
+  if ( ent->client->inventory[PW_SPREAD] ) 
+#else
+  if ( ent->client->ps.powerups[PW_SPREAD] ) 
+#endif
+	{
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
 		if(wp_grenadeCluster.integer) {
 			SpreadFire_Powerup(ent, fire_cluster_grenade);
 		} else

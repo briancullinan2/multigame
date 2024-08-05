@@ -1004,7 +1004,7 @@ Only in One Flag CTF games
 
 #endif
 
-#ifdef USE_WEAPON_SPREAD
+#if defined(USE_WEAPON_SPREAD) || defined(USE_RUNES)
 //Hal9000 spreadfire powerup
 /*QUAKED item_spread (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */

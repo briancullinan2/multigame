@@ -36,8 +36,8 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 	ent->s.pos.trTime = level.time;
 }
 
-#ifdef USE_CLUSTER_GRENADES
-gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster);
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster, qboolean isVortex);
 #endif
 
 /*
@@ -77,7 +77,7 @@ void G_ExplodeMissile( gentity_t *ent ) {
 		}
 	}
 
-#ifdef USE_CLUSTER_GRENADES
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
   // CCH: For cluster grenades
   if (!strcmp(ent->classname, "cgrenade")) {
     vec3_t		dir;			// CCH
@@ -88,13 +88,13 @@ void G_ExplodeMissile( gentity_t *ent ) {
     //   there is no where for it to bounce to and it wobbles around
     origin[2] += 4;
   	VectorSet(dir, .5, .5, 2.0);
-  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse, wp_grenadeVortex.integer);
   	VectorSet(dir, -.5, .5, 2.0);
-  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse, wp_grenadeVortex.integer);
   	VectorSet(dir, .5, -.5, 2.0);
-  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse, wp_grenadeVortex.integer);
   	VectorSet(dir, -.5, -.5, 2.0);
-  	fire_special_grenade(ent->parent, origin, dir, qfalse);
+  	fire_special_grenade(ent->parent, origin, dir, qfalse, wp_grenadeVortex.integer);
   }
 #endif
 
@@ -476,19 +476,19 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		}
 	}
 
-#ifdef USE_CLUSTER_GRENADES
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
   // CCH: For cluster grenades
 /*
   if (!strcmp(ent->classname, "cgrenade")) {
     vec3_t		dir;			// CCH
   	VectorSet(dir, 20, 20, 50);
-  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse, wp_grenadeVortex.integer);
   	VectorSet(dir, -20, 20, 50);
-  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse, wp_grenadeVortex.integer);
   	VectorSet(dir, 20, -20, 50);
-  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse, wp_grenadeVortex.integer);
   	VectorSet(dir, -20, -20, 50);
-  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse);
+  	fire_special_grenade(ent->parent, ent->r.currentOrigin, dir, qfalse, wp_grenadeVortex.integer);
   }
 */
 #endif

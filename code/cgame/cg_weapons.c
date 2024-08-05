@@ -1386,7 +1386,10 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 		return;
 	}
 	
-	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM ) {
+#ifdef USE_RUNES
+	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM 
+		&& powerups != RUNE_CLUSTER
+	) {
 		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(powerups-RUNE_STRENGTH)) ];
 		gun->customShader = item->altShader1;
 		trap_R_AddRefEntityToScene( gun );
@@ -1396,6 +1399,7 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
     }
 		return;
 	}
+#endif
 
 	trap_R_AddRefEntityToScene( gun );
 

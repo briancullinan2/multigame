@@ -235,21 +235,21 @@ do thou multiply manifold his punishment in the Fire.'
 --Holy Quran, translated by Maulvi Sher Ali  
 =================
 */
-gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster) 
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster, qboolean isVortex) 
 {
 	gentity_t	*bolt;
 
 	VectorNormalize (dir);
 
 	bolt = G_Spawn();
-#ifdef USE_CLUSTER_GRENADES
-	if(wp_grenadeCluster.integer && isCluster) {
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
+	if(isCluster) {
 	  bolt->classname = "cgrenade";
 	} else
 #endif
 	bolt->classname = "grenade";
 #ifdef USE_VORTEX_GRENADES
-  if(wp_grenadeVortex.integer) {
+  if(isVortex) {
     bolt->nextthink = level.time + 1000; // call G_Suck in 1 second
     bolt->think = G_Suck;
     bolt->wait = level.time + 20000; // vortext grenade lifetime.
@@ -284,7 +284,7 @@ gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboo
 	bolt->s.pos.trType = TR_GRAVITY;
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;		// move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
-#ifdef USE_CLUSTER_GRENADES
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
 	if(isCluster) {
 		VectorScale( dir, 400, bolt->s.pos.trDelta );
 	} else
@@ -297,9 +297,9 @@ gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboo
 	return bolt;
 }
 
-#ifdef USE_CLUSTER_GRENADES
+#if defined(USE_CLUSTER_GRENADES) || defined(USE_RUNES)
 gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
-	return fire_special_grenade(self, start, dir, wp_grenadeCluster.integer);
+	return fire_special_grenade(self, start, dir, qtrue, wp_grenadeVortex.integer);
 }
 #endif
 

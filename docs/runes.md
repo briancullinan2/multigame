@@ -531,7 +531,7 @@
     continuous supply.
 
 
-### TODO: Lithium Hook (59)
+### Lithium Hook (59)
 
 	This isn't a standard rune, it's the quasi-rune used to give you
 	a grappling hook in Lithium hook mode.  You can use impulse 159

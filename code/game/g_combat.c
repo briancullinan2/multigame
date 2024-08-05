@@ -139,7 +139,7 @@ void TossClientItems( gentity_t *self ) {
 
 #ifdef USE_RUNES
 
-	for(i = RUNE_LITHIUM; i <= RUNE_STRENGTH; i++) {
+	for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
 		if(self->client->inventory[i]) {
 			dropWeapon( self, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
 			self->client->inventory[i] = 0;

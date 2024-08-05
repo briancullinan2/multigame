@@ -213,7 +213,7 @@ typedef enum {
   PW_FROZEN = 18,
 #endif
 
-#ifdef USE_WEAPON_SPREAD
+#if defined(USE_WEAPON_SPREAD) || defined(USE_RUNES)
   PW_SPREAD = 19,  //Hal9000 spreadfire
 #endif
 
@@ -622,7 +622,7 @@ typedef enum {
   PW_FROZEN,
 #endif
 
-#ifdef USE_WEAPON_SPREAD
+#if defined(USE_WEAPON_SPREAD) || defined(USE_RUNES)
   PW_SPREAD,  //Hal9000 spreadfire
 #endif
 
