@@ -825,9 +825,26 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
+	
+#ifdef USE_RUNES
+		else if ( ent->client->inventory[RUNE_ARMOR] ) {
+			if ( client->ps.stats[STAT_ARMOR] + 5 <= client->ps.stats[STAT_MAX_HEALTH] ) {
+				client->ps.stats[STAT_ARMOR] += 5;
+				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
+			}
+		}
+#endif
+
 	}
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
-	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
+
+
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
+	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN 
+#ifdef USE_RUNES
+		|| ent->client->inventory[RUNE_ACTION]
+#endif
+	) {
 		int w, max, inc, t, i;
     int weapList[]={WP_MACHINEGUN,WP_SHOTGUN,WP_GRENADE_LAUNCHER,WP_ROCKET_LAUNCHER,WP_LIGHTNING,WP_RAILGUN,WP_PLASMAGUN,WP_BFG,WP_NAILGUN,WP_PROX_LAUNCHER,WP_CHAINGUN};
     int weapCount = ARRAY_LEN( weapList );
