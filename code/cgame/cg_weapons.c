@@ -1367,6 +1367,8 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 
 
 #ifdef USE_ADVANCED_ITEMS
+	int powerups2 = powerups >> 8;
+	powerups = powerups & 0xFF;
 
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)

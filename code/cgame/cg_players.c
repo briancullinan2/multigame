@@ -2557,11 +2557,12 @@ Also called by CG_Missile for quad rockets, but nobody can tell...
 void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int team ) {
 
 #ifdef USE_ADVANCED_ITEMS
+	int powerups = state->powerups & 0xFF;
+	int powerups2 = state->powerups >> 8;
 
-//CG_Printf("powerups: %i\n", state->powerups);
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-    if ( state->powerups == PW_FROZEN )
+    if ( powerups == PW_FROZEN )
     {
       trap_R_AddRefEntityToScene( ent );
       ent->customShader = cgs.media.frozenShader;
@@ -2570,7 +2571,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
     }
 #endif
 
-	if ( state->powerups == PW_INVIS ) {
+	if ( powerups == PW_INVIS ) {
 		ent->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( ent );
 		return;
@@ -2585,8 +2586,8 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 	}
 
 
-	if ( state->powerups >= RUNE_STRENGTH && state->powerups <= RUNE_LITHIUM ) {
-		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(state->powerups-RUNE_STRENGTH)) ];
+	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM ) {
+		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(powerups-RUNE_STRENGTH)) ];
 		ent->customShader = item->altShader1;
 		trap_R_AddRefEntityToScene( ent );
 		if(item->altShader2) {
@@ -2599,7 +2600,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 	trap_R_AddRefEntityToScene( ent );
 
 
-	if ( state->powerups == PW_QUAD || state->powerups == (PW_QUAD | (PW_REDFLAG << 8)) )
+	if ( powerups == PW_QUAD || powerups == (PW_QUAD | (PW_REDFLAG << 8)) )
 	{
 		if (team == TEAM_RED)
 			ent->customShader = cgs.media.redQuadShader;
@@ -2608,23 +2609,23 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 		trap_R_AddRefEntityToScene( ent );
 	}
 
-	if ( state->powerups == PW_REGEN ) {
+	if ( powerups == PW_REGEN ) {
 		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
 			ent->customShader = cgs.media.regenShader;
 			trap_R_AddRefEntityToScene( ent );
 		}
 	}
-	if ( state->powerups == PW_BATTLESUIT ) {
+	if ( powerups == PW_BATTLESUIT ) {
 		ent->customShader = cgs.media.battleSuitShader;
 		trap_R_AddRefEntityToScene( ent );
 	}
 
-	if ( state->powerups == PW_GRAVITYSUIT ) {
+	if ( powerups == PW_GRAVITYSUIT ) {
 		ent->customShader = cgs.media.gravitySuitShader;
 		trap_R_AddRefEntityToScene( ent );
 	}
 
-	if ( state->powerups == PW_REGENAMMO ) {
+	if ( powerups == PW_REGENAMMO ) {
 		if ( ( ( cg.time / 100 ) % 10 ) == 1 ) {
 			ent->customShader = cgs.media.ammoRegenShader;
 			trap_R_AddRefEntityToScene( ent );

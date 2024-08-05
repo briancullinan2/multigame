@@ -1149,7 +1149,42 @@ int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS
 	}
 
 	inv = 0;
+#ifdef USE_RUNES
+
 	for(i = 0; i < PW_NUM_POWERUPS; i++) {
+		gitem_t *item = BG_FindItemForPowerup(i);
+		if(inventory[i]) {
+			if(item->giTag >= RUNE_STRENGTH && item->giTag <= PW_NUM_RUNES) {
+				if(!inv) {
+					inv = i;
+				} else {
+					inv |= (i << 8);
+				}
+			}
+		}
+	}
+
+#endif
+
+	for(i = 0; i < PW_NUM_POWERUPS; i++) {
+		gitem_t *item = BG_FindItemForPowerup(i);
+		if(item->giType == IT_HOLDABLE) {
+			continue;
+		}
+		if(inventory[i]) {
+			if(!inv) {
+				inv = i;
+			} else {
+				inv |= (i << 8);
+			}
+		}
+	}
+
+	for(i = 0; i < PW_NUM_POWERUPS; i++) {
+		gitem_t *item = BG_FindItemForPowerup(i);
+		if(item->giType != IT_HOLDABLE) {
+			continue;
+		}
 		if(inventory[i]) {
 			if(!inv) {
 				inv = i;
