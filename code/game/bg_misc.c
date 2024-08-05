@@ -1150,15 +1150,34 @@ int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS
 	}
 
 	inv = 0;
+	for(i = 0; i < PW_NUM_POWERUPS; i++) {
+		gitem_t *item = BG_FindItemForPowerup(i);
+		if(item && item->giType == IT_HOLDABLE) {
+			continue;
+		}
+#ifdef USE_RUNES
+		if(item->giTag >= RUNE_STRENGTH && item->giTag <= PW_NUM_RUNES) {
+			continue;
+		}
+#endif
+		if(inventory[i]) {
+			if(!inv) {
+				inv = i;
+			} else if (!(inv >> 8)) {
+				inv |= (i << 8);
+			}
+		}
+	}
+
 #ifdef USE_RUNES
 
 	for(i = 0; i < PW_NUM_POWERUPS; i++) {
 		gitem_t *item = BG_FindItemForPowerup(i);
-		if(inventory[i]) {
+		if(item && inventory[i]) {
 			if(item->giTag >= RUNE_STRENGTH && item->giTag <= PW_NUM_RUNES) {
 				if(!inv) {
 					inv = i;
-				} else {
+				} else if (!(inv >> 8)) {
 					inv |= (i << 8);
 				}
 			}
@@ -1167,29 +1186,16 @@ int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS
 
 #endif
 
-	for(i = 0; i < PW_NUM_POWERUPS; i++) {
-		gitem_t *item = BG_FindItemForPowerup(i);
-		if(item->giType == IT_HOLDABLE) {
-			continue;
-		}
-		if(inventory[i]) {
-			if(!inv) {
-				inv = i;
-			} else {
-				inv |= (i << 8);
-			}
-		}
-	}
 
 	for(i = 0; i < PW_NUM_POWERUPS; i++) {
 		gitem_t *item = BG_FindItemForPowerup(i);
-		if(item->giType != IT_HOLDABLE) {
+		if(!item || item->giType != IT_HOLDABLE) {
 			continue;
 		}
-		if(inventory[i]) {
+		if(item && inventory[i]) {
 			if(!inv) {
 				inv = i;
-			} else {
+			} else if (!(inv >> 8)) {
 				inv |= (i << 8);
 			}
 		}
@@ -1573,7 +1579,8 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 #ifdef USE_RUNES
 		if((item->giTag == HI_PORTAL && inventory[RUNE_RECALL])
 			|| (item->giTag == HI_MEDKIT && inventory[RUNE_HEALTH])
-			|| (item->giTag == HI_INVULNERABILITY && inventory[RUNE_SHIELD])) {
+			|| (item->giTag == HI_INVULNERABILITY && inventory[RUNE_SHIELD])
+			|| (item->giTag == HI_KAMIKAZE && inventory[RUNE_DIVINE])) {
 			return qtrue;
 		}
 #endif

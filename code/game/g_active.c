@@ -807,8 +807,13 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 
 #ifdef USE_RUNES
 
+		if((client->inventory[RUNE_ELECTRIC] && client->ps.ammo[WP_LIGHTNING] < 50)) {
+			client->ps.ammo[WP_LIGHTNING]++;
+		}
+
 		if (client->ps.stats[STAT_ABILITY] < rune_ability.value) {
-			if((client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT])) {
+			if((client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT])
+				|| (client->inventory[RUNE_DIVINE] && !client->inventory[HI_KAMIKAZE])) {
 				client->ps.stats[STAT_ABILITY]++;
 			}
 		}
@@ -816,6 +821,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if(client->ps.stats[STAT_ABILITY] >= rune_ability.value) {
 			if(client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT]) {
 				G_GiveItem(ent, HI_MEDKIT);
+			}
+			if(client->inventory[RUNE_DIVINE] && !client->inventory[HI_KAMIKAZE]) {
+				G_GiveItem(ent, HI_KAMIKAZE);
 			}
 		}
 
@@ -1570,7 +1578,7 @@ client->ps.speed *= g_playerScale.value;
 		ent->client->pers.cmd.buttons |= BUTTON_GESTURE;
 	}
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	// check for invulnerability expansion before doing the Pmove
 #ifdef USE_ADVANCED_ITEMS
 	if (client->inventory[PW_INVULNERABILITY] ) 
@@ -2075,6 +2083,9 @@ void ClientEndFrame( gentity_t *ent ) {
 		ent->client->inventory[PW_INVULNERABILITY] = 1;
 		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
 	}
+
+	ent->s.powerups = BG_FindPriorityShaderForInventory(0, ent->client->inventory, ent->client->sess.sessionTeam);
+
 #else
 #ifdef MISSIONPACK
 	// set powerup for player animation

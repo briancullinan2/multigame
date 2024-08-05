@@ -291,7 +291,7 @@ GibEntity
 ==================
 */
 void GibEntity( gentity_t *self, int killer ) {
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	gentity_t *ent;
 	int i;
 
@@ -390,13 +390,14 @@ char	*modNames[] = {
 	"MOD_RUNE_STRENGTH",
 	"MOD_RUNE_BERSERK",
 	"MOD_RUNE_PIERCING",
+	"MOD_RUNE_DIVINITY",
 #endif
 };
 
 #ifdef USE_PORTALS
 void PortalDestroy( gentity_t *self );
 #endif
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 /*
 ==================
 Kamikaze_DeathActivate
@@ -982,7 +983,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		// globally cycle through the different death animations
 		i = ( i + 1 ) % 3;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 		if (self->s.eFlags & EF_KAMIKAZE) {
 			Kamikaze_DeathTimer( self );
 		}
@@ -1302,6 +1303,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 #ifdef USE_RUNES
 	if(attacker->client) {
+
+		if(attacker->client->inventory[RUNE_DIVINE]) {
+			mod = MOD_RUNE_DIVINITY;
+		}
+
 		if(attacker->client->inventory[RUNE_PIERCING]) {
 			mod = MOD_RUNE_PIERCING;
 		}

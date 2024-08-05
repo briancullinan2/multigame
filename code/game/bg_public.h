@@ -558,7 +558,7 @@ typedef enum {
 #define	EF_AWARD_GAUNTLET		0x00000040		// draw a gauntlet sprite
 #define	EF_NODRAW						0x00000080		// may have an event, but no model (unspawned items)
 #define	EF_FIRING						0x00000100		// for lightning gun
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 #define	EF_KAMIKAZE					0x00000200
 #endif
 #define	EF_MOVER_STOP				0x00000400		// will push otherwise
@@ -1122,16 +1122,20 @@ typedef enum {
 #ifdef USE_HEADSHOTS
   MOD_HEADSHOT,
 #endif
+
 	MOD_GRAPPLE,
+
 #ifdef USE_VEHICLES
 	MOD_HIGH_FORCES,
 	MOD_BO_SHOCKS,
 	MOD_WORLD_COLLISION,
 #endif
+
 #ifdef USE_RUNES
 	MOD_RUNE_STRENGTH,
 	MOD_RUNE_BERSERK,
 	MOD_RUNE_PIERCING,
+	MOD_RUNE_DIVINITY,
 #endif
 
 	MOD_MAX

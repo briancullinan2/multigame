@@ -20,21 +20,51 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 #if defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
   case PW_SPECIAL_ABILITY:
 #ifdef USE_RUNES
+    if(ent->client->inventory[RUNE_ELECTRIC]) {
+      gentity_t	*other;
+	    int			entityList[MAX_GENTITIES];
+    	int			numListedEntities, e;
+      vec3_t		mins, maxs, dir;
+      vec3_t bounding = {50, 50, 50};
+      ent->client->ps.ammo[WP_LIGHTNING] -= 5;
+      VectorCopy(ent->s.origin, mins);
+      VectorCopy(ent->s.origin, maxs);
+      VectorSubtract(mins, bounding, mins);
+      VectorAdd(maxs, bounding, maxs);
+      numListedEntities = trap_EntitiesInBox( mins, maxs, entityList, MAX_GENTITIES );
+      for ( e = 0 ; e < numListedEntities ; e++ ) {
+        other = &g_entities[entityList[ e ]];
+
+        if (!ent->takedamage) {
+          continue;
+        }
+
+        VectorSubtract (other->r.currentOrigin, ent->s.origin, dir);
+        dir[2] += 24;
+        G_Damage( other, NULL, ent, dir, origin, 25, DAMAGE_RADIUS|DAMAGE_NO_TEAM_PROTECTION, MOD_LV_DISCHARGE );
+      }
+      // TODO: add event that makes a radius of random lighting bolts like the hammer weapon
+    } else
     if(ent->client->inventory[RUNE_HEALTH]) {
       UsePowerup(ent, HI_MEDKIT);
       ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
       ent->client->ps.stats[STAT_ABILITY] = 0;
-    }
+    } else
     if(ent->client->inventory[RUNE_SHIELD]) {
       UsePowerup(ent, HI_INVULNERABILITY);
       ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
       ent->client->ps.stats[STAT_ABILITY] = 0;
-    }
+    } else
     if(ent->client->inventory[RUNE_RECALL]) {
       UsePowerup(ent, HI_PORTAL);
       ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
       ent->client->ps.stats[STAT_ABILITY] = 0;
-    }
+    }  else
+    if(ent->client->inventory[RUNE_DIVINE]) {
+      UsePowerup(ent, HI_KAMIKAZE);
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+    } else
 #endif
 #if defined(USE_ADVANCED_CLASS)
     switch(ent->client->pers.playerclass) {

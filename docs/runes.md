@@ -56,7 +56,7 @@
 	bleed in a disturbing manner.
 
 
-### TODO: Rune of Recall (8)
+### Rune of Recall (8)
 
 	Activate rune-use and you'll set your recall location.  Go
 	elsewhere and press it again and you'll teleport to your
@@ -79,7 +79,7 @@
 	of shadows).
 
 
-### TODO: Rune of Divine Wind (11)
+### Rune of Divine Wind (11)
 
 	You explode when killed, doing a fair amount of damage and so
 	often taking some other players out with you.  If you activate
@@ -535,7 +535,7 @@
 
 	This isn't a standard rune, it's the quasi-rune used to give you
 	a grappling hook in Lithium hook mode.  You can use impulse 159
-	to get a Lithium hook in rune cheating is turned on.
+	to get a Lithium hook if rune cheating is turned on.
 
 
 Rune Models

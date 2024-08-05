@@ -3184,7 +3184,8 @@ void CG_Player( centity_t *cent ) {
 		trap_R_AddRefEntityToScene( &powerup );
 	}
 #ifdef USE_ADVANCED_ITEMS
-	if ( cent->currentState.powerups == PW_AMMOREGEN ) 
+	if ( (cent->currentState.powerups & 0xFF) == PW_AMMOREGEN 
+		|| (cent->currentState.powerups >> 8) == PW_AMMOREGEN ) 
 #else
 	if ( cent->currentState.powerups & ( 1 << PW_AMMOREGEN ) ) 
 #endif
@@ -3199,7 +3200,8 @@ void CG_Player( centity_t *cent ) {
 	if ( 
 #ifdef USE_ADVANCED_ITEMS
 		//cg.inventory[PW_INVULNERABILITY]
-		cent->currentState.powerups == PW_INVULNERABILITY 
+		(cent->currentState.powerups & 0xFF) == PW_INVULNERABILITY 
+		|| (cent->currentState.powerups >> 8) == PW_INVULNERABILITY 
 #else
 		cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) 
 #endif
@@ -3215,7 +3217,8 @@ void CG_Player( centity_t *cent ) {
 	if ( 
 #ifdef USE_ADVANCED_ITEMS
 		//cg.inventory[PW_INVULNERABILITY]
-		cent->currentState.powerups == PW_INVULNERABILITY 
+		(cent->currentState.powerups & 0xFF) == PW_INVULNERABILITY 
+		|| (cent->currentState.powerups >> 8) == PW_INVULNERABILITY 
 #else
 		(cent->currentState.powerups & ( 1 << PW_INVULNERABILITY ) ) 
 #endif

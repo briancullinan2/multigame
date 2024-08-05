@@ -412,6 +412,9 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_RUNE_PIERCING:
 			message = "was pierced by";
 			break;
+		case MOD_RUNE_DIVINITY:
+			message = "was struck by divinity from";
+			break;
 #endif
 		default:
 			message = "was killed by";
@@ -464,6 +467,8 @@ static void CG_UseItem( centity_t *cent )
 	if ( itemNum < 0 || itemNum > HI_NUM_HOLDABLE ) {
 		itemNum = 0;
 	}
+#else
+	itemNum = es->eventParm;
 #endif
 
 	// print a message if the local player
@@ -476,6 +481,9 @@ static void CG_UseItem( centity_t *cent )
 #else
 			item = BG_FindItemForHoldable( itemNum );
 #endif
+			if(!item) {
+				CG_CenterPrint( va("Use %i", itemNum), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
+			} else
 			CG_CenterPrint( va("Use %s", item->pickup_name), SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 		}
 	}
@@ -484,9 +492,9 @@ static void CG_UseItem( centity_t *cent )
 	default:
 #ifndef USE_ADVANCED_ITEMS
 	case HI_NONE:
+#endif
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.useNothingSound );
 		break;
-#endif
 
 	case HI_TELEPORTER:
 		break;
@@ -508,6 +516,13 @@ static void CG_UseItem( centity_t *cent )
 		break;
 	case HI_INVULNERABILITY:
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.useInvulnerabilitySound );
+		break;
+#endif
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
+	case PW_SPECIAL_ABILITY:
+		if((es->powerups & 0xFF) == RUNE_SHIELD || (es->powerups >> 8) == RUNE_SHIELD) {
+			trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.useInvulnerabilitySound );
+		}
 		break;
 #endif
 	}

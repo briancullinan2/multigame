@@ -1433,7 +1433,7 @@ static void PM_CheckDuck (void)
 {
 	trace_t	trace;
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 #ifdef USE_ADVANCED_ITEMS
 	if ( pm->inventory[PW_INVULNERABILITY] ) 
 #else
@@ -1526,7 +1526,7 @@ static void PM_Footsteps( void ) {
 #endif
 	if ( pm->ps->groundEntityNum == ENTITYNUM_NONE ) {
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 #ifdef USE_ADVANCED_ITEMS
 		if ( pm->inventory[PW_INVULNERABILITY] ) 
 #else
@@ -1796,6 +1796,8 @@ static void PM_Weapon( void ) {
 			if((pm->ps->stats[STAT_ABILITY] >= rune_ability.value && pm->inventory[RUNE_HEALTH])
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_SHIELD])
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_RECALL])
+				|| (pm->ps->ammo[WP_LIGHTNING] >= 5 && pm->inventory[RUNE_ELECTRIC])
+				|| (pm->ps->stats[STAT_ABILITY] >= rune_ability.value && pm->inventory[RUNE_DIVINE])
 			) {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 #ifdef USE_ADVANCED_ITEMS
@@ -3019,7 +3021,7 @@ void PmoveSingle (pmove_t *pmove) {
   CheckLadder();  // ARTHUR TOMLIN check and see if they're on a ladder
 #endif
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 #ifdef USE_ADVANCED_ITEMS
 	if ( pm->inventory[PW_INVULNERABILITY] ) 
 #else

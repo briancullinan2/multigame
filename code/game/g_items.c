@@ -84,7 +84,7 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS], int team);
 #endif
 
-
+void G_GiveItem(gentity_t *ent, powerup_t pw);
 
 
 int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
@@ -136,7 +136,10 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	} else
 	if(ent->item->giTag == RUNE_SHIELD) {
 		G_GiveItem(other, HI_INVULNERABILITY);
-	}
+	} else
+	if(ent->item->giTag == RUNE_DIVINE) {
+		G_GiveItem(other, HI_KAMIKAZE);
+	} else
 
 #endif
 
@@ -292,7 +295,7 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	if( ent->item->giTag == HI_KAMIKAZE ) {
 		other->client->ps.eFlags |= EF_KAMIKAZE;
 	}
@@ -548,7 +551,7 @@ void RespawnItem( gentity_t *ent ) {
 		te->r.svFlags |= SVF_BROADCAST;
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	if ( ent->item->giType == IT_HOLDABLE && ent->item->giTag == HI_KAMIKAZE ) {
 		// play powerup spawn sound to all clients
 		gentity_t	*te;
