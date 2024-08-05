@@ -512,7 +512,7 @@
 	Deflects most telefrags!
 
 
-### TODO: Bouncing Betty Rune (56)
+### Bouncing Betty Rune (56)
 
 	Also known as cluster grenades. You launch a single grenade which
 	after a second spawns multiple clusters of grenades. A real

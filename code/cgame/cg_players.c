@@ -2502,9 +2502,18 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 	}
 
 	// no shadows when invisible
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_INVIS ) {
+		return qfalse;
+	}
+	if ( cent->currentState.powerups == RUNE_CLOAK ) {
+		return qfalse;
+	}
+#else
 	if ( cent->currentState.powerups & ( 1 << PW_INVIS ) ) {
 		return qfalse;
 	}
+#endif
 
 	// send a trace down from the player to the ground
 	VectorCopy( cent->lerpOrigin, end );
@@ -2655,7 +2664,22 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 		ent->customShader = cgs.media.invisShader;
 		trap_R_AddRefEntityToScene( ent );
 		return;
-	} 
+	}
+
+#ifdef USE_RUNES
+	if ( powerups == RUNE_CLOAK ) {
+		// if client was damaged recently, make them blink
+		if ( cg.time - cg_entities[state->clientNum].cloakBlinkTime <= 5000 && ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			trap_R_AddRefEntityToScene( ent );
+		} else {
+			// don't event add the player to the scene if cloaked
+			//ent->customShader = cgs.media.invisShader;
+			//trap_R_AddRefEntityToScene( ent );
+			return;
+		}
+	}
+#endif
+
 
 	if ( state->eFlags & EF_KAMIKAZE ) {
 		if (team == TEAM_BLUE)
@@ -3109,8 +3133,13 @@ void CG_Player( centity_t *cent ) {
 	CG_AddRefEntityWithPowerups( &torso, &cent->currentState, ci->team );
 
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
-	if ( cent->currentState.eFlags & EF_KAMIKAZE ) {
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
+	if ( cent->currentState.eFlags & EF_KAMIKAZE 
+#ifdef USE_RUNES
+		|| (cent->currentState.powerups & 0xFF) == RUNE_DEATH 
+		|| (cent->currentState.powerups >> 8) == RUNE_DEATH
+#endif
+	) {
 
 		memset( &skull, 0, sizeof(skull) );
 
@@ -3135,10 +3164,20 @@ void CG_Player( centity_t *cent ) {
 			VectorSet(skull.axis[2], 0, 0, 1);
 			CrossProduct(skull.axis[1], skull.axis[2], skull.axis[0]);
 
+#ifdef USE_RUNES
+			if((cent->currentState.powerups & 0xFF) == RUNE_DEATH || (cent->currentState.powerups >> 8) == RUNE_DEATH) {
+				skull.hModel = cgs.media.deathEffectModel;
+				skull.customShader = cgs.media.deathEffectShader;
+				trap_R_AddRefEntityToScene( &skull );
+			} else {
+#endif
 			skull.hModel = cgs.media.kamikazeHeadModel;
 			trap_R_AddRefEntityToScene( &skull );
 			skull.hModel = cgs.media.kamikazeHeadTrail;
 			trap_R_AddRefEntityToScene( &skull );
+#ifdef USE_RUNES
+			}
+#endif
 		}
 		else {
 			// three skulls spinning around the player
@@ -3163,6 +3202,13 @@ void CG_Player( centity_t *cent ) {
 			VectorSet(skull.axis[2], 0, 0, 1);
 			CrossProduct(skull.axis[1], skull.axis[2], skull.axis[0]);
 			*/
+#ifdef USE_RUNES
+			if((cent->currentState.powerups & 0xFF) == RUNE_DEATH || (cent->currentState.powerups >> 8) == RUNE_DEATH) {
+				skull.hModel = cgs.media.deathEffectModel;
+				skull.customShader = cgs.media.deathEffectShader;
+				trap_R_AddRefEntityToScene( &skull );
+			} else {
+#endif
 
 			skull.hModel = cgs.media.kamikazeHeadModel;
 			trap_R_AddRefEntityToScene( &skull );
@@ -3170,6 +3216,9 @@ void CG_Player( centity_t *cent ) {
 			VectorInverse(skull.axis[1]);
 			skull.hModel = cgs.media.kamikazeHeadTrail;
 			trap_R_AddRefEntityToScene( &skull );
+#ifdef USE_RUNES
+			}
+#endif
 
 			angle = ((cg.time / 4) & 255) * (M_PI * 2) / 255 + M_PI;
 			if (angle > M_PI * 2)
@@ -3193,11 +3242,22 @@ void CG_Player( centity_t *cent ) {
 			VectorSet(skull.axis[2], 0, 0, 1);
 			CrossProduct(skull.axis[1], skull.axis[2], skull.axis[0]);
 			*/
+#ifdef USE_RUNES
+			if((cent->currentState.powerups & 0xFF) == RUNE_DEATH || (cent->currentState.powerups >> 8) == RUNE_DEATH) {
+				skull.hModel = cgs.media.deathEffectModel;
+				skull.customShader = cgs.media.deathEffectShader;
+				trap_R_AddRefEntityToScene( &skull );
+			} else {
+#endif
+
 
 			skull.hModel = cgs.media.kamikazeHeadModel;
 			trap_R_AddRefEntityToScene( &skull );
 			skull.hModel = cgs.media.kamikazeHeadTrail;
 			trap_R_AddRefEntityToScene( &skull );
+#ifdef USE_RUNES
+			}
+#endif
 
 			angle = ((cg.time / 3) & 255) * (M_PI * 2) / 255 + 0.5 * M_PI;
 			if (angle > M_PI * 2)
@@ -3212,10 +3272,20 @@ void CG_Player( centity_t *cent ) {
 			VectorSet(skull.axis[2], 0, 0, 1);
 			CrossProduct(skull.axis[1], skull.axis[2], skull.axis[0]);
 
+#ifdef USE_RUNES
+			if((cent->currentState.powerups & 0xFF) == RUNE_DEATH || (cent->currentState.powerups >> 8) == RUNE_DEATH) {
+				skull.hModel = cgs.media.deathEffectModel;
+				skull.customShader = cgs.media.deathEffectShader;
+				trap_R_AddRefEntityToScene( &skull );
+			} else {
+#endif
 			skull.hModel = cgs.media.kamikazeHeadModel;
 			trap_R_AddRefEntityToScene( &skull );
 			skull.hModel = cgs.media.kamikazeHeadTrail;
 			trap_R_AddRefEntityToScene( &skull );
+#ifdef USE_RUNES
+			}
+#endif
 		}
 	}
 

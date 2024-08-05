@@ -215,6 +215,7 @@ typedef struct centity_s {
 
 #ifdef USE_RUNES
   int       rune;
+	int 			cloakBlinkTime;
 #endif
 } centity_t;
 
@@ -1056,6 +1057,10 @@ typedef struct {
 	qhandle_t	dustPuffShader;
 	qhandle_t	heartShader;
 	qhandle_t	invulnerabilityPowerupModel;
+#endif
+#ifdef USE_RUNES
+	qhandle_t	deathEffectModel;
+	qhandle_t	deathEffectShader;
 #endif
 
 	// scoreboard headers

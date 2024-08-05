@@ -1134,6 +1134,12 @@ int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS
 		return PW_INVIS;
 	}
 
+#ifdef USE_RUNES
+	if(inventory[RUNE_CLOAK]) {
+		return RUNE_CLOAK;
+	}
+#endif
+
 	if ( inventory[PW_QUAD] ) {
 		if (team == TEAM_RED) 
 			return PW_QUAD | (PW_REDFLAG << 8);

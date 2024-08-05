@@ -848,7 +848,10 @@ void CG_ReregisterModels( void ) {
 	cgs.media.heartShader = trap_R_RegisterShaderNoMip( "ui/assets/statusbar/selectedhealth.tga" );
 	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
 #endif
-
+#ifdef USE_RUNES
+	cgs.media.deathEffectModel = trap_R_RegisterModel( "models/runes/icetrap.md3" );
+	cgs.media.deathEffectShader = trap_R_RegisterShaderNoMip( "models/runes/death" );
+#endif
 #ifdef MISSIONPACK
 
 	trap_R_RegisterModel( "models/players/james/lower.md3" );
@@ -1109,6 +1112,12 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 	cgs.media.heartShader = trap_R_RegisterShaderNoMip( "ui/assets/statusbar/selectedhealth.tga" );
 	cgs.media.invulnerabilityPowerupModel = trap_R_RegisterModel( "models/powerups/shield/shield.md3" );
 #endif
+
+#ifdef USE_RUNES
+	cgs.media.deathEffectModel = trap_R_RegisterModel( "models/runes/icetrap.md3" );
+	cgs.media.deathEffectShader = trap_R_RegisterShaderNoMip( "models/runes/death" );
+#endif
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   cgs.media.frozenShader = trap_R_RegisterShader("freezeShader" );
 	cgs.media.freezeMarkShader = trap_R_RegisterShader( "freezeMarkShader" );

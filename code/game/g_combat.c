@@ -513,22 +513,39 @@ void CheckAlmostScored( gentity_t *self, gentity_t *attacker ) {
 
 
 
-#ifdef USE_DAMAGE_PLUMS
+#if defined(USE_DAMAGE_PLUMS) || defined(USE_RUNES)
 void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
   gentity_t *plum;
 
   if ( self->client->ps.pm_type == PM_DEAD ) {
 		return;
 	}
-  
+
+#ifdef USE_RUNES
+  if ( !attacker || !attacker->client || self->client == attacker->client && !self->client->inventory[RUNE_CLOAK] ) {
+    return;
+  }
+#else
   if ( !attacker || !attacker->client || self->client == attacker->client ) {
     return;
   }
+#endif
+
 
   plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
   // only send this temp entity to a single client
+#ifdef USE_RUNES
+	if(self->client->inventory[RUNE_CLOAK]) {
+		// ironically, broadcast to make them blink uninvisible
+		plum->r.svFlags |= SVF_BROADCAST;
+		plum->r.singleClient = 0;
+	} else {
+#endif
   plum->r.svFlags |= SVF_SINGLECLIENT;
   plum->r.singleClient = attacker->s.number;
+#ifdef USE_RUNES
+	}
+#endif
   //
   plum->s.otherEntityNum2 = attacker->s.number;
   plum->s.otherEntityNum = self->s.number;
@@ -923,10 +940,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
   if(self->client->portalDestination) {
     PortalDestroy(self->client->portalDestination);
   }
-#endif
-
-#ifdef USE_RUNES
-  //self->rune = 0;
 #endif
 
 	// never gib in a nodrop

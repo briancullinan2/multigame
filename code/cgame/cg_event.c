@@ -1192,6 +1192,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 #ifdef USE_DAMAGE_PLUMS
 	case EV_DAMAGEPLUM:
+#ifdef USE_RUNES
+		if((cg_entities[cent->currentState.otherEntityNum].currentState.powerups & 0xFF) == RUNE_CLOAK
+			|| (cg_entities[cent->currentState.otherEntityNum].currentState.powerups >> 8) == RUNE_CLOAK) {
+			cg_entities[cent->currentState.otherEntityNum].cloakBlinkTime = cg.time;
+		}
+
+		// don't actually show the plum on invisible players
+		if(cent->currentState.otherEntityNum != cg.snap->ps.clientNum)
+#endif
 		if(cent->currentState.time && cent->currentState.otherEntityNum2 == cg.snap->ps.clientNum) {
 			CG_DamagePlum( cent->currentState.otherEntityNum, cent->lerpOrigin, cent->currentState.time );
 		}

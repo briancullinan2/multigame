@@ -1362,7 +1362,7 @@ static float	CG_MachinegunSpinAngle( centity_t *cent ) {
 CG_AddWeaponWithPowerups
 ========================
 */
-static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
+static void CG_AddWeaponWithPowerups( refEntity_t *gun, entityState_t *state, int powerups ) {
 	// add powerup effects
 
 
@@ -1387,6 +1387,19 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 	}
 	
 #ifdef USE_RUNES
+
+	if ( powerups == RUNE_CLOAK ) {
+		// if client was damaged recently, make them blink
+		if ( cg.time - cg_entities[state->clientNum].cloakBlinkTime <= 5000 && ( ( cg.time / 100 ) % 10 ) == 1 ) {
+			trap_R_AddRefEntityToScene( gun );
+		} else if (cg.snap->ps.clientNum == state->clientNum && gun->renderfx & RF_FIRST_PERSON) {
+			gun->customShader = cgs.media.invisShader;
+			trap_R_AddRefEntityToScene( gun );
+		}
+		return;
+	}
+
+
 	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM 
 		&& powerups != RUNE_CLUSTER
 	) {
@@ -1563,7 +1576,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 
 	gun.customSkin = cg_items[weapon->item - bg_itemlist].customSkin;
 
-	CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups );
+	CG_AddWeaponWithPowerups( &gun, &cent->currentState, cent->currentState.powerups );
 
 
 	// add the spinning barrel
@@ -1583,7 +1596,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	
 		barrel.customSkin = cg_items[weapon->item - bg_itemlist].customSkin2;
 
-		CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups );
+		CG_AddWeaponWithPowerups( &barrel, &cent->currentState, cent->currentState.powerups );
 	}
 
 	// make sure we aren't looking at cg.predictedPlayerEntity for LG
