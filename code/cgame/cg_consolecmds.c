@@ -521,6 +521,13 @@ void PrevClass( void );
 void NextClass( void );
 #endif
 
+#ifdef USE_RUNES
+void CG_RunesDown_f( void );
+void CG_RunesUp_f( void );
+void CG_TellRune_f( void );
+void CG_UntellRune_f( void );
+#endif
+
 
 typedef struct {
 	const char *cmd;
@@ -576,6 +583,13 @@ static consoleCommand_t	commands[] = {
 	{ "spLose", CG_spLose_f },
 	{ "scoresDown", CG_scrollScoresDown_f },
 	{ "scoresUp", CG_scrollScoresUp_f },
+#endif
+
+#ifdef USE_RUNES
+  { "+runes", CG_RunesDown_f },
+  { "-runes", CG_RunesUp_f },
+  { "+tell_rune", CG_TellRune_f },
+  { "-tell_rune", CG_UntellRune_f },
 #endif
 
 #ifdef USE_ADVANCED_WEAPONS

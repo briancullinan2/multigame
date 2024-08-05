@@ -155,6 +155,54 @@ void P_WorldEffects( gentity_t *ent ) {
 void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPickup);
 void CalcMuzzlePointOrigin( const gentity_t *ent, vec3_t origin, const vec3_t forward, const vec3_t right, const vec3_t up, vec3_t muzzlePoint );
 
+void G_SetEntityPointed(gentity_t *ent) {
+	static vec3_t  range = { 40, 40, 52 };
+	int i;
+	int 	   num;
+	int 	   touch[MAX_GENTITIES];
+	gentity_t	   *hit;
+	vec3_t		   mins;
+	vec3_t		   maxs;
+	trace_t 	   tr;
+	vec3_t		   reach;
+	gentity_t	   *other;
+	vec3_t		   forward;
+	vec3_t		   right;
+	vec3_t		   up;
+	vec3_t		   muzzle;
+	vec3_t		   origin;
+
+	AngleVectors (ent->client->ps.viewangles, forward, right, up);
+	CalcMuzzlePointOrigin( ent, origin, forward, right, up, muzzle );
+
+	VectorMA(muzzle, 128, forward, reach);
+
+	trap_Trace(&tr, muzzle, NULL, NULL, reach, ent->s.number, MASK_SHOT | CONTENTS_TRIGGER);
+
+	if (tr.entityNum != ENTITYNUM_NONE && tr.entityNum != ENTITYNUM_WORLD) {
+		ent->client->ps.stats[STAT_ENTITY_POINTED] = tr.entityNum;
+	} else {
+		ent->client->ps.stats[STAT_ENTITY_POINTED] = 0;
+	}
+
+	VectorSubtract(reach, range, mins);
+	VectorAdd(reach, range, maxs);
+
+	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
+
+	for (i = 0; i < num; i++) {
+
+		hit = &g_entities[touch[i]];
+
+		if (!hit->classname || !hit->use) {
+			continue;
+		}
+
+		ent->client->ps.stats[STAT_ENTITY_POINTED] = touch[i];
+		break;
+	}
+}
+
 /**
  * G_Use
  *
@@ -1780,6 +1828,8 @@ client->ps.speed *= g_playerScale.value;
 #endif
 
 
+	G_SetEntityPointed(ent);
+
 	// perform once-a-second actions
 	ClientTimerActions( ent, msec );
 }
@@ -1812,7 +1862,6 @@ void ClientThink( int clientNum ) {
 		}
 	}
 #endif
-
 
 
 	trap_GetUsercmd( clientNum, &ent->client->pers.cmd );

@@ -686,6 +686,7 @@ typedef struct {
 	qboolean	scoreBoardShowing;
 	int			scoreFadeTime;
 #ifdef USE_RUNES
+  qboolean	tellRune;
   qboolean	showRunes;
   qboolean  runesBoardShowing;
   int			runesFadeTime;

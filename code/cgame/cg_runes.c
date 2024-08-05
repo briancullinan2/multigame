@@ -2,7 +2,43 @@
 #include "cg_local.h"
 
 #ifdef USE_RUNES
+qboolean	CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle );
 
+
+void CG_TellRune_f( void ) {
+	vec3_t		forward;
+	vec3_t		start;
+	vec3_t		reach;
+	trace_t trace;
+	centity_t *other;
+
+	cg.tellRune = qtrue;
+
+	//AngleVectors( cg.snap->ps.viewangles, forward, NULL, NULL );
+	//CG_CalcMuzzlePoint( cg.snap->ps.clientNum, start );
+	//VectorMA(start, 64, forward, reach);
+
+	//trap_CM_BoxTrace( &trace, reach, start, NULL, NULL, 0,  MASK_SHOT | CONTENTS_TRIGGER );
+	//other = &cg_entities[ trace.entityNum ];
+	if(cg.snap->ps.stats[STAT_ENTITY_POINTED]) {
+		other = &cg_entities[ cg.snap->ps.stats[STAT_ENTITY_POINTED] ];
+	}
+	if(other->currentState.eType == ET_ITEM) {
+		const gitem_t	*item;
+		item = &bg_itemlist[ other->currentState.modelindex ];
+		CG_CenterPrint( item->pickup_name, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
+	}
+}
+
+
+void CG_UntellRune_f( void ) {
+	if ( cgs.filterKeyUpEvent ) {
+		cgs.filterKeyUpEvent = qfalse;
+		return;
+	}
+
+	cg.tellRune = qfalse;
+}
 
 void CG_RunesDown_f( void ) {
 	cg.showRunes = qtrue;

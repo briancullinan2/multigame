@@ -210,6 +210,17 @@ static void CG_Obituary( entityState_t *ent ) {
 			message = "left to spectate";
 			break;
 #endif
+
+#ifdef USE_RUNES
+		case MOD_RUNE_STRENGTH:
+			if ( gender == GENDER_FEMALE )
+				message = "was too strong for her own good";
+			else if ( gender == GENDER_NEUTER )
+				message = "was too strong for its own good";
+			else
+				message = "was too strong for his own good";
+			break;
+#endif
 		default:
 			if ( gender == GENDER_FEMALE )
 				message = "killed herself";

@@ -493,6 +493,7 @@ typedef enum {
 	STAT_STAMINA,
 	STAT_ABILITY,
 #endif
+	STAT_ENTITY_POINTED,
 	STAT_HOLDABLE_ITEM,
 #ifdef USE_ADVANCED_ITEMS
 	STAT_HOLDABLE_AVAILABLE,
@@ -1127,6 +1128,10 @@ typedef enum {
 	MOD_BO_SHOCKS,
 	MOD_WORLD_COLLISION,
 #endif
+#ifdef USE_RUNES
+	MOD_RUNE_STRENGTH,
+#endif
+
 	MOD_MAX
 } meansOfDeath_t;
 

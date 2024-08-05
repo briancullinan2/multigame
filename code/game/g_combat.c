@@ -381,6 +381,14 @@ char	*modNames[] = {
   "MOD_HEADSHOT",
 #endif
 	"MOD_GRAPPLE"
+#ifdef USE_VEHICLES
+	"MOD_HIGH_FORCES",
+	"MOD_BO_SHOCKS",
+	"MOD_WORLD_COLLISION",
+#endif
+#ifdef USE_RUNES
+	"MOD_RUNE_STRENGTH",
+#endif
 };
 
 #ifdef USE_PORTALS
@@ -1448,6 +1456,12 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	}
 #endif
 
+#ifdef USE_RUNES
+	if(client->inventory[RUNE_STRENGTH]) {
+		damage *= 2.0;
+	}
+#endif
+
 	// always give half damage if hurting self
 	// calculated after knockback, so rocket jumping works
 	if ( targ == attacker) {
@@ -1466,6 +1480,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
     if(g_hotBFG.integer && targ == attacker) {
       return;
     }
+#endif
+#ifdef USE_RUNES
+	if(client->inventory[RUNE_STRENGTH]) {
+		mod = MOD_RUNE_STRENGTH;
+	}
 #endif
 	}
 
