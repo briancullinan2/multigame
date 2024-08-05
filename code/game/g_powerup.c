@@ -17,8 +17,16 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 
   switch(powerup) {
 
-#ifdef USE_ADVANCED_CLASS
+#if defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
   case PW_SPECIAL_ABILITY:
+#ifdef USE_RUNES
+    if(ent->client->inventory[RUNE_HEALTH]) {
+      UsePowerup(ent, HI_MEDKIT);
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+    }
+#endif
+#if defined(USE_ADVANCED_CLASS)
     switch(ent->client->pers.playerclass) {
     case PCLASS_VISOR:
       G_GiveItem(ent, PW_VISIBILITY);
@@ -32,6 +40,7 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     default:
       break;
     }
+#endif
     break;
 #endif
 
@@ -99,6 +108,12 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     break;
 
   case HI_MEDKIT:		// medkit
+#ifdef USE_RUNES
+    if(ent->client->inventory[RUNE_HEALTH]) {
+      ent->client->ps.stats[STAT_MAX_HEALTH] = rune_healthMax.integer;
+      ent->health = rune_health.integer;
+    } else
+#endif
     ent->health = ent->client->ps.stats[STAT_MAX_HEALTH] + 25;
 
     break;

@@ -127,6 +127,11 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
   //if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
   //  other->rune = ent->item->giTag;
   //}
+  if(ent->item->giTag == RUNE_HEALTH) {
+		other->client->ps.stats[STAT_MAX_HEALTH] = rune_healthMax.integer;
+		other->health = rune_health.integer;
+  }
+
 #endif
 
 	// give any nearby players a "denied" anti-reward

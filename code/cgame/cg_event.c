@@ -220,6 +220,22 @@ static void CG_Obituary( entityState_t *ent ) {
 			else
 				message = "was too strong for his own good";
 			break;
+		case MOD_RUNE_BERSERK:
+			if ( gender == GENDER_FEMALE )
+				message = "berserked herself";
+			else if ( gender == GENDER_NEUTER )
+				message = "berserked itself";
+			else
+				message = "berserked himself";
+			break;
+		case MOD_RUNE_PIERCING:
+			if ( gender == GENDER_FEMALE )
+				message = "pierced herself";
+			else if ( gender == GENDER_NEUTER )
+				message = "pierced itself";
+			else
+				message = "pierced himself";
+			break;
 #endif
 		default:
 			if ( gender == GENDER_FEMALE )
@@ -392,6 +408,11 @@ static void CG_Obituary( entityState_t *ent ) {
 			message = "tried to invade";
 			message2 = "'s personal space";
 			break;
+#ifdef USE_RUNES
+		case MOD_RUNE_PIERCING:
+			message = "was pierced by";
+			break;
+#endif
 		default:
 			message = "was killed by";
 			break;

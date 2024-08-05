@@ -289,7 +289,7 @@
      */
     {
         "rune_health",
-        "sound/items/protect.wav",
+        "sound/items/m_health.wav",
         {"models/runes/strength.md3", "models/runes/strength.md3", 0, 0},
         /* icon */ "icons/goodhealth",
         /* pickup */ "Good Health",

@@ -681,6 +681,12 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 		client->pers.maxHealth = HEALTH_SOFT_LIMIT;
 	}
 #endif
+
+#ifdef USE_RUNES
+	if(client->inventory[RUNE_HEALTH]) {
+		client->ps.stats[STAT_MAX_HEALTH] = rune_healthMax.integer;
+	} else
+#endif
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_TEAMS)
@@ -1442,7 +1448,7 @@ if(g_hotBFG.integer) {
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
-#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
 	client->ps.stats[STAT_STAMINA] = 100;
 	// start with ability powerup
 	client->ps.stats[STAT_ABILITY] = g_ability.integer;

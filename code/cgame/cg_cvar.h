@@ -244,4 +244,10 @@ CG_CVAR( cg_playerScale, "g_playerScale", "1.0", CVAR_SYSTEMINFO )
 CG_CVAR( cg_contrails, "cg_contrails", "1", CVAR_SYSTEMINFO )
 
 
+#ifdef USE_RUNES
+CG_CVAR( cg_berserk, "r_berserk", "0", 0 )
+CG_CVAR( cg_rune_ability, "rune_ability", "60", CVAR_SYSTEMINFO )
+#endif
+
+
 #undef CG_CVAR

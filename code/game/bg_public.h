@@ -489,7 +489,7 @@ void Pmove (pmove_t *pmove);
 // NOTE: may not have more than 16
 typedef enum {
 	STAT_HEALTH,
-#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
 	STAT_STAMINA,
 	STAT_ABILITY,
 #endif
@@ -1130,6 +1130,8 @@ typedef enum {
 #endif
 #ifdef USE_RUNES
 	MOD_RUNE_STRENGTH,
+	MOD_RUNE_BERSERK,
+	MOD_RUNE_PIERCING,
 #endif
 
 	MOD_MAX

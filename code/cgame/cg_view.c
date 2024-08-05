@@ -1203,6 +1203,19 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	}
 	CG_AddViewWeapon( &cg.predictedPlayerState );
 
+#ifdef USE_RUNES
+	// make the screen red
+	if(cg.inventory[RUNE_BERSERK]) {
+		if(cg_berserk.integer == 0) {
+			trap_Cvar_Set("r_berserk", "1");
+		}
+	} else {
+		if(cg_berserk.integer > 0) {
+			trap_Cvar_Set("r_berserk", "0");
+		}
+	}
+#endif
+
 	// add buffered sounds
 	CG_PlayBufferedSounds();
 

@@ -1384,6 +1384,17 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 		return;
 	}
 	
+	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM ) {
+		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(powerups-RUNE_STRENGTH)) ];
+		gun->customShader = item->altShader1;
+		trap_R_AddRefEntityToScene( gun );
+		if(item->altShader2) {
+      gun->customShader = item->altShader2;
+      trap_R_AddRefEntityToScene( gun );
+    }
+		return;
+	}
+
 	trap_R_AddRefEntityToScene( gun );
 
 	if ( powerups == PW_BATTLESUIT ) {

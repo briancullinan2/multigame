@@ -207,8 +207,15 @@ G_CVAR( g_mvproto, "mvproto", "1.0", CVAR_SYSTEMINFO | CVAR_ROM, 0, qfalse, qfal
 
 #if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 G_CVAR( g_stamina, "g_stamina", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
-G_CVAR( g_ability, "g_ability", "100", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( g_ability, "g_ability", "90", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 #endif
+
+#ifdef USE_RUNES
+G_CVAR( rune_ability, "rune_ability", "60", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( rune_health, "rune_health", "250", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( rune_healthMax, "rune_healthMax", "200", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+#endif
+
 
 G_CVAR( g_developer, "developer", "0", CVAR_TEMP, 0, qfalse, qfalse )
 

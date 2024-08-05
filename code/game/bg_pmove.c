@@ -15,6 +15,9 @@
 #define g_stamina cg_stamina
 #define g_ability cg_ability
 #endif
+#ifdef USE_RUNES
+#define rune_ability cg_rune_ability
+#endif
 
 #define g_playerScale cg_playerScale
 #define g_altGrapple cg_altGrapple
@@ -106,6 +109,11 @@ extern vmCvar_t  g_wallWalk;
 extern vmCvar_t g_stamina;
 extern vmCvar_t g_ability;
 #endif
+
+#ifdef USE_RUNES
+extern vmCvar_t rune_ability;
+#endif
+
 
 #ifdef USE_PORTALS
 extern vmCvar_t wp_portalEnable;
@@ -1777,7 +1785,26 @@ static void PM_Weapon( void ) {
 			}
 		}
 	}
+#endif
 
+
+#ifdef USE_RUNES
+	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
+		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
+			if(pm->ps->stats[STAT_ABILITY] >= rune_ability.value
+				&& pm->inventory[RUNE_HEALTH]
+			) {
+				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
+#ifdef USE_ADVANCED_ITEMS
+				BG_AddPredictableEventToPlayerstate( EV_USE_ITEM0, PW_SPECIAL_ABILITY, pm->ps, -1 );
+#else
+				PM_AddEvent( EV_USE_ITEM0 + PW_SPECIAL_ABILITY );
+#endif
+				pm->ps->stats[STAT_ABILITY] = 0;
+				return;
+			}
+		}
+	}
 #endif
 
 

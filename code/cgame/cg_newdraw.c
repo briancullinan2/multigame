@@ -603,14 +603,22 @@ static void CG_DrawPlayerAbility(rectDef_t *rect, float scale, vec4_t color, qha
 	playerState_t	*ps;
   int value;
 	char	num[16];
+	float max;
 
 	ps = &cg.snap->ps;
 
 	value = ps->stats[STAT_ABILITY];
 
+	max = cg_ability.value;
+#ifdef USE_RUNES
+	if(cg.inventory[RUNE_HEALTH]) {
+		max = cg_rune_ability.value;
+	}
+#endif
+
 	if (shader) {
 		trap_R_SetColor( color );
-		CG_DrawPic(rect->x, rect->y, rect->w * value / cg_ability.value, rect->h, shader);
+		CG_DrawPic(rect->x, rect->y, rect->w * value / max, rect->h, shader);
 		trap_R_SetColor( NULL );
 	} else {
 		Com_sprintf (num, sizeof(num), "%i", value);

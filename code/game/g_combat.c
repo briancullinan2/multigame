@@ -388,6 +388,8 @@ char	*modNames[] = {
 #endif
 #ifdef USE_RUNES
 	"MOD_RUNE_STRENGTH",
+	"MOD_RUNE_BERSERK",
+	"MOD_RUNE_PIERCING",
 #endif
 };
 
@@ -1298,6 +1300,32 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		attacker = &g_entities[ENTITYNUM_WORLD];
 	}
 
+#ifdef USE_RUNES
+	if(attacker->client) {
+		if(attacker->client->inventory[RUNE_PIERCING]) {
+			mod = MOD_RUNE_PIERCING;
+		}
+
+		if(targ == attacker) {
+			if(attacker->client->inventory[RUNE_STRENGTH]) {
+				mod = MOD_RUNE_STRENGTH;
+			}
+			if(attacker->client->inventory[RUNE_BERSERK]) {
+				mod = MOD_RUNE_BERSERK;
+			}
+		} else {
+			// do armor damage discount on self, but not on enemies
+			if(attacker->client->inventory[RUNE_PIERCING]) {
+				dflags |= DAMAGE_NO_ARMOR;
+			}
+		}
+
+	}
+
+#endif
+
+
+
 	// shootable doors / buttons don't actually have any health
 	if ( targ->s.eType == ET_MOVER ) {
 		if ( targ->use && (targ->moverState == MOVER_POS1 
@@ -1433,9 +1461,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	if ( client && 
 #ifdef USE_ADVANCED_ITEMS
 	(client->inventory[PW_BATTLESUIT] || client->inventory[PW_GRAVITYSUIT] )
-#ifdef USE_RUNES
-    || client->inventory[RUNE_RESIST]
-#endif
 #else
 	client->ps.powerups[PW_BATTLESUIT] 
 #endif	
@@ -1460,6 +1485,18 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	if(client->inventory[RUNE_STRENGTH]) {
 		damage *= 2.0;
 	}
+	if(client->inventory[RUNE_BERSERK]) {
+		damage *= 6.0;
+	}
+	if(client->inventory[RUNE_RESIST] || client->inventory[RUNE_ENVIRO]) {
+		G_AddEvent( targ, EV_POWERUP_BATTLESUIT, 0 );
+		if ( ( dflags & DAMAGE_RADIUS ) || ( mod == MOD_FALLING ) ) {
+			return;
+		}
+		if ( targ == attacker) {
+			damage *= 0.5;
+		}
+	}
 #endif
 
 	// always give half damage if hurting self
@@ -1480,11 +1517,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
     if(g_hotBFG.integer && targ == attacker) {
       return;
     }
-#endif
-#ifdef USE_RUNES
-	if(client->inventory[RUNE_STRENGTH]) {
-		mod = MOD_RUNE_STRENGTH;
-	}
 #endif
 	}
 

@@ -93,7 +93,7 @@ void P_WorldEffects( gentity_t *ent ) {
 	envirosuit = ent->client->ps.powerups[PW_BATTLESUIT] > level.time;
 #endif
 #ifdef USE_RUNES
-  envirosuit |= ent->client->inventory[RUNE_RESIST] > 0;
+  envirosuit |= ent->client->inventory[RUNE_RESIST] || ent->client->inventory[RUNE_ENVIRO];
 #endif
 
 	//
@@ -699,7 +699,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
 		}
 #ifdef USE_RUNES
-    else if ( ent->client->inventory[RUNE_REGEN] ) {
+    else if ( ent->client->inventory[RUNE_REGEN]
+		 || ent->client->inventory[RUNE_HEALTH] 
+		) {
       maxHealth = client->ps.stats[STAT_MAX_HEALTH];
     }
 #endif
@@ -724,7 +726,13 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 					ent->health = maxHealth * 1.1;
 				}
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
-			} else if ( ent->health < maxHealth * 2) {
+			} else 
+			if ( ent->health < maxHealth * 2
+#ifdef USE_RUNES
+				// don't over maximize health, but do regenerate
+				&& !ent->client->inventory[RUNE_HEALTH]
+#endif
+			) {
 				ent->health += 5;
 				if ( ent->health > maxHealth * 2 ) {
 					ent->health = maxHealth * 2;
@@ -795,6 +803,22 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 				}
 			}
 		}
+#endif
+
+#ifdef USE_RUNES
+
+		if (client->ps.stats[STAT_ABILITY] < rune_ability.value) {
+			if(client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT]) {
+				client->ps.stats[STAT_ABILITY]++;
+			}
+		}
+
+		if(client->ps.stats[STAT_ABILITY] >= rune_ability.value) {
+			if(client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT]) {
+				G_GiveItem(ent, HI_MEDKIT);
+			}
+		}
+
 #endif
 
 		// count down armor when over max
