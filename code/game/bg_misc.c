@@ -6,17 +6,18 @@
 #include "bg_public.h"
 
 #ifdef CGAME
+#ifdef USE_ADVANCED_ITEMS
+#define g_holdMultiple cg_holdMultiple
+#endif
 
-#define g_gravity      cg_gravity
-extern vmCvar_t  cg_gravity;
+#define g_gravity cg_gravity
+extern vmCvar_t cg_gravity;
 #else
-extern vmCvar_t  g_gravity;
+extern vmCvar_t g_gravity;
 #endif // end USE_PHYSICS_VARS
 
-#ifdef QAGAME
 #ifdef USE_ADVANCED_ITEMS
-extern vmCvar_t  g_holdMultiple;
-#endif
+extern vmCvar_t g_holdMultiple;
 #endif
 
 /*QUAKED item_***** ( 0 0 0 ) (-16 -16 -16) (16 16 16) suspended
@@ -703,7 +704,7 @@ Only in CTF games
 
 
 #ifdef USE_PORTALS
-#ifndef MISSIONPACK
+#if !defined(MISSIONPACK) && !defined(USE_ADVANCED_ITEMS) && !defined(USE_RUNES)
 
 /*QUAKED holdable_portal (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
@@ -724,7 +725,7 @@ Only in CTF games
 #endif
 #endif
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -1569,7 +1570,14 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 
 	case IT_HOLDABLE:
 		// can only hold one item at a time
-#ifdef QAGAME
+#ifdef USE_RUNES
+		if((item->giTag == HI_PORTAL && inventory[RUNE_RECALL])
+			|| (item->giTag == HI_MEDKIT && inventory[RUNE_HEALTH])
+			|| (item->giTag == HI_INVULNERABILITY && inventory[RUNE_SHIELD])) {
+			return qtrue;
+		}
+#endif
+#ifndef UI
 #ifdef USE_ADVANCED_ITEMS
 		if(!g_holdMultiple.integer)
 #endif

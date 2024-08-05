@@ -1130,7 +1130,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		break;
 
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 
 	case EV_KAMIKAZE:
 		CG_KamikazeEffect( cent->lerpOrigin );

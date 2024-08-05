@@ -162,7 +162,7 @@ G_CVAR( g_hordeBodies, "g_hordeBodies", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
 #endif
 
 #ifdef USE_ADVANCED_ITEMS
-G_CVAR( g_holdMultiple, "g_holdMultiple", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
+G_CVAR( g_holdMultiple, "g_holdMultiple", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse, qfalse )
 #endif
 
 
@@ -212,6 +212,7 @@ G_CVAR( g_ability, "g_ability", "90", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 #ifdef USE_RUNES
 G_CVAR( rune_ability, "rune_ability", "60", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( rune_abilityMin, "rune_abilityMin", "30", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 G_CVAR( rune_health, "rune_health", "250", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 G_CVAR( rune_healthMax, "rune_healthMax", "200", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 #endif

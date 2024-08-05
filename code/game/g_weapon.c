@@ -252,7 +252,7 @@ static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 		tent->s.otherEntityNum = ent->s.number;
 
 		if ( traceEnt->takedamage ) {
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -345,7 +345,7 @@ static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *
 #else
 			damage = DEFAULT_SHOTGUN_DAMAGE * s_quadFactor;
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
 					G_BounceProjectile( tr_start, impactpoint, bouncedir, tr_end );
@@ -602,7 +602,7 @@ void weapon_railgun_fire( gentity_t *ent ) {
 		}
 		traceEnt = &g_entities[ trace.entityNum ];
 		if ( traceEnt->takedamage ) {
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if ( G_InvulnerabilityEffect( traceEnt, forward, trace.endpos, impactpoint, bouncedir ) ) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -839,7 +839,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		traceEnt = &g_entities[ tr.entityNum ];
 
 		if ( traceEnt->takedamage ) {
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -1141,8 +1141,8 @@ gentity_t *fire_cluster_grenade (gentity_t *self, vec3_t start, vec3_t dir);
 #ifdef USE_FLAME_THROWER
 void Weapon_fire_flame (gentity_t *ent );
 #endif
-#if defined(USE_BOUNCE_RAIL) || defined(USE_INVULN_RAILS)
-void fire_special_railgun( gentity_t *ent );
+#if defined(USE_BOUNCE_RAIL) || defined(USE_INVULN_RAILS) || defined(USE_RUNES)
+void fire_special_railgun( gentity_t *ent, qboolean isBounce, qboolean invulnerable );
 #endif
 
 #ifdef USE_TELEFRAG_RAIL
@@ -1255,14 +1255,23 @@ void FireWeapon( gentity_t *ent )
 		Weapon_Plasmagun_Fire( ent );
 		break;
 	case WP_RAILGUN:
+#ifdef USE_RUNES
+		if(ent->client->inventory[RUNE_PIERCING]) {
+#ifdef USE_BOUNCE_RAIL
+			fire_special_railgun(ent, wp_railBounce.integer, qtrue);
+#else
+			fire_special_railgun(ent, qfalse, qtrue);
+#endif
+		} else
+#endif
 #ifdef USE_INVULN_RAILS
     if(wp_railThruWalls.integer)
-			fire_special_railgun( ent );
+			fire_special_railgun( ent, qfalse, qtrue );
 		else
 #endif
 #ifdef USE_BOUNCE_RAIL
 		if(wp_railBounce.integer) {
-			fire_special_railgun( ent );
+			fire_special_railgun( ent, qtrue, qfalse );
 		} else
 #endif
 #ifdef USE_TELEFRAG_RAIL

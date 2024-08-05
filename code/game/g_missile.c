@@ -298,7 +298,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
   ent->takedamage = qfalse;
 #endif
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	if ( other->takedamage ) {
 		if ( ent->s.weapon != WP_PROX_LAUNCHER ) {
 			if ( other->client && other->client->invulnerabilityTime > level.time ) {

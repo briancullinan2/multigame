@@ -130,7 +130,13 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
   if(ent->item->giTag == RUNE_HEALTH) {
 		other->client->ps.stats[STAT_MAX_HEALTH] = rune_healthMax.integer;
 		other->health = rune_health.integer;
-  }
+  } else
+	if(ent->item->giTag == RUNE_RECALL) {
+		G_GiveItem(other, HI_PORTAL);
+	} else
+	if(ent->item->giTag == RUNE_SHIELD) {
+		G_GiveItem(other, HI_INVULNERABILITY);
+	}
 
 #endif
 
@@ -1451,12 +1457,12 @@ void G_SpawnItem( gentity_t *ent, gitem_t *item ) {
 		ent->s.eFlags |= EF_NODRAW;
     ent->tag = TAG_DONTSPAWN;
 	} else {
-	RegisterItem( item );
+		RegisterItem( item );
 
-	if ( G_ItemDisabled( item ) ) {
-		ent->tag = TAG_DONTSPAWN;
-		return;
-	}
+		if ( G_ItemDisabled( item ) ) {
+			ent->tag = TAG_DONTSPAWN;
+			return;
+		}
   }
 
 	ent->item = item;

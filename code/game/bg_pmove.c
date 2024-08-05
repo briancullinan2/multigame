@@ -17,6 +17,7 @@
 #endif
 #ifdef USE_RUNES
 #define rune_ability cg_rune_ability
+#define rune_abilityMin cg_rune_abilityMin
 #endif
 
 #define g_playerScale cg_playerScale
@@ -112,6 +113,7 @@ extern vmCvar_t g_ability;
 
 #ifdef USE_RUNES
 extern vmCvar_t rune_ability;
+extern vmCvar_t rune_abilityMin;
 #endif
 
 
@@ -1791,8 +1793,9 @@ static void PM_Weapon( void ) {
 #ifdef USE_RUNES
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
 		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
-			if(pm->ps->stats[STAT_ABILITY] >= rune_ability.value
-				&& pm->inventory[RUNE_HEALTH]
+			if((pm->ps->stats[STAT_ABILITY] >= rune_ability.value && pm->inventory[RUNE_HEALTH])
+				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_SHIELD])
+				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_RECALL])
 			) {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 #ifdef USE_ADVANCED_ITEMS

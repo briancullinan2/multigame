@@ -313,7 +313,7 @@ weapon_railgun_fire
 =================
 */
 #define	MAX_RAIL_HITS	4
-void fire_special_railgun( gentity_t *ent ) {
+void fire_special_railgun( gentity_t *ent, qboolean isBounce, qboolean invulnerable ) {
 	vec3_t		end;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	vec3_t impactpoint, bouncedir;
@@ -374,7 +374,7 @@ void fire_special_railgun( gentity_t *ent ) {
 #endif
 	do {
 #ifdef USE_INVULN_RAILS
-    if(wp_railThruWalls.integer)
+    if(invulnerable)
       trap_Trace (&trace, tracefrom, NULL, NULL, end, passent, MASK_SHOT );
     else
 #endif
@@ -390,7 +390,7 @@ void fire_special_railgun( gentity_t *ent ) {
 
 		if ( trace.entityNum >= ENTITYNUM_MAX_NORMAL ) {
 #ifdef USE_INVULN_RAILS
-      if(wp_railThruWalls.integer) {
+      if(invulnerable) {
         // SUM break if we hit the sky
   			if (trace.surfaceFlags & SURF_SKY)
   				break;
@@ -412,7 +412,7 @@ void fire_special_railgun( gentity_t *ent ) {
 		}
 		traceEnt = &g_entities[ trace.entityNum ];
 		if ( traceEnt->takedamage ) {
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
 				if ( G_InvulnerabilityEffect( traceEnt, forward, trace.endpos, impactpoint, bouncedir ) ) {
 					G_BounceProjectile( muzzle, impactpoint, bouncedir, end );
@@ -442,7 +442,7 @@ void fire_special_railgun( gentity_t *ent ) {
 			}
 		}
 #ifdef USE_INVULN_RAILS
-    if(!wp_railThruWalls.integer)
+    if(!invulnerable)
 #endif
 		if ( trace.contents & CONTENTS_SOLID ) {
 			break;		// we hit something solid enough to stop the beam
@@ -464,7 +464,7 @@ void fire_special_railgun( gentity_t *ent ) {
 
 	// the final trace endpos will be the terminal point of the rail trail
 #ifdef USE_INVULN_RAILS
-  if(wp_railThruWalls.integer)
+  if(invulnerable)
     VectorCopy (lastend, trace.endpos);
 #endif
 
@@ -497,7 +497,7 @@ void fire_special_railgun( gentity_t *ent ) {
 
 #ifdef USE_INVULN_RAILS
   //send the effect to everyone since it tunnels through walls
-	if(wp_railThruWalls.integer) {
+	if(invulnerable) {
 		tent->r.svFlags |= SVF_BROADCAST;
 	}
 #endif
@@ -523,7 +523,7 @@ void fire_special_railgun( gentity_t *ent ) {
 #ifdef USE_BOUNCE_RAIL//Luc: Add a bounce, so it'll bounce only 4 times
 	tent->s.powerups = bounce;
 	bounce++;
-} while (wp_railBounce.integer && bounce <= MAX_RAIL_BOUNCE);
+} while (isBounce && bounce <= MAX_RAIL_BOUNCE);
 #endif
 }
 

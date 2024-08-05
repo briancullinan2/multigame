@@ -25,6 +25,16 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
       ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     }
+    if(ent->client->inventory[RUNE_SHIELD]) {
+      UsePowerup(ent, HI_INVULNERABILITY);
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+    }
+    if(ent->client->inventory[RUNE_RECALL]) {
+      UsePowerup(ent, HI_PORTAL);
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+    }
 #endif
 #if defined(USE_ADVANCED_CLASS)
     switch(ent->client->pers.playerclass) {
@@ -126,6 +136,11 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     break;
 
   case HI_INVULNERABILITY:		// invulnerability
+#ifdef USE_RUNES
+    if(ent->client->inventory[RUNE_SHIELD]) {
+    ent->client->invulnerabilityTime = level.time + 4000;
+    } else
+#endif
     ent->client->invulnerabilityTime = level.time + 10000;
     break;
 

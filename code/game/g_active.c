@@ -776,7 +776,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		}
 
 // i had a friend Dan in college that added this feature to the half life 2 engine, our plan was to compile target for playstation leaked sdk
-#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
 		if(!( client->pers.cmd.buttons & BUTTON_WALKING )
 			&& (client->pers.cmd.forwardmove != 0 || client->pers.cmd.rightmove != 0 || client->pers.cmd.upmove > 0)
 			&& client->ps.stats[STAT_STAMINA] > 0) {
@@ -808,7 +808,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #ifdef USE_RUNES
 
 		if (client->ps.stats[STAT_ABILITY] < rune_ability.value) {
-			if(client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT]) {
+			if((client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT])) {
 				client->ps.stats[STAT_ABILITY]++;
 			}
 		}
@@ -816,6 +816,23 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if(client->ps.stats[STAT_ABILITY] >= rune_ability.value) {
 			if(client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT]) {
 				G_GiveItem(ent, HI_MEDKIT);
+			}
+		}
+
+		if (client->ps.stats[STAT_ABILITY] < rune_abilityMin.value) {
+			if((client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY])
+				|| (client->inventory[RUNE_RECALL] && !client->inventory[HI_TELEPORTER])
+			) {
+				client->ps.stats[STAT_ABILITY]++;
+			}
+		}
+
+		if(client->ps.stats[STAT_ABILITY] >= rune_abilityMin.value) {
+			if(client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY]) {
+				G_GiveItem(ent, HI_INVULNERABILITY);
+			} else 
+			if(client->inventory[RUNE_RECALL] && !client->inventory[HI_PORTAL]) {
+				G_GiveItem(ent, HI_PORTAL);
 			}
 		}
 
@@ -827,7 +844,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		}
 	
 #ifdef USE_RUNES
-		else if ( ent->client->inventory[RUNE_ARMOR] ) {
+		else if ( ent->client->inventory[RUNE_ARMOR] || ent->client->inventory[RUNE_REGEN] ) {
 			if ( client->ps.stats[STAT_ARMOR] + 5 <= client->ps.stats[STAT_MAX_HEALTH] ) {
 				client->ps.stats[STAT_ARMOR] += 5;
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
@@ -2040,7 +2057,7 @@ void ClientEndFrame( gentity_t *ent ) {
 
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		ent->client->inventory[PW_GUARD] = level.time;
-		ent->client->inventoryModified[(int)floor(PW_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
+		ent->client->inventoryModified[(int)floor(PW_GUARD / PW_MAX_POWERUPS)] = qtrue;
 	}
 	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 		ent->client->inventory[PW_SCOUT] = level.time;
