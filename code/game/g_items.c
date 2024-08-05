@@ -124,9 +124,9 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 #endif
 
 #ifdef USE_RUNES
-  //if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
-  //  other->rune = ent->item->giTag;
-  //}
+  if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
+    other->client->inventory[ent->item->giTag] = 999 * 1000; // rune for a really long time
+  }
   if(ent->item->giTag == RUNE_HEALTH) {
 		other->client->ps.stats[STAT_MAX_HEALTH] = rune_healthMax.integer;
 		other->health = rune_health.integer;
@@ -646,10 +646,20 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		int i;
 		for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
 			if(other->client->inventory[i]) {
-				return;
+				return; // one at a time?
 			}
 		}
   }
+
+	if(other->client->inventory[RUNE_REQUIEM]
+		&& (ent->item->giType == IT_HEALTH || ent->item->giType == IT_ARMOR || ent->item->giType == IT_AMMO)
+	) {
+		other->client->requiemGrab = ent->item->giType;
+		other->client->requiemTime = level.time;
+		// instead handle this in clienttimeractions
+		return;
+	}
+
 #endif
 
 	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );

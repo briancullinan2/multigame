@@ -622,6 +622,12 @@ static void CG_TouchItem( centity_t *cent ) {
 	// delay next potential pickup for some time
 	cent->delaySpawn = cg.time + ( cg.meanPing > 0 ? cg.meanPing * 2 + 100 : 333 );
 	cent->delaySpawnPlayed = qfalse;
+#ifdef USE_RUNES
+	if(cg.inventory[RUNE_REQUIEM]) {
+		cent->delaySpawn += 1000;
+		cent->miscTime = cg.time + 1000; // automatically respawn visual
+	}
+#endif
 
 	// if it's a weapon, give them some predicted ammo so the autoswitch will work
 	if ( item->giType == IT_WEAPON ) {

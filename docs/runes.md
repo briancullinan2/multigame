@@ -525,7 +525,7 @@
 	center. If you touch the center you will be gibbed.
 
 
-### TODO: Requiem Rune (58)
+### Requiem Rune (58)
 
     Walking over ammo, health, or armor doesn't pick it up but provides a
     continuous supply.

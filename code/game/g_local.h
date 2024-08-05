@@ -464,6 +464,11 @@ struct gclient_s
 
 	float altGravity;
 
+#ifdef USE_RUNES
+	int requiemGrab;
+	int requiemTime;
+#endif
+
 };
 
 //

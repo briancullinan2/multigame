@@ -1418,12 +1418,23 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 #ifdef USE_ADVANCED_WEAPONS
 // TODO: fix this, add check for class and client array
 #endif
+#ifdef USE_RUNES
+		if(inventory[RUNE_REQUIEM]) {
+			return qtrue;
+		}
+#endif
 		if ( ps->ammo[ item->giTag ] >= 200 ) {
 			return qfalse;		// can't hold any more
 		}
 		return qtrue;
 
 	case IT_ARMOR:
+#ifdef USE_RUNES
+		if(inventory[RUNE_REQUIEM]) {
+			return qtrue;
+		}
+#endif
+
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 			return qfalse;
@@ -1448,6 +1459,11 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		return qtrue;
 
 	case IT_HEALTH:
+#ifdef USE_RUNES
+		if(inventory[RUNE_REQUIEM]) {
+			return qtrue;
+		}
+#endif
 		// small and mega healths will go over the max, otherwise
 		// don't pick up if already at max
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)

@@ -699,8 +699,8 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
 		}
 #ifdef USE_RUNES
-    else if ( ent->client->inventory[RUNE_REGEN]
-		 || ent->client->inventory[RUNE_HEALTH] 
+    else if ( ent->client->inventory[RUNE_REGEN] || ent->client->inventory[RUNE_HEALTH] 
+				|| (ent->client->inventory[RUNE_REQUIEM] && ent->client->requiemGrab == IT_HEALTH && level.time - ent->client->requiemTime <= 1500)
 		) {
       maxHealth = client->ps.stats[STAT_MAX_HEALTH];
     }
@@ -852,7 +852,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		}
 	
 #ifdef USE_RUNES
-		else if ( ent->client->inventory[RUNE_ARMOR] || ent->client->inventory[RUNE_REGEN] ) {
+		else if ( ent->client->inventory[RUNE_ARMOR] || ent->client->inventory[RUNE_REGEN]
+			|| (ent->client->inventory[RUNE_REQUIEM] && ent->client->requiemGrab == IT_ARMOR && level.time - ent->client->requiemTime <= 1500) 
+		) {
 			if ( client->ps.stats[STAT_ARMOR] + 5 <= client->ps.stats[STAT_MAX_HEALTH] ) {
 				client->ps.stats[STAT_ARMOR] += 5;
 				G_AddEvent( ent, EV_POWERUP_REGEN, 0 );
@@ -867,7 +869,8 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN 
 #ifdef USE_RUNES
-		|| ent->client->inventory[RUNE_ACTION]
+		|| ent->client->inventory[RUNE_ACTION] 
+		|| (ent->client->inventory[RUNE_REQUIEM] && ent->client->requiemGrab == IT_AMMO && level.time - ent->client->requiemTime <= 1500) 
 #endif
 	) {
 		int w, max, inc, t, i;
