@@ -2207,18 +2207,102 @@ CG_PlayerPowerups
 ===============
 */
 static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
-	int		powerups;
 	clientInfo_t	*ci;
+
+#ifdef USE_ADVANCED_ITEMS
+	int powerups = cent->currentState.powerups & 0xFF;
+	int powerups2 = cent->currentState.powerups >> 8;
+
+
+	// quad gives a dlight
+	if ( powerups == PW_QUAD || powerups2 == PW_QUAD ) {
+		if ( cgs.clientinfo[ cent->currentState.clientNum ].team == TEAM_RED ) {
+			trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 1.0f, 0.2f, 0.2f );
+		} else {
+			trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
+		}
+	}
+
+	// flight plays a looped sound
+	if ( powerups == PW_FLIGHT || powerups2 == PW_FLIGHT ) {
+		trap_S_AddLoopingSound( cent->currentState.number, cent->lerpOrigin, vec3_origin, cgs.media.flightSound );
+	}
+
+	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
+	// redflag
+	if ( powerups == PW_REDFLAG || powerups2 == PW_REDFLAG ) {
+		if (ci->newAnims) {
+			CG_PlayerFlag( cent, cgs.media.redFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.redFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 1.0f, 0.2f, 0.2f );
+	}
+
+	// blueflag
+	if ( powerups == PW_BLUEFLAG || powerups2 == PW_BLUEFLAG ) {
+		if (ci->newAnims){
+			CG_PlayerFlag( cent, cgs.media.blueFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.blueFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
+	}
+
+
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	// goldflag
+	if ( powerups == PW_GOLDFLAG || powerups2 == PW_GOLDFLAG ) {
+		if (ci->newAnims) {
+			CG_PlayerFlag( cent, cgs.media.goldFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.goldFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 1.0f, 0.2f, 0.2f );
+	}
+
+	// greenflag
+	if ( powerups == PW_GREENFLAG || powerups2 == PW_GREENFLAG ) {
+		if (ci->newAnims){
+			CG_PlayerFlag( cent, cgs.media.greenFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.greenFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 0.2f, 0.2f, 1.0f );
+	}
+#endif
+
+	// neutralflag
+	if ( powerups == PW_NEUTRALFLAG || powerups2 == PW_NEUTRALFLAG ) {
+		if (ci->newAnims) {
+			CG_PlayerFlag( cent, cgs.media.neutralFlagFlapSkin, torso );
+		}
+		else {
+			CG_TrailItem( cent, cgs.media.neutralFlagModel );
+		}
+		trap_R_AddLightToScene( cent->lerpOrigin, ( POWERUP_GLOW_RADIUS + (rand() & POWERUP_GLOW_RADIUS_MOD) ), 1.0f, 1.0f, 1.0f );
+	}
+
+	// haste leaves smoke trails
+	if ( powerups == PW_HASTE || powerups2 == PW_HASTE
+#ifdef USE_RUNES
+    || powerups == RUNE_HASTE || powerups2 == RUNE_HASTE
+#endif
+  ) {
+		CG_HasteTrail( cent );
+	}
+
+#else
+	int		powerups;
 
 	powerups = cent->currentState.powerups;
 	if ( !powerups ) {
 		return;
 	}
-
-#ifdef USE_ADVANCED_ITEMS
-
-
-#else
 
 	// quad gives a dlight
 	if ( powerups & ( 1 << PW_QUAD ) ) {
@@ -2294,11 +2378,7 @@ static void CG_PlayerPowerups( centity_t *cent, refEntity_t *torso ) {
 	}
 
 	// haste leaves smoke trails
-	if ( cent->client->inventory[PW_HASTE] 
-#ifdef USE_RUNES
-    || cent->client->inventory[RUNE_HASTE]
-#endif
-  ) {
+	if ( cent->client->ps.powerups[PW_HASTE] ) {
 		CG_HasteTrail( cent );
 	}
 
