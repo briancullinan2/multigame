@@ -831,6 +831,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			if((client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY])
 				|| (client->inventory[RUNE_RECALL] && !client->inventory[HI_TELEPORTER])
 				|| (client->inventory[RUNE_GRAPPLE] && !client->ps.ammo[WP_GRAPPLING_HOOK] < 100)
+				|| (client->inventory[RUNE_TORNADO])
 			) {
 				client->ps.stats[STAT_ABILITY]++;
 			}

@@ -1798,6 +1798,7 @@ static void PM_Weapon( void ) {
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_RECALL])
 				|| (pm->ps->ammo[WP_LIGHTNING] >= 5 && pm->inventory[RUNE_ELECTRIC])
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_ability.value && pm->inventory[RUNE_DIVINE])
+				||  (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_TORNADO])
 			) {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 #ifdef USE_ADVANCED_ITEMS

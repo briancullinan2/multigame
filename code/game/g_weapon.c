@@ -115,7 +115,7 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
   if(ent->client->inventory[RUNE_BERSERK]) {
     s_quadFactor = 6.0;
   } else
-  if(ent->client->inventory[RUNE_BERSERK]) {
+  if(ent->client->inventory[RUNE_STRENGTH]) {
     s_quadFactor = 2.0;
   } else
 #endif
@@ -1165,7 +1165,17 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 void FireWeapon( gentity_t *ent ) 
 #endif
 {
-	if ( ent->client->ps.powerups[PW_QUAD] ) {
+#ifdef USE_RUNES
+  if ( ent->client->inventory[RUNE_STRENGTH] ) {
+		s_quadFactor = g_quadfactor.value;
+  } else
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	if ( ent->client->inventory[PW_QUAD] || ent->client->inventory[PW_SUPERMAN])
+#else
+	if ( ent->client->ps.powerups[PW_QUAD] ) 
+#endif
+	{
 		s_quadFactor = g_quadfactor.value;
 	} else {
 		s_quadFactor = 1.0;

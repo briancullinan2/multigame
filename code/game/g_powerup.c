@@ -3,12 +3,37 @@
 #include "g_local.h"
 
 void G_GiveItem(gentity_t *ent, powerup_t pw);
+static	float	s_quadFactor;
+static	vec3_t	forward, right, up;
+static	vec3_t	muzzle;
+static	vec3_t	muzzle_origin; // for hitscan weapon trace
 
 void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	gitem_t *item;
 	vec3_t	origin, angles;
 	int		i, j;
 	gentity_t *drop;
+#ifdef USE_RUNES
+  if ( ent->client->inventory[RUNE_STRENGTH] ) {
+		s_quadFactor = g_quadfactor.value;
+  } else
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	if ( ent->client->inventory[PW_QUAD] || ent->client->inventory[PW_SUPERMAN])
+#else
+	if ( ent->client->ps.powerups[PW_QUAD] ) 
+#endif
+  {
+		s_quadFactor = g_quadfactor.value;
+	} else {
+		s_quadFactor = 1.0;
+	}
+
+	// set aiming directions
+	AngleVectors( ent->client->ps.viewangles, forward, right, up );
+
+	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
+
 
   int itemClass = floor(powerup / PW_MAX_POWERUPS);
   ent->client->inventory[powerup] = 0;
@@ -62,6 +87,19 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     }  else
     if(ent->client->inventory[RUNE_DIVINE]) {
       UsePowerup(ent, HI_KAMIKAZE);
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->ps.stats[STAT_ABILITY] = 0;
+    } else
+    if(ent->client->inventory[RUNE_TORNADO]) {
+      gentity_t	*m;
+
+      // extra vertical velocity
+      forward[2] += 0.2f;
+      VectorNormalize( forward );
+		  m = fire_special_grenade (ent, muzzle, forward, qtrue, wp_grenadeVortex.integer);
+      m->damage *= s_quadFactor;
+      m->splashDamage *= s_quadFactor;
+
       ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     } else

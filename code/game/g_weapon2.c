@@ -27,7 +27,17 @@ void SpreadFire_Powerup(gentity_t* ent, gentity_t* (*fireFunc)(gentity_t*, vec3_
 	gclient_t	*client;
 	vec3_t		newforward;
 	vec3_t		angles;
-	if ( ent->client->ps.powerups[PW_QUAD] ) {
+#ifdef USE_RUNES
+  if ( ent->client->inventory[RUNE_STRENGTH] ) {
+		s_quadFactor = g_quadfactor.value;
+  } else
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	if ( ent->client->inventory[PW_QUAD] || ent->client->inventory[PW_SUPERMAN])
+#else
+	if ( ent->client->ps.powerups[PW_QUAD] ) 
+#endif
+	{
 		s_quadFactor = g_quadfactor.value;
 	} else {
 		s_quadFactor = 1.0;
@@ -334,7 +344,21 @@ void fire_special_railgun( gentity_t *ent, qboolean isBounce, qboolean invulnera
   vec3_t		tracefrom;	// SUM
   vec3_t		lastend;	// SUM
 #endif
-	if ( ent->client->ps.powerups[PW_QUAD] ) {
+#ifdef USE_RUNES
+  if ( ent->client->inventory[RUNE_STRENGTH] ) {
+		s_quadFactor = g_quadfactor.value;
+  } else
+	// berserk only on melee attack
+  //if ( ent->client->inventory[RUNE_BERSERK] ) {
+	//	s_quadFactor = g_quadfactor.value * 3;
+  //} else
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	if ( ent->client->inventory[PW_QUAD] || ent->client->inventory[PW_SUPERMAN])
+#else
+	if ( ent->client->ps.powerups[PW_QUAD] ) 
+#endif
+	{
 		s_quadFactor = g_quadfactor.value;
 	} else {
 		s_quadFactor = 1.0;
