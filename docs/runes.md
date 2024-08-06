@@ -134,7 +134,7 @@
 	dancing.  "Now you will dance for me."
 
 
-### TODO: Action Movie Arsenal (18)
+### Action Movie Arsenal (18)
 
 	Just like Arnold in the latest big budget shoot-em-up, you have
 	a virtually inexhaustible supply of ammunition.  (All of your
@@ -232,7 +232,7 @@
 	you'll switch places with them.
 
 
-### TODO: Impact Rune (27)
+### Impact Rune (27)
 
 	Your attacks move people around much more than normal, your
 	attacks do a little more damage than normal, and if you touch

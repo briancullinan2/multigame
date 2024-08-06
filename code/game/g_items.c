@@ -140,6 +140,10 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	if(ent->item->giTag == RUNE_DIVINE) {
 		G_GiveItem(other, HI_KAMIKAZE);
 	} else
+	if(ent->item->giTag == RUNE_GRAPPLE) {
+		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
+		client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
+	} else
 	if(ent->item->giTag == RUNE_LITHIUM) {
 		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
 		client->ps.ammo[WP_GRAPPLING_HOOK] = INFINITE;

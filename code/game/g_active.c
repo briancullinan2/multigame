@@ -830,6 +830,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if (client->ps.stats[STAT_ABILITY] < rune_abilityMin.value) {
 			if((client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY])
 				|| (client->inventory[RUNE_RECALL] && !client->inventory[HI_TELEPORTER])
+				|| (client->inventory[RUNE_GRAPPLE] && !client->ps.ammo[WP_GRAPPLING_HOOK] < 100)
 			) {
 				client->ps.stats[STAT_ABILITY]++;
 			}
@@ -841,6 +842,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			} else 
 			if(client->inventory[RUNE_RECALL] && !client->inventory[HI_PORTAL]) {
 				G_GiveItem(ent, HI_PORTAL);
+			}
+			if(client->inventory[RUNE_GRAPPLE] && !client->ps.ammo[WP_GRAPPLING_HOOK] < 100) {
+				client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
 			}
 		}
 
@@ -922,6 +926,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		  client->ammoTimes[w] += msec;
 		  if ( client->ps.ammo[w] >= max ) {
 			  client->ammoTimes[w] = 0;
+#ifdef USE_RUNES
+				if(ent->client->inventory[RUNE_ACTION]) {
+					ent->client->ps.stats[STAT_WEAPONS] |= (1 << w);
+				}
+#endif
 		  }
 		  if ( client->ammoTimes[w] >= t ) {
 			  while ( client->ammoTimes[w] >= t )
