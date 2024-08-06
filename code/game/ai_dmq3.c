@@ -1753,11 +1753,27 @@ BotUpdateInventory
 */
 void BotUpdateInventory(bot_state_t *bs) {
 	int oldinventory[MAX_ITEMS];
+#ifdef USE_ADVANCED_WEAPONS
+	//int weaponClass
+	int i;
+#endif
 
 	memcpy(oldinventory, bs->inventory, sizeof(oldinventory));
 	//armor
 	bs->inventory[INVENTORY_ARMOR] = bs->cur_ps.stats[STAT_ARMOR];
 	//weapons
+#ifdef USE_ADVANCED_WEAPONS
+	//weaponClass = bs->cur_ps.stats[STAT_WEAPONS_UPDATE];
+	for(i = 0; i < WP_MAX_WEAPONS; i++) {
+		if(bs->cur_ps.stats[STAT_WEAPONS_AVAILABLE] & (1 << i)) {
+			bs->inventory[INVENTORY_GAUNTLET + i] = 1;
+		} else {
+			bs->inventory[INVENTORY_GAUNTLET + i] = 0;
+		}
+
+		bs->inventory[INVENTORY_SHELLS + i] = bs->cur_ps.ammo[i];
+	}
+#else
 	bs->inventory[INVENTORY_GAUNTLET] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_GAUNTLET)) != 0;
 	bs->inventory[INVENTORY_SHOTGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_SHOTGUN)) != 0;
 	bs->inventory[INVENTORY_MACHINEGUN] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_MACHINEGUN)) != 0;
@@ -1789,6 +1805,7 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_MINES] = bs->cur_ps.ammo[WP_PROX_LAUNCHER];
 	bs->inventory[INVENTORY_BELT] = bs->cur_ps.ammo[WP_CHAINGUN];
 #endif
+#endif
 	//powerups
 	bs->inventory[INVENTORY_HEALTH] = bs->cur_ps.stats[STAT_HEALTH];
 	bs->inventory[INVENTORY_TELEPORTER] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_TELEPORTER;
@@ -1819,11 +1836,22 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_REGEN] = bs->cur_ps.powerups[PW_REGEN] != 0;
 	bs->inventory[INVENTORY_FLIGHT] = bs->cur_ps.powerups[PW_FLIGHT] != 0;
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	bs->inventory[INVENTORY_SCOUT] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_SCOUT
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_SCOUT;
+	bs->inventory[INVENTORY_GUARD] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_GUARD 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_GUARD;
+	bs->inventory[INVENTORY_DOUBLER] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_DOUBLER 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_DOUBLER;
+	bs->inventory[INVENTORY_AMMOREGEN] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_AMMOREGEN 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_AMMOREGEN;
+#else
+#if defined(MISSIONPACK)
 	bs->inventory[INVENTORY_SCOUT] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_SCOUT;
 	bs->inventory[INVENTORY_GUARD] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_GUARD;
 	bs->inventory[INVENTORY_DOUBLER] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_DOUBLER;
 	bs->inventory[INVENTORY_AMMOREGEN] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_AMMOREGEN;
+#endif
 #endif
 	bs->inventory[INVENTORY_REDFLAG] = bs->cur_ps.powerups[PW_REDFLAG] != 0;
 	bs->inventory[INVENTORY_BLUEFLAG] = bs->cur_ps.powerups[PW_BLUEFLAG] != 0;

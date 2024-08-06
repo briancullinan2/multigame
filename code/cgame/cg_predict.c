@@ -600,7 +600,7 @@ static void CG_TouchItem( centity_t *cent ) {
 #ifdef USE_WEAPON_ORDER
   if(item->giType == IT_WEAPON) {
 #ifdef USE_ADVANCED_WEAPONS
-    alreadyHad = cg.snap->weapons[(int)floor(item->giTag / WP_MAX_WEAPONS)] & (1 << (item->giTag % WP_MAX_WEAPONS));
+    alreadyHad = cg.classWeapons[item->giTag] != 0;
 #else
     alreadyHad = cg.snap->ps.stats[STAT_WEAPONS] & (1 << item->giTag);
 #endif

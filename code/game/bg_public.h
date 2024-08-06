@@ -379,6 +379,66 @@ typedef enum {
 } pclass_t;
 #endif
 
+#ifdef USE_ADVANCED_WEAPONS
+
+typedef enum {
+	WP_NONE,
+	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
+
+	WP_GAUNTLET = 41,
+	WP_MACHINEGUN = 42,
+	WP_SHOTGUN = 43,
+	WP_GRENADE_LAUNCHER = 44,
+	WP_ROCKET_LAUNCHER = 45,
+	WP_LIGHTNING = 46,
+	WP_RAILGUN = 47,
+	WP_PLASMAGUN = 48,
+
+	WP_CROWBAR = 49,
+
+	WP_MOD_CLASSES = 10,
+
+#ifdef USE_PORTALS
+	WP_PORTAL_GUN = 50,
+#endif
+	WP_CHAINSAW = 51,
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+	WP_CHAINGUN = 52,
+	WP_NAILGUN = 53,
+	WP_PROX_LAUNCHER = 54,
+#endif
+	WP_HOMING_ROCKET = 55,
+	WP_THORS_HAMMER = 56,
+#ifdef USE_FLAME_THROWER
+	WP_FLAME_THROWER = 57,
+#endif
+	WP_BFG = 58,
+#ifdef USE_GRAPPLE
+	WP_GRAPPLING_HOOK = 59,
+#endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	WP_GAUNTLET2 = 21,
+	WP_MACHINEGUN2 = 22,
+	WP_SHOTGUN2 = 23,
+	WP_GRENADE_LAUNCHER2 = 24,
+	WP_ROCKET_LAUNCHER2 = 25,
+	WP_LIGHTNING2 = 26,
+	WP_RAILGUN2 = 27,
+	WP_PLASMAGUN2 = 28,
+	WP_BFG2 = 29,
+#endif
+
+	WP_NUM_WEAPONS = 60,
+	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
+	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
+	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools
+} weapon_t;
+
+#define WP_MAX_CLASSES (1 << (MAX_WEAPONS - WP_MAX_WEAPONS - 1))
+
+#endif
+
 // pmove->pm_flags
 #define	PMF_DUCKED			1
 #define	PMF_JUMP_HELD		2
@@ -429,6 +489,11 @@ typedef struct {
 	// these will be different functions during game and cgame
 	void		(*trace)( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask );
 	int			(*pointcontents)( const vec3_t point, int passEntityNum );
+
+#ifdef USE_ADVANCED_WEAPONS
+	int			classAmmo[WP_NUM_WEAPONS];
+	int			classWeapons[WP_NUM_WEAPONS];
+#endif
 
 #ifdef USE_ADVANCED_ITEMS
 	int inventory[PW_NUM_POWERUPS];
@@ -499,8 +564,10 @@ typedef enum {
 	STAT_HOLDABLE_AVAILABLE,
 	STAT_HOLDABLE_UPDATE,
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifndef USE_ADVANCED_ITEMS
+#if defined(MISSIONPACK)
 	STAT_PERSISTANT_POWERUP,
+#endif
 #endif
 	STAT_WEAPONS,					// 16 bit fields
 #ifdef USE_ADVANCED_WEAPONS
@@ -648,65 +715,7 @@ typedef enum {
 
 #endif
 
-#ifdef USE_ADVANCED_WEAPONS
-
-typedef enum {
-	WP_NONE,
-	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
-
-	WP_GAUNTLET = 1,
-	WP_MACHINEGUN = 2,
-	WP_SHOTGUN = 3,
-	WP_GRENADE_LAUNCHER = 4,
-	WP_ROCKET_LAUNCHER = 5,
-	WP_LIGHTNING = 6,
-	WP_RAILGUN = 7,
-	WP_PLASMAGUN = 8,
-
-	WP_CROWBAR = 9,
-
-	WP_MOD_CLASSES = 10,
-
-#ifdef USE_PORTALS
-	WP_PORTAL_GUN = 10,
-#endif
-	WP_CHAINSAW = 11,
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
-	WP_CHAINGUN = 12,
-	WP_NAILGUN = 13,
-	WP_PROX_LAUNCHER = 14,
-#endif
-	WP_HOMING_ROCKET = 15,
-	WP_THORS_HAMMER = 16,
-#ifdef USE_FLAME_THROWER
-	WP_FLAME_THROWER = 17,
-#endif
-	WP_BFG = 18,
-#ifdef USE_GRAPPLE
-	WP_GRAPPLING_HOOK = 19,
-#endif
-
-#ifdef USE_ADVANCED_WEAPONS
-	WP_GAUNTLET2 = 21,
-	WP_MACHINEGUN2 = 22,
-	WP_SHOTGUN2 = 23,
-	WP_GRENADE_LAUNCHER2 = 24,
-	WP_ROCKET_LAUNCHER2 = 25,
-	WP_LIGHTNING2 = 26,
-	WP_RAILGUN2 = 27,
-	WP_PLASMAGUN2 = 28,
-	WP_BFG2 = 29,
-#endif
-
-	WP_NUM_WEAPONS = 30,
-	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
-	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
-	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools
-} weapon_t;
-
-#define WP_MAX_CLASSES (1 << (MAX_WEAPONS - WP_MAX_WEAPONS - 1))
-
-#else
+#ifndef USE_ADVANCED_WEAPONS
 
 typedef enum {
 	WP_NONE,

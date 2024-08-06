@@ -422,8 +422,8 @@ struct gclient_s
 
 #ifdef USE_ADVANCED_WEAPONS
 	// MORE STATS for switching weapons, this is transfered to player state
-	int ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
-	int weapons[WP_MAX_CLASSES];
+	int classAmmo[WP_NUM_WEAPONS]; // 10 instead of 16
+	int classWeapons[WP_NUM_WEAPONS];
 	int weaponClass;
 #endif
 

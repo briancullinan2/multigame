@@ -4,6 +4,10 @@
 
 // g_client.c -- client functions that don't happen every frame
 
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Add_Ammo( gentity_t *ent, int weapon, int count );
+
 const vec3_t	playerMins = {-15, -15, -24};
 const vec3_t	playerMaxs = { 15,  15,  32};
 
@@ -1230,61 +1234,54 @@ void ClientSpawn(gentity_t *ent) {
 
 #ifdef USE_ADVANCED_WEAPONS
 	// TODO: make these templates somehow where a conditional evaluates to this if else code
-#endif
-
+	if ( g_gametype.integer == GT_TEAM ) {
+		Add_Weapon_Ammo(ent, WP_MACHINEGUN, 50);
+	} else {
+		Add_Weapon_Ammo(ent, WP_MACHINEGUN, 100);
+	}
+#else
 	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_MACHINEGUN );
 	if ( g_gametype.integer == GT_TEAM ) {
 		client->ps.ammo[WP_MACHINEGUN] = 50;
 	} else {
 		client->ps.ammo[WP_MACHINEGUN] = 100;
 	}
+#endif
 
 #ifdef USE_ADVANCED_CLASS
   //assign weapons according to class
   switch (client->pers.playerclass) {
 	case PCLASS_VORE:
 		G_ModelIndex("models/runes/icetrap.md3");
-		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
-		client->ps.ammo[WP_MACHINEGUN] = 0;
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_ROCKET_LAUNCHER );
-		client->ps.ammo[WP_ROCKET_LAUNCHER] = 30;
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+		Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, 30);
 		break;
 	case PCLASS_GUNNER:
-		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
-		client->ps.ammo[WP_MACHINEGUN] = 0;
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_CHAINGUN );
-		client->ps.ammo[WP_CHAINGUN] = 100;
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+		Add_Weapon_Ammo(ent, WP_CHAINGUN, 100);
 		break;
 	case PCLASS_BERSERKER:
-		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
-		client->ps.ammo[WP_MACHINEGUN] = 0;
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
 		break;
   case PCLASS_DRAGON:
-		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
-		client->ps.ammo[WP_MACHINEGUN] = 0;
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
 #ifdef USE_FLAME_THROWER
-    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
-    client->ps.ammo[WP_FLAME_THROWER] = 40;
+		Add_Weapon_Ammo(ent, WP_FLAME_THROWER, 40);
 #endif
     break;
   case PCLASS_BFG:
-    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BFG );
-    client->ps.ammo[WP_BFG] = 20;
+		Add_Weapon_Ammo(ent, WP_BFG, 20);
     break;
   case PCLASS_SHAMBLER:
-		client->ps.stats[STAT_WEAPONS] &= ~( 1 << WP_MACHINEGUN );
-		client->ps.ammo[WP_MACHINEGUN] = 0;
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
   case PCLASS_LIGHTNING:
-    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_LIGHTNING );
-    client->ps.ammo[WP_LIGHTNING] = 60;
+		Add_Weapon_Ammo(ent, WP_LIGHTNING, 60);
     break;
   case PCLASS_RAILGUN:
-    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_RAILGUN );
-    client->ps.ammo[WP_RAILGUN] = 20;
+		Add_Weapon_Ammo(ent, WP_RAILGUN, 20);
     break;
 	case PCLASS_RANGER:
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_SHOTGUN );
-		client->ps.ammo[WP_SHOTGUN] = 10;
+		Add_Weapon_Ammo(ent, WP_SHOTGUN, 10);
 		break;
   default:
 		break;
@@ -1306,49 +1303,57 @@ void ClientSpawn(gentity_t *ent) {
 #endif
 	)) {
 
+#ifdef USE_ADVANCED_WEAPONS
+	Add_Weapon_Ammo(ent, WP_GAUNTLET, INFINITE);
+#else
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;
+#endif
 
 	}
 
 #ifdef USE_INSTAGIB
   if(g_instagib.integer) {
-    client->ps.stats[STAT_WEAPONS] = ( 1 << WP_RAILGUN );
     // bots don't seem to like -1 as ammo amount, maybe this can be fixed
     //   during advanced grapple hook tutorial.
-    client->ps.ammo[WP_RAILGUN] = INFINITE;  
+		Add_Weapon_Ammo(ent, WP_RAILGUN, INFINITE);
   }
 #endif
 
-	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+#ifdef USE_GRAPPLE
+	if(wp_grappleEnable.integer) {
+#ifdef USE_ADVANCED_WEAPONS
+		Add_Ammo(ent, WP_GAUNTLET, INFINITE);
+#else
+		client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+#endif
+	}
+#endif
+
 #ifdef USE_PORTALS
   if(wp_portalEnable.integer) {
     // in alt-fire mode, both ends reset with right click
     // otherwise, use BFG left and right click for both ends
-    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BFG );
-    client->ps.ammo[WP_BFG] = INFINITE;  
+		Add_Weapon_Ammo(ent, WP_BFG, INFINITE);
   }
 #endif
 
 #ifdef USE_TRINITY
 if(g_unholyTrinity.integer) {
-  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_RAILGUN ) | ( 1 << WP_LIGHTNING ) | ( 1 << WP_ROCKET_LAUNCHER );
-  client->ps.ammo[WP_RAILGUN] = INFINITE;  
-  client->ps.ammo[WP_LIGHTNING] = INFINITE;  
-  client->ps.ammo[WP_ROCKET_LAUNCHER] = INFINITE;  
+	Add_Weapon_Ammo(ent, WP_RAILGUN, INFINITE);
+	Add_Weapon_Ammo(ent, WP_LIGHTNING, INFINITE);
+	Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, INFINITE);
 }
 #endif
 #ifdef USE_HOTRPG
 if(g_hotRockets.integer) {
-  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_ROCKET_LAUNCHER );
-  client->ps.ammo[WP_ROCKET_LAUNCHER] = INFINITE;  
+	Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, INFINITE);
 }
 #endif
 #ifdef USE_HOTBFG
 if(g_hotBFG.integer) {
   int handicap, max;
-  client->ps.stats[STAT_WEAPONS] = ( 1 << WP_BFG );
-  client->ps.ammo[WP_BFG] = INFINITE;  
+	Add_Weapon_Ammo(ent, WP_BFG, INFINITE);
   trap_GetUserinfo( client - level.clients, userinfo, sizeof(userinfo) );
   handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
   if( handicap<=0.0f || handicap>100.0f) {
@@ -1366,24 +1371,28 @@ if(g_hotBFG.integer) {
     && !g_altGrapple.integer
 #endif
   ) {
-    client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
-    client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+		Add_Weapon_Ammo(ent, WP_GRAPPLING_HOOK, INFINITE);
   }
 #endif
 #ifdef USE_FLAME_THROWER
 	if(wp_flameEnable.integer) {
 		//Spawn player with flame thrower
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_FLAME_THROWER );
-		client->ps.ammo[WP_FLAME_THROWER] = 999;
+		Add_Weapon_Ammo(ent, WP_FLAME_THROWER, INFINITE);
 	}
 #endif
 
 
 #ifdef USE_ADVANCED_WEAPONS
 	weaponClass = floor(client->ps.weapon / WP_MAX_WEAPONS);
-	client->weapons[weaponClass] = client->ps.stats[STAT_WEAPONS];
 	for(i = 0; i < WP_MAX_WEAPONS; i++) {
-		client->ammo[weaponClass][i] = client->ps.ammo[i];
+		if(client->ps.stats[STAT_WEAPONS] & (1 << i)) {
+			if(client->classWeapons[weaponClass * WP_MAX_WEAPONS + i] < 1) {
+				client->classWeapons[weaponClass * WP_MAX_WEAPONS + i]++;
+			}
+		} else {
+			client->classWeapons[weaponClass * WP_MAX_WEAPONS + i] = 0;
+		}
+		client->classAmmo[weaponClass * WP_MAX_WEAPONS + i] = client->ps.ammo[i];
 	}
 
 	// give the zero weapon (empty/hands) and malee weapon to all the classes
@@ -1394,29 +1403,24 @@ if(g_hotBFG.integer) {
 
 #ifdef USE_INSTAGIB
 		if(g_instagib.integer) {
-			client->weapons[i] = ( 1 << WP_RAILGUN );
-			client->ammo[i][WP_RAILGUN] = INFINITE;  
+			Add_Weapon_Ammo(ent, WP_RAILGUN, INFINITE);
 		}
 #endif
 #ifdef USE_TRINITY
 		if(g_unholyTrinity.integer) {
-			client->weapons[i] = ( 1 << WP_RAILGUN ) | ( 1 << WP_LIGHTNING ) | ( 1 << WP_ROCKET_LAUNCHER );
-			client->ammo[i][WP_RAILGUN] = INFINITE;  
-			client->ammo[i][WP_LIGHTNING] = INFINITE;  
-			client->ammo[i][WP_ROCKET_LAUNCHER] = INFINITE;  
+			Add_Weapon_Ammo(ent, WP_RAILGUN, INFINITE);
+			Add_Weapon_Ammo(ent, WP_LIGHTNING, INFINITE);
+			Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, INFINITE);
 		}
 		#endif
 #ifdef USE_HOTRPG
 		if(g_hotRockets.integer) {
-			client->weapons[i] = ( 1 << WP_ROCKET_LAUNCHER );
-			client->ammo[i][WP_ROCKET_LAUNCHER] = INFINITE;  
+			Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, INFINITE);
 		}
 #endif
 #ifdef USE_HOTBFG
 		if(g_hotBFG.integer) {
-			int handicap, max;
-			client->weapons[i] = ( 1 << WP_BFG );
-			client->ammo[i][WP_BFG] = INFINITE;
+			Add_Weapon_Ammo(ent, WP_BFG, INFINITE);
 		}
 #endif
 
@@ -1436,9 +1440,8 @@ if(g_hotBFG.integer) {
 		)) {
 
 
-		client->weapons[i] |= 3;
-		client->ammo[i][0] = -1;
-		client->ammo[i][1] = -1;
+		Add_Weapon_Ammo(ent, i * WP_MAX_WEAPONS + WP_NONE, INFINITE);
+		Add_Weapon_Ammo(ent, i * WP_MAX_WEAPONS + WP_GAUNTLET, INFINITE);
 
 		}
 

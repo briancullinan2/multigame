@@ -866,7 +866,15 @@ static void CG_DrawCTFPowerUp(rectDef_t *rect) {
 	if (cgs.gametype < GT_CTF) {
 		return;
 	}
+#ifdef USE_ADVANCED_ITEMS
+	value = cg.inventory[PW_AMMOREGEN] 
+	? PW_AMMOREGEN : cg.inventory[PW_GUARD] 
+	? PW_GUARD : cg.inventory[PW_SCOUT] 
+	? PW_SCOUT : cg.inventory[PW_DOUBLER] 
+	? PW_DOUBLER : 0;
+#else
 	value = cg.snap->ps.stats[STAT_PERSISTANT_POWERUP];
+#endif
 	if ( value ) {
 		CG_RegisterItemVisuals( value );
 		CG_DrawPic( rect->x, rect->y, rect->w, rect->h, cg_items[ value ].icon );

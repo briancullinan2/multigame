@@ -98,6 +98,13 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 }
 
 
+#ifdef USE_ADVANCED_WEAPONS
+qboolean CG_WeaponSelectable( int i );
+void PrevClass( void );
+void NextClass( void );
+#endif
+
+
 /*
 ===================
 CG_TransitionSnapshot
@@ -191,10 +198,19 @@ static void CG_TransitionSnapshot( void ) {
 			}
 		}
 
-		if(cg.snap->ps.stats[STAT_WEAPONS] != oldFrame->ps.stats[STAT_WEAPONS]
-			//oldFrame->ps.weapon != cg.snap->ps.weapon || cg.weaponClass != newClass
-			) {
-			
+		if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
+			|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) {
+
+			int j;
+			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				if(ps->stats[STAT_WEAPONS_AVAILABLE] & (1 << j)) {
+					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 1;
+				} else {
+					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
+				}
+			}
+
 			/*CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n%i %i %i %i %i %i %i %i %i %i\n", 
 				cg.weaponClass,
 				cg.snap->ps.ammo[0],

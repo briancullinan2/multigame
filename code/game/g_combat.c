@@ -265,7 +265,11 @@ void TossClientPersistantPowerups( gentity_t *ent ) {
 	powerup->r.contents = CONTENTS_TRIGGER;
 	trap_LinkEntity( powerup );
 
+#ifdef USE_ADVANCED_ITEMS
+	ent->client->inventory[powerup->item->giTag] = 0;
+#else
 	ent->client->ps.stats[STAT_PERSISTANT_POWERUP] = 0;
+#endif
 	ent->client->persistantPowerup = NULL;
 }
 #endif
@@ -1404,10 +1408,16 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	// unless they are rocket jumping
 	if ( attacker->client && attacker != targ ) {
 		max = attacker->client->ps.stats[STAT_MAX_HEALTH];
+#ifdef USE_ADVANCED_ITEMS
+		if( attacker->client->inventory[PW_GUARD] ) {
+			max /= 2;
+		}
+#else
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 		if( bg_itemlist[attacker->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			max /= 2;
 		}
+#endif
 #endif
 		damage = damage * max / 100;
 	}

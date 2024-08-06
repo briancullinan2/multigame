@@ -661,7 +661,7 @@ void CG_RegisterWeapon( int weaponNum ) {
 		}
 	}
 	if ( !item->classname ) {
-		CG_Printf( "Couldn't find weapon %i", weaponNum );
+		CG_Printf( "Couldn't find weapon %i\n", weaponNum );
 		return;
 	}
 	CG_RegisterItemVisuals( item - bg_itemlist );
@@ -2102,6 +2102,10 @@ qboolean CG_WeaponSelectable( int i ) {
 	return qtrue;
 }
 
+#ifdef USE_ADVANCED_WEAPONS
+void NextClass( void );
+void PrevClass( void );
+#endif
 
 /*
 ===============
@@ -2115,6 +2119,10 @@ void CG_NextWeapon_f( void ) {
 	if ( !cg.snap ) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_WEAPONS
+	NextClass();
+#else
 
 	cg.weaponSelectTime = cg.time;
 
@@ -2144,6 +2152,7 @@ void CG_NextWeapon_f( void ) {
 	if ( i == WP_MAX_WEAPONS ) {
 		cg.weaponSelect = original;
 	}
+#endif
 }
 
 
@@ -2159,6 +2168,10 @@ void CG_PrevWeapon_f( void ) {
 	if ( !cg.snap ) {
 		return;
 	}
+
+#ifdef USE_ADVANCED_WEAPONS
+	PrevClass();
+#else
 
 	cg.weaponSelectTime = cg.time;
 
@@ -2188,6 +2201,7 @@ void CG_PrevWeapon_f( void ) {
 	if ( i == WP_MAX_WEAPONS ) {
 		cg.weaponSelect = original;
 	}
+#endif
 }
 
 

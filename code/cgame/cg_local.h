@@ -646,8 +646,8 @@ typedef struct {
 	int			weaponClass;
 	int			weaponChange;
 	// MORE STATS for switching weapons, this is transfered to player state
-	//int			ammo[WP_MAX_CLASSES][WP_MAX_WEAPONS]; // 10 instead of 16
-	//int			weapons[WP_MAX_CLASSES];
+	//int			ammo[WP_NUM_WEAPONS];
+	int			classWeapons[WP_NUM_WEAPONS];
 #endif
 
 #ifdef USE_ADVANCED_ITEMS

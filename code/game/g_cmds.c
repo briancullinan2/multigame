@@ -224,7 +224,9 @@ void Cmd_Give_f( gentity_t *ent )
 {
 	char		*name;
 	gitem_t		*it;
+#ifndef USE_ADVANCED_WEAPONS
 	int			i;
+#endif
 	qboolean	give_all;
 	gentity_t	*it_ent;
 	trace_t		trace;
@@ -256,7 +258,7 @@ void Cmd_Give_f( gentity_t *ent )
 			for(j = 0; j < WP_MAX_WEAPONS; j++) {
 				gitem_t *it = BG_FindItemForWeapon(i * WP_MAX_WEAPONS + j);
 				if(it && it->icon) {
-					ent->client->weapons[i] |= (1 << j);
+					ent->client->classWeapons[i * WP_MAX_WEAPONS + j]++;
 				}
 			}
 		}
@@ -271,10 +273,10 @@ void Cmd_Give_f( gentity_t *ent )
 				if(i * WP_MAX_WEAPONS + j == WP_GAUNTLET
 					|| i * WP_MAX_WEAPONS + j == WP_GAUNTLET2
 					|| i * WP_MAX_WEAPONS + j == WP_GRAPPLING_HOOK) {
-					ent->client->ammo[i][j] = -1;
+					ent->client->classAmmo[i * WP_MAX_WEAPONS + j] = INFINITE;
 				} else 
 				if(it && it->icon) {
-					ent->client->ammo[i][j] = 999;
+					ent->client->classAmmo[i * WP_MAX_WEAPONS + j] = 999;
 				}
 			}
 		}
@@ -2356,14 +2358,19 @@ void ClientCommand( int clientNum ) {
 #ifdef USE_ADVANCED_WEAPONS
 	// cycle classes just like we do with weapons but server side
 	if (Q_stricmp (cmd, "prevclass") == 0) {
-		int i;
+		int i, j;
 		int prevClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
 		for(i = 0; i < WP_MAX_CLASSES; i++) {
 			prevClass--;
 			if(prevClass < 0) {
 				prevClass = WP_MAX_CLASSES - 1;
 			}
-			if(ent->client->weapons[prevClass] > 0) {
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				if(ent->client->classWeapons[prevClass * WP_MAX_WEAPONS + j] > 0) {
+					break;
+				}
+			}
+			if(j < WP_MAX_WEAPONS) {
 				break;
 			}
 		}
@@ -2371,14 +2378,19 @@ void ClientCommand( int clientNum ) {
 		ent->client->weaponClass = prevClass;
 	}
 	else if (Q_stricmp (cmd, "nextclass") == 0) {
-		int i;
+		int i, j;
 		int nextClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
 		for(i = 0; i < WP_MAX_CLASSES; i++) {
 			nextClass++;
 			if(nextClass >= WP_MAX_CLASSES) {
 				nextClass = 0;
 			}
-			if(ent->client->weapons[nextClass] > 0) {
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				if(ent->client->classWeapons[nextClass * WP_MAX_WEAPONS + j] > 0) {
+					break;
+				}
+			}
+			if(j < WP_MAX_WEAPONS) {
 				break;
 			}
 		}

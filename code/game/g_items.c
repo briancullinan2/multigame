@@ -35,6 +35,10 @@
 #define	RESPAWN_MEGAHEALTH	35000 //120000
 #define	RESPAWN_POWERUP		120000
 
+
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Add_Ammo( gentity_t *ent, int weapon, int count );
+
 //======================================================================
 
 int SpawnTime( gentity_t *ent, qboolean firstSpawn ) 
@@ -93,9 +97,9 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	gclient_t	*client;
 
 #ifndef USE_ADVANCED_ITEMS
-	if ( !other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] ) {
+	if ( !other->client->ps.powerups[ent->item->giTag] ) {
 		// round timing to seconds to make multiple powerup timers count in sync
-		other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] = level.time - ( level.time % 1000 );
+		other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
 	}
 
 	if ( ent->count ) {
@@ -104,7 +108,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		quantity = ent->item->quantity;
 	}
 
-	other->client->ps.powerups[ent->item->giTag % PW_MAX_POWERUPS] += quantity * 1000;
+	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
 
 #else
 	{
@@ -141,16 +145,13 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		G_GiveItem(other, HI_KAMIKAZE);
 	} else
 	if(ent->item->giTag == RUNE_GRAPPLE) {
-		other->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
-		other->client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
+		Add_Weapon_Ammo(other, WP_GRAPPLING_HOOK, 100);
 	} else
 	if(ent->item->giTag == RUNE_LITHIUM) {
-		other->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
-		other->client->ps.ammo[WP_GRAPPLING_HOOK] = INFINITE;
+		Add_Weapon_Ammo(other, WP_GRAPPLING_HOOK, INFINITE);
 	} else
 	if(ent->item->giTag == RUNE_CLUSTER) {
-		other->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
-		other->client->ps.ammo[WP_GRAPPLING_HOOK] = 10;
+		Add_Weapon_Ammo(other, WP_GRENADE_LAUNCHER, 10);
 	}
 
 #endif
@@ -215,18 +216,16 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 	float	handicap;
 	int		max;
 
-	other->client->ps.stats[STAT_PERSISTANT_POWERUP] = ent->item - bg_itemlist;
-	other->client->persistantPowerup = ent;
-
 #ifdef USE_ADVANCED_ITEMS
-	{
 		other->s.powerups = ent->item->giTag;
 		other->client->inventory[ent->item->giTag] = 1;
 		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
-	}
+#else
+	other->client->ps.stats[STAT_PERSISTANT_POWERUP] = ent->item - bg_itemlist;
 #endif
 
+	other->client->persistantPowerup = ent;
 
 	switch( ent->item->giTag ) {
 	case PW_GUARD:
@@ -319,18 +318,66 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 //======================================================================
 
-
-static void Add_Ammo( gentity_t *ent, int weapon, int count )
+void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count )
 {
 #ifdef USE_ADVANCED_WEAPONS
-	ent->client->ammo[(int)floor(weapon / WP_MAX_WEAPONS)][weapon % WP_MAX_WEAPONS] += count;
-	if ( ent->client->ammo[(int)floor(weapon / WP_MAX_WEAPONS)][weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
-		ent->client->ammo[(int)floor(weapon / WP_MAX_WEAPONS)][weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
+	ent->client->classWeapons[weapon] = 0;
+	ent->client->classAmmo[weapon] -= count;
+	if ( ent->client->classAmmo[weapon] < 0 ) {
+		ent->client->classAmmo[weapon] = 0;
 	}
 #else
-	ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] += count;
-	if ( ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
-		ent->client->ps.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
+	ent->client->ps.stats[STAT_WEAPONS] &= ~(1 << weapon);
+	ent->client->ps.ammo[weapon] -= count;
+	if ( ent->client->ps.ammo[weapon] < 0 ) {
+		ent->client->ps.ammo[weapon] = 0;
+	}
+#endif
+}
+
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count )
+{
+#ifdef USE_ADVANCED_WEAPONS
+	ent->client->classWeapons[weapon]++;
+	ent->client->classAmmo[weapon] += count;
+	if ( ent->client->classAmmo[weapon] > AMMO_HARD_LIMIT ) {
+		ent->client->classAmmo[weapon] = AMMO_HARD_LIMIT;
+	}
+#else
+	ent->client->ps.stats[STAT_WEAPONS] |= (1 << weapon);
+	ent->client->ps.ammo[weapon] += count;
+	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
+		ent->client->ps.ammo[weapon] = AMMO_HARD_LIMIT;
+	}
+#endif
+}
+
+void Remove_Ammo( gentity_t *ent, int weapon, int count )
+{
+#ifdef USE_ADVANCED_WEAPONS
+	ent->client->classAmmo[weapon] -= count;
+	if ( ent->client->classAmmo[weapon] < 0 ) {
+		ent->client->classAmmo[weapon] = 0;
+	}
+#else
+	ent->client->ps.ammo[weapon] -= count;
+	if ( ent->client->ps.ammo[weapon] < 0 ) {
+		ent->client->ps.ammo[weapon] = 0;
+	}
+#endif
+}
+
+void Add_Ammo( gentity_t *ent, int weapon, int count )
+{
+#ifdef USE_ADVANCED_WEAPONS
+	ent->client->classAmmo[weapon] += count;
+	if ( ent->client->classAmmo[weapon] > AMMO_HARD_LIMIT ) {
+		ent->client->classAmmo[weapon] = AMMO_HARD_LIMIT;
+	}
+#else
+	ent->client->ps.ammo[weapon] += count;
+	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
+		ent->client->ps.ammo[weapon] = AMMO_HARD_LIMIT;
 	}
 #endif
 }
@@ -380,16 +427,20 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 
 	// add the weapon
 #ifdef USE_ADVANCED_WEAPONS
-	other->client->weapons[other->client->weaponClass] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+	other->client->classWeapons[other->client->weaponClass * WP_MAX_WEAPONS + (ent->item->giTag % WP_MAX_WEAPONS)]++;
 #else
-	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << (ent->item->giTag % WP_MAX_WEAPONS) );
+	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << ent->item->giTag );
 #endif
 
 	Add_Ammo( other, ent->item->giTag, quantity );
 
 #ifdef USE_GRAPPLE
 	if (ent->item->giTag == WP_GRAPPLING_HOOK)
+#ifdef USE_ADVANCED_WEAPONS
 		other->client->ps.ammo[ent->item->giTag] = INFINITE; // unlimited ammo
+#else
+		other->client->ps.ammo[ent->item->giTag] = -1; // unlimited ammo
+#endif
 #endif
 
 	// team deathmatch has slow weapon respawns
@@ -409,11 +460,18 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	int			quantity;
 
 	// small and mega healths will go over the max
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	if( other->client && other->client->inventory[PW_GUARD] ) {
+		max = other->client->ps.stats[STAT_MAX_HEALTH];
+	}
+	else
+#else
+#ifdef MISSIONPACK
 	if( other->client && bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		max = other->client->ps.stats[STAT_MAX_HEALTH];
 	}
 	else
+#endif
 #endif
 	if ( ent->item->quantity != 5 && ent->item->quantity != 100
 #ifdef USE_ADVANCED_ITEMS
@@ -446,11 +504,18 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
   		other->client->ps.speed = g_speed.value;
   	}
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+  	if( other->client->inventory[PW_SCOUT] ) {
+  		other->client->ps.speed *= 1.5;
+  	}
+  	else
+#else
+#if defined(MISSIONPACK)
   	if( bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
   		other->client->ps.speed *= 1.5;
   	}
   	else
+#endif
 #endif
     if (
 #ifdef USE_ADVANCED_ITEMS
@@ -491,9 +556,15 @@ int Pickup_Armor( gentity_t *ent, gentity_t *other ) {
 
 	other->client->ps.stats[STAT_ARMOR] += ent->item->quantity;
 
+#ifdef USE_ADVANCED_ITEMS
+	if( other->client && other->client->inventory[PW_GUARD] ) {
+		upperBound = other->client->ps.stats[STAT_MAX_HEALTH];
+	}
+#else
 	if( other->client && bg_itemlist[other->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 		upperBound = other->client->ps.stats[STAT_MAX_HEALTH];
 	}
+#endif
 	else {
 		upperBound = other->client->ps.stats[STAT_MAX_HEALTH] * 2;
 	}
@@ -708,13 +779,16 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		respawn = Pickup_Powerup(ent, other);
 		// brian cullinan - why?
 		// allow prediction for some powerups
-		//if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
-		//	predict = qtrue;
-		//else
-		//	predict = qfalse;
 #ifdef USE_RUNES
     if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM)
       predict = qtrue;
+#endif
+		if ( ent->item->giTag >= PW_QUAD && ent->item->giTag <= PW_FLIGHT )
+			predict = qtrue;
+		else
+			predict = qfalse;
+#ifdef USE_ADVANCED_ITEMS
+			predict = qtrue;
 #endif
 		break;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)

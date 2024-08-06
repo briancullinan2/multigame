@@ -3,6 +3,8 @@
 
 #include "g_local.h"
 
+void Add_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Ammo( gentity_t *ent, int weapon, int count );
 
 /*
 ===============
@@ -694,9 +696,15 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 
 		// regenerate
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+		if( client->inventory[PW_GUARD] ) {
+			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
+		}
+#else
 		if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			maxHealth = client->ps.stats[STAT_MAX_HEALTH] / 2;
 		}
+#endif
 #ifdef USE_RUNES
     else if ( ent->client->inventory[RUNE_REGEN] || ent->client->inventory[RUNE_HEALTH] 
 				|| (ent->client->inventory[RUNE_REQUIEM] && ent->client->requiemGrab == IT_HEALTH && level.time - ent->client->requiemTime <= 1500)
@@ -813,8 +821,14 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 
 #ifdef USE_RUNES
 
-		if((client->inventory[RUNE_ELECTRIC] && client->ps.ammo[WP_LIGHTNING] < 50)) {
-			client->ps.ammo[WP_LIGHTNING]++;
+		if((client->inventory[RUNE_ELECTRIC] 
+#ifdef USE_ADVANCED_WEAPONS
+			&& client->classAmmo[WP_LIGHTNING] < 50
+#else
+			&& client->ps.ammo[WP_LIGHTNING] < 50
+#endif
+		)) {
+			Add_Ammo(ent, WP_LIGHTNING, 1);
 		}
 
 		if (client->ps.stats[STAT_ABILITY] < rune_ability.value) {
@@ -836,8 +850,13 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if (client->ps.stats[STAT_ABILITY] < rune_abilityMin.value) {
 			if((client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY])
 				|| (client->inventory[RUNE_RECALL] && !client->inventory[HI_TELEPORTER])
-				|| (client->inventory[RUNE_GRAPPLE] && client->ps.ammo[WP_GRAPPLING_HOOK] < 100)
-				|| (client->inventory[RUNE_TORNADO])
+				|| (client->inventory[RUNE_GRAPPLE] 
+#ifdef USE_ADVANCED_WEAPONS
+				&& client->classAmmo[WP_GRAPPLING_HOOK] < 100
+#else
+				&& client->ps.ammo[WP_GRAPPLING_HOOK] < 100
+#endif
+				) || (client->inventory[RUNE_TORNADO])
 			) {
 				client->ps.stats[STAT_ABILITY]++;
 			}
@@ -850,8 +869,14 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			if(client->inventory[RUNE_RECALL] && !client->inventory[HI_PORTAL]) {
 				G_GiveItem(ent, HI_PORTAL);
 			}
-			if(client->inventory[RUNE_GRAPPLE] && client->ps.ammo[WP_GRAPPLING_HOOK] < 100) {
-				client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
+			if(client->inventory[RUNE_GRAPPLE] 
+#ifdef USE_ADVANCED_WEAPONS
+				&& client->classAmmo[WP_GRAPPLING_HOOK] < 100
+#else
+				&& client->ps.ammo[WP_GRAPPLING_HOOK] < 100
+#endif
+			) {
+				Add_Ammo(ent, WP_GRAPPLING_HOOK, 100);
 			}
 		}
 
@@ -861,7 +886,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
     	int			numListedEntities, e;
       vec3_t		mins, maxs, dir, origin;
       vec3_t bounding = {50, 50, 50};
-      ent->client->ps.ammo[WP_LIGHTNING] -= 5;
+      Remove_Ammo(ent, WP_LIGHTNING, 5);
       VectorCopy(ent->s.origin, mins);
       VectorCopy(ent->s.origin, maxs);
       VectorSubtract(mins, bounding, mins);
@@ -903,7 +928,12 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
-	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN 
+	if( 
+#ifdef USE_ADVANCED_ITEMS
+		client->inventory[PW_AMMOREGEN]
+#else
+		bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN 
+#endif
 #ifdef USE_RUNES
 		|| ent->client->inventory[RUNE_ACTION] 
 		|| (ent->client->inventory[RUNE_REQUIEM] && ent->client->requiemGrab == IT_AMMO && level.time - ent->client->requiemTime <= 1500) 
@@ -1323,9 +1353,13 @@ void ClientThink_real( gentity_t *ent ) {
 #ifdef USE_ADVANCED_WEAPONS
 	//G_Printf("game class: %i\n", weaponClass);
 	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
-	client->ps.stats[STAT_WEAPONS] = client->weapons[client->weaponClass];
 	for(i = 0; i < WP_MAX_WEAPONS; i++) {
-		client->ps.ammo[i] = client->ammo[client->weaponClass][i];
+		if(client->classWeapons[client->weaponClass * WP_MAX_WEAPONS + i]) {
+			client->ps.stats[STAT_WEAPONS] |= (1 << i);
+		} else {
+			client->ps.stats[STAT_WEAPONS] &= ~(1 << i);
+		}
+		client->ps.ammo[i] = client->classAmmo[client->weaponClass * WP_MAX_WEAPONS + i];
 	}
 		/*G_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
 		client->weaponClass,
@@ -1541,7 +1575,16 @@ void ClientThink_real( gentity_t *ent ) {
 	// set speed
 	client->ps.speed = g_speed.value;
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	if( client->inventory[PW_SCOUT] ) {
+#ifdef USE_PHYSICS_VARS
+    client->ps.speed *= g_scoutFactor.value;
+#else
+		client->ps.speed *= 1.5;
+#endif
+	} else
+#else
+#if defined(MISSIONPACK)
 	if( bg_itemlist[client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 #ifdef USE_PHYSICS_VARS
     client->ps.speed *= g_scoutFactor.value;
@@ -1549,6 +1592,7 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.speed *= 1.5;
 #endif
 	} else
+#endif
 #endif
 
 #ifdef USE_ADVANCED_ITEMS
@@ -1863,7 +1907,7 @@ client->ps.speed *= g_playerScale.value;
 #ifdef USE_ADVANCED_WEAPONS
 	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
 	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
-	client->ammo[client->weaponClass][ client->ps.weapon % WP_MAX_WEAPONS ] = client->ps.ammo[client->ps.weapon % WP_MAX_WEAPONS];
+	client->classAmmo[client->weaponClass * WP_MAX_WEAPONS + client->ps.weapon % WP_MAX_WEAPONS ] = client->ps.ammo[client->ps.weapon % WP_MAX_WEAPONS];
 #endif
 
 	SendPendingPredictableEvents( &ent->client->ps );
@@ -2094,7 +2138,7 @@ void ClientEndFrame( gentity_t *ent ) {
 	gclient_t	*client;
 	// unlagged
 	int			frames;
-#ifdef USE_ADVANCED_WEAPONS
+#ifndef USE_ADVANCED_WEAPONS
 	int weaponClass;
 #endif
 
@@ -2141,19 +2185,19 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
+	if( ent->client->inventory[PW_GUARD] ) {
 		ent->client->inventory[PW_GUARD] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_GUARD / PW_MAX_POWERUPS)] = qtrue;
 	}
-	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
+	if( ent->client->inventory[PW_SCOUT] ) {
 		ent->client->inventory[PW_SCOUT] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_SCOUT / PW_MAX_POWERUPS)] = qtrue;
 	}
-	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_DOUBLER ) {
+	if( ent->client->inventory[PW_DOUBLER] ) {
 		ent->client->inventory[PW_DOUBLER] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_DOUBLER / PW_MAX_POWERUPS)] = qtrue;
 	}
-	if( bg_itemlist[ent->client->ps.stats[STAT_PERSISTANT_POWERUP]].giTag == PW_AMMOREGEN ) {
+	if( ent->client->inventory[PW_AMMOREGEN] ) {
 		ent->client->inventory[PW_AMMOREGEN] = level.time;
 		ent->client->inventoryModified[(int)floor(PW_AMMOREGEN / PW_MAX_POWERUPS)] = qtrue;
 	}

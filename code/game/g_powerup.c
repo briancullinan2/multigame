@@ -54,7 +54,11 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     	int			numListedEntities, e;
       vec3_t		mins, maxs, dir;
       vec3_t bounding = {50, 50, 50};
+#ifdef USE_ADVANCED_WEAPONS
+      ent->client->classAmmo[WP_LIGHTNING] -= 5;
+#else
       ent->client->ps.ammo[WP_LIGHTNING] -= 5;
+#endif
       VectorCopy(ent->s.origin, mins);
       VectorCopy(ent->s.origin, maxs);
       VectorSubtract(mins, bounding, mins);

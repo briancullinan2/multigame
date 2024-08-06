@@ -1796,7 +1796,11 @@ static void PM_Weapon( void ) {
 			if((pm->ps->stats[STAT_ABILITY] >= rune_ability.value && pm->inventory[RUNE_HEALTH])
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_SHIELD])
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_RECALL])
+#ifdef USE_ADVANCED_WEAPONS
+				|| (pm->classAmmo[WP_LIGHTNING] >= 5 && pm->inventory[RUNE_ELECTRIC])
+#else
 				|| (pm->ps->ammo[WP_LIGHTNING] >= 5 && pm->inventory[RUNE_ELECTRIC])
+#endif
 				|| (pm->ps->stats[STAT_ABILITY] >= rune_ability.value && pm->inventory[RUNE_DIVINE])
 				||  (pm->ps->stats[STAT_ABILITY] >= rune_abilityMin.value && pm->inventory[RUNE_TORNADO])
 			) {
@@ -2105,7 +2109,21 @@ static void PM_Weapon( void ) {
   } else
 #endif
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	if( pm->inventory[PW_SCOUT] ) {
+#ifdef USE_PHYSICS_VARS
+    addTime /= g_scoutFactor.value;
+#else
+		addTime /= 1.5;
+#endif
+	}
+	else
+	if( pm->inventory[PW_AMMOREGEN] ) {
+		addTime /= 1.3;
+  }
+  else
+#else
+#if defined(MISSIONPACK)
 	if( bg_itemlist[pm->ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 #ifdef USE_PHYSICS_VARS
     addTime /= g_scoutFactor.value;
@@ -2118,6 +2136,7 @@ static void PM_Weapon( void ) {
 		addTime /= 1.3;
   }
   else
+#endif
 #endif
 #ifdef USE_ADVANCED_ITEMS
 	if (pm->inventory[PW_HASTE]

@@ -1441,7 +1441,24 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		}
 #endif
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+		if( inventory[PW_SCOUT] ) {
+			return qfalse;
+		}
+
+		// we also clamp armor to the maxhealth for handicapping
+		if( inventory[PW_GUARD] ) {
+			upperBound = ps->stats[STAT_MAX_HEALTH];
+		}
+		else {
+			upperBound = ps->stats[STAT_MAX_HEALTH] * 2;
+		}
+
+		if ( ps->stats[STAT_ARMOR] >= upperBound ) {
+			return qfalse;
+		}
+#else
+#if defined(MISSIONPACK)
 		if( bg_itemlist[ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_SCOUT ) {
 			return qfalse;
 		}
@@ -1462,6 +1479,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 			return qfalse;
 		}
 #endif
+#endif // USE_ADVANCED_ITEMS
 		return qtrue;
 
 	case IT_HEALTH:
@@ -1472,11 +1490,18 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 #endif
 		// small and mega healths will go over the max, otherwise
 		// don't pick up if already at max
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+		if( inventory[PW_GUARD] ) {
+			upperBound = ps->stats[STAT_MAX_HEALTH];
+		}
+		else
+#else
+#if defined(MISSIONPACK)
 		if( bg_itemlist[ps->stats[STAT_PERSISTANT_POWERUP]].giTag == PW_GUARD ) {
 			upperBound = ps->stats[STAT_MAX_HEALTH];
 		}
 		else
+#endif
 #endif
 		if ( item->quantity == 5 || item->quantity == 100 
 #ifdef USE_ADVANCED_ITEMS
@@ -1500,9 +1525,15 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	case IT_PERSISTANT_POWERUP:
 		// can only hold one item at a time
+#ifdef USE_ADVANCED_ITEMS
+		if ( inventory[PW_GUARD] || inventory[PW_SCOUT] || inventory[PW_AMMOREGEN] || inventory[PW_DOUBLER] ) {
+			return qfalse;
+		}
+#else
 		if ( ps->stats[STAT_PERSISTANT_POWERUP] ) {
 			return qfalse;
 		}
+#endif
 
 		// check team only
 		if( ( ent->generic1 & 2 ) && ( ps->persistant[PERS_TEAM] != TEAM_RED ) ) {

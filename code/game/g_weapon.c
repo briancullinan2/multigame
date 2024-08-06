@@ -793,7 +793,11 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		int zaps;
 		gentity_t *tent;
 
+#ifdef USE_ADVANCED_WEAPONS
+		zaps = ent->client->classAmmo[WP_LIGHTNING];	// determines size/power of discharge
+#else
 		zaps = ent->client->ps.ammo[WP_LIGHTNING];	// determines size/power of discharge
+#endif
 		if (!zaps) return;	// prevents any subsequent frames causing second discharge + error
 		zaps++;		// pmove does an ammo[gun]--, so we must compensate
 		SnapVectorTowards (muzzle_origin, ent->s.origin);	// save bandwidth
@@ -801,7 +805,11 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		tent = G_TempEntity (muzzle_origin, EV_LV_DISCHARGE);
 		tent->s.eventParm = zaps;				// duration / size of explosion graphic
 
+#ifdef USE_ADVANCED_WEAPONS
+		ent->client->classAmmo[WP_LIGHTNING] = 0;		// drain ent's lightning count
+#else
 		ent->client->ps.ammo[WP_LIGHTNING] = 0;		// drain ent's lightning count
+#endif
 		if (G_WaterRadiusDamage (muzzle_origin, ent, damage * zaps,
 					(damage * zaps) + 16, NULL, MOD_LV_DISCHARGE))
 			g_entities[ent->r.ownerNum].client->accuracy_hits++;
