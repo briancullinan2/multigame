@@ -443,7 +443,12 @@ static void PM_TireEngineForces( car_t *car, carPoint_t *points, int i, vec3_t f
 
 	torque += friction;
 
-	if (pm->ps->powerups[PW_HASTE] > 0){ // TODO: PW_TURBO
+#ifdef USE_ADVANCED_ITEMS
+	if (pm->inventory[PW_HASTE] > 0)
+#else
+	if (pm->ps->powerups[PW_HASTE] > 0)
+#endif
+	{ // TODO: PW_TURBO
 		torque *= 4.5f;
 //		car->sPoints[0].scof *= 2.0f; // need to be able to set this back to normal
 //		car->sPoints[0].kcof *= 2.0f;

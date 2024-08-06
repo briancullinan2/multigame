@@ -2141,13 +2141,21 @@ void Cmd_Cloak_f( gentity_t *ent ) {
 	} else if (ent->flags & FL_CLOAK) {
 		msg = "Cloaking OFF\n";
     ent->flags &= ~FL_CLOAK;
+#ifdef USE_ADVANCED_ITEMS
+		ent->client->inventory[PW_INVIS] = level.time;
+#else
 		ent->client->ps.powerups[PW_INVIS] = level.time;
+#endif
 		// Removes the invisible powerup from the player
 	}        
 	else {
 		msg = "Cloaking ON\n";
     ent->flags |= FL_CLOAK;
+#ifdef USE_ADVANCED_ITEMS
+		ent->client->inventory[PW_INVIS] = level.time + 1000000000;
+#else
 		ent->client->ps.powerups[PW_INVIS] = level.time + 1000000000;
+#endif
 		// Gives the invisible powerup to the player
 	}
 

@@ -1578,10 +1578,14 @@ void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBa
 	}
 
 
-	if ( cent->currentState.powerups & ( 1 << PW_HASTE ) 
+	// this is only for local client || cg.inventory[PW_HASTE]
+	// for this i'll use powerups as "styles" for overlapping inventory
+	if ( 
 #ifdef USE_ADVANCED_ITEMS
-		// this is only for local client || cg.inventory[PW_HASTE]
-		// for this i'll use powerups as "styles" for overlapping inventory
+		(cent->currentState.powerups & 0xFF) == PW_HASTE
+		|| (cent->currentState.powerups >> 8) == PW_HASTE
+#else
+		cent->currentState.powerups & ( 1 << PW_HASTE ) 
 #endif
 #ifdef USE_RUNES
     //|| cg_entities[cent->currentState.number].->inventory[RUNE_HASTE]

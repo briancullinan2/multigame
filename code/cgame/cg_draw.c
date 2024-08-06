@@ -2428,9 +2428,16 @@ static void CG_ScanForCrosshairEntity( void ) {
 	}
 
 	// if the player is invisible, don't show it
+#ifdef USE_ADVANCED_ITEMS
+	if ( ( cg_entities[ trace.entityNum ].currentState.powerups & 0xFF ) == PW_INVIS
+		|| ( cg_entities[ trace.entityNum ].currentState.powerups >> 8 ) == PW_INVIS ) {
+		return;
+	}
+#else
 	if ( cg_entities[ trace.entityNum ].currentState.powerups & ( 1 << PW_INVIS ) ) {
 		return;
 	}
+#endif
 
 	// update the fade timer
 	cg.crosshairClientNum = trace.entityNum;

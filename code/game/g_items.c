@@ -452,7 +452,12 @@ static int Pickup_Health( gentity_t *ent, gentity_t *other ) {
   	}
   	else
 #endif
-    if ( other->client->ps.powerups[PW_HASTE] 
+    if (
+#ifdef USE_ADVANCED_ITEMS
+			 other->client->inventory[PW_HASTE] 
+#else
+			 other->client->ps.powerups[PW_HASTE] 
+#endif
 #ifdef USE_RUNES
       || other->client->inventory[RUNE_HASTE]
 #endif

@@ -681,8 +681,14 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
 
+#ifdef USE_ADVANCED_ITEMS
+	if(self->client->inventory[PW_QUAD]) {
+		bolt->s.powerups = PW_QUAD;
+	}
+#else
 	if ( self->s.powerups & (1 << PW_QUAD) )
 		bolt->s.powerups |= (1 << PW_QUAD);
+#endif
 
 	// missile owner
 	bolt->s.clientNum = self->s.clientNum;
@@ -750,8 +756,14 @@ gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
 
+#ifdef USE_ADVANCED_ITEMS
+	if(self->client->inventory[PW_QUAD]) {
+		bolt->s.powerups = PW_QUAD;
+	}
+#else
 	if ( self->s.powerups & (1 << PW_QUAD) )
 		bolt->s.powerups |= (1 << PW_QUAD);
+#endif
 
 	// missile owner
 	bolt->s.clientNum = self->s.clientNum;
@@ -821,8 +833,14 @@ gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->clipmask = MASK_SHOT;
 	bolt->target_ent = NULL;
 
+#ifdef USE_ADVANCED_ITEMS
+	if(self->client->inventory[PW_QUAD]) {
+		bolt->s.powerups = PW_QUAD;
+	}
+#else
 	if ( self->s.powerups & (1 << PW_QUAD) )
 		bolt->s.powerups |= (1 << PW_QUAD);
+#endif
 
 	// missile owner
 	bolt->s.clientNum = self->s.clientNum;

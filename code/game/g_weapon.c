@@ -109,7 +109,12 @@ qboolean CheckGauntletAttack( gentity_t *ent ) {
 		return qfalse;
 	}
 
-	if (ent->client->ps.powerups[PW_QUAD] ) {
+#ifdef USE_ADVANCED_ITEMS
+	if (ent->client->inventory[PW_QUAD] ) 
+#else
+	if (ent->client->ps.powerups[PW_QUAD] )
+#endif
+	{
 		G_AddEvent( ent, EV_POWERUP_QUAD, 0 );
 #ifdef USE_RUNES
   if(ent->client->inventory[RUNE_BERSERK]) {

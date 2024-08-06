@@ -575,8 +575,16 @@ if ( cent->currentState.modelindex
 	}
 
 	// add to refresh list, possibly with quad glow
-
+#ifdef USE_ADVANCED_ITEMS
+	if((s1->powerups & 0xFF) == PW_INVIS || (s1->powerups & 0xFF) == PW_REGEN) {
+		s1->powerups &= ~0xFF;
+	}
+	if((s1->powerups >> 8) == PW_INVIS || (s1->powerups >> 8) == PW_REGEN) {
+		s1->powerups &= ~0xFF00;
+	}
+#else
 	s1->powerups &= ~( (1 << PW_INVIS) | (1 << PW_REGEN) );
+#endif
 	ci = &cgs.clientinfo[ s1->clientNum & MAX_CLIENTS ];
 	if ( ci->infoValid ) {
 		CG_AddRefEntityWithPowerups( &ent, s1, ci->team );

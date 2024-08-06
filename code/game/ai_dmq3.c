@@ -223,7 +223,12 @@ qboolean EntityIsInvisible(aas_entityinfo_t *entinfo) {
 	if (EntityCarriesFlag(entinfo)) {
 		return qfalse;
 	}
-	if (entinfo->powerups & (1 << PW_INVIS)) {
+#ifdef USE_ADVANCED_ITEMS
+	if ((entinfo->powerups & 0xFF) == PW_INVIS || (entinfo->powerups >> 8) == PW_INVIS) 
+#else
+	if (entinfo->powerups & (1 << PW_INVIS)) 
+#endif
+	{
 		return qtrue;
 	}
 	return qfalse;
@@ -259,7 +264,12 @@ EntityHasQuad
 ==================
 */
 qboolean EntityHasQuad(aas_entityinfo_t *entinfo) {
-	if (entinfo->powerups & (1 << PW_QUAD)) {
+#ifdef USE_ADVANCED_ITEMS
+	if ((entinfo->powerups & 0xFF) == PW_QUAD || (entinfo->powerups >> 8) == PW_QUAD) 
+#else
+	if (entinfo->powerups & (1 << PW_QUAD)) 
+#endif
+	{
 		return qtrue;
 	}
 	return qfalse;
@@ -1788,12 +1798,27 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_PORTAL] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_PORTAL;
 	bs->inventory[INVENTORY_INVULNERABILITY] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_INVULNERABILITY;
 #endif
+#ifdef USE_ADVANCED_ITEMS
+	bs->inventory[INVENTORY_QUAD] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_QUAD 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_QUAD;
+	bs->inventory[INVENTORY_ENVIRONMENTSUIT] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_BATTLESUIT 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_BATTLESUIT;
+	bs->inventory[INVENTORY_HASTE] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_HASTE 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_HASTE;
+	bs->inventory[INVENTORY_INVISIBILITY] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_INVIS 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_INVIS;
+	bs->inventory[INVENTORY_REGEN] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_REGEN 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_REGEN;
+	bs->inventory[INVENTORY_FLIGHT] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_FLIGHT 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_FLIGHT;
+#else
 	bs->inventory[INVENTORY_QUAD] = bs->cur_ps.powerups[PW_QUAD] != 0;
 	bs->inventory[INVENTORY_ENVIRONMENTSUIT] = bs->cur_ps.powerups[PW_BATTLESUIT] != 0;
 	bs->inventory[INVENTORY_HASTE] = bs->cur_ps.powerups[PW_HASTE] != 0;
 	bs->inventory[INVENTORY_INVISIBILITY] = bs->cur_ps.powerups[PW_INVIS] != 0;
 	bs->inventory[INVENTORY_REGEN] = bs->cur_ps.powerups[PW_REGEN] != 0;
 	bs->inventory[INVENTORY_FLIGHT] = bs->cur_ps.powerups[PW_FLIGHT] != 0;
+#endif
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	bs->inventory[INVENTORY_SCOUT] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_SCOUT;
 	bs->inventory[INVENTORY_GUARD] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_GUARD;

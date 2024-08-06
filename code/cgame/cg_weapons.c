@@ -2410,7 +2410,12 @@ void CG_FireWeapon( centity_t *cent ) {
 	}
 
 	// play quad sound if needed
-	if ( cent->currentState.powerups & ( 1 << PW_QUAD ) ) {
+#ifdef USE_ADVANCED_ITEMS
+	if ( (cent->currentState.powerups & 0xFF) == PW_QUAD || (cent->currentState.powerups >> 8) == PW_QUAD ) 
+#else
+	if ( cent->currentState.powerups & ( 1 << PW_QUAD ) ) 
+#endif
+	{
 		trap_S_StartSound (NULL, cent->currentState.number, CHAN_ITEM, cgs.media.quadSound );
 	}
 

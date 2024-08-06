@@ -765,7 +765,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
       	ent->health--;
       	if ( ent->health < 11) {
       		ent->flags ^= FL_CLOAK;
+#ifdef USE_ADVANCED_ITEMS
+      		ent->client->inventory[PW_INVIS] = level.time;
+#else
       		ent->client->ps.powerups[PW_INVIS] = level.time;
+#endif
       	}
       } else
 #endif

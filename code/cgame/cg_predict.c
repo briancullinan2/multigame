@@ -404,8 +404,10 @@ static int CG_CheckArmor( int damage ) {
     return;
 #endif
 
+#ifndef USE_ADVANCED_ITEMS
 	if ( cg.predictedPlayerState.powerups[ PW_BATTLESUIT ] )
 		return;
+#endif
 
 	if ( cg.predictedPlayerState.clientNum != cg.snap->ps.clientNum || cg.snap->ps.pm_flags & PMF_FOLLOW ) {
 		return;
@@ -747,7 +749,12 @@ static void CG_CheckTimers( void ) {
 	// periodic tasks
 	if ( cg.timeResidual && cg.predictedPlayerState.commandTime >= cg.timeResidual && !cg.thisFrameTeleport ) {
 		cg.timeResidual += 1000;
-		if ( cg.predictedPlayerState.powerups[ PW_REGEN ] ) {
+#ifdef USE_ADVANCED_ITEMS
+		if ( cg.inventory[ PW_REGEN ] ) 
+#else
+		if ( cg.predictedPlayerState.powerups[ PW_REGEN ] ) 
+#endif
+		{
 			int maxhealth = cg.predictedPlayerState.stats[ STAT_MAX_HEALTH ];
 			if ( cg.predictedPlayerState.stats[ STAT_HEALTH ] < maxhealth ) {
 				cg.predictedPlayerState.stats[ STAT_HEALTH ] += 15;

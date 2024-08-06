@@ -70,7 +70,11 @@ void TossClientItems( gentity_t *self ) {
 #ifdef USE_CLOAK_CMD
   if (self->flags & FL_CLOAK) {
   	// remove the invisible powerup if the player is cloaked.
+#ifdef USE_ADVANCED_ITEMS
+  	self->client->inventory[PW_INVIS] = level.time;
+#else
   	self->client->ps.powerups[PW_INVIS] = level.time;
+#endif
   } 
 #endif
 
