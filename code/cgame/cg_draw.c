@@ -378,21 +378,6 @@ void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t head
 		// offset the origin y and z to center the head
 		trap_R_ModelBounds( cm, mins, maxs );
 
-#if 0 //def USE_ADVANCED_CLASS
-		if(ci->notq3) {
-
-			origin[2] = -(mins[2] + maxs[2]);
-			origin[1] = 0.5 * ( mins[1] + maxs[1] );
-
-			len = 0.7 * ( maxs[2] - mins[2] );	//all models combined into 1 file
-			origin[0] = len / 0.268;	// len / tan( fov/2 )
-
-			// allow per-model tweaking
-			VectorAdd( origin, ci->headOffset, origin );
-
-		} else {
-#endif
-
 		origin[2] = -0.5 * ( mins[2] + maxs[2] );
 		origin[1] = 0.5 * ( mins[1] + maxs[1] );
 
@@ -403,10 +388,6 @@ void CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t head
 
 		// allow per-model tweaking
 		VectorAdd( origin, ci->headOffset, origin );
-
-#if 0 //def USE_ADVANCED_CLASS
-		}
-#endif
 
 		CG_Draw3DModelColor( x, y, w, h, cm, hs, origin, headAngles, ci->headColor );
 	} else if ( cg_drawIcons.integer ) {
@@ -1503,10 +1484,7 @@ static float CG_DrawPowerups( float y ) {
 	// sort the list by time remaining
 	active = 0;
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
-		//int itemClass = floor(i / PW_MAX_POWERUPS);
 		t = cg.inventory[i];
-		// ZOID--don't draw if the power up has unlimited time (999 seconds)
-		// This is true of the CTF flags
 		if ( t <= 0 || t >= 999000) {
 			continue;
 		}
@@ -1893,6 +1871,7 @@ CG_DrawHoldableItem
 ===================
 */
 #if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
+#ifndef USE_ADVANCED_ITEMS
 static void CG_DrawHoldableItem( void ) { 
 	int		value;
 
@@ -1902,6 +1881,7 @@ static void CG_DrawHoldableItem( void ) {
 		CG_DrawPic( cgs.screenXmax + 1 - ICON_SIZE, (SCREEN_HEIGHT-ICON_SIZE)/2, ICON_SIZE, ICON_SIZE, cg_items[ value ].icon );
 	}
 }
+#endif
 #endif // MISSIONPACK
 
 #ifdef MISSIONPACK
@@ -2598,7 +2578,7 @@ qboolean CG_DrawRunesboard(void);
 static qboolean CG_DrawScoreboard( void ) {
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
 	static qboolean firstTime = qtrue;
-	float fade, *fadeColor;
+	float /* fade, */ *fadeColor;
 #ifdef USE_CLASSIC_MENU
 	if( cg_hudFiles.string[0] == '\0' ) {
 		return CG_DrawOldScoreboard();
@@ -2627,8 +2607,6 @@ static qboolean CG_DrawScoreboard( void ) {
 	}
 
 	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_DEAD || cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
-		fade = 1.0;
-		fadeColor = colorWhite;
 	} else {
 		fadeColor = CG_FadeColor( cg.scoreFadeTime, FADE_TIME );
 		if ( !fadeColor ) {
@@ -2638,7 +2616,6 @@ static qboolean CG_DrawScoreboard( void ) {
 			firstTime = qtrue;
 			return qfalse;
 		}
-		fade = *fadeColor;
 	}																					  
 
 

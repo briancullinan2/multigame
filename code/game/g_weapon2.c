@@ -591,7 +591,7 @@ Fly like an eagle...
 
 gentity_t *RedirectTarget(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_t targetdir) {
 	vec3_t		tentdir, midbody;
-	float		targetlength, tentlength;
+	float		/* targetlength,*/ tentlength;
 	trace_t		tr;
 
 	// Aim for the body, not the feet
@@ -604,7 +604,7 @@ gentity_t *RedirectTarget(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 
 	VectorSubtract(midbody, ent->r.currentOrigin, tentdir);
 	tentlength = VectorLength(tentdir);
-	if ( tentlength > LIGHTNING_RANGE ) return qfalse;
+	if ( tentlength > LIGHTNING_RANGE ) return NULL;
 
 	// Quick normalization of tentdir since 
 	// we already have the length
@@ -614,22 +614,22 @@ gentity_t *RedirectTarget(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 
 	// this value determines how wide from it's direction it can search for 
 	//   players to target
-	if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return qfalse;
+	if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return NULL;
 
 	trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
 		tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );
 
-	if ( tent != &g_entities[tr.entityNum] ) return qfalse;
+	if ( tent != &g_entities[tr.entityNum] ) return NULL;
 
-	targetlength = tentlength;
+	//targetlength = tentlength;
 	VectorCopy(tentdir, targetdir);
 	return tent;
 }
 
 gentity_t *RedirectEntity(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_t targetdir) {
-	vec3_t		tentdir, midbody;
-	float		targetlength, tentlength;
-	trace_t		tr;
+	vec3_t		tentdir; //, midbody;
+	float		/* targetlength,*/ tentlength;
+	//trace_t		tr;
 
 	// Aim for the body, not the feet
 	// midbody[0] = tent->r.currentOrigin[0] + 
@@ -667,8 +667,7 @@ gentity_t *RedirectEntity(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 void rocket_think( gentity_t *ent ) {
 	gentity_t	*target, *tent;
 	int		i;
-	vec3_t		tentdir, targetdir, forward, midbody;
-	trace_t		tr;
+	vec3_t		targetdir, forward;
 
 	target = NULL;
 	// Best way to get forward vector for this rocket?

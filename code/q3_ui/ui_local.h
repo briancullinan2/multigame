@@ -684,6 +684,7 @@ void			trap_LAN_GetPingInfo( int n, char *buf, int buflen );
 int				trap_MemoryRemaining( void );
 void			trap_GetCDKey( char *buf, int buflen );
 void			trap_SetCDKey( char *buf );
+void		trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset );
 
 qboolean		trap_VerifyCDKey( const char *key, const char *chksum); // bk001208 - RC4
 

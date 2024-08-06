@@ -267,7 +267,7 @@ void G_RegisterCvars( void ) {
 
 static void G_LocateSpawnSpots( void );
 
-void UpdateGameType() {
+void UpdateGameType( void ) {
 	int i;
 static char *gametypeNames[] = {"ffa", "tournament", "single", "team", "ctf", "oneflag", "obelisk", "harvester", "teamtournament"};
 	gentity_t *ent;

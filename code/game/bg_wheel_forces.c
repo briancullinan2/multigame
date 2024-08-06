@@ -429,7 +429,7 @@ static void PM_TireEngineForces( car_t *car, carPoint_t *points, int i, vec3_t f
 		ratio = CP_GEAR_RATIOS[car->gear-1];
 
 	friction = 0;
-	if (fabs(car->throttle < 0.01f) && car->gear)
+	if (fabs(car->throttle) < 0.01f && car->gear)
 		friction = (CP_M_2_QU * CP_M_2_QU * (car->rpm - CP_RPM_MIN) / 10.0f / ratio);// frictional torque
 
 	ratio *= CP_AXLEGEAR;

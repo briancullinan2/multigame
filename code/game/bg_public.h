@@ -201,11 +201,11 @@ typedef enum {
 
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	PW_GOLDFLAG = 15,
-	PW_GREENFLAG = 16,
+	PW_GREENFLAG = 9,
 #endif
 
 #ifdef USE_ADVANCED_CLASS
-	PW_SPECIAL_ABILITY = 17,
+	PW_SPECIAL_ABILITY = 16,
 #endif
 // memory overflow on everything past this in the default mode
 
@@ -547,7 +547,7 @@ typedef enum {
 
 // entityState_t->eFlags
 #define	EF_DEAD							0x00000001		// don't draw a foe marker over players with EF_DEAD
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 #define EF_TICKING					0x00000002		// used to make players play the prox mine ticking sound
 #endif
 #define	EF_TELEPORT_BIT			0x00000004		// toggled every time the origin abruptly changes

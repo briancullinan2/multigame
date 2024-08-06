@@ -858,6 +858,8 @@ typedef struct {
 
 #endif
 
+	qboolean getAsyncFiles;
+
 } cg_t;
 
 
@@ -1340,7 +1342,7 @@ typedef struct {
 	int				teamLastChatPos;
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
-	qboolean eventHandling;
+	cgame_event_t eventHandling;
 	qboolean mouseCaptured;
 	qboolean sizingHud;
 	void *capturedItem;

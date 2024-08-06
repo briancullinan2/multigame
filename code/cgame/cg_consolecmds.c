@@ -164,6 +164,7 @@ static void CG_scrollScoresUp_f( void) {
 	}
 }
 
+
 static void CG_spWin_f( void) {
 	trap_Cvar_Set("cg_cameraOrbit", "2");
 	trap_Cvar_Set("cg_cameraOrbitDelay", "35");

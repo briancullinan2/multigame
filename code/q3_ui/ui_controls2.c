@@ -343,11 +343,11 @@ Controls_InitCvars
 */
 static void Controls_InitCvars( void )
 {
-	int				i;
+	//int				i;
 	configcvar_t*	cvarptr;
 
 	cvarptr = g_configcvars;
-	for (i=0; ;i++,cvarptr++)
+	for (; ;cvarptr++)
 	{
 		if (!cvarptr->name)
 			break;
@@ -372,10 +372,10 @@ Controls_GetCvarDefault
 static float Controls_GetCvarDefault( char* name )
 {
 	configcvar_t*	cvarptr;
-	int				i;
+	//int				i;
 
 	cvarptr = g_configcvars;
-	for (i=0; ;i++,cvarptr++)
+	for (; ;cvarptr++)
 	{
 		if (!cvarptr->name)
 			return (0);
@@ -395,10 +395,10 @@ Controls_GetCvarValue
 static float Controls_GetCvarValue( char* name )
 {
 	configcvar_t*	cvarptr;
-	int				i;
+	//int				i;
 
 	cvarptr = g_configcvars;
-	for (i=0; ;i++,cvarptr++)
+	for (; ;cvarptr++)
 	{
 		if (!cvarptr->name)
 			return (0);
@@ -782,7 +782,7 @@ Controls_GetConfig
 */
 static void Controls_GetConfig( void )
 {
-	int		i;
+	//int		i;
 	int		twokeys[2];
 	bind_t*	bindptr;
 
@@ -790,7 +790,7 @@ static void Controls_GetConfig( void )
 	bindptr = g_bindings;
 
 	// iterate each command, get its numeric binding
-	for (i=0; ;i++,bindptr++)
+	for (; ;bindptr++)
 	{
 		if (!bindptr->label)
 			break;
@@ -818,14 +818,14 @@ Controls_SetConfig
 */
 static void Controls_SetConfig( void )
 {
-	int		i;
+	//int		i;
 	bind_t*	bindptr;
 
 	// set the bindings from the local store
 	bindptr = g_bindings;
 
 	// iterate each command, get its numeric binding
-	for (i=0; ;i++,bindptr++)
+	for (; ;bindptr++)
 	{
 		if (!bindptr->label)
 			break;
@@ -861,14 +861,14 @@ Controls_SetDefaults
 */
 static void Controls_SetDefaults( void )
 {
-	int	i;
+	//int	i;
 	bind_t*	bindptr;
 
 	// set the bindings from the local store
 	bindptr = g_bindings;
 
 	// iterate each command, set its default binding
-	for (i=0; ;i++,bindptr++)
+	for (; ;bindptr++)
 	{
 		if (!bindptr->label)
 			break;
@@ -895,7 +895,7 @@ Controls_MenuKey
 static sfxHandle_t Controls_MenuKey( int key )
 {
 	int			id;
-	int			i;
+	//int			i;
 	qboolean	found;
 	bind_t*		bindptr;
 	found = qfalse;
@@ -943,7 +943,7 @@ static sfxHandle_t Controls_MenuKey( int key )
 	{
 		// remove from any other bind
 		bindptr = g_bindings;
-		for (i=0; ;i++,bindptr++)
+		for (; ;bindptr++)
 		{
 			if (!bindptr->label)	
 				break;
@@ -962,7 +962,7 @@ static sfxHandle_t Controls_MenuKey( int key )
 	// assign key to local store
 	id      = ((menucommon_s*)(s_controls.menu.items[s_controls.menu.cursor]))->id;
 	bindptr = g_bindings;
-	for (i=0; ;i++,bindptr++)
+	for (; ;bindptr++)
 	{
 		if (!bindptr->label)	
 			break;

@@ -1029,8 +1029,10 @@ void UI_Load( void ) {
 }
 
 static const char *handicapValues[] = {"None","95","90","85","80","75","70","65","60","55","50","45","40","35","30","25","20","15","10","5",NULL};
+#if 0
 #ifndef MISSIONPACK // bk001206
 static int numHandicaps = sizeof(handicapValues) / sizeof(const char*);
+#endif
 #endif
 
 static void UI_DrawHandicap(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
@@ -4919,11 +4921,15 @@ static void UI_Pause(qboolean b) {
 	}
 }
 
+#if 0
+
 #ifndef MISSIONPACK // bk001206
 static int UI_OwnerDraw_Width(int ownerDraw) {
   // bk001205 - LCC missing return value
   return 0;
 }
+#endif
+
 #endif
 
 static int UI_PlayCinematic(const char *name, float x, float y, float w, float h) {
@@ -5518,6 +5524,10 @@ static void UI_DisplayDownloadInfo( const char *downloadName, float centerPoint,
 	}
 }
 
+#ifdef USE_CLASSIC_MENU
+extern void UI_CLASSIC_DrawConnectScreen( qboolean overlay );
+#endif
+
 /*
 ========================
 UI_DrawConnectScreen
@@ -5752,6 +5762,8 @@ static void UI_StopServerRefresh( void )
 
 }
 
+#if 0
+
 /*
 =================
 ArenaServers_MaxPing
@@ -5767,6 +5779,8 @@ static int ArenaServers_MaxPing( void ) {
 	}
 	return maxPing;
 }
+#endif
+
 #endif
 
 /*

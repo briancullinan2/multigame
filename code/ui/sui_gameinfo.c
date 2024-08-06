@@ -23,9 +23,11 @@ static char		*ui_botInfos[MAX_BOTS];
 static int		ui_numArenas;
 static char		*ui_arenaInfos[MAX_ARENAS];
 
+#if 0
 #ifndef MISSIONPACK // bk001206
 static int		ui_numSinglePlayerArenas;
 static int		ui_numSpecialSinglePlayerArenas;
+#endif
 #endif
 
 /*
@@ -295,7 +297,7 @@ char *UI_GetBotInfoByName( const char *name ) {
 	return NULL;
 }
 
-int UI_GetNumBots() {
+int UI_GetNumBots( void ) {
 	return ui_numBots;
 }
 

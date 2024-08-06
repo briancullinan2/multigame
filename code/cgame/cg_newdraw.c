@@ -9,9 +9,7 @@
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 
 #ifdef USE_CLASSIC_HUD
-static clientInfo_t info;
 qboolean updateModel = qtrue;
-
 #endif
 
 char *CG_Cvar_VariableString( const char *var_name );
@@ -148,8 +146,8 @@ void CG_SelectPrevPlayer( void ) {
 
 
 static void CG_DrawPlayerArmorIcon( rectDef_t *rect, qboolean draw2D ) {
-	centity_t	*cent;
-	playerState_t	*ps;
+	//centity_t	*cent;
+	//playerState_t	*ps;
 	vec3_t		angles;
 	vec3_t		origin;
 
@@ -157,8 +155,8 @@ static void CG_DrawPlayerArmorIcon( rectDef_t *rect, qboolean draw2D ) {
 		return;
 	}
 
-	cent = &cg_entities[cg.snap->ps.clientNum];
-	ps = &cg.snap->ps;
+	//cent = &cg_entities[cg.snap->ps.clientNum];
+	//ps = &cg.snap->ps;
 
 	if ( draw2D || ( !cg_draw3dIcons.integer && cg_drawIcons.integer) ) { // bk001206 - parentheses
 		CG_DrawPic( rect->x, rect->y + rect->h/2 + 1, rect->w, rect->h, cgs.media.armorIcon );
@@ -177,10 +175,10 @@ static void CG_DrawPlayerArmorIcon( rectDef_t *rect, qboolean draw2D ) {
 static void CG_DrawPlayerArmorValue(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader, int textStyle) {
 	char	num[16];
   int value;
-	centity_t	*cent;
+	//centity_t	*cent;
 	playerState_t	*ps;
 
-  cent = &cg_entities[cg.snap->ps.clientNum];
+  //cent = &cg_entities[cg.snap->ps.clientNum];
 	ps = &cg.snap->ps;
 
 	value = ps->stats[STAT_ARMOR];
@@ -197,6 +195,7 @@ static void CG_DrawPlayerArmorValue(rectDef_t *rect, float scale, vec4_t color, 
 	}
 }
 
+#if 0
 #ifndef MISSIONPACK // bk001206 
 static float healthColors[4][4] = { 
 //		{ 0.2, 1.0, 0.2, 1.0 } , { 1.0, 0.2, 0.2, 1.0 }, {0.5, 0.5, 0.5, 1} };
@@ -205,6 +204,7 @@ static float healthColors[4][4] = {
   { 1.0f, 0.2f, 0.2f, 1.0f },		// low health
   { 0.5f, 0.5f, 0.5f, 1.0f},		// weapon firing
   { 1.0f, 1.0f, 1.0f, 1.0f } };		// health > 100
+#endif
 #endif
 
 static void CG_DrawPlayerAmmoIcon( rectDef_t *rect, qboolean draw2D ) {
@@ -1613,6 +1613,8 @@ void CG_PlayerInfo_SetModel( clientInfo_t *pi, const char *model, const char *he
 	pi->curWeapon = WP_MACHINEGUN;
 }
 
+
+#if 0
 static void CG_DrawPlayerModel(rectDef_t *rect) {
   static clientInfo_t info;
   char model[MAX_QPATH];
@@ -1639,6 +1641,8 @@ static void CG_DrawPlayerModel(rectDef_t *rect) {
   }
 
 }
+#endif
+
 
 qboolean CG_hasSkinForBase(const char *base, const char *team) {
 	char	test[1024];
@@ -2268,7 +2272,7 @@ CG_HideTeamMenus
 ==================
 
 */
-void CG_HideTeamMenu() {
+void CG_HideTeamMenu( void ) {
   Menus_CloseByName("teamMenu");
   Menus_CloseByName("getMenu");
 }
@@ -2279,7 +2283,7 @@ CG_ShowTeamMenus
 ==================
 
 */
-void CG_ShowTeamMenu() {
+void CG_ShowTeamMenu( void ) {
   Menus_OpenByName("teamMenu");
 }
 

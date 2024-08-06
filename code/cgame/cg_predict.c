@@ -552,7 +552,6 @@ static void CG_TouchItem( centity_t *cent ) {
 #ifdef USE_ADVANCED_ITEMS
 	{
 		int tag = item->giTag;
-		int itemClass = floor(tag / PW_MAX_POWERUPS);
 		if(item->giType == IT_HOLDABLE && cg.inventory[tag]) {
 			return;
 		}

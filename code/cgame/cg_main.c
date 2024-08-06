@@ -2429,6 +2429,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 #endif
 		if ( trap_GetValue( value, sizeof( value ), "trap_GetAsyncFiles" ) ) {
 			trap_GetAsyncFiles = (void*)~atoi( value );
+			cg.getAsyncFiles = qtrue;
+		} else {
+			cg.getAsyncFiles = qfalse;
 		}
 
 #else
@@ -2458,6 +2461,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 
 		if ( trap_GetValue( value, sizeof( value ), "trap_GetAsyncFiles" ) ) {
 			dll_trap_GetAsyncFiles = atoi( value );
+			cg.getAsyncFiles = qtrue;
+		} else {
+			cg.getAsyncFiles = qfalse;
 		}
 
 #endif

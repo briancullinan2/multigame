@@ -6,11 +6,11 @@ qboolean	CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle );
 
 
 void CG_TellRune_f( void ) {
-	vec3_t		forward;
-	vec3_t		start;
-	vec3_t		reach;
-	trace_t trace;
-	centity_t *other;
+	//vec3_t		forward;
+	//vec3_t		start;
+	//vec3_t		reach;
+	//trace_t trace;
+	centity_t *other = NULL;
 
 	cg.tellRune = qtrue;
 
@@ -23,7 +23,7 @@ void CG_TellRune_f( void ) {
 	if(cg.snap->ps.stats[STAT_ENTITY_POINTED]) {
 		other = &cg_entities[ cg.snap->ps.stats[STAT_ENTITY_POINTED] ];
 	}
-	if(other->currentState.eType == ET_ITEM) {
+	if(other && other->currentState.eType == ET_ITEM) {
 		const gitem_t	*item;
 		item = &bg_itemlist[ other->currentState.modelindex ];
 		CG_CenterPrint( item->pickup_name, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
@@ -177,13 +177,12 @@ void hud_runes(float x, float y, float w, float h, gitem_t *rune)
 qboolean CG_DrawRunesboard(void)
 {
 	gitem_t *item;
-	float fade, *fadeColor;
+	float *fadeColor;
 	int x, y, w, h, ix, iy;
 	int n;
 
 	if (cg.showRunes)
 	{
-		fade = 1.0;
 		fadeColor = colorWhite;
 	}
 	else
@@ -193,7 +192,6 @@ qboolean CG_DrawRunesboard(void)
 		{
 			return qfalse;
 		}
-		fade = *fadeColor;
 	}
 
 	trap_R_SetColor(fadeColor);

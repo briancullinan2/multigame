@@ -912,7 +912,7 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 	vec2_t		line;
 	float		len, /*frac,*/ dist;
 	vec3_t		start, finish;
-	float		groundHeight;
+	//float		groundHeight;
 //	int			msec = trap_Milliseconds();
 	float height = TRAIL_WIDTH; // + random() * 3;
 	float weight = height * 0.5f;
@@ -1009,13 +1009,13 @@ static void CG_AddTrailEffects( void ) {
 
 		for ( i = 0 ; i < trailLength[j] ; i++ ) {
 			vec3_t temp;
-			float length;
+			//float length;
 			int trailI = trailHead[j] - i;
 			if(trailI < 0) {
 				trailI += TRAIL_LENGTH;
 			}
 			VectorSubtract(trailPos[j][trailI], prev, temp);
-			length = VectorNormalize(temp);
+			/*length =*/ VectorNormalize(temp);
 			//CG_Printf("pos: %f %f %f\n", trailPos[i][0], trailPos[i][1], trailPos[i][2]);
 			CG_TrailParticleRender(trailPos[j][trailI], temp, 1.0f - (1.0f * i) / trailLength[j], cgs.media.dustPuffShader);
 			VectorCopy(trailPos[j][i], prev);
@@ -1099,7 +1099,7 @@ Generates and draws a game scene and status information at the given time.
 */
 void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback ) {
 	int		inwater;
-	int count, i;
+	int count;
 	const char *files[16];
 
 	if (cg.cameraMode && cg.pauseBreak) {
@@ -1134,7 +1134,7 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_ProcessSnapshots();
 
 
-	if(trap_GetAsyncFiles) {
+	if(cg.getAsyncFiles) {
 		if((count = trap_GetAsyncFiles(files, 16)) && !cgs.registerModels) {
 			cgs.registerModels = cg.time + 1000;
 		}

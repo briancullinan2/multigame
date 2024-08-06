@@ -459,6 +459,6 @@ void    trap_R_SwitchWorld( int world ) {
 }
 #endif
 
-int    trap_GetAsyncFiles( const char *files, int max ) {
-	syscall( dll_trap_GetAsyncFiles, files, max );
+int    trap_GetAsyncFiles( const char **files, int max ) {
+	return syscall( dll_trap_GetAsyncFiles, files, max );
 }

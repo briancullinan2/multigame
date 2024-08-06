@@ -165,7 +165,6 @@ void G_SetEntityPointed(gentity_t *ent) {
 	vec3_t		   maxs;
 	trace_t 	   tr;
 	vec3_t		   reach;
-	gentity_t	   *other;
 	vec3_t		   forward;
 	vec3_t		   right;
 	vec3_t		   up;
@@ -830,7 +829,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if (client->ps.stats[STAT_ABILITY] < rune_abilityMin.value) {
 			if((client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY])
 				|| (client->inventory[RUNE_RECALL] && !client->inventory[HI_TELEPORTER])
-				|| (client->inventory[RUNE_GRAPPLE] && !client->ps.ammo[WP_GRAPPLING_HOOK] < 100)
+				|| (client->inventory[RUNE_GRAPPLE] && client->ps.ammo[WP_GRAPPLING_HOOK] < 100)
 				|| (client->inventory[RUNE_TORNADO])
 			) {
 				client->ps.stats[STAT_ABILITY]++;
@@ -844,7 +843,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			if(client->inventory[RUNE_RECALL] && !client->inventory[HI_PORTAL]) {
 				G_GiveItem(ent, HI_PORTAL);
 			}
-			if(client->inventory[RUNE_GRAPPLE] && !client->ps.ammo[WP_GRAPPLING_HOOK] < 100) {
+			if(client->inventory[RUNE_GRAPPLE] && client->ps.ammo[WP_GRAPPLING_HOOK] < 100) {
 				client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
 			}
 		}
@@ -2038,6 +2037,10 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 	}
 }
 
+
+#ifdef USE_ADVANCED_ITEMS
+int BG_FindPriorityShaderForInventory(int powerup, int inventory[PW_NUM_POWERUPS], int team);
+#endif
 
 /*
 ==============

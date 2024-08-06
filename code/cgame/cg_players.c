@@ -2647,7 +2647,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 
 #ifdef USE_ADVANCED_ITEMS
 	int powerups = state->powerups & 0xFF;
-	int powerups2 = state->powerups >> 8;
+	//int powerups2 = state->powerups >> 8;
 
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
@@ -2858,7 +2858,7 @@ void CG_PlayerStats( centity_t *cent ) {
 	clientInfo_t	*ci;
 	refEntity_t	re;
 	vec3_t		origin, delta, dir, vec, up = {0, 0, 1};
-	float		c, len;
+	float		len;
 	int			i, health, digits[10], numdigits, negative;
 
 	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
@@ -3096,13 +3096,14 @@ void CG_Player( centity_t *cent ) {
 	if((cent->currentState.powerups & 0xFF) == RUNE_IMPACT
 		|| (cent->currentState.powerups >> 8) == RUNE_IMPACT
 	) {
-		itemInfo_t *item;
+		//itemInfo_t *item;
 		refEntity_t ent;
-		item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(RUNE_IMPACT)) ];
+		//item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(RUNE_IMPACT)) ];
 		memcpy( &ent, &legs, sizeof( ent ) );
 		ent.origin[2] += 48;
 		ent.oldorigin[2] += 48;
 		ent.hModel = cgs.media.deathEffectModel;
+		//ent.customShader = item->altShader1;
 		trap_R_AddRefEntityToScene( &ent );
 	}
 #endif

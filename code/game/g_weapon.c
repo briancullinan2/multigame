@@ -765,15 +765,17 @@ void Weapon_LightningFire( gentity_t *ent ) {
 	gentity_t	*traceEnt, *tent;
 	int			damage, i, passent;
 
-#ifdef USE_TRINITY
-  if(g_unholyTrinity.integer) {
-    damage *= g_quadfactor.value;
-  } else 
-#endif
+
 #ifdef USE_WEAPON_VARS
   damage = wp_lightDamage.integer * s_quadFactor;
 #else
 	damage = 8 * s_quadFactor;
+#endif
+
+#ifdef USE_TRINITY
+  if(g_unholyTrinity.integer) {
+    damage *= g_quadfactor.value;
+  } else 
 #endif
 
 	passent = ent->s.number;
@@ -825,7 +827,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 		// unlagged
 		G_UndoTimeShiftFor( ent );
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 		// if not the first trace (the lightning bounced of an invulnerability sphere)
 		if (i) {
 			// add bounced off lightning bolt temp entity

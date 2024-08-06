@@ -2,6 +2,9 @@
 
 #include "g_local.h"
 
+gentity_t *fire_special_grenade (gentity_t *self, vec3_t start, vec3_t dir, qboolean isCluster, qboolean isVortex);
+void CalcMuzzlePointOrigin( const gentity_t *ent, vec3_t origin, const vec3_t forward, const vec3_t right, const vec3_t up, vec3_t muzzlePoint );
+
 void G_GiveItem(gentity_t *ent, powerup_t pw);
 static	float	s_quadFactor;
 static	vec3_t	forward, right, up;
@@ -11,7 +14,7 @@ static	vec3_t	muzzle_origin; // for hitscan weapon trace
 void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	gitem_t *item;
 	vec3_t	origin, angles;
-	int		i, j;
+	int		i, j, itemClass;
 	gentity_t *drop;
 #ifdef USE_RUNES
   if ( ent->client->inventory[RUNE_STRENGTH] ) {
@@ -35,7 +38,7 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
 
 
-  int itemClass = floor(powerup / PW_MAX_POWERUPS);
+  itemClass = floor(powerup / PW_MAX_POWERUPS);
   ent->client->inventory[powerup] = 0;
   ent->client->inventoryModified[itemClass] = qtrue;
   ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;

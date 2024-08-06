@@ -1821,7 +1821,6 @@ static void PM_Weapon( void ) {
 			int i;
 			for(i = 0; i < PW_NUM_POWERUPS; i++) {
 				gitem_t *item = BG_FindItemForPowerup(i);
-				int itemClass = floor(i / PW_MAX_POWERUPS);
 				if(!item || !item->giTag) {
 					continue;
 				}

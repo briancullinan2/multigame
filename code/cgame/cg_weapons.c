@@ -1367,7 +1367,7 @@ static void CG_AddWeaponWithPowerups( refEntity_t *gun, entityState_t *state, in
 
 
 #ifdef USE_ADVANCED_ITEMS
-	int powerups2 = powerups >> 8;
+	//int powerups2 = powerups >> 8;
 	powerups = powerups & 0xFF;
 
 
@@ -2348,6 +2348,12 @@ void CG_OutOfAmmoChange( void ) {
 	}
 
 	for ( i = WP_MAX_WEAPONS-1 ; i > 0 ; i-- ) {
+#ifdef USE_WEAPON_ORDER
+		if(cg_autoswitch.integer == 2 && CG_WeaponSelectable( weap )) {
+			cg.weaponSelect = weap;
+			break;
+		} else
+#endif
 		if ( CG_WeaponSelectable( i ) ) {
 			cg.weaponSelect = i;
 			break;

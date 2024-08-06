@@ -337,7 +337,7 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 	}
 
 	// TODO: make this a spawn flag?
-	if(self->target_ent && self->target_ent->movedir && !VectorCompare(self->target_ent->movedir, vec3_origin)) {
+	if(self->target_ent && !VectorCompare(self->target_ent->movedir, vec3_origin)) {
 		vec3_t angles;
 		VectorCopy(self->target_ent->movedir, angles);
 		G_Printf("angles: %s %f %f %f -> %f %f %f\n", self->target_ent->target, angles[0], angles[1], angles[2],

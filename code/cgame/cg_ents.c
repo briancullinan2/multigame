@@ -342,7 +342,6 @@ static void CG_Item( centity_t *cent ) {
 
 	// increase the size of the weapons when they are presented as items
 	if ( item->giType == IT_WEAPON ) {
-		refEntity_t   barrel;
 		VectorScale( ent.axis[0], 1.5, ent.axis[0] );
 		VectorScale( ent.axis[1], 1.5, ent.axis[1] );
 		VectorScale( ent.axis[2], 1.5, ent.axis[2] );
@@ -715,12 +714,12 @@ static void CG_PersonalPortal(const centity_t *cent) {
   //qboolean        isMirror;
   centity_t       *target;
   //refdef_t		    refdef;
-	float           len;
+	//float           len;
   //float           x = 0, y = 0, w = 640, h = 480;
 
   // always face portal towards player
   VectorSubtract( cg.refdef.vieworg, cent->lerpOrigin, vec );
-  len = VectorNormalize( vec );
+  //len = VectorNormalize( vec );
   VectorClear(angles);
 	VectorClear(angles2);
 
