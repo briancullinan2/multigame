@@ -1045,7 +1045,7 @@ Only in One Flag CTF games
   	"sound/misc/am_pkup.wav",
   	{ "models/powerups/ammo/flameaam.md3", 
   	0, 0, 0},
-  /* icon */"	icons/icona_flamethrower",
+  /* icon */"icons/icona_flamethrower",
   /* pickup */	"Flame Ammo",
   	50,
   	IT_AMMO,

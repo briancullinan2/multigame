@@ -110,6 +110,7 @@ Unofficial Quake III Arena gamecode patch
   * TODO: dragon with quad damage has blue/purple flame like Gozilla
   * TODO: vampire mode where all life forms that "die" respawn exactly as they were before the attack in the same place, temporary ghost shader for respawn timeout time, then popping back in, they can move as a ghost, just like spectators. i think world of warcraft had this feature but you lose equipment in the process and there might have been specific areas you must return to in order to respawn from the spirit realm.
   * TODO: make a bouncing grenade powerup that makes all the projectiles grenades where bullets and lasers and lighting shoots out of grenade explosions from each different weapon
+  * TODO: add a feature where players can respawn as active bots with targets, and can teleport into the bot position, play as the bot, then switch to a different bot closer to the action. the bot takes over then the player finishes
 
 
   * a level editor that uses OBJ -> MD3 top down versions of map components that someone can move around and build with in game, then using the compile function, replace the simplified versions with high poly/high definition OBJ includes at the same location as the entity in game. allow players to build maps they are interacting with similar to fortnite.

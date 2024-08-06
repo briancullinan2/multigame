@@ -844,6 +844,31 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			}
 		}
 
+    if(ent->client->inventory[RUNE_IMPACT]) {
+      gentity_t	*other;
+	    int			entityList[MAX_GENTITIES];
+    	int			numListedEntities, e;
+      vec3_t		mins, maxs, dir, origin;
+      vec3_t bounding = {50, 50, 50};
+      ent->client->ps.ammo[WP_LIGHTNING] -= 5;
+      VectorCopy(ent->s.origin, mins);
+      VectorCopy(ent->s.origin, maxs);
+      VectorSubtract(mins, bounding, mins);
+      VectorAdd(maxs, bounding, maxs);
+      numListedEntities = trap_EntitiesInBox( mins, maxs, entityList, MAX_GENTITIES );
+      for ( e = 0 ; e < numListedEntities ; e++ ) {
+        other = &g_entities[entityList[ e ]];
+
+        if (!ent->takedamage) {
+          continue;
+        }
+
+        VectorSubtract (other->r.currentOrigin, ent->s.origin, dir);
+        dir[2] += 24;
+        G_Damage( other, NULL, ent, dir, origin, 10000, DAMAGE_RADIUS|DAMAGE_NO_TEAM_PROTECTION, MOD_LV_DISCHARGE );
+      }
+      // TODO: add event that makes a radius of random lighting bolts like the hammer weapon
+    }
 #endif
 
 		// count down armor when over max

@@ -141,7 +141,9 @@ void TossClientItems( gentity_t *self ) {
 
 	for(i = RUNE_STRENGTH; i <= RUNE_LITHIUM; i++) {
 		if(self->client->inventory[i]) {
-			dropWeapon( self, BG_FindItemForRune(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+			gitem_t *item = BG_FindItemForRune(i - RUNE_STRENGTH);
+			if(!item) continue;
+			dropWeapon( self, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
 			self->client->inventory[i] = 0;
 			self->client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
 		}
@@ -1284,6 +1286,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	int			asave;
 	int			knockback;
 	int			max;
+	vec3_t tempdir;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	vec3_t		bouncedir, impactpoint;
 #endif
@@ -1381,6 +1384,14 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		}
 	}
 
+#ifdef USE_RUNES
+	if(attacker->client->inventory[RUNE_IMPACT] && !dir) {
+		dir = tempdir;
+		VectorCopy(attacker->s.origin, dir);
+		VectorSubtract(dir, targ->s.origin, dir);
+		VectorNormalize(dir);
+	}
+#endif
 	if ( !dir ) {
 		dflags |= DAMAGE_NO_KNOCKBACK;
 	} else {
@@ -1388,6 +1399,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	}
 
 	knockback = damage;
+#ifdef USE_RUNES
+	if(attacker->client->inventory[RUNE_IMPACT]) {
+		knockback *= 2;
+	}
+#endif
 	if ( knockback > 200 ) {
 		knockback = 200;
 	}

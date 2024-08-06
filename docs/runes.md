@@ -72,7 +72,7 @@
 	5 seconds.
 
 
-### TODO: Rune of Cloaking (10)
+### Rune of Cloaking (10)
 
 	You never make any noise.  Also, if you don't attack and aren't
 	hurt for a few seconds, you become invisible (as with the ring

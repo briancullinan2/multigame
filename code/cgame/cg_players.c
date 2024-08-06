@@ -3036,6 +3036,26 @@ void CG_Player( centity_t *cent ) {
 	// add the talk baloon or disconnect icon
 	CG_PlayerSprites( cent );
 
+#ifdef USE_RUNES
+	if((cent->currentState.powerups & 0xFF) == RUNE_IMPACT
+		|| (cent->currentState.powerups >> 8) == RUNE_IMPACT
+	) {
+		itemInfo_t *item;
+		refEntity_t ent;
+		item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(RUNE_IMPACT)) ];
+		memset( &ent, 0, sizeof( ent ) );
+		ent.reType = RT_MODEL;
+		VectorCopy( cent->lerpOrigin, ent.origin );
+		ent.origin[2] += 48;
+		VectorCopy (ent.origin, ent.oldorigin);
+		//ent.hModel = item->models[0];
+		ent.hModel = cgs.media.deathEffectModel;
+		//ent.customShader = item->altShader1;
+		//ent.renderfx = rf;
+		trap_R_AddRefEntityToScene( &ent );
+	}
+#endif
+
 #ifdef USE_RPG_STATS
 	// draw little health bars for players
 	if(cg_healthBar.integer) {
