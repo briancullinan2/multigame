@@ -108,10 +108,10 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 )
 void QDECL G_Printf( const char *fmt, ... ) {
 	va_list		argptr;
 	char		text[BIG_INFO_STRING];
-	int			len;
+	//int			len;
 
 	va_start( argptr, fmt );
-	len = ED_vsprintf( text, fmt, argptr );
+	/*len =*/ ED_vsprintf( text, fmt, argptr );
 	va_end( argptr );
 
 	text[4095] = '\0'; // truncate to 1.32b/c max print buffer size

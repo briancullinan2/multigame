@@ -249,7 +249,11 @@ static void Team_SetFlagStatus( team_t team, flagStatus_t status ) {
 	}
 
 	if ( modified ) {
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		char st[5];
+#else
 		char st[4];
+#endif
 
 		if ( g_gametype.integer == GT_CTF ) {
 			st[0] = ctfFlagStatusRemap[teamgame.redStatus];
@@ -837,6 +841,7 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	int			i;
 	gentity_t	*player;
 	gclient_t	*cl = other->client;
+#if !defined(USE_ADVANCED_GAMES) && !defined(USE_ADVANCED_TEAMS)
 	int			enemy_flag;
 
 #ifdef MISSIONPACK
@@ -850,6 +855,7 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	} else {
 		enemy_flag = PW_REDFLAG;
 	}
+#endif
 
 	if ( ent->flags & FL_DROPPED_ITEM ) {
 		// hey, its not home.  return it by teleporting it back

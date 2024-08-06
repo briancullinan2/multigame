@@ -141,16 +141,16 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 		G_GiveItem(other, HI_KAMIKAZE);
 	} else
 	if(ent->item->giTag == RUNE_GRAPPLE) {
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
-		client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
+		other->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
+		other->client->ps.ammo[WP_GRAPPLING_HOOK] = 100;
 	} else
 	if(ent->item->giTag == RUNE_LITHIUM) {
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
-		client->ps.ammo[WP_GRAPPLING_HOOK] = INFINITE;
+		other->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRAPPLING_HOOK );
+		other->client->ps.ammo[WP_GRAPPLING_HOOK] = INFINITE;
 	} else
 	if(ent->item->giTag == RUNE_CLUSTER) {
-		client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
-		client->ps.ammo[WP_GRAPPLING_HOOK] = 10;
+		other->client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
+		other->client->ps.ammo[WP_GRAPPLING_HOOK] = 10;
 	}
 
 #endif
@@ -647,7 +647,6 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 
 #ifdef USE_ADVANCED_ITEMS
 {
-	int itemClass = floor(ent->item->giTag / PW_MAX_POWERUPS);
 	if(ent->item->giType == IT_HOLDABLE && 
 		other->client->inventory[ent->item->giTag]) {
 		return;

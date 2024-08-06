@@ -445,20 +445,39 @@ void  Svcmd_Freeze_f( void ) {
 		return;
 	}
   ent = &g_entities[cl - level.clients];
-  
-  if(freeze && !ent->client->ps.powerups[PW_FROZEN]) {
+
+#ifdef USE_ADVANCED_ITEMS
+  if(freeze && !ent->client->inventory[PW_FROZEN]) 
+#else
+  if(freeze && !ent->client->ps.powerups[PW_FROZEN]) 
+#endif
+	{
     G_AddEvent( ent, EV_FROZEN, 0 );
+#ifdef USE_ADVANCED_ITEMS
+    ent->client->inventory[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+#else
     ent->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+#endif
     cl->ps.pm_type = PM_FROZEN;
     VectorCopy(cl->ps.viewangles, cl->frozen_angles);
-  } else if (!freeze && ent->client->ps.powerups[PW_FROZEN]) {
+  } else 
+#ifdef USE_ADVANCED_ITEMS
+	if (!freeze && ent->client->inventory[PW_FROZEN]) 
+#else
+	if (!freeze && ent->client->ps.powerups[PW_FROZEN]) 
+#endif
+	{
     G_AddEvent( ent, EV_UNFROZEN, 0 );
 		if(ent->client->ps.stats[STAT_HEALTH] == INFINITE 
 			|| ent->client->ps.stats[STAT_HEALTH] > 100) {
 			ent->client->ps.stats[STAT_HEALTH] = 100;
 			ent->health = 100;
 		}
+#ifdef USE_ADVANCED_ITEMS
+    ent->client->inventory[PW_FROZEN] = 0;
+#else
     ent->client->ps.powerups[PW_FROZEN] = 0;
+#endif
     cl->ps.pm_type = PM_NORMAL;
     SetClientViewAngle(ent, cl->frozen_angles);
   }
@@ -490,7 +509,7 @@ void Svcmd_Rotate_f( void ) {
 
 
 char	*ConcatArgs( int start );
-void UpdateGameType();
+void UpdateGameType( void );
 
 /*
 =================

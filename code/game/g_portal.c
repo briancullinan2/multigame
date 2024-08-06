@@ -114,7 +114,7 @@ void TeleportPlayer_real(gentity_t *player,
   }
   else
   {
-    vec3_t angles2;
+    //vec3_t angles2;
     vec3_t angleView;
     VectorClear(angleView);
     if (hasDest)

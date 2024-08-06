@@ -1265,7 +1265,7 @@ void FireWeapon( gentity_t *ent )
 	case WP_HOMING_ROCKET:
 #ifdef USE_ADVANCED_CLASS
 		if(ent->client->pers.playerclass == PCLASS_VORE) {
-			Weapon_RocketLauncher_Fire( ent, WP_HOMING_ROCKET ); // always fires homing rockets, so f-ing annoying
+			Weapon_RocketLauncher_Fire( ent, qtrue ); // always fires homing rockets, so f-ing annoying
 		} else
 #endif
 		Weapon_RocketLauncher_Fire( ent, ent->s.weapon == WP_HOMING_ROCKET );

@@ -726,7 +726,7 @@ typedef struct {
 
 	qboolean inGameLoad;
 #ifdef USE_CLASSIC_MENU
-	qboolean activeMenu;
+	uiMenuCommand_t activeMenu;
 #endif
 	int startTime;
 

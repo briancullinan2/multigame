@@ -106,8 +106,10 @@ static char* netnames[] = {
 	NULL
 };
 
+#if 0
 #ifndef MISSIONPACK // bk001206
 static char quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
+#endif
 #endif
 
 static int gamecodetoui[] = {4,2,3,0,5,1,6};
@@ -1436,12 +1438,15 @@ static void UI_DrawTierGameType(rectDef_t *rect, float scale, vec4_t color, int 
 }
 
 
+#if 0
 #ifndef MISSIONPACK // bk001206
 static const char *UI_OpponentLeaderName( void ) {
   int i = UI_TeamIndexFromName(UI_Cvar_VariableString("ui_opponentName"));
 	return uiInfo.teamList[i].teamMembers[0];
 }
 #endif
+#endif
+
 
 static const char *UI_AIFromName(const char *name) {
 	int j;
@@ -1453,6 +1458,7 @@ static const char *UI_AIFromName(const char *name) {
 	return "James";
 }
 
+#if 0
 #ifndef MISSIONPACK // bk001206
 static const int UI_AIIndex(const char *name) {
 	int j;
@@ -1496,6 +1502,7 @@ static const char *UI_OpponentLeaderModel( void ) {
 	}
 	return "James";
 }
+#endif
 #endif
 
 
@@ -3755,7 +3762,7 @@ static void UI_BuildServerDisplayList(qboolean force) {
 	int i, count, clients, maxClients, ping, game, len, visible;
 	char info[MAX_STRING_CHARS];
 //	qboolean startRefresh = qtrue; TTimo: unused
-	static int numinvisible;
+	//static int numinvisible;
 
 	if (!(force || uiInfo.uiDC.realTime > uiInfo.serverStatus.nextDisplayRefresh)) {
 		return;
@@ -3778,7 +3785,7 @@ static void UI_BuildServerDisplayList(qboolean force) {
 	} 
 
 	if (force) {
-		numinvisible = 0;
+		//numinvisible = 0;
 		// clear number of displayed servers
 		uiInfo.serverStatus.numDisplayServers = 0;
 		uiInfo.serverStatus.numPlayersOnServers = 0;
@@ -3852,7 +3859,7 @@ static void UI_BuildServerDisplayList(qboolean force) {
 			// done with this server
 			if (ping > 0) {
 				trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
-				numinvisible++;
+				//numinvisible++;
 			}
 		}
 	}
@@ -4042,7 +4049,7 @@ UI_BuildFindPlayerList
 ==================
 */
 static void UI_BuildFindPlayerList(qboolean force) {
-	static int numFound, numTimeOuts;
+	static int numFound; //, numTimeOuts;
 	int i, j, resend;
 	serverStatusInfo_t info;
 	char name[MAX_NAME_LENGTH+2];
@@ -4078,7 +4085,7 @@ static void UI_BuildFindPlayerList(qboolean force) {
 						sizeof(uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers-1]),
 							"searching %d...", uiInfo.pendingServerStatus.num);
 		numFound = 0;
-		numTimeOuts++;
+		//numTimeOuts++;
 	}
 	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
 		// if this pending server is valid
@@ -4125,9 +4132,9 @@ static void UI_BuildFindPlayerList(qboolean force) {
 		// if empty pending slot or timed out
 		if (!uiInfo.pendingServerStatus.server[i].valid ||
 			uiInfo.pendingServerStatus.server[i].startTime < uiInfo.uiDC.realTime - ui_serverStatusTimeOut.integer) {
-			if (uiInfo.pendingServerStatus.server[i].valid) {
-				numTimeOuts++;
-			}
+			//if (uiInfo.pendingServerStatus.server[i].valid) {
+				//numTimeOuts++;
+			//}
 			// reset server status request for this address
 			UI_GetServerStatusInfo( uiInfo.pendingServerStatus.server[i].adrstr, NULL );
 			// reuse pending slot

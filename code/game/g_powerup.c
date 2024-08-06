@@ -14,7 +14,7 @@ static	vec3_t	muzzle_origin; // for hitscan weapon trace
 void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	gitem_t *item;
 	vec3_t	origin, angles;
-	int		i, j, itemClass;
+	int		j, itemClass;
 	gentity_t *drop;
 #ifdef USE_RUNES
   if ( ent->client->inventory[RUNE_STRENGTH] ) {
@@ -218,10 +218,10 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 #ifdef USE_PORTALS
   case HI_PORTAL:		// portal
     if( ent->client->portalID ) {
-      DropPortalSource( ent, qfalse );
+      DropPortalSource( ent, NULL );
     }
     else {
-      DropPortalDestination( ent, qfalse );
+      DropPortalDestination( ent, NULL );
     }
     break;
 #endif

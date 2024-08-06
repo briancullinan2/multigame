@@ -757,7 +757,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		} else {
 			// count down health when over max
 #ifdef USE_GAME_FREEZETAG
-			if(!g_freezeTag.integer || ent->health != INFINITE)
+			if(!g_freezeTag.integer || ent->health != INFINITE) {
 #endif
 #ifdef USE_CLOAK_CMD
       if (ent->flags & FL_CLOAK) {
@@ -772,6 +772,9 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			if ( ent->health > client->ps.stats[STAT_MAX_HEALTH] ) {
 				ent->health--;
 			}
+#ifdef USE_GAME_FREEZETAG
+			}
+#endif
 		}
 
 // i had a friend Dan in college that added this feature to the half life 2 engine, our plan was to compile target for playstation leaked sdk
@@ -1004,14 +1007,20 @@ but any server game effects are handled here
 ================
 */
 void ClientEvents( gentity_t *ent, int oldEventSequence ) {
+#ifdef USE_ADVANCED_ITEMS
+	int		i;
+#else
 	int		i, j;
+#endif
 	int		event;
 	gclient_t *client;
 	int		damage;
+#ifndef USE_ADVANCED_ITEMS
 	vec3_t	origin, angles;
 //	qboolean	fired;
 	gitem_t *item;
 	gentity_t *drop;
+#endif
 
 	client = ent->client;
 
@@ -1171,10 +1180,10 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 #ifdef USE_PORTALS
 		case EV_USE_ITEM4:		// portal
 			if( ent->client->portalID ) {
-				DropPortalSource( ent, qfalse );
+				DropPortalSource( ent );
 			}
 			else {
-				DropPortalDestination( ent, qfalse );
+				DropPortalDestination( ent );
 			}
 			break;
 #endif
@@ -1460,7 +1469,12 @@ void ClientThink_real( gentity_t *ent ) {
 		client->ps.pm_type = PM_NOCLIP;
   } else
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-  if ( g_freezeTag.integer && client->ps.powerups[PW_FROZEN] ) {
+#ifdef USE_ADVANCED_ITEMS
+  if ( g_freezeTag.integer && client->inventory[PW_FROZEN] ) 
+#else
+  if ( g_freezeTag.integer && client->ps.powerups[PW_FROZEN] ) 
+#endif
+	{
     client->ps.pm_type = PM_FROZEN;
 		//client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
   } else
@@ -1576,11 +1590,20 @@ client->ps.speed *= g_playerScale.value;
 
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
   if(g_freezeTag.integer && g_thawTime.integer
+#ifdef USE_ADVANCED_ITEMS
+    && ent->client->inventory[PW_FROZEN]
+    && level.time >= ent->client->inventory[PW_FROZEN]
+#else
     && ent->client->ps.powerups[PW_FROZEN]
     && level.time >= ent->client->ps.powerups[PW_FROZEN]
+#endif
   ) {
     G_AddEvent( ent, EV_UNFROZEN, 0 );
+#ifdef USE_ADVANCED_ITEMS
+    ent->client->inventory[PW_FROZEN] = 0;
+#else
     ent->client->ps.powerups[PW_FROZEN] = 0;
+#endif
     SetClientViewAngle(ent, client->frozen_angles);
   }
 #endif
@@ -1954,8 +1977,18 @@ void ClientThink( int clientNum ) {
 	if(ent->client->pers.connected == CON_CONNECTED) {
 		if(g_freezeTag.integer &&
 			(ent->client->ps.stats[STAT_HEALTH] == INFINITE
-			|| ent->client->ps.powerups[PW_FROZEN])) {
-			if(level.time - ent->client->ps.powerups[PW_FROZEN] >= 0) {
+#ifdef USE_ADVANCED_ITEMS
+			|| ent->client->inventory[PW_FROZEN]
+#else
+			|| ent->client->ps.powerups[PW_FROZEN]
+#endif
+		)) {
+#ifdef USE_ADVANCED_ITEMS
+			if(level.time - ent->client->inventory[PW_FROZEN] >= 0) 
+#else
+			if(level.time - ent->client->ps.powerups[PW_FROZEN] >= 0) 
+#endif
+			{
 				ent->client->ps.pm_type = PM_DEAD;
 				respawn( ent );
 			}

@@ -524,7 +524,7 @@ void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
 	}
 
 #ifdef USE_RUNES
-  if ( !attacker || !attacker->client || self->client == attacker->client && !self->client->inventory[RUNE_CLOAK] ) {
+  if ( !attacker || !attacker->client || (self->client == attacker->client && !self->client->inventory[RUNE_CLOAK]) ) {
     return;
   }
 #else
@@ -559,7 +559,7 @@ void player_pain(gentity_t *self, gentity_t *attacker, int damage) {
 
 #ifdef USE_GAME_FREEZETAG
 
-void CheckFrozen() {
+void CheckFrozen( void ) {
 	int redCount = 0, blueCount = 0, frozenCount = 0, clientCount = 0;
 	int redTeam = 0, blueTeam = 0;
 	gentity_t	*lastAlive;
@@ -579,17 +579,32 @@ void CheckFrozen() {
 			clientCount++;
 			if (ent->client->sess.sessionTeam == TEAM_RED) {
 				redTeam++;
-				if(ent->client->ps.powerups[PW_FROZEN]) {
+#ifdef USE_ADVANCED_ITEMS
+				if(ent->client->inventory[PW_FROZEN]) 
+#else
+				if(ent->client->ps.powerups[PW_FROZEN]) 
+#endif
+				{
 					redCount++;
 				}
 			} 
 			if (ent->client->sess.sessionTeam == TEAM_BLUE) {
 				blueTeam++;
-				if(ent->client->ps.powerups[PW_FROZEN]) {
+#ifdef USE_ADVANCED_ITEMS
+				if(ent->client->inventory[PW_FROZEN]) 
+#else
+				if(ent->client->ps.powerups[PW_FROZEN]) 
+#endif
+				{
 					blueCount++;
 				}
 			}
-			if (ent->client->ps.powerups[PW_FROZEN] ) {
+#ifdef USE_ADVANCED_ITEMS
+			if (ent->client->inventory[PW_FROZEN] ) 
+#else
+			if (ent->client->ps.powerups[PW_FROZEN] ) 
+#endif
+			{
 				frozenCount++;
 			} else {
 				lastAlive = ent;
@@ -615,13 +630,22 @@ void CheckFrozen() {
 	if(unfreezeAll) {
 		ent = &g_entities[0];
 		for (i=0 ; i<MAX_CLIENTS ; i++, ent++) {
-			if(ent->inuse && ent->client && (ent->client->ps.powerups[PW_FROZEN]
+			if(ent->inuse && ent->client && (
+#ifdef USE_ADVANCED_ITEMS
+				ent->client->inventory[PW_FROZEN]
+#else
+				ent->client->ps.powerups[PW_FROZEN]
+#endif
 				|| ent->client->ps.pm_type == PM_FROZEN)) {
 				G_AddEvent( ent, EV_UNFROZEN, 0 );
 				// TODO: decide if they die or gib or come back to life
 				ent->client->ps.pm_type = PM_DEAD;
 				ent->client->ps.stats[STAT_HEALTH] = 0;
+#ifdef USE_ADVANCED_ITEMS
+				ent->client->inventory[PW_FROZEN] = 0;
+#else
 				ent->client->ps.powerups[PW_FROZEN] = 0;
+#endif
 				ent->health = 0;
 				//SetClientViewAngle(ent, ent->client->frozen_angles);
 			}
@@ -645,7 +669,11 @@ void player_frozen(gentity_t *self, int killer) {
 	}
 
 	plum = G_TempEntity( self->r.currentOrigin, EV_DAMAGEPLUM );
+#ifdef USE_ADVANCED_ITEMS
+	plum->s.time2 = g_thawTime.integer - (level.time - self->client->inventory[PW_FROZEN]) / 1000.0f;
+#else
 	plum->s.time2 = g_thawTime.integer - (level.time - self->client->ps.powerups[PW_FROZEN]) / 1000.0f;
+#endif
   plum->s.otherEntityNum = self->s.number;
 	plum->r.svFlags |= SVF_BROADCAST;
 	self->client->lastFreezeTime = level.time;
@@ -660,7 +688,11 @@ void player_frozen(gentity_t *self, int killer) {
 	self->client->ps.torsoAnim = TORSO_STAND;
 	self->client->ps.legsAnim = LEGS_IDLE;
 
+#ifdef USE_ADVANCED_ITEMS
+	self->client->inventory[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+#else
 	self->client->ps.powerups[PW_FROZEN] = level.time + g_thawTime.integer * 1000;
+#endif
 
 	self->takedamage = qfalse;	// can still be gibbed
 	self->health = INFINITE;

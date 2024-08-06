@@ -641,7 +641,7 @@ gentity_t *RedirectEntity(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 
 	VectorSubtract(tent->r.currentOrigin, ent->r.currentOrigin, tentdir);
 	tentlength = VectorLength(tentdir);
-	if ( tentlength > LIGHTNING_RANGE ) return qfalse;
+	if ( tentlength > LIGHTNING_RANGE ) return NULL;
 
 	// Quick normalization of tentdir since 
 	// we already have the length
@@ -651,7 +651,7 @@ gentity_t *RedirectEntity(gentity_t *ent, gentity_t *tent, vec4_t forward, vec3_
 
 	// this value determines how wide from it's direction it can search for 
 	//   players to target
-	 if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return qfalse;
+	 if ( DotProduct(forward, tentdir) < ROCKET_VIS_CONE ) return NULL;
 
 	// trap_Trace( &tr, ent->r.currentOrigin, NULL, NULL, 
 	// 	tent->r.currentOrigin, ENTITYNUM_NONE, MASK_SHOT );

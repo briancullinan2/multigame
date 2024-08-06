@@ -633,13 +633,13 @@ static int numPlayerTargets = 0;
 void target_player_setting( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	playerSetting_t *settings;
 	int i;
-	byte discard[12];
+	//byte discard[12];
 	byte	*b;
 	byte	*o;
-	qboolean isReset;
+	//qboolean isReset;
 	settings = player_targets[self->s.generic1];
 
-	isReset = Q_stricmpn(self->classname, "target_reset", 12) == 0;
+	//isReset = Q_stricmpn(self->classname, "target_reset", 12) == 0;
 
 	if(!activator->client) {
 		return;
@@ -653,6 +653,7 @@ void target_player_setting( gentity_t *self, gentity_t *other, gentity_t *activa
 
 		// store the old values so they can be reset
 		// TODO: this is going to work because triggers fire multiple times
+		//   so the first time it's copied correctly, the second time it overwrites the reset values again
 		//if(isReset) {
 		//	o = (byte *)&discard;
 		//	f = &old_player_targets[activator->s.number][i];
