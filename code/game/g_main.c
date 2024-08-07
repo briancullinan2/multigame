@@ -1170,6 +1170,9 @@ void MoveClientToIntermission( gentity_t *ent ) {
 	client->ps.pm_type = PM_INTERMISSION;
 
 	// clean up powerup info
+#ifdef USE_ADVANCED_WEAPONS
+	memset( client->weaponsModified, 1, sizeof( client->weaponsModified ) );
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	memset( client->inventory, 0, sizeof( client->inventory ) );
 	memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
@@ -1735,6 +1738,9 @@ static void G_WarmupEnd( void )
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 #endif
 
+#ifdef USE_ADVANCED_WEAPONS
+		memset( client->weaponsModified, 1, sizeof( client->weaponsModified ) );
+#endif
 #ifdef USE_ADVANCED_ITEMS
 		memset( client->inventory, 0, sizeof( client->inventory ) );
 		memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );

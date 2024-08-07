@@ -1983,7 +1983,12 @@ void CG_DrawWeaponSelect( void ) {
 #else
 	//CG_Printf("weapon class: %i\n", cg.weaponClass);
 	for ( i = 0 ; i < WP_MAX_WEAPONS ; i++ ) {
-		if ( bits & ( 1 << i ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+		if (qtrue || cg.classWeapons[i])
+#else
+		if ( bits & ( 1 << i ) ) 
+#endif
+		{
 			gitem_t *item = BG_FindItemForWeapon(WEAPON_CLASS + i);
 			if(!item || !item->icon) {
 				continue;
@@ -2057,7 +2062,7 @@ void CG_DrawWeaponSelect( void ) {
 		// no ammo cross on top
 		if ( 
 #ifdef USE_ADVANCED_WEAPONS
-			!cg.classAmmo[ cg.weaponClass * WP_MAX_WEAPONS + i ] 
+			!cg.classAmmo[ WEAPON_CLASS + i ] 
 #else
 			!cg.snap->ps.ammo[ i ] 
 #endif
@@ -2065,14 +2070,14 @@ void CG_DrawWeaponSelect( void ) {
 			CG_DrawPic( x, y, 32, 32, cgs.media.noammoShader );
 		} else if ( weaponSelect > 1 
 #ifdef USE_ADVANCED_WEAPONS
-		&& cg.classAmmo[ cg.weaponClass * WP_MAX_WEAPONS + i ] > 0 
+		&& cg.classAmmo[ WEAPON_CLASS + i ] > 0 
 #else
 		&& cg.snap->ps.ammo[ i ] > 0 
 #endif
 		) {
 			// ammo counter
 #ifdef USE_ADVANCED_WEAPONS
-			BG_sprintf( buf, "%i", cg.classAmmo[ cg.weaponClass * WP_MAX_WEAPONS + i ] );
+			BG_sprintf( buf, "%i", cg.classAmmo[ WEAPON_CLASS + i ] );
 #else
 			BG_sprintf( buf, "%i", cg.snap->ps.ammo[ i ] );
 #endif
@@ -2117,16 +2122,16 @@ qboolean CG_WeaponSelectable( int i ) {
 		return qfalse;
 	}
 #ifdef USE_ADVANCED_WEAPONS
-	if ( !cg.classAmmo[i % WP_MAX_WEAPONS] ) {
+	if ( !cg.classAmmo[WEAPON_CLASS + i] ) {
 		//CG_Printf("no ammo\n");
 		return qfalse;
 	}
-	if ( !cg.classWeapons[ i ] ) {
+	if ( !cg.classWeapons[ WEAPON_CLASS + i ] ) {
 		//CG_Printf("no weapon\n");
 		return qfalse;
 	}
 #else
-	if ( !cg.snap->ps.ammo[i % WP_MAX_WEAPONS] ) {
+	if ( !cg.snap->ps.ammo[i] ) {
 		//CG_Printf("no ammo\n");
 		return qfalse;
 	}
@@ -2287,9 +2292,9 @@ void NextClass( void ) {
 		if ( cg.weaponClass == 0 && cg.weaponSelect == WP_GAUNTLET ) {
 			continue;		// never cycle to gauntlet
 		}
-		//if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
+		if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
 			break;
-		//}
+		}
 	}
 
 	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
@@ -2333,9 +2338,9 @@ void PrevClass( void ) {
 		if ( cg.weaponClass == 0 && cg.weaponSelect == WP_GAUNTLET ) {
 			continue;		// never cycle to gauntlet
 		}
-		//if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
+		if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
 			break;
-		//}
+		}
 	}
 	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
 		cg.weaponSelect = original;

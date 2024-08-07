@@ -1424,7 +1424,7 @@ void CG_PredictPlayerState( void ) {
 
 
 #ifdef USE_ADVANCED_WEAPONS
-	cg.weaponClass = cg_pmove.weaponClass;
+	//cg.weaponClass = cg_pmove.weaponClass;
 	cg.predictedPlayerState.weapon = cg.weaponClass * WP_MAX_WEAPONS + (cg.predictedPlayerState.weapon % WP_MAX_WEAPONS);
 	if(cg.classAmmo[cg.predictedPlayerState.weapon] != cg_pmove.classAmmo[cg.predictedPlayerState.weapon]) {
 		cg.classAmmo[cg.predictedPlayerState.weapon] = cg_pmove.classAmmo[cg.predictedPlayerState.weapon];

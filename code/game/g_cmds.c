@@ -2530,7 +2530,7 @@ void ClientCommand( int clientNum ) {
 				break;
 			}
 		}
-		ent->s.weapon = ent->client->ps.weapon = WP_MAX_CLASSES - 1 + prevClass * WP_MAX_WEAPONS;
+		ent->s.weapon = ent->client->ps.weapon = prevClass * WP_MAX_WEAPONS + j;
 		ent->client->weaponClass = prevClass;
 	}
 	else if (Q_stricmp (cmd, "nextclass") == 0) {
@@ -2550,7 +2550,7 @@ void ClientCommand( int clientNum ) {
 				break;
 			}
 		}
-		ent->s.weapon = ent->client->ps.weapon = 0 + nextClass * WP_MAX_WEAPONS;
+		ent->s.weapon = ent->client->ps.weapon = nextClass * WP_MAX_WEAPONS + j;
 		ent->client->weaponClass = nextClass;
 	}
 	else
