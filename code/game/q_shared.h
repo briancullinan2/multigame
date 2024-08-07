@@ -236,7 +236,7 @@
 // enable the flame thrower
 #define USE_FLAME_THROWER 1
 // use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
-//#define USE_ADVANCED_WEAPONS 1
+#define USE_ADVANCED_WEAPONS 1
 // client side weapon order
 #define USE_WEAPON_ORDER 1
 // draw 3D weapons that rotate slightly
@@ -1150,8 +1150,16 @@ typedef struct playerState_s {
 
 	int			stats[MAX_STATS];
 	int			persistant[MAX_PERSISTANT];	// stats that aren't cleared on death
+#ifdef USE_ADVANCED_ITEMS
+	int			powerTimes[MAX_POWERUPS];	// level.time that the powerup runs out
+#else
 	int			powerups[MAX_POWERUPS];	// level.time that the powerup runs out
+#endif
+#ifdef USE_ADVANCED_WEAPONS
+	int			classAmmo[MAX_WEAPONS];
+#else
 	int			ammo[MAX_WEAPONS];
+#endif
 
 	int			generic1;
 	int			loopSound;

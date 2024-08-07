@@ -2053,11 +2053,27 @@ void CG_DrawWeaponSelect( void ) {
 		}
 
 		// no ammo cross on top
-		if ( !cg.snap->ps.ammo[ i ] ) {
+		if ( 
+#ifdef USE_ADVANCED_WEAPONS
+			!cg.classAmmo[ cg.weaponClass * WP_MAX_WEAPONS + i ] 
+#else
+			!cg.snap->ps.ammo[ i ] 
+#endif
+		) {
 			CG_DrawPic( x, y, 32, 32, cgs.media.noammoShader );
-		} else if ( weaponSelect > 1 && cg.snap->ps.ammo[ i ] > 0 ) {
+		} else if ( weaponSelect > 1 
+#ifdef USE_ADVANCED_WEAPONS
+		&& cg.classAmmo[ cg.weaponClass * WP_MAX_WEAPONS + i ] > 0 
+#else
+		&& cg.snap->ps.ammo[ i ] > 0 
+#endif
+		) {
 			// ammo counter
+#ifdef USE_ADVANCED_WEAPONS
+			BG_sprintf( buf, "%i", cg.classAmmo[ cg.weaponClass * WP_MAX_WEAPONS + i ] );
+#else
 			BG_sprintf( buf, "%i", cg.snap->ps.ammo[ i ] );
+#endif
 			if ( weaponSelect == 2 ) {
 				// horizontal ammo counters
 				CG_DrawString( x + 32/2, y - 20, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0, DS_CENTER | DS_PROPORTIONAL );
@@ -2098,16 +2114,20 @@ qboolean CG_WeaponSelectable( int i ) {
 		//CG_Printf("hit!\n");
 		return qfalse;
 	}
-	if ( !cg.snap->ps.ammo[i % WP_MAX_WEAPONS] ) {
+#ifdef USE_ADVANCED_WEAPONS
+	if ( !cg.classAmmo[i % WP_MAX_WEAPONS] ) {
 		//CG_Printf("no ammo\n");
 		return qfalse;
 	}
-#ifdef USE_ADVANCED_WEAPONS
-	if ( ! ( cg.classWeapons[ i ] ) ) {
+	if ( !cg.classWeapons[ i ] ) {
 		//CG_Printf("no weapon\n");
 		return qfalse;
 	}
 #else
+	if ( !cg.snap->ps.ammo[i % WP_MAX_WEAPONS] ) {
+		//CG_Printf("no ammo\n");
+		return qfalse;
+	}
 	if ( ! ( cg.snap->ps.stats[ STAT_WEAPONS ] & ( 1 << i ) ) ) {
 		//CG_Printf("no weapon\n");
 		return qfalse;

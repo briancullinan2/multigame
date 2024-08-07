@@ -464,7 +464,23 @@ static void PortalTouch(gentity_t *self, gentity_t *other, trace_t *trace)
   //	if( other->client->ps.persistant[PERS_TEAM] != self->spawnflags ) {
   //		return;
   //	}
-
+#ifdef USE_ADVANCED_ITEMS
+  if (other->client->inventory[PW_NEUTRALFLAG])
+  { // only happens in One Flag CTF
+    Drop_Item(other, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0);
+    other->client->inventory[PW_NEUTRALFLAG] = 0;
+  }
+  else if (other->client->inventory[PW_REDFLAG])
+  { // only happens in standard CTF
+    Drop_Item(other, BG_FindItemForPowerup(PW_REDFLAG), 0);
+    other->client->inventory[PW_REDFLAG] = 0;
+  }
+  else if (other->client->inventory[PW_BLUEFLAG])
+  { // only happens in standard CTF
+    Drop_Item(other, BG_FindItemForPowerup(PW_BLUEFLAG), 0);
+    other->client->inventory[PW_BLUEFLAG] = 0;
+  }
+#else
   if (other->client->ps.powerups[PW_NEUTRALFLAG])
   { // only happens in One Flag CTF
     Drop_Item(other, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0);
@@ -480,6 +496,7 @@ static void PortalTouch(gentity_t *self, gentity_t *other, trace_t *trace)
     Drop_Item(other, BG_FindItemForPowerup(PW_BLUEFLAG), 0);
     other->client->ps.powerups[PW_BLUEFLAG] = 0;
   }
+#endif
 
   // find the destination
   if (self == client->portalSource)

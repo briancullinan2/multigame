@@ -201,11 +201,11 @@ typedef enum {
 
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	PW_GOLDFLAG = 15,
-	PW_GREENFLAG = 9,
+	PW_GREENFLAG = 16,
 #endif
 
 #ifdef USE_ADVANCED_CLASS
-	PW_SPECIAL_ABILITY = 16,
+	PW_SPECIAL_ABILITY = 17,
 #endif
 // memory overflow on everything past this in the default mode
 
@@ -679,7 +679,7 @@ typedef enum {
 
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	PW_GOLDFLAG,
-	PW_GREENFLAG,
+	PW_GREENFLAG = PW_NEUTRALFLAG,
 #endif
 
 #ifdef MISSIONPACK
@@ -1212,15 +1212,19 @@ gitem_t	*BG_FindItemForHoldable( holdable_t pw );
 #endif
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
 
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent,
 #ifdef USE_ADVANCED_ITEMS
+	const int *inventory, 
+#endif
 #ifdef USE_ADVANCED_CLASS
-qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory, int playerClass );
-#else
-qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory );
+	int playerClass, 
 #endif
-#else
-qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps );
+#ifdef USE_ADVANCED_WEAPONS
+	int classWeapons[WP_MAX_WEAPONS],
+	int classAmmo[WP_MAX_WEAPONS],
 #endif
+	const playerState_t *ps
+);
 
 // g_dmflags->integer flags
 #define	DF_NO_FALLING			8

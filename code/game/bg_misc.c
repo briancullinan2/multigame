@@ -1386,15 +1386,19 @@ Returns false if the item should not be picked up.
 This needs to be the same for client side prediction and server use.
 ================
 */
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent,
 #ifdef USE_ADVANCED_ITEMS
+	const int *inventory, 
+#endif
 #ifdef USE_ADVANCED_CLASS
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory, int playerClass )
-#else
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps, const int *inventory )
+	int playerClass, 
 #endif
-#else
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps )
+#ifdef USE_ADVANCED_WEAPONS
+	int classWeapons[WP_MAX_WEAPONS],
+	int classAmmo[WP_MAX_WEAPONS],
 #endif
+	const playerState_t *ps
+)
 {
 	gitem_t	*item;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
@@ -1430,9 +1434,17 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 			return qtrue;
 		}
 #endif
+
+#ifdef USE_ADVANCED_ITEMS
+		if ( classAmmo[ item->giTag ] >= 200 ) {
+			return qfalse;		// can't hold any more
+		}
+#else
 		if ( ps->ammo[ item->giTag ] >= 200 ) {
 			return qfalse;		// can't hold any more
 		}
+#endif
+
 		return qtrue;
 
 	case IT_ARMOR:
@@ -1572,12 +1584,22 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG ||
 					(item->giTag == PW_REDFLAG && ent->modelindex2) ||
-					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) )
+#ifdef USE_ADVANCED_ITEMS
+					(item->giTag == PW_REDFLAG && inventory[PW_BLUEFLAG]) 
+#else
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) 
+#endif
+				)
 					return qtrue;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
 				if (item->giTag == PW_REDFLAG ||
 					(item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
-					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) )
+#ifdef USE_ADVANCED_ITEMS
+					(item->giTag == PW_BLUEFLAG && inventory[PW_REDFLAG]) 
+#else
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) 
+#endif
+				)
 					return qtrue;
 			}
 #ifdef USE_ADVANCED_GAMES
@@ -1586,36 +1608,64 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 					item->giTag == PW_GOLDFLAG ||
 					item->giTag == PW_GREENFLAG ||
 					(item->giTag == PW_REDFLAG && ent->modelindex2) ||
+#ifdef USE_ADVANCED_ITEMS
+					(item->giTag == PW_REDFLAG && inventory[PW_BLUEFLAG]) ||
+					(item->giTag == PW_REDFLAG && inventory[PW_GOLDFLAG]) ||
+					(item->giTag == PW_REDFLAG && inventory[PW_GREENFLAG]) 
+#else
 					(item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG]) ||
 					(item->giTag == PW_REDFLAG && ps->powerups[PW_GOLDFLAG]) ||
-					(item->giTag == PW_REDFLAG && ps->powerups[PW_GREENFLAG]) )
+					(item->giTag == PW_REDFLAG && ps->powerups[PW_GREENFLAG]) 
+#endif
+				)
 					return qtrue;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
 				if (item->giTag == PW_REDFLAG ||
 					item->giTag == PW_GOLDFLAG ||
 					item->giTag == PW_GREENFLAG ||
 					(item->giTag == PW_BLUEFLAG && ent->modelindex2) ||
+#ifdef USE_ADVANCED_ITEMS
+					(item->giTag == PW_BLUEFLAG && inventory[PW_REDFLAG]) ||
+					(item->giTag == PW_BLUEFLAG && inventory[PW_GOLDFLAG]) ||
+					(item->giTag == PW_BLUEFLAG && inventory[PW_GREENFLAG]) 
+#else
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG]) ||
 					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GOLDFLAG]) ||
-					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GREENFLAG]) )
+					(item->giTag == PW_BLUEFLAG && ps->powerups[PW_GREENFLAG]) 
+#endif
+				)
 					return qtrue;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_GOLD) {
 				if (item->giTag == PW_REDFLAG ||
 					item->giTag == PW_BLUEFLAG ||
 					item->giTag == PW_GREENFLAG ||
 					(item->giTag == PW_GOLDFLAG && ent->modelindex2) ||
+#ifdef USE_ADVANCED_ITEMS
+					(item->giTag == PW_GOLDFLAG && inventory[PW_REDFLAG]) ||
+					(item->giTag == PW_GOLDFLAG && inventory[PW_BLUEFLAG]) ||
+					(item->giTag == PW_GOLDFLAG && inventory[PW_GREENFLAG]) 
+#else
 					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_REDFLAG]) ||
 					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_BLUEFLAG]) ||
-					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_GREENFLAG]) )
+					(item->giTag == PW_GOLDFLAG && ps->powerups[PW_GREENFLAG]) 
+#endif
+				)
 					return qtrue;
 			} else if (ps->persistant[PERS_TEAM] == TEAM_GREEN) {
 				if (item->giTag == PW_REDFLAG ||
 					item->giTag == PW_BLUEFLAG ||
 					item->giTag == PW_GOLDFLAG ||
 					(item->giTag == PW_GREENFLAG && ent->modelindex2) ||
+#ifdef USE_ADVANCED_ITEMS
+					(item->giTag == PW_GREENFLAG && inventory[PW_REDFLAG]) ||
+					(item->giTag == PW_GREENFLAG && inventory[PW_BLUEFLAG]) ||
+					(item->giTag == PW_GREENFLAG && inventory[PW_GOLDFLAG]) 
+#else
 					(item->giTag == PW_GREENFLAG && ps->powerups[PW_REDFLAG]) ||
 					(item->giTag == PW_GREENFLAG && ps->powerups[PW_BLUEFLAG]) ||
-					(item->giTag == PW_GREENFLAG && ps->powerups[PW_GOLDFLAG]) )
+					(item->giTag == PW_GREENFLAG && ps->powerups[PW_GOLDFLAG]) 
+#endif
+				)
 					return qtrue;
 			}
 #endif

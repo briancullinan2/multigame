@@ -963,7 +963,13 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			  default: max = 0; inc = 0; t = 1000; break;
 		  }
 		  client->ammoTimes[w] += msec;
-		  if ( client->ps.ammo[w] >= max ) {
+		  if ( 
+#ifdef USE_ADVANCED_WEAPONS
+				client->classAmmo[w] >= max 
+#else
+				client->ps.ammo[w] >= max 
+#endif
+			) {
 			  client->ammoTimes[w] = 0;
 #ifdef USE_RUNES
 				if(ent->client->inventory[RUNE_ACTION]) {
@@ -974,10 +980,17 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		  if ( client->ammoTimes[w] >= t ) {
 			  while ( client->ammoTimes[w] >= t )
 				  client->ammoTimes[w] -= t;
+#ifdef USE_ADVANCED_WEAPONS
+			  client->classAmmo[w] += inc;
+			  if ( client->classAmmo[w] > max ) {
+				  client->classAmmo[w] = max;
+				}
+#else
 			  client->ps.ammo[w] += inc;
 			  if ( client->ps.ammo[w] > max ) {
 				  client->ps.ammo[w] = max;
 			  }
+#endif
 		  }
     }
 	}
@@ -1417,6 +1430,7 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 
 		if(i < 2 * WP_NUM_WEAPONS) {
+			memcpy(client->ps.classAmmo, &client->classAmmo[prevWeaponClass * WP_MAX_WEAPONS], sizeof(int) * WP_MAX_WEAPONS);
 			client->ps.stats[STAT_WEAPONS_UPDATE] = prevWeaponClass;
 			client->ps.stats[STAT_WEAPONS_AVAILABLE] = itemBits;
 			client->weaponsModified[prevWeaponClass] = qfalse;
@@ -1772,6 +1786,7 @@ client->ps.speed *= g_playerScale.value;
 #endif
 #ifdef USE_ADVANCED_WEAPONS
 	memcpy(pm.classWeapons, client->classWeapons, sizeof(client->classWeapons));
+	memcpy(pm.classAmmo, client->classAmmo, sizeof(client->classAmmo));
 	pm.weaponClass = client->weaponClass;
 #endif
 #ifdef USE_ADVANCED_ITEMS
@@ -1959,7 +1974,8 @@ client->ps.speed *= g_playerScale.value;
 #ifdef USE_ADVANCED_WEAPONS
 	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
 	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
-	client->classAmmo[client->weaponClass * WP_MAX_WEAPONS + client->ps.weapon % WP_MAX_WEAPONS ] = client->ps.ammo[client->ps.weapon % WP_MAX_WEAPONS];
+	client->classAmmo[client->ps.weapon] = pm.classAmmo[client->ps.weapon];
+	client->weaponsModified[(int)floor(client->ps.weapon / WP_MAX_WEAPONS)] = qtrue;
 #endif
 
 	SendPendingPredictableEvents( &ent->client->ps );
@@ -2207,11 +2223,20 @@ void ClientEndFrame( gentity_t *ent ) {
 	client = ent->client;
 
 	// turn off any expired powerups
+#ifdef USE_ADVANCED_ITEMS
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		if ( client->inventory[ i ] < client->pers.cmd.serverTime ) {
+			client->inventory[ i ] = 0;
+			client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
+		}
+	}
+#else
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( client->ps.powerups[ i ] < client->pers.cmd.serverTime ) {
 			client->ps.powerups[ i ] = 0;
 		}
 	}
+#endif
 
 #ifdef USE_RUNES
   // keep rune switch on?

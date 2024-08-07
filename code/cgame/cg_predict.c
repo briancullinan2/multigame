@@ -331,20 +331,37 @@ static void CG_AddArmor( const gitem_t *item, int quantity ) {
 
 static void CG_AddAmmo( int weapon, int count )
 {
+#ifdef USE_ADVANCED_WEAPONS
 	if ( weapon == WP_GAUNTLET 
 #ifdef USE_GRAPPLE
 		|| weapon == WP_GRAPPLING_HOOK 
 #endif
 	) {
-		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = -1;
+		cg.classAmmo[weapon] = -1;
 	} else {
-		cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] += count;
+		cg.classAmmo[weapon] += count;
 		if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG ) {
-			if ( cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] > AMMO_HARD_LIMIT ) {
-				cg.predictedPlayerState.ammo[weapon % WP_MAX_WEAPONS] = AMMO_HARD_LIMIT;
+			if ( cg.classAmmo[weapon] > AMMO_HARD_LIMIT ) {
+				cg.classAmmo[weapon] = AMMO_HARD_LIMIT;
 			}
 		}
 	}
+#else
+	if ( weapon == WP_GAUNTLET 
+#ifdef USE_GRAPPLE
+		|| weapon == WP_GRAPPLING_HOOK 
+#endif
+	) {
+		cg.predictedPlayerState.ammo[weapon] = -1;
+	} else {
+		cg.predictedPlayerState.ammo[weapon] += count;
+		if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG ) {
+			if ( cg.predictedPlayerState.ammo[weapon] > AMMO_HARD_LIMIT ) {
+				cg.predictedPlayerState.ammo[weapon] = AMMO_HARD_LIMIT;
+			}
+		}
+	}
+#endif
 }
 
 
@@ -356,8 +373,13 @@ static void CG_AddWeapon( int weapon, int quantity, qboolean dropped )
 
 	// dropped items and teamplay weapons always have full ammo
 	if ( !dropped && cgs.gametype != GT_TEAM ) {
-		if ( cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ] < quantity ) {
-			quantity = quantity - cg.predictedPlayerState.ammo[ weapon % WP_MAX_WEAPONS ];
+#ifdef USE_ADVANCED_WEAPONS
+		if ( cg.classAmmo[ weapon ] < quantity ) {
+			quantity = quantity - cg.classAmmo[ weapon ];
+#else
+		if ( cg.predictedPlayerState.ammo[ weapon ] < quantity ) {
+			quantity = quantity - cg.predictedPlayerState.ammo[ weapon ];
+#endif
 		} else {
 			quantity = 1;
 		}
@@ -479,8 +501,18 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 #endif
   )) {
 		// round timing to seconds to make multiple powerup timers count in sync
-		if ( !cg.predictedPlayerState.powerups[ item->giTag ] ) {
+		if ( 
+#ifdef USE_ADVANCED_ITEMS
+			!cg.inventory[ item->giTag ] 
+#else
+			!cg.predictedPlayerState.powerups[ item->giTag ] 
+#endif
+		) {
+#ifdef USE_ADVANCED_ITEMS
+			cg.inventory[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
+#else
 			cg.predictedPlayerState.powerups[ item->giTag ] = cg.predictedPlayerState.commandTime - ( cg.predictedPlayerState.commandTime % 1000 );
+#endif
 			// this assumption is correct only on transition and implies hardcoded 1.3 coefficient:
 			if ( item->giTag == PW_HASTE 
 #ifdef USE_RUNES
@@ -494,7 +526,11 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 #endif
 			}
 		}
+#ifdef USE_ADVANCED_ITEMS
+		cg.inventory[ item->giTag ] += cent->currentState.time2 * 1000;
+#else
 		cg.predictedPlayerState.powerups[ item->giTag ] += cent->currentState.time2 * 1000;
+#endif
 #ifdef USE_RUNES
     if(item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM) {
       cg_entities[cg.snap->ps.clientNum].rune = item->giTag;
@@ -539,21 +575,20 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
+	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, 
 #ifdef USE_ADVANCED_ITEMS
+		cg.inventory, 
+#endif
 #ifdef USE_ADVANCED_CLASS
-	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.inventory, cg.predictedPlayerState.stats[STAT_PLAYERCLASS]) ) {
-		return;	// can't hold it
-	}
-#else
-	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState, cg.inventory ) ) {
-		return;	// can't hold it
-	}
+		cg.predictedPlayerState.stats[STAT_PLAYERCLASS],
 #endif
-#else
-	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+		cg.classWeapons,
+		cg.classAmmo,
+#endif
+		&cg.predictedPlayerState ) ) {
 		return;	// can't hold it
 	}
-#endif
 
 	item = &bg_itemlist[ cent->currentState.modelindex ];
 
@@ -643,9 +678,15 @@ static void CG_TouchItem( centity_t *cent ) {
 #else
 		cg.predictedPlayerState.stats[ STAT_WEAPONS ] |= 1 << item->giTag;
 #endif
-		if ( !cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] ) {
-			cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] = 1;
+#ifdef USE_ADVANCED_WEAPONS
+		if ( !cg.classAmmo[ item->giTag ] ) {
+			cg.classAmmo[ item->giTag ] = 1;
 		}
+#else
+		if ( !cg.predictedPlayerState.ammo[ item->giTag ] ) {
+			cg.predictedPlayerState.ammo[ item->giTag ] = 1;
+		}
+#endif
 	}
 }
 
@@ -790,6 +831,25 @@ static void CG_CheckTimers( void ) {
 	}
 
 	// turn off any expired powerups
+#ifdef USE_ADVANCED_ITEMS
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		if ( !cg.inventory[ i ] )
+			continue;
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+      if(i == PW_FROZEN) {
+        continue;      
+      }
+#endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+      if(i >= RUNE_STRENGTH && i <= RUNE_LITHIUM) {
+        continue;      
+      }
+#endif
+		if ( cg.inventory[ i ] < cg.predictedPlayerState.commandTime ) {
+			cg.inventory[ i ] = 0;
+		}
+	}
+#else
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( !cg.predictedPlayerState.powerups[ i ] )
 			continue;
@@ -798,10 +858,16 @@ static void CG_CheckTimers( void ) {
         continue;      
       }
 #endif
+#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+      if(i >= RUNE_STRENGTH && i <= RUNE_LITHIUM) {
+        continue;      
+      }
+#endif
 		if ( cg.predictedPlayerState.powerups[ i ] < cg.predictedPlayerState.commandTime ) {
 			cg.predictedPlayerState.powerups[ i ] = 0;
 		}
 	}
+#endif
 }
 
 
@@ -981,6 +1047,7 @@ static int CG_IsUnacceptableError( playerState_t *ps, playerState_t *pps, qboole
 		}
 	}
 
+#ifndef USE_ADVANCED_WEAPONS
 	for( i = 0; i < WP_MAX_WEAPONS; i++ ) {
 		if( pps->ammo[ i ] != ps->ammo[ i ] ) {
 			if ( cg_showmiss.integer > 1 ) {
@@ -989,11 +1056,13 @@ static int CG_IsUnacceptableError( playerState_t *ps, playerState_t *pps, qboole
 			return 18;
 		}
 	}
+#endif
 
 	if ( pps->generic1 != ps->generic1 || pps->loopSound != ps->loopSound ) {
 		return 19;
 	}
 
+#ifndef USE_ADVANCED_ITEMS
 	for ( i = 0; i < MAX_POWERUPS; i++ ) {
 		if( pps->powerups[ i ] != ps->powerups[ i ] ) {
 			if ( cg_showmiss.integer > 1 )
@@ -1001,6 +1070,7 @@ static int CG_IsUnacceptableError( playerState_t *ps, playerState_t *pps, qboole
 			return 20;
 		}
 	}
+#endif
 
 	return 0;
 }
@@ -1065,6 +1135,11 @@ void CG_PredictPlayerState( void ) {
 
 	// prepare for pmove
 	cg_pmove.ps = &cg.predictedPlayerState;
+#ifdef USE_ADVANCED_WEAPONS
+	cg_pmove.weaponClass = cg.weaponClass;
+	memcpy(cg_pmove.classWeapons, cg.classWeapons, sizeof(cg.classWeapons));
+	memcpy(cg_pmove.classAmmo, cg.classAmmo, sizeof(cg.classAmmo));
+#endif
 #ifdef USE_ADVANCED_ITEMS
 	memcpy(cg_pmove.inventory, cg.inventory, sizeof(cg.inventory));
 #endif

@@ -50,6 +50,21 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 		return;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if( activator->client->inventory[PW_REDFLAG] ) {
+		Team_ReturnFlag( TEAM_RED );
+	} else if( activator->client->inventory[PW_BLUEFLAG] ) {
+		Team_ReturnFlag( TEAM_BLUE );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	} else if( activator->client->inventory[PW_GOLDFLAG] ) {
+		Team_ReturnFlag( TEAM_GOLD );
+	} else if( activator->client->inventory[PW_GREENFLAG] ) {
+		Team_ReturnFlag( TEAM_GREEN );
+#endif
+	} else if( activator->client->inventory[PW_NEUTRALFLAG] ) {
+		Team_ReturnFlag( TEAM_FREE );
+	}
+#else
 	if( activator->client->ps.powerups[PW_REDFLAG] ) {
 		Team_ReturnFlag( TEAM_RED );
 	} else if( activator->client->ps.powerups[PW_BLUEFLAG] ) {
@@ -59,15 +74,17 @@ void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *ac
 		Team_ReturnFlag( TEAM_GOLD );
 	} else if( activator->client->ps.powerups[PW_GREENFLAG] ) {
 		Team_ReturnFlag( TEAM_GREEN );
-
 #endif
 	} else if( activator->client->ps.powerups[PW_NEUTRALFLAG] ) {
 		Team_ReturnFlag( TEAM_FREE );
 	}
+#endif
 
-	memset( activator->client->ps.powerups, 0, sizeof( activator->client->ps.powerups ) );
 #ifdef USE_ADVANCED_ITEMS
-		memset( activator->client->inventory, 0, sizeof( activator->client->inventory ) );
+	memset( activator->client->inventory, 0, sizeof( activator->client->inventory ) );
+	memset( activator->client->ps.powerTimes, 0, sizeof( activator->client->ps.powerTimes ) );
+#else
+	memset( activator->client->ps.powerups, 0, sizeof( activator->client->ps.powerups ) );
 #endif
 }
 

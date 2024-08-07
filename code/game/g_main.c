@@ -1170,10 +1170,12 @@ void MoveClientToIntermission( gentity_t *ent ) {
 	client->ps.pm_type = PM_INTERMISSION;
 
 	// clean up powerup info
-	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #ifdef USE_ADVANCED_ITEMS
 	memset( client->inventory, 0, sizeof( client->inventory ) );
 	memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
+	memset( client->ps.powerTimes, 0, sizeof( client->ps.powerTimes ) );
+#else
+	memset( client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #endif
 
 	client->ps.eFlags = ( client->ps.eFlags & ~EF_PERSISTANT ) | ( client->ps.eFlags & EF_PERSISTANT );
@@ -1733,10 +1735,12 @@ static void G_WarmupEnd( void )
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 #endif
 
-		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #ifdef USE_ADVANCED_ITEMS
 		memset( client->inventory, 0, sizeof( client->inventory ) );
 		memset( client->inventoryModified, 1, sizeof( client->inventoryModified ) );
+		memset( &client->ps.powerTimes, 0, sizeof( client->ps.powerTimes ) );
+#else
+		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #endif
 
 

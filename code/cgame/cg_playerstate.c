@@ -43,10 +43,18 @@ void CG_CheckAmmo( void ) {
 #ifdef MISSIONPACK
 		case WP_PROX_LAUNCHER:
 #endif
+#ifdef USE_ADVANCED_WEAPONS
+			total += cg.classAmmo[i] * 1000;
+#else
 			total += cg.snap->ps.ammo[i] * 1000;
+#endif
 			break;
 		default:
+#ifdef USE_ADVANCED_WEAPONS
+			total += cg.classAmmo[i] * 200;
+#else
 			total += cg.snap->ps.ammo[i] * 200;
+#endif
 			break;
 		}
 		if ( total >= 5000 ) {
@@ -419,6 +427,19 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 
 	// check for flag pickup
 	if ( cgs.gametype >= GT_TEAM ) {
+#ifdef USE_ADVANCED_WEAPONS
+		if (/*memcmp(ops->powerups, ps->powerups, sizeof(ps->powerups)) != 0 &&*/ (
+			cg.inventory[PW_REDFLAG] ||
+			cg.inventory[PW_BLUEFLAG] ||
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+			cg.inventory[PW_GOLDFLAG] ||
+			cg.inventory[PW_GREENFLAG] ||
+#endif
+			cg.inventory[PW_NEUTRALFLAG] )
+		) {
+			trap_S_StartLocalSound( cgs.media.youHaveFlagSound, CHAN_ANNOUNCER );
+		}
+#else
 		if ((ps->powerups[PW_REDFLAG] != ops->powerups[PW_REDFLAG] && ps->powerups[PW_REDFLAG]) ||
 			(ps->powerups[PW_BLUEFLAG] != ops->powerups[PW_BLUEFLAG] && ps->powerups[PW_BLUEFLAG]) ||
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
@@ -429,6 +450,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 		{
 			trap_S_StartLocalSound( cgs.media.youHaveFlagSound, CHAN_ANNOUNCER );
 		}
+#endif
 	}
 
 	// lead changes

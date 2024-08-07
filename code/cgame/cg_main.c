@@ -758,7 +758,6 @@ void CG_ReregisterModels( void ) {
 		CG_LoadClientInfo( match );
 	}
 
-	
 	for ( i = 1 ; i < bg_numItems ; i++ ) {
 		cg_items[ i ].registered = qfalse;
 		if(bg_itemlist[i].giType == IT_WEAPON) {

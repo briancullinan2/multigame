@@ -246,6 +246,7 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
 				}
 			}
+			memcpy(&cg.classAmmo[prevWeaponClass * WP_MAX_WEAPONS], ps->classAmmo, sizeof(int) * WP_MAX_WEAPONS);
 			CG_Printf("\n");
 		}
 #endif

@@ -419,8 +419,13 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 		if ( ! (ent->flags & FL_DROPPED_ITEM) && g_gametype.integer != GT_TEAM ) {
 			// respawning rules
 			// drop the quantity if the already have over the minimum
+#ifdef USE_ADVANCED_WEAPONS
+			if ( other->client->classAmmo[ ent->item->giTag ] < quantity ) {
+				quantity = quantity - other->client->classAmmo[ ent->item->giTag ];
+#else
 			if ( other->client->ps.ammo[ ent->item->giTag ] < quantity ) {
 				quantity = quantity - other->client->ps.ammo[ ent->item->giTag ];
+#endif
 			} else {
 				quantity = 1;		// only add a single shot
 			}
@@ -440,7 +445,7 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 #ifdef USE_GRAPPLE
 	if (ent->item->giTag == WP_GRAPPLING_HOOK)
 #ifdef USE_ADVANCED_WEAPONS
-		other->client->ps.ammo[ent->item->giTag] = INFINITE; // unlimited ammo
+		other->client->classAmmo[ent->item->giTag] = INFINITE; // unlimited ammo
 #else
 		other->client->ps.ammo[ent->item->giTag] = -1; // unlimited ammo
 #endif
@@ -708,21 +713,20 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;		// dead people can't pickup
 
 	// the same pickup rules are used for client side and server side
+	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, 
 #ifdef USE_ADVANCED_ITEMS
+		other->client->inventory, 
+#endif
 #ifdef USE_ADVANCED_CLASS
-	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory, other->client->pers.playerclass ) ) {
-		return;
-	}
-#else
-	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory ) ) {
-		return;
-	}
+		other->client->pers.playerclass,
 #endif
-#else
-	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+		other->client->classWeapons,
+		other->client->classAmmo,
+#endif
+		&other->client->ps ) ) {
 		return;
 	}
-#endif
 
 #ifdef USE_ADVANCED_ITEMS
 {
@@ -965,25 +969,21 @@ void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPick
 		return;
 	}
 
+	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, 
 #ifdef USE_ADVANCED_ITEMS
+		other->client->inventory,
+#endif
 #ifdef USE_ADVANCED_CLASS
-	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory, other->client->pers.playerclass ))
-	{
-		return;
-	}
-#else
-	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps, other->client->inventory ))
-	{
-		return;
-	}
+		other->client->pers.playerclass,
 #endif
-#else
-	// the same pickup rules are used for client side and server side
-	if (!BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ))
+#ifdef USE_ADVANCED_WEAPONS
+		other->client->classWeapons,
+		other->client->classAmmo,
+#endif
+		&other->client->ps ))
 	{
 		return;
 	}
-#endif
 
 #if 0
 	if(g_gametype.integer == GT_BOMB &&

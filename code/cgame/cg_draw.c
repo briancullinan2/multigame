@@ -647,6 +647,22 @@ static void CG_DrawStatusBar( void ) {
 
 	CG_DrawStatusBarHead( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE );
 
+
+#ifdef USE_ADVANCED_ITEMS
+	if( cg.inventory[PW_REDFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
+	} else if( cg.inventory[PW_BLUEFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_BLUE );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+	} else if( cg.inventory[PW_GOLDFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GOLD );
+	} else if( cg.inventory[PW_GREENFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GREEN );
+#endif
+	} else if( cg.inventory[PW_NEUTRALFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_FREE );
+	}
+#else
 	if( cg.predictedPlayerState.powerups[PW_REDFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
 	} else if( cg.predictedPlayerState.powerups[PW_BLUEFLAG] ) {
@@ -656,11 +672,11 @@ static void CG_DrawStatusBar( void ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GOLD );
 	} else if( cg.predictedPlayerState.powerups[PW_GREENFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GREEN );
-
 #endif
 	} else if( cg.predictedPlayerState.powerups[PW_NEUTRALFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_FREE );
 	}
+#endif
 
 	if ( ps->stats[ STAT_ARMOR ] ) {
 		origin[0] = 90;
@@ -688,7 +704,11 @@ static void CG_DrawStatusBar( void ) {
 	// ammo
 	//
 	if ( cent->currentState.weapon ) {
-		value = ps->ammo[cent->currentState.weapon % WP_MAX_WEAPONS];
+#ifdef USE_ADVANCED_WEAPONS
+		value = cg.classAmmo[cent->currentState.weapon];
+#else
+		value = ps->ammo[cent->currentState.weapon];
+#endif
 		if ( value > -1 && value != INFINITE ) {
 			if ( cg.predictedPlayerState.weaponstate == WEAPON_FIRING
 				&& cg.predictedPlayerState.weaponTime > 100 ) {

@@ -139,6 +139,26 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     item = NULL;
     j = 0;
 
+#ifdef USE_ADVANCED_ITEMS
+    if ( ent->client->inventory[ PW_REDFLAG ] ) {
+      item = BG_FindItemForPowerup( PW_REDFLAG );
+      j = PW_REDFLAG;
+    } else if ( ent->client->inventory[ PW_BLUEFLAG ] ) {
+      item = BG_FindItemForPowerup( PW_BLUEFLAG );
+      j = PW_BLUEFLAG;
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+    } else if ( ent->client->inventory[ PW_GOLDFLAG ] ) {
+      item = BG_FindItemForPowerup( PW_GOLDFLAG );
+      j = PW_GOLDFLAG;
+    } else if ( ent->client->inventory[ PW_GREENFLAG ] ) {
+      item = BG_FindItemForPowerup( PW_GREENFLAG );
+      j = PW_GREENFLAG;
+#endif
+    } else if ( ent->client->inventory[ PW_NEUTRALFLAG ] ) {
+      item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
+      j = PW_NEUTRALFLAG;
+    }
+#else
     if ( ent->client->ps.powerups[ PW_REDFLAG ] ) {
       item = BG_FindItemForPowerup( PW_REDFLAG );
       j = PW_REDFLAG;
@@ -157,18 +177,27 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
       item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
       j = PW_NEUTRALFLAG;
     }
+#endif
 
     if ( item ) {
       drop = Drop_Item( ent, item, 0 );
       // decide how many seconds it has left
+#ifdef USE_ADVANCED_ITEMS
+      drop->count = ( ent->client->inventory[ j ] - level.time ) / 1000;
+#else
       drop->count = ( ent->client->ps.powerups[ j ] - level.time ) / 1000;
+#endif
       if ( drop->count < 1 ) {
         drop->count = 1;
       }
       // for pickup prediction
       drop->s.time2 = drop->count;
 
+#ifdef USE_ADVANCED_ITEMS
+      ent->client->inventory[ j ] = 0;
+#else
       ent->client->ps.powerups[ j ] = 0;
+#endif
     }
 
 #ifdef MISSIONPACK

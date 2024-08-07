@@ -790,9 +790,15 @@ void StopFollowing( gentity_t *ent, qboolean release ) {
 	client->sess.sessionTeam = TEAM_SPECTATOR;	
 	if ( release ) {
 		client->ps.stats[STAT_HEALTH] = ent->health = 1;
-		memset( client->ps.powerups, 0, sizeof ( client->ps.powerups ) );
+#ifdef USE_ADVANCED_WEAPONS
+		memset( client->classAmmo, 0, sizeof( client->classAmmo ) );
+		memset( client->classWeapons, 0, sizeof( client->classWeapons ) );
+#endif
 #ifdef USE_ADVANCED_ITEMS
 		memset( client->inventory, 0, sizeof( client->inventory ) );
+		memset( client->ps.powerTimes, 0, sizeof ( client->ps.powerTimes ) );
+#else
+		memset( client->ps.powerups, 0, sizeof ( client->ps.powerups ) );
 #endif
 	}
 	SetClientViewAngle( ent, client->ps.viewangles );
@@ -1862,6 +1868,29 @@ gentity_t *ThrowWeapon( gentity_t *ent );
 
 #ifdef USE_FLAG_DROP
 void Cmd_DropFlag_f(gentity_t *ent) {
+#ifdef USE_ADVANCED_ITEMS
+  if(ent->client->inventory[PW_REDFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->inventory[PW_BLUEFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+  } else if(ent->client->inventory[PW_GOLDFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  } else if (ent->client->inventory[PW_GREENFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_GREENFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+#endif
+  } else if (ent->client->inventory[PW_NEUTRALFLAG]) {
+    dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+  }
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+  ent->client->inventory[PW_GREENFLAG] =
+  ent->client->inventory[PW_GOLDFLAG] =
+#endif
+  ent->client->inventory[PW_REDFLAG] =
+  ent->client->inventory[PW_BLUEFLAG] =
+  ent->client->inventory[PW_NEUTRALFLAG] = 0;
+
+#else
   if(ent->client->ps.powerups[PW_REDFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   } else if (ent->client->ps.powerups[PW_BLUEFLAG]) {
@@ -1871,14 +1900,18 @@ void Cmd_DropFlag_f(gentity_t *ent) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   } else if (ent->client->ps.powerups[PW_GREENFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_GREENFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
-
 #endif
   } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
     dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
   }
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+  ent->client->ps.powerups[PW_GREENFLAG] =
+  ent->client->ps.powerups[PW_GOLDFLAG] =
+#endif
   ent->client->ps.powerups[PW_REDFLAG] =
   ent->client->ps.powerups[PW_BLUEFLAG] =
   ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
+#endif
 }
 #endif
 
@@ -1916,8 +1949,24 @@ void Cmd_DropPowerup_f(gentity_t *ent) {
   {
     gentity_t	*drop;
     int i;
+#ifdef USE_ADVANCED_ITEMS
+    for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+      if ( ent->client->inventory[ i ] > level.time ) {
+        drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+        // decide how many seconds it has left
+        drop->count = ( ent->client->inventory[i] - level.time ) / 1000;
+        if ( drop->count < 1 ) {
+          drop->count = 1;
+        }
+        // for pickup prediction
+        drop->s.time2 = drop->count;
+        ent->client->inventory[i] = 0;
+        return;
+      }
+    }
+#else
     for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
-      if ( ent->client->ps.powerups[i ] > level.time ) {
+      if ( ent->client->ps.powerups[ i ] > level.time ) {
         drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
         // decide how many seconds it has left
         drop->count = ( ent->client->ps.powerups[i] - level.time ) / 1000;
@@ -1930,6 +1979,7 @@ void Cmd_DropPowerup_f(gentity_t *ent) {
         return;
       }
     }
+#endif
   }
 }
 #endif
@@ -1964,6 +2014,16 @@ void Cmd_DropAmmo_f(gentity_t *ent) {
   // drop ammo for current weapon, total / default pack size
   gitem_t *item;
   int i = ent->s.weapon;
+#ifdef USE_ADVANCED_WEAPONS
+	if(ent->client->classAmmo[i] == INFINITE)
+		return;
+  item = BG_FindItemForAmmo(i);
+  if(floor(ent->client->classAmmo[i] / item->quantity) > 1) {
+    dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    ent->client->classAmmo[i] -= item->quantity;
+    return;
+  }
+#else
 	if(ent->client->ps.ammo[i] == INFINITE)
 		return;
   item = BG_FindItemForAmmo(i);
@@ -1972,6 +2032,7 @@ void Cmd_DropAmmo_f(gentity_t *ent) {
     ent->client->ps.ammo[i] -= item->quantity;
     return;
   }
+#endif
 }
 #endif
 
@@ -2014,6 +2075,33 @@ void Cmd_Drop_f( gentity_t *ent ) {
     ThrowWeapon( ent );
 
 #ifdef USE_FLAG_DROP
+#ifdef USE_ADVANCED_ITEMS
+  if((g_dropWeapon.integer & 2)
+    && (ent->client->inventory[PW_REDFLAG]
+      || ent->client->inventory[PW_BLUEFLAG]
+      || ent->client->inventory[PW_NEUTRALFLAG])) {
+    if(ent->client->inventory[PW_REDFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_REDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->inventory[PW_BLUEFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_BLUEFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->inventory[PW_NEUTRALFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    }
+#ifdef USE_ADVANCED_GAMES
+		else if (ent->client->inventory[PW_GREENFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_GREENFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->inventory[PW_GOLDFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    }
+    ent->client->inventory[PW_GREENFLAG] =
+    ent->client->inventory[PW_GREENFLAG] =
+#endif
+    ent->client->inventory[PW_REDFLAG] =
+    ent->client->inventory[PW_BLUEFLAG] =
+    ent->client->inventory[PW_NEUTRALFLAG] = 0;
+    return;
+  }
+#else
   if((g_dropWeapon.integer & 2)
     && (ent->client->ps.powerups[PW_REDFLAG]
       || ent->client->ps.powerups[PW_BLUEFLAG]
@@ -2025,12 +2113,23 @@ void Cmd_Drop_f( gentity_t *ent ) {
     } else if (ent->client->ps.powerups[PW_NEUTRALFLAG]) {
       dropWeapon( ent, BG_FindItemForPowerup(PW_NEUTRALFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
     }
+#ifdef USE_ADVANCED_GAMES
+		else if (ent->client->ps.powerups[PW_GREENFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_GREENFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    } else if (ent->client->ps.powerups[PW_GOLDFLAG]) {
+      dropWeapon( ent, BG_FindItemForPowerup(PW_GOLDFLAG), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+    }
+    ent->client->ps.powerups[PW_GREENFLAG] =
+    ent->client->ps.powerups[PW_GREENFLAG] =
+#endif
     ent->client->ps.powerups[PW_REDFLAG] =
     ent->client->ps.powerups[PW_BLUEFLAG] =
     ent->client->ps.powerups[PW_NEUTRALFLAG] = 0;
     return;
   }
 #endif
+#endif
+
 #ifdef USE_RUNES
   if((g_dropWeapon.integer & 8)) {
 		int i;
@@ -2055,6 +2154,22 @@ void Cmd_Drop_f( gentity_t *ent ) {
 #endif
     {
       int i;
+#ifdef USE_ADVANCED_ITEMS
+      for ( i = 1 ; i < PW_NUM_POWERUPS ; i++ ) {
+        if ( ent->client->inventory[i ] > level.time ) {
+          drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+          // decide how many seconds it has left
+          drop->count = ( ent->client->inventory[i] - level.time ) / 1000;
+          if ( drop->count < 1 ) {
+            drop->count = 1;
+          }
+          // for pickup prediction
+          drop->s.time2 = drop->count;
+          ent->client->inventory[i] = 0;
+          return;
+        }
+      }
+#else
       for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
         if ( ent->client->ps.powerups[i ] > level.time ) {
           drop = dropWeapon( ent, BG_FindItemForPowerup( i ), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
@@ -2069,6 +2184,7 @@ void Cmd_Drop_f( gentity_t *ent ) {
           return;
         }
       }
+#endif
     }
   }
 #endif
@@ -2099,6 +2215,20 @@ void Cmd_Drop_f( gentity_t *ent ) {
   if(g_dropWeapon.integer & 32) {
     gitem_t *item;
     int i = ent->s.weapon;
+#ifdef USE_ADVANCED_WEAPONS
+		if(ent->client->classAmmo[i] != -1 && ent->client->classAmmo[i] != INFINITE) {
+			item = BG_FindItemForAmmo(i);
+			if(floor(ent->client->classAmmo[i] / item->quantity) > 0) {
+				dropWeapon( ent, item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+				ent->client->classAmmo[i] -= item->quantity;
+				if(ent->client->classAmmo[i] == 0) {
+					G_AddEvent( ent, EV_NOAMMO, 0 );
+					ent->client->ps.weaponTime += 500;
+				}
+				return;
+			}
+		}
+#else
 		if(ent->client->ps.ammo[i] != -1 && ent->client->ps.ammo[i] != INFINITE) {
 			item = BG_FindItemForAmmo(i);
 			if(floor(ent->client->ps.ammo[i] / item->quantity) > 0) {
@@ -2111,6 +2241,7 @@ void Cmd_Drop_f( gentity_t *ent ) {
 				return;
 			}
 		}
+#endif
   }
 #endif
   // TODO: fix weapon switch animation

@@ -1340,8 +1340,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 
 				case GTS_RED_TAKEN: // CTF: red team took blue flag, 1FCTF: blue team took the neutral flag
 					// if this player picked up the flag then a sound is played in CG_CheckLocalSounds
+#ifdef USE_ADVANCED_ITEMS
+					if (cg.inventory[PW_BLUEFLAG] || cg.inventory[PW_NEUTRALFLAG]) {
+					}
+#else
 					if (cg.snap->ps.powerups[PW_BLUEFLAG] || cg.snap->ps.powerups[PW_NEUTRALFLAG]) {
 					}
+#endif
 					else {
 						if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE) {
 #ifdef MISSIONPACK
@@ -1363,8 +1368,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 					break;
 				case GTS_BLUE_TAKEN: // CTF: blue team took the red flag, 1FCTF red team took the neutral flag
 					// if this player picked up the flag then a sound is played in CG_CheckLocalSounds
+#ifdef USE_ADVANCED_ITEMS
+					if (cg.inventory[PW_REDFLAG] || cg.inventory[PW_NEUTRALFLAG]) {
+					}
+#else
 					if (cg.snap->ps.powerups[PW_REDFLAG] || cg.snap->ps.powerups[PW_NEUTRALFLAG]) {
 					}
+#endif
 					else {
 						if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED) {
 #ifdef MISSIONPACK

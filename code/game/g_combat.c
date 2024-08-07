@@ -105,7 +105,17 @@ void TossClientItems( gentity_t *self ) {
 	}
 
 	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
+#ifdef USE_ADVANCED_WEAPONS
+		self->client->classAmmo[ weapon ]
+#ifdef USE_WEAPON_VARS
+		&& self->client->classAmmo[ weapon ] != INFINITE
+#endif
+#else
 		self->client->ps.ammo[ weapon ]
+#ifdef USE_WEAPON_VARS
+		&& self->client->ps.ammo[ weapon ] != INFINITE
+#endif
+#endif
 #ifdef USE_TRINITY
     // don't drop anything in instagib mode
     && !g_unholyTrinity.integer
@@ -125,9 +135,6 @@ void TossClientItems( gentity_t *self ) {
 #ifdef USE_PORTALS
 		// don't drop portal guns
 		&& (!wp_portalEnable.integer || weapon != WP_BFG)
-#endif
-#ifdef USE_WEAPON_VARS
-		&& self->client->ps.ammo[ weapon ] != INFINITE
 #endif
 #ifdef USE_GRAPPLE
 		&& weapon != WP_GRAPPLING_HOOK 
@@ -165,14 +172,24 @@ void TossClientItems( gentity_t *self ) {
 	if ( g_gametype.integer != GT_TEAM ) {
 		angle = 45;
 		for ( i = 1 ; i < MAX_POWERUPS ; i++ ) {
-			if ( self->client->ps.powerups[ i ] > level.time ) {
+			if ( 
+#ifdef USE_ADVANCED_ITEMS
+				self->client->inventory[ i ] > level.time 
+#else
+				self->client->ps.powerups[ i ] > level.time 
+#endif
+			) {
 				item = BG_FindItemForPowerup( i );
 				if ( !item ) {
 					continue;
 				}
 				drop = Drop_Item( self, item, angle );
 				// decide how many seconds it has left
+#ifdef USE_ADVANCED_ITEMS
+				drop->count = ( self->client->inventory[ i ] - level.time ) / 1000;
+#else
 				drop->count = ( self->client->ps.powerups[ i ] - level.time ) / 1000;
+#endif
 				if ( drop->count < 1 ) {
 					drop->count = 1;
 				}
@@ -455,9 +472,17 @@ void CheckAlmostCapture( gentity_t *self, gentity_t *attacker ) {
 	char		*classname;
 
 	// if this player was carrying a flag
-	if ( self->client->ps.powerups[PW_REDFLAG] ||
+	if ( 
+#ifdef USE_ADVANCED_ITEMS
+		self->client->inventory[PW_REDFLAG] ||
+		self->client->inventory[PW_BLUEFLAG] ||
+		self->client->inventory[PW_NEUTRALFLAG] 
+#else
+		self->client->ps.powerups[PW_REDFLAG] ||
 		self->client->ps.powerups[PW_BLUEFLAG] ||
-		self->client->ps.powerups[PW_NEUTRALFLAG] ) {
+		self->client->ps.powerups[PW_NEUTRALFLAG] 
+#endif
+	) {
 		// get the goal flag this player should have been going for
 		if ( g_gametype.integer == GT_CTF ) {
 			if ( self->client->sess.sessionTeam == TEAM_BLUE ) {
@@ -881,6 +906,26 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			self->client->ps.powerups[PW_NEUTRALFLAG] = 0;
 		} else 
 #endif
+#ifdef USE_ADVANCED_ITEMS
+		if ( self->client->inventory[PW_REDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_RED );
+			self->client->inventory[PW_REDFLAG] = 0;
+		}
+		else if ( self->client->inventory[PW_BLUEFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_BLUE );
+			self->client->inventory[PW_BLUEFLAG] = 0;
+		}
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		else if ( self->client->inventory[PW_GOLDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GOLD );
+			self->client->inventory[PW_GOLDFLAG] = 0;
+		}
+		else if ( self->client->inventory[PW_GREENFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GREEN );
+			self->client->inventory[PW_GREENFLAG] = 0;
+		}
+#endif
+#else
 		if ( self->client->ps.powerups[PW_REDFLAG] ) {		// only happens in standard CTF
 			Team_ReturnFlag( TEAM_RED );
 			self->client->ps.powerups[PW_REDFLAG] = 0;
@@ -899,6 +944,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			self->client->ps.powerups[PW_GREENFLAG] = 0;
 		}
 #endif
+#endif
 	}
 
 	// if client is in a nodrop area, don't drop anything (but return CTF flags!)
@@ -907,6 +953,25 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		TossClientItems( self );
 	}
 	else {
+#ifdef USE_ADVANCED_ITEMS
+		if ( self->client->inventory[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
+			Team_ReturnFlag( TEAM_FREE );
+		}
+		else if ( self->client->inventory[PW_REDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_RED );
+		}
+		else if ( self->client->inventory[PW_BLUEFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_BLUE );
+		}
+#if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
+		else if ( self->client->inventory[PW_GOLDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GOLD );
+		}
+		else if ( self->client->inventory[PW_GREENFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GREEN );
+		}
+#endif
+#else
 		if ( self->client->ps.powerups[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
 		}
@@ -923,7 +988,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		else if ( self->client->ps.powerups[PW_GREENFLAG] ) {	// only happens in standard CTF
 			Team_ReturnFlag( TEAM_GREEN );
 		}
-
+#endif
 #endif
 	}
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
@@ -978,10 +1043,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	self->client->respawnTime = level.time + 1700;
 
 	// remove powerups
-	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
 #ifdef USE_ADVANCED_ITEMS
 	memset( self->client->inventory, 0, sizeof( self->client->inventory ) );
 	memset( self->client->inventoryModified, 1, sizeof( self->client->inventoryModified ) );
+	memset( self->client->ps.powerTimes, 0, sizeof(self->client->ps.powerTimes) );
+#else
+	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
 #endif
 
 #ifdef USE_PORTALS

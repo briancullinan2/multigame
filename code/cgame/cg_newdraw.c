@@ -238,13 +238,21 @@ static void CG_DrawPlayerAmmoValue(rectDef_t *rect, float scale, vec4_t color, q
 	char	num[16];
 	int value;
 	centity_t	*cent;
+#ifndef USE_ADVANCED_WEAPONS
 	playerState_t	*ps;
+#endif
 
 	cent = &cg_entities[cg.snap->ps.clientNum];
+#ifndef USE_ADVANCED_WEAPONS
 	ps = &cg.snap->ps;
+#endif
 
 	if ( cent->currentState.weapon ) {
-		value = ps->ammo[cent->currentState.weapon % WP_MAX_WEAPONS];
+#ifdef USE_ADVANCED_WEAPONS
+		value = cg.classAmmo[cent->currentState.weapon];
+#else
+		value = ps->ammo[cent->currentState.weapon];
+#endif
 		if ( value > -1 && value != INFINITE ) {
 			if (shader) {
 		    trap_R_SetColor( color );
@@ -893,8 +901,8 @@ static void CG_DrawTeamColor(rectDef_t *rect, vec4_t color) {
 
 static void CG_DrawAreaPowerUp(rectDef_t *rect, int align, float special, float scale, vec4_t color) {
 	char num[16];
-	int		sorted[MAX_POWERUPS];
-	int		sortedTime[MAX_POWERUPS];
+	int		sorted[PW_NUM_POWERUPS];
+	int		sortedTime[PW_NUM_POWERUPS];
 	int		i, j, k;
 	int		active;
 	playerState_t	*ps;
@@ -918,11 +926,18 @@ static void CG_DrawAreaPowerUp(rectDef_t *rect, int align, float special, float 
 
 	// sort the list by time remaining
 	active = 0;
-	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+#ifdef USE_ADVANCED_ITEMS
+		if(!cg.inventory[i]) {
+			continue;
+		}
+		t = cg.powerTimes[ i ] - cg.time;
+#else
 		if ( !ps->powerups[ i ] ) {
 			continue;
 		}
 		t = ps->powerups[ i ] - cg.time;
+#endif
 		// ZOID--don't draw if the power up has unlimited time (999 seconds)
 		// This is true of the CTF flags
 		if ( t <= 0 || t >= 999000) {
@@ -974,7 +989,11 @@ static void CG_DrawAreaPowerUp(rectDef_t *rect, int align, float special, float 
 		item = BG_FindItemForPowerup( sorted[i] );
 
 		if (item) {
+#ifdef USE_ADVANCED_ITEMS
+			t = cg.inventory[ sorted[i] ];
+#else
 			t = ps->powerups[ sorted[i] ];
+#endif
 			if ( t - cg.time >= POWERUP_BLINKS * POWERUP_BLINK_TIME ) {
 				trap_R_SetColor( NULL );
 			} else {
@@ -1020,7 +1039,11 @@ float CG_GetValue(int ownerDraw) {
     break;
   case CG_PLAYER_AMMO_VALUE:
 		if ( cent->currentState.weapon ) {
-		  return ps->ammo[cent->currentState.weapon % WP_MAX_WEAPONS];
+#ifdef USE_ADVANCED_WEAPONS
+		  return cg.classAmmo[cent->currentState.weapon];
+#else
+		  return ps->ammo[cent->currentState.weapon];
+#endif
 		}
     break;
   case CG_PLAYER_SCORE:
@@ -1196,9 +1219,23 @@ qboolean CG_OwnerDrawVisible(int flags) {
 	}
 
 	if (flags & CG_SHOW_IF_PLAYER_HAS_FLAG) {
-		if (cg.snap->ps.powerups[PW_REDFLAG] || cg.snap->ps.powerups[PW_BLUEFLAG] || cg.snap->ps.powerups[PW_NEUTRALFLAG]) {
+#ifdef USE_ADVANCED_ITEMS
+		if (cg.inventory[PW_REDFLAG] || cg.inventory[PW_BLUEFLAG] || cg.inventory[PW_NEUTRALFLAG]
+#ifdef USE_ADVANCED_GAMES
+			|| cg.inventory[PW_GREENFLAG] || cg.inventory[PW_GOLDFLAG]
+#endif
+		) {
 			return qtrue;
 		}
+#else
+		if (cg.snap->ps.powerups[PW_REDFLAG] || cg.snap->ps.powerups[PW_BLUEFLAG] || cg.snap->ps.powerups[PW_NEUTRALFLAG]
+#ifdef USE_ADVANCED_GAMES
+			|| cg.snap->ps.powerups[PW_GREENFLAG] || cg.snap->ps.powerups[PW_GOLDFLAG]
+#endif
+		) {
+			return qtrue;
+		}
+#endif
 	}
 	return qfalse;
 }
@@ -1207,6 +1244,22 @@ qboolean CG_OwnerDrawVisible(int flags) {
 
 static void CG_DrawPlayerHasFlag(rectDef_t *rect, qboolean force2D) {
 	int adj = (force2D) ? 0 : 2;
+#ifdef USE_ADVANCED_ITEMS
+	if( cg.inventory[PW_REDFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_RED, force2D);
+	} else if( cg.inventory[PW_BLUEFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_BLUE, force2D);
+	} else if( cg.inventory[PW_NEUTRALFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_FREE, force2D);
+	}
+#ifdef USE_ADVANCED_GAMES
+	else if( cg.inventory[PW_GREENFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_GREEN, force2D);
+	} else if( cg.inventory[PW_GOLDFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_GOLD, force2D);
+	}
+#endif
+#else
 	if( cg.predictedPlayerState.powerups[PW_REDFLAG] ) {
   	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_RED, force2D);
 	} else if( cg.predictedPlayerState.powerups[PW_BLUEFLAG] ) {
@@ -1214,6 +1267,14 @@ static void CG_DrawPlayerHasFlag(rectDef_t *rect, qboolean force2D) {
 	} else if( cg.predictedPlayerState.powerups[PW_NEUTRALFLAG] ) {
   	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_FREE, force2D);
 	}
+#ifdef USE_ADVANCED_GAMES
+	else if( cg.predictedPlayerState.powerups[PW_GREENFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_GREEN, force2D);
+	} else if( cg.predictedPlayerState.powerups[PW_GOLDFLAG] ) {
+  	CG_DrawFlagModel( rect->x + adj, rect->y + adj, rect->w - adj, rect->h - adj, TEAM_GOLD, force2D);
+	}
+#endif
+#endif
 }
 
 static void CG_DrawAreaSystemChat(rectDef_t *rect, float scale, vec4_t color, qhandle_t shader) {

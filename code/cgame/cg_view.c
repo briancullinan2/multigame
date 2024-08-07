@@ -838,8 +838,17 @@ static void CG_PowerupTimerSounds( void ) {
 	int		t;
 
 	// powerup timers going away
-	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
+#ifdef USE_ADVANCED_ITEMS
+	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) 
+#else
+	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) 
+#endif
+	{
+#ifdef USE_ADVANCED_ITEMS
+		t = cg.inventory[i];
+#else
 		t = cg.snap->ps.powerups[i];
+#endif
 		if ( t <= cg.time ) {
 			continue;
 		}

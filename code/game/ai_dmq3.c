@@ -1754,7 +1754,7 @@ BotUpdateInventory
 void BotUpdateInventory(bot_state_t *bs) {
 	int oldinventory[MAX_ITEMS];
 #ifdef USE_ADVANCED_WEAPONS
-	//int weaponClass
+	//int weaponClass;
 	int i;
 #endif
 
@@ -1764,6 +1764,7 @@ void BotUpdateInventory(bot_state_t *bs) {
 	//weapons
 #ifdef USE_ADVANCED_WEAPONS
 	//weaponClass = bs->cur_ps.stats[STAT_WEAPONS_UPDATE];
+	
 	for(i = 0; i < WP_MAX_WEAPONS; i++) {
 		if(bs->cur_ps.stats[STAT_WEAPONS_AVAILABLE] & (1 << i)) {
 			bs->inventory[INVENTORY_GAUNTLET + i] = 1;
@@ -1771,7 +1772,7 @@ void BotUpdateInventory(bot_state_t *bs) {
 			bs->inventory[INVENTORY_GAUNTLET + i] = 0;
 		}
 
-		bs->inventory[INVENTORY_SHELLS + i] = bs->cur_ps.ammo[i];
+		bs->inventory[INVENTORY_SHELLS + i] = bs->cur_ps.classAmmo[i];
 	}
 #else
 	bs->inventory[INVENTORY_GAUNTLET] = (bs->cur_ps.stats[STAT_WEAPONS] & (1 << WP_GAUNTLET)) != 0;
@@ -1868,8 +1869,15 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_AMMOREGEN] = bs->cur_ps.stats[STAT_PERSISTANT_POWERUP] == MODELINDEX_AMMOREGEN;
 #endif
 #endif
+#ifdef USE_ADVANCED_ITEMS
+	if(bs->cur_ps.stats[STAT_HOLDABLE_UPDATE] == (int)floor(PW_REDFLAG / PW_MAX_POWERUPS)) {
+		bs->inventory[INVENTORY_REDFLAG] = bs->cur_ps.stats[STAT_HOLDABLE_AVAILABLE] & (1 << (PW_REDFLAG % PW_MAX_POWERUPS));
+		bs->inventory[INVENTORY_BLUEFLAG] = bs->cur_ps.stats[STAT_HOLDABLE_AVAILABLE] & (1 << (PW_BLUEFLAG % PW_MAX_POWERUPS));
+	}
+#else
 	bs->inventory[INVENTORY_REDFLAG] = bs->cur_ps.powerups[PW_REDFLAG] != 0;
 	bs->inventory[INVENTORY_BLUEFLAG] = bs->cur_ps.powerups[PW_BLUEFLAG] != 0;
+#endif
 #ifdef MISSIONPACK
 	bs->inventory[INVENTORY_NEUTRALFLAG] = bs->cur_ps.powerups[PW_NEUTRALFLAG] != 0;
 	if (BotTeam(bs) == TEAM_RED) {
@@ -3764,7 +3772,7 @@ void BotCheckAttack(bot_state_t *bs) {
 	}
 
 	weapon = bs->cur_ps.weapon;
-	if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG && !bs->cur_ps.ammo[ weapon ] ) {
+	if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG && !bs->cur_ps.classAmmo[ weapon ] ) {
 		return;
 	}
 

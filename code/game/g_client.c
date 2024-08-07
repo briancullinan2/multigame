@@ -1384,7 +1384,7 @@ if(g_hotRockets.integer) {
 
 #ifdef USE_ADVANCED_WEAPONS
 	for(i = 0; i < WP_MAX_CLASSES; i++) {
-		client->weaponsModified[WP_MAX_CLASSES] = qtrue;
+		client->weaponsModified[i] = qtrue;
 	}
 #endif
 

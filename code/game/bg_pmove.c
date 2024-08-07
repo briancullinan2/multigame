@@ -1966,16 +1966,27 @@ static void PM_Weapon( void ) {
 	pm->ps->weaponstate = WEAPON_FIRING;
 
 	// check for out of ammo
-	if ( ! pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] ) {
+#ifdef USE_ADVANCED_WEAPONS
+	if ( ! pm->classAmmo[ pm->ps->weapon ] ) 
+#else
+	if ( ! pm->ps->ammo[ pm->ps->weapon ] ) 
+#endif
+	{
 		PM_AddEvent( EV_NOAMMO );
 		pm->ps->weaponTime += 500;
 		return;
 	}
 
 	// take an ammo away if not infinite
-	if ( pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] != -1 && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ] != INFINITE ) {
-		pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ]--;
+#ifdef USE_ADVANCED_WEAPONS
+	if ( pm->classAmmo[ pm->ps->weapon ] != -1 && pm->classAmmo[ pm->ps->weapon ] != INFINITE ) {
+		pm->classAmmo[ pm->ps->weapon ]--;
 	}
+#else
+	if ( pm->ps->ammo[ pm->ps->weapon ] != -1 && pm->ps->ammo[ pm->ps->weapon ] != INFINITE ) {
+		pm->ps->ammo[ pm->ps->weapon ]--;
+	}
+#endif
 
 	// fire weapon
 #ifdef USE_ALT_FIRE
@@ -2461,7 +2472,12 @@ void PmoveVehicle (pmove_t *pmove) {
 
 	// set the firing flag for continuous beam weapons
 	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] ) {
+#ifdef USE_ADVANCED_WEAPONS
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->classAmmo[ pm->ps->weapon ] 
+#else
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ] 
+#endif
+	) {
 		pm->ps->eFlags |= EF_FIRING;
 	} else {
 		pm->ps->eFlags &= ~EF_FIRING;
@@ -2840,7 +2856,11 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// set the firing flag for continuous beam weapons
 	if ( !(pm->ps->pm_flags & PMF_RESPAWNED) && pm->ps->pm_type != PM_INTERMISSION && pm->ps->pm_type != PM_NOCLIP
-		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon % WP_MAX_WEAPONS ]
+#ifdef USE_ADVANCED_WEAPONS
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->classAmmo[ pm->ps->weapon ]
+#else
+		&& ( pm->cmd.buttons & BUTTON_ATTACK ) && pm->ps->ammo[ pm->ps->weapon ]
+#endif
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
     && pm->ps->pm_type != PM_FROZEN
 #endif

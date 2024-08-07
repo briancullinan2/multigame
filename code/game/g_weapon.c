@@ -1000,15 +1000,24 @@ gentity_t *ThrowWeapon( gentity_t *ent ) {
 #endif
 		|| ( ucmd->buttons & BUTTON_ATTACK )
 		// TODO: just make it disappear in mode where it affects speed
+#ifdef USE_ADVANCED_WEAPONS
+		|| client->classAmmo[client->ps.weapon] == INFINITE
+#else
 		|| client->ps.ammo[client->ps.weapon] == INFINITE
+#endif
 		|| client->ps.weapon == WP_NONE)
 		return NULL;
 
 
 	xr_item = BG_FindItemForWeapon( client->ps.weapon );
 
+#ifdef USE_ADVANCED_WEAPONS
+	amount = client->classAmmo[ client->ps.weapon ]; // XRAY save amount
+	client->ps.classAmmo[ client->ps.weapon % WP_MAX_WEAPONS ] = 0; // assume we're showing the same class currently?
+#else
 	amount = client->ps.ammo[ client->ps.weapon ]; // XRAY save amount
 	client->ps.ammo[ client->ps.weapon ] = 0;
+#endif
 
 #ifdef USE_ADVANCED_WEAPONS
 	client->classWeapons[client->ps.weapon] = 0;
