@@ -296,7 +296,7 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 #ifdef USE_ADVANCED_ITEMS
 	{
-		other->client->inventory[ent->item->giTag] = 1;
+		other->client->inventory[ent->item->giTag] = level.time;
 		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
 	}

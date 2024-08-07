@@ -266,7 +266,7 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 
 #ifdef USE_ADVANCED_ITEMS
 		//if(ps->stats[STAT_HOLDABLE_UPDATE] != ops->stats[STAT_HOLDABLE_UPDATE]
-			//|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) 
+		//	|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) 
 		{
 			int j;
 			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
@@ -274,13 +274,28 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 			for(j = 0; j < PW_MAX_POWERUPS; j++) {
 				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
 					//CG_Printf("1");
-					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 1;
+					//cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 1;
+					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = ps->powerTimes[j];
 				} else {
 					//CG_Printf("0");
 					cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 0;
 				}
 			}
 			//CG_Printf("\n");
+			//memcpy(&, sizeof(int) * PW_MAX_POWERUPS);
+			/*CG_Printf("items %i: %i %i %i %i %i %i %i %i %i %i\n", 
+				prevItemClass,
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 0],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 1],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 2],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 3],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 4],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 5],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 6],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 7],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 8],
+				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 9]
+			);*/
 		}
 
 #endif

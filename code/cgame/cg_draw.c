@@ -1479,17 +1479,18 @@ CG_DrawPowerups
 ================
 */
 static float CG_DrawPowerups( float y ) {
-	int		sorted[MAX_POWERUPS];
-	int		sortedTime[MAX_POWERUPS];
+	int		sorted[PW_NUM_POWERUPS];
+	int		sortedTime[PW_NUM_POWERUPS];
 	int		i, j, k;
 	int		active;
 	playerState_t	*ps;
 	int		t;
 	gitem_t	*item;
-	int		x;
+	int		x, yStart;
 	int		color;
 	float	size;
 	float	f;
+	qboolean yMin = qfalse;
 	static const float colors[2][4] = { 
 		{ 0.2f, 1.0f, 0.2f, 1.0f },
 		{ 1.0f, 0.2f, 0.2f, 1.0f } 
@@ -1526,6 +1527,7 @@ static float CG_DrawPowerups( float y ) {
 
 	// draw the icons and timers
 	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;
+	yStart = y;
 	for ( i = 0 ; i < active ; i++ ) {
 		item = BG_FindItemForPowerup( sorted[i] );
 
@@ -1534,6 +1536,11 @@ static float CG_DrawPowerups( float y ) {
 			color = 1;
 
 			y -= ICON_SIZE;
+			if(y < 50) {
+				yMin = qtrue;
+				y = yStart;
+				x -= ICON_SIZE + CHAR_WIDTH * 2;
+			}
 
 			if(sortedTime[ i ] != 1) {
 				trap_R_SetColor( colors[color] );
@@ -1564,7 +1571,7 @@ static float CG_DrawPowerups( float y ) {
 				size = ICON_SIZE;
 			}
 
-			CG_DrawPic( cgs.screenXmax + 1 - size, y + ICON_SIZE / 2 - size / 2, 
+			CG_DrawPic( x + CHAR_WIDTH * 2, y + ICON_SIZE / 2 - size / 2, 
 				size, size, trap_R_RegisterShader( item->icon ) );
 		} // if ( item )
 	}
@@ -1632,7 +1639,7 @@ static float CG_DrawPowerups( float y ) {
 		active++;
 	}
 
-#ifdef USE_RUNES
+#if 0 //def USE_RUNES
 	// always draw rune first if there is one
 	x = cgs.screenXmax + 1 - ICON_SIZE - CHAR_WIDTH * 2;
 	if (cg_entities[cg.clientNum].items[cg_entities[cg.clientNum].rune])

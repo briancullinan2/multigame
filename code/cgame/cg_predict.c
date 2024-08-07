@@ -833,18 +833,23 @@ static void CG_CheckTimers( void ) {
 	// turn off any expired powerups
 #ifdef USE_ADVANCED_ITEMS
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
+		gitem_t *item;
 		if ( !cg.inventory[ i ] )
 			continue;
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-      if(i == PW_FROZEN) {
-        continue;      
-      }
+		if(i == PW_FROZEN) {
+			continue;
+		}
 #endif
-#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
-      if(i >= RUNE_STRENGTH && i <= RUNE_LITHIUM) {
-        continue;      
-      }
+#if defined(USE_RUNES)
+		if(i >= RUNE_STRENGTH && i <= RUNE_LITHIUM) {
+			continue;
+		}
 #endif
+		item = BG_FindItemForPowerup(i);
+		if(item->giType == IT_HOLDABLE || item->giType == IT_PERSISTANT_POWERUP) {
+			continue;
+		}
 		if ( cg.inventory[ i ] < cg.predictedPlayerState.commandTime ) {
 			cg.inventory[ i ] = 0;
 		}

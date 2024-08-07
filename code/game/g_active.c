@@ -1477,6 +1477,7 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 
 		if(i < 2 * PW_NUM_POWERUPS) {
+			memcpy(client->ps.powerTimes, &client->inventory[prevItemClass * PW_MAX_POWERUPS], sizeof(int) * PW_MAX_POWERUPS);
 			client->ps.stats[STAT_HOLDABLE_UPDATE] = prevItemClass;
 			client->ps.stats[STAT_HOLDABLE_AVAILABLE] = itemBits;
 			client->inventoryModified[prevItemClass] = qfalse;
@@ -2226,14 +2227,7 @@ void ClientEndFrame( gentity_t *ent ) {
 	client = ent->client;
 
 	// turn off any expired powerups
-#ifdef USE_ADVANCED_ITEMS
-	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
-		if ( client->inventory[ i ] < client->pers.cmd.serverTime ) {
-			client->inventory[ i ] = 0;
-			client->inventoryModified[(int)floor(i / PW_MAX_POWERUPS)] = qtrue;
-		}
-	}
-#else
+#ifndef USE_ADVANCED_ITEMS
 	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
 		if ( client->ps.powerups[ i ] < client->pers.cmd.serverTime ) {
 			client->ps.powerups[ i ] = 0;
