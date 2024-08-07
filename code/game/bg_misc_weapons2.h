@@ -16,7 +16,8 @@
 		IT_WEAPON,
 		WP_GAUNTLET2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/gauntlet/gauntlet.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_shotgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -32,7 +33,8 @@
 		IT_WEAPON,
 		WP_SHOTGUN2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/shotgun/shotgun.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_machinegun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -48,7 +50,8 @@
 		IT_WEAPON,
 		WP_MACHINEGUN2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/machinegun/machinegun.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_grenadelauncher (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -64,7 +67,8 @@
 		IT_WEAPON,
 		WP_GRENADE_LAUNCHER2,
 		/* precache */ "",
-		/* sounds */ "sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav"
+		/* sounds */ "sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav",
+		{"models/weapons3/grenadel/grenadel.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_rocketlauncher (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -80,7 +84,8 @@
 		IT_WEAPON,
 		WP_ROCKET_LAUNCHER2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/rocketl/rocketl.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_lightning (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -96,7 +101,8 @@
 		IT_WEAPON,
 		WP_LIGHTNING2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/lightning/lightning.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_railgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -112,7 +118,8 @@
 		IT_WEAPON,
 		WP_RAILGUN2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/railgun/railgun.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_plasmagun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -128,7 +135,8 @@
 		IT_WEAPON,
 		WP_PLASMAGUN2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/plasma/plasma.skin", NULL, NULL, NULL}
 	},
 
 	/*QUAKED weapon_oa_bfg (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -144,7 +152,8 @@
 		IT_WEAPON,
 		WP_BFG2,
 		/* precache */ "",
-		/* sounds */ ""
+		/* sounds */ "",
+		{"models/weapons3/bfg/bfg.skin", NULL, NULL, NULL}
 	},
 
 #if 0
