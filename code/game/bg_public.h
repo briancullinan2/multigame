@@ -496,6 +496,7 @@ typedef struct {
 	int			classAmmo[WP_NUM_WEAPONS];
 	int			classWeapons[WP_NUM_WEAPONS];
 	int     weaponClass;
+	qboolean classChange;
 #endif
 
 #ifdef USE_ADVANCED_ITEMS

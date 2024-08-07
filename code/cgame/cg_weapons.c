@@ -2122,11 +2122,11 @@ qboolean CG_WeaponSelectable( int i ) {
 		return qfalse;
 	}
 #ifdef USE_ADVANCED_WEAPONS
-	if ( !cg.classAmmo[WEAPON_CLASS + i] ) {
+	if ( !cg.classAmmo[weapon] ) {
 		//CG_Printf("no ammo\n");
 		return qfalse;
 	}
-	if ( !cg.classWeapons[ WEAPON_CLASS + i ] ) {
+	if ( !cg.classWeapons[ weapon ] ) {
 		//CG_Printf("no weapon\n");
 		return qfalse;
 	}
@@ -2284,7 +2284,6 @@ void NextClass( void ) {
 			cg.weaponClass++;
 			cg.weaponSelect = 0;
 			cg.weaponChange = 1;
-			trap_SendClientCommand( "nextclass" );
 		}
 		if(cg.weaponClass == floor(WP_NUM_WEAPONS / WP_MAX_WEAPONS)) {
 			cg.weaponClass = 0;
@@ -2299,6 +2298,8 @@ void NextClass( void ) {
 
 	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
 		cg.weaponSelect = original;
+	} else {
+		trap_SendClientCommand( va("nextclass %i %i", cg.weaponClass, cg.weaponSelect) );
 	}
 }
 
@@ -2330,7 +2331,6 @@ void PrevClass( void ) {
 			cg.weaponClass--;
 			cg.weaponSelect = WP_MAX_WEAPONS - 1;
 			cg.weaponChange = -1;
-			trap_SendClientCommand( "prevclass" );
 		}
 		if(cg.weaponClass == -1) {
 			cg.weaponClass = floor(WP_NUM_WEAPONS / WP_MAX_WEAPONS);
@@ -2344,6 +2344,8 @@ void PrevClass( void ) {
 	}
 	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
 		cg.weaponSelect = original;
+	} else {
+		trap_SendClientCommand( va("prevclass %i %i", cg.weaponClass, cg.weaponSelect) );
 	}
 }
 

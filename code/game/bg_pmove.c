@@ -1697,6 +1697,9 @@ static void PM_BeginWeaponChange( int weapon ) {
 #endif
 	pm->ps->weaponTime += 200;
 	PM_StartTorsoAnim( TORSO_DROP );
+#ifdef USE_ADVANCED_WEAPONS
+	pm->classChange = qfalse;
+#endif
 }
 
 
@@ -1708,13 +1711,18 @@ PM_FinishWeaponChange
 static void PM_FinishWeaponChange( void ) {
 	int		weapon;
 
+#ifdef USE_ADVANCED_WEAPONS
+	weapon = pm->cmd.weapon + pm->weaponClass * WP_MAX_WEAPONS;
+#else
 	weapon = pm->cmd.weapon;
+#endif
 	if ( weapon < WP_NONE || weapon >= WP_NUM_WEAPONS ) {
 		weapon = WP_NONE;
 	}
 
 #ifdef USE_ADVANCED_WEAPONS
 	if ( !( pm->classWeapons[weapon] ) ) {
+		Com_Printf("hit damnit: %i\n", weapon);
 		weapon = WP_NONE;
 	}
 #else
@@ -1723,11 +1731,9 @@ static void PM_FinishWeaponChange( void ) {
 	}
 #endif
 
-#ifdef USE_ADVANCED_WEAPONS
-	pm->ps->weapon = weapon + floor(pm->ps->weapon / WP_MAX_WEAPONS) * WP_MAX_WEAPONS; // keep weapon class from input
-	pm->weaponClass = floor(pm->ps->weapon / WP_MAX_WEAPONS);
-#else
 	pm->ps->weapon = weapon;
+#ifdef USE_ADVANCED_WEAPONS
+	pm->weaponClass = floor(pm->ps->weapon / WP_MAX_WEAPONS);
 #endif
 	pm->ps->weaponstate = WEAPON_RAISING;
 	pm->ps->eFlags &= ~EF_FIRING;
@@ -1889,7 +1895,10 @@ static void PM_Weapon( void ) {
 	// again if lowering or raising
 	if ( pm->ps->weaponTime <= 0 || pm->ps->weaponstate != WEAPON_FIRING ) {
 		if ( pm->ps->weapon % WP_MAX_WEAPONS != pm->cmd.weapon % WP_MAX_WEAPONS
-			|| pm->ps->weapon / WP_MAX_WEAPONS != pm->weaponClass ) {
+#ifdef USE_ADVANCED_WEAPONS
+			|| pm->classChange
+#endif
+		) {
 #ifdef USE_ADVANCED_WEAPONS
 			PM_BeginWeaponChange( pm->weaponClass * WP_MAX_WEAPONS + (pm->cmd.weapon % WP_MAX_WEAPONS) );
 #else

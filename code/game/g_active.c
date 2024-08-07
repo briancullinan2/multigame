@@ -1789,6 +1789,7 @@ client->ps.speed *= g_playerScale.value;
 	memcpy(pm.classWeapons, client->classWeapons, sizeof(client->classWeapons));
 	memcpy(pm.classAmmo, client->classAmmo, sizeof(client->classAmmo));
 	pm.weaponClass = client->weaponClass;
+	pm.classChange = client->classChange;
 #endif
 #ifdef USE_ADVANCED_ITEMS
 	memcpy(pm.inventory, client->inventory, sizeof(client->inventory));
@@ -1973,7 +1974,8 @@ client->ps.speed *= g_playerScale.value;
 	BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
 
 #ifdef USE_ADVANCED_WEAPONS
-	client->weaponClass = pm.weaponClass;
+	client->classChange = pm.classChange;
+	//client->weaponClass = pm.weaponClass;
 	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
 	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
 	if(client->classAmmo[client->ps.weapon] != pm.classAmmo[client->ps.weapon]) {

@@ -1144,7 +1144,7 @@ void CG_PredictPlayerState( void ) {
 	// prepare for pmove
 	cg_pmove.ps = &cg.predictedPlayerState;
 #ifdef USE_ADVANCED_WEAPONS
-	cg_pmove.weaponClass = (int)floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
+	cg_pmove.weaponClass = cg.weaponClass;
 	memcpy(cg_pmove.classWeapons, cg.classWeapons, sizeof(cg.classWeapons));
 	memcpy(cg_pmove.classAmmo, cg.classAmmo, sizeof(cg.classAmmo));
 #endif

@@ -2653,7 +2653,6 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 	int powerups = state->powerups & 0xFF;
 	//int powerups2 = state->powerups >> 8;
 
-
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
     if ( powerups == PW_FROZEN )
     {
@@ -2692,7 +2691,6 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 			ent->customShader = cgs.media.redKamikazeShader;
 		trap_R_AddRefEntityToScene( ent );
 	}
-
 
 	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM ) {
 		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(powerups-RUNE_STRENGTH)) ];

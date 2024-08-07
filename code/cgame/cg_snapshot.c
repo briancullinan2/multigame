@@ -237,7 +237,7 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 			int j;
 			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
 			//CG_Printf("weapons %i: ", ps->stats[STAT_WEAPONS_UPDATE]);
-			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+			for(j = 0; j < WP_MAX_WEAPONS && prevWeaponClass * WP_MAX_WEAPONS + j < WP_NUM_WEAPONS; j++) {
 				if(ps->stats[STAT_WEAPONS_AVAILABLE] & (1 << j)) {
 					//CG_Printf("1");
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 1;
@@ -245,9 +245,9 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 					//CG_Printf("0");
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
 				}
+				cg.classAmmo[prevWeaponClass * WP_MAX_WEAPONS + j] = ps->classAmmo[j];
 			}
 			//CG_Printf("\n");
-			memcpy(&cg.classAmmo[prevWeaponClass * WP_MAX_WEAPONS], ps->classAmmo, sizeof(int) * WP_MAX_WEAPONS);
 			/*CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
 				cg.weaponClass,
 				cg.snap->ps.classAmmo[0],
@@ -271,7 +271,7 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 			int j;
 			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
 			//CG_Printf("items %i: ", ps->stats[STAT_HOLDABLE_UPDATE]);
-			for(j = 0; j < PW_MAX_POWERUPS; j++) {
+			for(j = 0; j < PW_MAX_POWERUPS && prevItemClass * PW_MAX_POWERUPS + j < PW_NUM_POWERUPS; j++) {
 				if(ps->stats[STAT_HOLDABLE_AVAILABLE] & (1 << j)) {
 					//CG_Printf("1");
 					//cg.inventory[prevItemClass * PW_MAX_POWERUPS + j] = 1;
@@ -282,7 +282,6 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 				}
 			}
 			//CG_Printf("\n");
-			//memcpy(&, sizeof(int) * PW_MAX_POWERUPS);
 			/*CG_Printf("items %i: %i %i %i %i %i %i %i %i %i %i\n", 
 				prevItemClass,
 				cg.inventory[prevItemClass * PW_MAX_POWERUPS + 0],

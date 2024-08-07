@@ -2513,6 +2513,21 @@ void ClientCommand( int clientNum ) {
 
 #ifdef USE_ADVANCED_WEAPONS
 	// cycle classes just like we do with weapons but server side
+	if (Q_stricmp (cmd, "prevclass") == 0 || Q_stricmp (cmd, "nextclass") == 0) {
+		char		arg[MAX_TOKEN_CHARS];
+
+		if ( trap_Argc () < 2 ) {
+			return;
+		}
+
+		trap_Argv( 1, arg, sizeof( arg ) );
+		if(ent->client->weaponClass != atoi(arg)) {
+			ent->client->classChange = qtrue;
+			ent->client->weaponClass = atoi(arg);
+		}
+	} else
+
+#if 0
 	if (Q_stricmp (cmd, "prevclass") == 0) {
 		int i, j;
 		int prevClass = floor(ent->client->ps.weapon / WP_MAX_WEAPONS);
@@ -2530,8 +2545,10 @@ void ClientCommand( int clientNum ) {
 				break;
 			}
 		}
-		ent->s.weapon = ent->client->ps.weapon = prevClass * WP_MAX_WEAPONS + j;
-		ent->client->weaponClass = prevClass;
+		if(ent->client->weaponClass != prevClass) {
+			ent->client->classChange = qtrue;
+			ent->client->weaponClass = prevClass;
+		}
 	}
 	else if (Q_stricmp (cmd, "nextclass") == 0) {
 		int i, j;
@@ -2550,10 +2567,13 @@ void ClientCommand( int clientNum ) {
 				break;
 			}
 		}
-		ent->s.weapon = ent->client->ps.weapon = nextClass * WP_MAX_WEAPONS + j;
-		ent->client->weaponClass = nextClass;
+		if(ent->client->weaponClass != nextClass) {
+			ent->client->classChange = qtrue;
+			ent->client->weaponClass = nextClass;
+		}
 	}
 	else
+#endif
 #endif
 
 	if (Q_stricmp (cmd, "give") == 0)

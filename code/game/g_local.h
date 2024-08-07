@@ -427,6 +427,7 @@ struct gclient_s
 	qboolean weaponsModified[WP_MAX_CLASSES];
 	int weaponClass;
 	int lastItemTime2;
+	qboolean classChange;
 #endif
 
 #ifdef USE_ADVANCED_ITEMS
