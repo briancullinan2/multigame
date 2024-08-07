@@ -322,6 +322,7 @@ void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count )
 {
 #ifdef USE_ADVANCED_WEAPONS
 	ent->client->classWeapons[weapon] = 0;
+	ent->client->weaponsModified[(int)floor(weapon / WP_MAX_WEAPONS)] = qtrue;
 	ent->client->classAmmo[weapon] -= count;
 	if ( ent->client->classAmmo[weapon] < 0 ) {
 		ent->client->classAmmo[weapon] = 0;
@@ -339,6 +340,7 @@ void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count )
 {
 #ifdef USE_ADVANCED_WEAPONS
 	ent->client->classWeapons[weapon]++;
+	ent->client->weaponsModified[(int)floor(weapon / WP_MAX_WEAPONS)] = qtrue;
 	ent->client->classAmmo[weapon] += count;
 	if ( ent->client->classAmmo[weapon] > AMMO_HARD_LIMIT ) {
 		ent->client->classAmmo[weapon] = AMMO_HARD_LIMIT;
@@ -427,7 +429,8 @@ static int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 
 	// add the weapon
 #ifdef USE_ADVANCED_WEAPONS
-	other->client->classWeapons[other->client->weaponClass * WP_MAX_WEAPONS + (ent->item->giTag % WP_MAX_WEAPONS)]++;
+	other->client->classWeapons[ent->item->giTag]++;
+	other->client->weaponsModified[(int)floor(ent->item->giTag / WP_MAX_WEAPONS)] = qtrue;
 #else
 	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << ent->item->giTag );
 #endif

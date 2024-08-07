@@ -236,13 +236,17 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 
 			int j;
 			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
+			CG_Printf("weapons %i: ", ps->stats[STAT_WEAPONS_UPDATE]);
 			for(j = 0; j < WP_MAX_WEAPONS; j++) {
 				if(ps->stats[STAT_WEAPONS_AVAILABLE] & (1 << j)) {
+					CG_Printf("1");
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 1;
 				} else {
+					CG_Printf("0");
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
 				}
 			}
+			CG_Printf("\n");
 		}
 #endif
 

@@ -1382,32 +1382,32 @@ void ClientThink_real( gentity_t *ent ) {
 #ifdef USE_ADVANCED_WEAPONS
 	// update item classes but actually store them on the client
 	// TODO: use these techniques to improve weapon switching without delay
-	if(client->lastItemTime + 30 < level.time) {
+	if(client->lastItemTime2 + 30 < level.time) {
 		int i, j;
 		int itemBits;
 		qboolean hasItems = qfalse;
 		// TODO: find the next item in inventory and switch to that class for updates
-		int prevItemClass = client->ps.stats[STAT_WEAPONS_UPDATE];
+		int prevWeaponClass = client->ps.stats[STAT_WEAPONS_UPDATE];
 		for(i = 0; i < 2 * WP_NUM_WEAPONS; i++) {
-			prevItemClass++;
-			if(prevItemClass == WP_MAX_CLASSES) {
-				prevItemClass = 0;
+			prevWeaponClass++;
+			if(prevWeaponClass == WP_MAX_CLASSES) {
+				prevWeaponClass = 0;
 			}
-			//if(!client->inventoryModified[prevItemClass]) {
-			//	continue;
-			//}
+			if(!client->weaponsModified[prevWeaponClass]) {
+				continue;
+			}
 			itemBits = 0;
 			hasItems = qfalse;
 			for(j = 0; j < WP_MAX_WEAPONS; j++) {
-				//gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
+				//gitem_t *item = BG_FindItemForPowerup(prevWeaponClass * PW_MAX_POWERUPS + j);
 				//if(!item || !item->giTag) {
 				//	continue;
 				//}
-				if(prevItemClass * WP_MAX_WEAPONS + j >= WP_NUM_WEAPONS) {
+				if(prevWeaponClass * WP_MAX_WEAPONS + j >= WP_NUM_WEAPONS) {
 					continue;
 				}
 				hasItems = qtrue;
-				if(client->classWeapons[prevItemClass * WP_MAX_WEAPONS + j] > 0) {
+				if(client->classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] > 0) {
 					itemBits |= (1 << j);
 				}
 			}
@@ -1417,11 +1417,11 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 
 		if(i < 2 * WP_NUM_WEAPONS) {
-			client->ps.stats[STAT_WEAPONS_UPDATE] = prevItemClass;
+			client->ps.stats[STAT_WEAPONS_UPDATE] = prevWeaponClass;
 			client->ps.stats[STAT_WEAPONS_AVAILABLE] = itemBits;
-			client->inventoryModified[prevItemClass] = qfalse;
+			client->weaponsModified[prevWeaponClass] = qfalse;
 		}
-		client->lastItemTime = level.time;
+		client->lastItemTime2 = level.time;
 	}
 #endif
 
@@ -1772,6 +1772,7 @@ client->ps.speed *= g_playerScale.value;
 #endif
 #ifdef USE_ADVANCED_WEAPONS
 	memcpy(pm.classWeapons, client->classWeapons, sizeof(client->classWeapons));
+	pm.weaponClass = client->weaponClass;
 #endif
 #ifdef USE_ADVANCED_ITEMS
 	memcpy(pm.inventory, client->inventory, sizeof(client->inventory));

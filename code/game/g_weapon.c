@@ -1012,6 +1012,7 @@ gentity_t *ThrowWeapon( gentity_t *ent ) {
 
 #ifdef USE_ADVANCED_WEAPONS
 	client->classWeapons[client->ps.weapon] = 0;
+	client->weaponsModified[client->weaponClass] = qtrue;
 #else
 	client->ps.stats[STAT_WEAPONS] &= ~( 1 << client->ps.weapon );
 #endif

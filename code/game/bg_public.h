@@ -179,12 +179,12 @@ typedef enum {
 typedef enum {
 	PW_NONE,
 
-	PW_QUAD = 41,
-	PW_REGEN = 42,
-	PW_BATTLESUIT = 43,
-	PW_HASTE = 44,
-	PW_INVIS = 45,
-	PW_FLIGHT = 46,
+	PW_QUAD = 1,
+	PW_REGEN = 2,
+	PW_BATTLESUIT = 3,
+	PW_HASTE = 4,
+	PW_INVIS = 5,
+	PW_FLIGHT = 6,
 
 	PW_REDFLAG = 7,
 	PW_BLUEFLAG = 8,
@@ -193,11 +193,11 @@ typedef enum {
 	PW_MAX_POWERUPS = 10,
 	// = 10
 
-	PW_SCOUT = 50,
-	PW_GUARD = 51,
-	PW_DOUBLER = 52,
-	PW_AMMOREGEN = 53,
-	PW_INVULNERABILITY = 54,
+	PW_SCOUT = 10,
+	PW_GUARD = 11,
+	PW_DOUBLER = 12,
+	PW_AMMOREGEN = 13,
+	PW_INVULNERABILITY = 14,
 
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	PW_GOLDFLAG = 15,
@@ -495,6 +495,7 @@ typedef struct {
 #ifdef USE_ADVANCED_WEAPONS
 	int			classAmmo[WP_NUM_WEAPONS];
 	int			classWeapons[WP_NUM_WEAPONS];
+	int     weaponClass;
 #endif
 
 #ifdef USE_ADVANCED_ITEMS

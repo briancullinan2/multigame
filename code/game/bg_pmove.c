@@ -1887,8 +1887,12 @@ static void PM_Weapon( void ) {
 	// can't change if weapon is firing, but can change
 	// again if lowering or raising
 	if ( pm->ps->weaponTime <= 0 || pm->ps->weaponstate != WEAPON_FIRING ) {
-		if ( abs((pm->ps->weapon & 0x1FF) % WP_MAX_WEAPONS) != pm->cmd.weapon ) {
+		if ( pm->ps->weapon != pm->cmd.weapon ) {
+#ifdef USE_ADVANCED_WEAPONS
+			PM_BeginWeaponChange( pm->weaponClass * WP_MAX_WEAPONS + (pm->cmd.weapon % WP_MAX_WEAPONS) );
+#else
 			PM_BeginWeaponChange( pm->cmd.weapon );
+#endif
 		}
 	}
 

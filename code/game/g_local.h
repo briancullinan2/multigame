@@ -424,7 +424,9 @@ struct gclient_s
 	// MORE STATS for switching weapons, this is transfered to player state
 	int classAmmo[WP_NUM_WEAPONS]; // 10 instead of 16
 	int classWeapons[WP_NUM_WEAPONS];
+	qboolean weaponsModified[WP_MAX_CLASSES];
 	int weaponClass;
+	int lastItemTime2;
 #endif
 
 #ifdef USE_ADVANCED_ITEMS

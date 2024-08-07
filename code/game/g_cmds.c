@@ -259,6 +259,7 @@ void Cmd_Give_f( gentity_t *ent )
 				gitem_t *it = BG_FindItemForWeapon(i * WP_MAX_WEAPONS + j);
 				if(it && it->icon) {
 					ent->client->classWeapons[i * WP_MAX_WEAPONS + j]++;
+					ent->client->weaponsModified[i] = qtrue;
 				}
 			}
 		}

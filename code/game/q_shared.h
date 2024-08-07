@@ -236,7 +236,7 @@
 // enable the flame thrower
 #define USE_FLAME_THROWER 1
 // use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
-#define USE_ADVANCED_WEAPONS 1
+//#define USE_ADVANCED_WEAPONS 1
 // client side weapon order
 #define USE_WEAPON_ORDER 1
 // draw 3D weapons that rotate slightly

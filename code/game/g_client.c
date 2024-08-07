@@ -1382,6 +1382,14 @@ if(g_hotRockets.integer) {
 #endif
 
 
+#ifdef USE_ADVANCED_WEAPONS
+	for(i = 0; i < WP_MAX_CLASSES; i++) {
+		client->weaponsModified[WP_MAX_CLASSES] = qtrue;
+	}
+#endif
+
+
+
 #if 0
 #ifdef USE_ADVANCED_WEAPONS
 	weaponClass = floor(client->ps.weapon / WP_MAX_WEAPONS);
