@@ -567,11 +567,11 @@ static void CG_ItemPickup( int itemNum )
       }
 #endif
 			cg.weaponSelectTime = cg.time;
+			cg.weaponSelect = bg_itemlist[itemNum].giTag;
 #ifdef USE_ADVANCED_WEAPONS
 			cg.weaponClass = floor(bg_itemlist[itemNum].giTag / WP_MAX_WEAPONS);
+			trap_SendClientCommand( va("nextclass %i %i", cg.weaponClass, cg.weaponSelect) );
 #endif
-			cg.weaponSelect = bg_itemlist[itemNum].giTag;
-
 		}
 	}
 
