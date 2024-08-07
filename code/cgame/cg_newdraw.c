@@ -940,7 +940,8 @@ static void CG_DrawAreaPowerUp(rectDef_t *rect, int align, float special, float 
 #endif
 		// ZOID--don't draw if the power up has unlimited time (999 seconds)
 		// This is true of the CTF flags
-		if ( t <= 0 || t >= 999000) {
+		// do this now because i disabled the other areas
+		if ( t <= 0 /* || t >= 999000*/) {
 			continue;
 		}
 
@@ -1007,8 +1008,11 @@ static void CG_DrawAreaPowerUp(rectDef_t *rect, int align, float special, float 
 
 			CG_DrawPic( r2.x, r2.y, r2.w * .75, r2.h, trap_R_RegisterShader( item->icon ) );
 
-			Com_sprintf (num, sizeof(num), "%i", sortedTime[i] / 1000);
-			CG_Text_Paint(r2.x + (r2.w * .75) + 3 , r2.y + r2.h, scale, color, num, 0, 0, 0);
+			if((sortedTime[ i ] - cg.time) != 1 && (sortedTime[ i ] - cg.time) > -1
+				&& (sortedTime[ i ] - cg.time) < 999000) {
+				Com_sprintf (num, sizeof(num), "%i", sortedTime[i] / 1000);
+				CG_Text_Paint(r2.x + (r2.w * .75) + 3 , r2.y + r2.h, scale, color, num, 0, 0, 0);
+			}
 			*inc += r2.w + special;
 		}
 

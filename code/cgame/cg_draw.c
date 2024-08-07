@@ -1506,7 +1506,8 @@ static float CG_DrawPowerups( float y ) {
 	active = 0;
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
 		t = cg.inventory[i];
-		if ( t <= 0 || t >= 999000) {
+		// do this now because i disabled the other areas
+		if ( t <= 0 /*|| (t - cg.time) >= 999000*/) {
 			continue;
 		}
 
@@ -1542,17 +1543,15 @@ static float CG_DrawPowerups( float y ) {
 				x -= ICON_SIZE + CHAR_WIDTH * 2;
 			}
 
-			if(sortedTime[ i ] != 1) {
+			if((sortedTime[ i ] - cg.time) != 1 && (sortedTime[ i ] - cg.time) > -1
+				&& (sortedTime[ i ] - cg.time) < 999000) {
 				trap_R_SetColor( colors[color] );
-				CG_DrawField( x, y, 2, sortedTime[ i ] / 1000 );
+				CG_DrawField( x, y, 2, (sortedTime[ i ] - cg.time) / 1000 );
 			}
 
-			//t = ps->powerups[ sorted[i] ];
-			//if ( t - cg.time >= POWERUP_BLINKS * POWERUP_BLINK_TIME ) {
+			t = cg.inventory[ sorted[i] ];
+			if ( t - cg.time >= POWERUP_BLINKS * POWERUP_BLINK_TIME ) {
 				trap_R_SetColor( NULL );
-			/*
-			TODO: fix this with some time syncing device
-
 			} else {
 				vec4_t	modulate;
 
@@ -1561,7 +1560,6 @@ static float CG_DrawPowerups( float y ) {
 				modulate[0] = modulate[1] = modulate[2] = modulate[3] = f;
 				trap_R_SetColor( modulate );
 			}
-			*/
 
 			if ( cg.powerupActive == sorted[i] && 
 				cg.time - cg.powerupTime < PULSE_TIME ) {

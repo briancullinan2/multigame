@@ -834,8 +834,10 @@ static void CG_CheckTimers( void ) {
 #ifdef USE_ADVANCED_ITEMS
 	for ( i = 0 ; i < PW_NUM_POWERUPS ; i++ ) {
 		gitem_t *item;
-		if ( !cg.inventory[ i ] )
+		if ( !cg.inventory[ i ] ) {
 			continue;
+		}
+
 #if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
 		if(i == PW_FROZEN) {
 			continue;
@@ -846,6 +848,7 @@ static void CG_CheckTimers( void ) {
 			continue;
 		}
 #endif
+
 		item = BG_FindItemForPowerup(i);
 		if(item->giType == IT_HOLDABLE || item->giType == IT_PERSISTANT_POWERUP) {
 			continue;

@@ -112,7 +112,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 #else
 	{
-		other->client->inventory[ent->item->giTag] = level.time - ( level.time % 1000 );
+		other->client->inventory[ent->item->giTag] = level.time + (1000 - ( level.time % 1000 )); // round up?
 
 		if ( ent->count ) {
 			quantity = ent->count;
@@ -129,7 +129,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 #ifdef USE_RUNES
   if(ent->item->giTag >= RUNE_STRENGTH && ent->item->giTag <= RUNE_LITHIUM) {
-    other->client->inventory[ent->item->giTag] = 999 * 1000; // rune for a really long time
+    other->client->inventory[ent->item->giTag] += 999 * 1000; // rune for a really long time
   }
   if(ent->item->giTag == RUNE_HEALTH) {
 		other->client->ps.stats[STAT_MAX_HEALTH] = rune_healthMax.integer;
@@ -217,10 +217,9 @@ int Pickup_PersistantPowerup( gentity_t *ent, gentity_t *other ) {
 	int		max;
 
 #ifdef USE_ADVANCED_ITEMS
-		other->s.powerups = ent->item->giTag;
-		other->client->inventory[ent->item->giTag] = 1;
-		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
-		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
+	other->s.powerups = ent->item->giTag;
+	other->client->inventory[ent->item->giTag] = 1;
+	other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 #else
 	other->client->ps.stats[STAT_PERSISTANT_POWERUP] = ent->item - bg_itemlist;
 #endif
