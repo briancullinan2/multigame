@@ -2278,8 +2278,6 @@ void NextClass( void ) {
 			cg.weaponSelect = 0;
 			cg.weaponChange = 1;
 			trap_SendClientCommand( "nextclass" );
-			i = WP_MAX_WEAPONS * WP_MAX_CLASSES;
-			break;
 		}
 		if(cg.weaponClass == floor(WP_NUM_WEAPONS / WP_MAX_WEAPONS)) {
 			cg.weaponClass = 0;
@@ -2326,8 +2324,6 @@ void PrevClass( void ) {
 			cg.weaponSelect = WP_MAX_WEAPONS - 1;
 			cg.weaponChange = -1;
 			trap_SendClientCommand( "prevclass" );
-			i = WP_MAX_WEAPONS * WP_MAX_CLASSES;
-			break;
 		}
 		if(cg.weaponClass == -1) {
 			cg.weaponClass = floor(WP_NUM_WEAPONS / WP_MAX_WEAPONS);

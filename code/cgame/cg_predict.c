@@ -1136,7 +1136,7 @@ void CG_PredictPlayerState( void ) {
 	// prepare for pmove
 	cg_pmove.ps = &cg.predictedPlayerState;
 #ifdef USE_ADVANCED_WEAPONS
-	cg_pmove.weaponClass = cg.weaponClass;
+	cg_pmove.weaponClass = (int)floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
 	memcpy(cg_pmove.classWeapons, cg.classWeapons, sizeof(cg.classWeapons));
 	memcpy(cg_pmove.classAmmo, cg.classAmmo, sizeof(cg.classAmmo));
 #endif
@@ -1413,6 +1413,17 @@ void CG_PredictPlayerState( void ) {
 			*cg_pmove.ps = cg.savedPmoveStates[ stateIndex ];
 			stateIndex = ( stateIndex + 1 ) % NUM_SAVED_STATES;
 		}
+
+
+#ifdef USE_ADVANCED_WEAPONS
+	cg.weaponClass = cg_pmove.weaponClass;
+	cg.predictedPlayerState.weapon = cg.weaponClass * WP_MAX_WEAPONS + (cg.predictedPlayerState.weapon % WP_MAX_WEAPONS);
+	if(cg.classAmmo[cg.predictedPlayerState.weapon] != cg_pmove.classAmmo[cg.predictedPlayerState.weapon]) {
+		cg.classAmmo[cg.predictedPlayerState.weapon] = cg_pmove.classAmmo[cg.predictedPlayerState.weapon];
+	}
+#endif
+
+
 
 #ifdef USE_BIRDS_EYE
 		// ZYGOTE START

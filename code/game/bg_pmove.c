@@ -1725,6 +1725,7 @@ static void PM_FinishWeaponChange( void ) {
 
 #ifdef USE_ADVANCED_WEAPONS
 	pm->ps->weapon = weapon + floor(pm->ps->weapon / WP_MAX_WEAPONS) * WP_MAX_WEAPONS; // keep weapon class from input
+	pm->weaponClass = floor(pm->ps->weapon / WP_MAX_WEAPONS);
 #else
 	pm->ps->weapon = weapon;
 #endif
@@ -1887,7 +1888,8 @@ static void PM_Weapon( void ) {
 	// can't change if weapon is firing, but can change
 	// again if lowering or raising
 	if ( pm->ps->weaponTime <= 0 || pm->ps->weaponstate != WEAPON_FIRING ) {
-		if ( pm->ps->weapon != pm->cmd.weapon ) {
+		if ( pm->ps->weapon % WP_MAX_WEAPONS != pm->cmd.weapon % WP_MAX_WEAPONS
+			|| pm->ps->weapon / WP_MAX_WEAPONS != pm->weaponClass ) {
 #ifdef USE_ADVANCED_WEAPONS
 			PM_BeginWeaponChange( pm->weaponClass * WP_MAX_WEAPONS + (pm->cmd.weapon % WP_MAX_WEAPONS) );
 #else
@@ -1967,7 +1969,7 @@ static void PM_Weapon( void ) {
 
 	// check for out of ammo
 #ifdef USE_ADVANCED_WEAPONS
-	if ( ! pm->classAmmo[ pm->ps->weapon ] ) 
+	if ( ! pm->classAmmo[ pm->weaponClass * WP_MAX_WEAPONS + (pm->ps->weapon % WP_MAX_WEAPONS) ] ) 
 #else
 	if ( ! pm->ps->ammo[ pm->ps->weapon ] ) 
 #endif

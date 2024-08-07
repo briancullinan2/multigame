@@ -231,29 +231,43 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 #endif
 
 #ifdef USE_ADVANCED_WEAPONS
-		if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
-			|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) {
-
+		//if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
+			//|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) 
+		{
 			int j;
 			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
-			CG_Printf("weapons %i: ", ps->stats[STAT_WEAPONS_UPDATE]);
+			//CG_Printf("weapons %i: ", ps->stats[STAT_WEAPONS_UPDATE]);
 			for(j = 0; j < WP_MAX_WEAPONS; j++) {
 				if(ps->stats[STAT_WEAPONS_AVAILABLE] & (1 << j)) {
-					CG_Printf("1");
+					//CG_Printf("1");
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 1;
 				} else {
-					CG_Printf("0");
+					//CG_Printf("0");
 					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
 				}
 			}
+			//CG_Printf("\n");
 			memcpy(&cg.classAmmo[prevWeaponClass * WP_MAX_WEAPONS], ps->classAmmo, sizeof(int) * WP_MAX_WEAPONS);
-			CG_Printf("\n");
+			/*CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
+				cg.weaponClass,
+				cg.snap->ps.classAmmo[0],
+				cg.snap->ps.classAmmo[1],
+				cg.snap->ps.classAmmo[2],
+				cg.snap->ps.classAmmo[3],
+				cg.snap->ps.classAmmo[4],
+				cg.snap->ps.classAmmo[5],
+				cg.snap->ps.classAmmo[6],
+				cg.snap->ps.classAmmo[7],
+				cg.snap->ps.classAmmo[8],
+				cg.snap->ps.classAmmo[9]
+			);*/
 		}
 #endif
 
 #ifdef USE_ADVANCED_ITEMS
-		if(ps->stats[STAT_HOLDABLE_UPDATE] != ops->stats[STAT_HOLDABLE_UPDATE]
-			|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) {
+		//if(ps->stats[STAT_HOLDABLE_UPDATE] != ops->stats[STAT_HOLDABLE_UPDATE]
+			//|| ps->stats[STAT_HOLDABLE_AVAILABLE] != ops->stats[STAT_HOLDABLE_AVAILABLE]) 
+		{
 			int j;
 			int prevItemClass = ps->stats[STAT_HOLDABLE_UPDATE];
 			//CG_Printf("items %i: ", ps->stats[STAT_HOLDABLE_UPDATE]);

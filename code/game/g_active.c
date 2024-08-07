@@ -1972,10 +1972,13 @@ client->ps.speed *= g_playerScale.value;
 	BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qtrue );
 
 #ifdef USE_ADVANCED_WEAPONS
+	client->weaponClass = pm.weaponClass;
 	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
 	//G_Printf("weapon: %i\n", ent->client->ps.weapon);
-	client->classAmmo[client->ps.weapon] = pm.classAmmo[client->ps.weapon];
-	client->weaponsModified[(int)floor(client->ps.weapon / WP_MAX_WEAPONS)] = qtrue;
+	if(client->classAmmo[client->ps.weapon] != pm.classAmmo[client->ps.weapon]) {
+		client->classAmmo[client->ps.weapon] = pm.classAmmo[client->ps.weapon];
+		client->weaponsModified[(int)floor(client->ps.weapon / WP_MAX_WEAPONS)] = qtrue;
+	}
 #endif
 
 	SendPendingPredictableEvents( &ent->client->ps );
