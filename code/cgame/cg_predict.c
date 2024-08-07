@@ -364,7 +364,11 @@ static void CG_AddWeapon( int weapon, int quantity, qboolean dropped )
 	}
 
 	// add the weapon
-	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << (weapon % WP_MAX_WEAPONS) );
+#ifdef USE_ADVANCED_WEAPONS
+	cg.classWeapons[ weapon ]++;
+#else
+	cg.predictedPlayerState.stats[STAT_WEAPONS] |= ( 1 << weapon );
+#endif
 
 	CG_AddAmmo( weapon, quantity );
 }
@@ -499,9 +503,11 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 	}	
 
 	// holdable prediction
+#ifndef USE_ADVANCED_ITEMS
 	if ( item->giType == IT_HOLDABLE && ( item->giTag == HI_TELEPORTER || item->giTag == HI_MEDKIT ) ) {
 		cg.predictedPlayerState.stats[ STAT_HOLDABLE_ITEM ] = item - bg_itemlist;
 	}
+#endif
 }
 
 
@@ -632,7 +638,11 @@ static void CG_TouchItem( centity_t *cent ) {
 
 	// if it's a weapon, give them some predicted ammo so the autoswitch will work
 	if ( item->giType == IT_WEAPON ) {
+#ifdef USE_ADVANCED_WEAPONS
+		cg.classWeapons[ item->giTag ]++;
+#else
 		cg.predictedPlayerState.stats[ STAT_WEAPONS ] |= 1 << item->giTag;
+#endif
 		if ( !cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] ) {
 			cg.predictedPlayerState.ammo[ item->giTag % WP_MAX_WEAPONS ] = 1;
 		}

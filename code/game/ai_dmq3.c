@@ -1808,12 +1808,27 @@ void BotUpdateInventory(bot_state_t *bs) {
 #endif
 	//powerups
 	bs->inventory[INVENTORY_HEALTH] = bs->cur_ps.stats[STAT_HEALTH];
+#ifdef USE_ADVANCED_ITEMS
+	bs->inventory[INVENTORY_TELEPORTER] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == HI_TELEPORTER 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == HI_TELEPORTER;
+	bs->inventory[INVENTORY_MEDKIT] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == HI_MEDKIT 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == HI_MEDKIT;
+#ifdef MISSIONPACK
+	bs->inventory[INVENTORY_KAMIKAZE] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == HI_KAMIKAZE 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == HI_KAMIKAZE;
+	bs->inventory[INVENTORY_PORTAL] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == HI_PORTAL 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == HI_PORTAL;
+	bs->inventory[INVENTORY_INVULNERABILITY] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == HI_INVULNERABILITY 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == HI_INVULNERABILITY;
+#endif
+#else
 	bs->inventory[INVENTORY_TELEPORTER] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_TELEPORTER;
 	bs->inventory[INVENTORY_MEDKIT] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_MEDKIT;
 #ifdef MISSIONPACK
 	bs->inventory[INVENTORY_KAMIKAZE] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_KAMIKAZE;
 	bs->inventory[INVENTORY_PORTAL] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_PORTAL;
 	bs->inventory[INVENTORY_INVULNERABILITY] = bs->cur_ps.stats[STAT_HOLDABLE_ITEM] == MODELINDEX_INVULNERABILITY;
+#endif
 #endif
 #ifdef USE_ADVANCED_ITEMS
 	bs->inventory[INVENTORY_QUAD] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_QUAD 

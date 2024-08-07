@@ -300,9 +300,9 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 		other->client->inventoryModified[(int)floor(ent->item->giTag / PW_MAX_POWERUPS)] = qtrue;
 		//G_Printf("powerup: %i = %i\n", ent->item->giTag,  other->client->ps.powerups[ent->item->giTag]);
 	}
-#endif
-
+#else
 	other->client->ps.stats[STAT_HOLDABLE_ITEM] = ent->item - bg_itemlist;
+#endif
 
 
 
@@ -762,7 +762,11 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	switch( ent->item->giType ) {
 	case IT_WEAPON:
 #ifdef USE_WEAPON_ORDER
+#ifdef USE_ADVANCED_WEAPONS
+    alreadyHad = other->client->classWeapons[ent->item->giTag];
+#else
     alreadyHad = other->client->ps.stats[STAT_WEAPONS] & (1 << ent->item->giTag);
+#endif
 #endif
 		respawn = Pickup_Weapon(ent, other);
 		break;

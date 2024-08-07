@@ -175,13 +175,15 @@ static void CG_TransitionSnapshot( void ) {
 
 
 
-#ifdef USE_ADVANCED_WEAPONS
+#if 0 //def USE_ADVANCED_WEAPONS
 	{
 		//cg.weaponClass = cg.snap->ps.stats[STAT_WEAPONS] >> 9;
 		int newClass = floor(cg.snap->ps.weapon / WP_MAX_WEAPONS);
 		if(newClass < 0) {
 			newClass = WP_MAX_CLASSES + newClass;
 		}
+
+CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 
 		if(newClass != cg.weaponClass || cg.weaponChange
 			|| cg.snap->ps.stats[STAT_WEAPONS] != oldFrame->ps.stats[STAT_WEAPONS]) {
@@ -197,19 +199,6 @@ static void CG_TransitionSnapshot( void ) {
 				cg.weaponChange = 0;
 			}
 		}
-
-		if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
-			|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) {
-
-			int j;
-			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
-			for(j = 0; j < WP_MAX_WEAPONS; j++) {
-				if(ps->stats[STAT_WEAPONS_AVAILABLE] & (1 << j)) {
-					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 1;
-				} else {
-					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
-				}
-			}
 
 			/*CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n%i %i %i %i %i %i %i %i %i %i\n", 
 				cg.weaponClass,
@@ -241,6 +230,21 @@ static void CG_TransitionSnapshot( void ) {
 	}
 #endif
 
+#ifdef USE_ADVANCED_WEAPONS
+		if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
+			|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) {
+
+			int j;
+			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				if(ps->stats[STAT_WEAPONS_AVAILABLE] & (1 << j)) {
+					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 1;
+				} else {
+					cg.classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] = 0;
+				}
+			}
+		}
+#endif
 
 #ifdef USE_ADVANCED_ITEMS
 		if(ps->stats[STAT_HOLDABLE_UPDATE] != ops->stats[STAT_HOLDABLE_UPDATE]

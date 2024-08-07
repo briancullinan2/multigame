@@ -93,9 +93,15 @@ void TossClientItems( gentity_t *self ) {
 		if ( self->client->ps.weaponstate == WEAPON_DROPPING ) {
 			weapon = self->client->pers.cmd.weapon;
 		}
+#ifdef USE_ADVANCED_WEAPONS
+		if ( !( self->client->classWeapons[weapon] ) ) {
+			weapon = WP_NONE;
+		}
+#else
 		if ( !( self->client->ps.stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
 			weapon = WP_NONE;
 		}
+#endif
 	}
 
 	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 

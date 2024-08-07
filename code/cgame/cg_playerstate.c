@@ -18,15 +18,23 @@ void CG_CheckAmmo( void ) {
 	int		i;
 	int		total;
 	int		previous;
+#ifndef USE_ADVANCED_WEAPONS
 	int		weapons;
 
 	// see about how many seconds of ammo we have remaining
 	weapons = cg.snap->ps.stats[ STAT_WEAPONS ];
+#endif
 	total = 0;
 	for ( i = WP_MACHINEGUN ; i < WP_MAX_WEAPONS ; i++ ) {
+#ifdef USE_ADVANCED_WEAPONS
+		if ( ! ( cg.classWeapons[cg.weaponClass * WP_MAX_WEAPONS + (cg.weaponSelect % WP_MAX_WEAPONS)] ) ) {
+			continue;
+		}
+#else
 		if ( ! ( weapons & ( 1 << i ) ) ) {
 			continue;
 		}
+#endif
 		switch ( i ) {
 		case WP_ROCKET_LAUNCHER:
 		case WP_GRENADE_LAUNCHER:

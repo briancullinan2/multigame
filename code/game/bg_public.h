@@ -228,6 +228,8 @@ typedef enum {
 	HI_VEHICLE = 26,
 #endif
 
+	HI_NUM_HOLDABLE = 27,
+
 	PW_REGENAMMO = 32,
 	PW_GRAVITYSUIT = 33,
 	PW_FLASH = 34,
@@ -385,36 +387,36 @@ typedef enum {
 	WP_NONE,
 	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
 
-	WP_GAUNTLET = 41,
-	WP_MACHINEGUN = 42,
-	WP_SHOTGUN = 43,
-	WP_GRENADE_LAUNCHER = 44,
-	WP_ROCKET_LAUNCHER = 45,
-	WP_LIGHTNING = 46,
-	WP_RAILGUN = 47,
-	WP_PLASMAGUN = 48,
+	WP_GAUNTLET = 1,
+	WP_MACHINEGUN = 2,
+	WP_SHOTGUN = 3,
+	WP_GRENADE_LAUNCHER = 4,
+	WP_ROCKET_LAUNCHER = 5,
+	WP_LIGHTNING = 6,
+	WP_RAILGUN = 7,
+	WP_PLASMAGUN = 8,
 
-	WP_CROWBAR = 49,
+	WP_CROWBAR = 9,
 
 	WP_MOD_CLASSES = 10,
 
 #ifdef USE_PORTALS
-	WP_PORTAL_GUN = 50,
+	WP_PORTAL_GUN = 10,
 #endif
-	WP_CHAINSAW = 51,
+	WP_CHAINSAW = 11,
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
-	WP_CHAINGUN = 52,
-	WP_NAILGUN = 53,
-	WP_PROX_LAUNCHER = 54,
+	WP_CHAINGUN = 12,
+	WP_NAILGUN = 13,
+	WP_PROX_LAUNCHER = 14,
 #endif
-	WP_HOMING_ROCKET = 55,
-	WP_THORS_HAMMER = 56,
+	WP_HOMING_ROCKET = 15,
+	WP_THORS_HAMMER = 16,
 #ifdef USE_FLAME_THROWER
-	WP_FLAME_THROWER = 57,
+	WP_FLAME_THROWER = 17,
 #endif
-	WP_BFG = 58,
+	WP_BFG = 18,
 #ifdef USE_GRAPPLE
-	WP_GRAPPLING_HOOK = 59,
+	WP_GRAPPLING_HOOK = 19,
 #endif
 
 #ifdef USE_ADVANCED_WEAPONS
@@ -429,7 +431,7 @@ typedef enum {
 	WP_BFG2 = 29,
 #endif
 
-	WP_NUM_WEAPONS = 60,
+	WP_NUM_WEAPONS = 30,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
 	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
 	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools
@@ -559,20 +561,22 @@ typedef enum {
 	STAT_ABILITY,
 #endif
 	STAT_ENTITY_POINTED,
-	STAT_HOLDABLE_ITEM,
 #ifdef USE_ADVANCED_ITEMS
 	STAT_HOLDABLE_AVAILABLE,
 	STAT_HOLDABLE_UPDATE,
+#else
+	STAT_HOLDABLE_ITEM,
 #endif
 #ifndef USE_ADVANCED_ITEMS
 #if defined(MISSIONPACK)
 	STAT_PERSISTANT_POWERUP,
 #endif
 #endif
-	STAT_WEAPONS,					// 16 bit fields
 #ifdef USE_ADVANCED_WEAPONS
 	STAT_WEAPONS_AVAILABLE,
 	STAT_WEAPONS_UPDATE,
+#else
+	STAT_WEAPONS,					// 16 bit fields
 #endif
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)

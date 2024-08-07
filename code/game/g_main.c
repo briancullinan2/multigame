@@ -1729,7 +1729,9 @@ static void G_WarmupEnd( void )
 		client->damage.enemy = client->damage.team = 0;
 
 		client->ps.stats[STAT_CLIENTS_READY] = 0;
+#ifndef USE_ADVANCED_ITEMS
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+#endif
 
 		memset( &client->ps.powerups, 0, sizeof( client->ps.powerups ) );
 #ifdef USE_ADVANCED_ITEMS

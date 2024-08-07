@@ -697,10 +697,11 @@ void DropPortalDestination(gentity_t *player, vec3_t isWall)
   // give the item back so they can drop the source now
   if (!player->client->portalSource)
   {
-    player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
 #ifdef USE_ADVANCED_ITEMS
     player->client->inventory[HI_PORTAL] = 1;
     player->client->inventoryModified[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)] = qtrue;
+#else
+    player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
 #endif
   }
 }
@@ -808,10 +809,11 @@ void DropPortalSource(gentity_t *player, vec3_t isWall)
   // give the item back so they can drop the source now
   if (!player->client->portalDestination)
   {
-    player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
 #ifdef USE_ADVANCED_ITEMS
     player->client->inventory[HI_PORTAL] = 1;
     player->client->inventoryModified[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)] = qtrue;
+#else
+    player->client->ps.stats[STAT_HOLDABLE_ITEM] = BG_FindItem("Portal") - bg_itemlist;
 #endif
   }
 }

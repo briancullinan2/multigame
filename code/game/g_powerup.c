@@ -41,7 +41,9 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
   itemClass = floor(powerup / PW_MAX_POWERUPS);
   ent->client->inventory[powerup] = 0;
   ent->client->inventoryModified[itemClass] = qtrue;
+#ifndef USE_ADVANCED_ITEMS
   ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+#endif
 
   switch(powerup) {
 
@@ -79,22 +81,26 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
     } else
     if(ent->client->inventory[RUNE_HEALTH]) {
       UsePowerup(ent, HI_MEDKIT);
-      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->inventory[HI_MEDKIT] = 0;
+      ent->client->inventoryModified[(int)floor(HI_MEDKIT / PW_MAX_POWERUPS)] = qtrue;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     } else
     if(ent->client->inventory[RUNE_SHIELD]) {
       UsePowerup(ent, HI_INVULNERABILITY);
-      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->inventory[HI_INVULNERABILITY] = 0;
+      ent->client->inventoryModified[(int)floor(HI_INVULNERABILITY / PW_MAX_POWERUPS)] = qtrue;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     } else
     if(ent->client->inventory[RUNE_RECALL]) {
       UsePowerup(ent, HI_PORTAL);
-      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->inventory[HI_PORTAL] = 0;
+      ent->client->inventoryModified[(int)floor(HI_PORTAL / PW_MAX_POWERUPS)] = qtrue;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     }  else
     if(ent->client->inventory[RUNE_DIVINE]) {
       UsePowerup(ent, HI_KAMIKAZE);
-      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->inventory[HI_KAMIKAZE] = 0;
+      ent->client->inventoryModified[(int)floor(HI_KAMIKAZE / PW_MAX_POWERUPS)] = qtrue;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     } else
     if(ent->client->inventory[RUNE_TORNADO]) {
@@ -106,8 +112,6 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 		  m = fire_special_grenade (ent, muzzle, forward, qtrue, wp_grenadeVortex.integer);
       m->damage *= s_quadFactor;
       m->splashDamage *= s_quadFactor;
-
-      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
       ent->client->ps.stats[STAT_ABILITY] = 0;
     } else
 #endif
@@ -119,7 +123,8 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
       break;
     case PCLASS_RANGER:
       UsePowerup(ent, HI_TELEPORTER);
-      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+      ent->client->inventory[HI_TELEPORTER] = 0;
+      ent->client->inventoryModified[(int)floor(HI_TELEPORTER / PW_MAX_POWERUPS)] = qtrue;
       ent->client->ps.stats[STAT_ABILITY] = 0;
       break;
     default:

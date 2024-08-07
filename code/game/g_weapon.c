@@ -1010,13 +1010,24 @@ gentity_t *ThrowWeapon( gentity_t *ent ) {
 	amount = client->ps.ammo[ client->ps.weapon ]; // XRAY save amount
 	client->ps.ammo[ client->ps.weapon ] = 0;
 
+#ifdef USE_ADVANCED_WEAPONS
+	client->classWeapons[client->ps.weapon] = 0;
+#else
 	client->ps.stats[STAT_WEAPONS] &= ~( 1 << client->ps.weapon );
+#endif
 	client->ps.weapon = WP_MACHINEGUN;
 	for ( i = WP_NUM_WEAPONS - 1 ; i > 0 ; i-- ) {
+#ifdef USE_ADVANCED_WEAPONS
+		if ( client->classWeapons[i] ) {
+			client->ps.weapon = i;
+			break;
+		}
+#else
 		if ( client->ps.stats[STAT_WEAPONS] & ( 1 << i ) ) {
 			client->ps.weapon = i;
 			break;
 		}
+#endif
 	}
 
 	xr_drop = dropWeapon( ent, xr_item, 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );

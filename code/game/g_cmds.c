@@ -1938,11 +1938,22 @@ void Cmd_DropPowerup_f(gentity_t *ent) {
 #ifdef USE_ITEM_DROP
 void Cmd_DropItem_f(gentity_t *ent) {
   // check if there are some holdable items to toss
+#ifdef USE_ADVANCED_ITEMS
+	int i;
+	for(i = HI_TELEPORTER; i < HI_NUM_HOLDABLE; i++) {
+		if(ent->client->inventory[i]) {
+			dropWeapon( ent, &bg_itemlist[ent->client->inventory[i]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
+			ent->client->inventory[i] = 0;
+			return;
+		}
+	}
+#else
   if(ent->client->ps.stats[STAT_HOLDABLE_ITEM]) {
     dropWeapon( ent, &bg_itemlist[ent->client->ps.stats[STAT_HOLDABLE_ITEM]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
     ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
     return;
   }
+#endif
 }
 #endif
 
@@ -2062,12 +2073,25 @@ void Cmd_Drop_f( gentity_t *ent ) {
 #endif
 #ifdef USE_ITEM_DROP
   // check if there are some holdable items to toss
+#ifdef USE_ADVANCED_ITEMS
+	if(g_dropWeapon.integer & 16) {
+		int i;
+		for(i = HI_TELEPORTER; i < HI_NUM_HOLDABLE; i++) {
+			if(ent->client->inventory[i]) {
+				dropWeapon(ent, &bg_itemlist[ent->client->inventory[i]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM);
+				ent->client->inventory[i] = 0;
+				return;
+			}
+		}
+	}
+#else
   if(g_dropWeapon.integer & 16
     && ent->client->ps.stats[STAT_HOLDABLE_ITEM]) {
     dropWeapon( ent, &bg_itemlist[ent->client->ps.stats[STAT_HOLDABLE_ITEM]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM );
     ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
     return;
   }
+#endif
 #endif
 #ifdef USE_AMMO_DROP
   // drop ammo for current weapon, total / default pack size

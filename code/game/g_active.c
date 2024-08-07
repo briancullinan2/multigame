@@ -3,6 +3,8 @@
 
 #include "g_local.h"
 
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count );
 void Add_Ammo( gentity_t *ent, int weapon, int count );
 void Remove_Ammo( gentity_t *ent, int weapon, int count );
 
@@ -965,7 +967,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			  client->ammoTimes[w] = 0;
 #ifdef USE_RUNES
 				if(ent->client->inventory[RUNE_ACTION]) {
-					ent->client->ps.stats[STAT_WEAPONS] |= (1 << w);
+					Add_Weapon_Ammo(ent, w, 0);
 				}
 #endif
 		  }
@@ -1338,7 +1340,7 @@ void ClientThink_real( gentity_t *ent ) {
 	vec3_t sources[32], destinations[32], sourcesAngles[32], destinationsAngles[32];
 #endif
 #ifdef USE_ADVANCED_WEAPONS
-	int i;
+	//int i;
 #endif
 
 	client = ent->client;
@@ -1350,7 +1352,7 @@ void ClientThink_real( gentity_t *ent ) {
 	// mark the time, so the connection sprite can be removed
 	ucmd = &ent->client->pers.cmd;
 
-#ifdef USE_ADVANCED_WEAPONS
+#if 0 //def USE_ADVANCED_WEAPONS
 	//G_Printf("game class: %i\n", weaponClass);
 	client->ps.weapon = ent->s.weapon = client->weaponClass * WP_MAX_WEAPONS + (ent->client->ps.weapon % WP_MAX_WEAPONS);
 	for(i = 0; i < WP_MAX_WEAPONS; i++) {
@@ -1375,6 +1377,52 @@ void ClientThink_real( gentity_t *ent ) {
 		(client->ps.stats[STAT_WEAPONS] & (1 << 9)) >> 9
 		);*/
 
+#endif
+
+#ifdef USE_ADVANCED_WEAPONS
+	// update item classes but actually store them on the client
+	// TODO: use these techniques to improve weapon switching without delay
+	if(client->lastItemTime + 30 < level.time) {
+		int i, j;
+		int itemBits;
+		qboolean hasItems = qfalse;
+		// TODO: find the next item in inventory and switch to that class for updates
+		int prevItemClass = client->ps.stats[STAT_WEAPONS_UPDATE];
+		for(i = 0; i < 2 * WP_NUM_WEAPONS; i++) {
+			prevItemClass++;
+			if(prevItemClass == WP_MAX_CLASSES) {
+				prevItemClass = 0;
+			}
+			//if(!client->inventoryModified[prevItemClass]) {
+			//	continue;
+			//}
+			itemBits = 0;
+			hasItems = qfalse;
+			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+				//gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
+				//if(!item || !item->giTag) {
+				//	continue;
+				//}
+				if(prevItemClass * WP_MAX_WEAPONS + j >= WP_NUM_WEAPONS) {
+					continue;
+				}
+				hasItems = qtrue;
+				if(client->classWeapons[prevItemClass * WP_MAX_WEAPONS + j] > 0) {
+					itemBits |= (1 << j);
+				}
+			}
+			if(hasItems) {
+				break;
+			}
+		}
+
+		if(i < 2 * WP_NUM_WEAPONS) {
+			client->ps.stats[STAT_WEAPONS_UPDATE] = prevItemClass;
+			client->ps.stats[STAT_WEAPONS_AVAILABLE] = itemBits;
+			client->inventoryModified[prevItemClass] = qfalse;
+		}
+		client->lastItemTime = level.time;
+	}
 #endif
 
 #ifdef USE_ADVANCED_ITEMS
@@ -1721,6 +1769,9 @@ client->ps.speed *= g_playerScale.value;
 	pm.ps = &client->ps;
 #ifdef USE_ADVANCED_CLASS
 	pm.playerClass = client->pers.newplayerclass; // possible for bgmove to change a player class using a powerup?
+#endif
+#ifdef USE_ADVANCED_WEAPONS
+	memcpy(pm.classWeapons, client->classWeapons, sizeof(client->classWeapons));
 #endif
 #ifdef USE_ADVANCED_ITEMS
 	memcpy(pm.inventory, client->inventory, sizeof(client->inventory));

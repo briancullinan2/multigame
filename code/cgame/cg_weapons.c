@@ -1912,7 +1912,9 @@ void CG_DrawWeaponSelect( void ) {
 #ifdef USE_WEAPON_ORDER
   int  weap; 
 #endif
+#ifndef USE_ADVANCED_WEAPONS
 	int		bits;
+#endif
 	int		count;
 	int		x, y;
 	int		dx, dy;
@@ -1942,7 +1944,9 @@ void CG_DrawWeaponSelect( void ) {
 	cg.itemPickupTime = 0;
 
 	// count the number of weapons owned
+#ifndef USE_ADVANCED_WEAPONS
 	bits = cg.snap->ps.stats[ STAT_WEAPONS ];
+#endif
 	count = 0;
 #ifdef USE_WEAPON_ORDER
   for ( i = WP_GAUNTLET ; i < WP_MAX_WEAPONS ; i++ ) {
@@ -1950,7 +1954,12 @@ void CG_DrawWeaponSelect( void ) {
       weap = NextWeapon( weaponRawOrder[WP_NUM_WEAPONS - i] ) % WP_MAX_WEAPONS;
     else
       weap = i % WP_MAX_WEAPONS;
-    if ( bits & ( 1 << weap ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+		if (qtrue || cg.classWeapons[weap])
+#else
+    if ( bits & ( 1 << weap ) ) 
+#endif
+		{
 			gitem_t *item = BG_FindItemForWeapon(WEAPON_CLASS + weap);
 			if(!item || !item->icon) {
 				continue;
@@ -2013,9 +2022,12 @@ void CG_DrawWeaponSelect( void ) {
       weap = i % WP_MAX_WEAPONS;
 #define i weap
 #endif
+
+#ifndef USE_ADVANCED_WEAPONS
 		if ( !( bits & ( 1 << i ) ) ) {
 			continue;
 		}
+#endif
 
 		if(WEAPON_CLASS + i >= WP_NUM_WEAPONS) {
 			continue;
@@ -2090,10 +2102,17 @@ qboolean CG_WeaponSelectable( int i ) {
 		//CG_Printf("no ammo\n");
 		return qfalse;
 	}
-	if ( ! (cg.snap->ps.stats[ STAT_WEAPONS ] & ( 1 << (i % WP_MAX_WEAPONS) ) ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+	if ( ! ( cg.classWeapons[ i ] ) ) {
 		//CG_Printf("no weapon\n");
 		return qfalse;
 	}
+#else
+	if ( ! ( cg.snap->ps.stats[ STAT_WEAPONS ] & ( 1 << i ) ) ) {
+		//CG_Printf("no weapon\n");
+		return qfalse;
+	}
+#endif
 	if(!cg_weapons[weapon].registered || !cg_weapons[weapon].weaponIcon) {
 		//CG_Printf("no registration %i\n", weapon);
 		return qfalse;
@@ -2113,8 +2132,10 @@ CG_NextWeapon_f
 ===============
 */
 void CG_NextWeapon_f( void ) {
+#ifndef USE_ADVANCED_WEAPONS
 	int		i;
 	int		original;
+#endif
 
 	if ( !cg.snap ) {
 		return;
@@ -2162,8 +2183,10 @@ CG_PrevWeapon_f
 ===============
 */
 void CG_PrevWeapon_f( void ) {
+#ifndef USE_ADVANCED_WEAPONS
 	int		i;
 	int		original;
+#endif
 
 	if ( !cg.snap ) {
 		return;
@@ -2230,20 +2253,25 @@ void NextClass( void ) {
 
 	for ( i = 0 ; i < WP_MAX_WEAPONS * WP_MAX_CLASSES ; i++ ) {
 		cg.weaponSelect++;
-		if ( cg.weaponSelect == WP_MAX_WEAPONS ) {
+		if ( cg.weaponSelect % WP_MAX_WEAPONS == 0 ) {
+			cg.weaponClass++;
 			cg.weaponSelect = 0;
 			cg.weaponChange = 1;
 			trap_SendClientCommand( "nextclass" );
 			i = WP_MAX_WEAPONS * WP_MAX_CLASSES;
 			break;
 		}
+		if(cg.weaponClass == floor(WP_NUM_WEAPONS / WP_MAX_WEAPONS)) {
+			cg.weaponClass = 0;
+		}
 		if ( cg.weaponClass == 0 && cg.weaponSelect == WP_GAUNTLET ) {
 			continue;		// never cycle to gauntlet
 		}
-		if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
+		//if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
 			break;
-		}
+		//}
 	}
+
 	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
 		cg.weaponSelect = original;
 	}
@@ -2274,18 +2302,22 @@ void PrevClass( void ) {
 	for ( i = 0 ; i < WP_MAX_WEAPONS * WP_MAX_CLASSES ; i++ ) {
 		cg.weaponSelect--;
 		if ( cg.weaponSelect == -1 ) {
+			cg.weaponClass--;
 			cg.weaponSelect = WP_MAX_WEAPONS - 1;
 			cg.weaponChange = -1;
 			trap_SendClientCommand( "prevclass" );
 			i = WP_MAX_WEAPONS * WP_MAX_CLASSES;
 			break;
 		}
+		if(cg.weaponClass == -1) {
+			cg.weaponClass = floor(WP_NUM_WEAPONS / WP_MAX_WEAPONS);
+		}
 		if ( cg.weaponClass == 0 && cg.weaponSelect == WP_GAUNTLET ) {
 			continue;		// never cycle to gauntlet
 		}
-		if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
+		//if ( CG_WeaponSelectable( cg.weaponSelect ) ) {
 			break;
-		}
+		//}
 	}
 	if ( i == WP_MAX_WEAPONS + WP_MAX_CLASSES ) {
 		cg.weaponSelect = original;
@@ -2322,9 +2354,11 @@ void CG_Weapon_f( void ) {
 		return;
 	}
 
+#ifndef USE_ADVANCED_WEAPONS
 	if ( ! ( cg.snap->ps.stats[STAT_WEAPONS] & ( 1 << num ) ) ) {
 		return;		// don't have the weapon
 	}
+#endif
 
   if(num < 16 && num == (cg.weaponSelect & 0xF) && isRecent) {
     int class = cg.weaponSelect >> 4;

@@ -1399,6 +1399,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 	gitem_t	*item;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 	int		upperBound;
+	int i;
 #endif
 
 	if ( ent->modelindex < 1 || ent->modelindex >= bg_numItems ) {
@@ -1642,9 +1643,17 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		if(!g_holdMultiple.integer)
 #endif
 #endif
+#ifdef USE_ADVANCED_ITEMS
+		for(i = HI_TELEPORTER; i < HI_NUM_HOLDABLE; i++) {
+			if(inventory[i]) {
+				return qfalse;
+			}
+		}
+#else
 		if ( ps->stats[STAT_HOLDABLE_ITEM] ) {
 			return qfalse;
 		}
+#endif
 		return qtrue;
 
         case IT_BAD:

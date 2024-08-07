@@ -471,6 +471,8 @@ static void CG_DrawPlayerScore( rectDef_t *rect, float scale, vec4_t color, qhan
 	}
 }
 
+#ifndef USE_ADVANCED_ITEMS
+
 static void CG_DrawPlayerItem( rectDef_t *rect, float scale, qboolean draw2D) {
 	int		value;
   vec3_t origin, angles;
@@ -493,6 +495,8 @@ static void CG_DrawPlayerItem( rectDef_t *rect, float scale, qboolean draw2D) {
 	}
 
 }
+
+#endif
 
 
 static void CG_DrawSelectedPlayerPowerup( rectDef_t *rect, qboolean draw2D ) {
@@ -2069,9 +2073,11 @@ void CG_OwnerDraw(float x, float y, float w, float h, float text_x, float text_y
   case CG_PLAYER_HEAD:
     CG_DrawPlayerHead(&rect, ownerDrawFlags & CG_SHOW_2DONLY);
     break;
+#ifndef USE_ADVANCED_ITEMS
   case CG_PLAYER_ITEM:
     CG_DrawPlayerItem(&rect, scale, ownerDrawFlags & CG_SHOW_2DONLY);
     break;
+#endif
   case CG_PLAYER_SCORE:
     CG_DrawPlayerScore(&rect, scale, color, shader, textStyle);
     break;

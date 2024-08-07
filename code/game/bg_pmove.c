@@ -1669,14 +1669,20 @@ PM_BeginWeaponChange
 ===============
 */
 static void PM_BeginWeaponChange( int weapon ) {
-	if ( weapon <= WP_NONE || weapon >= WP_MAX_WEAPONS ) {
+	if ( weapon <= WP_NONE || weapon >= WP_NUM_WEAPONS ) {
 		return;
 	}
 
-	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+	if ( !( pm->classWeapons[weapon] ) ) {
 		return;
 	}
-	
+#else
+	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+		return;
+	}
+#endif
+
 	if ( pm->ps->weaponstate == WEAPON_DROPPING ) {
 		pm->ps->eFlags &= ~EF_FIRING;
 		return;
@@ -1703,15 +1709,25 @@ static void PM_FinishWeaponChange( void ) {
 	int		weapon;
 
 	weapon = pm->cmd.weapon;
-	if ( weapon < WP_NONE || weapon >= WP_MAX_WEAPONS ) {
+	if ( weapon < WP_NONE || weapon >= WP_NUM_WEAPONS ) {
 		weapon = WP_NONE;
 	}
 
-	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << (weapon % WP_MAX_WEAPONS) ) ) ) {
+#ifdef USE_ADVANCED_WEAPONS
+	if ( !( pm->classWeapons[weapon] ) ) {
 		weapon = WP_NONE;
 	}
+#else
+	if ( !( pm->ps->stats[STAT_WEAPONS] & ( 1 << weapon ) ) ) {
+		weapon = WP_NONE;
+	}
+#endif
 
+#ifdef USE_ADVANCED_WEAPONS
 	pm->ps->weapon = weapon + floor(pm->ps->weapon / WP_MAX_WEAPONS) * WP_MAX_WEAPONS; // keep weapon class from input
+#else
+	pm->ps->weapon = weapon;
+#endif
 	pm->ps->weaponstate = WEAPON_RAISING;
 	pm->ps->eFlags &= ~EF_FIRING;
 	pm->ps->weaponTime += 250;
@@ -1823,7 +1839,7 @@ static void PM_Weapon( void ) {
 		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
 #ifdef USE_ADVANCED_ITEMS
 			int i;
-			for(i = 0; i < PW_NUM_POWERUPS; i++) {
+			for(i = HI_TELEPORTER; i < HI_NUM_HOLDABLE; i++) {
 				gitem_t *item = BG_FindItemForPowerup(i);
 				if(!item || !item->giTag) {
 					continue;
@@ -1837,17 +1853,23 @@ static void PM_Weapon( void ) {
 				}
 			}
 #endif
-			if ( bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_MEDKIT
+			if ( 
+#ifdef USE_ADVANCED_ITEMS
+				pm->inventory[HI_MEDKIT]
+#else
+				bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_MEDKIT
+#endif
 				&& pm->ps->stats[STAT_HEALTH] >= (pm->ps->stats[STAT_MAX_HEALTH] + 25) ) {
 				// don't use medkit if at max health
 			} else {
 				pm->ps->pm_flags |= PMF_USE_ITEM_HELD;
 #ifdef USE_ADVANCED_ITEMS
 				BG_AddPredictableEventToPlayerstate( EV_USE_ITEM0, i == PW_NUM_POWERUPS ? 0 : i, pm->ps, -1 );
+				pm->inventory[i] = 0;
 #else
 				PM_AddEvent( EV_USE_ITEM0 + bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag );
-#endif
 				pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
+#endif
 			}
 			return;
 		}

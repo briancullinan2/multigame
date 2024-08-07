@@ -1088,10 +1088,6 @@ void ClientSpawn(gentity_t *ent) {
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
 
-#ifdef USE_ADVANCED_WEAPONS
-	int weaponClass;
-#endif
-
 	index = ent - g_entities;
 	client = ent->client;
 
@@ -1345,26 +1341,29 @@ if(g_unholyTrinity.integer) {
 	Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, INFINITE);
 }
 #endif
+
 #ifdef USE_HOTRPG
 if(g_hotRockets.integer) {
 	Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, INFINITE);
 }
 #endif
+
 #ifdef USE_HOTBFG
-if(g_hotBFG.integer) {
-  int handicap, max;
-	Add_Weapon_Ammo(ent, WP_BFG, INFINITE);
-  trap_GetUserinfo( client - level.clients, userinfo, sizeof(userinfo) );
-  handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
-  if( handicap<=0.0f || handicap>100.0f) {
-    handicap = 100.0f;
-  }
-  max = (int)(2 *  handicap);
-  ent->health = max;
-  client->ps.stats[STAT_HEALTH] = max;
-  client->ps.stats[STAT_MAX_HEALTH] = max;
-}
+	if(g_hotBFG.integer) {
+		int handicap, max;
+		Add_Weapon_Ammo(ent, WP_BFG, INFINITE);
+		trap_GetUserinfo( client - level.clients, userinfo, sizeof(userinfo) );
+		handicap = atof( Info_ValueForKey( userinfo, "handicap" ) );
+		if( handicap<=0.0f || handicap>100.0f) {
+			handicap = 100.0f;
+		}
+		max = (int)(2 *  handicap);
+		ent->health = max;
+		client->ps.stats[STAT_HEALTH] = max;
+		client->ps.stats[STAT_MAX_HEALTH] = max;
+	}
 #endif
+
 #if defined(USE_GRAPPLE)
   if(wp_grappleEnable.integer 
 #ifdef USE_ALT_FIRE
@@ -1374,6 +1373,7 @@ if(g_hotBFG.integer) {
 		Add_Weapon_Ammo(ent, WP_GRAPPLING_HOOK, INFINITE);
   }
 #endif
+
 #ifdef USE_FLAME_THROWER
 	if(wp_flameEnable.integer) {
 		//Spawn player with flame thrower
@@ -1382,6 +1382,7 @@ if(g_hotBFG.integer) {
 #endif
 
 
+#if 0
 #ifdef USE_ADVANCED_WEAPONS
 	weaponClass = floor(client->ps.weapon / WP_MAX_WEAPONS);
 	for(i = 0; i < WP_MAX_WEAPONS; i++) {
@@ -1394,6 +1395,7 @@ if(g_hotBFG.integer) {
 		}
 		client->classAmmo[weaponClass * WP_MAX_WEAPONS + i] = client->ps.ammo[i];
 	}
+
 
 	// give the zero weapon (empty/hands) and malee weapon to all the classes
 	for(i = 1; i < WP_MAX_CLASSES; i++) {
@@ -1444,15 +1446,17 @@ if(g_hotBFG.integer) {
 		Add_Weapon_Ammo(ent, i * WP_MAX_WEAPONS + WP_GAUNTLET, INFINITE);
 
 		}
-
 	}
+#endif
+
 
 #endif
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
+
 #if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
-	client->ps.stats[STAT_STAMINA] = 100;
+	client->ps.stats[STAT_STAMINA] = g_stamina.integer;
 	// start with ability powerup
 	client->ps.stats[STAT_ABILITY] = g_ability.integer;
 #endif
@@ -1513,12 +1517,22 @@ if(g_hotBFG.integer) {
 		// select the highest weapon number available, after any
 		// spawn given items have fired
 		client->ps.weapon = 1;
+#ifdef USE_ADVANCED_WEAPONS
+		for ( i = WP_NUM_WEAPONS - 1 ; i > 0 ; i-- ) {
+			if ( client->classWeapons[i] ) {
+				client->ps.weapon = i;
+				client->weaponClass = floor(i / WP_MAX_WEAPONS);
+				break;
+			}
+		}
+#else
 		for ( i = WP_MAX_WEAPONS - 1 ; i > 0 ; i-- ) {
 			if ( client->ps.stats[STAT_WEAPONS] & ( 1 << i ) ) {
 				client->ps.weapon = i;
 				break;
 			}
 		}
+#endif
 	}
 
 	// run a client frame to drop exactly to the floor,
