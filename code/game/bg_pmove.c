@@ -1539,15 +1539,20 @@ static void PM_Footsteps( void ) {
 #endif
 		if ( pm->waterlevel > 1 ) {
 			PM_ContinueLegsAnim( LEGS_SWIM );
+			return;
 		}
-		return;
 	}
 
 	// if not trying to move
 	if ( !pm->cmd.forwardmove && !pm->cmd.rightmove ) {
 		xyspeedQ = pm->ps->velocity[0] * pm->ps->velocity[0] 
 			+ pm->ps->velocity[1] * pm->ps->velocity[1];
-		if ( xyspeedQ < 5.0*5.0 ) { // not using sqrt() there
+		if ( xyspeedQ < 5.0*5.0 
+		|| (pm->ps->groundEntityNum == ENTITYNUM_NONE 
+#ifdef USE_ADVANCED_CLASS
+		&& pm->playerClass != PCLASS_DRAGON // keep flying animation going
+#endif
+		)) { // not using sqrt() there
 			pm->ps->bobCycle = 0;	// start at beginning of cycle again
 			if ( pm->ps->pm_flags & PMF_DUCKED ) {
 				PM_ContinueLegsAnim( LEGS_IDLECR );
@@ -1555,7 +1560,6 @@ static void PM_Footsteps( void ) {
 				PM_ContinueLegsAnim( LEGS_IDLE );
 			}
 		}
-		Com_Printf("wtf?");
 		return;
 	}
 	
