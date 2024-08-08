@@ -25,13 +25,30 @@
 /*QUAKED item_slip_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
+		"item_slip_armor", 
+		"sound/misc/ar2_pkup.wav",
+        { "models/powerups5/armor/armor_yellowslip.md3",
+		0, 0, 0},
+/* icon */		"icons/iconr_yellow",
+/* pickup */	"Green Armor",
+		100,
+		IT_ARMOR,
+		0,
+/* precache */ "",
+/* sounds */ "",
+		{"models/powerups5/armor/armor_yellowslip.skin%hue0.15", 0, 0, 0}
+	},
+
+/*QUAKED item_slip_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+	{
 		"item_slip_armor_combat", 
 		"sound/misc/ar2_pkup.wav",
         { "models/powerups5/armor/armor_yellowslip.md3",
 		0, 0, 0},
 /* icon */		"icons/iconr_yellow",
-/* pickup */	"Armor",
-		50,
+/* pickup */	"Yellow Armor",
+		150,
 		IT_ARMOR,
 		0,
 /* precache */ "",
@@ -46,8 +63,8 @@
         { "models/powerups5/armor/armor_redslip.md3",
 		0, 0, 0},
 /* icon */		"icons/iconr_red",
-/* pickup */	"Heavy Armor",
-		100,
+/* pickup */	"Red Armor",
+		200,
 		IT_ARMOR,
 		0,
 /* precache */ "",
@@ -134,15 +151,15 @@
 /*QUAKED weapon_slip_gauntlet (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
-		"weapon_slip_gauntlet", 
+		"weapon_slip_axe", 
 		"sound/misc/w_pkup.wav",
         { "models/weapons5/gauntlet/gauntletslip.md3",
 		0, 0, 0},
 /* icon */		"icons/iconw_gauntlet",
-/* pickup */	"Gauntlet",
+/* pickup */	"Axe",
 		0,
 		IT_WEAPON,
-		WP_GAUNTLET,
+		WP_AXE,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -155,10 +172,10 @@
         { "models/weapons5/shotgun/shotgunslip.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_shotgun",
-/* pickup */	"Shotgun",
+/* pickup */	"Double Barrel",
 		10,
 		IT_WEAPON,
-		WP_SHOTGUN,
+		WP_MARAUDER,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -171,10 +188,10 @@
         { "models/weapons5/machinegun/machinegunslip.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_machinegun",
-/* pickup */	"Machinegun",
+/* pickup */	"Oscillator",
 		40,
 		IT_WEAPON,
-		WP_MACHINEGUN,
+		WP_OSCILLATOR,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -187,10 +204,10 @@
         { "models/weapons5/grenadel/grenadelslip.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_grenade",
-/* pickup */	"Grenade Launcher",
+/* pickup */	"Trailblazer",
 		10,
 		IT_WEAPON,
-		WP_GRENADE_LAUNCHER,
+		WP_TRAILBLAZER,
 /* precache */ "",
 /* sounds */ "sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav"
 	},
@@ -206,7 +223,7 @@
 /* pickup */	"Rocket Launcher",
 		10,
 		IT_WEAPON,
-		WP_ROCKET_LAUNCHER,
+		WP_ORIGINAL,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -219,26 +236,10 @@
         { "models/weapons5/lightning/lightningslip.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_lightning",
-/* pickup */	"Lightning Gun",
+/* pickup */	"Thunderbolt",
 		100,
 		IT_WEAPON,
-		WP_LIGHTNING,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-/*QUAKED weapon_slip_railgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"weapon_slip_railgun", 
-		"sound/misc/w_pkup.wav",
-        { "models/weapons5/railgun/railgunslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/iconw_railgun",
-/* pickup */	"Railgun",
-		10,
-		IT_WEAPON,
-		WP_RAILGUN,
+		WP_THUNDERBOLT,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -246,52 +247,18 @@
 /*QUAKED weapon_slip_plasmagun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
-		"weapon_slip_plasmagun", 
+		"weapon_slip_nailgun", 
 		"sound/misc/w_pkup.wav",
         { "models/weapons5/plasma/plasmaslip.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_plasma",
-/* pickup */	"Plasma Gun",
+/* pickup */	"Super Nailgun",
 		50,
 		IT_WEAPON,
-		WP_PLASMAGUN,
+		WP_NAILGUN4,
 /* precache */ "",
 /* sounds */ ""
 	},
-
-/*QUAKED weapon_slip_bfg (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"weapon_slip_bfg",
-		"sound/misc/w_pkup.wav",
-        { "models/weapons5/bfg/bfgslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/iconw_bfg",
-/* pickup */	"BFG10K",
-		20,
-		IT_WEAPON,
-		WP_BFG,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-#ifdef USE_GRAPPLE
-/*QUAKED weapon_slip_grapplinghook (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"weapon_slip_grapplinghook",
-		"sound/misc/w_pkup.wav",
-        { "models/weapons5/grapple/grappleslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/iconw_grapple",
-/* pickup */	"Grappling Hook",
-		0,
-		IT_WEAPON,
-		WP_GRAPPLING_HOOK,
-/* precache */ "",
-/* sounds */ ""
-	},
-#endif
 
 	//
 	// AMMO ITEMS
@@ -308,7 +275,7 @@
 /* pickup */	"Shells",
 		10,
 		IT_AMMO,
-		WP_SHOTGUN,
+		WP_MARAUDER,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -324,23 +291,7 @@
 /* pickup */	"Bullets",
 		50,
 		IT_AMMO,
-		WP_MACHINEGUN,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-/*QUAKED ammo_slip_grenades (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"ammo_slip_grenades",
-		"sound/misc/am_pkup.wav",
-        { "models/powerups5/ammo/grenadeamslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/icona_grenade",
-/* pickup */	"Grenades",
-		5,
-		IT_AMMO,
-		WP_GRENADE_LAUNCHER,
+		WP_OSCILLATOR,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -348,15 +299,15 @@
 /*QUAKED ammo_slip_cells (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
-		"ammo_slip_cells",
+		"ammo_slip_nails",
 		"sound/misc/am_pkup.wav",
         { "models/powerups5/ammo/plasmaamslip.md3", 
 		0, 0, 0},
 /* icon */		"icons/icona_plasma",
-/* pickup */	"Cells",
+/* pickup */	"Nails",
 		30,
 		IT_AMMO,
-		WP_PLASMAGUN,
+		WP_NAILGUN4,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -372,7 +323,7 @@
 /* pickup */	"Lightning",
 		60,
 		IT_AMMO,
-		WP_LIGHTNING,
+		WP_THUNDERBOLT,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -388,39 +339,7 @@
 /* pickup */	"Rockets",
 		5,
 		IT_AMMO,
-		WP_ROCKET_LAUNCHER,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-/*QUAKED ammo_slip_slugs (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"ammo_slip_slugs",
-		"sound/misc/am_pkup.wav",
-        { "models/powerups5/ammo/railgunamslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/icona_railgun",
-/* pickup */	"Slugs",
-		10,
-		IT_AMMO,
-		WP_RAILGUN,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-/*QUAKED ammo_slip_bfg (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"ammo_slip_bfg",
-		"sound/misc/am_pkup.wav",
-        { "models/powerups5/ammo/bfgamslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/icona_bfg",
-/* pickup */	"Bfg Ammo",
-		15,
-		IT_AMMO,
-		WP_BFG,
+		WP_ORIGINAL,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -428,21 +347,7 @@
 	//
 	// HOLDABLE ITEMS
 	//
-/*QUAKED holdable_slip_teleporter (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"holdable_slip_teleporter", 
-		"sound/items/holdable.wav",
-        { "models/powerups5/holdable/teleporterslip.md3", 
-		0, 0, 0},
-/* icon */		"icons/teleporter",
-/* pickup */	"Personal Teleporter",
-		60,
-		IT_HOLDABLE,
-		HI_TELEPORTER,
-/* precache */ "",
-/* sounds */ ""
-	},
+
 /*QUAKED holdable_slip_medkit (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{

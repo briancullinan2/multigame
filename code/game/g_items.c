@@ -821,13 +821,29 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 
 	// play the normal pickup sound
+#ifdef USE_ADVANCED_ITEMS
+  if ( predict ) {
+		
+		G_AddPredictableEvent( other, 
+			alreadyHad ? EV_ITEM_PICKUP + (ent->s.modelindex2 * 2)
+								: EV_ITEM_PICKUP + (ent->s.modelindex2 * 2) + 1,
+			ent->s.modelindex );
+	} else {
+		G_AddEvent( other, 
+			alreadyHad ? EV_ITEM_PICKUP + (ent->s.modelindex2 * 2)
+								: EV_ITEM_PICKUP + (ent->s.modelindex2 * 2) + 1,
+			ent->s.modelindex );
+	}
+#else
 #ifdef USE_WEAPON_ORDER
   if ( predict ) {
-		G_AddPredictableEvent( other, alreadyHad 
-      ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, ent->s.modelindex );
+		G_AddPredictableEvent( other, 
+			alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, 
+			ent->s.modelindex );
 	} else {
-		G_AddEvent( other, alreadyHad 
-      ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, ent->s.modelindex );
+		G_AddEvent( other, 
+			alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, 
+			ent->s.modelindex );
 	}
 #else
 	if ( predict ) {
@@ -836,6 +852,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		G_AddEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
 	}
 #endif
+#endif
 
 	// powerup pickups are global broadcasts
 	if ( ent->item->giType == IT_POWERUP || ent->item->giType == IT_TEAM) {
@@ -843,14 +860,14 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		if (!ent->speed) {
 			gentity_t	*te;
 
-			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex | (ent->s.modelindex2 << 8);
+			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP + ent->s.modelindex2 );
+			te->s.eventParm = ent->s.modelindex;
 			te->r.svFlags |= SVF_BROADCAST;
 		} else {
 			gentity_t	*te;
 
-			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex | (ent->s.modelindex2 << 8);
+			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP + ent->s.modelindex2 );
+			te->s.eventParm = ent->s.modelindex;
 			// only send this temp entity to a single client
 			te->r.svFlags |= SVF_SINGLECLIENT;
 			te->r.singleClient = other->s.number;
@@ -1050,7 +1067,7 @@ void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPick
 	G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
 
 	// play the normal pickup sound
-	G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.modelindex );
+	G_AddPredictableEvent( other, EV_ITEM_PICKUP, ent->s.modelindex | (ent->s.modelindex2 << 8) );
 
 	// powerup pickups are global broadcasts
 	if ((ent->item->giType == IT_POWERUP) || (ent->item->giType == IT_TEAM))
@@ -1063,7 +1080,7 @@ void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPick
 			gentity_t  *te;
 
 			te		= G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex;
+			te->s.eventParm = ent->s.modelindex | (ent->s.modelindex2 << 8);
 			te->r.svFlags  |= SVF_BROADCAST;
 		}
 		else
@@ -1071,7 +1088,7 @@ void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPick
 			gentity_t  *te;
 
 			te		   = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm    = ent->s.modelindex;
+			te->s.eventParm    = ent->s.modelindex | (ent->s.modelindex2 << 8);
 			// only send this temp entity to a single client
 			te->r.svFlags	  |= SVF_SINGLECLIENT;
 			te->r.singleClient = other->s.number;

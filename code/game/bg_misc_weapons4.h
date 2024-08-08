@@ -163,7 +163,7 @@
 				/* pickup */ "Maledictation",
 				10,
 				IT_WEAPON,
-				WP_OLDRAILGUN,
+				WP_MALEDICTION,
 				/* precache */ "",
 				/* sounds */ ""},
 

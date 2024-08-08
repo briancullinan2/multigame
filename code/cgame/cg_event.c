@@ -907,14 +907,24 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		break;
 
 #ifdef USE_WEAPON_ORDER
+  case EV_ITEM_PICKUP6:
+  case EV_ITEM_PICKUP4:
   case EV_ITEM_PICKUP2:
 #endif
+	case EV_ITEM_PICKUP5:
+	case EV_ITEM_PICKUP3:
 	case EV_ITEM_PICKUP:
 		{
 			gitem_t	*item;
 			int		index;
 
 			index = es->eventParm;		// player predicted
+			if(event == EV_ITEM_PICKUP3 || event == EV_ITEM_PICKUP4) {
+				index += 256;
+			}
+			if(event == EV_ITEM_PICKUP5 || event == EV_ITEM_PICKUP6) {
+				index += 512;
+			}
 
 			if ( index < 1 || index >= bg_numItems ) {
 				break;
@@ -965,7 +975,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 			// show icon and name on status bar
 			if ( es->number == cg.snap->ps.clientNum ) {
 #ifdef USE_WEAPON_ORDER
-				CG_ItemPickup( index, event == EV_ITEM_PICKUP2 );
+				CG_ItemPickup( index, event == EV_ITEM_PICKUP2 || event == EV_ITEM_PICKUP4 || event == EV_ITEM_PICKUP6 );
 #else
         CG_ItemPickup( index );
 #endif
@@ -977,12 +987,20 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		}
 		break;
 
+	case EV_GLOBAL_ITEM_PICKUP3:
+	case EV_GLOBAL_ITEM_PICKUP2:
 	case EV_GLOBAL_ITEM_PICKUP:
 		{
 			gitem_t	*item;
 			int		index;
 
 			index = es->eventParm;		// player predicted
+			if(event == EV_GLOBAL_ITEM_PICKUP2) {
+				index += 256;
+			}
+			if(event == EV_GLOBAL_ITEM_PICKUP3) {
+				index += 512;
+			}
 
 			if ( index < 1 || index >= bg_numItems ) {
 				break;

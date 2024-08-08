@@ -9,7 +9,11 @@
 // needs to be larger than PACKET_BACKUP
 
 
+#if defined(USE_MULTIWORLD) || defined(USE_HORDES)
+#define	MAX_ENTITIES_IN_SNAPSHOT	MAX_GENTITIES
+#else
 #define	MAX_ENTITIES_IN_SNAPSHOT	256
+#endif
 
 // snapshots are a view of the server at a given time
 

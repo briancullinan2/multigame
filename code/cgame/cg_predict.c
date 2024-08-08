@@ -590,7 +590,7 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;	// can't hold it
 	}
 
-	item = &bg_itemlist[ cent->currentState.modelindex ];
+	item = &bg_itemlist[ cent->currentState.modelindex | (cent->currentState.modelindex2 << 8) ];
 
 #ifdef USE_ADVANCED_ITEMS
 	{
@@ -647,9 +647,9 @@ static void CG_TouchItem( centity_t *cent ) {
 #endif
   }
 	//if(item->giTag )
-  BG_AddPredictableEventToPlayerstate( alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
+  BG_AddPredictableEventToPlayerstate( alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, cent->currentState.modelindex | (cent->currentState.modelindex2 << 8) , &cg.predictedPlayerState, cent - cg_entities );
 #else
-	BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, cent->currentState.modelindex , &cg.predictedPlayerState, cent - cg_entities );
+	BG_AddPredictableEventToPlayerstate( EV_ITEM_PICKUP, cent->currentState.modelindex | (cent->currentState.modelindex2 << 8) , &cg.predictedPlayerState, cent - cg_entities );
 #endif
 
 	// perform prediction
