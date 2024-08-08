@@ -14,7 +14,7 @@ void CG_AddPolyToPool( qhandle_t shader, const polyVert_t *verts );
 static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float length, qhandle_t shader ) {
 	// Draw a raindrop
 
-	vec3_t		forward, right;
+	vec3_t		forward, right, viewAxis;
 	polyVert_t	verts[3];
 	vec2_t		line;
 	float		len, /*frac,*/ dist;
@@ -22,7 +22,7 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 	//float		groundHeight;
 //	int			msec = trap_Milliseconds();
 	float height = TRAIL_WIDTH; // + random() * 3;
-	float weight = height * 0.5f;
+	float weight = TRAIL_WIDTH; //height * 0.5f;
 	vec3_t colour;
 	colour[0] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
 	colour[1] = 0xFF; //0.8 + 0.2 * random() * 0xFF;
@@ -54,6 +54,7 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 		dist = 1.0f;
 	}
 
+#if 0
 	//AngleVectors(cg.refdefViewAngles, forward, NULL, NULL);
 	VectorClear(forward);
 	forward[1] = 1.0f;
@@ -66,6 +67,16 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 	VectorScale( cg.refdef.viewaxis[1], line[1], right );
 	VectorMA( right, -line[0], cg.refdef.viewaxis[2], right );
 	VectorNormalize( right );
+#else
+  VectorCopy( deltaNormalized, forward );
+
+	VectorCopy( pos, start );
+	VectorMA( start, len, forward, finish );
+
+  VectorSubtract( cg.refdef.vieworg, pos, viewAxis );
+  CrossProduct( viewAxis, forward, right );
+  VectorNormalize( right );
+#endif
 	
 	dist = length; //length / 256.0f;
 

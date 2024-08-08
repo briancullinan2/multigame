@@ -775,6 +775,7 @@ static void PM_AirMove( void ) {
 		wishvel[i] = pml.forward[i]*fmove + pml.right[i]*smove;
 	}
 	wishvel[2] = 0;
+
 	VectorCopy (wishvel, wishdir);
 	wishspeed = VectorNormalize(wishdir);
 	wishspeed *= scale;
@@ -1287,12 +1288,11 @@ static void PM_GroundTrace( void ) {
 
 #ifdef USE_PORTALS
 	{
-		// find nearest portal from our current trajectory the distance from the portal
+		// TODO: find nearest portal from our current trajectory the distance from the portal
 		// rerun the trace from the point of the portal
 	}
-
-
 #endif
+
 	// do something corrective if the trace starts in a solid...
 	if ( trace.allsolid ) {
 		if ( !PM_CorrectAllSolid(&trace) )
@@ -1521,9 +1521,6 @@ static void PM_Footsteps( void ) {
 	//
 	//xyspeedQ = pm->ps->velocity[0] * pm->ps->velocity[0] 
 	//	+ pm->ps->velocity[1] * pm->ps->velocity[1];
-#ifdef USE_ADVANCED_CLASS
-	if(pm->playerClass != PCLASS_DRAGON)
-#endif
 	if ( pm->ps->groundEntityNum == ENTITYNUM_NONE ) {
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
@@ -1537,6 +1534,9 @@ static void PM_Footsteps( void ) {
 		}
 #endif
 		// airborne leaves position in cycle intact, but doesn't advance
+#ifdef USE_ADVANCED_CLASS
+		if(pm->playerClass != PCLASS_DRAGON) // keep flying animation going
+#endif
 		if ( pm->waterlevel > 1 ) {
 			PM_ContinueLegsAnim( LEGS_SWIM );
 		}
@@ -1555,6 +1555,7 @@ static void PM_Footsteps( void ) {
 				PM_ContinueLegsAnim( LEGS_IDLE );
 			}
 		}
+		Com_Printf("wtf?");
 		return;
 	}
 	
