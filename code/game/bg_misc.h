@@ -35,3 +35,7 @@
 #endif
 #endif
 
+#ifdef USE_ADVANCED_CLASS
+#include "./bg_misc_earth.h"
+#endif
+

@@ -1548,7 +1548,7 @@ static void PM_Footsteps( void ) {
 		xyspeedQ = pm->ps->velocity[0] * pm->ps->velocity[0] 
 			+ pm->ps->velocity[1] * pm->ps->velocity[1];
 		if ( xyspeedQ < 5.0*5.0 
-		|| (pm->ps->groundEntityNum == ENTITYNUM_NONE 
+		|| (pm->ps->groundEntityNum == ENTITYNUM_NONE // TODO: moving this to the `if` above means always legs idle if they are flying, might be a better effect
 #ifdef USE_ADVANCED_CLASS
 		&& pm->playerClass != PCLASS_DRAGON // keep flying animation going
 #endif
