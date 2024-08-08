@@ -223,10 +223,12 @@ static void CG_Item( centity_t *cent ) {
 	weaponInfo_t	*wi;
 	int				modulus;
 	itemInfo_t		*itemInfo;
+	int modelIndex;
 
 	es = &cent->currentState;
-	if ( es->modelindex >= bg_numItems ) {
-		CG_Error( "Bad item index %i on entity", es->modelindex );
+	modelIndex = es->modelindex | (es->modelindex2 << 8);
+	if ( modelIndex >= bg_numItems ) {
+		CG_Error( "Bad item index %i on entity", modelIndex );
 	}
 
 #ifdef USE_ITEM_TIMERS
@@ -244,25 +246,25 @@ static void CG_Item( centity_t *cent ) {
 #endif
 
 	// if set to invisible, skip
-	if ( !es->modelindex || ( es->eFlags & EF_NODRAW ) || cent->delaySpawn > cg.time ) {
+	if ( !modelIndex || ( es->eFlags & EF_NODRAW ) || cent->delaySpawn > cg.time ) {
 		return;
 	}
 
-	itemInfo = &cg_items[ es->modelindex ];
+	itemInfo = &cg_items[ modelIndex ];
 	if ( !itemInfo->registered ) {
-		CG_RegisterItemVisuals( es->modelindex );
+		CG_RegisterItemVisuals( modelIndex );
 		if ( !itemInfo->registered ) {
 			return;
 		}
 	}
 
-	item = &bg_itemlist[ es->modelindex ];
+	item = &bg_itemlist[ modelIndex ];
 	if ( cg_simpleItems.integer && item->giType != IT_TEAM ) {
 		memset( &ent, 0, sizeof( ent ) );
 		ent.reType = RT_SPRITE;
 		VectorCopy( cent->lerpOrigin, ent.origin );
 		ent.radius = 14;
-		ent.customShader = cg_items[es->modelindex].icon_df;
+		ent.customShader = cg_items[modelIndex].icon_df;
 		ent.shaderRGBA[0] = 255;
 		ent.shaderRGBA[1] = 255;
 		ent.shaderRGBA[2] = 255;
@@ -313,8 +315,8 @@ static void CG_Item( centity_t *cent ) {
 		cent->lerpOrigin[2] += 8;	// an extra height boost
 	}
 
-	ent.hModel = cg_items[es->modelindex].models[0];
-	ent.customSkin = cg_items[es->modelindex].customSkin;
+	ent.hModel = cg_items[modelIndex].models[0];
+	ent.customSkin = cg_items[modelIndex].customSkin;
 
 	VectorCopy( cent->lerpOrigin, ent.origin);
 	VectorCopy( cent->lerpOrigin, ent.oldorigin);
@@ -415,7 +417,7 @@ static void CG_Item( centity_t *cent ) {
 
 		if ( item->giType == IT_HEALTH || item->giType == IT_POWERUP || item->giTag == HI_HEALER )
 		{
-			if ( ( ent.hModel = cg_items[es->modelindex].models[1] ) != 0 )
+			if ( ( ent.hModel = cg_items[modelIndex].models[1] ) != 0 )
 			{
 				if ( item->giType == IT_POWERUP )
 				{
@@ -431,7 +433,7 @@ static void CG_Item( centity_t *cent ) {
 					VectorScale( ent.axis[2], frac, ent.axis[2] );
 					ent.nonNormalizedAxes = qtrue;
 				}
-				ent.customSkin = cg_items[es->modelindex].customSkin2;
+				ent.customSkin = cg_items[modelIndex].customSkin2;
 				trap_R_AddRefEntityToScene( &ent );
 			}
 		}

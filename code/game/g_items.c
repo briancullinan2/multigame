@@ -1171,8 +1171,9 @@ gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity )
 	dropped = G_Spawn();
 
 	dropped->s.eType = ET_ITEM;
-	dropped->s.modelindex = item - bg_itemlist;	// store item number in modelindex
-	dropped->s.modelindex2 = 1; // This is non-zero is it's a dropped item
+	dropped->s.modelindex = (item - bg_itemlist) & 0xFF;	// store item number in modelindex
+	dropped->s.modelindex2 = ((item - bg_itemlist) & 0xFF00) >> 8;	// store item number in modelindex
+	//dropped->s.modelindex2 = 1; // This is non-zero is it's a dropped item
 
 	// item scale-down
 	dropped->s.time = level.time;
@@ -1284,8 +1285,10 @@ void FinishSpawningItem( gentity_t *ent ) {
 	VectorSet( ent->r.maxs, ITEM_RADIUS, ITEM_RADIUS, ITEM_RADIUS );
 
 	ent->s.eType = ET_ITEM;
-	ent->s.modelindex = ent->item - bg_itemlist;		// store item number in modelindex
-	ent->s.modelindex2 = 0; // zero indicates this isn't a dropped item
+	ent->s.modelindex = (ent->item - bg_itemlist) & 0xFF;	// store item number in modelindex
+	ent->s.modelindex2 = ((ent->item - bg_itemlist) & 0xFF00) >> 8;	// store item number in modelindex
+	//ent->s.modelindex = ent->item - bg_itemlist;		// store item number in modelindex
+	//ent->s.modelindex2 = 0; // zero indicates this isn't a dropped item
 
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->touch = Touch_Item;

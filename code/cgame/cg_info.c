@@ -70,7 +70,9 @@ void CG_LoadingItem( int itemNum ) {
 	
 	if ( item->icon && loadingItemIconCount < MAX_LOADING_ITEM_ICONS ) {
 		loadingItemIcons[loadingItemIconCount] = trap_R_RegisterShaderNoMip( item->icon );
-		loadingItemIconCount++;
+		if(loadingItemIcons[loadingItemIconCount]) {
+			loadingItemIconCount++;
+		}
 	}
 
 	CG_LoadingString( item->pickup_name );

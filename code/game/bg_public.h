@@ -15,7 +15,7 @@
 #define	HEALTH_SOFT_LIMIT	100
 #define	AMMO_HARD_LIMIT		200
 
-#define	MAX_ITEMS			256
+#define	MAX_ITEMS			512
 
 #define	RANK_TIED_FLAG		0x4000
 

@@ -36,6 +36,9 @@
 #endif
 
 #ifdef USE_ADVANCED_CLASS
-#include "./bg_misc_earth.h"
+#include "./bg_misc_gen_earth.h"
+#include "./bg_misc_gen_strogg.h"
+#include "./bg_misc_gen_slip.h"
+#include "./bg_misc_gen_doom.h"
 #endif
 
