@@ -844,13 +844,13 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 			gentity_t	*te;
 
 			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex;
+			te->s.eventParm = ent->s.modelindex | (ent->s.modelindex2 << 8);
 			te->r.svFlags |= SVF_BROADCAST;
 		} else {
 			gentity_t	*te;
 
 			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_ITEM_PICKUP );
-			te->s.eventParm = ent->s.modelindex;
+			te->s.eventParm = ent->s.modelindex | (ent->s.modelindex2 << 8);
 			// only send this temp entity to a single client
 			te->r.svFlags |= SVF_SINGLECLIENT;
 			te->r.singleClient = other->s.number;

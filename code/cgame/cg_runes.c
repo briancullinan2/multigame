@@ -25,7 +25,7 @@ void CG_TellRune_f( void ) {
 	}
 	if(other && other->currentState.eType == ET_ITEM) {
 		const gitem_t	*item;
-		item = &bg_itemlist[ other->currentState.modelindex ];
+		item = &bg_itemlist[ other->currentState.modelindex | (other->currentState.modelindex2 << 8) ];
 		CG_CenterPrint( item->pickup_name, SCREEN_HEIGHT * 0.30, BIGCHAR_WIDTH );
 	}
 }

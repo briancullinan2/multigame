@@ -1405,12 +1405,14 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent,
 	int		upperBound;
 	int i;
 #endif
+	int modelIndex;
+	modelIndex = ent->modelindex | (ent->modelindex2 << 8);
 
-	if ( ent->modelindex < 1 || ent->modelindex >= bg_numItems ) {
+	if ( modelIndex < 1 || modelIndex >= bg_numItems ) {
 		Com_Error( ERR_DROP, "BG_CanItemBeGrabbed: index out of range" );
 	}
 
-	item = &bg_itemlist[ent->modelindex];
+	item = &bg_itemlist[modelIndex];
 
 	switch( item->giType ) {
 	case IT_WEAPON:
