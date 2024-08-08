@@ -419,7 +419,6 @@ typedef enum {
 	WP_GRAPPLING_HOOK = 19,
 #endif
 
-#ifdef USE_ADVANCED_WEAPONS
 	WP_GAUNTLET2 = 21,
 	WP_MACHINEGUN2 = 22,
 	WP_SHOTGUN2 = 23,
@@ -429,9 +428,20 @@ typedef enum {
 	WP_RAILGUN2 = 27,
 	WP_PLASMAGUN2 = 28,
 	WP_BFG2 = 29,
-#endif
 
-	WP_NUM_WEAPONS = 30,
+	WP_CONDUCTOR = 30,
+	WP_INCINERATOR = 31,
+	WP_EXECUTIONER = 32,
+	WP_CROSSBOW = 33,
+	WP_ANNIHILATOR = 34,
+	WP_FROSTGUN = 35,
+	WP_PEACEMAKER = 36,
+	WP_BITTERMAN = 37,
+	WP_TRESPASSER = 38,
+	WP_ICEBEAM = 39,
+	WP_OLDRAILGUN = 40,
+
+	WP_NUM_WEAPONS = 41,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
 	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
 	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools
