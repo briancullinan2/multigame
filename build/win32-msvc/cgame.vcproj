@@ -416,6 +416,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\cgame\cg_trails.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\cgame\cg_timer.c"
 				>
 			</File>

@@ -1142,6 +1142,10 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 	cgs.media.medalAssist = trap_R_RegisterShaderNoMip( "medal_assist" );
 	cgs.media.medalCapture = trap_R_RegisterShaderNoMip( "medal_capture" );
 
+	// BFP - Ki trail shaders
+	cgs.media.kiTrailBlueShader = trap_R_RegisterShader( "powerups/bluekitrail" );
+	cgs.media.kiTrailRedShader = trap_R_RegisterShader( "powerups/redkitrail" );
+	cgs.media.kiTrailYellowShader = trap_R_RegisterShader( "powerups/yellowkitrail" );
 
 	memset( cg_items, 0, sizeof( cg_items ) );
 	memset( cg_weapons, 0, sizeof( cg_weapons ) );
@@ -2594,6 +2598,11 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	CG_InitLocalEntities();
 
 	CG_InitMarkPolys();
+
+	if(cg_kiTrail.integer) {
+		// BFP - Initialize ki trails
+		CG_InitKiTrails();
+	}
 
 	// remove the last loading update
 	cg.infoScreenText[0] = 0;

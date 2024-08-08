@@ -157,6 +157,8 @@ typedef struct {
 	qboolean		painIgnore;
 	int				lightningFiring;
 
+	int				kiTrailTime;
+
 	// railgun trail spawning
 	vec3_t			railgunImpact;
 	qboolean		railgunFlash;
@@ -1065,6 +1067,11 @@ typedef struct {
 	qhandle_t	deathEffectShader;
 #endif
 
+	// BFP - Ki trail shaders
+	qhandle_t	kiTrailRedShader;
+	qhandle_t	kiTrailBlueShader;
+	qhandle_t	kiTrailYellowShader;
+
 	// scoreboard headers
 	qhandle_t	scoreboardName;
 	qhandle_t	scoreboardPing;
@@ -1674,6 +1681,11 @@ void CG_ScorePlum( int client, const vec3_t origin, int score );
 #ifdef USE_DAMAGE_PLUMS
 void CG_DamagePlum( int client, const vec3_t origin, int damage );
 #endif
+
+void CG_InitKiTrails( void );
+void CG_ResetKiTrail( int entityNum, vec3_t origin );
+void CG_UpdateKiTrail( int entityNum, vec3_t origin, qboolean remove );
+void CG_KiTrail( int entityNum, qhandle_t hShader );
 
 void CG_GibPlayer( const vec3_t playerOrigin );
 void CG_BigExplode( vec3_t playerOrigin );

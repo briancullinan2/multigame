@@ -419,6 +419,7 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/cg_scoreboard.o \
   $(B)/$(MOD)/cgame/cg_servercmds.o \
   $(B)/$(MOD)/cgame/cg_snapshot.o \
+  $(B)/$(MOD)/cgame/cg_trails.o \
   $(B)/$(MOD)/cgame/cg_timer.o \
   $(B)/$(MOD)/cgame/cg_view.o \
   $(B)/$(MOD)/cgame/cg_weapons.o \

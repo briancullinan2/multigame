@@ -274,6 +274,7 @@
     <ClCompile Include="..\..\code\cgame\cg_scoreboard.c" />
     <ClCompile Include="..\..\code\cgame\cg_servercmds.c" />
     <ClCompile Include="..\..\code\cgame\cg_snapshot.c" />
+    <ClCompile Include="..\..\code\cgame\cg_trails.c" />
     <ClCompile Include="..\..\code\cgame\cg_syscalls.c" />
     <ClCompile Include="..\..\code\cgame\cg_timer.c" />
     <ClCompile Include="..\..\code\cgame\cg_view.c" />

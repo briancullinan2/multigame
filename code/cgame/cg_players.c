@@ -2922,7 +2922,7 @@ void CG_PlayerStats( centity_t *cent ) {
 }
 #endif
 
-void CG_RecordPosition(centity_t *cent);
+void CG_RecordPosition(centity_t *cent, qboolean moving, qboolean isAdding);
 
 
 /*
@@ -2948,24 +2948,31 @@ void CG_Player( centity_t *cent ) {
 	vec3_t			dir, angles;
 #endif
 	qboolean		darken;
+	qboolean    isTrailPowerup;
 
 	if ( cg.levelShot ) {
 		return;
 	}
 
 
-	if( // cent->currentState.clientNum == cg.snap->ps.clientNum
+	isTrailPowerup = 
 #ifdef USE_ADVANCED_ITEMS
-		cent->currentState.powerups == PW_FLIGHT
+		(cent->currentState.powerups & 0xFF) == PW_FLIGHT
+		|| (cent->currentState.powerups >> 8) == PW_FLIGHT
+		|| (cent->currentState.powerups & 0xFF) == PW_SUPERMAN
+		|| (cent->currentState.powerups >> 8) == PW_SUPERMAN
 #else
 		cent->currentState.powerups & PW_FLIGHT
 #endif
 #ifdef USE_ADVANCED_CLASS
 		|| cgs.clientinfo[cent->currentState.clientNum].playerClass == PCLASS_DRAGON
 #endif
-	) {
-		CG_RecordPosition(cent);
-	}
+		;
+
+	CG_RecordPosition(cent, 
+		( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) != LEGS_IDLE 
+		&& ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) != LEGS_IDLECR,
+		isTrailPowerup);
 
 
 	// the client number is stored in clientNum.  It can't be derived

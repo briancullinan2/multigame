@@ -242,6 +242,7 @@ CG_CVAR( cg_splitY, "cg_splitY", "1", CVAR_USERINFO )
 
 CG_CVAR( cg_playerScale, "g_playerScale", "1.0", CVAR_SYSTEMINFO )
 CG_CVAR( cg_contrails, "cg_contrails", "1", CVAR_SYSTEMINFO )
+CG_CVAR( cg_kiTrail, "cg_kiTrail", "50", CVAR_ARCHIVE )
 
 
 #ifdef USE_RUNES
