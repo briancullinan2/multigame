@@ -440,8 +440,9 @@ typedef enum {
 	WP_TRESPASSER = 38,
 	WP_ICEBEAM = 39,
 	WP_OLDRAILGUN = 40,
+	WP_THUNDERBOLT = 41,
 
-	WP_NUM_WEAPONS = 41,
+	WP_NUM_WEAPONS = 42,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
 	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
 	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools

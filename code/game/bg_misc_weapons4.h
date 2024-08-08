@@ -167,5 +167,20 @@
 				/* precache */ "",
 				/* sounds */ ""},
 
+		/*QUAKED weapon_lightning (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+		 */
+		{
+				"weapon_qc_thunderbolt",
+				"sound/misc/w_pkup.wav",
+				{"models/weapons4/lightning/lg_thunderbolt.md3",
+				 0, 0, 0},
+				/* icon */ "icons/iconw_lightning",
+				/* pickup */ "Thunderbolt",
+				100,
+				IT_WEAPON,
+				WP_THUNDERBOLT,
+				/* precache */ "",
+				/* sounds */ ""},
+
 
 
