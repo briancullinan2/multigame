@@ -509,6 +509,10 @@ typedef struct {
   qhandle_t		altShader2;
   qhandle_t		altShader3;
 #endif
+#ifdef USE_ADVANCED_ITEMS
+	vec3_t mins;
+	vec3_t maxs;
+#endif
 } itemInfo_t;
 
 

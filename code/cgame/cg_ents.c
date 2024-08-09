@@ -304,6 +304,9 @@ static void CG_Item( centity_t *cent ) {
 	} else {
 		memset (&ent, 0, sizeof(ent));
 
+		VectorSubtract(cent->lerpOrigin, cg_items[modelIndex].mins, cent->lerpOrigin);
+		cent->lerpOrigin[2] -= 15; // bounding box 
+
 		AnglesToAxis( vec3_origin, ent.axis );
 	}
 #endif
