@@ -1007,7 +1007,12 @@ void CG_RegisterItemVisuals( int itemNum ) {
 	// powerups have an accompanying ring or sphere
 	//
 	if ( item->giType == IT_POWERUP || item->giType == IT_HEALTH || 
-		item->giType == IT_ARMOR || item->giType == IT_HOLDABLE ) {
+		item->giType == IT_ARMOR || item->giType == IT_HOLDABLE 
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_POWERUP2 || item->giType == IT_HEALTH2 || 
+		item->giType == IT_ARMOR2 || item->giType == IT_HOLDABLE2 
+#endif
+	) {
 		if ( item->world_model[1] ) {
 			itemInfo->models[1] = trap_R_RegisterModel( item->world_model[1] );
 		}

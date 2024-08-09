@@ -1227,7 +1227,18 @@ typedef enum {
 	IT_HOLDABLE,			// single use, holdable item
 							// EFX: rotate + bob
 	IT_PERSISTANT_POWERUP,
-	IT_TEAM
+	IT_TEAM,
+#ifdef USE_ADVANCED_ITEMS
+	IT_WEAPON2,  //  stationary
+	IT_AMMO2,  //  stationary
+	IT_ARMOR2,      // like the name implies, quake2 pickups are stationary
+	IT_HEALTH2,  //  stationary
+	IT_POWERUP2,  //  stationary
+	IT_HOLDABLE2,  //  stationary
+	IT_PERSISTANT_POWERUP2, //  stationary
+	IT_TEAM2, //  stationary
+#endif
+	IT_NUM_TYPES
 } itemType_t;
 
 #define MAX_ITEM_MODELS 4

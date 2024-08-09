@@ -477,25 +477,41 @@ static void CG_PickupPrediction( centity_t *cent, const gitem_t *item ) {
 	}
 
 	// armor prediction
-	if ( item->giType == IT_ARMOR && cent->currentState.time2 > 0 ) {
+	if ( (item->giType == IT_ARMOR
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_ARMOR2
+#endif
+	) && cent->currentState.time2 > 0 ) {
 		CG_AddArmor( item, cent->currentState.time2 );
 		return;
 	}
 
 	// ammo prediction
-	if ( item->giType == IT_AMMO && cent->currentState.time2 > 0 ) {
+	if ( (item->giType == IT_AMMO
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_AMMO2
+#endif
+	) && cent->currentState.time2 > 0 ) {
 		CG_AddAmmo( item->giTag, cent->currentState.time2 );
 		return;
 	}
 
 	// weapon prediction
-	if ( item->giType == IT_WEAPON && cent->currentState.time2 > 0 ) {
+	if ( (item->giType == IT_WEAPON
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_WEAPON2
+#endif
+	) && cent->currentState.time2 > 0 ) {
 		CG_AddWeapon( item->giTag, cent->currentState.time2, (cent->currentState.modelindex2 == 1) );
 		return;
 	}
 
 	// powerups prediction
-	if ( item->giType == IT_POWERUP && ((item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT) 
+	if ( (item->giType == IT_POWERUP
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_POWERUP2
+#endif
+	) && ((item->giTag >= PW_QUAD && item->giTag <= PW_FLIGHT) 
 #if 0 //def USE_RUNES
     || (item->giTag >= RUNE_STRENGTH && item->giTag <= RUNE_LITHIUM)
 #endif

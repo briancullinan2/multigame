@@ -916,7 +916,12 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 	
 #ifdef USE_RUNES
 		else if ( ent->client->inventory[RUNE_ARMOR] || ent->client->inventory[RUNE_REGEN]
-			|| (ent->client->inventory[RUNE_REQUIEM] && ent->client->requiemGrab == IT_ARMOR && level.time - ent->client->requiemTime <= 1500) 
+			|| (ent->client->inventory[RUNE_REQUIEM] 
+#ifdef USE_ADVANCED_ITEMS
+			&& ent->client->requiemGrab == IT_ARMOR2 
+#endif
+			&& ent->client->requiemGrab == IT_ARMOR 
+			&& level.time - ent->client->requiemTime <= 1500) 
 		) {
 			if ( client->ps.stats[STAT_ARMOR] + 5 <= client->ps.stats[STAT_MAX_HEALTH] ) {
 				client->ps.stats[STAT_ARMOR] += 5;

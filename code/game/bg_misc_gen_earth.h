@@ -16,7 +16,7 @@
 /* icon */		"icons/iconr_shard",
 /* pickup */	"Armor Shard",
 		5,
-		IT_ARMOR,
+		IT_ARMOR2,
 		0,
 /* precache */ "",
 /* sounds */ ""
@@ -32,7 +32,7 @@
 /* icon */		"icons/iconr_yellow",
 /* pickup */	"Armor",
 		50,
-		IT_ARMOR,
+		IT_ARMOR2,
 		0,
 /* precache */ "",
 /* sounds */ ""
@@ -48,7 +48,7 @@
 /* icon */		"icons/iconr_red",
 /* pickup */	"Heavy Armor",
 		100,
-		IT_ARMOR,
+		IT_ARMOR2,
 		0,
 /* precache */ "",
 /* sounds */ "",
@@ -69,7 +69,7 @@
 /* icon */		"icons/iconh_green",
 /* pickup */	"5 Health",
 		5,
-		IT_HEALTH,
+		IT_HEALTH2,
 		0,
 /* precache */ "",
 /* sounds */ ""
@@ -86,7 +86,7 @@
 /* icon */		"icons/iconh_yellow",
 /* pickup */	"25 Health",
 		25,
-		IT_HEALTH,
+		IT_HEALTH2,
 		0,
 /* precache */ "",
 /* sounds */ ""
@@ -103,7 +103,7 @@
 /* icon */		"icons/iconh_red",
 /* pickup */	"50 Health",
 		50,
-		IT_HEALTH,
+		IT_HEALTH2,
 		0,
 /* precache */ "",
 /* sounds */ ""
@@ -120,7 +120,7 @@
 /* icon */		"icons/iconh_mega",
 /* pickup */	"Mega Health",
 		100,
-		IT_HEALTH,
+		IT_HEALTH2,
 		0,
 /* precache */ "",
 /* sounds */ ""
@@ -141,7 +141,7 @@
 /* icon */		"icons/iconw_gauntlet",
 /* pickup */	"Gauntlet",
 		0,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_GAUNTLET,
 /* precache */ "",
 /* sounds */ ""
@@ -157,7 +157,7 @@
 /* icon */		"icons/iconw_shotgun",
 /* pickup */	"Shotgun",
 		10,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_SHOTGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -173,7 +173,7 @@
 /* icon */		"icons/iconw_machinegun",
 /* pickup */	"Machinegun",
 		40,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_MACHINEGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -189,7 +189,7 @@
 /* icon */		"icons/iconw_grenade",
 /* pickup */	"Grenade Launcher",
 		10,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_GRENADE_LAUNCHER,
 /* precache */ "",
 /* sounds */ "sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav"
@@ -205,7 +205,7 @@
 /* icon */		"icons/iconw_rocket",
 /* pickup */	"Rocket Launcher",
 		10,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_ROCKET_LAUNCHER,
 /* precache */ "",
 /* sounds */ ""
@@ -221,7 +221,7 @@
 /* icon */		"icons/iconw_lightning",
 /* pickup */	"Lightning Gun",
 		100,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_LIGHTNING,
 /* precache */ "",
 /* sounds */ ""
@@ -237,7 +237,7 @@
 /* icon */		"icons/iconw_railgun",
 /* pickup */	"Railgun",
 		10,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_RAILGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -253,7 +253,7 @@
 /* icon */		"icons/iconw_plasma",
 /* pickup */	"Plasma Gun",
 		50,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_PLASMAGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -269,7 +269,7 @@
 /* icon */		"icons/iconw_bfg",
 /* pickup */	"BFG10K",
 		20,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_BFG,
 /* precache */ "",
 /* sounds */ ""
@@ -286,7 +286,7 @@
 /* icon */		"icons/iconw_grapple",
 /* pickup */	"Grappling Hook",
 		0,
-		IT_WEAPON,
+		IT_WEAPON2,
 		WP_GRAPPLING_HOOK,
 /* precache */ "",
 /* sounds */ ""
@@ -307,7 +307,7 @@
 /* icon */		"icons/icona_shotgun",
 /* pickup */	"Shells",
 		10,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_SHOTGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -323,7 +323,7 @@
 /* icon */		"icons/icona_machinegun",
 /* pickup */	"Bullets",
 		50,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_MACHINEGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -339,7 +339,7 @@
 /* icon */		"icons/icona_grenade",
 /* pickup */	"Grenades",
 		5,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_GRENADE_LAUNCHER,
 /* precache */ "",
 /* sounds */ ""
@@ -355,7 +355,7 @@
 /* icon */		"icons/icona_plasma",
 /* pickup */	"Cells",
 		30,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_PLASMAGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -371,7 +371,7 @@
 /* icon */		"icons/icona_lightning",
 /* pickup */	"Lightning",
 		60,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_LIGHTNING,
 /* precache */ "",
 /* sounds */ ""
@@ -387,7 +387,7 @@
 /* icon */		"icons/icona_rocket",
 /* pickup */	"Rockets",
 		5,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_ROCKET_LAUNCHER,
 /* precache */ "",
 /* sounds */ ""
@@ -403,7 +403,7 @@
 /* icon */		"icons/icona_railgun",
 /* pickup */	"Slugs",
 		10,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_RAILGUN,
 /* precache */ "",
 /* sounds */ ""
@@ -419,7 +419,7 @@
 /* icon */		"icons/icona_bfg",
 /* pickup */	"Bfg Ammo",
 		15,
-		IT_AMMO,
+		IT_AMMO2,
 		WP_BFG,
 /* precache */ "",
 /* sounds */ ""
@@ -438,7 +438,7 @@
 /* icon */		"icons/teleporter",
 /* pickup */	"Personal Teleporter",
 		60,
-		IT_HOLDABLE,
+		IT_HOLDABLE2,
 		HI_TELEPORTER,
 /* precache */ "",
 /* sounds */ ""
@@ -455,7 +455,7 @@
 /* icon */		"icons/medkit",
 /* pickup */	"Medkit",
 		60,
-		IT_HOLDABLE,
+		IT_HOLDABLE2,
 		HI_MEDKIT,
 /* precache */ "",
 /* sounds */ "sound/items/use_medkit.wav"
@@ -475,7 +475,7 @@
 /* icon */		"icons/quad",
 /* pickup */	"Quad Damage",
 		30,
-		IT_POWERUP,
+		IT_POWERUP2,
 		PW_QUAD,
 /* precache */ "",
 /* sounds */ "sound/items/damage2.wav sound/items/damage3.wav"
@@ -492,7 +492,7 @@
 /* icon */		"icons/envirosuit",
 /* pickup */	"Battle Suit",
 		30,
-		IT_POWERUP,
+		IT_POWERUP2,
 		PW_BATTLESUIT,
 /* precache */ "",
 /* sounds */ "sound/items/airout.wav sound/items/protect3.wav"
@@ -509,7 +509,7 @@
 /* icon */		"icons/haste",
 /* pickup */	"Speed",
 		30,
-		IT_POWERUP,
+		IT_POWERUP2,
 		PW_HASTE,
 /* precache */ "",
 /* sounds */ ""
@@ -526,7 +526,7 @@
 /* icon */		"icons/invis",
 /* pickup */	"Invisibility",
 		30,
-		IT_POWERUP,
+		IT_POWERUP2,
 		PW_INVIS,
 /* precache */ "",
 /* sounds */ ""
@@ -543,7 +543,7 @@
 /* icon */		"icons/regen",
 /* pickup */	"Regeneration",
 		30,
-		IT_POWERUP,
+		IT_POWERUP2,
 		PW_REGEN,
 /* precache */ "",
 /* sounds */ "sound/items/regen.wav"
@@ -560,7 +560,7 @@
 /* icon */		"icons/flight",
 /* pickup */	"Flight",
 		60,
-		IT_POWERUP,
+		IT_POWERUP2,
 		PW_FLIGHT,
 /* precache */ "",
 /* sounds */ "sound/items/flight.wav"
@@ -577,7 +577,7 @@ Only in CTF games
 /* icon */		"icons/iconf_red1",
 /* pickup */	"Red Flag",
 		0,
-		IT_TEAM,
+		IT_TEAM2,
 		PW_REDFLAG,
 /* precache */ "",
 /* sounds */ ""
@@ -594,7 +594,7 @@ Only in CTF games
 /* icon */		"icons/iconf_blu1",
 /* pickup */	"Blue Flag",
 		0,
-		IT_TEAM,
+		IT_TEAM2,
 		PW_BLUEFLAG,
 /* precache */ "",
 /* sounds */ ""
@@ -610,7 +610,7 @@ Only in CTF games
 /* icon */		"icons/kamikaze",
 /* pickup */	"Vengeance",
   60,
-  IT_HOLDABLE,
+  IT_HOLDABLE2,
   HI_KAMIKAZE,
 /* precache */ "",
 /* sounds */ "sound/items/kamikazerespawn.wav"

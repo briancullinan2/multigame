@@ -47,6 +47,9 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 		return 0;
 
 	switch( ent->item->giType ) {
+#ifdef USE_ADVANCED_ITEMS
+	case IT_WEAPON2:
+#endif
 	case IT_WEAPON:
 		if ( firstSpawn )
 			return SPAWN_WEAPONS;
@@ -55,27 +58,45 @@ int SpawnTime( gentity_t *ent, qboolean firstSpawn )
 		else
 			return g_weaponRespawn.value * 1000 ;
 
+#ifdef USE_ADVANCED_ITEMS
+	case IT_AMMO2:
+#endif
 	case IT_AMMO:
 		return firstSpawn ? SPAWN_AMMO : RESPAWN_AMMO;
 
+#ifdef USE_ADVANCED_ITEMS
+	case IT_ARMOR2:
+#endif
 	case IT_ARMOR:
 		return firstSpawn ? SPAWN_ARMOR : RESPAWN_ARMOR;
 
+#ifdef USE_ADVANCED_ITEMS
+	case IT_HEALTH2:
+#endif
 	case IT_HEALTH:
 		if ( ent->item->quantity == 100 ) // mega health respawns slow
 			return firstSpawn ? SPAWN_MEGAHEALTH : RESPAWN_MEGAHEALTH;
 		else
 			return firstSpawn ? SPAWN_HEALTH : RESPAWN_HEALTH;
 
+#ifdef USE_ADVANCED_ITEMS
+	case IT_POWERUP2:
+#endif
 	case IT_POWERUP:
 		return firstSpawn ? SPAWN_POWERUP : RESPAWN_POWERUP;
 
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	case IT_PERSISTANT_POWERUP2:
+#endif
 	case IT_PERSISTANT_POWERUP:
 		return -1;
 		break;
 #endif
 
+#ifdef USE_ADVANCED_ITEMS
+	case IT_HOLDABLE2:
+#endif
 	case IT_HOLDABLE:
 		return firstSpawn ? SPAWN_HOLDABLE : RESPAWN_HOLDABLE;
 
@@ -750,8 +771,11 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
   }
 
 	if(other->client->inventory[RUNE_REQUIEM]
-		&& (ent->item->giType == IT_HEALTH || ent->item->giType == IT_ARMOR || ent->item->giType == IT_AMMO)
-	) {
+		&& (ent->item->giType == IT_HEALTH || ent->item->giType == IT_ARMOR || ent->item->giType == IT_AMMO
+#ifdef USE_ADVANCED_ITEMS
+		|| ent->item->giType == IT_HEALTH2 || ent->item->giType == IT_ARMOR2 || ent->item->giType == IT_AMMO2
+#endif
+	)) {
 		other->client->requiemGrab = ent->item->giType;
 		other->client->requiemTime = level.time;
 		// instead handle this in clienttimeractions
@@ -766,6 +790,9 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 
 	// call the item-specific pickup function
 	switch( ent->item->giType ) {
+#ifdef USE_ADVANCED_ITEMS
+	case IT_WEAPON2:
+#endif
 	case IT_WEAPON:
 #ifdef USE_WEAPON_ORDER
 #ifdef USE_ADVANCED_WEAPONS
@@ -776,15 +803,29 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 #endif
 		respawn = Pickup_Weapon(ent, other);
 		break;
+#ifdef USE_ADVANCED_ITEMS
+	case IT_AMMO2:
+#endif
 	case IT_AMMO:
 		respawn = Pickup_Ammo(ent, other);
 		break;
+#ifdef USE_ADVANCED_ITEMS
+
+#ifdef USE_ADVANCED_ITEMS
+	case IT_ARMOR2:
+#endif
 	case IT_ARMOR:
 		respawn = Pickup_Armor(ent, other);
 		break;
+#ifdef USE_ADVANCED_ITEMS
+	case IT_HEALTH2:
+#endif
 	case IT_HEALTH:
 		respawn = Pickup_Health(ent, other);
 		break;
+#ifdef USE_ADVANCED_ITEMS
+	case IT_POWERUP2:
+#endif
 	case IT_POWERUP:
 		respawn = Pickup_Powerup(ent, other);
 		// brian cullinan - why?
@@ -802,13 +843,23 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 #endif
 		break;
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#ifdef USE_ADVANCED_ITEMS
+	case IT_PERSISTANT_POWERUP2:
+#endif
 	case IT_PERSISTANT_POWERUP:
 		respawn = Pickup_PersistantPowerup(ent, other);
 		break;
 #endif
+#ifdef USE_ADVANCED_ITEMS
+	case IT_TEAM2:
+#endif
+#endif
 	case IT_TEAM:
 		respawn = Pickup_Team(ent, other);
 		break;
+#ifdef USE_ADVANCED_ITEMS
+	case IT_HOLDABLE2:
+#endif
 	case IT_HOLDABLE:
 		respawn = Pickup_Holdable(ent, other);
 		break;

@@ -277,6 +277,12 @@ static void CG_Item( centity_t *cent ) {
 	//	CG_Printf("drawing flag %i\n", es->eFlags);
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if(item->giType == IT_WEAPON || item->giType == IT_AMMO|| item->giType == IT_ARMOR
+		|| item->giType == IT_HEALTH|| item->giType == IT_POWERUP|| item->giType == IT_HOLDABLE
+		|| item->giType == IT_PERSISTANT_POWERUP || item->giType == IT_TEAM) {
+#endif
+
 	// items bob up and down continuously
 	scale = 0.005 + cent->currentState.number * 0.00001;
 	modulus = 2 * M_PI * 20228 / scale;
@@ -285,6 +291,7 @@ static void CG_Item( centity_t *cent ) {
 	memset (&ent, 0, sizeof(ent));
 
 	// autorotate at one of two speeds
+
 	if ( item->giType == IT_HEALTH ) {
 		VectorCopy( cg.autoAnglesFast, cent->lerpAngles );
 		AxisCopy( cg.autoAxisFast, ent.axis );
@@ -293,11 +300,23 @@ static void CG_Item( centity_t *cent ) {
 		AxisCopy( cg.autoAxis, ent.axis );
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	} else {
+		memset (&ent, 0, sizeof(ent));
+
+		AnglesToAxis( vec3_origin, ent.axis );
+	}
+#endif
+
 	wi = NULL;
 	// the weapons have their origin where they attatch to player
 	// models, so we need to offset them or they will rotate
 	// eccentricly
-	if ( item->giType == IT_WEAPON ) {
+	if ( item->giType == IT_WEAPON 
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_WEAPON2
+#endif
+	) {
 		wi = &cg_weapons[item->giTag];
 		cent->lerpOrigin[0] -= 
 			wi->weaponMidpoint[0] * ent.axis[0][0] +
@@ -337,13 +356,20 @@ static void CG_Item( centity_t *cent ) {
 
 	// items without glow textures need to keep a minimum light value
 	// so they are always visible
-	if ( ( item->giType == IT_WEAPON ) ||
-		 ( item->giType == IT_ARMOR ) ) {
+	if ( item->giType == IT_WEAPON || item->giType == IT_ARMOR 
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_WEAPON2 || item->giType == IT_ARMOR2 || item->giType == IT_HEALTH2 // because they are solid not like Q3
+#endif
+	) {
 		ent.renderfx |= RF_MINLIGHT;
 	}
 
 	// increase the size of the weapons when they are presented as items
-	if ( item->giType == IT_WEAPON ) {
+	if ( item->giType == IT_WEAPON 
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_WEAPON2
+#endif
+	) {
 		VectorScale( ent.axis[0], 1.5, ent.axis[0] );
 		VectorScale( ent.axis[1], 1.5, ent.axis[1] );
 		VectorScale( ent.axis[2], 1.5, ent.axis[2] );
@@ -362,7 +388,7 @@ static void CG_Item( centity_t *cent ) {
 		
 	}
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
 	if ( item->giType == IT_HOLDABLE && item->giTag == HI_KAMIKAZE ) {
 		VectorScale( ent.axis[0], 2, ent.axis[0] );
 		VectorScale( ent.axis[1], 2, ent.axis[1] );
@@ -388,7 +414,11 @@ static void CG_Item( centity_t *cent ) {
 
 	// i always hated how the machine gun doesn't show the barrel
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
-	if ( item->giType == IT_WEAPON && wi->barrelModel ) {
+	if ( (item->giType == IT_WEAPON 
+#ifdef USE_ADVANCED_ITEMS
+		|| item->giType == IT_WEAPON2
+#endif
+	) && wi->barrelModel ) {
 		refEntity_t	barrel;
 
 		memset( &barrel, 0, sizeof( barrel ) );
@@ -437,6 +467,27 @@ static void CG_Item( centity_t *cent ) {
 				trap_R_AddRefEntityToScene( &ent );
 			}
 		}
+
+#ifdef USE_ADVANCED_ITEMS
+		if ( item->giType == IT_HEALTH2 || item->giType == IT_POWERUP2 )
+		{
+			if ( ( ent.hModel = cg_items[modelIndex].models[1] ) != 0 )
+			{
+				AnglesToAxis( vec3_origin, ent.axis );
+
+				// scale up if respawning
+				if ( frac != 1.0 ) {
+					VectorScale( ent.axis[0], frac, ent.axis[0] );
+					VectorScale( ent.axis[1], frac, ent.axis[1] );
+					VectorScale( ent.axis[2], frac, ent.axis[2] );
+					ent.nonNormalizedAxes = qtrue;
+				}
+
+				ent.customSkin = cg_items[modelIndex].customSkin2;
+				trap_R_AddRefEntityToScene( &ent );
+			}
+		}
+#endif
 	}
 }
 
