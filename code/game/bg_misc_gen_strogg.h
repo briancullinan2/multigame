@@ -30,7 +30,7 @@
         { "models/powerups5/armor/armor_yellowstrogg.md3",
 		0, 0, 0},
 /* icon */		"icons/iconr_yellow",
-/* pickup */	"Armor",
+/* pickup */	"Combat Armor",
 		50,
 		IT_ARMOR,
 		0,
@@ -46,7 +46,7 @@
         { "models/powerups5/armor/armor_redstrogg.md3",
 		0, 0, 0},
 /* icon */		"icons/iconr_red",
-/* pickup */	"Heavy Armor",
+/* pickup */	"Body Armor",
 		100,
 		IT_ARMOR,
 		0,
@@ -67,7 +67,7 @@
 		"models/powerups5/health/small_spherestrogg.md3", 
 		0, 0 },
 /* icon */		"icons/iconh_green",
-/* pickup */	"5 Health",
+/* pickup */	"Health",
 		5,
 		IT_HEALTH,
 		0,
@@ -84,7 +84,7 @@
 		"models/powerups5/health/medium_spherestrogg.md3", 
 		0, 0 },
 /* icon */		"icons/iconh_yellow",
-/* pickup */	"25 Health",
+/* pickup */	"Stimpack",
 		25,
 		IT_HEALTH,
 		0,
@@ -101,7 +101,7 @@
 		"models/powerups5/health/large_spherestrogg.md3", 
 		0, 0 },
 /* icon */		"icons/iconh_red",
-/* pickup */	"50 Health",
+/* pickup */	"Medkit",
 		50,
 		IT_HEALTH,
 		0,
@@ -134,15 +134,15 @@
 /*QUAKED weapon_strogg_gauntlet (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
-		"weapon_strogg_gauntlet", 
+		"weapon_strogg_blaster", 
 		"sound/misc/w_pkup.wav",
-        { "models/weapons5/gauntlet/gauntletstrogg.md3",
+        { "models/weapons5/pistol/pistolstrogg.md3",
 		0, 0, 0},
 /* icon */		"icons/iconw_gauntlet",
-/* pickup */	"Gauntlet",
+/* pickup */	"Blaster",
 		0,
 		IT_WEAPON,
-		WP_GAUNTLET,
+		WP_BLASTER,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -158,7 +158,7 @@
 /* pickup */	"Super Shotgun",
 		10,
 		IT_WEAPON,
-		WP_TRESPASSER,
+		WP_TRESPASSER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -174,7 +174,7 @@
 /* pickup */	"Stepchild",
 		40,
 		IT_WEAPON,
-		WP_STEPCHILD,
+		WP_STEPCHILD2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -187,10 +187,10 @@
         { "models/weapons5/grenadel/grenadelstrogg.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_grenade",
-/* pickup */	"Grenade Launcher",
+/* pickup */	"Joker",
 		10,
 		IT_WEAPON,
-		WP_GRENADE_LAUNCHER,
+		WP_JOKER2,
 /* precache */ "",
 /* sounds */ "sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav"
 	},
@@ -203,10 +203,10 @@
         { "models/weapons5/rocketl/rocketlstrogg.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_rocket",
-/* pickup */	"Rocket Launcher",
+/* pickup */	"Peacemaker",
 		10,
 		IT_WEAPON,
-		WP_ROCKET_LAUNCHER,
+		WP_PEACEMAKER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -219,10 +219,10 @@
         { "models/weapons5/lightning/lightningstrogg.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_lightning",
-/* pickup */	"Lightning Gun",
+/* pickup */	"Chaingun",
 		100,
 		IT_WEAPON,
-		WP_LIGHTNING,
+		WP_CHAINGUN2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -235,10 +235,10 @@
         { "models/weapons5/railgun/railgunstrogg.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_railgun",
-/* pickup */	"Railgun",
+/* pickup */	"Rail Gun",
 		10,
 		IT_WEAPON,
-		WP_RAILGUN,
+		WP_MALEDICTION2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -251,10 +251,10 @@
         { "models/weapons5/plasma/plasmastrogg.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_plasma",
-/* pickup */	"Incinerator",
+/* pickup */	"Hyper Blaster",
 		50,
 		IT_WEAPON,
-		WP_EXECUTIONER,
+		WP_EXECUTIONER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -270,7 +270,7 @@
 /* pickup */	"BFG10K",
 		20,
 		IT_WEAPON,
-		WP_BFG,
+		WP_BFG10K,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -279,9 +279,9 @@
 /*QUAKED weapon_strogg_grapplinghook (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
-		"weapon_strogg_grapplinghook",
+		"weapon_strogg_grapple",
 		"sound/misc/w_pkup.wav",
-        { "models/weapons5/grapple/grapplestrogg.md3", 
+        { "models/weapons5/grapple/grapple.md3", 
 		0, 0, 0},
 /* icon */		"icons/iconw_grapple",
 /* pickup */	"Grappling Hook",
@@ -308,7 +308,7 @@
 /* pickup */	"Shells",
 		10,
 		IT_AMMO,
-		WP_TRESPASSER,
+		WP_TRESPASSER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -324,7 +324,7 @@
 /* pickup */	"Bullets",
 		50,
 		IT_AMMO,
-		WP_MACHINEGUN,
+		WP_STEPCHILD2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -340,7 +340,7 @@
 /* pickup */	"Grenades",
 		5,
 		IT_AMMO,
-		WP_GRENADE_LAUNCHER,
+		WP_JOKER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -356,23 +356,7 @@
 /* pickup */	"Cells",
 		30,
 		IT_AMMO,
-		WP_PLASMAGUN,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-/*QUAKED ammo_strogg_lightning (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"ammo_strogg_lightning",
-		"sound/misc/am_pkup.wav",
-        { "models/powerups5/ammo/lightningamstrogg.md3", 
-		0, 0, 0},
-/* icon */		"icons/icona_lightning",
-/* pickup */	"Lightning",
-		60,
-		IT_AMMO,
-		WP_LIGHTNING,
+		WP_EXECUTIONER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -388,7 +372,7 @@
 /* pickup */	"Rockets",
 		5,
 		IT_AMMO,
-		WP_PEACEMAKER,
+		WP_PEACEMAKER2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -404,23 +388,7 @@
 /* pickup */	"Slugs",
 		10,
 		IT_AMMO,
-		WP_MALEDICTION,
-/* precache */ "",
-/* sounds */ ""
-	},
-
-/*QUAKED ammo_strogg_bfg (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-	{
-		"ammo_strogg_bfg",
-		"sound/misc/am_pkup.wav",
-        { "models/powerups5/ammo/bfgamstrogg.md3", 
-		0, 0, 0},
-/* icon */		"icons/icona_bfg",
-/* pickup */	"Bfg Ammo",
-		15,
-		IT_AMMO,
-		WP_BFG,
+		WP_MALEDICTION2,
 /* precache */ "",
 /* sounds */ ""
 	},
@@ -490,7 +458,7 @@
 		"models/powerups5/instant/enviro_ringstrogg.md3", 
 		0, 0 },
 /* icon */		"icons/envirosuit",
-/* pickup */	"Battle Suit",
+/* pickup */	"Invulnerability",
 		30,
 		IT_POWERUP,
 		PW_BATTLESUIT,

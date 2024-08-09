@@ -235,6 +235,7 @@ typedef enum {
 	PW_FLASH = 34,
 	PW_VISIBILITY = 35,
 	PW_SUPERMAN = 36,
+	PW_BERSERKER = 37, // same thing as RUNE_BERSERK but non-permanently
 
 
 #ifdef USE_RUNES
@@ -387,6 +388,7 @@ typedef enum {
 	WP_NONE,
 	WP_HANDS = WP_NONE, // class set to 0,1,2 but weapon select set to zero
 
+	// Original ARENA
 	WP_GAUNTLET = 1,
 	WP_MACHINEGUN = 2,
 	WP_SHOTGUN = 3,
@@ -400,6 +402,7 @@ typedef enum {
 
 	WP_MOD_CLASSES = 10,
 
+	// Fun guns and Team Arena
 #ifdef USE_PORTALS
 	WP_PORTAL_GUN = 10,
 #endif
@@ -419,6 +422,7 @@ typedef enum {
 	WP_GRAPPLING_HOOK = 19,
 #endif
 
+	// Open Arena
 	WP_GAUNTLET2 = 21,
 	WP_MACHINEGUN2 = 22,
 	WP_SHOTGUN2 = 23,
@@ -437,6 +441,7 @@ typedef enum {
 	WP_FROSTGUN = 38,
 	WP_ICEBEAM = 39,
 
+	// QUAKE 1
 	WP_AXE = 41,
 	WP_OSCILLATOR = 42,
 	WP_MARAUDER = 43,
@@ -446,14 +451,34 @@ typedef enum {
 	WP_NAILGUN4 = 47,
 	WP_CONDUCTOR = 48,
 
-
-	WP_STEPCHILD = 52,
+	// Quake 2
+	WP_BLASTER = 51,
+	WP_STEPCHILD2 = 52,
+	WP_TRESPASSER2 = 53,
 	WP_BITTERMAN = 53,
-	WP_JOKER = 54,
+	WP_JOKER2 = 54,
+	WP_PEACEMAKER2 = 55,
+	WP_INCINERATOR2 = 56,
+	WP_CHAINGUN2 = 56,
 	WP_MALEDICTION = 57,
+	WP_MALEDICTION2 = 57,
 	WP_EXECUTIONER = 58,
+	WP_EXECUTIONER2 = 58,
+	WP_BFG10K = 59,
 
-	WP_NUM_WEAPONS = 60,
+	// Doom 1
+	// TODO: fists?
+	WP_CHAINSAW3 = 61,
+	WP_PISTOL = 62,
+	WP_SHOTGUN3 = 63,
+	// TODO: grenade 
+	WP_ORIGINAL3 = 65,
+	// TODO: lighning
+	WP_CHAINGUN3 = 67,
+	WP_PLASMAGUN3 = 68,
+	WP_BFG9000 = 69,
+
+	WP_NUM_WEAPONS = 70,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
 	WP_MAX_WEAPONS = WP_MOD_CLASSES // for modulo 10 and classing based on 
 	// 7 bits * classNum + weaponNum = 64 classes possible or 576 weapons/tools

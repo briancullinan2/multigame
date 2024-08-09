@@ -43,7 +43,7 @@
 				{"models/powerups5/armor/armor_reddoom.md3",
 				 0, 0, 0},
 				/* icon */ "icons/iconr_red",
-				/* pickup */ "Heavy Armor",
+				/* pickup */ "Mega Armor",
 				100,
 				IT_ARMOR,
 				0,
@@ -64,7 +64,7 @@
 				 "models/powerups5/health/small_spheredoom.md3",
 				 0, 0},
 				/* icon */ "icons/iconh_green",
-				/* pickup */ "5 Health",
+				/* pickup */ "Health",
 				5,
 				IT_HEALTH,
 				0,
@@ -80,7 +80,7 @@
 				 "models/powerups5/health/medium_spheredoom.md3",
 				 0, 0},
 				/* icon */ "icons/iconh_yellow",
-				/* pickup */ "25 Health",
+				/* pickup */ "Stimpack",
 				25,
 				IT_HEALTH,
 				0,
@@ -96,7 +96,7 @@
 				 "models/powerups5/health/large_spheredoom.md3",
 				 0, 0},
 				/* icon */ "icons/iconh_red",
-				/* pickup */ "50 Health",
+				/* pickup */ "Medkit",
 				50,
 				IT_HEALTH,
 				0,
@@ -112,7 +112,7 @@
 				 "models/powerups5/health/mega_spheredoom.md3",
 				 0, 0},
 				/* icon */ "icons/iconh_mega",
-				/* pickup */ "Mega Health",
+				/* pickup */ "Supercharge",
 				100,
 				IT_HEALTH,
 				0,
@@ -126,15 +126,15 @@
 		/*QUAKED weapon_doom_gauntlet (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
 		{
-				"weapon_doom_gauntlet",
+				"weapon_doom_pistol",
 				"sound/misc/w_pkup.wav",
-				{"models/weapons5/gauntlet/gauntletdoom.md3",
+				{"models/weapons5/pistol/pistoldoom.md3",
 				 0, 0, 0},
 				/* icon */ "icons/iconw_gauntlet",
-				/* pickup */ "Gauntlet",
+				/* pickup */ "Pistol",
 				0,
 				IT_WEAPON,
-				WP_GAUNTLET,
+				WP_PISTOL,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -149,39 +149,24 @@
 				/* pickup */ "Shotgun",
 				10,
 				IT_WEAPON,
-				WP_SHOTGUN,
+				WP_SHOTGUN3,
 				/* precache */ "",
 				/* sounds */ ""},
 
 		/*QUAKED weapon_doom_machinegun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
 		{
-				"weapon_doom_machinegun",
+				"weapon_doom_chainsaw",
 				"sound/misc/w_pkup.wav",
 				{"models/weapons5/machinegun/machinegundoom.md3",
 				 0, 0, 0},
 				/* icon */ "icons/iconw_machinegun",
-				/* pickup */ "Machinegun",
+				/* pickup */ "Chainsaw",
 				40,
 				IT_WEAPON,
-				WP_MACHINEGUN,
+				WP_CHAINSAW3,
 				/* precache */ "",
 				/* sounds */ ""},
-
-		/*QUAKED weapon_doom_grenadelauncher (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-		 */
-		{
-				"weapon_doom_grenadelauncher",
-				"sound/misc/w_pkup.wav",
-				{"models/weapons5/grenadel/grenadeldoom.md3",
-				 0, 0, 0},
-				/* icon */ "icons/iconw_grenade",
-				/* pickup */ "Grenade Launcher",
-				10,
-				IT_WEAPON,
-				WP_GRENADE_LAUNCHER,
-				/* precache */ "",
-				/* sounds */ "sound/weapons/grenade/hgrenb1a.wav sound/weapons/grenade/hgrenb2a.wav"},
 
 		/*QUAKED weapon_doom_rocketlauncher (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
@@ -194,37 +179,22 @@
 				/* pickup */ "Rocket Launcher",
 				10,
 				IT_WEAPON,
-				WP_ROCKET_LAUNCHER,
-				/* precache */ "",
-				/* sounds */ ""},
-
-		/*QUAKED weapon_doom_lightning (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-		 */
-		{
-				"weapon_doom_lightning",
-				"sound/misc/w_pkup.wav",
-				{"models/weapons5/lightning/lightningdoom.md3",
-				 0, 0, 0},
-				/* icon */ "icons/iconw_lightning",
-				/* pickup */ "Lightning Gun",
-				100,
-				IT_WEAPON,
-				WP_LIGHTNING,
+				WP_ORIGINAL3,
 				/* precache */ "",
 				/* sounds */ ""},
 
 		/*QUAKED weapon_doom_railgun (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
 		{
-				"weapon_doom_railgun",
+				"weapon_doom_chaingun",
 				"sound/misc/w_pkup.wav",
-				{"models/weapons5/railgun/railgundoom.md3",
+				{"models/weapons5/lightning/lightningdoom.md3",
 				 0, 0, 0},
 				/* icon */ "icons/iconw_railgun",
-				/* pickup */ "Railgun",
+				/* pickup */ "Chaingun",
 				10,
 				IT_WEAPON,
-				WP_RAILGUN,
+				WP_CHAINGUN3,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -239,7 +209,7 @@
 				/* pickup */ "Plasma Gun",
 				50,
 				IT_WEAPON,
-				WP_PLASMAGUN,
+				WP_PLASMAGUN3,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -251,29 +221,12 @@
 				{"models/weapons5/bfg/bfgdoom.md3",
 				 0, 0, 0},
 				/* icon */ "icons/iconw_bfg",
-				/* pickup */ "BFG10K",
+				/* pickup */ "BFG9000",
 				20,
 				IT_WEAPON,
-				WP_BFG,
+				WP_BFG9000,
 				/* precache */ "",
 				/* sounds */ ""},
-
-#ifdef USE_GRAPPLE
-		/*QUAKED weapon_doom_grapplinghook (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-		 */
-		{
-				"weapon_doom_grapplinghook",
-				"sound/misc/w_pkup.wav",
-				{"models/weapons5/grapple/grappledoom.md3",
-				 0, 0, 0},
-				/* icon */ "icons/iconw_grapple",
-				/* pickup */ "Grappling Hook",
-				0,
-				IT_WEAPON,
-				WP_GRAPPLING_HOOK,
-				/* precache */ "",
-				/* sounds */ ""},
-#endif
 
 		//
 		// AMMO ITEMS
@@ -290,7 +243,7 @@
 				/* pickup */ "Shells",
 				10,
 				IT_AMMO,
-				WP_SHOTGUN,
+				WP_SHOTGUN3,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -305,22 +258,7 @@
 				/* pickup */ "Bullets",
 				50,
 				IT_AMMO,
-				WP_MACHINEGUN,
-				/* precache */ "",
-				/* sounds */ ""},
-
-		/*QUAKED ammo_doom_grenades (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-		 */
-		{
-				"ammo_doom_grenades",
-				"sound/misc/am_pkup.wav",
-				{"models/powerups5/ammo/grenadeamdoom.md3",
-				 0, 0, 0},
-				/* icon */ "icons/icona_grenade",
-				/* pickup */ "Grenades",
-				5,
-				IT_AMMO,
-				WP_GRENADE_LAUNCHER,
+				WP_PISTOL,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -335,22 +273,7 @@
 				/* pickup */ "Cells",
 				30,
 				IT_AMMO,
-				WP_PLASMAGUN,
-				/* precache */ "",
-				/* sounds */ ""},
-
-		/*QUAKED ammo_doom_lightning (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-		 */
-		{
-				"ammo_doom_lightning",
-				"sound/misc/am_pkup.wav",
-				{"models/powerups5/ammo/lightningamdoom.md3",
-				 0, 0, 0},
-				/* icon */ "icons/icona_lightning",
-				/* pickup */ "Lightning",
-				60,
-				IT_AMMO,
-				WP_LIGHTNING,
+				WP_PLASMAGUN3,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -365,7 +288,7 @@
 				/* pickup */ "Rockets",
 				5,
 				IT_AMMO,
-				WP_ROCKET_LAUNCHER,
+				WP_ORIGINAL3,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -380,7 +303,7 @@
 				/* pickup */ "Slugs",
 				10,
 				IT_AMMO,
-				WP_RAILGUN,
+				WP_CHAINGUN3,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -395,7 +318,7 @@
 				/* pickup */ "Bfg Ammo",
 				15,
 				IT_AMMO,
-				WP_BFG,
+				WP_BFG9000,
 				/* precache */ "",
 				/* sounds */ ""},
 
@@ -440,14 +363,13 @@
 		{
 				"item_doom_quad",
 				"sound/items/quaddamage.wav",
-				{"models/powerups5/instant/quad.md3",
-				 "models/powerups5/instant/quad_ring.md3",
-				 0, 0},
+				{"models/powerups5/holdable/medkitdoom.md3",
+				 0, 0, 0},
 				/* icon */ "icons/quad",
 				/* pickup */ "Quad Damage",
 				30,
 				IT_POWERUP,
-				PW_QUAD,
+				PW_BERSERKER,
 				/* precache */ "",
 				/* sounds */ "sound/items/damage2.wav sound/items/damage3.wav"},
 
@@ -459,7 +381,7 @@
 				{"models/powerups5/instant/envirodoom.md3",
 				 0, 0, 0},
 				/* icon */ "icons/envirosuit",
-				/* pickup */ "Battle Suit",
+				/* pickup */ "Invulnerability",
 				30,
 				IT_POWERUP,
 				PW_BATTLESUIT,
