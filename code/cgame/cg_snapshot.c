@@ -231,8 +231,6 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 #endif
 
 #ifdef USE_ADVANCED_WEAPONS
-		//if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
-			//|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) 
 		{
 			int j;
 			int prevWeaponClass = ps->stats[STAT_WEAPONS_UPDATE];
@@ -248,8 +246,10 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 				cg.classAmmo[prevWeaponClass * WP_MAX_WEAPONS + j] = ps->classAmmo[j];
 			}
 			//CG_Printf("\n");
-			/*CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
-				cg.weaponClass,
+		if(ps->stats[STAT_WEAPONS_UPDATE] != ops->stats[STAT_WEAPONS_UPDATE]
+			|| ps->stats[STAT_WEAPONS_AVAILABLE] != ops->stats[STAT_WEAPONS_AVAILABLE]) 
+			CG_Printf("weapons %i: %i %i %i %i %i %i %i %i %i %i\n", 
+				prevWeaponClass,
 				cg.snap->ps.classAmmo[0],
 				cg.snap->ps.classAmmo[1],
 				cg.snap->ps.classAmmo[2],
@@ -260,7 +260,8 @@ CG_Printf("weapon: %i, class %i\n", cg.snap->ps.weapon, newClass);
 				cg.snap->ps.classAmmo[7],
 				cg.snap->ps.classAmmo[8],
 				cg.snap->ps.classAmmo[9]
-			);*/
+			);
+			
 		}
 #endif
 

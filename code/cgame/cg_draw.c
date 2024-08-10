@@ -1490,7 +1490,7 @@ static float CG_DrawPowerups( float y ) {
 	int		color;
 	float	size;
 	float	f;
-	qboolean yMin = qfalse;
+	//qboolean yMin = qfalse;
 	static const float colors[2][4] = { 
 		{ 0.2f, 1.0f, 0.2f, 1.0f },
 		{ 1.0f, 0.2f, 0.2f, 1.0f } 
@@ -1538,7 +1538,7 @@ static float CG_DrawPowerups( float y ) {
 
 			y -= ICON_SIZE;
 			if(y < 50) {
-				yMin = qtrue;
+				//yMin = qtrue;
 				y = yStart;
 				x -= ICON_SIZE + CHAR_WIDTH * 2;
 			}

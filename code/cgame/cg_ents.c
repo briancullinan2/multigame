@@ -226,9 +226,9 @@ static void CG_Item( centity_t *cent ) {
 	int modelIndex;
 
 	es = &cent->currentState;
-	modelIndex = es->modelindex | (es->modelindex2 << 8);
+	modelIndex = (es->modelindex & 0xFF) | (es->modelindex2 << 8);
 	if ( modelIndex >= bg_numItems ) {
-		CG_Error( "Bad item index %i on entity", modelIndex );
+		CG_Error( "Bad item index %i, %i, %i on entity", modelIndex, es->modelindex, es->modelindex2 );
 	}
 
 #ifdef USE_ITEM_TIMERS

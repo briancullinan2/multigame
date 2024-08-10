@@ -255,9 +255,9 @@ void Cmd_Give_f( gentity_t *ent )
 	{
 		int i, j;
 		for(i = 0; i < WP_MAX_CLASSES; i++) {
-			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+			for(j = 0; j < WP_MAX_WEAPONS && i * WP_MAX_WEAPONS + j < WP_NUM_WEAPONS; j++) {
 				gitem_t *it = BG_FindItemForWeapon(i * WP_MAX_WEAPONS + j);
-				if(it && it->icon) {
+				if(it) {
 					ent->client->classWeapons[i * WP_MAX_WEAPONS + j]++;
 					ent->client->weaponsModified[i] = qtrue;
 				}
@@ -269,14 +269,14 @@ void Cmd_Give_f( gentity_t *ent )
 	{
 		int i, j;
 		for(i = 0; i < WP_MAX_CLASSES; i++) {
-			for ( j = 0 ; j < WP_MAX_WEAPONS ; j++ ) {
+			for ( j = 0 ; j < WP_MAX_WEAPONS && i * WP_MAX_WEAPONS + j < WP_NUM_WEAPONS; j++ ) {
 				gitem_t *it = BG_FindAmmoForWeapon(i * WP_MAX_WEAPONS + j);
 				if(i * WP_MAX_WEAPONS + j == WP_GAUNTLET
 					|| i * WP_MAX_WEAPONS + j == WP_GAUNTLET2
 					|| i * WP_MAX_WEAPONS + j == WP_GRAPPLING_HOOK) {
 					ent->client->classAmmo[i * WP_MAX_WEAPONS + j] = INFINITE;
 				} else 
-				if(it && it->icon) {
+				if(it) {
 					ent->client->classAmmo[i * WP_MAX_WEAPONS + j] = 999;
 				}
 			}
@@ -2195,7 +2195,7 @@ void Cmd_Drop_f( gentity_t *ent ) {
 		int i;
 		for(i = HI_TELEPORTER; i < HI_NUM_HOLDABLE; i++) {
 			if(ent->client->inventory[i]) {
-				dropWeapon(ent, &bg_itemlist[ent->client->inventory[i]], 0, FL_DROPPED_ITEM | FL_THROWN_ITEM);
+				dropWeapon(ent, BG_FindItemForPowerup(i), 0, FL_DROPPED_ITEM | FL_THROWN_ITEM);
 				ent->client->inventory[i] = 0;
 				return;
 			}

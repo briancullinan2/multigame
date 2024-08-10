@@ -1240,8 +1240,12 @@ gentity_t *LaunchItem( gitem_t *item, vec3_t origin, vec3_t velocity )
 
 	dropped->s.eType = ET_ITEM;
 	dropped->s.modelindex = (item - bg_itemlist) & 0xFF;	// store item number in modelindex
-	dropped->s.modelindex2 = ((item - bg_itemlist) & 0xFF00) >> 8;	// store item number in modelindex
+	dropped->s.modelindex2 = (item - bg_itemlist) >> 8;	// store item number in modelindex
 	//dropped->s.modelindex2 = 1; // This is non-zero is it's a dropped item
+	if((item - bg_itemlist) > bg_numItems) {
+		G_Error("What are we even doing here? %i", bg_numItems);
+	}
+	G_Printf("Launching: %i, %i, %i\n", (item - bg_itemlist), dropped->s.modelindex, dropped->s.modelindex2);
 
 	// item scale-down
 	dropped->s.time = level.time;
@@ -1354,7 +1358,7 @@ void FinishSpawningItem( gentity_t *ent ) {
 
 	ent->s.eType = ET_ITEM;
 	ent->s.modelindex = (ent->item - bg_itemlist) & 0xFF;	// store item number in modelindex
-	ent->s.modelindex2 = ((ent->item - bg_itemlist) & 0xFF00) >> 8;	// store item number in modelindex
+	ent->s.modelindex2 = (ent->item - bg_itemlist) >> 8;	// store item number in modelindex
 	//ent->s.modelindex = ent->item - bg_itemlist;		// store item number in modelindex
 	//ent->s.modelindex2 = 0; // zero indicates this isn't a dropped item
 

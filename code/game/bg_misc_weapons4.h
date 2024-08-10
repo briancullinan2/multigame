@@ -182,5 +182,19 @@
 				/* precache */ "",
 				/* sounds */ ""},
 
+		/*QUAKED weapon_lightning (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+		 */
+		{
+				"weapon_qc_original",
+				"sound/misc/w_pkup.wav",
+				{"models/weapons4/rl/rl_original.md3",
+				 0, 0, 0},
+				/* icon */ "icons/iconw_lightning",
+				/* pickup */ "Original",
+				10,
+				IT_WEAPON,
+				WP_ORIGINAL,
+				/* precache */ "",
+				/* sounds */ ""},
 
 

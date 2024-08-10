@@ -1318,7 +1318,7 @@ static void CG_SpawnRailTrail( centity_t *cent, vec3_t origin ) {
 	}
 	cent->pe.railgunFlash = qtrue;
 	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
-	if(cg_oldRail.integer > 0) {
+	if(cg_oldRail.integer > 2) {
 		CG_OldRailTrail(ci, origin, cent->pe.railgunImpact);
 	} else {
 		CG_RailTrail( ci, origin, cent->pe.railgunImpact );

@@ -1416,15 +1416,13 @@ void ClientThink_real( gentity_t *ent ) {
 			}
 			itemBits = 0;
 			hasItems = qfalse;
-			for(j = 0; j < WP_MAX_WEAPONS; j++) {
+			for(j = 0; j < WP_MAX_WEAPONS && prevWeaponClass * WP_MAX_WEAPONS + j < WP_NUM_WEAPONS; j++) {
 				//gitem_t *item = BG_FindItemForPowerup(prevWeaponClass * PW_MAX_POWERUPS + j);
 				//if(!item || !item->giTag) {
 				//	continue;
 				//}
-				if(prevWeaponClass * WP_MAX_WEAPONS + j >= WP_NUM_WEAPONS) {
-					continue;
-				}
 				hasItems = qtrue;
+				client->ps.classAmmo[j] = client->classAmmo[prevWeaponClass * WP_MAX_WEAPONS + j];
 				if(client->classWeapons[prevWeaponClass * WP_MAX_WEAPONS + j] > 0) {
 					itemBits |= (1 << j);
 				}
@@ -1435,7 +1433,6 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 
 		if(i < 2 * WP_NUM_WEAPONS) {
-			memcpy(client->ps.classAmmo, &client->classAmmo[prevWeaponClass * WP_MAX_WEAPONS], sizeof(int) * WP_MAX_WEAPONS);
 			client->ps.stats[STAT_WEAPONS_UPDATE] = prevWeaponClass;
 			client->ps.stats[STAT_WEAPONS_AVAILABLE] = itemBits;
 			client->weaponsModified[prevWeaponClass] = qfalse;
@@ -1463,15 +1460,13 @@ void ClientThink_real( gentity_t *ent ) {
 			}
 			itemBits = 0;
 			hasItems = qfalse;
-			for(j = 0; j < PW_MAX_POWERUPS; j++) {
+			for(j = 0; j < PW_MAX_POWERUPS && prevItemClass * PW_MAX_POWERUPS + j < PW_NUM_POWERUPS; j++) {
 				//gitem_t *item = BG_FindItemForPowerup(prevItemClass * PW_MAX_POWERUPS + j);
 				//if(!item || !item->giTag) {
 				//	continue;
 				//}
-				if(prevItemClass * PW_MAX_POWERUPS + j >= PW_NUM_POWERUPS) {
-					continue;
-				}
 				hasItems = qtrue;
+				client->ps.powerTimes[j] = client->inventory[prevItemClass * PW_MAX_POWERUPS + j];
 				if(client->inventory[prevItemClass * PW_MAX_POWERUPS + j] > 0) {
 					itemBits |= (1 << j);
 				}
@@ -1482,7 +1477,6 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 
 		if(i < 2 * PW_NUM_POWERUPS) {
-			memcpy(client->ps.powerTimes, &client->inventory[prevItemClass * PW_MAX_POWERUPS], sizeof(int) * PW_MAX_POWERUPS);
 			client->ps.stats[STAT_HOLDABLE_UPDATE] = prevItemClass;
 			client->ps.stats[STAT_HOLDABLE_AVAILABLE] = itemBits;
 			client->inventoryModified[prevItemClass] = qfalse;

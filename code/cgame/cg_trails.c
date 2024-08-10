@@ -16,11 +16,11 @@ static void CG_TrailParticleRender( vec3_t pos, vec3_t deltaNormalized, float le
 
 	vec3_t		forward, right, viewAxis;
 	polyVert_t	verts[3];
-	vec2_t		line;
+	//vec2_t		line;
 	float		len, /*frac,*/ dist;
 	vec3_t		start, finish;
 	//float		groundHeight;
-//	int			msec = trap_Milliseconds();
+	//int			msec = trap_Milliseconds();
 	float height = TRAIL_WIDTH; // + random() * 3;
 	float weight = TRAIL_WIDTH; //height * 0.5f;
 	vec3_t colour;
