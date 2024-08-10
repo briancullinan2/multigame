@@ -3,7 +3,7 @@
 #include "../ui/ui_shared.h"
 
 #if !defined(MISSIONPACK) && !defined(USE_CLASSIC_HUD) // bk001204
-#error This file not be used for classic Q3A.
+//#error This file not be used for classic Q3A.
 #endif
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)

@@ -129,6 +129,8 @@ MainMenu_Cache
 */
 void MainMenu_Cache( void ) {
 	s_main.bannerModel = trap_R_RegisterModel( MAIN_BANNER_MODEL );
+	Com_Printf("Reregistering models: %i\n", s_main.bannerModel);
+
 	trap_R_RemapShader("models/mapobjects/banner/q3banner02", "models/mapobjects/banner/q3banner02%hue0.65", "0");
 }
 

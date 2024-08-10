@@ -219,7 +219,9 @@ void G_Use(gentity_t *ent) {
 	int 	   num;
 	int 	   touch[MAX_GENTITIES];
 	gentity_t	   *hit;
+#ifdef USE_SINGLEPLAYER
 	gentity_t	   *interfaceEnt;
+#endif
 	vec3_t		   mins;
 	vec3_t		   maxs;
 	qboolean	   anim  = qfalse;
@@ -276,6 +278,7 @@ void G_Use(gentity_t *ent) {
 			//Press a button
 			hit->use(hit, hit, ent);
 		}
+#ifdef USE_ROTATING_DOOR
 		else if (!Q_stricmp(hit->classname, "func_door")) {
 			//Trigger_only is a flag set by the mapper
 			//it prevents doors being opened directly by a player
@@ -291,9 +294,11 @@ void G_Use(gentity_t *ent) {
 				anim = qtrue;
 			}
 		}
+#endif
 		else if (!Q_stricmp(hit->classname, "func_keyboard_interface") && !doingDoor) {
 			hit->use(hit, hit, ent);
 		}
+#ifdef USE_SINGLEPLAYER // entity
 		else if (!Q_stricmp(hit->classname, "func_train") && !doingDoor && hit->interfaceEnt) {
 			if(hit->interfaceEnt){
 				if ((interfaceEnt = G_Find (NULL, FOFS(targetname), hit->interfaceEnt)) != NULL
@@ -302,6 +307,7 @@ void G_Use(gentity_t *ent) {
 				}
 			}
 		}
+#endif
 	}
 
 	//Run "use" animation but only if a high priority anim is not already running
@@ -2211,7 +2217,7 @@ void ClientEndFrame( gentity_t *ent ) {
 	gclient_t	*client;
 	// unlagged
 	int			frames;
-#ifndef USE_ADVANCED_WEAPONS
+#ifdef USE_ADVANCED_WEAPONS
 	int weaponClass;
 #endif
 

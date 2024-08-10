@@ -1399,7 +1399,9 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	int			asave;
 	int			knockback;
 	int			max;
+#ifdef USE_RUNES
 	vec3_t tempdir;
+#endif
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
 	vec3_t		bouncedir, impactpoint;
 #endif

@@ -1287,7 +1287,12 @@ void ClientSpawn(gentity_t *ent) {
   }
 #endif
 
-	if(!( !wp_gauntEnable.integer
+	if(!( 
+#ifdef USE_ADVANCED_WEAPONS
+		!wp_gauntEnable.integer
+#else
+		qtrue
+#endif
 #ifdef USE_HOTRPG
 		|| g_hotRockets.integer
 #endif

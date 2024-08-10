@@ -1,5 +1,7 @@
 #include "cg_local.h"
 
+#ifdef USE_VEHICLES
+
 void CG_Sparks( const vec3_t origin, const vec3_t normal, const vec3_t direction, const float speed )
 {
 	vec3_t			velocity;
@@ -48,3 +50,5 @@ void CG_Sparks( const vec3_t origin, const vec3_t normal, const vec3_t direction
 	le->leBounceSoundType = LEBS_BRASS;
 	le->leMarkType = LEMT_NONE;
 }
+
+#endif

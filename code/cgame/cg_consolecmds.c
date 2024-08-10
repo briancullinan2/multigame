@@ -486,7 +486,9 @@ void CG_StartCamera( const char *name, qboolean startBlack ) {
 		// 
 		// letterbox look
 		//
+#ifdef USE_SINGLEPLAYER
 		black_bars = 1;
+#endif
 #ifdef USE_CLASSIC_HUD
 	// spy on camera name for play edit menu
 		if(Q_stristr(name, "_playeredit") != NULL) {

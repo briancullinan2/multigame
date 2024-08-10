@@ -39,7 +39,11 @@ vmCvar_t mapnames[MAX_WORLDS];
 int mapnamesModificationCounts[MAX_WORLDS];
 #endif
 
+#ifdef USE_MULTIWORLD
 static void G_InitGame( int levelTime, int randomSeed, int restart );
+#else
+static void G_InitGame( int levelTime, int randomSeed, qboolean restart );
+#endif
 static void G_RunFrame( int levelTime );
 static void G_ShutdownGame( int restart );
 static void CheckExitRules( void );

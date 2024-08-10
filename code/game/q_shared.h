@@ -147,137 +147,137 @@
 //=============================================================
 
 // runes enable little popup powerups in random places on the map, over 60 different effects
-#define USE_RUNES 1
+// #define USE_RUNES 1
 
-// unholy trinity mode, start with rocket, rails, lightning
-#define USE_TRINITY 1
-// hot rockets do no self-splash damage, infinite rockets, intagib on direct hits
-#define USE_HOTRPG 1
-// hot BFG better balance, infinite ammo
-#define USE_HOTBFG 1
-// extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
-#define USE_MODES_DEATH 1
-// show special messages and animation for headshots
-#define USE_HEADSHOTS 1
-// enable lightening discharge that kills players in radius when used in water
-#define USE_LV_DISCHARGE 1
-// instagib mode
-#define USE_INSTAGIB 1
+// // unholy trinity mode, start with rocket, rails, lightning
+// #define USE_TRINITY 1
+// // hot rockets do no self-splash damage, infinite rockets, intagib on direct hits
+// #define USE_HOTRPG 1
+// // hot BFG better balance, infinite ammo
+// #define USE_HOTBFG 1
+// // extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
+// #define USE_MODES_DEATH 1
+// // show special messages and animation for headshots
+// #define USE_HEADSHOTS 1
+// // enable lightening discharge that kills players in radius when used in water
+// #define USE_LV_DISCHARGE 1
+// // instagib mode
+// #define USE_INSTAGIB 1
 
-// compile item timers, show how long until power-up respawns
-#define USE_ITEM_TIMERS 1
-// advanged damage changes based on where the player is shot
-#define USE_LOCAL_DMG 1
+// // compile item timers, show how long until power-up respawns
+// #define USE_ITEM_TIMERS 1
+// // advanged damage changes based on where the player is shot
+// #define USE_LOCAL_DMG 1
 
-// enable birds eye view, set by server or client, for use in spray and prey game modes
-#define USE_BIRDS_EYE 1
-// Alice in Wonderland game dynamics like shrinking and growing a player
-#define USE_AIW 1
+// // enable birds eye view, set by server or client, for use in spray and prey game modes
+// #define USE_BIRDS_EYE 1
+// // Alice in Wonderland game dynamics like shrinking and growing a player
+// #define USE_AIW 1
 
-// compile damage plums every time someone gets hit
-#define USE_DAMAGE_PLUMS 1
-// allow referees to freeze players/TODO: rebalance teams
-#define USE_REFEREE_CMDS 1
-// enable freeze tag as a game mode in addition to the chosen CTF/Overload
-#define USE_GAME_FREEZETAG 1
-// show rpg like status bar for health, ammo, frozenness
-#define USE_RPG_STATS 1
+// // compile damage plums every time someone gets hit
+// #define USE_DAMAGE_PLUMS 1
+// // allow referees to freeze players/TODO: rebalance teams
+// #define USE_REFEREE_CMDS 1
+// // enable freeze tag as a game mode in addition to the chosen CTF/Overload
+// #define USE_GAME_FREEZETAG 1
+// // show rpg like status bar for health, ammo, frozenness
+// #define USE_RPG_STATS 1
 
-// use alternate fire buttons
-#define USE_ALT_FIRE 1
-// enable portal gun, requires modified client
-#define USE_PORTALS 1
+// // use alternate fire buttons
+// #define USE_ALT_FIRE 1
+// // enable portal gun, requires modified client
+// #define USE_PORTALS 1
 
-// cluster grenades create offspring every time they hit something
-#define USE_CLUSTER_GRENADES 1
-// spreadfire weapon and powerup mod, sends lots of fire everywhere
-#define USE_WEAPON_SPREAD 1
-// enable vortex grenades that suck players in when they are tossed
-#define USE_VORTEX_GRENADES 1
-// enable bouncing rail guns
-#define USE_BOUNCE_RAIL 1
-// enable rails that go through walls
-//#define USE_INVULN_RAILS 1
-#define USE_TELEFRAG_RAIL 1
+// // cluster grenades create offspring every time they hit something
+// #define USE_CLUSTER_GRENADES 1
+// // spreadfire weapon and powerup mod, sends lots of fire everywhere
+// #define USE_WEAPON_SPREAD 1
+// // enable vortex grenades that suck players in when they are tossed
+// #define USE_VORTEX_GRENADES 1
+// // enable bouncing rail guns
+// #define USE_BOUNCE_RAIL 1
+// // enable rails that go through walls
+// //#define USE_INVULN_RAILS 1
+// #define USE_TELEFRAG_RAIL 1
 
-// homing rockets look for other people to track and change direction
-#define USE_HOMING_MISSILE 1
-// rpg accellerating missiles start slow and then speed up as they fly
-#define USE_ACCEL_RPG 1
-// enable bouncing rpgs from map items or server enabled
-#define USE_BOUNCE_RPG 1
-// enable vulnerable rockets that can be shot down
-#define USE_VULN_RPG 1
+// // homing rockets look for other people to track and change direction
+// #define USE_HOMING_MISSILE 1
+// // rpg accellerating missiles start slow and then speed up as they fly
+// #define USE_ACCEL_RPG 1
+// // enable bouncing rpgs from map items or server enabled
+// #define USE_BOUNCE_RPG 1
+// // enable vulnerable rockets that can be shot down
+// #define USE_VULN_RPG 1
 
-// allow clients to drop weapons, items, and powerups
-#define USE_WEAPON_DROP 1
-#define USE_ITEM_DROP 1
-#define USE_POWERUP_DROP 1
-#define USE_FLAG_DROP 1
-#define USE_AMMO_DROP 1
-#define USE_ARMOR_DROP 1
-#define USE_HEALTH_DROP 1
-// add single player features like earthquakes, player stopping, and animated models
-#define USE_SINGLEPLAYER 1
-// physics variables, usually transfered from server to client
-#define USE_PHYSICS_VARS 1
-// add single player features like earthquakes, player stopping, and animated models
-#define USE_SINGLEPLAYER 1
-// enable ladders in map
-#define USE_LADDERS 1
-// adds rotating doors from maps, UrT uses them, so does Quake 2
-#define USE_ROTATING_DOOR 1
+// // allow clients to drop weapons, items, and powerups
+// #define USE_WEAPON_DROP 1
+// #define USE_ITEM_DROP 1
+// #define USE_POWERUP_DROP 1
+// #define USE_FLAG_DROP 1
+// #define USE_AMMO_DROP 1
+// #define USE_ARMOR_DROP 1
+// #define USE_HEALTH_DROP 1
+// // add single player features like earthquakes, player stopping, and animated models
+// #define USE_SINGLEPLAYER 1
+// // physics variables, usually transfered from server to client
+// #define USE_PHYSICS_VARS 1
+// // add single player features like earthquakes, player stopping, and animated models
+// #define USE_SINGLEPLAYER 1
+// // enable ladders in map
+// #define USE_LADDERS 1
+// // adds rotating doors from maps, UrT uses them, so does Quake 2
+// #define USE_ROTATING_DOOR 1
 
 
-// weapon vars allow customizing all weapon behavior
-#define USE_WEAPON_VARS 1
-// enable the grappling hook
-#define USE_GRAPPLE 1
-// enable the flame thrower
-#define USE_FLAME_THROWER 1
-// use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
-#define USE_ADVANCED_WEAPONS 1
-// client side weapon order
-#define USE_WEAPON_ORDER 1
-// draw 3D weapons that rotate slightly
-#define USE_3D_WEAPONS 1
-// allow clients to center the weapons above the hud
-#define USE_WEAPON_CENTER 1
+// // weapon vars allow customizing all weapon behavior
+// #define USE_WEAPON_VARS 1
+// // enable the grappling hook
+// #define USE_GRAPPLE 1
+// // enable the flame thrower
+// #define USE_FLAME_THROWER 1
+// // use advanced weapons loads weapons from header files and appends custom loaded definitions from text files
+// #define USE_ADVANCED_WEAPONS 1
+// // client side weapon order
+// #define USE_WEAPON_ORDER 1
+// // draw 3D weapons that rotate slightly
+// #define USE_3D_WEAPONS 1
+// // allow clients to center the weapons above the hud
+// #define USE_WEAPON_CENTER 1
 
-// allow anti gravity boots commands to be used by clients
-#define USE_GRAVITY_BOOTS 1
-// advanced classes applies special properties to players based on model or selection
-#define USE_ADVANCED_CLASS 1
-// laser sight and flash light
-#define USE_LASER_SIGHT 1
-// advanced zoom stops zooming when the key is up and returns to original
-#define USE_ADVANCED_ZOOM 1
-// allow clients to specific bouncing rockets
-#define USE_BOUNCE_CMD 1
-// enable bouncing rpgs from map items or server enabled
-#define USE_BOUNCE_RPG 1
-// enable cloaking command for clients to turn on infinite invisibility
-#define USE_CLOAK_CMD 1
-// use advanced gaming features like many teams, map rotations settings, randomizing items
-#define USE_ADVANCED_GAMES 1
-#define USE_ADVANCED_TEAMS 1
-// allow the player to pick up more than one holdable item, or more than one persistent power up
-#define USE_ADVANCED_ITEMS 1
+// // allow anti gravity boots commands to be used by clients
+// #define USE_GRAVITY_BOOTS 1
+// // advanced classes applies special properties to players based on model or selection
+// #define USE_ADVANCED_CLASS 1
+// // laser sight and flash light
+// #define USE_LASER_SIGHT 1
+// // advanced zoom stops zooming when the key is up and returns to original
+// #define USE_ADVANCED_ZOOM 1
+// // allow clients to specific bouncing rockets
+// #define USE_BOUNCE_CMD 1
+// // enable bouncing rpgs from map items or server enabled
+// #define USE_BOUNCE_RPG 1
+// // enable cloaking command for clients to turn on infinite invisibility
+// #define USE_CLOAK_CMD 1
+// // use advanced gaming features like many teams, map rotations settings, randomizing items
+// #define USE_ADVANCED_GAMES 1
+// #define USE_ADVANCED_TEAMS 1
+// // allow the player to pick up more than one holdable item, or more than one persistent power up
+// #define USE_ADVANCED_ITEMS 1
 
-// many team colors, with automatically added many bots, rules for respawning, dying, and decay
-#define USE_HORDES 1
+// // many team colors, with automatically added many bots, rules for respawning, dying, and decay
+// #define USE_HORDES 1
 
-// special multiworld features like cameras and portals
-#define USE_MULTIWORLD 1
-#define MAX_WORLDS 10
+// // special multiworld features like cameras and portals
+// #define USE_MULTIWORLD 1
+// #define MAX_WORLDS 10
 
-// loads the standard Q3 hud if the mod is missing a huds.txt file.
-#define USE_CLASSIC_HUD 1
-// loads the standard Q3 menu if the mod is missing a menus.txt file.
-#define USE_CLASSIC_MENU 1
+// // loads the standard Q3 hud if the mod is missing a huds.txt file.
+// #define USE_CLASSIC_HUD 1
+// // loads the standard Q3 menu if the mod is missing a menus.txt file.
+// #define USE_CLASSIC_MENU 1
 
-// players can get inside vehicles and drive or jet around
-#define USE_VEHICLES 1
+// // players can get inside vehicles and drive or jet around
+// #define USE_VEHICLES 1
 
 typedef unsigned char 		byte;
 

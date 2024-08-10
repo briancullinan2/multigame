@@ -15,7 +15,9 @@ static int enemyColorsModificationCount = -1;
 static int teamModelModificationCount  = -1;
 static int teamColorsModificationCount = -1;
 static int atmosphereModificationCount = -1;
+#ifdef USE_WEAPON_ORDER
 static int weaponsOrderModificationCount = -1; //WarZone
+#endif
 static int gametypeModificationCount = -1;
 
 #ifdef USE_CLASSIC_HUD
@@ -168,8 +170,12 @@ void CG_RegisterCvars( void ) {
 	teamModelModificationCount = cg_teamModel.modificationCount;
 	teamColorsModificationCount = cg_teamColors.modificationCount;
 	atmosphereModificationCount = cg_atmosphere.modificationCount;
+#ifdef USE_WEAPON_ORDER
 	weaponsOrderModificationCount = cg_weaponOrder.modificationCount; 
+#endif
+#ifdef USE_ADVANCED_GAMES
 	gametypeModificationCount = cg_gametype.modificationCount; 
+#endif
 #ifdef USE_CLASSIC_HUD
 	hudFilesModificationCount = cg_hudFiles.modificationCount;
 #endif
@@ -748,6 +754,7 @@ void CG_ReregisterModels( void ) {
 	int		i;
 	clientInfo_t	*match;
 	weaponInfo_t	*weaponInfo;
+	char	items[MAX_ITEMS+1];
 
 	for ( i = 0 ; i < cgs.maxclients ; i++ ) {
 		match = &cgs.clientinfo[ i ];
@@ -757,8 +764,16 @@ void CG_ReregisterModels( void ) {
 		// just load the real info cause it uses the same models and skins
 		CG_LoadClientInfo( match );
 	}
+	
+	Q_strncpyz( items, CG_ConfigString(CS_ITEMS), sizeof( items ) );
 
 	for ( i = 1 ; i < bg_numItems ; i++ ) {
+		if(items[ i ] != '1') {
+			continue;
+		}
+		if(cg_items[ i ].models[0] != 0) {
+			continue;
+		}
 		cg_items[ i ].registered = qfalse;
 		if(bg_itemlist[i].giType == IT_WEAPON) {
 			weaponInfo = &cg_weapons[bg_itemlist[i].giTag];
@@ -791,12 +806,14 @@ void CG_ReregisterModels( void ) {
 #endif
 	cgs.media.neutralFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/ntrl_base.md3" );
 #endif
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	cgs.media.overloadBaseModel = trap_R_RegisterModel( "models/powerups/overload_base.md3" );
 	cgs.media.overloadTargetModel = trap_R_RegisterModel( "models/powerups/overload_target.md3" );
 	cgs.media.overloadLightsModel = trap_R_RegisterModel( "models/powerups/overload_lights.md3" );
 	cgs.media.overloadEnergyModel = trap_R_RegisterModel( "models/powerups/overload_energy.md3" );
 	cgs.media.harvesterModel = trap_R_RegisterModel( "models/powerups/harvester/harvester.md3" );
 	cgs.media.harvesterNeutralModel = trap_R_RegisterModel( "models/powerups/obelisk/obelisk.md3" );
+#endif
 	cgs.media.armorModel = trap_R_RegisterModel( "models/powerups/armor/armor_yel.md3" );
 	cgs.media.gibAbdomen = trap_R_RegisterModel( "models/gibs/abdomen.md3" );
 	cgs.media.gibArm = trap_R_RegisterModel( "models/gibs/arm.md3" );

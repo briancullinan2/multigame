@@ -135,7 +135,11 @@ void CG_AddTrailEffects( void ) {
 			VectorSubtract(trailPos[j][trailI], prev, temp);
 			/*length =*/ VectorNormalize(temp);
 			//CG_Printf("pos: %f %f %f\n", trailPos[i][0], trailPos[i][1], trailPos[i][2]);
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
 			CG_TrailParticleRender(trailPos[j][trailI], temp, 1.0f - (1.0f * i) / trailLength[j], cgs.media.dustPuffShader);
+#else
+			CG_TrailParticleRender(trailPos[j][trailI], temp, 1.0f - (1.0f * i) / trailLength[j], cgs.media.railCoreShader);
+#endif
 			VectorCopy(trailPos[j][i], prev);
 		}
 	}

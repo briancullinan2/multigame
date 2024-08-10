@@ -730,6 +730,8 @@ typedef struct {
 #endif
 	int startTime;
 
+	int registerModels;
+
 }	uiInfo_t;
 
 extern uiInfo_t uiInfo;
@@ -1059,4 +1061,18 @@ typedef struct postGameInfo_s {
 
 
 
+#endif
+
+#ifdef Q3_VM
+extern void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
+extern int	(*trap_GetAsyncFiles)( const char **files, int max );
+#else
+qboolean trap_GetValue( char *value, int valueSize, const char *key );
+void trap_R_AddRefEntityToScene2( const refEntity_t *re );
+int	trap_GetAsyncFiles( const char **files, int max );
+extern int dll_com_trapGetValue;
+extern int dll_trap_R_AddRefEntityToScene2;
+extern int dll_trap_R_AddLinearLightToScene;
+extern int dll_trap_R_AddPolyBufferToScene;
+extern int dll_trap_GetAsyncFiles;
 #endif

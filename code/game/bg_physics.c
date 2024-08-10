@@ -30,6 +30,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #endif
 #include "bg_local.h"
 
+#ifdef USE_VEHICLES
+
 float CP_CURRENT_GRAVITY;
 
 // not actually used now, use cvars instead
@@ -2392,3 +2394,4 @@ void PM_DriveMove( car_t *car, float time, qboolean includeBodies )
 //	Com_Printf( "t1 %d, t2 %d, t3 %d, t4 %d, t5 %d\n", t1 - t, t2 - t, t3 - t, t4 - t, t5 - t );
 }
 
+#endif

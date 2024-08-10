@@ -14,7 +14,10 @@ static	vec3_t	muzzle_origin; // for hitscan weapon trace
 void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 	gitem_t *item;
 	vec3_t	origin, angles;
-	int		j, itemClass;
+	int		j;
+#ifdef USE_ADVANCED_ITEMS
+  int itemClass;
+#endif
 	gentity_t *drop;
 #ifdef USE_RUNES
   if ( ent->client->inventory[RUNE_STRENGTH] ) {
@@ -37,10 +40,12 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 
 	CalcMuzzlePointOrigin( ent, muzzle_origin, forward, right, up, muzzle );
 
-
+  // not sure how we get here without this, just make compiler happy - roger
+#ifdef USE_ADVANCED_ITEMS
   itemClass = floor(powerup / PW_MAX_POWERUPS);
   ent->client->inventory[powerup] = 0;
   ent->client->inventoryModified[itemClass] = qtrue;
+#endif
 #ifndef USE_ADVANCED_ITEMS
   ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 #endif
@@ -237,6 +242,7 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 
     break;
 
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES) || defined(MISSIONPACK)
   case HI_KAMIKAZE:		// kamikaze
     // make sure the invulnerability is off
     ent->client->invulnerabilityTime = 0;
@@ -252,8 +258,9 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 #endif
     ent->client->invulnerabilityTime = level.time + 10000;
     break;
+#endif
 
-#ifdef USE_PORTALS
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_PORTALS) || defined(MISSIONPACK)
   case HI_PORTAL:		// portal
     if( ent->client->portalID ) {
       DropPortalSource( ent, NULL );

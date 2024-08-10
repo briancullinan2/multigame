@@ -809,7 +809,6 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	case IT_AMMO:
 		respawn = Pickup_Ammo(ent, other);
 		break;
-#ifdef USE_ADVANCED_ITEMS
 
 #ifdef USE_ADVANCED_ITEMS
 	case IT_ARMOR2:
@@ -853,7 +852,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 #ifdef USE_ADVANCED_ITEMS
 	case IT_TEAM2:
 #endif
-#endif
+
 	case IT_TEAM:
 		respawn = Pickup_Team(ent, other);
 		break;
@@ -1095,8 +1094,13 @@ void Pickup_Item (gentity_t *ent, gentity_t *other, trace_t *trace, int autoPick
 
 		case IT_HOLDABLE:
 			// No picking up an item twice.
-			if ((autoPickup & (1 << (ent->item - bg_itemlist))) && other->client->inventory[ent->item->giTag])
-			{
+			if ((autoPickup & (1 << (ent->item - bg_itemlist))) 
+#ifdef USE_ADVANCED_ITEMS
+				&& !other->client->inventory[ent->item->giTag]
+#else
+				&& !other->client->ps.stats[STAT_HOLDABLE_ITEM]
+#endif
+			) {
 				respawn = Pickup_Holdable(ent, other);
 			}
 			else

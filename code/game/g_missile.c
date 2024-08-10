@@ -672,9 +672,9 @@ gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t dir) {
   bolt->splashDamage = wp_grenadeSplash.integer;
   bolt->splashRadius = wp_grenadeRadius.integer;
 #else
-  bolt->damage = GRENADE_DAMAGE;
-  bolt->splashDamage = GRENADE_DAMAGE;
-  bolt->splashRadius = GRENADE_RADIUS;
+  bolt->damage = 100;
+  bolt->splashDamage = 100;
+  bolt->splashRadius = 150;
 #endif
 	bolt->methodOfDeath = MOD_GRENADE;
 	bolt->splashMethodOfDeath = MOD_GRENADE_SPLASH;

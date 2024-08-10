@@ -242,13 +242,14 @@ static void Crosshair_Draw( void *self ) {
 	UI_DrawHandlePic( x + SMALLCHAR_WIDTH, y - 4, 24, 24, s_preferences.crosshairShader[s->curvalue] );
 }
 
-
+#ifdef USE_CLASSIC_HUD
 static const char *menu_names[] =
 {
 	"Classic",
 	"Team Arena",
 	0
 };
+#endif
 
 static void Preferences_MenuInit( void ) {
 	int				y;
@@ -428,7 +429,9 @@ static void Preferences_MenuInit( void ) {
 	Menu_AddItem( &s_preferences.menu, &s_preferences.forcemodel );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.drawteamoverlay );
 	Menu_AddItem( &s_preferences.menu, &s_preferences.allowdownload );
+#ifdef USE_CLASSIC_MENU
 	Menu_AddItem( &s_preferences.menu, &s_preferences.menustyle );
+#endif
 
 	Menu_AddItem( &s_preferences.menu, &s_preferences.back );
 

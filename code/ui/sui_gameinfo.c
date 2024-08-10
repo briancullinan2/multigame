@@ -7,7 +7,7 @@
 #include "ui_local.h"
 
 #if !defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU)
-#error this file is for mission pack -DMISSIONPACK=1
+//#error this file is for mission pack -DMISSIONPACK=1
 #endif
 
 #if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)

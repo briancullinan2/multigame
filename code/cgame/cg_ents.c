@@ -448,8 +448,11 @@ static void CG_Item( centity_t *cent ) {
 
 		VectorClear( spinAngles );
 
-		if ( item->giType == IT_HEALTH || item->giType == IT_POWERUP || item->giTag == HI_HEALER )
-		{
+		if ( item->giType == IT_HEALTH || item->giType == IT_POWERUP
+#ifdef USE_ADVANCED_ITEMS
+		 || item->giTag == HI_HEALER 
+#endif
+		 ) {
 			if ( ( ent.hModel = cg_items[modelIndex].models[1] ) != 0 )
 			{
 				if ( item->giType == IT_POWERUP )
@@ -1290,12 +1293,14 @@ static void CG_AddCEntity( centity_t *cent ) {
 	case ET_PUSH_TRIGGER:
 		break;
 	case ET_TELEPORT_TRIGGER:
+#if defined(MISSIONPACK) || defined(USE_PORTALS)
 		if(cent->currentState.modelindex
 		//	&& cent->currentState.clientNum
 			&& (cent->currentState.powerups & ((1 << 4) | (1 << 5)))
 		) {
       CG_PersonalPortal( cent );
 		}
+#endif
 		break;
 	case ET_GENERAL:
 		CG_General( cent );

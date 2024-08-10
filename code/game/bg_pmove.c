@@ -8,13 +8,13 @@
 #include "bg_local.h"
 
 
-#ifdef USE_GRAPPLE
-
 #ifdef CGAME
+
 #if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
 #define g_stamina cg_stamina
 #define g_ability cg_ability
 #endif
+
 #ifdef USE_RUNES
 #define rune_ability cg_rune_ability
 #define rune_abilityMin cg_rune_abilityMin
@@ -23,6 +23,13 @@
 #define g_playerScale cg_playerScale
 #define g_altGrapple cg_altGrapple
 #define wp_grapplePull cgwp_grapplePull
+
+#endif
+
+
+#ifdef USE_GRAPPLE
+
+#ifdef CGAME
 
 extern vmCvar_t cgwp_grapplePull;
 extern vmCvar_t cgwp_grappleCycle;
@@ -2071,40 +2078,59 @@ static void PM_Weapon( void ) {
 #else // USE_WEAPON_VARS
 	switch( pm->ps->weapon ) {
 	default:
-	case WP_GAUNTLET:
+#ifdef USE_ADVANCED_WEAPONS
 	case WP_GAUNTLET2:
 		addTime = 400;
 		break;
-	case WP_LIGHTNING:
 	case WP_LIGHTNING2:
 		addTime = 50;
 		break;
-	case WP_SHOTGUN:
 	case WP_SHOTGUN2:
 		addTime = 1000;
 		break;
-	case WP_MACHINEGUN:
 	case WP_MACHINEGUN2:
 		addTime = 100;
 		break;
-	case WP_GRENADE_LAUNCHER:
 	case WP_GRENADE_LAUNCHER2:
 		addTime = 800;
 		break;
-	case WP_ROCKET_LAUNCHER:
 	case WP_ROCKET_LAUNCHER2:
 		addTime = 800;
 		break;
-	case WP_PLASMAGUN:
 	case WP_PLASMAGUN2:
 		addTime = 100;
 		break;
-	case WP_RAILGUN:
 	case WP_RAILGUN2:
 		addTime = 1500;
 		break;
-	case WP_BFG:
 	case WP_BFG2:
+
+#endif
+	case WP_GAUNTLET:
+		addTime = 400;
+		break;
+	case WP_LIGHTNING:
+		addTime = 50;
+		break;
+	case WP_SHOTGUN:
+		addTime = 1000;
+		break;
+	case WP_MACHINEGUN:
+		addTime = 100;
+		break;
+	case WP_GRENADE_LAUNCHER:
+		addTime = 800;
+		break;
+	case WP_ROCKET_LAUNCHER:
+		addTime = 800;
+		break;
+	case WP_PLASMAGUN:
+		addTime = 100;
+		break;
+	case WP_RAILGUN:
+		addTime = 1500;
+		break;
+	case WP_BFG:
 #ifdef USE_PORTALS
     if(wp_portalEnable.integer) {
       addTime = 1000;

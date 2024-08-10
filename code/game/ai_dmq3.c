@@ -3772,7 +3772,13 @@ void BotCheckAttack(bot_state_t *bs) {
 	}
 
 	weapon = bs->cur_ps.weapon;
-	if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG && !bs->cur_ps.classAmmo[ weapon ] ) {
+	if ( weapon >= WP_MACHINEGUN && weapon <= WP_BFG 
+#ifdef USE_ADVANCED_WEAPONS
+		&& !bs->cur_ps.classAmmo[ weapon ] 
+#else
+		&& !bs->cur_ps.ammo[ weapon ] 
+#endif
+	) {
 		return;
 	}
 

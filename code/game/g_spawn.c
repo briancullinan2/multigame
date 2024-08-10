@@ -254,10 +254,8 @@ spawn_t	spawns[] = {
 	{"target_player_stop", SP_target_player_stop},
 	{"target_setting", SP_target_setting},
 	{"target_reset", SP_target_setting},
-#endif
-
 	{"target_kamikaze", SP_target_kamikaze},
-
+#endif
 
 	{"light", SP_light},
 	{"path_corner", SP_path_corner},

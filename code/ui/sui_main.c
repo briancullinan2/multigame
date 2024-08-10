@@ -154,6 +154,21 @@ void _UI_MouseEvent( int dx, int dy, qboolean absolute );
 void _UI_Refresh( int realtime );
 qboolean _UI_IsFullscreen( void );
 
+// extension interface
+qboolean intShaderTime = qfalse;
+qboolean linearLight = qfalse;
+qboolean getAsyncFiles = qfalse;
+
+#ifdef Q3_VM
+qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
+void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
+int (*trap_GetAsyncFiles)( const char **files, int max );
+#else
+int dll_com_trapGetValue;
+int dll_trap_R_AddRefEntityToScene2;
+int dll_trap_GetAsyncFiles;
+#endif
+
 
 #ifdef BUILD_GAME_STATIC
 intptr_t UI_Call( int command, int arg0, int arg1, int arg2 )
@@ -583,6 +598,15 @@ void UI_ShowPostGame(qboolean newHigh) {
 
 void UI_NEW_VideoCheck( int time );
 
+void UI_ReregisterModels( void ) {
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		MainMenu_Cache();
+
+	}
+
+}
+
+
 /*
 =================
 _UI_Refresh
@@ -604,6 +628,8 @@ void _UI_Refresh( int realtime )
 {
 	static int index;
 	static int	previousTimes[UI_FPS_FRAMES];
+	int count;
+	const char *files[16];
 
 	//if ( !( trap_Key_GetCatcher() & KEYCATCH_UI ) ) {
 	//	return;
@@ -629,6 +655,18 @@ void _UI_Refresh( int realtime )
 
 
 	UI_UpdateCvars();
+
+
+	if(getAsyncFiles) {
+		if((count = trap_GetAsyncFiles(files, 16)) && !uiInfo.registerModels) {
+			uiInfo.registerModels = realtime + 1000;
+		}
+
+		if(uiInfo.registerModels != 0 && realtime > uiInfo.registerModels) {
+			UI_ReregisterModels();
+			uiInfo.registerModels = 0;
+		}
+	}
 
 	UI_NEW_VideoCheck( realtime );
 
@@ -5058,10 +5096,43 @@ UI_Init
 =================
 */
 void _UI_Init( qboolean inGameLoad ) {
+	char  value[MAX_CVAR_VALUE_STRING];
 	const char *menuSet;
 	int start;
 
 	//uiInfo.inGameLoad = inGameLoad;
+
+	trap_Cvar_VariableStringBuffer( "//trap_GetValue", value, sizeof( value ) );
+	if ( value[0] ) {
+#ifdef Q3_VM
+		trap_GetValue = (void*)~atoi( value );
+		Com_Printf("extensions supported: %i\n", trap_GetValue);
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddRefEntityToScene2" ) ) {
+			trap_R_AddRefEntityToScene2 = (void*)~atoi( value );
+			intShaderTime = qtrue;
+		}
+		if ( trap_GetValue( value, sizeof( value ), "trap_GetAsyncFiles" ) ) {
+			trap_GetAsyncFiles = (void*)~atoi( value );
+			getAsyncFiles = qtrue;
+		} else {
+			getAsyncFiles = qfalse;
+		}
+#else
+		dll_com_trapGetValue = atoi( value );
+		if ( trap_GetValue( value, sizeof( value ), "trap_R_AddRefEntityToScene2" ) ) {
+			dll_trap_R_AddRefEntityToScene2 = atoi( value );
+			intShaderTime = qtrue;
+		}
+
+		if ( trap_GetValue( value, sizeof( value ), "trap_GetAsyncFiles" ) ) {
+			dll_trap_GetAsyncFiles = atoi( value );
+			getAsyncFiles = qtrue;
+		} else {
+			getAsyncFiles = qfalse;
+		}
+
+#endif
+	}
 
 	UI_RegisterCvars();
 	UI_InitMemory();

@@ -36,7 +36,7 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .qvm file
 ================
 */
-static char	breadcrumb[MAX_STRING_CHARS];
+//static char	breadcrumb[MAX_STRING_CHARS];
 #ifdef BUILD_GAME_STATIC
 intptr_t UI_Call( int command, int arg0, int arg1, int arg2 )
 #else

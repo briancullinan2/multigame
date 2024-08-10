@@ -336,6 +336,7 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 		}
 	}
 
+#ifdef USE_PORTALS
 	// TODO: make this a spawn flag?
 	if(self->target_ent && !VectorCompare(self->target_ent->movedir, vec3_origin)) {
 		vec3_t angles;
@@ -345,7 +346,7 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 		TeleportPlayer_real( other, dest->s.origin, vec3_origin, qtrue, qtrue, dest->s.angles, angles );
 		return;
 	}
-
+#endif
 
 	TeleportPlayer( other, dest->s.origin, dest->s.angles );
 }
