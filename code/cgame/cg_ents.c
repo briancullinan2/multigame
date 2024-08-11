@@ -166,6 +166,13 @@ static void CG_General( const centity_t *cent ) {
 	if(cgs.gameSkins[cent->currentState.modelindex2]) {
 		ent.customSkin = cgs.gameSkins[cent->currentState.modelindex2];
 	}
+	if(cent->currentState.generic1 & 8) {
+		vec3_t mins, maxs;
+		trap_R_ModelBounds( ent.hModel, mins, maxs );
+		VectorSubtract( ent.origin, mins,  ent.origin);
+		 ent.origin[2] -= 15; // bounding box 
+	}
+
 
 	// player model
 	if (cent->currentState.number == cg.snap->ps.clientNum) {

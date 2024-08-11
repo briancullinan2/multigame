@@ -2471,7 +2471,7 @@ void Cmd_Spawn_f( gentity_t *ent ) {
 	// item scale-down
 	dropped->s.time = level.time;
 	dropped->physicsObject = qtrue;
-
+	dropped->s.generic1 = 8;
 	dropped->classname = G_NewString(str);
 	VectorSet (dropped->r.mins, -ITEM_RADIUS, -ITEM_RADIUS, -ITEM_RADIUS);
 	VectorSet (dropped->r.maxs, ITEM_RADIUS, ITEM_RADIUS, ITEM_RADIUS);
