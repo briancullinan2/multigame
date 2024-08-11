@@ -572,6 +572,12 @@ qboolean	ConsoleCommand( void ) {
 		return qtrue;
 	}
 
+	// TODO: spawn from dedicated admin console, pick a client to spawn on
+	//if (Q_stricmp (cmd, "spawn") == 0) {
+	//	Svcmd_Spawn_f();
+	//	return qtrue;
+	//}
+
 #ifdef USE_REFEREE_CMDS
 	if (Q_stricmp (cmd, "freezePlayer") == 0 || Q_stricmp (cmd, "unfreeze") == 0) {
 		Svcmd_Freeze_f();

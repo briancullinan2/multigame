@@ -2434,6 +2434,82 @@ static void Cmd_Rune_f( gentity_t *ent ) {
   G_AddEvent( e, EV_ITEM_RESPAWN, 0 );
 }
 #endif
+
+
+
+
+void Cmd_Spawn_f( gentity_t *ent ) {
+	vec3_t	angles;
+	vec3_t velocity;
+	char	str[MAX_TOKEN_CHARS];
+	char *stripped[MAX_QPATH];
+	gentity_t	*dropped;
+
+	if ( trap_Argc() < 2 ) {
+		return;
+	}
+	
+	trap_Argv( 1, str, sizeof( str ) );
+
+	VectorCopy( ent->s.apos.trBase, angles );
+	angles[YAW] += 45;
+	angles[PITCH] = 0;	// always forward
+
+	AngleVectors( angles, velocity, NULL, NULL );
+	VectorScale( velocity, 150, velocity );
+	velocity[2] += 200 + crandom() * 50;
+	
+
+	dropped = G_Spawn();
+
+	//dropped->r.bmodel = qfalse;
+	dropped->s.eType = ET_GENERAL;
+	dropped->s.modelindex = G_ModelIndex(str);
+	COM_StripExtension(str, (char *)stripped, MAX_QPATH);
+	dropped->s.modelindex2 = G_SkinIndex(va("%s_default.skin", stripped));
+
+	// item scale-down
+	dropped->s.time = level.time;
+
+	dropped->classname = G_NewString(str);
+	VectorSet (dropped->r.mins, -ITEM_RADIUS, -ITEM_RADIUS, -ITEM_RADIUS);
+	VectorSet (dropped->r.maxs, ITEM_RADIUS, ITEM_RADIUS, ITEM_RADIUS);
+	dropped->r.contents = CONTENTS_TRIGGER;
+
+	//dropped->touch = Touch_Item;
+
+	G_SetOrigin( dropped, ent->s.pos.trBase );
+	//dropped->s.pos.trType = TR_GRAVITY;
+	dropped->s.pos.trTime = level.time;
+	VectorCopy( velocity, dropped->s.pos.trDelta );
+
+	//dropped->s.eFlags |= EF_BOUNCE_HALF;
+	dropped->think = G_FreeEntity;
+	dropped->nextthink = level.time + DROPPED_TIME;
+
+#ifdef USE_WEAPON_DROP
+	dropped->flags = xr_flags; // FL_DROPPED_ITEM; // XRAY FMJ FL_THROWN_ITEM
+
+  if( xr_flags & FL_THROWN_ITEM) {
+    dropped->clipmask = MASK_SHOT; // XRAY FMJ
+    dropped->s.pos.trTime = level.time - 100;	// move a bit on the very first frame
+    VectorScale( velocity, 200, dropped->s.pos.trDelta ); // 700
+    SnapVector( dropped->s.pos.trDelta );		// save net bandwidth
+    dropped->physicsBounce = 0.5;
+  }
+#else
+	dropped->flags = FL_DROPPED_ITEM;
+#endif
+
+	trap_LinkEntity (dropped);
+	//dropped->s.solid = qfalse;
+
+}
+
+
+
+
+
 /*
 =================
 ClientCommand
@@ -2662,6 +2738,9 @@ void ClientCommand( int clientNum ) {
   else if (Q_stricmp (cmd, "droprune") == 0)
     Cmd_DropRune_f( ent );
 #endif
+
+	else if (Q_stricmp (cmd, "spawn") == 0)
+		Cmd_Spawn_f( ent );
 
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );

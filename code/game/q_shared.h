@@ -149,25 +149,31 @@
 // runes enable little popup powerups in random places on the map, over 60 different effects
 // #define USE_RUNES 1
 
-// // unholy trinity mode, start with rocket, rails, lightning
-// #define USE_TRINITY 1
-// // hot rockets do no self-splash damage, infinite rockets, intagib on direct hits
-// #define USE_HOTRPG 1
-// // hot BFG better balance, infinite ammo
-// #define USE_HOTBFG 1
-// // extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
-// #define USE_MODES_DEATH 1
-// // show special messages and animation for headshots
-// #define USE_HEADSHOTS 1
-// // enable lightening discharge that kills players in radius when used in water
-// #define USE_LV_DISCHARGE 1
-// // instagib mode
-// #define USE_INSTAGIB 1
+// unholy trinity mode, start with rocket, rails, lightning
+#define USE_TRINITY 1
+// hot rockets do no self-splash damage, infinite rockets, intagib on direct hits
+#define USE_HOTRPG 1
+// hot BFG better balance, infinite ammo
+#define USE_HOTBFG 1
+// extra modes of death like MOD_VOID, MOD_RING_OUT and MOD_FROM_GRAVE
+#define USE_MODES_DEATH 1
+// show special messages and animation for headshots
+#define USE_HEADSHOTS 1
+// enable lightening discharge that kills players in radius when used in water
+#define USE_LV_DISCHARGE 1
+// instagib mode
+#define USE_INSTAGIB 1
 
-// // compile item timers, show how long until power-up respawns
-// #define USE_ITEM_TIMERS 1
-// // advanged damage changes based on where the player is shot
-// #define USE_LOCAL_DMG 1
+// compile item timers, show how long until power-up respawns
+#define USE_ITEM_TIMERS 1
+// advanged damage changes based on where the player is shot
+#define USE_LOCAL_DMG 1
+
+#ifdef USE_HEADSHOTS
+#ifndef USE_LOCAL_DMG
+#define USE_LOCAL_DMG 1
+#endif
+#endif
 
 // // enable birds eye view, set by server or client, for use in spray and prey game modes
 // #define USE_BIRDS_EYE 1
@@ -1055,7 +1061,7 @@ typedef enum {
 
 #define	MAX_MODELS			256		// these are sent over the net as 8 bits
 #define	MAX_SOUNDS			256		// so they cannot be blindly increased
-
+#define MAX_SKINS       64
 
 #define	MAX_CONFIGSTRINGS	1024
 

@@ -163,6 +163,9 @@ static void CG_General( const centity_t *cent ) {
   if(!ent.hModel) {
     return;
   }
+	if(cgs.gameSkins[cent->currentState.modelindex2]) {
+		ent.customSkin = cgs.gameSkins[cent->currentState.modelindex2];
+	}
 
 	// player model
 	if (cent->currentState.number == cg.snap->ps.clientNum) {

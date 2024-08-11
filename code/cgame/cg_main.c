@@ -1213,7 +1213,17 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 		}
 		cgs.gameModels[i] = trap_R_RegisterModel( modelName );
 	}
-	
+
+	for (i=1 ; i<MAX_SKINS ; i++) {
+		const char		*skinName;
+
+		skinName = CG_ConfigString( CS_SKINS+i );
+		if ( !skinName[0] ) {
+			break;
+		}
+		cgs.gameSkins[i] = trap_R_RegisterModel( skinName );
+	}
+
 	cgs.media.cursor = trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
 #ifdef MISSIONPACK
 	// new stuff
