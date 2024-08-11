@@ -2452,12 +2452,12 @@ void Cmd_Spawn_f( gentity_t *ent ) {
 	trap_Argv( 1, str, sizeof( str ) );
 
 	VectorCopy( ent->s.apos.trBase, angles );
-	angles[YAW] += 45;
+	//angles[YAW] += 45;
 	angles[PITCH] = 0;	// always forward
 
 	AngleVectors( angles, velocity, NULL, NULL );
-	VectorScale( velocity, 150, velocity );
-	velocity[2] += 200 + crandom() * 50;
+	VectorScale( velocity, 400, velocity );
+	velocity[2] += 100 + crandom() * 50;
 	
 
 	dropped = G_Spawn();
@@ -2470,39 +2470,36 @@ void Cmd_Spawn_f( gentity_t *ent ) {
 
 	// item scale-down
 	dropped->s.time = level.time;
+	dropped->physicsObject = qtrue;
 
 	dropped->classname = G_NewString(str);
 	VectorSet (dropped->r.mins, -ITEM_RADIUS, -ITEM_RADIUS, -ITEM_RADIUS);
 	VectorSet (dropped->r.maxs, ITEM_RADIUS, ITEM_RADIUS, ITEM_RADIUS);
 	dropped->r.contents = CONTENTS_TRIGGER;
+	dropped->clipmask = MASK_SHOT;
 
 	//dropped->touch = Touch_Item;
 
 	G_SetOrigin( dropped, ent->s.pos.trBase );
-	//dropped->s.pos.trType = TR_GRAVITY;
-	dropped->s.pos.trTime = level.time;
+	dropped->s.pos.trType = TR_GRAVITY;
 	VectorCopy( velocity, dropped->s.pos.trDelta );
+	SnapVector( dropped->s.pos.trDelta );			// save net bandwidth
 
-	//dropped->s.eFlags |= EF_BOUNCE_HALF;
+	dropped->r.bmodel = qfalse;
+	dropped->s.eFlags = EF_BOUNCE_HALF;
 	dropped->think = G_FreeEntity;
 	dropped->nextthink = level.time + DROPPED_TIME;
 
-#ifdef USE_WEAPON_DROP
-	dropped->flags = xr_flags; // FL_DROPPED_ITEM; // XRAY FMJ FL_THROWN_ITEM
+	dropped->flags = FL_DROPPED_ITEM; // FL_DROPPED_ITEM; // XRAY FMJ FL_THROWN_ITEM
+	dropped->s.solid = qtrue;
 
-  if( xr_flags & FL_THROWN_ITEM) {
-    dropped->clipmask = MASK_SHOT; // XRAY FMJ
-    dropped->s.pos.trTime = level.time - 100;	// move a bit on the very first frame
-    VectorScale( velocity, 200, dropped->s.pos.trDelta ); // 700
-    SnapVector( dropped->s.pos.trDelta );		// save net bandwidth
-    dropped->physicsBounce = 0.5;
-  }
-#else
-	dropped->flags = FL_DROPPED_ITEM;
-#endif
+	dropped->clipmask = MASK_SHOT; // XRAY FMJ
+	dropped->s.pos.trTime = level.time - 100;	// move a bit on the very first frame
+	//VectorScale( velocity, 20, dropped->s.pos.trDelta ); // 700
+	//SnapVector( dropped->s.pos.trDelta );		// save net bandwidth
+	dropped->physicsBounce = 0.5;
 
 	trap_LinkEntity (dropped);
-	//dropped->s.solid = qfalse;
 
 }
 
