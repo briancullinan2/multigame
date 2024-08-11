@@ -334,6 +334,8 @@
         /* precache */ "",
         /* sounds */ "sound/items/use_medkit.wav"},
 
+#ifdef USE_VEHICLES
+
     /*QUAKED holdable_medkit (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
      */
     {
@@ -350,3 +352,6 @@
         /* precache */ "",
         /* sounds */ "sound/items/use_medkit.wav",
         {"models/players/camaro/red.skin", NULL, NULL, NULL}},
+#endif
+
+

@@ -515,6 +515,8 @@ typedef struct {
 	qboolean			firstdraw;
 	int					lastVideoCheck;
 	int startTime;
+	int registerModels;
+	
 } uiStatic_t;
 
 
@@ -816,4 +818,15 @@ void UI_SignupMenu( void );
 void RankStatus_Cache( void );
 void UI_RankStatusMenu( void );
 
+#endif
+#ifdef Q3_VM
+extern void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
+extern int	(*trap_GetAsyncFiles)( const char **files, int max );
+#else
+qboolean trap_GetValue( char *value, int valueSize, const char *key );
+void trap_R_AddRefEntityToScene2( const refEntity_t *re );
+int	trap_GetAsyncFiles( const char **files, int max );
+extern int dll_com_trapGetValue;
+extern int dll_trap_R_AddRefEntityToScene2;
+extern int dll_trap_GetAsyncFiles;
 #endif

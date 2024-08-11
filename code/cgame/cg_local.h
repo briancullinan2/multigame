@@ -251,7 +251,7 @@ typedef enum {
 #ifdef USE_DAMAGE_PLUMS
   LE_DAMAGEPLUM,
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 	LE_KAMIKAZE,
 	LE_INVULIMPACT,
 	LE_INVULJUICED,
@@ -1674,7 +1674,7 @@ localEntity_t *CG_SmokePuff( const vec3_t p,
 void CG_BubbleTrail( const vec3_t start, const vec3_t end, float spacing );
 void CG_SpawnEffect( const vec3_t origin );
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 void CG_KamikazeEffect( vec3_t org );
 void CG_ObeliskExplode( vec3_t org, int entityNum );
 void CG_ObeliskPain( vec3_t org );

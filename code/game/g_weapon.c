@@ -476,7 +476,7 @@ ROCKET
 ======================================================================
 */
 
-#if defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
+#if defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS) || defined(USE_HOMING_MISSILE)
 void Weapon_RocketLauncher_Fire (gentity_t *ent, qboolean isHoming)
 #else
 void Weapon_RocketLauncher_Fire (gentity_t *ent)
@@ -1295,7 +1295,7 @@ void FireWeapon( gentity_t *ent )
 		weapon_grenadelauncher_fire( ent );
 		break;
 	case WP_ROCKET_LAUNCHER:
-#if defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
+#if defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS) || defined(USE_HOMING_MISSILE)
 	case WP_HOMING_ROCKET:
 #ifdef USE_ADVANCED_CLASS
 		if(ent->client->pers.playerclass == PCLASS_VORE) {
@@ -1381,7 +1381,7 @@ void FireWeapon( gentity_t *ent )
 }
 
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 
 /*
 ===============

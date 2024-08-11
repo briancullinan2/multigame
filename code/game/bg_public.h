@@ -97,7 +97,7 @@ typedef enum {
 
 	GT_TEAM,			// team deathmatch
 	GT_CTF,				// capture the flag
-#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD) || defined(USE_ADVANCED_ITEMS)
 	GT_1FCTF,
 	GT_OBELISK,
 	GT_HARVESTER,
@@ -679,7 +679,7 @@ typedef enum {
 #define	EF_AWARD_GAUNTLET		0x00000040		// draw a gauntlet sprite
 #define	EF_NODRAW						0x00000080		// may have an event, but no model (unspawned items)
 #define	EF_FIRING						0x00000100		// for lightning gun
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES) || defined(USE_SINGLEPLAYER)
 #define	EF_KAMIKAZE					0x00000200
 #endif
 #define	EF_MOVER_STOP				0x00000400		// will push otherwise
@@ -792,7 +792,7 @@ typedef enum {
 #ifdef USE_FLAME_THROWER
 	WP_FLAME_THROWER,
 #endif
-#if defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS) || defined(USE_HOMING_MISSILE)
 	WP_HOMING_ROCKET,
 #endif
 
@@ -931,12 +931,12 @@ typedef enum {
 
 #if defined(USE_WEAPON_ORDER) || defined(USE_ADVANCED_ITEMS)
   EV_ITEM_PICKUP2,			// had items
+  EV_ITEM_PICKUP4,			// had items
+  EV_ITEM_PICKUP6,			// had items
 #endif
 #ifdef USE_ADVANCED_ITEMS
 	EV_ITEM_PICKUP3,			// had items
-  EV_ITEM_PICKUP4,			// had items
 	EV_ITEM_PICKUP5,			// had items
-  EV_ITEM_PICKUP6,			// had items
 	EV_GLOBAL_ITEM_PICKUP2,
 	EV_GLOBAL_ITEM_PICKUP3,
 #endif
@@ -1178,7 +1178,7 @@ typedef enum {
   MOD_FROM_GRAVE,
 #endif
 	MOD_TRIGGER_HURT,
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 	MOD_NAIL,
 	MOD_CHAINGUN,
 	MOD_PROXIMITY_MINE,

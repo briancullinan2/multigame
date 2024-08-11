@@ -631,9 +631,11 @@ void _UI_Refresh( int realtime )
 	int count;
 	const char *files[16];
 
-	//if ( !( trap_Key_GetCatcher() & KEYCATCH_UI ) ) {
-	//	return;
-	//}
+#ifdef USE_CLASSIC_MENU
+	if ( !( trap_Key_GetCatcher() & KEYCATCH_UI ) ) {
+		return;
+	}
+#endif
 
 	uiInfo.uiDC.frameTime = realtime - uiInfo.uiDC.realTime;
 	uiInfo.uiDC.realTime = realtime;
@@ -653,9 +655,16 @@ void _UI_Refresh( int realtime )
 		uiInfo.uiDC.FPS = 1000 * UI_FPS_FRAMES / total;
 	}
 
+#ifdef USE_CLASSIC_MENU
+	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
+		UI_CLASSIC_Refresh( realtime );
+		return;
+	}
+#endif
 
 	UI_UpdateCvars();
 
+	UI_NEW_VideoCheck( realtime );
 
 	if(getAsyncFiles) {
 		if((count = trap_GetAsyncFiles(files, 16)) && !uiInfo.registerModels) {
@@ -667,16 +676,6 @@ void _UI_Refresh( int realtime )
 			uiInfo.registerModels = 0;
 		}
 	}
-
-	UI_NEW_VideoCheck( realtime );
-
-
-#ifdef USE_CLASSIC_MENU
-	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
-		UI_CLASSIC_Refresh( realtime );
-		return;
-	}
-#endif
 
 	if (Menu_Count() > 0) {
 		// paint all the menus

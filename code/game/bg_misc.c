@@ -1437,7 +1437,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent,
 		}
 #endif
 
-#ifdef USE_ADVANCED_ITEMS
+#ifdef USE_ADVANCED_WEAPONS
 		if ( classAmmo[ item->giTag ] >= 200 ) {
 			return qfalse;		// can't hold any more
 		}

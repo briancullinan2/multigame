@@ -2231,9 +2231,6 @@ void ClientEndFrame( gentity_t *ent ) {
 	gclient_t	*client;
 	// unlagged
 	int			frames;
-#ifdef USE_ADVANCED_WEAPONS
-	int weaponClass;
-#endif
 
 	if ( !ent->client )
 		return;

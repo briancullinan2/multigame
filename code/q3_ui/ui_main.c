@@ -19,12 +19,12 @@ USER INTERFACE MAIN
 #define UI_MouseEvent UI_CLASSIC_MouseEvent
 #define UI_Refresh UI_CLASSIC_Refresh
 #define UI_ConsoleCommand UI_CLASSIC_ConsoleCommand
-#define UI_Refresh UI_CLASSIC_Refresh
 #define UI_IsFullscreen UI_CLASSIC_IsFullscreen
 #define UI_SetActiveMenu UI_CLASSIC_SetActiveMenu
 #define UI_DrawConnectScreen UI_CLASSIC_DrawConnectScreen
 
 #endif
+
 
 #ifndef USE_CLASSIC_MENU
 

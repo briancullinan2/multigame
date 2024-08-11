@@ -433,8 +433,8 @@ CGOBJ_ = \
 CGOBJ   = $(CGOBJ_) $(B)/$(MOD)/cgame/cg_syscalls.o
 CGASM   = $(subst /cgame/,/vm/cgame/,$(CGOBJ_:.o=.asm)) $(CGDIR)/cg_syscalls.asm
 #ifdef MISSIONPACK
-CGOBJ  += $(B)/$(MOD)/ui/ui_shared.o
-CGASM  += $(B)/$(MOD)/vm/ui/ui_shared.asm
+CGOBJ  += $(B)/$(MOD)/cgame/ui_shared.o
+CGASM  += $(B)/$(MOD)/vm/cgame/ui_shared.asm
 #endif
 
 $(B)/$(MOD)/vm/cgame.qvm: $(CGASM)
@@ -594,6 +594,9 @@ $(B)/$(MOD)/vm/cgame/q_%.asm: $(QADIR)/q_%.c
 $(B)/$(MOD)/vm/cgame/%.asm: $(CGDIR)/%.c
 	$(DO_CGAME_LCC)
 
+$(B)/$(MOD)/vm/cgame/ui_%.asm: $(UIDIR)/ui_%.c
+	$(DO_CGAME_LCC)
+
 $(B)/$(MOD)/vm/game/%.asm: $(QADIR)/%.c
 	$(DO_GAME_LCC)
 
@@ -622,6 +625,9 @@ $(B)/$(MOD)/cgame/q_%.o: $(QADIR)/q_%.c
 	$(DO_CGAME_CC)
 
 $(B)/$(MOD)/cgame/%.o: $(CGDIR)/%.c
+	$(DO_CGAME_CC)
+
+$(B)/$(MOD)/cgame/ui_%.o: $(UIDIR)/ui_%.c
 	$(DO_CGAME_CC)
 
 $(B)/$(MOD)/game/%.o: $(QADIR)/%.c

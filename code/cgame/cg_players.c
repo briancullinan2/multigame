@@ -2506,11 +2506,13 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 	}
 
 	// no shadows when invisible
-#ifdef USE_ADVANCED_ITEMS
-	if ( cent->currentState.powerups == PW_INVIS ) {
+#ifdef USE_RUNES
+	if ( cent->currentState.powerups == RUNE_CLOAK ) {
 		return qfalse;
 	}
-	if ( cent->currentState.powerups == RUNE_CLOAK ) {
+#endif
+#ifdef USE_ADVANCED_ITEMS
+	if ( cent->currentState.powerups == PW_INVIS ) {
 		return qfalse;
 	}
 #else
@@ -2692,6 +2694,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
 		trap_R_AddRefEntityToScene( ent );
 	}
 
+#ifdef USE_RUNES
 	if ( powerups >= RUNE_STRENGTH && powerups <= RUNE_LITHIUM ) {
 		itemInfo_t *item = &cg_items[ ITEM_INDEX(BG_FindItemForRune(powerups-RUNE_STRENGTH)) ];
 		ent->customShader = item->altShader1;
@@ -2702,6 +2705,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *state, int te
     }
 		return;
 	}
+#endif
 
 	trap_R_AddRefEntityToScene( ent );
 

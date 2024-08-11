@@ -427,7 +427,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 
 	// check for flag pickup
 	if ( cgs.gametype >= GT_TEAM ) {
-#ifdef USE_ADVANCED_WEAPONS
+#ifdef USE_ADVANCED_ITEMS
 		if (/*memcmp(ops->powerups, ps->powerups, sizeof(ps->powerups)) != 0 &&*/ (
 			cg.inventory[PW_REDFLAG] ||
 			cg.inventory[PW_BLUEFLAG] ||

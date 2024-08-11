@@ -383,3 +383,15 @@ qboolean trap_VerifyCDKey( const char *key, const char *chksum) {
 void trap_SetPbClStatus( int status ) {
 	syscall( UI_SET_PBCLSTATUS, status );
 }
+
+qboolean trap_GetValue( char *value, int valueSize, const char *key ) {
+	return syscall( dll_com_trapGetValue, value, valueSize, key );
+}
+
+void trap_R_AddRefEntityToScene2( const refEntity_t *re ) {
+	syscall( dll_trap_R_AddRefEntityToScene2, re );
+}
+
+int    trap_GetAsyncFiles( const char **files, int max ) {
+	return syscall( dll_trap_GetAsyncFiles, files, max );
+}

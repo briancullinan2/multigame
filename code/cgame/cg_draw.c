@@ -2608,10 +2608,10 @@ qboolean CG_DrawRunesboard(void);
 #endif
 
 static qboolean CG_DrawScoreboard( void ) {
-#if defined(MISSIONPACK) || defined(USE_CLASSIC_MENU)
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	static qboolean firstTime = qtrue;
 	float /* fade, */ *fadeColor;
-#ifdef USE_CLASSIC_MENU
+#ifdef USE_CLASSIC_HUD
 	if( cg_hudFiles.string[0] == '\0' ) {
 		return CG_DrawOldScoreboard();
 	}

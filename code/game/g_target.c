@@ -479,9 +479,11 @@ void SP_target_location( gentity_t *self ){
 	G_SetOrigin( self, self->s.origin );
 }
 
-#ifdef USE_SINGLEPLAYER 
+#ifdef USE_SINGLEPLAYER
 
-char target_execs[MAX_WORLDS][MAX_QPATH]; // max of 10 level change entities per level
+#define MAX_EXECS 64
+
+char target_execs[MAX_EXECS][MAX_QPATH]; // max of 10 level change entities per level
 int num_target_execs=0;
 
 void target_use_exec( gentity_t *self, gentity_t *other, gentity_t *activator ) {
@@ -525,10 +527,10 @@ void SP_target_exec( gentity_t *self ) {
 
 	Com_sprintf(nx,sizeof(target_execs[0]),"load game %s",buf);
 	if(nx[0]) {
-		if(num_target_execs == MAX_WORLDS) {
+		if(num_target_execs == MAX_EXECS) {
 			// this should be a strange occurance if it happens
 			// TODO: demonstrate how to unload worlds in the case of the lobby level changer / select
-			G_Printf("MAX_WORLDS reached, not loading %s\n", nx);
+			G_Printf("MAX_EXECS reached, not loading %s\n", nx);
 			return;
 		}
 		G_Printf("mapCommand (%d): %s\n",num_target_execs,buf);

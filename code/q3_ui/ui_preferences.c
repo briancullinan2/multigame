@@ -242,7 +242,7 @@ static void Crosshair_Draw( void *self ) {
 	UI_DrawHandlePic( x + SMALLCHAR_WIDTH, y - 4, 24, 24, s_preferences.crosshairShader[s->curvalue] );
 }
 
-#ifdef USE_CLASSIC_HUD
+#ifdef USE_CLASSIC_MENU
 static const char *menu_names[] =
 {
 	"Classic",

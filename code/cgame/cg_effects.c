@@ -234,7 +234,7 @@ void CG_Lightning_Discharge (vec3_t origin, int msec)
 #endif
 
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 /*
 ===============
 CG_LightningBoltBeam

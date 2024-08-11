@@ -2673,7 +2673,7 @@ CG_EventHandling
       2 - scoreboard
       3 - hud editor
 */
-#if !defined(MISSIONPACK) && !defined(USE_CLASSIC_MENU) && !defined(USE_CLASSIC_HUD)
+#if !defined(MISSIONPACK) && !defined(USE_CLASSIC_HUD)
 void CG_EventHandling( cgame_event_t type ) 
 {
 
@@ -2717,7 +2717,7 @@ void CG_SetScoreCatcher( qboolean enable )
 	}
 }
 
-#if !defined(MISSIONPACK) || defined(USE_CLASSIC_MENU) || defined(USE_CLASSIC_HUD)
+#if !defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 
 #ifdef USE_CLASSIC_HUD
 void CG_CLASSIC_KeyEvent( int key, qboolean down ) 
