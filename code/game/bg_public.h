@@ -618,7 +618,7 @@ typedef enum {
 	STAT_HOLDABLE_ITEM,
 #endif
 #ifndef USE_ADVANCED_ITEMS
-#if defined(MISSIONPACK)
+#if defined(MISSIONPACK) || defined(USE_CLASSIC_HUD)
 	STAT_PERSISTANT_POWERUP,
 #endif
 #endif

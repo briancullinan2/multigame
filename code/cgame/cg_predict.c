@@ -882,7 +882,7 @@ static void CG_CheckTimers( void ) {
         continue;      
       }
 #endif
-#if defined(USE_GAME_FREEZETAG) || defined(USE_REFEREE_CMDS)
+#if defined(USE_RUNES)
       if(i >= RUNE_STRENGTH && i <= RUNE_LITHIUM) {
         continue;      
       }

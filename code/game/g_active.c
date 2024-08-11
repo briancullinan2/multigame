@@ -807,6 +807,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			client->ps.stats[STAT_STAMINA] += 10;
 		}
 
+#if defined(USE_ADVANCED_CLASS)
 		if(g_ability.integer > 0) {
 				
 			if (client->ps.stats[STAT_ABILITY] < g_ability.value) {
@@ -826,6 +827,8 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			}
 		}
 #endif
+
+#endif // USE_RPG_STATS
 
 #ifdef USE_RUNES
 
@@ -1238,6 +1241,16 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 #endif
 
 #ifdef USE_PORTALS
+#ifndef MISSIONPACK
+		case EV_USE_ITEM4:		// portal
+			if( ent->client->portalID ) {
+				DropPortalSource( ent, NULL );
+			}
+			else {
+				DropPortalDestination( ent, NULL );
+			}
+			break;
+#else
 		case EV_USE_ITEM4:		// portal
 			if( ent->client->portalID ) {
 				DropPortalSource( ent );
@@ -1247,8 +1260,9 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			}
 			break;
 #endif
-
 #endif
+
+#endif //!USE_ADVANCED_ITEMS
 
 		default:
 			break;

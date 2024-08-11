@@ -2383,7 +2383,9 @@ CG_EventHandling
 void CG_EventHandling(cgame_event_t type) {
 #ifdef USE_CLASSIC_HUD
 	if(type == CGAME_EVENT_NONE) {
+#ifdef USE_SINGLEPLAYER
 		black_bars = 0;
+#endif
 		cg.cameraMode = qfalse;
 		cg.pauseBreak = 0;
 		cg.editPlayerMode = qfalse;

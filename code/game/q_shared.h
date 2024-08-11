@@ -175,24 +175,24 @@
 #endif
 #endif
 
-// // enable birds eye view, set by server or client, for use in spray and prey game modes
-// #define USE_BIRDS_EYE 1
-// // Alice in Wonderland game dynamics like shrinking and growing a player
-// #define USE_AIW 1
+// enable birds eye view, set by server or client, for use in spray and prey game modes
+#define USE_BIRDS_EYE 1
+// Alice in Wonderland game dynamics like shrinking and growing a player
+#define USE_AIW 1
 
-// // compile damage plums every time someone gets hit
-// #define USE_DAMAGE_PLUMS 1
-// // allow referees to freeze players/TODO: rebalance teams
-// #define USE_REFEREE_CMDS 1
-// // enable freeze tag as a game mode in addition to the chosen CTF/Overload
-// #define USE_GAME_FREEZETAG 1
-// // show rpg like status bar for health, ammo, frozenness
-// #define USE_RPG_STATS 1
+// compile damage plums every time someone gets hit
+#define USE_DAMAGE_PLUMS 1
+// allow referees to freeze players/TODO: rebalance teams
+#define USE_REFEREE_CMDS 1
+// enable freeze tag as a game mode in addition to the chosen CTF/Overload
+#define USE_GAME_FREEZETAG 1
+// show rpg like status bar for health, ammo, frozenness
+#define USE_RPG_STATS 1
 
-// // use alternate fire buttons
-// #define USE_ALT_FIRE 1
-// // enable portal gun, requires modified client
-// #define USE_PORTALS 1
+// use alternate fire buttons
+#define USE_ALT_FIRE 1
+// enable portal gun, requires modified client
+#define USE_PORTALS 1
 
 // // cluster grenades create offspring every time they hit something
 // #define USE_CLUSTER_GRENADES 1
@@ -277,10 +277,10 @@
 // #define USE_MULTIWORLD 1
 // #define MAX_WORLDS 10
 
-// // loads the standard Q3 hud if the mod is missing a huds.txt file.
-// #define USE_CLASSIC_HUD 1
-// // loads the standard Q3 menu if the mod is missing a menus.txt file.
-// #define USE_CLASSIC_MENU 1
+// loads the standard Q3 hud if the mod is missing a huds.txt file.
+#define USE_CLASSIC_HUD 1
+// loads the standard Q3 menu if the mod is missing a menus.txt file.
+#define USE_CLASSIC_MENU 1
 
 // // players can get inside vehicles and drive or jet around
 // #define USE_VEHICLES 1

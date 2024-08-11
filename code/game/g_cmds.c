@@ -2478,7 +2478,12 @@ void Cmd_Spawn_f( gentity_t *ent ) {
 	dropped->r.contents = CONTENTS_TRIGGER;
 	dropped->clipmask = MASK_SHOT;
 
-	//dropped->touch = Touch_Item;
+	//dropped->s.legsAnim = 0; // firstFrame
+	//dropped->s.torsoAnim = 0; // numFrames
+	//dropped->s.generic1 |= 16; // repeatFrames
+	//dropped->s.generic1 |= 32; // 10 instead of 15
+	//dropped->s.generic1 |= 64; 
+	
 
 	G_SetOrigin( dropped, ent->s.pos.trBase );
 	dropped->s.pos.trType = TR_GRAVITY;
