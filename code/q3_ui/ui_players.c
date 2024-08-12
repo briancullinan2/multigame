@@ -5,7 +5,7 @@
 #include "ui_local.h"
 
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_DrawPlayer UI_CLASSIC_DrawPlayer
 #define UI_PlayerInfo_SetModel UI_CLASSIC_PlayerInfo_SetModel
 #define UI_PlayerInfo_SetInfo UI_CLASSIC_PlayerInfo_SetInfo
@@ -1191,11 +1191,7 @@ void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model )
 UI_PlayerInfo_SetInfo
 ===============
 */
-#ifdef USE_CLASSIC_MENU
-void UI_CLASSIC_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) 
-#else
 void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNumber, qboolean chat ) 
-#endif
 {
 	int			currentAnim;
 	weapon_t	weaponNum;

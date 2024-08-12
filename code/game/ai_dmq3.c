@@ -1879,7 +1879,12 @@ void BotUpdateInventory(bot_state_t *bs) {
 	bs->inventory[INVENTORY_BLUEFLAG] = bs->cur_ps.powerups[PW_BLUEFLAG] != 0;
 #endif
 #ifdef MISSIONPACK
+#ifdef USE_ADVANCED_ITEMS
+	bs->inventory[INVENTORY_NEUTRALFLAG] = (g_entities[bs->cur_ps.clientNum].s.powerups & 0xFF) == PW_NEUTRALFLAG 
+		|| (g_entities[bs->cur_ps.clientNum].s.powerups >> 8) == PW_NEUTRALFLAG;
+#else
 	bs->inventory[INVENTORY_NEUTRALFLAG] = bs->cur_ps.powerups[PW_NEUTRALFLAG] != 0;
+#endif
 	if (BotTeam(bs) == TEAM_RED) {
 		bs->inventory[INVENTORY_REDCUBE] = bs->cur_ps.generic1;
 		bs->inventory[INVENTORY_BLUECUBE] = 0;

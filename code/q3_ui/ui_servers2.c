@@ -12,7 +12,7 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #include "ui_local.h"
 #include "../game/q_shared.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_PopMenu UI_CLASSIC_PopMenu
 #define UI_DrawChar UI_CLASSIC_DrawChar
 #define UI_DrawString UI_CLASSIC_DrawString

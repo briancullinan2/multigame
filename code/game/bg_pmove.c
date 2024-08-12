@@ -533,6 +533,11 @@ static qboolean PM_CheckJump( void ) {
 #else
 	pm->ps->velocity[2] = JUMP_VELOCITY;
 #endif
+#ifdef USE_ADVANCED_ITEMS
+	if(pm->inventory[PW_GRAVITYSUIT]) {
+		pm->ps->velocity[2] *= 1.2;
+	}
+#endif
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
@@ -1335,6 +1340,9 @@ static void PM_GroundTrace( void ) {
 	}
 	
 	// slopes that are too steep will not be considered onground
+#ifdef USE_ADVANCED_ITEMS
+	if(!pm->inventory[PW_GRAVITYSUIT] || trace.plane.normal[2] < 0.9) // very steep slopes
+#endif
 #ifdef USE_PHYSICS_VARS
   if ( trace.plane.normal[2] < g_wallWalk.value )
 #else

@@ -2,7 +2,7 @@
 //
 #include "ui_local.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_PopMenu UI_CLASSIC_PopMenu
 #define UI_DrawString UI_CLASSIC_DrawString
 #define UI_DrawChar UI_CLASSIC_DrawChar
@@ -11,6 +11,7 @@
 #define UI_ProportionalStringWidth UI_CLASSIC_ProportionalStringWidth
 #define UI_ProportionalSizeScale UI_CLASSIC_ProportionalSizeScale
 #define UI_SetColor UI_CLASSIC_SetColor
+#define UI_DrawConnectScreen UI_CLASSIC_DrawConnectScreen
 #endif
 
 

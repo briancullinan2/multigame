@@ -426,8 +426,13 @@ void Menu_Paint(menuDef_t *menu, qboolean forcePaint);
 void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char *name);
 void Display_CacheAll( void );
 
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
+void *UI_CLASSIC_Alloc( int size );
+void UI_CLASSIC_InitMemory( void );
+#endif
 void *UI_Alloc( int size );
 void UI_InitMemory( void );
+
 qboolean UI_OutOfMemory( void );
 
 void Controls_GetConfig( void );

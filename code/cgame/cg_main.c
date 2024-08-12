@@ -784,6 +784,12 @@ void CG_ReregisterModels( void ) {
 		}
 	}
 
+	for(i = 0; i < MAX_CLIENTS; i++) {
+		if(!cgs.clientinfo[i].legsModel) {
+			CG_LoadClientInfo(&cgs.clientinfo[i]);
+		}
+	}
+
 #if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS)
 	cgs.media.blueProxMine = trap_R_RegisterModel( "models/weaphits/proxmineb.md3" );
 #endif

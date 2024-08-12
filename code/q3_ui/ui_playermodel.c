@@ -2,7 +2,7 @@
 //
 #include "ui_local.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_PopMenu UI_CLASSIC_PopMenu
 #define UI_DrawChar UI_CLASSIC_DrawChar
 #define UI_DrawString UI_CLASSIC_DrawString
@@ -11,6 +11,7 @@
 #define UI_ForceMenuOff UI_CLASSIC_ForceMenuOff
 #define UI_PlayerInfo_SetModel UI_CLASSIC_PlayerInfo_SetModel
 #define UI_PlayerInfo_SetInfo UI_CLASSIC_PlayerInfo_SetInfo
+#define UI_DrawPlayer UI_CLASSIC_DrawPlayer
 #endif
 
 #define MODEL_BACK0			"menu/art/back_0"
@@ -400,6 +401,7 @@ static void PlayerModel_BuildList( void )
 
 	// iterate directory of all player models
 	numdirs = trap_FS_GetFileList("models/players", "/", dirlist, 2048 );
+
 	dirptr  = dirlist;
 	for (i=0; i<numdirs && s_playermodel.nummodels < MAX_PLAYERMODELS; i++,dirptr+=dirlen+1)
 	{
@@ -409,7 +411,7 @@ static void PlayerModel_BuildList( void )
 
 		if (!strcmp(dirptr,".") || !strcmp(dirptr,".."))
 			continue;
-			
+
 		// iterate all skin files in directory
 		numfiles = trap_FS_GetFileList( va("models/players/%s",dirptr), "tga", filelist, 2048 );
 		fileptr  = filelist;

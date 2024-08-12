@@ -26,7 +26,7 @@ USER INTERFACE MAIN
 #endif
 
 
-#ifndef USE_CLASSIC_MENU
+#if !defined(USE_CLASSIC_MENU) && !defined(MISSIONPACK)
 
 /*
 ================

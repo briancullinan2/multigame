@@ -458,7 +458,7 @@ typedef struct {
 	int				realWeapon;
 } playerInfo_t;
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 
 void UI_CLASSIC_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time );
 void UI_CLASSIC_PlayerInfo_SetModel( playerInfo_t *pi, const char *model );
@@ -516,11 +516,11 @@ typedef struct {
 	int					lastVideoCheck;
 	int startTime;
 	int registerModels;
-	
+
 } uiStatic_t;
 
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) ||  defined(MISSIONPACK)
 
 extern void			UI_CLASSIC_Init( void );
 extern void			UI_CLASSIC_Shutdown( void );
@@ -760,7 +760,7 @@ int UI_GetNumArenas( void );
 int UI_GetNumSPArenas( void );
 int UI_GetNumSPTiers( void );
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 
 char *UI_CLASSIC_GetBotInfoByNumber( int num );
 char *UI_CLASSIC_GetBotInfoByName( const char *name );

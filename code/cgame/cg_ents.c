@@ -218,6 +218,11 @@ void CG_ItemTimer(int client, const vec3_t origin, int startTime, int respawnTim
 #endif
 #endif
 
+#ifdef USE_ADVANCED_ITEMS
+void CG_RunLerpFrame( animation_t animations[MAX_TOTALANIMATIONS], lerpFrame_t *lf, int newAnimation, float speedScale );
+#endif
+
+
 /*
 ==================
 CG_Item
@@ -319,6 +324,15 @@ static void CG_Item( centity_t *cent ) {
 
 		AnglesToAxis( vec3_origin, ent.axis );
 	}
+
+	if(item->animation.firstFrame || item->animation.numFrames) {
+		CG_RunLerpFrame( (animation_t *)&item->animation, &cent->lerpFrame, 0 /* animation zero */, 1 );
+		ent.oldframe = cent->lerpFrame.oldFrame;
+		ent.frame = cent->lerpFrame.frame;
+		ent.backlerp = cent->lerpFrame.backlerp;
+
+	}
+
 #endif
 
 	wi = NULL;

@@ -219,6 +219,10 @@ typedef struct centity_s {
   int       rune;
 	int 			cloakBlinkTime;
 #endif
+
+#ifdef USE_ADVANCED_ITEMS
+	lerpFrame_t lerpFrame;
+#endif
 } centity_t;
 
 

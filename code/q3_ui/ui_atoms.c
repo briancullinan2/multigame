@@ -7,7 +7,7 @@
 **********************************************************************/
 #include "ui_local.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 
 #define UI_Init UI_CLASSIC_Init
 #define UI_Shutdown UI_CLASSIC_Shutdown
@@ -41,6 +41,7 @@
 #define UI_StartDemoLoop UI_CLASSIC_StartDemoLoop
 #endif
 
+#ifndef MISSIONPACK
 #ifdef Q3_VM
 qboolean (*trap_GetValue)( char *value, int valueSize, const char *key );
 void (*trap_R_AddRefEntityToScene2)( const refEntity_t *re );
@@ -50,8 +51,9 @@ int dll_com_trapGetValue;
 int dll_trap_R_AddRefEntityToScene2;
 int dll_trap_GetAsyncFiles;
 #endif
+#endif
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 extern qboolean intShaderTime;
 extern qboolean linearLight;
 extern qboolean getAsyncFiles;
@@ -62,9 +64,13 @@ qboolean getAsyncFiles = qfalse;
 #endif
 
 uiStatic_t		uis;
+#ifdef MISSIONPACK
+extern qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
+#else
 qboolean		m_entersound;		// after a frame, so caching won't disrupt the sound
+#endif
 
-#if !defined(BUILD_GAME_STATIC) && !defined(USE_CLASSIC_MENU)
+#if !defined(BUILD_GAME_STATIC) && !defined(USE_CLASSIC_MENU) && !defined(MISSIONPACK)
 // these are here so the functions in q_shared.c can link
 
 void QDECL Com_Error( int level, const char *fmt, ... ) {
@@ -1005,7 +1011,7 @@ void UI_MouseEvent( int dx, int dy, qboolean absolute )
 }
 
 
-#ifndef USE_CLASSIC_MENU
+#if !defined(USE_CLASSIC_MENU) && !defined(MISSIONPACK)
 
 
 char *UI_Argv( int arg ) {
@@ -1143,9 +1149,9 @@ UI_Init
 =================
 */
 void UI_Init( void ) {
+#if !defined(USE_CLASSIC_MENU) && !defined(MISSIONPACK)
 	char  value[MAX_CVAR_VALUE_STRING];
 
-#ifndef USE_CLASSIC_MENU
 	trap_Cvar_VariableStringBuffer( "//trap_GetValue", value, sizeof( value ) );
 	if ( value[0] ) {
 #ifdef Q3_VM
@@ -1301,6 +1307,8 @@ void UI_UpdateScreen( void ) {
 	trap_UpdateScreen();
 }
 
+#ifndef MISSIONPACK
+
 void UI_ReregisterModels( void ) {
 	if( *UI_Cvar_VariableString("ui_menuFiles") == '\0' ) {
 		MainMenu_Cache();
@@ -1309,6 +1317,8 @@ void UI_ReregisterModels( void ) {
 
 }
 
+#endif
+
 /*
 =================
 UI_Refresh
@@ -1316,8 +1326,10 @@ UI_Refresh
 */
 void UI_Refresh( int realtime )
 {
+#ifndef MISSIONPACK
 	int count;
 	const char *files[16];
+#endif
 	uis.frametime = realtime - uis.realtime;
 	uis.realtime  = realtime;
 
@@ -1329,6 +1341,7 @@ void UI_Refresh( int realtime )
 
 	UI_VideoCheck( realtime );
 	
+#ifndef MISSIONPACK
 	if(getAsyncFiles) {
 		if((count = trap_GetAsyncFiles(files, 16)) && !uis.registerModels) {
 			uis.registerModels = realtime + 1000;
@@ -1339,6 +1352,7 @@ void UI_Refresh( int realtime )
 			uis.registerModels = 0;
 		}
 	}
+#endif
 
 	if ( uis.activemenu )
 	{

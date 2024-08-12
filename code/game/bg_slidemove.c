@@ -225,6 +225,10 @@ void PM_StepSlideMove( qboolean gravity ) {
 //	vec3_t		delta, delta2;
 	vec3_t		up, down;
 	float		stepSize;
+#ifdef USE_ADVANCED_ITEMS
+	float stepHeight;
+#endif
+
 
 	VectorCopy (pm->ps->origin, start_o);
 	VectorCopy (pm->ps->velocity, start_v);
@@ -234,7 +238,15 @@ void PM_StepSlideMove( qboolean gravity ) {
 	}
 
 	VectorCopy(start_o, down);
+#ifdef USE_ADVANCED_ITEMS
+	stepHeight = PM_STEP_HEIGHT;
+	if(pm->inventory[PW_GRAVITYSUIT]) {
+		stepHeight *= 2;
+	}
+	down[2] -= stepHeight * g_playerScale.value;
+#else
 	down[2] -= PM_STEP_HEIGHT * g_playerScale.value;
+#endif
 	pm->trace (&trace, start_o, pm->mins, pm->maxs, down, pm->ps->clientNum, pm->tracemask);
 	VectorSet(up, 0, 0, 1);
 	// never step up when you still have up velocity
@@ -247,7 +259,11 @@ void PM_StepSlideMove( qboolean gravity ) {
 	//VectorCopy (pm->ps->velocity, down_v);
 
 	VectorCopy (start_o, up);
+#ifdef USE_ADVANCED_ITEMS
+	up[2] += stepHeight * g_playerScale.value;
+#else
 	up[2] += PM_STEP_HEIGHT * g_playerScale.value;
+#endif
 
 	// test the player position if they were a stepheight higher
 	pm->trace (&trace, start_o, pm->mins, pm->maxs, up, pm->ps->clientNum, pm->tracemask);

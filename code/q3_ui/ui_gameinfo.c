@@ -6,8 +6,13 @@
 
 #include "ui_local.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_ParseInfos UI_CLASSIC_ParseInfos
+#define UI_Alloc UI_CLASSIC_Alloc
+#define UI_InitMemory UI_CLASSIC_InitMemory
+#define UI_GetBotInfoByNumber UI_CLASSIC_GetBotInfoByNumber
+#define UI_GetBotInfoByName UI_CLASSIC_GetBotInfoByName
+#define UI_GetNumBots UI_CLASSIC_GetNumBots
 #endif
 
 //
@@ -25,16 +30,10 @@ static char		*ui_arenaInfos[MAX_ARENAS];
 static int		ui_numSinglePlayerArenas;
 static int		ui_numSpecialSinglePlayerArenas;
 
-#ifndef USE_CLASSIC_MENU
 static char		memoryPool[POOLSIZE];
 static int		allocPoint, outOfMemory;
-#else
-extern int		allocPoint, outOfMemory;
-void *UI_Alloc( int size );
-void UI_InitMemory( void );
-#endif
 
-#ifndef USE_CLASSIC_MENU
+
 /*
 ===============
 UI_Alloc
@@ -65,7 +64,6 @@ void UI_InitMemory( void ) {
 	outOfMemory = qfalse;
 }
 
-#endif
 
 /*
 ===============
@@ -390,11 +388,7 @@ static void UI_LoadBots( void ) {
 UI_GetBotInfoByNumber
 ===============
 */
-#ifdef USE_CLASSIC_MENU
-char *UI_CLASSIC_GetBotInfoByNumber( int num ) 
-#else
 char *UI_GetBotInfoByNumber( int num ) 
-#endif
 {
 	if( num < 0 || num >= ui_numBots ) {
 		trap_Print( va( S_COLOR_RED "Invalid bot number: %i\n", num ) );
@@ -409,11 +403,7 @@ char *UI_GetBotInfoByNumber( int num )
 UI_GetBotInfoByName
 ===============
 */
-#ifdef USE_CLASSIC_MENU
-char *UI_CLASSIC_GetBotInfoByName( const char *name ) 
-#else
 char *UI_GetBotInfoByName( const char *name ) 
-#endif
 {
 	int		n;
 	char	*value;
@@ -819,9 +809,7 @@ UI_InitGameinfo
 ===============
 */
 void UI_InitGameinfo( void ) {
-#ifndef USE_CLASSIC_MENU
 	UI_InitMemory();
-#endif
 	UI_LoadArenas();
 	UI_LoadBots();
 

@@ -62,10 +62,10 @@ Unofficial Quake III Arena gamecode patch
   * Add features to support other map types like Xonotic (warp zones are just automatically centered cameras with some fancy distortion shaders, Quake 1 did not normally have the camera feature) and QueToo (map format?) and Smokin' Guns probably added a surface parm.
   * Add tracer rounds, ammo clip sized packs for reloading, etc.
   * Infinite haste, how is this different than g_speed? Applies to only one player.
-  * Boots that can climb steep slopes. 
-  * Jump velocity as a part of anti-gravity boots. 
+  * DONE: Boots that can climb steep slopes. 
+  * DONE: Jump velocity as a part of anti-gravity boots. 
   * Power-ups cover entire body or just the gun setting from server and client setting. 
-  * Add player state to UI QVM so multiple cursors can be shared, and players can see map and game configuration.
+  * DONE: Add player state to UI QVM so multiple cursors can be shared, and players can see map and game configuration.
   * Add walk on walls, better movement than Trem.
   * Live-action minimap, using procedurally generated mini maps, draw small players top-down and glowing like quad damage.
   * Ricochet mode where damage only applies after projectile bounces/splash damage
@@ -89,7 +89,7 @@ Unofficial Quake III Arena gamecode patch
   * finish seamless portals between worlds
   * turn maze generator into a proper dungeon generator now with working geometries included as models entiee rooms can be referenced by shape, calculated and aligned automatically
   * make a simpsons spin off but include and entire neighborhood of portals into even bigger spaces
-  * make a portal in this tree woolands area
+  * make a portal in this tree woodlands area
   * use camera based portals for a 4 person map but make it clever
   * add scene lights to portals
   * grab some alice and star wars content to test with multiworld portals particularly for teleports

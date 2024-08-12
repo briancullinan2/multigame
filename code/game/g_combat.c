@@ -901,10 +901,18 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 #endif
 	) {
 #ifdef MISSIONPACK
+#ifdef USE_ADVANCED_ITEMS
+		if ( self->client->inventory[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
+			Team_ReturnFlag( TEAM_FREE );
+			self->client->inventory[PW_NEUTRALFLAG] = 0;
+			self->client->inventoryModified[(int)floor(PW_NEUTRALFLAG / PW_MAX_POWERUPS)] = 0;
+		} else 
+#else
 		if ( self->client->ps.powerups[PW_NEUTRALFLAG] ) {		// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
 			self->client->ps.powerups[PW_NEUTRALFLAG] = 0;
 		} else 
+#endif
 #endif
 #ifdef USE_ADVANCED_ITEMS
 		if ( self->client->inventory[PW_REDFLAG] ) {		// only happens in standard CTF

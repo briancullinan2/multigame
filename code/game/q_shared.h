@@ -289,7 +289,7 @@
 #endif
 
 // loads the standard Q3 menu if the mod is missing a menus.txt file.
-//#define USE_CLASSIC_MENU 1
+//#define MISSIONPACK 1
 
 // // players can get inside vehicles and drive or jet around
 // #define USE_VEHICLES 1

@@ -1260,6 +1260,7 @@ typedef struct gitem_s {
 	char		const *precaches;		// string of all models and images this item will use
 	char		const *sounds;		// string of all sounds this item will use
 	char		*skinNames[MAX_ITEM_MODELS];
+	animation_t animation;
 } gitem_t;
 
 // included in both the game dll and the client

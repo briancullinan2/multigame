@@ -402,7 +402,9 @@
 				IT_POWERUP2,
 				PW_HASTE,
 				/* precache */ "",
-				/* sounds */ ""},
+				/* sounds */ "",
+				{NULL, NULL, NULL, NULL},
+				{0, 15, 15, 1000/15, 1000/15, 0, 0}},
 
 		/*QUAKED item_doom_invis (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */

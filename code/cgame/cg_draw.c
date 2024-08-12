@@ -2810,7 +2810,9 @@ static void CG_DrawWarmup( void ) {
 	float scale;
 #endif
 	clientInfo_t *ci1, *ci2;
+#ifndef MISSIONPACK
 	int			cw;
+#endif
 	const char	*s;
 
 	if ( !cg.warmup ) {
@@ -2891,26 +2893,30 @@ static void CG_DrawWarmup( void ) {
 
 	switch ( cg.warmupCount ) {
 	case 1:
+#ifndef MISSIONPACK
 		cw = 28;
-#ifdef MISSIONPACK
+#else
 		scale = 0.54f;
 #endif
 		break;
 	case 2:
+#ifndef MISSIONPACK
 		cw = 24;
-#ifdef MISSIONPACK
+#else
 		scale = 0.51f;
 #endif
 		break;
 	case 3:
+#ifndef MISSIONPACK
 		cw = 20;
-#ifdef MISSIONPACK
+#else
 		scale = 0.48f;
 #endif
 		break;
 	default:
+#ifndef MISSIONPACK
 		cw = 16;
-#ifdef MISSIONPACK
+#else
 		scale = 0.45f;
 #endif
 		break;

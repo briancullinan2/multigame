@@ -7,7 +7,7 @@
 **********************************************************************/
 #include "ui_local.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_PopMenu UI_CLASSIC_PopMenu
 #define UI_DrawChar UI_CLASSIC_DrawChar
 #define UI_DrawString UI_CLASSIC_DrawString
@@ -30,7 +30,11 @@ sfxHandle_t menu_move_sound;
 sfxHandle_t menu_out_sound;
 sfxHandle_t menu_buzz_sound;
 sfxHandle_t menu_null_sound;
+#ifdef MISSIONPACK
+extern sfxHandle_t weaponChangeSound;
+#else
 sfxHandle_t weaponChangeSound;
+#endif
 
 static qhandle_t	sliderBar;
 static qhandle_t	sliderButton_0;

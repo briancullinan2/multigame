@@ -11,7 +11,7 @@ ADD BOTS MENU
 
 #include "ui_local.h"
 
-#ifdef USE_CLASSIC_MENU
+#if defined(USE_CLASSIC_MENU) || defined(MISSIONPACK)
 #define UI_PopMenu UI_CLASSIC_PopMenu 
 #define UI_DrawBannerString UI_CLASSIC_DrawBannerString
 #define UI_PushMenu UI_CLASSIC_PushMenu

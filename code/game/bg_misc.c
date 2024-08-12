@@ -1568,6 +1568,17 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent,
 			if( item->giTag == PW_NEUTRALFLAG ) {
 				return qtrue;
 			}
+#ifdef USE_ADVANCED_ITEMS
+			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
+				if (item->giTag == PW_BLUEFLAG  && inventory[PW_NEUTRALFLAG] ) {
+					return qtrue;
+				}
+			} else if (ps->persistant[PERS_TEAM] == TEAM_BLUE) {
+				if (item->giTag == PW_REDFLAG  && inventory[PW_NEUTRALFLAG] ) {
+					return qtrue;
+				}
+			}
+#else
 			if (ps->persistant[PERS_TEAM] == TEAM_RED) {
 				if (item->giTag == PW_BLUEFLAG  && ps->powerups[PW_NEUTRALFLAG] ) {
 					return qtrue;
@@ -1577,6 +1588,7 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent,
 					return qtrue;
 				}
 			}
+#endif
 		}
 #endif
 		if( gametype == GT_CTF ) {

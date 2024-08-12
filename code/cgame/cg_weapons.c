@@ -968,10 +968,10 @@ void CG_RegisterItemVisuals( int itemNum ) {
 	if(item->skinNames[0]) {
 		itemInfo->customSkin = trap_R_RegisterSkin( item->skinNames[0] );
 	}
+
 #ifdef USE_ADVANCED_ITEMS
 	trap_R_ModelBounds( itemInfo->models[0], itemInfo->mins, itemInfo->maxs );
 #endif
-
 
 	itemInfo->icon = trap_R_RegisterShaderNoMip( item->icon );
 
