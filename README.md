@@ -54,7 +54,7 @@ Unofficial Quake III Arena gamecode patch
   * Reportedly, Portal the game it is a developer responsibility to specify where portals can be placed, this seems incredibly difficult to me or it was much more linear than I thought (i.e. only one way to solve the puzzle). https://www.youtube.com/watch?v=eNKntZzwnAw
   * Portal has view-axis ROLL turning towards the pull of gravity. Splitgate uses roll, but it is much faster than Portal 1.
   * Add Splitgate style if you go through someone else's portal it is black and unknown, might make for good traps, HAHA!
-  * Trigger earthquake from kamikaze.
+  * DONE: Trigger earthquake from kamikaze.
   * Optional for portals to be for 1 individual player, or any player can go through any players portal. NODRAW and SINGLECLIENT flags to be set.
   * Add auto-regen health shield thing?
   * Fix portal gun.  Use teleporter location to draw entities in relative locations on the other side of the jump.  Use a special flag on teleport to tell it where to interpolate for other players even though EF_TELEPORT_BIT is used, just follow velocity backwards one frame on personal teleporters. Looking through a standing portal has a weird repetitive effect because of depth write or sorting or something. Turn off depth in shader or skip entity in tr_main.c? Measure/cache midpoint of portal model and use on floor and wall alignment. Fix corners by tracing in server for edges. Add NOPORTAL surfaceParm. Still take falling damage for landing on a portal. Projectiles through portals. Face wall portals like 5 degrees towards player away from original angle. No falling damage while holding the portal gun.

@@ -112,6 +112,34 @@ void SP_trigger_always (gentity_t *ent) {
 	ent->think = trigger_always_think;
 }
 
+void trigger_once_touch( gentity_t *self, gentity_t *other, trace_t *trace  ) {
+	G_UseTargets(self, other);
+	G_FreeEntity( self );
+}
+
+/*QUAKED trigger_always (.5 .5 .5) (-8 -8 -8) (8 8 8)
+This trigger will always fire.  It is activated by the world.
+*/
+void SP_trigger_once (gentity_t *self) {
+	InitTrigger (self);
+
+	// unlike other triggers, we need to send this one to the client
+	// unless is a spectator trigger
+	if ( self->spawnflags & 1 ) {
+		self->r.svFlags |= SVF_NOCLIENT;
+	} else {
+		self->r.svFlags &= ~SVF_NOCLIENT;
+	}
+
+	// make sure the client precaches this sound
+	//G_SoundIndex("sound/world/jumppad.wav");
+
+	//self->s.eType = ET_TELEPORT_TRIGGER;
+	self->touch = trigger_once_touch;
+
+	trap_LinkEntity (self);
+}
+
 
 /*
 ==============================================================================
