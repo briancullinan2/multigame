@@ -1742,7 +1742,6 @@ static void PM_FinishWeaponChange( void ) {
 
 #ifdef USE_ADVANCED_WEAPONS
 	if ( !( pm->classWeapons[weapon] ) ) {
-		Com_Printf("hit damnit: %i\n", weapon);
 		weapon = WP_NONE;
 	}
 #else

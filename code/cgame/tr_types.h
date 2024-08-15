@@ -24,7 +24,7 @@
 #define	RF_WRAP_FRAMES		512		// mod the model frames by the maxframes to allow continuous
 									// animation without needing to know the frame count
 
-#define RF_BILLBOARD     0x0800
+#define RF_BILLBOARD     0x0400
 
 // refdef flags
 #define RDF_NOWORLDMODEL	1		// used for player configuration screen

@@ -2927,7 +2927,10 @@ void CG_PlayerStats( centity_t *cent ) {
 #endif
 
 void CG_RecordPosition(centity_t *cent, qboolean moving, qboolean isAdding);
-
+#ifdef USE_CLASSIC_HUD
+extern qboolean updateModel;
+char *CG_Cvar_VariableString( const char *var_name );
+#endif
 
 /*
 ===============
@@ -2957,6 +2960,19 @@ void CG_Player( centity_t *cent ) {
 	if ( cg.levelShot ) {
 		return;
 	}
+
+#ifdef USE_CLASSIC_HUD
+	if(updateModel) {
+		char model[MAX_QPATH];
+		char team[256];
+		char head[256];
+		strcpy(team, CG_Cvar_VariableString("ui_teamName"));
+		strcpy(model, CG_Cvar_VariableString("team_model"));
+		strcpy(head, CG_Cvar_VariableString("team_headmodel"));
+		CG_RegisterClientModelname( &cgs.clientinfo[cg.snap->ps.clientNum], model, "default", head, "default", team );
+		updateModel = qfalse;
+	}
+#endif
 
 
 	isTrailPowerup = 

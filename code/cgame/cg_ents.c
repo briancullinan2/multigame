@@ -384,6 +384,15 @@ static void CG_Item( centity_t *cent ) {
 #ifdef USE_ADVANCED_ITEMS
 	if(item->renderfx) {
 		ent.renderfx = item->renderfx;
+		/*if(ent.renderfx & RF_BILLBOARD) {
+			vec3_t angles;
+			angles[YAW] = -180;
+			angles[YAW] += cg.refdefViewAngles[YAW];
+			angles[PITCH] -= cg.refdefViewAngles[PITCH];
+			angles[ROLL] = 0;
+			AxisClear( ent.axis );
+			AnglesToAxis( angles, ent.axis );
+		}*/
 	} else
 #endif
 	// items without glow textures need to keep a minimum light value
@@ -839,7 +848,7 @@ static void CG_PersonalPortal(const centity_t *cent) {
 		angles[YAW] += cg.refdefViewAngles[YAW];
 		angles[PITCH] -= cg.refdefViewAngles[PITCH];
 		angles[ROLL] = 0;
-		SnapVector( angles );
+		//SnapVector( angles );
 		AxisClear( ent.axis );
     AnglesToAxis( angles, ent.axis );
     VectorCopy( cent->lerpOrigin, ent.origin);
