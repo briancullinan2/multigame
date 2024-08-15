@@ -2,6 +2,8 @@
 //
 // bg_local.h -- local definitions for the bg (both games) files
 
+#include "../cgame/tr_types.h"
+
 #define	MIN_WALK_NORMAL	0.7f		// can't walk on very steep slopes
 
 #define	JUMP_VELOCITY	270

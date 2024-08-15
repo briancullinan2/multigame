@@ -381,6 +381,11 @@ static void CG_Item( centity_t *cent ) {
 		frac = 1.0;
 	}
 
+#ifdef USE_ADVANCED_ITEMS
+	if(item->renderfx) {
+		ent.renderfx = item->renderfx;
+	} else
+#endif
 	// items without glow textures need to keep a minimum light value
 	// so they are always visible
 	if ( item->giType == IT_WEAPON || item->giType == IT_ARMOR 

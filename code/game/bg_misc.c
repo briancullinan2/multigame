@@ -3,6 +3,7 @@
 // bg_misc.c -- both games misc functions, all completely stateless
 
 #include "q_shared.h"
+#include "../cgame/tr_types.h"
 #include "bg_public.h"
 
 #ifdef CGAME

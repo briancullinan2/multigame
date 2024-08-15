@@ -404,7 +404,8 @@
 				/* precache */ "",
 				/* sounds */ "",
 				{NULL, NULL, NULL, NULL},
-				{0, 15, 15, 1000/15, 1000/15, 0, 0}},
+				{0, 15, 15, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
 
 		/*QUAKED item_doom_invis (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */

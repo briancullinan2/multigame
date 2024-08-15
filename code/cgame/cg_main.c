@@ -242,6 +242,7 @@ void CG_UpdateCvars( void ) {
 	if(hudFilesModificationCount != cg_hudFiles.modificationCount) {
 		hudFilesModificationCount = cg_hudFiles.modificationCount;
 		if(cg_hudFiles.string[0] == '\0') {
+			//UI_InitMemory();
 			CG_LoadMenus(cg_hudFiles.string);
 		}
 	}
