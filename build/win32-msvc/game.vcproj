@@ -392,6 +392,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\bg_pmove_ball.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\bg_physics.c"
 				>
 			</File>

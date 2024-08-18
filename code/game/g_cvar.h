@@ -201,7 +201,7 @@ G_CVAR( g_scale, "cm_scale", "1.0", 0, 0, qfalse, qfalse )
 G_CVAR( g_playerScale, "g_playerScale", "1.0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 #ifdef USE_MULTIWORLD
-G_CVAR( g_mvproto, "mvproto", "1.0", CVAR_SYSTEMINFO | CVAR_ROM, 0, qfalse, qfalse )
+G_CVAR( g_mvproto, "mvproto", "0", CVAR_SYSTEMINFO | CVAR_ROM, 0, qfalse, qfalse )
 #endif
 
 

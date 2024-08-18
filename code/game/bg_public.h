@@ -152,6 +152,7 @@ typedef enum {
 #endif
 
 #ifdef USE_ADVANCED_CLASS
+	PM_ROUND, // for neverball/geoball movement
 	PM_MONSTER, // not interested in item pickups, they come with special powerups
 	PM_STUCKDUCK, // some monsters don't move when crouching, it was really funny to watch
 #endif
@@ -369,6 +370,8 @@ typedef enum {
 	PCLASS_FREEZE,
 	PCLASS_ANTIGRAVITY,
 
+	PCLASS_ROUND, // for ball physics
+
 	// begin classes of monsters, not interested in item pickups
 	PCLASS_MONSTER,
 	PCLASS_SHAMBLER, // shambler
@@ -515,6 +518,7 @@ typedef struct {
 	usercmd_t	cmd;
 	int			tracemask;			// collide against these types of surfaces
 	int			debugLevel;			// if set, diagnostic output will be printed
+	qboolean  noFootsteps;
 	qboolean	gauntletHit;		// true if a gauntlet attack would actually hit something
 
 	int			framecount;
@@ -528,7 +532,7 @@ typedef struct {
 	int			watertype;
 	int			waterlevel;
 
-	//float		xyspeed;
+	float		xyspeed;
 
 	// for fixed msec Pmove
 	int			pmove_fixed;

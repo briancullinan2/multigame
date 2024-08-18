@@ -395,6 +395,7 @@ CGOBJ_ = \
   $(B)/$(MOD)/cgame/bg_lib.o \
   $(B)/$(MOD)/cgame/bg_misc.o \
   $(B)/$(MOD)/cgame/bg_pmove.o \
+  $(B)/$(MOD)/cgame/bg_pmove_ball.o \
   $(B)/$(MOD)/cgame/bg_physics.o \
   $(B)/$(MOD)/cgame/bg_wheel_forces.o \
   $(B)/$(MOD)/cgame/bg_slidemove.o \
@@ -461,6 +462,7 @@ QAOBJ_ = \
   $(B)/$(MOD)/game/bg_lib.o \
   $(B)/$(MOD)/game/bg_misc.o \
   $(B)/$(MOD)/game/bg_pmove.o \
+  $(B)/$(MOD)/game/bg_pmove_ball.o \
   $(B)/$(MOD)/game/bg_physics.o \
   $(B)/$(MOD)/game/bg_wheel_forces.o \
   $(B)/$(MOD)/game/bg_slidemove.o \

@@ -1602,6 +1602,14 @@ void ClientThink_real( gentity_t *ent ) {
   if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 		client->ps.pm_type = PM_DEAD;
 	} else 
+#ifdef USE_ADVANCED_CLASS
+	if((client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT)) {
+		client->ps.pm_type = PM_STUCKDUCK;
+	} else
+	if((client->pers.newplayerclass == PCLASS_ROUND)) {
+		client->ps.pm_type = PM_ROUND;
+	} else
+#endif
 #ifdef USE_VEHICLES
 	if(client->inventory[HI_VEHICLE]) {
 		if(client->pers.showCursor) {

@@ -84,6 +84,8 @@ cd vm\cgame
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_pmove.c
 @if errorlevel 1 goto quit
+%cc1% %gamedir%\bg_pmove_ball.c
+@if errorlevel 1 goto quit
 %cc1% %gamedir%\bg_slidemove.c
 @if errorlevel 1 goto quit
 %cc1% %gamedir%\q_math.c
@@ -130,6 +132,8 @@ cd vm\game
 %cc2% %gamedir%\bg_misc.c 
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\bg_pmove.c
+@if errorlevel 1 goto quit
+%cc2% %gamedir%\bg_pmove_ball.c
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\bg_physics.c 
 @if errorlevel 1 goto quit
