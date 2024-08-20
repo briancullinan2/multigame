@@ -122,14 +122,20 @@ void UsePowerup( gentity_t *ent, powerup_t powerup ) {
 #endif
 #if defined(USE_ADVANCED_CLASS)
     switch(ent->client->pers.playerclass) {
+#ifdef USE_ADVANCED_ITEMS
     case PCLASS_VISOR:
       G_GiveItem(ent, PW_VISIBILITY);
       ent->client->ps.stats[STAT_ABILITY] = 0;
       break;
+#endif
     case PCLASS_RANGER:
       UsePowerup(ent, HI_TELEPORTER);
+#ifdef USE_ADVANCED_ITEMS
       ent->client->inventory[HI_TELEPORTER] = 0;
       ent->client->inventoryModified[(int)floor(HI_TELEPORTER / PW_MAX_POWERUPS)] = qtrue;
+#else
+      ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+#endif
       ent->client->ps.stats[STAT_ABILITY] = 0;
       break;
     default:

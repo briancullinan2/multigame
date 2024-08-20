@@ -642,6 +642,11 @@ typedef enum {
 #ifdef USE_ADVANCED_CLASS
 	STAT_PLAYERCLASS,
 #endif
+#ifndef USE_ADVANCED_ITEMS
+#ifdef USE_RUNES
+	STAT_RUNE,
+#endif
+#endif
 	STAT_NUM_STATS
 } statIndex_t;
 
@@ -735,7 +740,7 @@ typedef enum {
 	PW_GREENFLAG = PW_NEUTRALFLAG,
 #endif
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_RUNES) || defined(USE_ADVANCED_CLASS)
 	PW_SCOUT,
 	PW_GUARD,
 	PW_DOUBLER,
@@ -751,9 +756,112 @@ typedef enum {
   PW_SPREAD,  //Hal9000 spreadfire
 #endif
 
+#ifdef USE_ADVANCED_CLASS
+	PW_SPECIAL_ABILITY,
+#endif
+
 	PW_NUM_POWERUPS
 
 } powerup_t;
+
+#ifdef USE_RUNES
+
+typedef enum {
+
+  // 1 - 4
+  RUNE_STRENGTH,     // black
+  RUNE_REGEN,        // hell
+  RUNE_RESIST,       // elder
+  RUNE_HASTE,        // earth
+  
+  // 5 - 8
+  RUNE_ENVIRO,       // black
+  RUNE_FLIGHT,       // hell
+  RUNE_BERSERK,      // elder
+  RUNE_RECALL,       // earth
+  
+  // 9 - 12
+  RUNE_ELECTRIC,     // black
+  RUNE_CLOAK,        // hell
+  RUNE_DIVINE,       // elder
+  RUNE_DEATH,        // earth
+  
+  // 13 - 16
+  RUNE_HOLO,         // black
+  RUNE_ORB,          // hell
+  RUNE_BLINK,        // elder
+  RUNE_CAMO,         // earth
+  
+  // 17 - 20
+  RUNE_JUMP,         // black
+  RUNE_ACTION,       // hell
+  RUNE_VAMPIRE,      // elder
+  RUNE_SHIELD,       // earth
+  
+  // 21 - 24
+  RUNE_HEALTH,       // black
+  RUNE_RADIO,        // hell
+  RUNE_SWITCH,       // elder
+  RUNE_ICETRAP,      // earth
+  
+  // 25 - 28
+  RUNE_GRAVITY,      // black
+  RUNE_TELE,         // hell
+  RUNE_IMPACT,       // elder
+  RUNE_VENGEANCE,    // earth
+  
+  // 29 - 32
+  RUNE_SHUBHAT,      // black
+  RUNE_REPULSION,    // hell
+  RUNE_PHASING,      // elder
+  RUNE_SHAMBLER,     // earth
+  
+  // 33 - 36
+  RUNE_DUALRECALL,   // black
+  RUNE_WEIRDNESS,    // hell
+  RUNE_PHOENIX,      // elder
+  RUNE_SPIKECLOUD,   // earth
+  
+  // 37 - 40
+  RUNE_FIREWALK,     // black
+  RUNE_GRAPPLE,      // hell
+  RUNE_ATHLETIC,     // elder
+  RUNE_LUMBERJACK,   // earth
+  
+  // 41 - 44
+  RUNE_HOUNGAN,      // black
+  RUNE_PIERCING,     // hell
+  RUNE_PRESERVE,     // elder
+  RUNE_ZENMONK,      // earth
+  
+  // 45 - 48
+  RUNE_TORCH,        // black
+  RUNE_PACKRAT,      // hell
+  RUNE_ARMOR,        // elder
+  RUNE_QUAD,         // earth
+  
+  // 49 - 52
+  RUNE_JACK,         // black
+  RUNE_BLUEGOO,      // hell
+  RUNE_BLIZZARD,     // elder
+  RUNE_THOR,         // earth
+  
+  // 53 - 56
+  RUNE_SNIPER,       // black
+  RUNE_ANTIPACK,     // hell
+  RUNE_ANTITELE,     // elder
+  RUNE_CLUSTER,      // earth
+  
+  // 57 - 59
+  RUNE_TORNADO,      // black 
+  RUNE_REQUIEM,      // hell
+  RUNE_LITHIUM,      // elder
+
+	RUNE_COUNT
+
+} rune_t;
+#define PW_NUM_RUNES RUNE_LITHIUM-RUNE_STRENGTH
+#endif
 
 #endif
 
@@ -1233,7 +1341,7 @@ typedef enum {
 							// EFX: rotate + bob
 	IT_PERSISTANT_POWERUP,
 	IT_TEAM,
-#ifdef USE_ADVANCED_ITEMS
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 	IT_WEAPON2,  //  stationary
 	IT_AMMO2,  //  stationary
 	IT_ARMOR2,      // like the name implies, quake2 pickups are stationary
@@ -1356,15 +1464,14 @@ void	BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t resu
 
 void	BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm, playerState_t *ps, int entityNum );
 
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad
 #ifdef USE_ADVANCED_ITEMS
+, const int *inventory
+#endif
 #ifdef USE_ADVANCED_CLASS
-void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, const int playerClass );
-#else
-void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory );
+, const int playerClass 
 #endif
-#else
-void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
-#endif
+);
 
 void	BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap );
 void	BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );

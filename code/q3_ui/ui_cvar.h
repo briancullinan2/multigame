@@ -65,7 +65,7 @@ UI_CVAR( ui_server14, "server14", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server15, "server15", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server16, "server16", "", CVAR_ARCHIVE )
 
-UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM )
+UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "1", CVAR_ROM )
 
 UI_CVAR( ui_developer, "developer", "0", 0 )
 

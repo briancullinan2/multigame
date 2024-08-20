@@ -164,6 +164,9 @@ static void UI_SPLevelMenu_SetBots( void ) {
 	char	bots[MAX_INFO_STRING];
 
 	levelMenuInfo.numBots = 0;
+#ifdef USE_SINGLEPLAYER // allow playing in all arenas
+	if(!Q_stristr(ui_arenasFile.string, "campaign"))
+#endif
 	if ( selectedArenaSet > currentSet ) {
 		return;
 	}
@@ -224,12 +227,40 @@ static void UI_SPLevelMenu_SetMenuArena( int n, int level, const char *arenaInfo
 		levelMenuInfo.levelScores[n] = 8;
 	}
 
+	if(Q_stristr(map, "q3damned")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/q3Damned.tga%hue0.55" );
+	} else 
+	if(Q_stristr(map, "axdm1")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/axdm1.tga%hue0.45" );
+	} else 
+	if(Q_stristr(map, "q3hipdm1")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/q3hipdm1.tga%hue0.65%lum0.05" );
+	} else 
+	if(Q_stristr(map, "13house")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/13house.tga%hue0.35" );
+	} else 
+	if(Q_stristr(map, "nodm10")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/nodm10.tga%hue-0.1%lum0.05" );
+	} else 
+	if(Q_stristr(map, "q3fp2002")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/q3fp2002.tga%hue-0.1" );
+	} else 
+	if(Q_stristr(map, "13tokay")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/13tokay.tga%hue-0.2" );
+	} else 
+	if(Q_stristr(map, "bloodrust")) {
+		strcpy( levelMenuInfo.levelPicNames[n], "levelshots/bloodrust.tga%hue-0.2" );
+	} else 
 	Com_sprintf( levelMenuInfo.levelPicNames[n], sizeof( levelMenuInfo.levelPicNames[n] ), "levelshots/%s.tga", map );
 	if( !trap_R_RegisterShaderNoMip( levelMenuInfo.levelPicNames[n] ) ) {
 		strcpy( levelMenuInfo.levelPicNames[n], ART_MAP_UNKNOWN );
 	}
 	levelMenuInfo.item_maps[n].shader = 0;
-	if ( selectedArenaSet > currentSet ) {
+	if ( selectedArenaSet > currentSet 
+#ifdef USE_SINGLEPLAYER // allow playing in all arenas
+		&& !Q_stristr(ui_arenasFile.string, "campaign")
+#endif
+	) {
 		levelMenuInfo.item_maps[n].generic.flags |= QMF_GRAYED;
 	}
 	else {
@@ -244,7 +275,11 @@ static void UI_SPLevelMenu_SetMenuItems( void ) {
 	int			level;
 	const char	*arenaInfo;
 
-	if ( selectedArenaSet > currentSet ) {
+	if ( selectedArenaSet > currentSet 
+#ifdef USE_SINGLEPLAYER // allow playing in all arenas
+		&& !Q_stristr(ui_arenasFile.string, "campaign")
+#endif
+	) {
 		selectedArena = -1;
 	}
 	else if ( selectedArena == -1 ) {
@@ -474,6 +509,9 @@ static void UI_SPLevelMenu_NextEvent( void* ptr, int notification ) {
 		return;
 	}
 
+#ifdef USE_SINGLEPLAYER // allow playing in all arenas
+	if(!Q_stristr(ui_arenasFile.string, "campaign"))
+#endif
 	if ( selectedArenaSet > currentSet ) {
 		return;
 	}
@@ -589,7 +627,28 @@ static void UI_SPLevelMenu_MenuDraw( void ) {
 		}
 	}
 
+#ifdef USE_SINGLEPLAYER
+	if(Q_stristr(ui_arenasFile.string, "campaign")) {
+		if(selectedArenaSet == 0) {
+			UI_DrawProportionalString( 18, 38, "QUAKE", UI_LEFT|UI_SMALLFONT, color_orange );
+		}
+		if(selectedArenaSet == 1) {
+			UI_DrawProportionalString( 18, 38, "QUAKE II", UI_LEFT|UI_SMALLFONT, color_orange );
+		}
+		if(selectedArenaSet == 2) {
+			UI_DrawProportionalString( 18, 38, "DOOM", UI_LEFT|UI_SMALLFONT, color_orange );
+		}
+		if(selectedArenaSet == 3) {
+			UI_DrawProportionalString( 18, 38, "BONUS", UI_LEFT|UI_SMALLFONT, color_orange );
+		}
+		if(selectedArenaSet == 4) {
+			UI_DrawProportionalString( 18, 38, "AD INFINITUM", UI_LEFT|UI_SMALLFONT, color_orange );
+		}
+	} else 
+#endif
+	{
 	UI_DrawProportionalString( 18, 38, va( "Tier %i", selectedArenaSet + 1 ), UI_LEFT|UI_SMALLFONT, color_orange );
+	}
 
 	for ( n = 0; n < levelMenuInfo.numMaps; n++ ) {
 		x = levelMenuInfo.item_maps[n].generic.x;
@@ -597,6 +656,9 @@ static void UI_SPLevelMenu_MenuDraw( void ) {
 		UI_FillRect( x, y + 96, 128, 18, color_black );
 	}
 
+#ifdef USE_SINGLEPLAYER // allow playing in all arenas
+	if(!Q_stristr(ui_arenasFile.string, "campaign"))
+#endif
 	if ( selectedArenaSet > currentSet ) {
 		UI_DrawProportionalString( 320, 216, "ACCESS DENIED", UI_CENTER|UI_BIGFONT, color_red );
 		return;

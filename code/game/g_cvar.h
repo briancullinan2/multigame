@@ -159,6 +159,10 @@ G_CVAR( g_hordeMode, "g_hordeMode", "0", CVAR_TEMP, 0, qfalse, qfalse )
 G_CVAR( g_hordeRed,  "g_hordeRed", "0", CVAR_TEMP, 0, qfalse, qfalse )
 G_CVAR( g_hordeBlue, "g_hordeBlue", "0", CVAR_TEMP, 0, qfalse, qfalse )
 G_CVAR( g_hordeBodies, "g_hordeBodies", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#ifdef USE_ADVANCED_TEAMS
+G_CVAR( g_hordeGreen,  "g_hordeGreen", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeGold, "g_hordeGold", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
 #endif
 
 #ifdef USE_ADVANCED_ITEMS
@@ -219,6 +223,10 @@ G_CVAR( rune_healthMax, "rune_healthMax", "200", CVAR_SYSTEMINFO, 0, qfalse, qfa
 
 
 G_CVAR( g_developer, "developer", "0", CVAR_TEMP, 0, qfalse, qfalse )
+
+#ifdef USE_SINGLEPLAYER
+G_CVAR( g_arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_ROM, 0, qtrue, qfalse )
+#endif
 
 
 #undef G_CVAR

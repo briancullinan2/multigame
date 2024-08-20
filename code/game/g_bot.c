@@ -4,6 +4,10 @@
 
 #include "g_local.h"
 
+#ifdef USE_SINGLEPLAYER
+qboolean botsAreMonsters = qfalse;
+#endif
+
 
 static int		g_numBots;
 static char		*g_botInfos[MAX_BOTS];
@@ -135,7 +139,7 @@ G_LoadArenas
 */
 static void G_LoadArenas( void ) {
 	int			numdirs;
-	vmCvar_t	arenasFile;
+	//vmCvar_t	arenasFile;
 	char		filename[128];
 	char		dirlist[1024];
 	char*		dirptr;
@@ -144,9 +148,9 @@ static void G_LoadArenas( void ) {
 
 	g_numArenas = 0;
 
-	trap_Cvar_Register( &arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_ROM );
-	if( *arenasFile.string ) {
-		G_LoadArenasFromFile(arenasFile.string);
+	//trap_Cvar_Register( &arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_ROM );
+	if( *g_arenasFile.string ) {
+		G_LoadArenasFromFile(g_arenasFile.string);
 	}
 	else {
 		G_LoadArenasFromFile("scripts/arenas.txt");

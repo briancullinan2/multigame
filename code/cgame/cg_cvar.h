@@ -150,8 +150,8 @@ CG_CVAR( cg_fullscreen, "r_modeFullscreen", "-2", CVAR_ARCHIVE )
 
 
 #ifdef USE_PORTALS
-CG_CVAR( cgwp_portalEnable, "wp_portalEnable", "1", CVAR_SERVERINFO )
-CG_CVAR( cg_altPortal, "g_altPortal", "1", CVAR_SERVERINFO )
+CG_CVAR( cgwp_portalEnable, "wp_portalEnable", "0", CVAR_SERVERINFO )
+CG_CVAR( cg_altPortal, "g_altPortal", "0", CVAR_SERVERINFO )
 #endif
 
 CG_CVAR( cg_developer, "developer", "0", 0 )

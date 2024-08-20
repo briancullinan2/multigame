@@ -871,6 +871,7 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 
 	// play the normal pickup sound
+#ifdef USE_WEAPON_ORDER
 #ifdef USE_ADVANCED_ITEMS
   if ( predict ) {
 		
@@ -885,7 +886,6 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 			ent->s.modelindex );
 	}
 #else
-#ifdef USE_WEAPON_ORDER
   if ( predict ) {
 		G_AddPredictableEvent( other, 
 			alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, 
@@ -893,6 +893,16 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	} else {
 		G_AddEvent( other, 
 			alreadyHad ? EV_ITEM_PICKUP2 : EV_ITEM_PICKUP, 
+			ent->s.modelindex );
+	}
+#endif
+#else
+#ifdef USE_ADVANCED_ITEMS
+  if ( predict ) {
+		G_AddPredictableEvent( other, EV_ITEM_PICKUP + ent->s.modelindex2,
+			ent->s.modelindex );
+	} else {
+		G_AddEvent( other, EV_ITEM_PICKUP + ent->s.modelindex2,
 			ent->s.modelindex );
 	}
 #else

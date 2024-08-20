@@ -947,9 +947,41 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	}
 #endif
 
-#if !defined(USE_ADVANCED_GAMES) && !defined(USE_ADVANCED_TEAMS)
+#if !defined(USE_ADVANCED_GAMES) && !defined(USE_ADVANCED_TEAMS) && !defined(USE_ADVANCED_ITEMS)
 	// give the player some points
 	cl->ps.powerups[enemy_flag] = 0;
+#else
+#ifdef USE_ADVANCED_ITEMS
+	if(team != TEAM_RED) {
+		cl->inventory[PW_REDFLAG] = 0;
+	}
+	if(team != TEAM_BLUE) {
+		cl->inventory[PW_BLUEFLAG] = 0;
+	}
+#ifdef USE_ADVANCED_TEAMS
+	if(team != TEAM_GREEN) {
+		cl->inventory[PW_GREENFLAG] = 0;
+	}
+	if(team != TEAM_GOLD) {
+		cl->inventory[PW_GOLDFLAG] = 0;
+	}
+#endif
+#else
+	if(team != TEAM_RED) {
+		cl->ps.powerups[PW_REDFLAG] = 0;
+	}
+	if(team != TEAM_BLUE) {
+		cl->ps.powerups[PW_BLUEFLAG] = 0;
+	}
+#ifdef USE_ADVANCED_TEAMS
+	if(team != TEAM_GREEN) {
+		cl->ps.powerups[PW_GREENFLAG] = 0;
+	}
+	if(team != TEAM_GOLD) {
+		cl->ps.powerups[PW_GOLDFLAG] = 0;
+	}
+#endif
+#endif
 #endif
 
 	teamgame.last_flag_capture = level.time;

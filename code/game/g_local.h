@@ -409,11 +409,13 @@ struct gclient_s
 #endif
 
 	int portalID;
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
+
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES) || defined(USE_ADVANCED_CLASS)
 	gentity_t *persistantPowerup;
 	int ammoTimes[WP_MAX_WEAPONS];
 	int invulnerabilityTime;
 #endif
+
 #ifdef USE_PORTALS
 	gentity_t *portalDestination;
 	gentity_t *portalSource;

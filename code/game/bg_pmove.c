@@ -1711,7 +1711,11 @@ static void PM_BeginWeaponChange( int weapon ) {
 	PM_AddEvent( EV_CHANGE_WEAPON );
 	pm->ps->weaponstate = WEAPON_DROPPING;
 #ifdef USE_RUNES
+#ifdef USE_ADVANCED_ITEMS
 	if (pm->inventory[RUNE_HASTE])
+#else
+	if (pm->ps->stats[STAT_RUNE] == RUNE_HASTE)
+#endif
 		pm->ps->weaponTime += 50;
 	else
 #endif
@@ -3278,12 +3282,12 @@ void Pmove (pmove_t *pmove) {
 			}
 		}
 		pmove->cmd.serverTime = pmove->ps->commandTime + msec;
-#ifdef USE_VEHICLES
+#if 0 //def USE_VEHICLES
 		if(pmove->ps->pm_type == PM_VEHICLE || pmove->ps->pm_type == PM_VEHICLEMOUSE) {
 			PmoveVehicle(pmove);
 		} else
 #endif
-#ifdef USE_ADVANCED_CLASS
+#if 0 //def USE_ADVANCED_CLASS
 		if(pmove->ps->pm_type == PM_ROUND) {
 			PmoveBall(pmove);
 		} else

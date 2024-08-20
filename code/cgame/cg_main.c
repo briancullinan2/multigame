@@ -564,7 +564,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.gibBounce2Sound = trap_S_RegisterSound( "sound/player/gibimp2.wav", qfalse );
 	cgs.media.gibBounce3Sound = trap_S_RegisterSound( "sound/player/gibimp3.wav", qfalse );
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 	cgs.media.useInvulnerabilitySound = trap_S_RegisterSound( "sound/items/invul_activate.wav", qfalse );
 	cgs.media.invulnerabilityImpactSound1 = trap_S_RegisterSound( "sound/items/invul_impact_01.wav", qfalse );
 	cgs.media.invulnerabilityImpactSound2 = trap_S_RegisterSound( "sound/items/invul_impact_02.wav", qfalse );
@@ -856,7 +856,7 @@ void CG_ReregisterModels( void ) {
 #else
 	cgs.media.teleportEffectModel = trap_R_RegisterModel( "models/misc/telep.md3" );
 #endif
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 	cgs.media.kamikazeEffectModel = trap_R_RegisterModel( "models/weaphits/kamboom2.md3" );
 	cgs.media.kamikazeShockWave = trap_R_RegisterModel( "models/weaphits/kamwave.md3" );
 	cgs.media.kamikazeHeadModel = trap_R_RegisterModel( "models/powerups/kamikazi.md3" );
@@ -923,6 +923,30 @@ static void CG_RegisterGraphics( qboolean firstTime ) {
 
 		CG_LoadingString( cgs.mapname );
 
+	if(Q_stristr(cgs.mapname, "q3damned")) {
+		trap_R_LoadWorldMap( "maps/q3Damned.bsp%hue0.55" );
+	} else 
+	if(Q_stristr(cgs.mapname, "axdm1")) {
+		trap_R_LoadWorldMap( "maps/axdm1.bsp%hue0.45" );
+	} else 
+	if(Q_stristr(cgs.mapname, "q3hipdm1")) {
+		trap_R_LoadWorldMap( "maps/q3hipdm1.bsp%hue0.65%lum0.05" );
+	} else 
+	if(Q_stristr(cgs.mapname, "13house")) {
+		trap_R_LoadWorldMap( "maps/13house.bsp%hue0.35" );
+	} else 
+	if(Q_stristr(cgs.mapname, "nodm10")) {
+		trap_R_LoadWorldMap( "maps/nodm10.bsp%hue-0.1%lum0.05" );
+	} else 
+	if(Q_stristr(cgs.mapname, "q3fp2002")) {
+		trap_R_LoadWorldMap( "maps/q3fp2002.bsp%hue-0.1" );
+	} else 
+	if(Q_stristr(cgs.mapname, "13tokay")) {
+		trap_R_LoadWorldMap( "maps/13tokay.bsp%hue-0.2" );
+	} else 
+	if(Q_stristr(cgs.mapname, "bloodrust")) {
+		trap_R_LoadWorldMap( "maps/bloodrust.bsp%hue-0.2" );
+	} else 
 		trap_R_LoadWorldMap( cgs.mapname );
 
 		// precache status bar pics

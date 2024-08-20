@@ -781,15 +781,14 @@ static void CG_TouchTriggerPrediction( void ) {
         continue;
 #endif
 
+			BG_TouchJumpPad( &cg.predictedPlayerState, ent
 #ifdef USE_ADVANCED_ITEMS
+			, cg.inventory
+#endif
 #ifdef USE_ADVANCED_CLASS
-			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory, cg.predictedPlayerState.stats[STAT_PLAYERCLASS] );
-#else
-			BG_TouchJumpPad( &cg.predictedPlayerState, ent, cg.inventory );
+			, cg.predictedPlayerState.stats[STAT_PLAYERCLASS] 
 #endif
-#else
-			BG_TouchJumpPad( &cg.predictedPlayerState, ent );
-#endif
+			);
 		}
 	}
 

@@ -2962,7 +2962,7 @@ void CG_Player( centity_t *cent ) {
 	}
 
 #ifdef USE_CLASSIC_HUD
-	if(updateModel) {
+	if(cg.editPlayerMode && updateModel) {
 		char model[MAX_QPATH];
 		char team[256];
 		char head[256];
@@ -3003,6 +3003,7 @@ void CG_Player( centity_t *cent ) {
 		CG_Error( "Bad clientNum on player entity" );
 	}
 	ci = &cgs.clientinfo[ clientNum ];
+
 
 	// it is possible to see corpses from disconnected players that may
 	// not have valid clientinfo

@@ -1263,7 +1263,7 @@ gitem_t	*BG_FindItemForPowerup( powerup_t pw ) {
 
 	for ( i = 0 ; i < bg_numItems ; i++ ) {
 		if ( (bg_itemlist[i].giType == IT_POWERUP || 
-#ifdef USE_ADVANCED_ITEMS
+#if defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_CLASS)
 					bg_itemlist[i].giType == IT_HOLDABLE || 
 #endif
 					bg_itemlist[i].giType == IT_TEAM ||
@@ -2073,16 +2073,14 @@ void BG_AddPredictableEventToPlayerstate( entity_event_t newEvent, int eventParm
 BG_TouchJumpPad
 ========================
 */
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad
 #ifdef USE_ADVANCED_ITEMS
+, const int *inventory
+#endif
 #ifdef USE_ADVANCED_CLASS
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory, const int playerClass ) 
-#else
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad, const int *inventory ) 
+, const int playerClass 
 #endif
-#else
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) 
-#endif
-{
+) {
 	vec3_t	angles;
 	float p;
 	int effectNum;

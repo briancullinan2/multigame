@@ -1027,7 +1027,7 @@ typedef struct {
 #endif
 
 	qhandle_t	hastePuffShader;
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_ADVANCED_GAMES)
 	qhandle_t	redKamikazeShader;
 	qhandle_t	blueKamikazeShader;
 #endif
@@ -1054,7 +1054,7 @@ typedef struct {
 	// special effects models
 	qhandle_t	teleportEffectModel;
 	qhandle_t	teleportEffectShader;
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_CLASSIC_HUD)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_CLASSIC_HUD) || defined(USE_SINGLEPLAYER)
 	qhandle_t	kamikazeEffectModel;
 	qhandle_t	kamikazeShockWave;
 	qhandle_t	kamikazeHeadModel;
@@ -1110,7 +1110,7 @@ typedef struct {
 	sfxHandle_t	sfx_railg;
 	sfxHandle_t	sfx_rockexp;
 	sfxHandle_t	sfx_plasmaexp;
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_WEAPONS) || defined(USE_ADVANCED_ITEMS) || defined(USE_SINGLEPLAYER)
 	sfxHandle_t	sfx_proxexp;
 	sfxHandle_t	sfx_nghit;
 	sfxHandle_t	sfx_nghitflesh;
@@ -1225,7 +1225,7 @@ typedef struct {
 	sfxHandle_t	countFightSound;
 	sfxHandle_t	countPrepareSound;
 
-#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_CLASSIC_HUD)
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_ITEMS) || defined(USE_CLASSIC_HUD) || defined(USE_SINGLEPLAYER)
 	// new stuff
 	qhandle_t patrolShader;
 	qhandle_t assaultShader;

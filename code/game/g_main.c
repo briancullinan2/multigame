@@ -220,6 +220,11 @@ void G_RemapTeamShaders( void ) {
 }
 
 
+#ifdef USE_SINGLEPLAYER
+extern qboolean botsAreMonsters;
+#endif
+
+
 /*
 =================
 G_RegisterCvars
@@ -261,6 +266,30 @@ void G_RegisterCvars( void ) {
 		trap_Cvar_Set( "g_gametype", "0" );
 		trap_Cvar_Update( &g_gametype );
 	}
+
+#ifdef USE_SINGLEPLAYER
+	// make sure campaign mode is in team mode also
+	// this way we get the menu items for monsters versus humans
+	if(Q_stristr(g_arenasFile.string, "campaign")) {
+		if(g_gametype.integer < GT_TEAM) {
+			trap_Cvar_Set( "g_gametype", va("%i", GT_TEAM) );
+			trap_Cvar_Set( "gametype", va("%i", GT_TEAM) );
+			trap_Cvar_Update( &g_gametype );
+
+		}
+
+		// notify the engine that bots only spawn as monsters,
+		//   that is, they follow special rules,
+		//   always spawn near an enemy, opposite of "spawn furthest"
+		//   only spawn up to 3 at a time in a player queue, or 1/3 players/enemies whichever is higher
+		//   when they die they either queue or teleport in as a new enemy
+		trap_Cvar_Set( "bot_monsters", "1" );
+		botsAreMonsters = qtrue;
+	} else {
+		trap_Cvar_Set( "bot_monsters", "0" );
+		botsAreMonsters = qfalse;
+	}
+#endif
 
 	level.warmupModificationCount = g_warmup.modificationCount;
 
@@ -716,6 +745,7 @@ static void G_InitGame( int levelTime, int randomSeed, qboolean restart )
 	G_ModelIndex( "models/portal/portal_blue.md3" );
 	G_ModelIndex( "models/portal/portal_red.md3" );
 #endif
+
 	if ( trap_Cvar_VariableIntegerValue( "bot_enable" ) ) {
 		BotAISetup( restart );
 		BotAILoadMap( restart );
@@ -2189,22 +2219,38 @@ void G_RunThink( gentity_t *ent ) {
 }
 
 
-#ifdef USE_HORDES
+#if defined(USE_HORDES) || defined(USE_SINGLEPLAYER)
+
+void G_AddBot( const char *name, float skill, const char *team, int delay, const char *altname );
+void G_AddRandomBot( team_t team );
+
+
 qboolean setup = qfalse;
 int lastTime = 2000;
-void G_AddBot( const char *name, float skill, const char *team, int delay, const char *altname );
 
-static void InitHoards( void ) {
+
+static void InitHordes( void ) {
 	int i;
 	int blue_count = 0;
 	int red_count = 0;
+#ifdef USE_ADVANCED_TEAMS
+	int green_count = 0;
+	int gold_count = 0;
+#endif
 	int player_count = 0;
+	int human_count = 0;
+
+#ifdef USE_SINGLEPLAYER
+	if(!Q_stristr(g_arenasFile.string, "campaign"))
+#endif
 	if(!g_hordeMode.integer) {
 		return;
 	}
+
 	if(level.time - lastTime < 300) {
 		return;
 	}
+
 	lastTime = level.time;
 	for ( i=0; i < MAX_CLIENTS ; i++ ){
 		if(!g_entities[i].inuse) {
@@ -2216,6 +2262,15 @@ static void InitHoards( void ) {
 			} else if (level.clients[i].sess.sessionTeam == TEAM_RED) {
 				red_count++;
 			}
+#ifdef USE_ADVANCED_TEAMS
+			else if(level.clients[i].sess.sessionTeam == TEAM_GREEN) {
+				green_count++;
+			} else if (level.clients[i].sess.sessionTeam == TEAM_GOLD) {
+				gold_count++;
+			}
+#endif
+		} else {
+			human_count++;
 		}
 		player_count++;
 	}
@@ -2225,18 +2280,41 @@ static void InitHoards( void ) {
 		return;
 	}
 
+#ifdef USE_SINGLEPLAYER
+	if(botsAreMonsters) {
+		g_hordeRed.integer = human_count * 3;
+	}
+#endif
+
 	if(g_hordeRed.integer > red_count) {
 		for(i = 0; i < g_hordeRed.integer - red_count; i++) {
-			G_AddBot( "sarge", 5, "red", i, 0 );
+			G_AddRandomBot(TEAM_RED);
+			//G_AddBot( "sarge", 5, "red", i, 0 );
 			return;
 		}
 	}
 	if(g_hordeBlue.integer > blue_count) {
 		for(i = 0; i < g_hordeBlue.integer - blue_count; i++) {
-			G_AddBot( "sarge", 5, "blue", i, 0 );
+			G_AddRandomBot(TEAM_BLUE);
+			//G_AddBot( "sarge", 5, "blue", i, 0 );
 			return;
 		}
 	}
+#ifdef USE_ADVANCED_TEAMS
+	if(g_hordeGreen.integer > green_count) {
+		for(i = 0; i < g_hordeGreen.integer - green_count; i++) {
+			G_AddRandomBot(TEAM_GREEN);
+			return;
+		}
+	}
+	if(g_hordeGold.integer > gold_count) {
+		for(i = 0; i < g_hordeGold.integer - gold_count; i++) {
+			G_AddRandomBot(TEAM_GOLD);
+			return;
+		}
+	}
+#endif
+
 }
 #endif
 
@@ -2357,9 +2435,13 @@ static void G_RunFrame( int levelTime ) {
 		}
 	}
 
-#ifdef USE_HORDES
-	if(g_hordeMode.integer) {
-		InitHoards();
+#if defined(USE_HORDES) || defined(USE_SINGLEPLAYER)
+	if(g_hordeMode.integer
+#ifdef USE_SINGLEPLAYER
+		|| Q_stristr(g_arenasFile.string, "campaign")
+#endif
+	) {
+		InitHordes();
 	}
 #endif
 

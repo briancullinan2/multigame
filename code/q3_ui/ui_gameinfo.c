@@ -160,7 +160,7 @@ static void UI_LoadArenasFromFile( const char *filename ) {
 UI_LoadArenas
 ===============
 */
-static void UI_LoadArenas( void ) {
+void UI_LoadArenas( void ) {
 	int			numdirs;
 	vmCvar_t	arenasFile;
 	char		filename[128];

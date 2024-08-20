@@ -518,7 +518,7 @@ static void CG_UseItem( centity_t *cent )
 		trap_S_StartSound (NULL, es->number, CHAN_BODY, cgs.media.useInvulnerabilitySound );
 		break;
 #endif
-#if defined(USE_ADVANCED_ITEMS) || defined(USE_RUNES)
+#if defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
 	case PW_SPECIAL_ABILITY:
 #if defined(USE_RUNES)
 		if((es->powerups & 0xFF) == RUNE_SHIELD || (es->powerups >> 8) == RUNE_SHIELD) {

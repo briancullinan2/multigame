@@ -310,6 +310,8 @@ static void CG_ConfigStringModified( void ) {
 	// look up the individual string that was modified
 	str = CG_ConfigString( num );
 
+CG_Printf("somethings wrong cgame %i: %s\n", num, str);
+
 	// do something with it if necessary
 	if ( num == CS_MUSIC ) {
 		CG_StartMusic();

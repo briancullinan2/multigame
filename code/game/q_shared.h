@@ -227,8 +227,6 @@
 #define USE_SINGLEPLAYER 1
 // physics variables, usually transfered from server to client
 #define USE_PHYSICS_VARS 1
-// add single player features like earthquakes, player stopping, and animated models
-#define USE_SINGLEPLAYER 1
 // enable ladders in map
 #define USE_LADDERS 1
 // adds rotating doors from maps, UrT uses them, so does Quake 2
@@ -270,8 +268,20 @@
 // allow the player to pick up more than one holdable item, or more than one persistent power up
 #define USE_ADVANCED_ITEMS 1
 
+#ifdef USE_RUNES
+#ifndef USE_ADVANCED_ITEMS
+#define USE_ADVANCED_ITEMS 1
+#endif
+#endif
+
 // many team colors, with automatically added many bots, rules for respawning, dying, and decay
 #define USE_HORDES 1
+
+#ifdef USE_SINGLEPLAYER
+#ifndef USE_HORDES
+#define USE_HORDES 1
+#endif
+#endif
 
 // special multiworld features like cameras and portals
 #define USE_MULTIWORLD 1
@@ -348,7 +358,7 @@ typedef int		clipHandle_t;
 #define	MAX_OSPATH			256		// max length of a filesystem pathname
 #endif
 
-#define	MAX_NAME_LENGTH		32		// max length of a client name
+#define	MAX_NAME_LENGTH		64		// max length of a client name
 
 #define	MAX_SAY_TEXT	150
 
@@ -1214,7 +1224,7 @@ typedef struct playerState_s {
 
 #define	BUTTON_ANY			2048			// any key whatsoever
 
-#ifdef USE_ALT_FIRE
+#if defined(USE_ALT_FIRE) || defined(USE_SINGLEPLAYER)
 #define BUTTON_ALT_ATTACK	  0x1000      // button12
 #define BUTTON_USE          0x2000      // button13
 #define BUTTON_HANDBRAKE    0x4000      // button14

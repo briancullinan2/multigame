@@ -811,7 +811,13 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		if(g_ability.integer > 0) {
 				
 			if (client->ps.stats[STAT_ABILITY] < g_ability.value) {
-				if(client->pers.playerclass == PCLASS_RANGER && !client->inventory[HI_TELEPORTER]) {
+				if(client->pers.playerclass == PCLASS_RANGER
+#ifdef USE_ADVANCED_ITEMS
+					&& !client->inventory[HI_TELEPORTER]
+#else
+					&& client->ps.stats[STAT_HOLDABLE_ITEM] != HI_TELEPORTER
+#endif
+				) {
 					client->ps.stats[STAT_ABILITY]++;
 				}
 				if(client->pers.playerclass == PCLASS_VISOR) {
@@ -820,7 +826,13 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			}
 
 			if(client->ps.stats[STAT_ABILITY] >= g_ability.value) {
-				if(client->pers.playerclass == PCLASS_RANGER && !client->inventory[HI_TELEPORTER]) {
+				if(client->pers.playerclass == PCLASS_RANGER 
+#ifdef USE_ADVANCED_ITEMS
+					&& !client->inventory[HI_TELEPORTER]
+#else
+					&& client->ps.stats[STAT_HOLDABLE_ITEM] != HI_TELEPORTER
+#endif
+				) {
 					G_GiveItem(ent, HI_TELEPORTER);
 					client->ps.stats[STAT_ABILITY] = 0;
 				}
@@ -1606,7 +1618,7 @@ void ClientThink_real( gentity_t *ent ) {
 	if((client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT)) {
 		client->ps.pm_type = PM_STUCKDUCK;
 	} else
-	if((client->pers.newplayerclass == PCLASS_ROUND)) {
+	if(client->pers.newplayerclass == PCLASS_ROUND) {
 		client->ps.pm_type = PM_ROUND;
 	} else
 #endif

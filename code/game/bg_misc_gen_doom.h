@@ -117,7 +117,10 @@
 				IT_HEALTH2,
 				0,
 				/* precache */ "",
-				/* sounds */ ""},
+				/* sounds */ "",
+				{NULL, NULL, NULL, NULL},
+				{1, 14, 14, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
 
 		//
 		// WEAPONS
@@ -355,6 +358,7 @@
 				/* precache */ "",
 				/* sounds */ "sound/items/use_medkit.wav"},
 
+#ifdef USE_ADVANCED_ITEMS
 		//
 		// POWERUP ITEMS
 		//
@@ -371,7 +375,12 @@
 				IT_POWERUP2,
 				PW_BERSERKER,
 				/* precache */ "",
-				/* sounds */ "sound/items/damage2.wav sound/items/damage3.wav"},
+				/* sounds */ "sound/items/damage2.wav sound/items/damage3.wav",
+				{NULL, NULL, NULL, NULL},
+				{1, 14, 14, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
+
+#endif
 
 		/*QUAKED item_doom_enviro (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
@@ -386,7 +395,10 @@
 				IT_POWERUP2,
 				PW_BATTLESUIT,
 				/* precache */ "",
-				/* sounds */ "sound/items/airout.wav sound/items/protect3.wav"},
+				/* sounds */ "sound/items/airout.wav sound/items/protect3.wav",
+				{NULL, NULL, NULL, NULL},
+				{1, 14, 14, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
 
 		/*QUAKED item_doom_haste (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
@@ -421,7 +433,10 @@
 				IT_POWERUP2,
 				PW_INVIS,
 				/* precache */ "",
-				/* sounds */ ""},
+				/* sounds */ "",
+				{NULL, NULL, NULL, NULL},
+				{1, 14, 14, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
 
 		/*QUAKED item_doom_regen (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
@@ -437,7 +452,10 @@
 				IT_POWERUP2,
 				PW_REGEN,
 				/* precache */ "",
-				/* sounds */ "sound/items/regen.wav"},
+				/* sounds */ "sound/items/regen.wav",
+				{NULL, NULL, NULL, NULL},
+				{1, 14, 14, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
 
 		/*QUAKED item_doom_flight (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		 */
@@ -453,7 +471,10 @@
 				IT_POWERUP2,
 				PW_FLIGHT,
 				/* precache */ "",
-				/* sounds */ "sound/items/flight.wav"},
+				/* sounds */ "sound/items/flight.wav",
+				{NULL, NULL, NULL, NULL},
+				{1, 14, 14, 1000/15, 1000/15, 0, 0},
+				RF_BILLBOARD},
 
 		/*QUAKED team_CTF_redflag (1 0 0) (-16 -16 -16) (16 16 16)
 		Only in CTF games

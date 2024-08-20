@@ -830,6 +830,7 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	}
 #endif
 
+G_Printf("somethings wrong %s\n", s);
 
 	trap_SetConfigstring( CS_PLAYERS+clientNum, s );
 

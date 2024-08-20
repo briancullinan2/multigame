@@ -114,10 +114,20 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.frame.generic.flags	= QMF_INACTIVE;
 	s_teammain.frame.generic.name   = TEAMMAIN_FRAME;
 	s_teammain.frame.width			= 300;
+#ifdef USE_SINGLEPLAYER
+	if(Q_stristr(ui_arenasFile.string, "campaign"))
+		s_teammain.frame.height			= 225;
+	else
+#endif
 	s_teammain.frame.height			= 260;
 	s_teammain.frame.generic.x		= (640-s_teammain.frame.width)/2;
 	s_teammain.frame.generic.y		= (480-s_teammain.frame.height)/2;
 
+#ifdef USE_SINGLEPLAYER
+	if(Q_stristr(ui_arenasFile.string, "campaign"))
+		y = 195;
+	else
+#endif
 	y = 175; // 188
 
 	s_teammain.joinred.generic.type     = MTYPE_PTEXT;
@@ -126,6 +136,11 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joinred.generic.callback = TeamMain_MenuEvent;
 	s_teammain.joinred.generic.x        = 320;
 	s_teammain.joinred.generic.y        = y;
+#ifdef USE_SINGLEPLAYER
+	if(Q_stristr(ui_arenasFile.string, "campaign"))
+	s_teammain.joinred.string           = "MONSTERS";
+	else
+#endif
 	s_teammain.joinred.string           = "JOIN RED";
 	s_teammain.joinred.style            = UI_CENTER|UI_SMALLFONT;
 	s_teammain.joinred.color            = colorRed;
@@ -137,6 +152,11 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joinblue.generic.callback = TeamMain_MenuEvent;
 	s_teammain.joinblue.generic.x        = 320;
 	s_teammain.joinblue.generic.y        = y;
+#ifdef USE_SINGLEPLAYER
+	if(Q_stristr(ui_arenasFile.string, "campaign"))
+	s_teammain.joinblue.string           = "HUMANS";
+	else
+#endif
 	s_teammain.joinblue.string           = "JOIN BLUE";
 	s_teammain.joinblue.style            = UI_CENTER|UI_SMALLFONT;
 	s_teammain.joinblue.color            = colorBlue;
@@ -153,6 +173,9 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joingold.string           = "JOIN GOLD";
 	s_teammain.joingold.style            = UI_CENTER|UI_SMALLFONT;
 	s_teammain.joingold.color            = colorYellow;
+#ifdef USE_SINGLEPLAYER
+	if(!Q_stristr(ui_arenasFile.string, "campaign"))
+#endif
 	y += INGAME_TEAM_VERTICAL_SPACING;
 
 	s_teammain.joingreen.generic.type     = MTYPE_PTEXT;
@@ -164,6 +187,9 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joingreen.string           = "JOIN GREEN";
 	s_teammain.joingreen.style            = UI_CENTER|UI_SMALLFONT;
 	s_teammain.joingreen.color            = colorGreen;
+#ifdef USE_SINGLEPLAYER
+	if(!Q_stristr(ui_arenasFile.string, "campaign"))
+#endif
 	y += INGAME_TEAM_VERTICAL_SPACING;
 
 #endif
@@ -216,9 +242,17 @@ void TeamMain_MenuInit( void ) {
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.frame );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joinred );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joinblue );
+#ifdef USE_SINGLEPLAYER
+	if(Q_stristr(ui_arenasFile.string, "campaign")) {
+
+	} else {
+#endif
 #if defined(USE_ADVANCED_GAMES) || defined(USE_ADVANCED_TEAMS)
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingold );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingreen );
+#endif
+#ifdef USE_SINGLEPLAYER
+	}
 #endif
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingame );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.spectate );

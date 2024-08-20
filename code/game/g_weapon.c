@@ -1344,7 +1344,11 @@ void FireWeapon( gentity_t *ent )
       && !g_altPortal.integer // do both ends with right click, reset each time
 #endif
     ) {
+#ifdef USE_ALT_FIRE
 			fire_portal( ent, muzzle, forward, altFire );
+#else
+			fire_portal( ent, muzzle, forward, ent->client->portalSource != NULL );
+#endif
     } else
 #endif
 		BFG_Fire( ent );

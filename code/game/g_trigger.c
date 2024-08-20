@@ -161,15 +161,14 @@ void trigger_push_touch (gentity_t *self, gentity_t *other, trace_t *trace ) {
 #endif
   
 
+	BG_TouchJumpPad( &other->client->ps, &self->s
 #ifdef USE_ADVANCED_ITEMS
+	, other->client->inventory
+#endif
 #ifdef USE_ADVANCED_CLASS
-	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory, other->client->pers.playerclass );
-#else
-	BG_TouchJumpPad( &other->client->ps, &self->s, other->client->inventory );
+	, other->client->pers.playerclass 
 #endif
-#else
-	BG_TouchJumpPad( &other->client->ps, &self->s );
-#endif
+	);
 }
 
 

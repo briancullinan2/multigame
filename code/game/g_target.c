@@ -534,7 +534,7 @@ void SP_target_exec( gentity_t *self ) {
 			return;
 		}
 		G_Printf("mapCommand (%d): %s\n",num_target_execs,buf);
-		self->world=num_target_execs;
+		//self->world=num_target_execs;
 		num_target_execs++;
 	}
 
