@@ -488,7 +488,12 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
-	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState ) ) {
+	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState 
+#ifdef USE_ADVANCED_CLASS
+			, cgs.clientinfo[cent->currentState.number].playerClass
+#endif
+
+	) ) {
 		return;	// can't hold it
 	}
 

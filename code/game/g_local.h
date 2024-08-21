@@ -11,6 +11,11 @@
 // the "gameversion" client command will print this plus compile date
 #define	GAMEVERSION	"baseq3"
 
+#ifdef USE_ADVANCED_CLASS
+#define	DEFAULT_MODEL			"sarge"
+#define	DEFAULT_MONSTER			"shambler"
+#endif
+
 #define BODY_QUEUE_SIZE		8
 
 #define INFINITE			0x7FFF
@@ -240,6 +245,11 @@ typedef struct {
 	int			teamVoted;
 
 	qboolean	inGame;
+#ifdef USE_ADVANCED_CLASS
+	pclass_t playerclass;		 // The players current class
+	pclass_t newplayerclass; // The class the player will become when it respawns
+#endif
+
 } clientPersistant_t;
 
 // unlagged

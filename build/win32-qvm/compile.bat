@@ -125,6 +125,8 @@ cd vm\game
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_active.c
 @if errorlevel 1 goto quit
+%cc2% %gamedir%\g_classes.c
+@if errorlevel 1 goto quit
 %cc2% %gamedir%\g_arenas.c
 @if errorlevel 1 goto quit
 %cc2% %gamedir%\g_bot.c

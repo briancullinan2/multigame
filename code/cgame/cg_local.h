@@ -201,6 +201,15 @@ typedef struct centity_s {
 	// exact interpolated position of entity on this frame
 	vec3_t			lerpOrigin;
 	vec3_t			lerpAngles;
+
+#ifdef USE_RUNES
+  int       rune;
+	int 			cloakBlinkTime;
+#endif
+
+#ifdef USE_ADVANCED_ITEMS
+	lerpFrame_t lerpFrame;
+#endif
 } centity_t;
 
 
@@ -363,6 +372,9 @@ typedef struct {
 	qboolean		fixedtorso;		// true if torso never changes yaw
 
 	vec3_t			headOffset;		// move head in icon views
+#ifdef USE_ADVANCED_CLASS
+	vec3_t			povOffset;
+#endif
 	footstep_t		footsteps;
 	gender_t		gender;			// from model
 
@@ -385,6 +397,12 @@ typedef struct {
 	vec3_t			headColor;
 	vec3_t			bodyColor;
 	vec3_t			legsColor;
+
+
+#ifdef USE_ADVANCED_CLASS
+	qboolean notq3;
+	pclass_t playerClass;
+#endif
 
 } clientInfo_t;
 

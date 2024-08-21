@@ -903,6 +903,44 @@ Only in One Flag CTF games
 int		bg_numItems = ARRAY_LEN( bg_itemlist ) - 1;
 
 
+
+
+#ifdef USE_ADVANCED_CLASS
+
+pclass_t BG_PlayerClassFromModel(const char *model) {
+//     return PCLASS_DRAGON;
+  if (Q_stristr (model, "sarge"))
+     return PCLASS_RANGER;
+  else if (Q_stristr (model, "visor"))
+     return PCLASS_VISOR;
+  else if (!Q_stricmp (model, "biker/red"))
+     return PCLASS_BFG;
+  else if (!Q_stricmp (model, "anarki/blue"))
+     return PCLASS_LIGHTNING;
+  else if (!Q_stricmp (model, "grunt/red"))
+     return PCLASS_RAILGUN;
+  else if (Q_stristr (model, "shambler"))
+     return PCLASS_SHAMBLER;
+  else if (Q_stristr (model, "dragon"))
+     return PCLASS_DRAGON;
+  else if (Q_stristr (model, "berserker"))
+     return PCLASS_BERSERKER;
+  else if (Q_stristr (model, "infantry"))
+     return PCLASS_GUNNER;
+  else if (Q_stristr (model, "monkey"))
+     return PCLASS_ROUND;
+  else if (Q_stristr (model, "shalrath"))
+     return PCLASS_VORE;
+  else {
+     return PCLASS_NONE;
+     //return PCLASS_BFG;
+     //Q_strncpyz( model, "biker/red", sizeof( model ) );
+  }
+}
+
+#endif
+
+
 /*
 ==============
 BG_FindItemForPowerup
@@ -1016,7 +1054,11 @@ Returns false if the item should not be picked up.
 This needs to be the same for client side prediction and server use.
 ================
 */
-qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps ) {
+qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps 
+#ifdef USE_ADVANCED_CLASS
+, int playerClass
+#endif
+) {
 	gitem_t	*item;
 #ifdef MISSIONPACK
 	int		upperBound;
@@ -1030,6 +1072,14 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 
 	switch( item->giType ) {
 	case IT_WEAPON:
+
+#ifdef USE_ADVANCED_CLASS
+		// monsters are stuck with the weapons they spawn with
+		if(playerClass >= PCLASS_MONSTER && playerClass <= PCLASS_MONSTER_COUNT) {
+			return qfalse;
+		}
+#endif
+
 		return qtrue;	// weapons are always picked up
 
 	case IT_AMMO:

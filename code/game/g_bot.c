@@ -4,6 +4,10 @@
 
 #include "g_local.h"
 
+#ifdef USE_CAMPAIGN
+qboolean botsAreMonsters = qfalse;
+#endif
+
 
 static int		g_numBots;
 static char		*g_botInfos[MAX_BOTS];

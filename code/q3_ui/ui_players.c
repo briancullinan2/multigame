@@ -919,6 +919,7 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 	int			skip;
 	char		text[20000];
 	fileHandle_t	f;
+	qboolean notq3 = qfalse;
 
 	memset( animations, 0, sizeof( animation_t ) * MAX_ANIMATIONS );
 
@@ -970,6 +971,9 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 				break;
 			}
 			continue;
+		} else if ( !Q_stricmp( token, "notq3" ) ) {
+			notq3 = qtrue;
+			continue;
 		}
 
 		// if it is a number, start parsing animations
@@ -999,12 +1003,15 @@ static qboolean UI_ParseAnimationFile( const char *filename, animation_t *animat
 			break;
 		}
 		animations[i].firstFrame = atoi( token );
+
+		if(!notq3) {
 		// leg only frames are adjusted to not count the upper body only frames
 		if ( i == LEGS_WALKCR ) {
 			skip = animations[LEGS_WALKCR].firstFrame - animations[TORSO_GESTURE].firstFrame;
 		}
 		if ( i >= LEGS_WALKCR ) {
 			animations[i].firstFrame -= skip;
+		}
 		}
 
 		token = COM_Parse( &text_p );

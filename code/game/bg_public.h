@@ -5,6 +5,8 @@
 // because games can change separately from the main system version, we need a
 // second version that must match between game and cgame
 
+#include "./bg_classes.h"
+
 #define	GAME_VERSION		"baseq3-1"
 
 #define	DEFAULT_GRAVITY		800
@@ -190,6 +192,10 @@ void Pmove (pmove_t *pmove);
 // NOTE: may not have more than 16
 typedef enum {
 	STAT_HEALTH,
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
+	STAT_STAMINA,
+	STAT_ABILITY,
+#endif
 	STAT_HOLDABLE_ITEM,
 #ifdef MISSIONPACK
 	STAT_PERSISTANT_POWERUP,
@@ -309,7 +315,7 @@ typedef enum {
 	WP_PLASMAGUN,
 	WP_BFG,
 	WP_GRAPPLING_HOOK,
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_CLASS)
 	WP_NAILGUN,
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
@@ -653,7 +659,11 @@ gitem_t	*BG_FindItemForPowerup( powerup_t pw );
 gitem_t	*BG_FindItemForHoldable( holdable_t pw );
 #define	ITEM_INDEX(x) ((x)-bg_itemlist)
 
-qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps );
+qboolean	BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const playerState_t *ps
+#ifdef USE_ADVANCED_CLASS
+, int playerClass
+#endif
+);
 
 
 // g_dmflags->integer flags

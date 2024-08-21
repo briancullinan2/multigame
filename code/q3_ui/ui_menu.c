@@ -12,6 +12,10 @@ MAIN MENU
 #include "ui_local.h"
 
 
+
+#ifdef USE_CAMPAIGN
+#define ID_CAMPAIGN			9
+#endif
 #define ID_SINGLEPLAYER			10
 #define ID_MULTIPLAYER			11
 #define ID_SETUP				12
@@ -28,6 +32,9 @@ MAIN MENU
 typedef struct {
 	menuframework_s	menu;
 
+#ifdef USE_CAMPAIGN
+	menutext_s		campaign;
+#endif
 	menutext_s		singleplayer;
 	menutext_s		multiplayer;
 	menutext_s		setup;
@@ -76,6 +83,15 @@ void Main_MenuEvent (void* ptr, int event) {
 	}
 
 	switch( ((menucommon_s*)ptr)->id ) {
+#ifdef USE_CAMPAIGN
+	case ID_CAMPAIGN:
+		trap_Cvar_Set("g_arenasFile", "scripts/campaign.txt");
+		trap_Cvar_Update(&ui_arenasFile);
+		UI_LoadArenas();
+		UI_SPLevelMenu();
+		break;
+#endif
+
 	case ID_SINGLEPLAYER:
 		UI_SPLevelMenu();
 		break;
@@ -291,6 +307,19 @@ void UI_MainMenu( void ) {
 	s_main.menu.showlogo = qtrue;
 
 	y = 134;
+#ifdef USE_CAMPAIGN
+	s_main.campaign.generic.type		= MTYPE_PTEXT;
+	s_main.campaign.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	s_main.campaign.generic.x			= 320;
+	s_main.campaign.generic.y			= y;
+	s_main.campaign.generic.id			= ID_CAMPAIGN;
+	s_main.campaign.generic.callback	= Main_MenuEvent; 
+	s_main.campaign.string				= "CAMPAIGN";
+	s_main.campaign.color				= color_red;
+	s_main.campaign.style				= style;
+
+	y += MAIN_MENU_VERTICAL_SPACING;
+#endif
 	s_main.singleplayer.generic.type		= MTYPE_PTEXT;
 	s_main.singleplayer.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
 	s_main.singleplayer.generic.x			= 320;
@@ -381,6 +410,9 @@ void UI_MainMenu( void ) {
 	s_main.exit.color						= color_red;
 	s_main.exit.style						= style;
 
+#ifdef USE_CAMPAIGN
+	Menu_AddItem( &s_main.menu,	&s_main.campaign );
+#endif
 	Menu_AddItem( &s_main.menu,	&s_main.singleplayer );
 	Menu_AddItem( &s_main.menu,	&s_main.multiplayer );
 	Menu_AddItem( &s_main.menu,	&s_main.setup );

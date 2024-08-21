@@ -686,6 +686,23 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz( model, Info_ValueForKey( userinfo, "model" ), sizeof( model ) );
 	Q_strncpyz( headModel, Info_ValueForKey( userinfo, "headmodel" ), sizeof( headModel ) );
 
+
+#ifdef USE_ADVANCED_CLASS
+  client->pers.newplayerclass = BG_PlayerClassFromModel(model);
+	if(client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT) {
+		if(client->sess.sessionTeam == TEAM_BLUE) {
+			Q_strncpyz( model, DEFAULT_MODEL, sizeof( model ) );
+			client->pers.newplayerclass = BG_PlayerClassFromModel(model);
+		}
+	} else {
+		if(client->sess.sessionTeam == TEAM_RED) {
+			Q_strncpyz( model, DEFAULT_MONSTER, sizeof( model ) );
+			client->pers.newplayerclass = BG_PlayerClassFromModel(model);
+		}
+	}
+  client->pers.playerclass = client->pers.newplayerclass;
+#endif
+
 	// team task (0 = none, 1 = offence, 2 = defence)
 	teamTask = atoi(Info_ValueForKey(userinfo, "teamtask"));
 	// team Leader (1 = leader, 0 is normal player)
@@ -1092,6 +1109,46 @@ void ClientSpawn(gentity_t *ent) {
 	} else {
 		client->ps.ammo[WP_MACHINEGUN] = 100;
 	}
+
+#ifdef USE_ADVANCED_CLASS
+  //assign weapons according to class
+  switch (client->pers.playerclass) {
+	case PCLASS_VORE:
+		G_ModelIndex("models/runes/icetrap.md3");
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+		Add_Weapon_Ammo(ent, WP_ROCKET_LAUNCHER, 30);
+		break;
+	case PCLASS_GUNNER:
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+		Add_Weapon_Ammo(ent, WP_CHAINGUN, 100);
+		break;
+	case PCLASS_BERSERKER:
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+		break;
+  case PCLASS_DRAGON:
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+#ifdef USE_FLAME_THROWER
+		Add_Weapon_Ammo(ent, WP_FLAME_THROWER, 40);
+#endif
+    break;
+  case PCLASS_BFG:
+		Add_Weapon_Ammo(ent, WP_BFG, 20);
+    break;
+  case PCLASS_SHAMBLER:
+		Remove_Weapon_Ammo(ent, WP_MACHINEGUN, INFINITE);
+  case PCLASS_LIGHTNING:
+		Add_Weapon_Ammo(ent, WP_LIGHTNING, 60);
+    break;
+  case PCLASS_RAILGUN:
+		Add_Weapon_Ammo(ent, WP_RAILGUN, 20);
+    break;
+	case PCLASS_RANGER:
+		Add_Weapon_Ammo(ent, WP_SHOTGUN, 10);
+		break;
+  default:
+		break;
+  }
+#endif
 
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;

@@ -93,4 +93,34 @@ G_CVAR( pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
 
 G_CVAR( g_rotation, "g_rotation", "0", CVAR_ARCHIVE, 0, qfalse, qfalse )
 
+
+#ifdef USE_HORDES
+G_CVAR( g_hordeMode, "g_hordeMode", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeRed,  "g_hordeRed", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeBlue, "g_hordeBlue", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeBodies, "g_hordeBodies", "1", CVAR_ARCHIVE, 0, qfalse, qfalse )
+#ifdef USE_ADVANCED_TEAMS
+G_CVAR( g_hordeGreen,  "g_hordeGreen", "0", CVAR_TEMP, 0, qfalse, qfalse )
+G_CVAR( g_hordeGold, "g_hordeGold", "0", CVAR_TEMP, 0, qfalse, qfalse )
+#endif
+#endif
+
+
+
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS)
+G_CVAR( g_stamina, "g_stamina", "0", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( g_ability, "g_ability", "90", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+#endif
+
+#ifdef USE_RUNES
+G_CVAR( rune_ability, "rune_ability", "60", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( rune_abilityMin, "rune_abilityMin", "30", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( rune_health, "rune_health", "250", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+G_CVAR( rune_healthMax, "rune_healthMax", "200", CVAR_SYSTEMINFO, 0, qfalse, qfalse )
+#endif
+
+#ifdef USE_CAMPAIGN
+G_CVAR( g_arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_ROM, 0, qtrue, qfalse )
+#endif
+
 #undef G_CVAR

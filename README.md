@@ -264,6 +264,9 @@ Portals! Portal power-up can be placed anywhere, ground, mid-air, under water. P
 ### USE_SINGLEPLAYER
 Add single player features like earthquakes, player stopping, and animated models.
 
+### USE_CAMPAIGN
+A brand new single player game mode that allows players to play as monsters, new rules for spawning
+
 ### USE_MULTIWORLD
 Special multiworld features like cameras and portals. See [multiworld](../docs/multiworld.md) for more information.
 

@@ -96,6 +96,11 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joinred.generic.callback = TeamMain_MenuEvent;
 	s_teammain.joinred.generic.x        = 320;
 	s_teammain.joinred.generic.y        = y;
+#ifdef USE_CAMPAIGN
+	if(Q_stristr(ui_arenasFile.string, "campaign"))
+	s_teammain.joinred.string           = "MONSTERS";
+	else
+#endif
 	s_teammain.joinred.string           = "JOIN RED";
 	s_teammain.joinred.style            = UI_CENTER|UI_SMALLFONT;
 	s_teammain.joinred.color            = colorRed;
@@ -107,6 +112,11 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joinblue.generic.callback = TeamMain_MenuEvent;
 	s_teammain.joinblue.generic.x        = 320;
 	s_teammain.joinblue.generic.y        = y;
+#ifdef USE_CAMPAIGN
+	if(Q_stristr(ui_arenasFile.string, "campaign"))
+	s_teammain.joinblue.string           = "HUMANS";
+	else
+#endif
 	s_teammain.joinblue.string           = "JOIN BLUE";
 	s_teammain.joinblue.style            = UI_CENTER|UI_SMALLFONT;
 	s_teammain.joinblue.color            = colorRed;

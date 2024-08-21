@@ -400,6 +400,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\g_classes.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\g_arenas.c"
 				>
 			</File>

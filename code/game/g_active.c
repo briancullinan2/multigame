@@ -3,6 +3,10 @@
 
 #include "g_local.h"
 
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Add_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Ammo( gentity_t *ent, int weapon, int count );
 
 /*
 ===============
@@ -367,6 +371,12 @@ qboolean ClientInactivityTimer( gclient_t *client ) {
 	return qtrue;
 }
 
+
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
+void ClassTimerActions( gentity_t *ent, int msec );
+#endif // USE_RPG_STATS
+
+
 /*
 ==================
 ClientTimerActions
@@ -433,6 +443,15 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 				ent->health--;
 			}
 		}
+
+// i had a friend Dan in college that added this feature to the half life 2 engine, our plan was to compile target for playstation leaked sdk
+#if defined(USE_RPG_STATS) || defined(USE_ADVANCED_CLASS) || defined(USE_RUNES)
+		ClassTimerActions( ent, msec );
+#endif // USE_RPG_STATS
+
+#ifdef USE_RUNES
+		RuneTimerActions( ent, msec );
+#endif
 
 		// count down armor when over max
 		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {

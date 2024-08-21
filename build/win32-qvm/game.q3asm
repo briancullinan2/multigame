@@ -12,6 +12,7 @@ bg_misc
 bg_pmove
 bg_slidemove
 g_active
+g_classes
 g_arenas
 g_bot
 g_client

@@ -243,8 +243,33 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 //======================================================================
 
+void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count )
+{
+	ent->client->ps.stats[STAT_WEAPONS] &= ~(1 << weapon);
+	ent->client->ps.ammo[weapon] -= count;
+	if ( ent->client->ps.ammo[weapon] < 0 ) {
+		ent->client->ps.ammo[weapon] = 0;
+	}
+}
 
-static void Add_Ammo( gentity_t *ent, int weapon, int count )
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count )
+{
+	ent->client->ps.stats[STAT_WEAPONS] |= (1 << weapon);
+	ent->client->ps.ammo[weapon] += count;
+	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
+		ent->client->ps.ammo[weapon] = AMMO_HARD_LIMIT;
+	}
+}
+
+void Remove_Ammo( gentity_t *ent, int weapon, int count )
+{
+	ent->client->ps.ammo[weapon] -= count;
+	if ( ent->client->ps.ammo[weapon] < 0 ) {
+		ent->client->ps.ammo[weapon] = 0;
+	}
+}
+
+void Add_Ammo( gentity_t *ent, int weapon, int count )
 {
 	ent->client->ps.ammo[weapon] += count;
 	if ( ent->client->ps.ammo[weapon] > AMMO_HARD_LIMIT ) {
@@ -480,7 +505,11 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;		// dead people can't pickup
 
 	// the same pickup rules are used for client side and server side
-	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ) ) {
+	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps
+#ifdef USE_ADVANCED_CLASS
+, other->client->pers.playerclass
+#endif
+ ) ) {
 		return;
 	}
 
@@ -921,6 +950,28 @@ int G_ItemDisabled( gitem_t *item ) {
 
 	Com_sprintf(name, sizeof(name), "disable_%s", item->classname);
 	return trap_Cvar_VariableIntegerValue( name );
+}
+
+
+void G_GiveItem(gentity_t *ent, powerup_t pw) {
+	gitem_t		*it;
+	gentity_t *it_ent;
+	trace_t		trace;
+	it = BG_FindItemForPowerup (pw);
+	if (!it) {
+		return;
+	}
+
+	it_ent = G_Spawn();
+	VectorCopy( ent->r.currentOrigin, it_ent->s.origin );
+	it_ent->classname = it->classname;
+	G_SpawnItem (it_ent, it);
+	FinishSpawningItem(it_ent );
+	memset( &trace, 0, sizeof( trace ) );
+	Touch_Item (it_ent, ent, &trace);
+	if (it_ent->inuse) {
+		G_FreeEntity( it_ent );
+	}
 }
 
 /*

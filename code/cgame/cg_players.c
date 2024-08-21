@@ -108,6 +108,9 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 	ci->gender = GENDER_MALE;
 	ci->fixedlegs = qfalse;
 	ci->fixedtorso = qfalse;
+#ifdef USE_ADVANCED_CLASS
+	ci->notq3 = qfalse;
+#endif
 
 	// read optional parameters
 	while ( 1 ) {
@@ -144,7 +147,20 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 				ci->headOffset[i] = atof( token );
 			}
 			continue;
-		} else if ( !Q_stricmp( token, "sex" ) ) {
+		} else 
+#ifdef USE_ADVANCED_CLASS
+		if ( !Q_stricmp( token, "povoffset" ) ) {
+			for ( i = 0 ; i < 3 ; i++ ) {
+				token = COM_Parse( &text_p );
+				if ( !token[0] ) {
+					break;
+				}
+				ci->povOffset[i] = atof( token );
+			}
+			continue;
+		} else 
+#endif
+		if ( !Q_stricmp( token, "sex" ) ) {
 			token = COM_Parse( &text_p );
 			if ( !token[0] ) {
 				break;
@@ -164,6 +180,12 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 			ci->fixedtorso = qtrue;
 			continue;
 		}
+#ifdef USE_ADVANCED_CLASS
+		else if ( !Q_stricmp( token, "notq3" ) ) {
+			ci->notq3 = qtrue;
+			continue;
+		}
+#endif
 
 		// if it is a number, start parsing animations
 		if ( token[0] >= '0' && token[0] <= '9' ) {
@@ -191,6 +213,10 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 			break;
 		}
 		animations[i].firstFrame = atoi( token );
+
+#ifdef USE_ADVANCED_CLASS
+		if(!ci->notq3) {
+#endif
 		// leg only frames are adjusted to not count the upper body only frames
 		if ( i == LEGS_WALKCR ) {
 			skip = animations[LEGS_WALKCR].firstFrame - animations[TORSO_GESTURE].firstFrame;
@@ -198,6 +224,9 @@ static qboolean	CG_ParseAnimationFile( const char *filename, clientInfo_t *ci ) 
 		if ( i >= LEGS_WALKCR && i<TORSO_GETFLAG) {
 			animations[i].firstFrame -= skip;
 		}
+#ifdef USE_ADVANCED_CLASS
+		}
+#endif
 
 		token = COM_Parse( &text_p );
 		if ( !token[0] ) {
@@ -738,7 +767,7 @@ Load it now, taking the disk hits.
 This will usually be deferred to a safe time
 ===================
 */
-static void CG_LoadClientInfo( clientInfo_t *ci ) {
+void CG_LoadClientInfo( clientInfo_t *ci ) {
 	const char	*dir;
 	int			i, modelloaded;
 	const char	*s;
@@ -846,6 +875,11 @@ static void CG_CopyClientInfoModel( const clientInfo_t *from, clientInfo_t *to )
 	VectorCopy( from->headOffset, to->headOffset );
 	to->footsteps = from->footsteps;
 	to->gender = from->gender;
+#ifdef USE_ADVANCED_CLASS
+	VectorCopy( from->povOffset, to->povOffset );
+	to->notq3 = from->notq3;
+	to->playerClass = from->playerClass;
+#endif
 
 	to->legsModel = from->legsModel;
 	to->legsSkin = from->legsSkin;
@@ -1312,6 +1346,10 @@ void CG_NewClientInfo( int clientNum ) {
 		}
 	}
 
+#ifdef USE_ADVANCED_CLASS
+	newInfo.playerClass = BG_PlayerClassFromModel(newInfo.modelName);
+#endif
+
 	// replace whatever was there with the new one
 	newInfo.infoValid = qtrue;
 	*ci = newInfo;
@@ -1362,7 +1400,7 @@ CG_SetLerpFrameAnimation
 may include ANIM_TOGGLEBIT
 ===============
 */
-static void CG_SetLerpFrameAnimation( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation ) {
+static void CG_SetLerpFrameAnimation( animation_t animations[MAX_TOTALANIMATIONS], lerpFrame_t *lf, int newAnimation ) {
 	animation_t	*anim;
 
 	lf->animationNumber = newAnimation;
@@ -1372,7 +1410,7 @@ static void CG_SetLerpFrameAnimation( clientInfo_t *ci, lerpFrame_t *lf, int new
 		CG_Error( "Bad animation number: %i", newAnimation );
 	}
 
-	anim = &ci->animations[ newAnimation ];
+	anim = &animations[ newAnimation ];
 
 	lf->animation = anim;
 	lf->animationTime = lf->frameTime + anim->initialLerp;
@@ -1391,7 +1429,7 @@ Sets cg.snap, cg.oldFrame, and cg.backlerp
 cg.time should be between oldFrameTime and frameTime after exit
 ===============
 */
-static void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale ) {
+void CG_RunLerpFrame( animation_t animations[MAX_TOTALANIMATIONS], lerpFrame_t *lf, int newAnimation, float speedScale ) {
 	int			f, numFrames;
 	animation_t	*anim;
 
@@ -1403,7 +1441,7 @@ static void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation
 
 	// see if the animation sequence is switching
 	if ( newAnimation != lf->animationNumber || !lf->animation ) {
-		CG_SetLerpFrameAnimation( ci, lf, newAnimation );
+		CG_SetLerpFrameAnimation( animations, lf, newAnimation );
 	}
 
 	// if we have passed the current frame, move it to
@@ -1479,9 +1517,9 @@ static void CG_RunLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation
 CG_ClearLerpFrame
 ===============
 */
-static void CG_ClearLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int animationNumber ) {
+static void CG_ClearLerpFrame( animation_t animations[MAX_TOTALANIMATIONS], lerpFrame_t *lf, int animationNumber ) {
 	lf->frameTime = lf->oldFrameTime = cg.time;
-	CG_SetLerpFrameAnimation( ci, lf, animationNumber );
+	CG_SetLerpFrameAnimation( animations, lf, animationNumber );
 	lf->oldFrame = lf->frame = lf->animation->firstFrame;
 }
 
@@ -1491,7 +1529,7 @@ static void CG_ClearLerpFrame( clientInfo_t *ci, lerpFrame_t *lf, int animationN
 CG_PlayerAnimation
 ===============
 */
-static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
+void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBackLerp,
 						int *torsoOld, int *torso, float *torsoBackLerp ) {
 	clientInfo_t	*ci;
 	int				clientNum;
@@ -1514,16 +1552,16 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 
 	// do the shuffle turn frames locally
 	if ( cent->pe.legs.yawing && ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) == LEGS_IDLE ) {
-		CG_RunLerpFrame( ci, &cent->pe.legs, LEGS_TURN, speedScale );
+		CG_RunLerpFrame( ci->animations, &cent->pe.legs, LEGS_TURN, speedScale );
 	} else {
-		CG_RunLerpFrame( ci, &cent->pe.legs, cent->currentState.legsAnim, speedScale );
+		CG_RunLerpFrame( ci->animations, &cent->pe.legs, cent->currentState.legsAnim, speedScale );
 	}
 
 	*legsOld = cent->pe.legs.oldFrame;
 	*legs = cent->pe.legs.frame;
 	*legsBackLerp = cent->pe.legs.backlerp;
 
-	CG_RunLerpFrame( ci, &cent->pe.torso, cent->currentState.torsoAnim, speedScale );
+	CG_RunLerpFrame( ci->animations, &cent->pe.torso, cent->currentState.torsoAnim, speedScale );
 
 	*torsoOld = cent->pe.torso.oldFrame;
 	*torso = cent->pe.torso.frame;
@@ -2008,7 +2046,7 @@ static void CG_PlayerFlag( centity_t *cent, qhandle_t hSkin, refEntity_t *torso 
 	angles[YAW] = cent->pe.flag.yawAngle;
 	// lerp the flag animation frames
 	ci = &cgs.clientinfo[ cent->currentState.clientNum ];
-	CG_RunLerpFrame( ci, &cent->pe.flag, flagAnim, 1 );
+	CG_RunLerpFrame( ci->animations, &cent->pe.flag, flagAnim, 1 );
 	flag.oldframe = cent->pe.flag.oldFrame;
 	flag.frame = cent->pe.flag.frame;
 	flag.backlerp = cent->pe.flag.backlerp;
@@ -2873,6 +2911,10 @@ void CG_Player( centity_t *cent ) {
 	}
 	head.shaderRGBA[3] = 255;
 	
+
+#ifdef USE_ADVANCED_CLASS
+	if(!ci->notq3)
+#endif
 	CG_AddRefEntityWithPowerups( &head, &cent->currentState, ci->team );
 
 #ifdef MISSIONPACK
@@ -2904,8 +2946,8 @@ void CG_ResetPlayerEntity( centity_t *cent ) {
 	cent->errorTime = -99999;		// guarantee no error decay added
 	cent->extrapolated = qfalse;	
 
-	CG_ClearLerpFrame( &cgs.clientinfo[ cent->currentState.clientNum ], &cent->pe.legs, cent->currentState.legsAnim );
-	CG_ClearLerpFrame( &cgs.clientinfo[ cent->currentState.clientNum ], &cent->pe.torso, cent->currentState.torsoAnim );
+	CG_ClearLerpFrame( cgs.clientinfo[ cent->currentState.clientNum ].animations, &cent->pe.legs, cent->currentState.legsAnim );
+	CG_ClearLerpFrame( cgs.clientinfo[ cent->currentState.clientNum ].animations, &cent->pe.torso, cent->currentState.torsoAnim );
 
 	BG_EvaluateTrajectory( &cent->currentState.pos, cg.time, cent->lerpOrigin );
 	BG_EvaluateTrajectory( &cent->currentState.apos, cg.time, cent->lerpAngles );

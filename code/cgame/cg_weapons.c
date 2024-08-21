@@ -1309,6 +1309,12 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 
 	CG_PositionEntityOnTag( &gun, parent, parent->hModel, "tag_weapon");
 
+
+#ifdef USE_ADVANCED_CLASS
+	if(ci->playerClass >= PCLASS_MONSTER && ci->playerClass <= PCLASS_MONSTER_COUNT) {
+		// don't draw a weapon because they generally have them build into the model
+	} else
+#endif
 	CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups );
 
 	// add the spinning barrel
@@ -1450,7 +1456,12 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 
 
 	// allow the gun to be completely removed
-	if ( !cg_drawGun.integer ) {
+	if ( !cg_drawGun.integer 
+#ifdef USE_ADVANCED_CLASS
+		|| (cgs.clientinfo[ps->clientNum].playerClass >= PCLASS_MONSTER 
+		&& cgs.clientinfo[ps->clientNum].playerClass <= PCLASS_MONSTER_COUNT)
+#endif
+	) {
 		vec3_t		origin;
 
 		if ( cg.predictedPlayerState.eFlags & EF_FIRING ) {
@@ -1461,6 +1472,13 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 		}
 		return;
 	}
+
+#ifdef USE_ADVANCED_CLASS
+	if(cgs.clientinfo[ps->clientNum].playerClass >= PCLASS_MONSTER
+		&& cgs.clientinfo[ps->clientNum].playerClass <= PCLASS_MONSTER_COUNT) {
+		return; // monsters have built in weapons, need to be configured above
+	}
+#endif
 
 	// don't draw if testing a gun model
 	if ( cg.testGun ) {
