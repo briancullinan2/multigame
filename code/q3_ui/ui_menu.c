@@ -85,7 +85,9 @@ void Main_MenuEvent (void* ptr, int event) {
 	switch( ((menucommon_s*)ptr)->id ) {
 #ifdef USE_CAMPAIGN
 	case ID_CAMPAIGN:
-		trap_Cvar_Set("g_arenasFile", "scripts/campaign.txt");
+		if(ui_arenasFile.string[0] == '\0') {
+			trap_Cvar_Set("g_arenasFile", "scripts/campaign.txt");
+		}
 		trap_Cvar_Update(&ui_arenasFile);
 		UI_LoadArenas();
 		UI_SPLevelMenu();
@@ -93,6 +95,11 @@ void Main_MenuEvent (void* ptr, int event) {
 #endif
 
 	case ID_SINGLEPLAYER:
+#ifdef USE_CAMPAIGN
+		trap_Cvar_Set("g_arenasFile", "");
+		trap_Cvar_Update(&ui_arenasFile);
+		UI_LoadArenas();
+#endif
 		UI_SPLevelMenu();
 		break;
 
@@ -264,10 +271,25 @@ and that local cinematics are killed
 */
 void UI_MainMenu( void ) {
 	int		y;
+	static char strippedName[MAX_QPATH];
 	qboolean teamArena = qfalse;
 	int		style = UI_CENTER | UI_DROPSHADOW;
 
-	trap_Cvar_Set( "sv_killserver", "1" );
+	//trap_Cvar_Set( "sv_killserver", "1" );
+	strippedName[0] = '\0';
+	if(ui_arenasFile.string[0] != '\0') {
+		char *filename = Q_stristr(ui_arenasFile.string, "/");
+		if(!filename) {
+			filename = Q_stristr(ui_arenasFile.string, "\\");
+		}
+		if(!filename) {
+			COM_StripExtension(ui_arenasFile.string, strippedName, MAX_QPATH);
+		} else {
+			COM_StripExtension(filename + 1, strippedName, MAX_QPATH);
+		}
+	} else {
+		strcpy(strippedName, "CAMPAIGN");
+	}
 
 	if( !uis.demoversion && !ui_cdkeychecked.integer ) {
 		char	key[17];
@@ -314,7 +336,7 @@ void UI_MainMenu( void ) {
 	s_main.campaign.generic.y			= y;
 	s_main.campaign.generic.id			= ID_CAMPAIGN;
 	s_main.campaign.generic.callback	= Main_MenuEvent; 
-	s_main.campaign.string				= "CAMPAIGN";
+	s_main.campaign.string				= strippedName;
 	s_main.campaign.color				= color_red;
 	s_main.campaign.style				= style;
 

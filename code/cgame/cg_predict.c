@@ -492,7 +492,6 @@ static void CG_TouchItem( centity_t *cent ) {
 #ifdef USE_ADVANCED_CLASS
 			, cgs.clientinfo[cent->currentState.number].playerClass
 #endif
-
 	) ) {
 		return;	// can't hold it
 	}
