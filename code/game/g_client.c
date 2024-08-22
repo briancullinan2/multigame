@@ -563,6 +563,15 @@ team_t PickTeam( int ignoreClientNum ) {
 	return TEAM_BLUE;
 }
 
+static char *monsters[MAX_QPATH] = {
+	"enforcer",
+	"berserker",
+	"shalrath",
+	"shambler",
+	"ogre",
+	"\0"
+};
+static int monsters_count = sizeof(monsters) / MAX_QPATH;
 
 /*
 ===========
@@ -703,6 +712,17 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 			}
 		}
 	}
+
+	if(client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT) {
+		if(g_randomMonsters.integer) {
+			char *random_model;
+			random_model = monsters[(int)(random() * monsters_count)];
+			G_Printf("wtf? %i, %s\n", monsters_count, random_model);
+			Q_strncpyz( model, random_model, sizeof( model ) );
+			client->pers.playerclass = client->pers.newplayerclass = BG_PlayerClassFromModel(random_model);
+		}
+	}
+
   client->pers.playerclass = client->pers.newplayerclass;
 #endif
 
@@ -993,6 +1013,8 @@ void ClientSpawn(gentity_t *ent) {
 
 	trap_UnlinkEntity( ent );
 
+	ClientUserinfoChanged( index );
+
 	// TODO: finish exist rules above
 	for ( i=0; i < MAX_CLIENTS ; i++ ){
 		if(!g_entities[i].inuse) {
@@ -1084,6 +1106,9 @@ void ClientSpawn(gentity_t *ent) {
 				}
 			}
 		}
+
+
+
 	}
 
 #endif
