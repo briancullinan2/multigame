@@ -65,9 +65,9 @@ CG_CVAR( cg_footsteps, "cg_footsteps", "1", CVAR_CHEAT )
 CG_CVAR( cg_tracerChance, "cg_tracerchance", "0.4", CVAR_CHEAT )
 CG_CVAR( cg_tracerWidth, "cg_tracerwidth", "1", CVAR_CHEAT )
 CG_CVAR( cg_tracerLength, "cg_tracerlength", "100", CVAR_CHEAT )
-CG_CVAR( cg_thirdPersonRange, "cg_thirdPersonRange", "40", CVAR_CHEAT )
-CG_CVAR( cg_thirdPersonAngle, "cg_thirdPersonAngle", "0", CVAR_CHEAT )
-CG_CVAR( cg_thirdPerson, "cg_thirdPerson", "0", 0 )
+CG_CVAR( cg_thirdPersonRange, "cg_thirdPersonRange", "40", CVAR_ARCHIVE )
+CG_CVAR( cg_thirdPersonAngle, "cg_thirdPersonAngle", "0", CVAR_ARCHIVE )
+CG_CVAR( cg_thirdPerson, "cg_thirdPerson", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_teamChatTime, "cg_teamChatTime", "3000", CVAR_ARCHIVE  )
 CG_CVAR( cg_teamChatHeight, "cg_teamChatHeight", "0", CVAR_ARCHIVE  )
 CG_CVAR( cg_forceModel, "cg_forceModel", "0", CVAR_ARCHIVE  )
@@ -131,5 +131,13 @@ CG_CVAR( cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE )
 CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
+
+#ifdef USE_CAMPAIGN
+CG_CVAR( cg_thirdMonsterRange, "cg_thirdMonsterRange", "100", CVAR_ARCHIVE )
+CG_CVAR( cg_thirdMonsterAngle, "cg_thirdMonsterAngle", "10", CVAR_ARCHIVE )
+CG_CVAR( cg_thirdMonster, "cg_thirdMonster", "1", CVAR_ARCHIVE )
+
+#endif
+
 
 #undef CG_CVAR

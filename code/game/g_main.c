@@ -1046,7 +1046,11 @@ void BeginIntermission( void ) {
 	}
 #else
 	// if single player game
-	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
+	if ( g_gametype.integer == GT_SINGLE_PLAYER 
+#ifdef USE_CAMPAIGN
+		|| Q_stristr(g_arenasFile.string, "campaign")
+#endif
+	) {
 		UpdateTournamentInfo();
 		SpawnModelsOnVictoryPads();
 	}

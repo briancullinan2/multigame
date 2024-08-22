@@ -927,6 +927,10 @@ typedef struct {
 	sfxHandle_t	gibBounce3Sound;
 	sfxHandle_t	teleInSound;
 	sfxHandle_t	teleOutSound;
+#ifdef USE_ADVANCED_CLASS
+	sfxHandle_t	teleInSound2;
+	sfxHandle_t	teleOutSound2;
+#endif
 	sfxHandle_t	noAmmoSound;
 	sfxHandle_t	respawnSound;
 	sfxHandle_t talkSound;

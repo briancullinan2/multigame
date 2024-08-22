@@ -27,10 +27,10 @@ void RuneTimerActions( gentity_t *ent, int msec ) {
 
   if(client->ps.stats[STAT_ABILITY] >= rune_ability.value) {
     if(client->inventory[RUNE_HEALTH] && !client->inventory[HI_MEDKIT]) {
-      G_GiveItem(ent, HI_MEDKIT);
+      G_GiveHoldable(ent, HI_MEDKIT);
     }
     if(client->inventory[RUNE_DIVINE] && !client->inventory[HI_KAMIKAZE]) {
-      G_GiveItem(ent, HI_KAMIKAZE);
+      G_GiveHoldable(ent, HI_KAMIKAZE);
     }
   }
 
@@ -47,10 +47,10 @@ void RuneTimerActions( gentity_t *ent, int msec ) {
 
   if(client->ps.stats[STAT_ABILITY] >= rune_abilityMin.value) {
     if(client->inventory[RUNE_SHIELD] && !client->inventory[HI_INVULNERABILITY]) {
-      G_GiveItem(ent, HI_INVULNERABILITY);
+      G_GiveHoldable(ent, HI_INVULNERABILITY);
     } else 
     if(client->inventory[RUNE_RECALL] && !client->inventory[HI_PORTAL]) {
-      G_GiveItem(ent, HI_PORTAL);
+      G_GiveHoldable(ent, HI_PORTAL);
     }
     if(client->inventory[RUNE_GRAPPLE] 
       && client->ps.ammo[WP_GRAPPLING_HOOK] < 100

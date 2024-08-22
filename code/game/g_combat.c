@@ -930,6 +930,13 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 #else	
 		if ( targ != attacker && OnSameTeam (targ, attacker)  ) {
 #endif
+#ifdef USE_ADVANCED_CLASS
+			if(attacker->client->pers.playerclass >= PCLASS_MONSTER && attacker->client->pers.playerclass <= PCLASS_MONSTER_COUNT) {
+				if(g_arenasFile.string[0] == '\0') {
+					return; // not playing campaign
+				}
+			} else
+#endif
 			if ( !g_friendlyFire.integer ) {
 				return;
 			}

@@ -160,7 +160,7 @@ void UI_LoadArenas( void ) {
 
 	ui_numArenas = 0;
 
-	trap_Cvar_Register( &arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_TEMP );
+	trap_Cvar_Register( &arenasFile, "g_arenasFile", "scripts/campaign.txt", CVAR_INIT|CVAR_TEMP );
 	if( *arenasFile.string ) {
 		UI_LoadArenasFromFile(arenasFile.string);
 	}

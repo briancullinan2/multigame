@@ -235,10 +235,26 @@ static void CG_OffsetThirdPersonView( void ) {
 
 	AngleVectors( cg.refdefViewAngles, forward, right, up );
 
+#ifdef USE_CAMPAIGN
+	if(cgs.clientinfo[cg.snap->ps.clientNum].playerClass >= PCLASS_MONSTER
+		&& cgs.clientinfo[cg.snap->ps.clientNum].playerClass <= PCLASS_MONSTER_COUNT) {
+
+		forwardScale = cos( cg_thirdMonsterAngle.value / 180 * M_PI );
+		sideScale = sin( cg_thirdMonsterAngle.value / 180 * M_PI );
+		VectorMA( view, -cg_thirdMonsterRange.value * forwardScale, forward, view );
+		VectorMA( view, -cg_thirdMonsterRange.value * sideScale, right, view );
+
+	} else {
+#endif
+
 	forwardScale = cos( cg_thirdPersonAngle.value / 180 * M_PI );
 	sideScale = sin( cg_thirdPersonAngle.value / 180 * M_PI );
 	VectorMA( view, -cg_thirdPersonRange.value * forwardScale, forward, view );
 	VectorMA( view, -cg_thirdPersonRange.value * sideScale, right, view );
+
+#ifdef USE_CAMPAIGN
+	}
+#endif
 
 	// trace a ray from the origin to the viewpoint to make sure the view isn't
 	// in a solid block.  Use an 8 by 8 block to prevent the view from near clipping anything
@@ -831,7 +847,13 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	CG_PredictPlayerState();
 
 	// decide on third person view
-	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
+	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0)
+#ifdef USE_CAMPAIGN
+		|| (cgs.clientinfo[cg.snap->ps.clientNum].playerClass >= PCLASS_MONSTER
+		&& cgs.clientinfo[cg.snap->ps.clientNum].playerClass <= PCLASS_MONSTER_COUNT
+		&& cg_thirdMonster.integer)
+#endif
+	;
 
 	CG_TrackClientTeamChange();
 

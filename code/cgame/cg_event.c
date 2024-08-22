@@ -893,11 +893,23 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	// other events
 	//
 	case EV_PLAYER_TELEPORT_IN:
+#ifdef USE_ADVANCED_CLASS
+		if(cgs.clientinfo[es->clientNum].playerClass >= PCLASS_MONSTER 
+			&& cgs.clientinfo[es->clientNum].playerClass <= PCLASS_MONSTER_COUNT) {
+			trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.teleInSound2 );
+		} else
+#endif
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.teleInSound );
 		CG_SpawnEffect( position);
 		break;
 
 	case EV_PLAYER_TELEPORT_OUT:
+#ifdef USE_ADVANCED_CLASS
+		if(cgs.clientinfo[es->clientNum].playerClass >= PCLASS_MONSTER 
+			&& cgs.clientinfo[es->clientNum].playerClass <= PCLASS_MONSTER_COUNT) {
+			trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.teleOutSound2 );
+		} else
+#endif
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.teleOutSound );
 		CG_SpawnEffect(  position);
 		break;

@@ -24,7 +24,7 @@ UI_CVAR( ui_ctf_capturelimit, "ui_ctf_capturelimit", "8", CVAR_ARCHIVE )
 UI_CVAR( ui_ctf_timelimit, "ui_ctf_timelimit", "30", CVAR_ARCHIVE )
 UI_CVAR( ui_ctf_friendly, "ui_ctf_friendly",  "0", CVAR_ARCHIVE )
 
-UI_CVAR( ui_arenasFile, "g_arenasFile", "", CVAR_INIT|CVAR_TEMP )
+UI_CVAR( ui_arenasFile, "g_arenasFile", "scripts/campaign.txt", CVAR_INIT|CVAR_TEMP )
 UI_CVAR( ui_botsFile, "g_botsFile", "", CVAR_ARCHIVE|CVAR_LATCH )
 UI_CVAR( ui_spScores1, "g_spScores1", "", CVAR_ARCHIVE )
 UI_CVAR( ui_spScores2, "g_spScores2", "", CVAR_ARCHIVE )
@@ -65,7 +65,7 @@ UI_CVAR( ui_server14, "server14", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server15, "server15", "", CVAR_ARCHIVE )
 UI_CVAR( ui_server16, "server16", "", CVAR_ARCHIVE )
 
-UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM )
+UI_CVAR( ui_cdkeychecked, "ui_cdkeychecked", "1", CVAR_ROM )
 
 UI_CVAR( ui_developer, "developer", "0", 0 )
 

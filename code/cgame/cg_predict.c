@@ -490,7 +490,7 @@ static void CG_TouchItem( centity_t *cent ) {
 
 	if ( !BG_CanItemBeGrabbed( cgs.gametype, &cent->currentState, &cg.predictedPlayerState 
 #ifdef USE_ADVANCED_CLASS
-			, cgs.clientinfo[cent->currentState.number].playerClass
+			, cgs.clientinfo[cent->currentState.clientNum].playerClass
 #endif
 	) ) {
 		return;	// can't hold it

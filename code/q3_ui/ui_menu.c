@@ -224,10 +224,14 @@ static void Main_MenuDraw( void ) {
 		Menu_Draw( &s_main.menu );		
 	}
 
+
 	if (uis.demoversion) {
 		UI_DrawProportionalString( 320, 372, "DEMO      FOR MATURE AUDIENCES      DEMO", UI_CENTER|UI_SMALLFONT, color );
 		UI_DrawString( 320, 400, "Quake III Arena(c) 1999-2000, Id Software, Inc.  All Rights Reserved", UI_CENTER|UI_SMALLFONT, color );
 	} else {
+#ifdef USE_CAMPAIGN
+		UI_DrawProportionalString( 320, 372, "MONSTERS FROM ONLY THE FINEST REGIONS OF HELL", UI_CENTER|UI_SMALLFONT, color );
+#endif
 		UI_DrawString( 320, 450, "Quake III Arena(c) 1999-2000, Id Software, Inc.  All Rights Reserved", UI_CENTER|UI_SMALLFONT, color );
 	}
 }
@@ -340,7 +344,7 @@ void UI_MainMenu( void ) {
 	s_main.campaign.color				= color_red;
 	s_main.campaign.style				= style;
 
-	y += MAIN_MENU_VERTICAL_SPACING;
+	//y += MAIN_MENU_VERTICAL_SPACING;
 #endif
 	s_main.singleplayer.generic.type		= MTYPE_PTEXT;
 	s_main.singleplayer.generic.flags		= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
@@ -433,7 +437,9 @@ void UI_MainMenu( void ) {
 	s_main.exit.style						= style;
 
 #ifdef USE_CAMPAIGN
-	Menu_AddItem( &s_main.menu,	&s_main.campaign );
+	if(ui_arenasFile.string[0] != '\0') {
+		Menu_AddItem( &s_main.menu,	&s_main.campaign );
+	} else
 #endif
 	Menu_AddItem( &s_main.menu,	&s_main.singleplayer );
 	Menu_AddItem( &s_main.menu,	&s_main.multiplayer );

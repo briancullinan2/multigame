@@ -1323,7 +1323,8 @@ void CG_NewClientInfo( int clientNum ) {
 		newInfo.headModelName, sizeof( newInfo.headModelName ),	newInfo.headSkinName, sizeof( newInfo.headSkinName ) );
 
 	// allow deferred load at some conditions
-	can_defer = cg_deferPlayers.integer == 2 || ( cg_deferPlayers.integer == 1 && myTeam != TEAM_SPECTATOR && team == TEAM_SPECTATOR );
+	can_defer = qfalse;
+	//can_defer = cg_deferPlayers.integer == 2 || ( cg_deferPlayers.integer == 1 && myTeam != TEAM_SPECTATOR && team == TEAM_SPECTATOR );
 
 	// scan for an existing clientinfo that matches this modelname
 	// so we can avoid loading checks if possible
