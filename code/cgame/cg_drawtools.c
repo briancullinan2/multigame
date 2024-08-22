@@ -1273,12 +1273,24 @@ float UI_ProportionalSizeScale( int style ) {
 }
 
 
+void UI_DrawProportionalString_real( int x, int y, const char* str, int style, vec4_t color, qhandle_t fontProp );
+
+
+void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color ) {
+	UI_DrawProportionalString_real( x, y, str, style, color, cgs.media.charsetProp );
+}
+
+void UI_DrawProportionalStringEvil( int x, int y, const char* str, int style, vec4_t color ) {
+	//UI_DrawProportionalString_real( x, y, str, style, color, cgs.media.charsetProp2 );
+}
+
+
 /*
 =================
 UI_DrawProportionalString
 =================
 */
-void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color ) {
+void UI_DrawProportionalString_real( int x, int y, const char* str, int style, vec4_t color, qhandle_t fontProp ) {
 	vec4_t	drawcolor;
 	int		width;
 	float	sizeScale;
@@ -1304,7 +1316,7 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 	if ( style & UI_DROPSHADOW ) {
 		drawcolor[0] = drawcolor[1] = drawcolor[2] = 0;
 		drawcolor[3] = color[3];
-		UI_DrawProportionalString2( x+2, y+2, str, drawcolor, sizeScale, cgs.media.charsetProp );
+		UI_DrawProportionalString2( x+2, y+2, str, drawcolor, sizeScale, fontProp );
 	}
 
 	if ( style & UI_INVERSE ) {
@@ -1312,7 +1324,7 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 		drawcolor[1] = color[1] * 0.8;
 		drawcolor[2] = color[2] * 0.8;
 		drawcolor[3] = color[3];
-		UI_DrawProportionalString2( x, y, str, drawcolor, sizeScale, cgs.media.charsetProp );
+		UI_DrawProportionalString2( x, y, str, drawcolor, sizeScale, fontProp );
 		return;
 	}
 
@@ -1321,7 +1333,7 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 		drawcolor[1] = color[1] * 0.8;
 		drawcolor[2] = color[2] * 0.8;
 		drawcolor[3] = color[3];
-		UI_DrawProportionalString2( x, y, str, color, sizeScale, cgs.media.charsetProp );
+		UI_DrawProportionalString2( x, y, str, color, sizeScale, fontProp );
 
 		drawcolor[0] = color[0];
 		drawcolor[1] = color[1];
@@ -1331,6 +1343,6 @@ void UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t
 		return;
 	}
 
-	UI_DrawProportionalString2( x, y, str, color, sizeScale, cgs.media.charsetProp );
+	UI_DrawProportionalString2( x, y, str, color, sizeScale, fontProp );
 }
 #endif // Q3STATIC

@@ -25,7 +25,7 @@ MAIN MENU
 #define ID_MODS					16
 #define ID_EXIT					17
 
-#define MAIN_BANNER_MODEL				"models/mapobjects/banner/banner5.md3"
+#define MAIN_BANNER_MODEL				"models/mapobjects/banner/banner6.md3"
 #define MAIN_MENU_VERTICAL_SPACING		34
 
 
@@ -142,6 +142,9 @@ MainMenu_Cache
 */
 void MainMenu_Cache( void ) {
 	s_main.bannerModel = trap_R_RegisterModel( MAIN_BANNER_MODEL );
+	Com_Printf("Reregistering models: %i\n", s_main.bannerModel);
+
+	trap_R_RemapShader("models/mapobjects/banner/q3banner02", "models/mapobjects/banner/q3banner02%hue0.65", "0");
 }
 
 sfxHandle_t ErrorMessage_Key(int key)
@@ -150,6 +153,10 @@ sfxHandle_t ErrorMessage_Key(int key)
 	UI_MainMenu();
 	return (menu_null_sound);
 }
+
+
+void UI_DrawProportionalStringEvil( int x, int y, const char* str, int style, vec4_t color );
+
 
 /*
 ===============
@@ -214,6 +221,8 @@ static void Main_MenuDraw( void ) {
 
 	trap_R_RenderScene( &refdef );
 	
+	UI_DrawProportionalStringEvil( 320, 100, "C H A M P A G N E", UI_CENTER, color );
+
 	if (strlen(s_errorMessage.errorMessage))
 	{
 		UI_DrawProportionalString_AutoWrapped( 320, 192, 600, 20, s_errorMessage.errorMessage, UI_CENTER|UI_SMALLFONT|UI_DROPSHADOW, menu_text_color );

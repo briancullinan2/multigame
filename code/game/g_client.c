@@ -980,13 +980,45 @@ void ClientSpawn(gentity_t *ent) {
 	int		eventSequence;
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
+	int blue_count = 0;
+	int red_count = 0;
+	int highest_score = 0;
+	int safety = 0;
 
 	index = ent - g_entities;
 	client = ent->client;
 
 	trap_UnlinkEntity( ent );
 
+	// TODO: finish exist rules above
+	for ( i=0; i < MAX_CLIENTS ; i++ ){
+		if(!g_entities[i].inuse) {
+			continue;
+		}
+		if(level.clients[i].sess.sessionTeam == TEAM_RED) {
+			red_count++;
+		}
+		if(level.clients[i].sess.sessionTeam == TEAM_BLUE) {
+			blue_count++;
+		}
+		if(level.clients[i].ps.persistant[PERS_SCORE] > highest_score) {
+			highest_score = level.clients[i].ps.persistant[PERS_SCORE];
+		}
+	}
+
+	// if there are only 2 frags left, and a third person joins
+	//   the third person will have to sit and spectate until the next queing
+	if(blue_count > (g_fraglimit.integer - highest_score)
+		|| red_count > (g_fraglimit.integer - highest_score)
+	) {
+		client->ps.persistant[ PERS_TEAM ] = TEAM_SPECTATOR;
+		client->sess.sessionTeam = TEAM_SPECTATOR;
+	}
+
+
 	isSpectator = client->sess.sessionTeam == TEAM_SPECTATOR;
+
+
 	// find a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
@@ -995,7 +1027,53 @@ void ClientSpawn(gentity_t *ent) {
 	} else if (g_gametype.integer >= GT_CTF ) {
 		// all base oriented team games use the CTF spawn points
 		spawnPoint = SelectCTFSpawnPoint( ent, client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles );
-	} else {
+	}
+	
+#ifdef USE_CAMPAIGN
+	// TODO: select monster spawn points
+	// select an enemy that is currently being played by a bot
+	else if(g_campaignMode.integer && 
+		client->pers.playerclass >= PCLASS_MONSTER && client->pers.playerclass <= PCLASS_MONSTER_COUNT) {
+		
+		if(!(ent->r.svFlags & SVF_BOT)) {
+			// humans can take over a bot spot
+			for ( i=0; i < MAX_CLIENTS ; i++ ){
+				if(!g_entities[i].inuse) {
+					continue;
+				}
+				if ( g_entities[i].r.svFlags & SVF_BOT ) {
+					spawnPoint = &g_entities[i];
+					VectorCopy( spawnPoint->s.angles, spawn_angles );
+					VectorCopy( spawnPoint->s.origin, spawn_origin );
+					spawnPoint->client->ps.persistant[ PERS_TEAM ] = TEAM_SPECTATOR;
+					spawnPoint->client->sess.sessionTeam = TEAM_SPECTATOR;
+					trap_UnlinkEntity(spawnPoint);
+					break;
+				}
+			}
+		}
+
+		if(!spawnPoint) {
+			// TODO: monster_class spawn points, this changes skins automatically
+		}
+
+		if(!spawnPoint) {
+			safety = 0;
+			do {
+				spawnPoint = SelectSpawnPoint( ent, client->ps.origin, spawn_origin, spawn_angles );
+				if ( ( spawnPoint->flags & FL_NO_BOTS ) && ( ent->r.svFlags & SVF_BOT ) ) {
+					continue;	// try again
+				}
+				if ( ( spawnPoint->flags & FL_NO_HUMANS ) && !( ent->r.svFlags & SVF_BOT ) ) {
+					continue;	// try again
+				}
+				break;
+			} while ( ++safety < 10 );
+		}
+	}
+#endif
+
+	else {
 		do {
 			// the first spawn should be at a good looking spot
 			if ( !client->pers.initialSpawn && client->pers.localClient ) {

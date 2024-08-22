@@ -120,6 +120,7 @@ G_CVAR( rune_healthMax, "rune_healthMax", "200", CVAR_SYSTEMINFO, 0, qfalse, qfa
 #endif
 
 #ifdef USE_CAMPAIGN
+G_CVAR( g_campaignMode, "g_campaignMode", "0", CVAR_INIT|CVAR_TEMP, 0, qtrue, qfalse )
 G_CVAR( g_arenasFile, "g_arenasFile", "scripts/campaign.txt", CVAR_INIT|CVAR_TEMP, 0, qtrue, qfalse )
 #endif
 

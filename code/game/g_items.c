@@ -964,7 +964,8 @@ void G_GiveItem(gentity_t *ent, gitem_t *it) {
 	VectorCopy( ent->r.currentOrigin, it_ent->s.origin );
 	it_ent->classname = it->classname;
 	G_SpawnItem (it_ent, it);
-	FinishSpawningItem(it_ent );
+	ent->item = it;
+	FinishSpawningItem(it_ent);
 	memset( &trace, 0, sizeof( trace ) );
 	Touch_Item (it_ent, ent, &trace);
 	if (it_ent->inuse) {
@@ -974,7 +975,6 @@ void G_GiveItem(gentity_t *ent, gitem_t *it) {
 
 void G_GivePowerup(gentity_t *ent, powerup_t pw) {
 	gitem_t		*it;
-	gentity_t *it_ent;
 	trace_t		trace;
 	it = BG_FindItemForPowerup (pw);
 	if (!it) {
@@ -986,7 +986,6 @@ void G_GivePowerup(gentity_t *ent, powerup_t pw) {
 
 void G_GiveHoldable(gentity_t *ent, holdable_t pw) {
 	gitem_t		*it;
-	gentity_t *it_ent;
 	trace_t		trace;
 	it = BG_FindItemForHoldable (pw);
 	if (!it) {

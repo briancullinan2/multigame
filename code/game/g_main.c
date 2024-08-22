@@ -252,12 +252,13 @@ void G_RegisterCvars( void ) {
 #ifdef USE_CAMPAIGN
 	// make sure campaign mode is in team mode also
 	// this way we get the menu items for monsters versus humans
-	if(Q_stristr(g_arenasFile.string, "campaign")) {
+	if(Q_stristr(g_arenasFile.string, "campaign") || g_campaignMode.integer) {
 		if(g_gametype.integer < GT_TEAM) {
 			trap_Cvar_Set( "g_gametype", va("%i", GT_TEAM) );
 			trap_Cvar_Set( "gametype", va("%i", GT_TEAM) );
 			trap_Cvar_Update( &g_gametype );
-
+			trap_Cvar_Set( "g_campaignMode", "1" );
+			trap_Cvar_Update( &g_campaignMode );
 		}
 
 		// notify the engine that bots only spawn as monsters,
@@ -1048,7 +1049,7 @@ void BeginIntermission( void ) {
 	// if single player game
 	if ( g_gametype.integer == GT_SINGLE_PLAYER 
 #ifdef USE_CAMPAIGN
-		|| Q_stristr(g_arenasFile.string, "campaign")
+		|| g_campaignMode.integer
 #endif
 	) {
 		UpdateTournamentInfo();
@@ -1958,10 +1959,11 @@ static void InitHordes( void ) {
 	int player_count = 0;
 	int human_count = 0;
 
+	if(!g_hordeMode.integer
 #ifdef USE_CAMPAIGN
-	if(!Q_stristr(g_arenasFile.string, "campaign"))
+		&& !g_campaignMode.integer
 #endif
-	if(!g_hordeMode.integer) {
+	) {
 		return;
 	}
 
@@ -1984,7 +1986,12 @@ static void InitHordes( void ) {
 				blue_count++;
 			} else if (level.clients[i].sess.sessionTeam == TEAM_RED) {
 				red_count++;
+			} else if (level.clients[i].sess.sessionTeam == TEAM_SPECTATOR) {
+				// spectator bots count as both because they could be either, prevents too many bots
+				red_count++;
+				blue_count++;
 			}
+
 #ifdef USE_ADVANCED_TEAMS
 			else if(level.clients[i].sess.sessionTeam == TEAM_GREEN) {
 				green_count++;
@@ -2160,7 +2167,7 @@ static void G_RunFrame( int levelTime ) {
 #if defined(USE_HORDES) || defined(USE_CAMPAIGN)
 	if(g_hordeMode.integer
 #ifdef USE_CAMPAIGN
-		|| Q_stristr(g_arenasFile.string, "campaign")
+		|| g_campaignMode.integer
 #endif
 	) {
 		InitHordes();
