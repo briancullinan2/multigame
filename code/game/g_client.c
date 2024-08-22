@@ -689,12 +689,13 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 
 #ifdef USE_ADVANCED_CLASS
   client->pers.newplayerclass = BG_PlayerClassFromModel(model);
+	
 	if(client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT) {
 		if(client->sess.sessionTeam == TEAM_BLUE) {
 			Q_strncpyz( model, DEFAULT_MODEL, sizeof( model ) );
 			client->pers.newplayerclass = BG_PlayerClassFromModel(model);
 		}
-	} else {
+	} else if (g_campaignMode.integer) {
 		if(client->sess.sessionTeam == TEAM_RED) {
 			Q_strncpyz( model, DEFAULT_MONSTER, sizeof( model ) );
 			client->pers.newplayerclass = BG_PlayerClassFromModel(model);
@@ -1027,53 +1028,7 @@ void ClientSpawn(gentity_t *ent) {
 	} else if (g_gametype.integer >= GT_CTF ) {
 		// all base oriented team games use the CTF spawn points
 		spawnPoint = SelectCTFSpawnPoint( ent, client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles );
-	}
-	
-#ifdef USE_CAMPAIGN
-	// TODO: select monster spawn points
-	// select an enemy that is currently being played by a bot
-	else if(g_campaignMode.integer && 
-		client->pers.playerclass >= PCLASS_MONSTER && client->pers.playerclass <= PCLASS_MONSTER_COUNT) {
-		
-		if(!(ent->r.svFlags & SVF_BOT)) {
-			// humans can take over a bot spot
-			for ( i=0; i < MAX_CLIENTS ; i++ ){
-				if(!g_entities[i].inuse) {
-					continue;
-				}
-				if ( g_entities[i].r.svFlags & SVF_BOT ) {
-					spawnPoint = &g_entities[i];
-					VectorCopy( spawnPoint->s.angles, spawn_angles );
-					VectorCopy( spawnPoint->s.origin, spawn_origin );
-					spawnPoint->client->ps.persistant[ PERS_TEAM ] = TEAM_SPECTATOR;
-					spawnPoint->client->sess.sessionTeam = TEAM_SPECTATOR;
-					trap_UnlinkEntity(spawnPoint);
-					break;
-				}
-			}
-		}
-
-		if(!spawnPoint) {
-			// TODO: monster_class spawn points, this changes skins automatically
-		}
-
-		if(!spawnPoint) {
-			safety = 0;
-			do {
-				spawnPoint = SelectSpawnPoint( ent, client->ps.origin, spawn_origin, spawn_angles );
-				if ( ( spawnPoint->flags & FL_NO_BOTS ) && ( ent->r.svFlags & SVF_BOT ) ) {
-					continue;	// try again
-				}
-				if ( ( spawnPoint->flags & FL_NO_HUMANS ) && !( ent->r.svFlags & SVF_BOT ) ) {
-					continue;	// try again
-				}
-				break;
-			} while ( ++safety < 10 );
-		}
-	}
-#endif
-
-	else {
+	} else {
 		do {
 			// the first spawn should be at a good looking spot
 			if ( !client->pers.initialSpawn && client->pers.localClient ) {
@@ -1098,6 +1053,41 @@ void ClientSpawn(gentity_t *ent) {
 
 		} while ( 1 );
 	}
+
+
+
+#ifdef USE_CAMPAIGN
+	// TODO: select monster spawn points
+	// select an enemy that is currently being played by a bot
+	if(g_campaignMode.integer && 
+		client->pers.playerclass >= PCLASS_MONSTER && client->pers.playerclass <= PCLASS_MONSTER_COUNT) {
+		
+		if(!(ent->r.svFlags & SVF_BOT)) {
+			// humans can take over a bot spot
+			for ( i=0; i < MAX_CLIENTS ; i++ ){
+				if(!g_entities[i].inuse) {
+					continue;
+				}
+				if ( g_entities[i].r.svFlags & SVF_BOT ) {
+					spawnPoint = &g_entities[i];
+					VectorCopy( spawnPoint->s.angles, spawn_angles );
+					VectorCopy( spawnPoint->s.origin, spawn_origin );
+					spawnPoint->client->ps.persistant[ PERS_TEAM ] = TEAM_SPECTATOR;
+					spawnPoint->client->sess.sessionTeam = TEAM_SPECTATOR;
+					spawnPoint->client->pers.teamState.state = TEAM_BEGIN;
+					trap_UnlinkEntity(spawnPoint);
+					G_WriteClientSessionData( spawnPoint->client );
+					CalculateRanks();
+					break;
+				}
+			}
+		}
+	}
+
+#endif
+
+
+
 	client->pers.teamState.state = TEAM_ACTIVE;
 
 #ifdef MISSIONPACK
