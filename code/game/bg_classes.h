@@ -1,5 +1,6 @@
 
 #ifdef USE_ADVANCED_CLASS
+
 typedef enum {
 	PCLASS_NONE,
 	PCLASS_BFG,
@@ -19,7 +20,6 @@ typedef enum {
 	PCLASS_FIGHTER,
 	PCLASS_MONK,
 	PCLASS_PALADIN,
-	PCLASS_VISOR,
 	PCLASS_RANGER,
 	PCLASS_ROGUE,
 	PCLASS_SORCERER,
@@ -32,6 +32,12 @@ typedef enum {
 
 	// begin classes of monsters, not interested in item pickups
 	PCLASS_MONSTER,
+	PCLASS_KLESK,
+	PCLASS_BONES,
+	PCLASS_SORLAG,
+	PCLASS_VISOR,
+	PCLASS_TANK,
+	PCLASS_TANKJR,
 	PCLASS_SHAMBLER, // shambler
 	PCLASS_DRAGON, // always flies because i lack animation ambition
 	PCLASS_BERSERKER,
@@ -42,5 +48,6 @@ typedef enum {
 
 	PCLASS_NUM_CLASSES
 } pclass_t;
+
 #endif
 

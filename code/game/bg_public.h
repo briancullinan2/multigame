@@ -120,6 +120,13 @@ typedef enum {
 	PM_DEAD,		// no acceleration or turning, but free falling
 	PM_FREEZE,		// stuck in place with no control
 	PM_INTERMISSION,	// no movement or status bar
+
+#ifdef USE_ADVANCED_CLASS
+	PM_ROUND, // for neverball/geoball movement
+	PM_MONSTER, // not interested in item pickups, they come with special powerups
+	PM_STUCKDUCK, // some monsters don't move when crouching, it was really funny to watch
+#endif
+
 	PM_SPINTERMISSION	// no movement or status bar
 } pmtype_t;
 
@@ -129,6 +136,8 @@ typedef enum {
 	WEAPON_DROPPING,
 	WEAPON_FIRING
 } weaponstate_t;
+
+
 
 // pmove->pm_flags
 #define	PMF_DUCKED			1
@@ -179,6 +188,11 @@ typedef struct {
 	// these will be different functions during game and cgame
 	void		(*trace)( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask );
 	int			(*pointcontents)( const vec3_t point, int passEntityNum );
+
+#ifdef USE_ADVANCED_CLASS
+	pclass_t playerClass;
+#endif
+
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles

@@ -913,7 +913,17 @@ pclass_t BG_PlayerClassFromModel(const char *model) {
      return PCLASS_RANGER;
   else if (Q_stristr (model, "visor"))
      return PCLASS_VISOR;
-  else if (!Q_stricmp (model, "biker/red"))
+  else if (Q_stristr (model, "sorlag"))
+     return PCLASS_SORLAG;
+  else if (Q_stristr (model, "bones"))
+     return PCLASS_BONES;
+  else if (Q_stristr (model, "klesk"))
+     return PCLASS_KLESK;
+	else if (Q_stristr (model, "tank"))
+     return PCLASS_TANK;
+  else if (Q_stristr (model, "tankjr"))
+     return PCLASS_TANKJR;
+ 	else if (!Q_stricmp (model, "biker/red"))
      return PCLASS_BFG;
   else if (!Q_stricmp (model, "anarki/blue"))
      return PCLASS_LIGHTNING;

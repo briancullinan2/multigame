@@ -1552,6 +1552,18 @@ void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float *legsBa
 	ci = &cgs.clientinfo[ clientNum ];
 
 	// do the shuffle turn frames locally
+
+#ifdef USE_ADVANCED_CLASS
+	if(ci->notq3) {
+		// make a special exception for monsters, because animations are combined
+		//   if the bot stops moving to attack show that animation instead of walking
+		//CG_Printf("legs: %i, torso: %i\n", cent->currentState.legsAnim & ~ANIM_TOGGLEBIT, cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT);
+		if((cent->currentState.legsAnim & ~ANIM_TOGGLEBIT) == LEGS_IDLE) {
+			cent->currentState.legsAnim = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
+		}
+	}
+#endif
+
 	if ( cent->pe.legs.yawing && ( cent->currentState.legsAnim & ~ANIM_TOGGLEBIT ) == LEGS_IDLE ) {
 		CG_RunLerpFrame( ci->animations, &cent->pe.legs, LEGS_TURN, speedScale );
 	} else {

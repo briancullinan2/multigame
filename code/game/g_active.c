@@ -902,6 +902,9 @@ void ClientThink_real( gentity_t *ent ) {
 #endif
 
 	pm.ps = &client->ps;
+#ifdef USE_ADVANCED_CLASS
+	pm.playerClass = client->pers.newplayerclass; // possible for bgmove to change a player class using a powerup?
+#endif
 	pm.cmd = *ucmd;
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
@@ -957,6 +960,10 @@ void ClientThink_real( gentity_t *ent ) {
 
 	VectorCopy (pm.mins, ent->r.mins);
 	VectorCopy (pm.maxs, ent->r.maxs);
+
+#ifdef USE_ADVANCED_CLASS
+	//ent->client->ps.stats[STAT_PLAYERCLASS] = pm.playerClass;
+#endif
 
 	ent->waterlevel = pm.waterlevel;
 	ent->watertype = pm.watertype;

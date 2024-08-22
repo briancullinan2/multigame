@@ -697,8 +697,10 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 		}
 	} else if (g_campaignMode.integer) {
 		if(client->sess.sessionTeam == TEAM_RED) {
-			Q_strncpyz( model, DEFAULT_MONSTER, sizeof( model ) );
-			client->pers.newplayerclass = BG_PlayerClassFromModel(model);
+			if(client->pers.newplayerclass < PCLASS_MONSTER && client->pers.newplayerclass > PCLASS_MONSTER_COUNT) {
+				Q_strncpyz( model, DEFAULT_MONSTER, sizeof( model ) );
+				client->pers.newplayerclass = BG_PlayerClassFromModel(model);
+			}
 		}
 	}
   client->pers.playerclass = client->pers.newplayerclass;
