@@ -52,10 +52,13 @@
 bot_waypoint_t botai_waypoints[MAX_WAYPOINTS];
 bot_waypoint_t *botai_freewaypoints;
 
+extern gclient_t g_clients[ MAX_CLIENTS ];
+
 //NOTE: not using a cvars which can be updated because the game should be reloaded anyway
 int gametype;		//game type
 //int maxclients;	//maximum number of clients
 
+vmCvar_t bot_campaignMode;
 vmCvar_t bot_grapple;
 vmCvar_t bot_rocketjump;
 vmCvar_t bot_fastchat;
@@ -2779,7 +2782,6 @@ BotSameTeam
 */
 int BotSameTeam(bot_state_t *bs, int entnum) {
 
-	extern gclient_t g_clients[ MAX_CLIENTS ];
 
 	if ( (unsigned) bs->client >= MAX_CLIENTS ) {
 		//BotAI_Print(PRT_ERROR, "BotSameTeam: client out of range\n");
@@ -2945,6 +2947,9 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 	float squaredist, cursquaredist;
 	aas_entityinfo_t entinfo, curenemyinfo;
 	vec3_t dir, angles;
+#ifdef USE_CAMPAIGN
+	qboolean shouldKillTeam = qfalse;
+#endif
 
 	alertness = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_ALERTNESS, 0, 1);
 	easyfragger = trap_Characteristic_BFloat(bs->character, CHARACTERISTIC_EASY_FRAGGER, 0, 1);
@@ -3025,8 +3030,26 @@ int BotFindEnemy(bot_state_t *bs, int curenemy) {
 		} //end if
 		//if the bot has no
 		if (squaredist > Square(900.0 + alertness * 4000.0)) continue;
+
+#ifdef USE_CAMPAIGN
+		if(bot_campaignMode.integer) {
+			// recently attacked by some asshole on the same team
+			if((level.time - g_clients[bs->client].recentlyAttacked < 1000
+				&& g_clients[bs->client].recentAttacker == i) 
+				|| (level.time - g_clients[bs->client].recentlyAttacked2 < 1000
+				&& g_clients[bs->client].recentAttacker2 == i)
+			) {
+				// turn on treacherous teammates
+				shouldKillTeam = qtrue;
+			}
+		}
+
+		if(!shouldKillTeam)
+#endif
 		//if on the same team
 		if (BotSameTeam(bs, i)) continue;
+
+
 		//if the bot's health decreased or the enemy is shooting
 		if (curenemy < 0 && (healthdecrease || EntityIsShooting(&entinfo)))
 			f = 360;
@@ -5411,6 +5434,7 @@ void BotSetupDeathmatchAI(void) {
 
 	gametype = trap_Cvar_VariableIntegerValue( "g_gametype" );
 
+	trap_Cvar_Register(&bot_campaignMode, "g_campaignMode", "0", 0);
 	trap_Cvar_Register(&bot_rocketjump, "bot_rocketjump", "1", 0);
 	trap_Cvar_Register(&bot_grapple, "bot_grapple", "0", 0);
 	trap_Cvar_Register(&bot_fastchat, "bot_fastchat", "0", 0);

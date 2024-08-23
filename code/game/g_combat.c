@@ -783,6 +783,9 @@ int G_InvulnerabilityEffect( gentity_t *targ, vec3_t dir, vec3_t point, vec3_t i
 	}
 }
 #endif
+
+extern gclient_t g_clients[ MAX_CLIENTS ];
+
 /*
 ============
 G_Damage
@@ -930,11 +933,17 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 #else	
 		if ( targ != attacker && OnSameTeam (targ, attacker)  ) {
 #endif
-#ifdef USE_ADVANCED_CLASS
-			if(attacker->client->pers.playerclass >= PCLASS_MONSTER && attacker->client->pers.playerclass <= PCLASS_MONSTER_COUNT) {
-				if(g_arenasFile.string[0] == '\0') {
-					return; // not playing campaign
+#ifdef USE_CAMPAIGN
+			if(g_campaignMode.integer &&
+				attacker->client->pers.playerclass >= PCLASS_MONSTER && attacker->client->pers.playerclass <= PCLASS_MONSTER_COUNT) {
+				// continue
+				if(level.time - targ->client->recentlyAttacked > 1000) {
+					targ->client->recentAttacker = attacker->client - g_clients;
 				}
+				if(level.time - targ->client->recentlyAttacked2 > 1000) {
+					targ->client->recentAttacker2 = attacker->client - g_clients;
+				}
+			// else not playing camapaign
 			} else
 #endif
 			if ( !g_friendlyFire.integer ) {

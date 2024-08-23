@@ -148,17 +148,25 @@
 
 // advanced classes applies special properties to players based on model or selection
 #define USE_ADVANCED_CLASS 1
+// many team colors, with automatically added many bots, rules for respawning, dying, and decay
+#define USE_HORDES 1
 // a brand new single player game mode that allows players to play as monsters, new rules for spawning
 #define USE_CAMPAIGN 1
 
-// many team colors, with automatically added many bots, rules for respawning, dying, and decay
-#define USE_HORDES 1
 
 #ifdef USE_CAMPAIGN
+
 #ifndef USE_HORDES
 #define USE_HORDES 1
 #endif
+
+#ifndef USE_ADVANCED_CLASS
+#define USE_ADVANCED_CLASS 1
 #endif
+
+#endif
+
+
 
 typedef unsigned char 		byte;
 

@@ -717,7 +717,6 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 		if(g_randomMonsters.integer) {
 			char *random_model;
 			random_model = monsters[(int)(random() * monsters_count)];
-			G_Printf("wtf? %i, %s\n", monsters_count, random_model);
 			Q_strncpyz( model, random_model, sizeof( model ) );
 			client->pers.playerclass = client->pers.newplayerclass = BG_PlayerClassFromModel(random_model);
 		}

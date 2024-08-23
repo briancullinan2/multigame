@@ -1401,6 +1401,7 @@ int BotAIStartFrame(int time) {
 
 	G_CheckBotSpawn();
 
+	trap_Cvar_Update(&bot_campaignMode);
 	trap_Cvar_Update(&bot_rocketjump);
 	trap_Cvar_Update(&bot_grapple);
 	trap_Cvar_Update(&bot_fastchat);

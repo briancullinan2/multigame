@@ -344,6 +344,13 @@ struct gclient_s {
 		int		enemy;
 		int		amount;
 	} damage;
+
+#ifdef USE_CAMPAIGN
+	int recentlyAttacked;
+	int recentAttacker;
+	int recentlyAttacked2;
+	int recentAttacker2;
+#endif
 };
 
 
