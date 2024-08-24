@@ -73,6 +73,7 @@ typedef struct
 	menutext_s		modelname;
 	menutext_s		skinname;
 	menutext_s		playername;
+	menulist_s		playerclass;
 	playerInfo_t	playerinfo;
 	int				nummodels;
 	char			modelnames[MAX_PLAYERMODELS][128];
@@ -358,6 +359,38 @@ static void PlayerModel_DrawPlayer( void *self )
 	UI_DrawPlayer( b->generic.x, b->generic.y, b->width, b->height, &s_playermodel.playerinfo, uis.realtime/2 );
 }
 
+#ifdef USE_CAMPAIGN
+
+#define ID_PLAYERCLASS			126
+
+static void PlayerModel_BuildList( void );
+static int selectedClass = 0;
+
+static void PlayerClass_Event( void* ptr, int notification ) {
+	if( notification != QM_ACTIVATED ) {
+		return;
+	}
+
+	switch( ((menucommon_s*)ptr)->id ) {
+	case ID_PLAYERCLASS:
+		selectedClass = s_playermodel.playerclass.curvalue;
+		PlayerModel_BuildList();
+		PlayerModel_SetMenuItems();
+		PlayerModel_UpdateGrid();
+		PlayerModel_UpdateModel();
+		break;
+	}
+}
+
+static const char *player_classes[] =
+{
+	"Monsters",
+	"Humans",
+	0
+};
+
+#endif
+
 /*
 =================
 PlayerModel_BuildList
@@ -377,6 +410,7 @@ static void PlayerModel_BuildList( void )
 	int		dirlen;
 	int		filelen;
 	qboolean precache;
+	int playerClass;
 
 	precache = trap_Cvar_VariableValue("com_buildscript");
 
@@ -394,6 +428,30 @@ static void PlayerModel_BuildList( void )
 
 		if (!strcmp(dirptr,".") || !strcmp(dirptr,".."))
 			continue;
+
+
+#ifdef USE_CAMPAIGN
+		if(Q_stristr(ui_arenasFile.string, "campaign")) {
+			playerClass = BG_PlayerClassFromModel(dirptr);
+
+			if(selectedClass == 1) {
+				if(playerClass >= PCLASS_HUMAN && playerClass <= PCLASS_HUMAN_COUNT) {
+				} else {
+					continue;
+				}
+			}
+
+			if(selectedClass == 0) {
+				if(playerClass >= PCLASS_MONSTER && playerClass <= PCLASS_MONSTER_COUNT) {
+				} else {
+					continue;
+				}
+			}
+
+		}
+
+#endif
+
 			
 		// iterate all skin files in directory
 		numfiles = trap_FS_GetFileList( va("models/players/%s",dirptr), "tga", filelist, 2048 );
@@ -403,6 +461,12 @@ static void PlayerModel_BuildList( void )
 			filelen = strlen(fileptr);
 
 			COM_StripExtension(fileptr,skinname,sizeof(skinname));
+
+#ifdef USE_CAMPAIGN
+			if(Q_stristr(ui_arenasFile.string, "campaign") && !Q_stristr(skinname, "default")) {
+				continue;
+			}
+#endif
 
 			// look for icon_????
 			if (!Q_stricmpn(skinname,"icon_",5))
@@ -501,6 +565,17 @@ static void PlayerModel_MenuInit( void )
 	static char	modelname[32];
 	static char	skinname[32];
 
+#ifdef USE_CAMPAIGN
+	int playerClass;
+	trap_Cvar_VariableStringBuffer( "model", s_playermodel.modelskin, 64 );
+	playerClass = BG_PlayerClassFromModel(s_playermodel.modelskin);
+	if(playerClass >= PCLASS_HUMAN && playerClass <= PCLASS_HUMAN_COUNT) {
+		selectedClass = 1;
+	} else {
+		selectedClass = 0;
+	}
+#endif
+
 	// zero set all our globals
 	memset( &s_playermodel, 0 ,sizeof(playermodel_t) );
 
@@ -576,6 +651,21 @@ static void PlayerModel_MenuInit( void )
 		y += 64+6;
 	}
 
+
+#ifdef USE_CAMPAIGN
+	if(Q_stristr(ui_arenasFile.string, "campaign")) {
+		s_playermodel.playerclass.generic.type  = MTYPE_SPINCONTROL;
+		s_playermodel.playerclass.generic.name	 = "Player Class:";
+		s_playermodel.playerclass.generic.flags = QMF_PULSEIFFOCUS|QMF_SMALLFONT;
+		s_playermodel.playerclass.generic.callback = PlayerClass_Event;
+		s_playermodel.playerclass.generic.id       = ID_PLAYERCLASS;
+		s_playermodel.playerclass.generic.x	 = 320;
+		s_playermodel.playerclass.generic.y	 = 440;
+		s_playermodel.playerclass.itemnames     = player_classes;
+		s_playermodel.playerclass.curvalue				= 0;
+	} //else {
+#endif
+
 	s_playermodel.playername.generic.type  = MTYPE_PTEXT;
 	s_playermodel.playername.generic.flags = QMF_CENTER_JUSTIFY|QMF_INACTIVE;
 	s_playermodel.playername.generic.x	   = 320;
@@ -583,6 +673,10 @@ static void PlayerModel_MenuInit( void )
 	s_playermodel.playername.string	       = playername;
 	s_playermodel.playername.style		   = UI_CENTER;
 	s_playermodel.playername.color         = text_color_normal;
+
+#ifdef USE_CAMPAIGN
+	//}
+#endif
 
 	s_playermodel.modelname.generic.type  = MTYPE_PTEXT;
 	s_playermodel.modelname.generic.flags = QMF_CENTER_JUSTIFY|QMF_INACTIVE;
@@ -651,7 +745,17 @@ static void PlayerModel_MenuInit( void )
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.framel );
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.framer );
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.ports );
-	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.playername );
+
+#ifdef USE_CAMPAIGN
+	if(Q_stristr(ui_arenasFile.string, "campaign")) {
+		Menu_AddItem( &s_playermodel.menu,	&s_playermodel.playerclass );
+	} else {
+#endif
+		Menu_AddItem( &s_playermodel.menu,	&s_playermodel.playername );
+#ifdef USE_CAMPAIGN
+	}
+#endif
+
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.modelname );
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.skinname );
 
@@ -667,7 +771,7 @@ static void PlayerModel_MenuInit( void )
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.right );
 	Menu_AddItem( &s_playermodel.menu,	&s_playermodel.back );
 
-	// find all available models
+// find all available models
 //	PlayerModel_BuildList();
 
 	// set initial states

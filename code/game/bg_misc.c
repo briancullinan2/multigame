@@ -906,48 +906,7 @@ int		bg_numItems = ARRAY_LEN( bg_itemlist ) - 1;
 
 
 #ifdef USE_ADVANCED_CLASS
-
-pclass_t BG_PlayerClassFromModel(const char *model) {
-//     return PCLASS_DRAGON;
-  if (Q_stristr (model, "sarge"))
-     return PCLASS_RANGER;
-  else if (Q_stristr (model, "visor"))
-     return PCLASS_VISOR;
-  else if (Q_stristr (model, "sorlag"))
-     return PCLASS_SORLAG;
-  else if (Q_stristr (model, "bones"))
-     return PCLASS_BONES;
-  else if (Q_stristr (model, "klesk"))
-     return PCLASS_KLESK;
-	else if (Q_stristr (model, "tank"))
-     return PCLASS_TANK;
-  else if (Q_stristr (model, "tankjr"))
-     return PCLASS_TANKJR;
- 	else if (!Q_stricmp (model, "biker/red"))
-     return PCLASS_BFG;
-  else if (!Q_stricmp (model, "anarki/blue"))
-     return PCLASS_LIGHTNING;
-  else if (!Q_stricmp (model, "grunt/red"))
-     return PCLASS_RAILGUN;
-  else if (Q_stristr (model, "shambler"))
-     return PCLASS_SHAMBLER;
-  else if (Q_stristr (model, "dragon"))
-     return PCLASS_DRAGON;
-  else if (Q_stristr (model, "berserker"))
-     return PCLASS_BERSERKER;
-  else if (Q_stristr (model, "infantry"))
-     return PCLASS_GUNNER;
-  else if (Q_stristr (model, "monkey"))
-     return PCLASS_ROUND;
-  else if (Q_stristr (model, "shalrath"))
-     return PCLASS_VORE;
-  else {
-     return PCLASS_NONE;
-     //return PCLASS_BFG;
-     //Q_strncpyz( model, "biker/red", sizeof( model ) );
-  }
-}
-
+#include "./bg_classes.h"
 #endif
 
 

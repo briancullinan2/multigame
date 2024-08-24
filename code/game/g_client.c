@@ -4,6 +4,11 @@
 
 // g_client.c -- client functions that don't happen every frame
 
+void Add_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Weapon_Ammo( gentity_t *ent, int weapon, int count );
+void Add_Ammo( gentity_t *ent, int weapon, int count );
+void Remove_Ammo( gentity_t *ent, int weapon, int count );
+
 const vec3_t	playerMins = {-15, -15, -24};
 const vec3_t	playerMaxs = { 15,  15,  32};
 
@@ -563,15 +568,11 @@ team_t PickTeam( int ignoreClientNum ) {
 	return TEAM_BLUE;
 }
 
-static char *monsters[MAX_QPATH] = {
-	"enforcer",
-	"berserker",
-	"shalrath",
-	"shambler",
-	"ogre",
-	"\0"
-};
-static int monsters_count = sizeof(monsters) / MAX_QPATH;
+extern char *humans[MAX_QPATH];
+extern int humans_count;
+extern char *monsters[MAX_QPATH];
+extern int monsters_count;
+
 
 /*
 ===========
@@ -706,21 +707,23 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 		}
 	} else if (g_campaignMode.integer) {
 		if(client->sess.sessionTeam == TEAM_RED) {
-			if(client->pers.newplayerclass < PCLASS_MONSTER && client->pers.newplayerclass > PCLASS_MONSTER_COUNT) {
+			if(client->pers.newplayerclass < PCLASS_MONSTER || client->pers.newplayerclass > PCLASS_MONSTER_COUNT) {
 				Q_strncpyz( model, DEFAULT_MONSTER, sizeof( model ) );
 				client->pers.newplayerclass = BG_PlayerClassFromModel(model);
 			}
 		}
 	}
 
-	if(client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT) {
-		if(g_randomMonsters.integer) {
-			char *random_model;
-			random_model = monsters[(int)(random() * monsters_count)];
-			Q_strncpyz( model, random_model, sizeof( model ) );
-			client->pers.playerclass = client->pers.newplayerclass = BG_PlayerClassFromModel(random_model);
-		}
+	// randomly select a monster
+	if(g_randomMonsters.integer &&
+		client->pers.newplayerclass >= PCLASS_MONSTER && client->pers.newplayerclass <= PCLASS_MONSTER_COUNT) {
+		char *random_model;
+		random_model = monsters[(int)(random() * monsters_count)];
+		Q_strncpyz( model, random_model, sizeof( model ) );
+		client->pers.playerclass = client->pers.newplayerclass = BG_PlayerClassFromModel(random_model);
 	}
+
+	// TODO: once a base is installed, allow players to select their monster
 
   client->pers.playerclass = client->pers.newplayerclass;
 #endif

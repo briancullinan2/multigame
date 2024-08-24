@@ -1977,7 +1977,7 @@ static void InitHordes( void ) {
 	}
 
 	lastTime = level.time;
-	for ( i=0; i < MAX_CLIENTS ; i++ ){
+	for ( i=0; i < MAX_CLIENTS ; i++ ) {
 		if(!g_entities[i].inuse) {
 			continue;
 		}
@@ -2004,6 +2004,8 @@ static void InitHordes( void ) {
 		}
 		player_count++;
 	}
+
+	// TODO: if there is a bot spectating, put them on the empty team
 
 	// don't continue here if server is full
 	if(player_count >= g_maxclients.integer) {

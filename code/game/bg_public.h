@@ -5,7 +5,6 @@
 // because games can change separately from the main system version, we need a
 // second version that must match between game and cgame
 
-#include "./bg_classes.h"
 
 #define	GAME_VERSION		"baseq3-1"
 
@@ -157,6 +156,12 @@ typedef enum {
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
 
 #define	MAXTOUCH	32
+
+#define PCLASS_HEADER
+#include "./bg_classes.h"
+#undef PCLASS_HEADER
+
+
 typedef struct {
 	// state (in / out)
 	playerState_t	*ps;
@@ -194,6 +199,8 @@ typedef struct {
 #endif
 
 } pmove_t;
+
+pclass_t BG_PlayerClassFromModel(const char *model);
 
 // if a full pmove isn't done on the client, you can just update the angles
 void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd );

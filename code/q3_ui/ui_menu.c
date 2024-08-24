@@ -71,6 +71,8 @@ static void MainMenu_ExitAction( qboolean result ) {
 }
 
 
+void UI_LoadArenas( void );
+
 
 /*
 =================

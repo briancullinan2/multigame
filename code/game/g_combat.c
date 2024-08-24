@@ -939,9 +939,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 				// continue
 				if(level.time - targ->client->recentlyAttacked > 1000) {
 					targ->client->recentAttacker = attacker->client - g_clients;
+					targ->client->recentlyAttacked = level.time;
 				}
 				if(level.time - targ->client->recentlyAttacked2 > 1000) {
 					targ->client->recentAttacker2 = attacker->client - g_clients;
+					targ->client->recentlyAttacked2 = level.time;
 				}
 			// else not playing camapaign
 			} else
