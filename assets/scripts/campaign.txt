@@ -1,0 +1,181 @@
+
+{
+map			"q3Damned"
+bots		"knight demon mummy ogre"
+longname	"Castle of the Damned"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"axdm1"
+bots		"knight demon mummy ogre shalrath"
+longname	"The Heinous Place"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"q3hipdm1"
+bots		"knight demon mummy ogre shalrath shambler"
+longname	"Edge of Oblivion"
+fraglimit	15
+type		"single ffa tourney"
+}
+
+
+{
+map			"13house"
+bots		"chthon knight demon mummy ogre shalrath"
+longname	"House of Chthon"
+fraglimit	20
+type		"single ffa tourney"
+}
+
+
+{
+map			"nodm10"
+bots		"berserker enforcer gladiatr gunner hover insane"
+longname	"The Edge"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"q3fp2002"
+bots		"berserker enforcer gunner hover insane tank tankjr"
+longname	"The Frag Pipe"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"13tokay"
+bots		"berserker  gladiatr gunner hover tankjr widow"
+longname	"Tokays Towers"
+fraglimit	15
+type		"single ffa tourney"
+}
+
+
+{
+map			"bloodrust"
+bots		"berserker gladiatr enforcer gunner tank widow"
+longname	"Bloodrust"
+fraglimit	20
+type		"single ffa tourney"
+}
+
+
+{
+map			"tabd2map01"
+bots		"berserker gladiatr"
+longname	"Return to Entryway"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"q3d1hangar"
+bots		"knight demon"
+longname	"Hangar"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"thegantlet"
+bots		"berserker gladiatr"
+longname	"The Gauntlet"
+fraglimit	15
+type		"single ffa tourney"
+}
+
+
+{
+map			"lffd"
+bots		"knight demon"
+longname	"Looking for Free DOOM"
+fraglimit	20
+type		"single ffa tourney"
+}
+
+
+{
+map			"Marsv1"
+bots		"knight demon"
+longname	"Vermillion Dream"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"toxicmetal"
+bots		"knight demon"
+longname	"Toxic Metal"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"xccc_dm3"
+bots		"knight demon"
+longname	"Temple of the Damned"
+fraglimit	15
+type		"single ffa tourney"
+}
+
+
+{
+map			"lun3dm3"
+bots		"knight demon"
+longname	"A Load of Useless Bloody Loonies"
+fraglimit	20
+type		"single ffa tourney"
+}
+
+
+{
+map			"aearena"
+bots		"knight demon"
+longname	"AEon's Arena"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"e1m2red"
+bots		"knight demon"
+longname	"Deva Plant"
+fraglimit	10
+type		"single ffa tourney"
+}
+
+
+{
+map			"tabq1dm5"
+bots		"knight demon"
+longname	"Return to the Cistern"
+fraglimit	15
+type		"single ffa tourney"
+}
+
+
+{
+map			"zv4q3"
+bots		"knight demon"
+longname	"Ziggurat Vertigo"
+fraglimit	20
+type		"single ffa tourney"
+}
+
+
