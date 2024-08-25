@@ -232,6 +232,10 @@ static const char *teamNames1[] = {
 static const char *teamNames2[] = {
 	"Red",
 	"Blue",
+#ifdef USE_ADVANCED_TEAMS
+	"Green",
+	"Gold",
+#endif
 	0
 };
 

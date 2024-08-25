@@ -257,7 +257,6 @@
     <ClCompile Include="..\..\code\cgame\cg_consolecmds.c" />
     <ClCompile Include="..\..\code\cgame\cg_draw.c" />
     <ClCompile Include="..\..\code\cgame\cg_drawtools.c" />
-    <ClCompile Include="..\..\code\cgame\cg_newdraw.c" />
     <ClCompile Include="..\..\code\cgame\cg_effects.c" />
     <ClCompile Include="..\..\code\cgame\cg_ents.c" />
     <ClCompile Include="..\..\code\cgame\cg_event.c" />
