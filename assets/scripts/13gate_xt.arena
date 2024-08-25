@@ -1,0 +1,7 @@
+{
+map		"13gate_xt"
+longname	"Arena Gate CTF - Extended (by sst13)"
+type		"ctf"
+capturelimit    "8"
+author		"sst13"
+}

@@ -436,6 +436,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\code\game\g_portal.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\code\game\g_missile.c"
 				>
 			</File>

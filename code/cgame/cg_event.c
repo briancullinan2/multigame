@@ -864,6 +864,20 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.selectSound );
 		break;
 
+#ifdef USE_ALT_FIRE
+  case EV_ALTFIRE_WEAPON:
+#ifdef USE_GRAPPLE
+    if(cg_altGrapple.integer) {
+      // don't play firing animation
+		break;
+	}
+#endif
+#ifdef USE_PORTALS
+    if(cg_altPortal.integer) {
+      break;
+    }
+#endif
+#endif
 	case EV_FIRE_WEAPON:
 		CG_FireWeapon( cent );
 		break;

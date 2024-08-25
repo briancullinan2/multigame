@@ -48,6 +48,8 @@ void SP_light( gentity_t *self ) {
 
 
 
+#ifndef USE_PORTALS
+
 /*
 =================================================================================
 
@@ -123,6 +125,8 @@ an info_notnull
 void SP_misc_teleporter_dest( gentity_t *ent ) {
 }
 
+#endif
+
 
 //===========================================================
 
@@ -143,6 +147,9 @@ void SP_misc_model( gentity_t *ent ) {
 	G_FreeEntity( ent );
 #endif
 }
+
+
+#ifndef USE_PORTALS
 
 //===========================================================
 
@@ -227,6 +234,8 @@ void SP_misc_portal_camera(gentity_t *ent) {
 
 	ent->s.clientNum = roll/360.0 * 256;
 }
+
+#endif
 
 /*
 ======================================================================
@@ -327,7 +336,7 @@ void SP_shooter_grenade( gentity_t *ent ) {
 	InitShooter( ent, WP_GRENADE_LAUNCHER);
 }
 
-
+#ifndef USE_PORTALS
 #ifdef MISSIONPACK
 static void PortalDie (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	G_FreeEntity( self );
@@ -470,4 +479,6 @@ void DropPortalSource( gentity_t *player ) {
 	}
 
 }
+#endif
+
 #endif

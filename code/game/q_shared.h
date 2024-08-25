@@ -146,6 +146,8 @@
 
 //=============================================================
 
+// use advanced gaming features like many teams, map rotations settings, randomizing items
+#define USE_ADVANCED_TEAMS 1
 typedef unsigned char 		byte;
 
 typedef enum { qfalse = 0, qtrue } qboolean;

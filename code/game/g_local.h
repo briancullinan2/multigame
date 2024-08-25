@@ -160,6 +160,11 @@ struct gentity_s {
 	team_t		fteam;
 
 	tag_t		tag;
+
+#if defined(USE_PORTALS) || defined(USE_MULTIWORLD)
+	int world;
+#endif
+
 };
 
 
@@ -318,6 +323,13 @@ struct gclient_s {
 	int			invulnerabilityTime;
 #endif
 
+#ifdef USE_PORTALS
+	gentity_t *portalDestination;
+	gentity_t *portalSource;
+	int lastPortal;
+	gentity_t *lastPortalEnt;
+#endif
+
 	char		*areabits;
 
 	// unlagged
@@ -426,7 +438,7 @@ typedef struct {
 	gentity_t	*locationHead;			// head of the location list
 	int			bodyQueIndex;			// dead bodies
 	gentity_t	*bodyQue[BODY_QUEUE_SIZE];
-#ifdef MISSIONPACK
+#ifdef USE_PORTALS
 	int			portalSequence;
 #endif
 
@@ -554,6 +566,9 @@ gentity_t *fire_blaster (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_plasma (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_grenade (gentity_t *self, vec3_t start, vec3_t aimdir);
 gentity_t *fire_rocket (gentity_t *self, vec3_t start, vec3_t dir);
+#ifdef USE_PORTALS
+gentity_t *fire_portal(gentity_t *self, vec3_t start, vec3_t dir, qboolean altFire);
+#endif
 gentity_t *fire_bfg (gentity_t *self, vec3_t start, vec3_t dir);
 gentity_t *fire_grapple (gentity_t *self, vec3_t start, vec3_t dir);
 #ifdef MISSIONPACK
@@ -578,11 +593,15 @@ void trigger_teleporter_touch (gentity_t *self, gentity_t *other, trace_t *trace
 // g_misc.c
 //
 void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles );
+#ifdef USE_PORTALS
+void DropPortalSource(gentity_t *ent, vec3_t isWall);
+void DropPortalDestination(gentity_t *ent, vec3_t isWall);
+#else
 #ifdef MISSIONPACK
 void DropPortalSource( gentity_t *ent );
 void DropPortalDestination( gentity_t *ent );
 #endif
-
+#endif
 
 //
 // g_weapon.c

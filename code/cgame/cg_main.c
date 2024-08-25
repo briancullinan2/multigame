@@ -739,16 +739,33 @@ static void CG_RegisterGraphics( void ) {
 		cgs.media.blueFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_blu1" );
 		cgs.media.blueFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_blu2" );
 		cgs.media.blueFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_blu3" );
-
+#if defined(USE_ADVANCED_TEAMS)
+		cgs.media.goldFlagModel = trap_R_RegisterModel( "models/flags/k_flag.md3" );
+		cgs.media.greenFlagModel = trap_R_RegisterModel( "models/flags/g_flag.md3" );
+		cgs.media.goldFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_gold1" );
+		cgs.media.goldFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_gold2" );
+		cgs.media.goldFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_gold3" );
+		cgs.media.greenFlagShader[0] = trap_R_RegisterShaderNoMip( "icons/iconf_green1" );
+		cgs.media.greenFlagShader[1] = trap_R_RegisterShaderNoMip( "icons/iconf_green2" );
+		cgs.media.greenFlagShader[2] = trap_R_RegisterShaderNoMip( "icons/iconf_green3" );
+#endif
 		cgs.media.flagPoleModel = trap_R_RegisterModel( "models/flag2/flagpole.md3" );
 		cgs.media.flagFlapModel = trap_R_RegisterModel( "models/flag2/flagflap3.md3" );
 
 		cgs.media.redFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/red.skin" );
 		cgs.media.blueFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/blue.skin" );
+#if defined(USE_ADVANCED_TEAMS)
+		cgs.media.goldFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/gold.skin" );
+		cgs.media.greenFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/green.skin" );
+#endif
 		cgs.media.neutralFlagFlapSkin = trap_R_RegisterSkin( "models/flag2/white.skin" );
 #ifdef MISSIONPACK
 		cgs.media.redFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/red_base.md3" );
 		cgs.media.blueFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/blue_base.md3" );
+#if defined(USE_ADVANCED_TEAMS)
+		cgs.media.goldFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/gold_base.md3" );
+		cgs.media.greenFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/green_base.md3" );
+#endif
 		cgs.media.neutralFlagBaseModel = trap_R_RegisterModel( "models/mapobjects/flagbase/ntrl_base.md3" );
 #endif
 	}
@@ -1742,6 +1759,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum ) {
 	cg.weaponSelect = WP_MACHINEGUN;
 
 	cgs.redflag = cgs.blueflag = -1; // For compatibily, default to unset for
+#if defined(USE_ADVANCED_TEAMS)
+	cgs.goldflag = cgs.greenflag = -1; // For compatibily, default to unset for
+#endif
 	cgs.flagStatus = -1;
 	// old servers
 

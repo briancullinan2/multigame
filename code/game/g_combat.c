@@ -77,8 +77,13 @@ void TossClientItems( gentity_t *self ) {
 		}
 	}
 
-	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK && 
-		self->client->ps.ammo[ weapon ] ) {
+	if ( weapon > WP_MACHINEGUN && weapon != WP_GRAPPLING_HOOK 
+#ifdef USE_PORTALS
+		// don't drop portal guns
+		&& (!wp_portalEnable.integer || weapon != WP_BFG)
+#endif
+		&& self->client->ps.ammo[ weapon ] 
+	) {
 		// find the item type for this weapon
 		item = BG_FindItemForWeapon( weapon );
 
@@ -301,6 +306,9 @@ char	*modNames[] = {
 	"MOD_GRAPPLE"
 };
 
+#ifdef USE_PORTALS
+void PortalDestroy( gentity_t *self );
+#endif
 #ifdef MISSIONPACK
 /*
 ==================
@@ -553,6 +561,16 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			Team_ReturnFlag( TEAM_BLUE );
 			self->client->ps.powerups[PW_BLUEFLAG] = 0;
 		}
+#if defined(USE_ADVANCED_TEAMS)
+		else if ( self->client->ps.powerups[PW_GOLDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GOLD );
+			self->client->ps.powerups[PW_GOLDFLAG] = 0;
+		}
+		else if ( self->client->ps.powerups[PW_GREENFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GREEN );
+			self->client->ps.powerups[PW_GREENFLAG] = 0;
+		}
+#endif
 	}
 
 	// if client is in a nodrop area, don't drop anything (but return CTF flags!)
@@ -570,6 +588,14 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		else if ( self->client->ps.powerups[PW_BLUEFLAG] ) {	// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
 		}
+#if defined(USE_ADVANCED_TEAMS)
+		else if ( self->client->ps.powerups[PW_GOLDFLAG] ) {		// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GOLD );
+		}
+		else if ( self->client->ps.powerups[PW_GREENFLAG] ) {	// only happens in standard CTF
+			Team_ReturnFlag( TEAM_GREEN );
+		}
+#endif
 	}
 #ifdef MISSIONPACK
 	TossClientPersistantPowerups( self );
@@ -618,6 +644,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	// remove powerups
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
+
+#ifdef USE_PORTALS
+  if(self->client->portalDestination) {
+    PortalDestroy(self->client->portalDestination);
+  }
+#endif
 
 	// never gib in a nodrop
 	if ( (self->health <= GIB_HEALTH && !(contents & CONTENTS_NODROP) && g_blood.integer) || meansOfDeath == MOD_SUICIDE) {

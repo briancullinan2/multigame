@@ -425,6 +425,12 @@ void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean fo
 			handle = cgs.media.redFlagModel;
 		} else if( team == TEAM_BLUE ) {
 			handle = cgs.media.blueFlagModel;
+#if defined(USE_ADVANCED_TEAMS)
+		} else if( team == TEAM_GOLD ) {
+			handle = cgs.media.goldFlagModel;
+		} else if( team == TEAM_GREEN ) {
+			handle = cgs.media.greenFlagModel;
+#endif
 		} else if( team == TEAM_FREE ) {
 			handle = cgs.media.neutralFlagModel;
 		} else {
@@ -438,6 +444,12 @@ void CG_DrawFlagModel( float x, float y, float w, float h, int team, qboolean fo
 			item = BG_FindItemForPowerup( PW_REDFLAG );
 		} else if( team == TEAM_BLUE ) {
 			item = BG_FindItemForPowerup( PW_BLUEFLAG );
+#if defined(USE_ADVANCED_TEAMS)
+		} else if( team == TEAM_GOLD ) {
+			item = BG_FindItemForPowerup( PW_GOLDFLAG );
+		} else if( team == TEAM_GREEN ) {
+			item = BG_FindItemForPowerup( PW_GREENFLAG );
+#endif
 		} else if( team == TEAM_FREE ) {
 			item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
 		} else {
@@ -541,6 +553,16 @@ void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team )
 		hcolor[0] = 0.0f;
 		hcolor[1] = 0.1f;
 		hcolor[2] = 1.0f;
+#if defined(USE_ADVANCED_TEAMS)
+	} else if ( team == TEAM_GOLD ) {
+		hcolor[0] = 1.0f;
+		hcolor[1] = 0.8f;
+		hcolor[2] = 0.0f;
+	} else if ( team == TEAM_GREEN ) {
+		hcolor[0] = 0.1f;
+		hcolor[1] = 1.0f;
+		hcolor[2] = 0.1f;
+#endif
 	} else {
 		return;
 	}
@@ -608,6 +630,12 @@ static void CG_DrawStatusBar( void ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
 	} else if( cg.predictedPlayerState.powerups[PW_BLUEFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_BLUE );
+#if defined(USE_ADVANCED_TEAMS)
+	} else if( cg.predictedPlayerState.powerups[PW_GOLDFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GOLD );
+	} else if( cg.predictedPlayerState.powerups[PW_GREENFLAG] ) {
+		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_GREEN );
+#endif
 	} else if( cg.predictedPlayerState.powerups[PW_NEUTRALFLAG] ) {
 		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_FREE );
 	}
@@ -1203,6 +1231,64 @@ static float CG_DrawScores( float y ) {
 				}
 			}
 		}
+
+#if defined(USE_ADVANCED_TEAMS)
+		y -= BIGCHAR_HEIGHT + 8 + BIGCHAR_HEIGHT + 8;
+
+		x0 = cgs.screenXmax + 1;
+		color[0] = 1.0f;
+		color[1] = 0.8f;
+		color[2] = 0.0f;
+		color[3] = 0.33f;
+		// second score
+		s = va( "%2i", cgs.scores3 );
+		w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH + 8;
+		x = x0 - w;
+		CG_FillRect( x, y-4,  w, BIGCHAR_HEIGHT+8, color );
+		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_GOLD ) {
+			CG_DrawPic( x, y-4, w, BIGCHAR_HEIGHT+8, cgs.media.selectShader );
+		}
+		CG_DrawString( x0-4, y, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT );
+
+		if ( cgs.gametype == GT_CTF ) {
+			// Display flag status
+			item = BG_FindItemForPowerup( PW_GOLDFLAG );
+
+			if (item) {
+				y1 = y - BIGCHAR_HEIGHT - 8;
+				if( cgs.goldflag >= 0 && cgs.goldflag <= 2 ) {
+					CG_DrawPic( x, y1-4, w, BIGCHAR_HEIGHT+8, cgs.media.goldFlagShader[cgs.goldflag] );
+				}
+			}
+		}
+		color[0] = 0.1f;
+		color[1] = 1.0f;
+		color[2] = 0.1f;
+		color[3] = 0.33f;
+		// first score
+		x0 = x;
+		s = va( "%2i", cgs.scores4 );
+		w = CG_DrawStrlen( s ) * BIGCHAR_WIDTH + 8;
+		x -= w;
+		CG_FillRect( x, y-4,  w, BIGCHAR_HEIGHT+8, color );
+		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_GREEN ) {
+			CG_DrawPic( x, y-4, w, BIGCHAR_HEIGHT+8, cgs.media.selectShader );
+		}
+
+		CG_DrawString( x0-4, y, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT );
+
+		if ( cgs.gametype == GT_CTF ) {
+			// Display flag status
+			item = BG_FindItemForPowerup( PW_GREENFLAG );
+
+			if (item) {
+				y1 = y - BIGCHAR_HEIGHT - 8;
+				if( cgs.greenflag >= 0 && cgs.greenflag <= 2 ) {
+					CG_DrawPic( x, y1-4, w, BIGCHAR_HEIGHT+8, cgs.media.greenFlagShader[cgs.greenflag] );
+				}
+			}
+		}
+#endif
 
 #ifdef MISSIONPACK
 		if ( cgs.gametype == GT_1FCTF ) {

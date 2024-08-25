@@ -132,4 +132,9 @@ CG_CVAR( cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE )
 
 CG_CVAR( cg_developer, "developer", "0", 0 )
 
+#ifdef USE_PORTALS
+CG_CVAR( cgwp_portalEnable, "wp_portalEnable", "0", CVAR_SERVERINFO )
+CG_CVAR( cg_altPortal, "g_altPortal", "0", CVAR_SERVERINFO )
+#endif
+
 #undef CG_CVAR

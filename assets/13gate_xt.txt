@@ -1,0 +1,28 @@
+_________________________
+Arena Gate CTF - Extended
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+Game			: Quake 3 Arena
+Map Title		: Arena Gate CTF - Extended (by sst13)
+Map Filename		: 13gate_xt.bsp
+Relase Date		: 29. Januar 2007
+
+Author			: Stefan Scholz "aka sst13 / [FDK]Railraver"
+e-Mail			: sst13@gmx.de
+Author Homepage		: http://www.sst13.de
+
+Description		: larger CTF Version of Arena Gate (q3dm1)
+
+Player			: 2-6
+Gametypes		: CTF
+Botsupport		: Yes
+
+New Textures		: Yes
+New Shaders		: Yes
+New Sounds		: No
+New Models		: Yes
+
+Editors used		: Q3Radiant v2.02, Q3Build, NPhernos MD3 Compiler, Milkshape 3D 1.5.7
+Compile Machine		: TB/1000 with 256 MBram
+Compile Time		: 40 min
+
+Credits			: id Software, PQ Editing Forum, all Quake Zockers...

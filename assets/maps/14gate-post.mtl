@@ -1,0 +1,9 @@
+newmtl common/caulk
+map_Kd 
+
+newmtl gothic_trim/pitted_rust3
+map_Kd textures/gothic_trim/pitted_rust3
+
+newmtl gothic_wall/supportborder_blue_b
+map_Kd textures/gothic_wall/supportborder_blue_b
+

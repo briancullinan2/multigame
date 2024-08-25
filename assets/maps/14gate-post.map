@@ -1,0 +1,73 @@
+// Game: Quake 3
+// Format: Quake3 (legacy)
+// entity 0
+{
+"classname" "worldspawn"
+"music" "music\sonic5.wav"
+"message" "Arena Gate CTF - Extended (by sst13)"
+"_tb_textures" "textures;textures/14gate_xt;textures/base_light;textures/base_wall;textures/common;textures/ctf;textures/gothic_block;textures/gothic_ceiling;textures/gothic_door;textures/gothic_floor;textures/gothic_light;textures/gothic_trim;textures/gothic_wall;textures/organics;textures/sfx;textures/skin;textures/stone"
+"_tb_mod" "pak91.pk3dir;pak0.pk3dir"
+// brush 0
+{
+patchDef2
+{
+gothic_trim/pitted_rust3
+( 9 3 0 0 0 )
+(
+( ( 32 0 320 -1 0 ) ( 32 0 420 -1 0.78125 ) ( 0 0 520 -1 1.6015249491 ) )
+( ( 32 32 320 -0.75 0 ) ( 32 32 420 -0.75 0.78125 ) ( 0 0 520 -0.75 1.6015249491 ) )
+( ( 0 32 320 -0.5 0 ) ( 0 32 420 -0.5 0.78125 ) ( 0 0 520 -0.5 1.6015249491 ) )
+( ( -32 32 320 -0.25 0 ) ( -32 32 420 -0.25 0.78125 ) ( 0 0 520 -0.25 1.6015249491 ) )
+( ( -32 0 320 0 0 ) ( -32 0 420 0 0.78125 ) ( 0 0 520 0 1.6015249491 ) )
+( ( -32 -32 320 0.25 0 ) ( -32 -32 420 0.25 0.78125 ) ( 0 0 520 0.25 1.6015249491 ) )
+( ( 0 -32 320 0.5 0 ) ( 0 -32 420 0.5 0.78125 ) ( 0 0 520 0.5 1.6015249491 ) )
+( ( 32 -32 320 0.75 0 ) ( 32 -32 420 0.75 0.78125 ) ( 0 0 520 0.75 1.6015249491 ) )
+( ( 32 0 320 1 0 ) ( 32 0 420 1 0.78125 ) ( 0 0 520 1 1.6015249491 ) )
+)
+}
+}
+// brush 1
+{
+( -36 -36 320 ) ( -36 -36 256 ) ( -36 36 256 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( 36 -36 320 ) ( 36 -36 256 ) ( -36 -36 256 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( -36 36 256 ) ( -36 -36 256 ) ( 36 -36 256 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( -36 -36 320 ) ( -36 36 320 ) ( 36 36 320 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( -36 36 320 ) ( -36 36 256 ) ( 36 36 256 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( 36 36 320 ) ( 36 36 256 ) ( 36 -36 256 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+}
+// brush 2
+{
+( -32 -32 256 ) ( -32 -32 48 ) ( -32 32 48 ) gothic_wall/supportborder_blue_b 0 0 0 0.5 0.5 0 0 0
+( 32 -32 256 ) ( 32 -32 48 ) ( -32 -32 48 ) gothic_wall/supportborder_blue_b 0 0 0 0.5 0.5 0 0 0
+( -32 32 48 ) ( -32 -32 48 ) ( 32 -32 48 ) common/caulk 0 0 0 0.25 0.25 0 0 0
+( -32 -32 256 ) ( -32 32 256 ) ( 32 32 256 ) common/caulk 0 0 0 0.25 0.25 0 0 0
+( -32 32 256 ) ( -32 32 48 ) ( 32 32 48 ) gothic_wall/supportborder_blue_b 0 0 0 0.5 0.5 0 0 0
+( 32 32 256 ) ( 32 32 48 ) ( 32 -32 48 ) gothic_wall/supportborder_blue_b 0 0 0 0.5 0.5 0 0 0
+}
+// brush 3
+{
+( -36 -36 48 ) ( -36 -36 0 ) ( -36 36 0 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( 36 -36 48 ) ( 36 -36 0 ) ( -36 -36 0 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( -36 36 0 ) ( -36 -36 0 ) ( 36 -36 0 ) common/caulk 0 0 0 0.25 0.25 0 0 0
+( -36 -36 48 ) ( -36 36 48 ) ( 36 36 48 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( -36 36 48 ) ( -36 36 0 ) ( 36 36 0 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+( 36 36 48 ) ( 36 36 0 ) ( 36 -36 0 ) gothic_trim/pitted_rust3 0 0 0 0.5 0.5 0 0 0
+}
+}
+// entity 1
+{
+"classname" "target_position"
+"origin" "-104 148 488"
+"targetname" "t119"
+}
+// entity 2
+{
+"classname" "light"
+"origin" "40 356 656"
+"target" "sun_dir"
+"_color" "1.0 0.9 0.8"
+"light" "2000"
+"angle" "300"
+"radius" "1500"
+"_deviance" "3"
+}

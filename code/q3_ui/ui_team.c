@@ -13,6 +13,10 @@
 
 #define ID_JOINRED		100
 #define ID_JOINBLUE		101
+#if defined(USE_ADVANCED_TEAMS)
+#define ID_JOINGOLD		104
+#define ID_JOINGREEN		105
+#endif
 #define ID_JOINGAME		102
 #define ID_SPECTATE		103
 
@@ -23,6 +27,10 @@ typedef struct
 	menubitmap_s	frame;
 	menutext_s		joinred;
 	menutext_s		joinblue;
+#if defined(USE_ADVANCED_TEAMS)
+	menutext_s		joingold;
+	menutext_s		joingreen;
+#endif
 	menutext_s		joingame;
 	menutext_s		spectate;
 } teammain_t;
@@ -49,6 +57,19 @@ static void TeamMain_MenuEvent( void* ptr, int event ) {
 		trap_Cmd_ExecuteText( EXEC_APPEND, "cmd team blue\n" );
 		UI_ForceMenuOff();
 		break;
+
+#if defined(USE_ADVANCED_TEAMS)
+	case ID_JOINGOLD:
+		trap_Cmd_ExecuteText( EXEC_APPEND, "cmd team gold\n" );
+		UI_ForceMenuOff();
+		break;
+
+	case ID_JOINGREEN:
+		trap_Cmd_ExecuteText( EXEC_APPEND, "cmd team green\n" );
+		UI_ForceMenuOff();
+		break;
+
+#endif
 
 	case ID_JOINGAME:
 		trap_Cmd_ExecuteText( EXEC_APPEND, "cmd team free\n" );
@@ -109,8 +130,34 @@ void TeamMain_MenuInit( void ) {
 	s_teammain.joinblue.generic.y        = y;
 	s_teammain.joinblue.string           = "JOIN BLUE";
 	s_teammain.joinblue.style            = UI_CENTER|UI_SMALLFONT;
-	s_teammain.joinblue.color            = colorRed;
+	s_teammain.joinblue.color            = colorBlue;
 	y += INGAME_TEAM_VERTICAL_SPACING;
+
+#if defined(USE_ADVANCED_TEAMS)
+
+	s_teammain.joingold.generic.type     = MTYPE_PTEXT;
+	s_teammain.joingold.generic.flags    = QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	s_teammain.joingold.generic.id       = ID_JOINGOLD;
+	s_teammain.joingold.generic.callback = TeamMain_MenuEvent;
+	s_teammain.joingold.generic.x        = 320;
+	s_teammain.joingold.generic.y        = y;
+	s_teammain.joingold.string           = "JOIN GOLD";
+	s_teammain.joingold.style            = UI_CENTER|UI_SMALLFONT;
+	s_teammain.joingold.color            = colorYellow;
+	y += INGAME_TEAM_VERTICAL_SPACING;
+
+	s_teammain.joingreen.generic.type     = MTYPE_PTEXT;
+	s_teammain.joingreen.generic.flags    = QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+	s_teammain.joingreen.generic.id       = ID_JOINGREEN;
+	s_teammain.joingreen.generic.callback = TeamMain_MenuEvent;
+	s_teammain.joingreen.generic.x        = 320;
+	s_teammain.joingreen.generic.y        = y;
+	s_teammain.joingreen.string           = "JOIN GREEN";
+	s_teammain.joingreen.style            = UI_CENTER|UI_SMALLFONT;
+	s_teammain.joingreen.color            = colorGreen;
+	y += INGAME_TEAM_VERTICAL_SPACING;
+
+#endif
 
 	s_teammain.joingame.generic.type     = MTYPE_PTEXT;
 	s_teammain.joingame.generic.flags    = QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
@@ -144,6 +191,10 @@ void TeamMain_MenuInit( void ) {
 	case GT_TOURNAMENT:
 		s_teammain.joinred.generic.flags  |= QMF_GRAYED;
 		s_teammain.joinblue.generic.flags |= QMF_GRAYED;
+#if defined(USE_ADVANCED_TEAMS)
+		s_teammain.joingold.generic.flags  |= QMF_GRAYED;
+		s_teammain.joingreen.generic.flags |= QMF_GRAYED;
+#endif
 		break;
 
 	default:
@@ -156,6 +207,10 @@ void TeamMain_MenuInit( void ) {
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.frame );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joinred );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joinblue );
+#if defined(USE_ADVANCED_TEAMS)
+	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingold );
+	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingreen );
+#endif
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.joingame );
 	Menu_AddItem( &s_teammain.menu, (void*) &s_teammain.spectate );
 }

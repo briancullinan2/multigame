@@ -661,7 +661,7 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 #endif
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
-#ifdef MISSIONPACK
+#if defined(MISSIONPACK) || defined(USE_ADVANCED_TEAMS)
 	if (g_gametype.integer >= GT_TEAM) {
 		client->pers.teamInfo = qtrue;
 	} else {
@@ -1096,6 +1096,15 @@ void ClientSpawn(gentity_t *ent) {
 	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
 	client->ps.ammo[WP_GAUNTLET] = -1;
 	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+
+#ifdef USE_PORTALS
+  if(wp_portalEnable.integer) {
+    // in alt-fire mode, both ends reset with right click
+    // otherwise, use BFG left and right click for both ends
+		Add_Weapon_Ammo(ent, WP_BFG, INFINITE);
+  }
+#endif
+
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;

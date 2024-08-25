@@ -205,6 +205,120 @@ void ClientImpacts( gentity_t *ent, pmove_t *pm ) {
 
 }
 
+#ifdef USE_PORTALS
+/*
+============
+G_ListPortals
+
+Find all personal portals so they don't affect Pmove physics negatively
+============
+*/
+void	G_ListPortals( gentity_t *ent, vec3_t *sources, vec3_t *destinations
+	, vec3_t *sourcesAngles, vec3_t *destinationsAngles ) {
+	int			i, num;
+	int			touch[MAX_GENTITIES];
+	gentity_t	*hit;
+	vec3_t		mins, maxs;
+	int         count = 0;
+  //vec3_t    velocity;
+	static vec3_t	range = { 80, 80, 104 };
+
+	if ( !ent->client ) {
+		return;
+	}
+
+	// dead clients don't activate triggers!
+	if ( ent->client->ps.stats[STAT_HEALTH] <= 0 ) {
+		return;
+	}
+
+	VectorSubtract( ent->client->ps.origin, range, mins );
+	VectorAdd( ent->client->ps.origin, range, maxs );
+  //VectorCopy(ent->client->ps.velocity, velocity);
+  //VectorScale( velocity, 52, velocity );
+  //VectorSubtract( mins, velocity, mins );
+  //VectorSubtract( maxs, velocity, maxs );
+
+	num = trap_EntitiesInBox( mins, maxs, touch, MAX_GENTITIES );
+
+	// can't use ent->absmin, because that has a one unit pad
+	VectorAdd( ent->client->ps.origin, ent->r.mins, mins );
+	VectorAdd( ent->client->ps.origin, ent->r.maxs, maxs );
+
+	for ( i=0 ; i<num ; i++ ) {
+		hit = &g_entities[touch[i]];
+
+		if ( !hit->touch && !ent->touch ) {
+			continue;
+		}
+		if ( !( hit->r.contents & CONTENTS_TRIGGER ) ) {
+			continue;
+		}
+
+		if ( hit->s.eType != ET_TELEPORT_TRIGGER ) {
+			continue;
+		}
+
+		if ( !trap_EntityContact( mins, maxs, hit ) ) {
+			continue;
+		}
+
+		//pm->
+		if( hit->pos1[0] || hit->pos1[1] || hit->pos1[2] ) {
+			gentity_t *destination;
+			gclient_t *client = &level.clients[hit->r.ownerNum];
+			if(hit == client->portalSource) {
+				destination = client->portalDestination;
+			} else {
+				destination = client->portalSource;
+			}
+
+			if(destination->s.eventParm) {
+				vec3_t angles;
+				ByteToDir( destination->s.eventParm, angles );
+				vectoangles( angles, angles );
+				if(hit->s.eventParm) {
+					vec3_t angles2;
+					ByteToDir( hit->s.eventParm, angles2 );
+					vectoangles( angles2, angles2 );
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(angles2, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(angles, destinationsAngles[count]);
+				} else {
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(vec3_origin, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(angles, destinationsAngles[count]);
+				}
+			} else {
+				if(hit->s.eventParm) {
+					vec3_t angles2;
+					ByteToDir( hit->s.eventParm, angles2 );
+					vectoangles( angles2, angles2 );
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(angles2, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(vec3_origin, destinationsAngles[count]);
+				} else {
+					VectorCopy(hit->r.currentOrigin, sources[count]);
+					VectorCopy(vec3_origin, sourcesAngles[count]);
+					VectorCopy(hit->pos1, destinations[count]);
+					VectorCopy(vec3_origin, destinationsAngles[count]);
+				}
+			}
+
+			count++;
+		}
+	}
+	VectorCopy(vec3_origin, sources[count]);
+	VectorCopy(vec3_origin, destinations[count]);
+	VectorCopy(vec3_origin, sourcesAngles[count]);
+	VectorCopy(vec3_origin, destinationsAngles[count]);
+	//Com_Printf("%i portals detected\n", count);
+}
+#endif
+
 /*
 ============
 G_TouchTriggers
@@ -544,6 +658,30 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			G_Damage (ent, NULL, NULL, NULL, NULL, damage, 0, MOD_FALLING);
 			break;
 
+#ifdef USE_ALT_FIRE
+    case EV_ALTFIRE_BOTH:
+    case EV_ALTFIRE_WEAPON:
+#ifdef USE_PORTALS
+      if(g_altPortal.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_BFG;
+				FireWeapon( ent, qtrue );
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
+#ifdef USE_GRAPPLE
+      if(g_altGrapple.integer) {
+        int oldWeapon = ent->s.weapon;
+        ent->s.weapon = WP_GRAPPLING_HOOK;
+        FireWeapon( ent, qtrue );
+        ent->s.weapon = oldWeapon;
+      } else
+#endif
+      FireWeapon( ent, qtrue );
+
+		if(event != EV_ALTFIRE_BOTH)
+      break;        
+#endif
 		case EV_FIRE_WEAPON:
 			FireWeapon( ent );
 			break;
@@ -559,6 +697,14 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			} else if ( ent->client->ps.powerups[ PW_BLUEFLAG ] ) {
 				item = BG_FindItemForPowerup( PW_BLUEFLAG );
 				j = PW_BLUEFLAG;
+#if defined(USE_ADVANCED_TEAMS)
+			} else if ( ent->client->ps.powerups[ PW_GOLDFLAG ] ) {
+				item = BG_FindItemForPowerup( PW_GOLDFLAG );
+				j = PW_GOLDFLAG;
+			} else if ( ent->client->ps.powerups[ PW_GREENFLAG ] ) {
+				item = BG_FindItemForPowerup( PW_GREENFLAG );
+				j = PW_GREENFLAG;
+#endif
 			} else if ( ent->client->ps.powerups[ PW_NEUTRALFLAG ] ) {
 				item = BG_FindItemForPowerup( PW_NEUTRALFLAG );
 				j = PW_NEUTRALFLAG;
@@ -616,6 +762,17 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			G_StartKamikaze( ent );
 			break;
 
+#ifdef USE_PORTALS
+#ifndef MISSIONPACK
+		case EV_USE_ITEM4:		// portal
+			if( ent->client->portalID ) {
+				DropPortalSource( ent, NULL );
+			}
+			else {
+				DropPortalDestination( ent, NULL );
+			}
+			break;
+#else
 		case EV_USE_ITEM4:		// portal
 			if( ent->client->portalID ) {
 				DropPortalSource( ent );
@@ -624,6 +781,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 				DropPortalDestination( ent );
 			}
 			break;
+#endif
+#endif
 		case EV_USE_ITEM5:		// invulnerability
 			ent->client->invulnerabilityTime = level.time + 10000;
 			break;
@@ -733,6 +892,9 @@ void ClientThink_real( gentity_t *ent ) {
 	int			oldEventSequence;
 	int			msec;
 	usercmd_t	*ucmd;
+#ifdef USE_PORTALS
+	vec3_t sources[32], destinations[32], sourcesAngles[32], destinationsAngles[32];
+#endif
 
 	client = ent->client;
 
@@ -902,6 +1064,10 @@ void ClientThink_real( gentity_t *ent ) {
 
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
+
+#ifdef USE_PORTALS
+	G_ListPortals( ent, sources, destinations, sourcesAngles, destinationsAngles );
+#endif
 #ifdef MISSIONPACK
 		if (level.intermissionQueued != 0 && g_singlePlayer.integer) {
 			if ( level.time - level.intermissionQueued >= 1000  ) {

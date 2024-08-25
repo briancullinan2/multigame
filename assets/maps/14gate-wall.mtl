@@ -1,0 +1,12 @@
+newmtl common/caulk
+map_Kd ../textures/common/caulk
+
+newmtl gothic_trim/metalsupport4b
+map_Kd ../textures/gothic_trim/metalsupport4b
+
+newmtl gothic_trim/pitted_rust3
+map_Kd ../textures/gothic_trim/pitted_rust3
+
+newmtl gothic_trim/pitted_rust3_black
+map_Kd ../textures/gothic_trim/pitted_rust3_black
+

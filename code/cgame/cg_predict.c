@@ -512,6 +512,14 @@ static void CG_TouchItem( centity_t *cent ) {
 		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_BLUE &&
 			item->giType == IT_TEAM && item->giTag == PW_BLUEFLAG)
 			return;
+#if defined(USE_ADVANCED_TEAMS)
+		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_GOLD &&
+			item->giType == IT_TEAM && item->giTag == PW_GOLDFLAG)
+			return;
+		if (cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_GREEN &&
+			item->giType == IT_TEAM && item->giTag == PW_GREENFLAG)
+			return;
+#endif
 	}
 
 	// grab it

@@ -352,6 +352,38 @@ static void G_LocateSpawnSpots( void )
 				ent->count = 0;
 				continue;
 			}
+#if defined(USE_ADVANCED_TEAMS)
+			if ( !Q_stricmp( ent->classname+9, "goldspawn" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GOLD;
+				ent->count = 1; // means its not initial spawn point
+				continue;
+			}
+			if ( !Q_stricmp( ent->classname+9, "greenspawn" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GREEN;
+				ent->count = 1;
+				continue;
+			}
+			// base spawn spots
+			if ( !Q_stricmp( ent->classname+9, "goldplayer" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GOLD;
+				ent->count = 0;
+				continue;
+			}
+			if ( !Q_stricmp( ent->classname+9, "greenplayer" ) ) {
+				level.spawnSpots[n] = ent; n++;
+				level.numSpawnSpotsTeam++;
+				ent->fteam = TEAM_GREEN;
+				ent->count = 0;
+				continue;
+			}
+
+#endif
 		}
 	}
 	level.numSpawnSpots = n;
@@ -480,6 +512,11 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	if( g_gametype.integer == GT_SINGLE_PLAYER || trap_Cvar_VariableIntegerValue( "com_buildScript" ) ) {
 		G_ModelIndex( SP_PODIUM_MODEL );
 	}
+
+#ifdef USE_PORTALS
+	G_ModelIndex( "models/portal/portal_blue.md3" );
+	G_ModelIndex( "models/portal/portal_red.md3" );
+#endif
 
 	if ( trap_Cvar_VariableIntegerValue( "bot_enable" ) ) {
 		BotAISetup( restart );
@@ -847,16 +884,32 @@ void CalculateRanks( void ) {
 	if ( g_gametype.integer >= GT_TEAM ) {
 		trap_SetConfigstring( CS_SCORES1, va("%i", level.teamScores[TEAM_RED] ) );
 		trap_SetConfigstring( CS_SCORES2, va("%i", level.teamScores[TEAM_BLUE] ) );
+#if defined(USE_ADVANCED_TEAMS)
+		trap_SetConfigstring( CS_SCORES3, va("%i", level.teamScores[TEAM_GOLD] ) );
+		trap_SetConfigstring( CS_SCORES4, va("%i", level.teamScores[TEAM_GREEN] ) );
+#endif
 	} else {
 		if ( level.numConnectedClients == 0 ) {
 			trap_SetConfigstring( CS_SCORES1, va("%i", SCORE_NOT_PRESENT) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", SCORE_NOT_PRESENT) );
+#if defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", SCORE_NOT_PRESENT) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", SCORE_NOT_PRESENT) );
+#endif
 		} else if ( level.numConnectedClients == 1 ) {
 			trap_SetConfigstring( CS_SCORES1, va("%i", level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] ) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", SCORE_NOT_PRESENT) );
+#if defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", SCORE_NOT_PRESENT) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", SCORE_NOT_PRESENT) );
+#endif
 		} else {
 			trap_SetConfigstring( CS_SCORES1, va("%i", level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] ) );
 			trap_SetConfigstring( CS_SCORES2, va("%i", level.clients[ level.sortedClients[1] ].ps.persistant[PERS_SCORE] ) );
+#if defined(USE_ADVANCED_TEAMS)
+			trap_SetConfigstring( CS_SCORES3, va("%i", level.clients[ level.sortedClients[2] ].ps.persistant[PERS_SCORE] ) );
+			trap_SetConfigstring( CS_SCORES4, va("%i", level.clients[ level.sortedClients[3] ].ps.persistant[PERS_SCORE] ) );
+#endif
 		}
 	}
 
@@ -1450,6 +1503,10 @@ static void G_WarmupEnd( void )
 
 	trap_SetConfigstring( CS_SCORES1, "0" );
 	trap_SetConfigstring( CS_SCORES2, "0" );
+#if defined(USE_ADVANCED_TEAMS)
+	trap_SetConfigstring( CS_SCORES3, "0" );
+	trap_SetConfigstring( CS_SCORES4, "0" );
+#endif
 	trap_SetConfigstring( CS_WARMUP, "" );
 	trap_SetConfigstring( CS_LEVEL_START_TIME, va( "%i", level.startTime ) );
 	
@@ -1504,6 +1561,10 @@ static void G_WarmupEnd( void )
 			// already processed in Team_ResetFlags()
 			if ( ent->item->giTag == PW_NEUTRALFLAG || ent->item->giTag == PW_REDFLAG || ent->item->giTag == PW_BLUEFLAG )
 				continue;
+#if defined(USE_ADVANCED_TEAMS)
+			if ( ent->item->giTag == PW_GOLDFLAG || ent->item->giTag == PW_GREENFLAG )
+				continue;
+#endif
 
 			// remove dropped items
 			if ( ent->flags & FL_DROPPED_ITEM ) {
@@ -2034,6 +2095,10 @@ static void G_RunFrame( int levelTime ) {
 	// check team votes
 	CheckTeamVote( TEAM_RED );
 	CheckTeamVote( TEAM_BLUE );
+#if defined(USE_ADVANCED_TEAMS)
+	CheckTeamVote( TEAM_GOLD );
+	CheckTeamVote( TEAM_GREEN );
+#endif
 
 	// for tracking changes
 	CheckCvars();

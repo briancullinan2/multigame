@@ -634,6 +634,65 @@ Only in CTF games
 /* sounds */ ""
 	},
 
+#if defined(USE_ADVANCED_TEAMS)
+
+    /*QUAKED team_CTF_goldflag (1 0 0) (-16 -16 -16) (16 16 16)
+    Only in CTF games
+    */
+    {
+        "team_CTF_goldflag",
+        NULL,
+        {"models/flags/k_flag.md3",
+         0, 0, 0},
+        /* icon */ "icons/iconf_gold1",
+        /* pickup */ "Gold Flag",
+        0,
+        IT_TEAM,
+        PW_GOLDFLAG,
+        /* precache */ "",
+        /* sounds */ ""},
+
+    /*QUAKED team_CTF_greenflag (0 0 1) (-16 -16 -16) (16 16 16)
+    Only in CTF games
+    */
+    {
+        "team_CTF_greenflag",
+        NULL,
+        {"models/flags/g_flag.md3",
+         0, 0, 0},
+        /* icon */ "icons/iconf_green1",
+        /* pickup */ "Green Flag",
+        0,
+        IT_TEAM,
+        PW_GREENFLAG,
+        /* precache */ "",
+/* sounds */ ""
+	},
+#endif
+
+
+#ifdef USE_PORTALS
+#if !defined(MISSIONPACK) && !defined(USE_ADVANCED_ITEMS) && !defined(USE_RUNES)
+
+/*QUAKED holdable_portal (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+	{
+		"holdable_portal", 
+		"sound/items/holdable.wav",
+        { "models/powerups/holdable/porter.md3",
+		0, 0, 0},
+/* icon */		"icons/portal",
+/* pickup */	"Portal",
+		60,
+		IT_HOLDABLE,
+		HI_PORTAL,
+/* precache */ "",
+/* sounds */ ""
+	},
+
+#endif
+#endif
+
 #ifdef MISSIONPACK
 /*QUAKED holdable_kamikaze (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */

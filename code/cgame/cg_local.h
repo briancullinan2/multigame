@@ -709,6 +709,12 @@ typedef struct {
 	qhandle_t	neutralFlagModel;
 	qhandle_t	redFlagShader[3];
 	qhandle_t	blueFlagShader[3];
+#if defined(USE_ADVANCED_TEAMS)
+	qhandle_t	goldFlagModel;
+	qhandle_t	greenFlagModel;
+	qhandle_t	goldFlagShader[3];
+	qhandle_t	greenFlagShader[3];
+#endif
 	qhandle_t	flagShader[4];
 
 	qhandle_t	flagPoleModel;
@@ -716,10 +722,18 @@ typedef struct {
 
 	qhandle_t	redFlagFlapSkin;
 	qhandle_t	blueFlagFlapSkin;
+#if defined(USE_ADVANCED_TEAMS)
+	qhandle_t	goldFlagFlapSkin;
+	qhandle_t	greenFlagFlapSkin;
+#endif
 	qhandle_t	neutralFlagFlapSkin;
 
 	qhandle_t	redFlagBaseModel;
 	qhandle_t	blueFlagBaseModel;
+#if defined(USE_ADVANCED_TEAMS)
+	qhandle_t	goldFlagBaseModel;
+	qhandle_t	greenFlagBaseModel;
+#endif
 	qhandle_t	neutralFlagBaseModel;
 
 #ifdef MISSIONPACK
@@ -828,6 +842,10 @@ typedef struct {
 	qhandle_t	rocketExplosionShader;
 	qhandle_t	grenadeExplosionShader;
 	qhandle_t	bfgExplosionShader;
+#ifdef USE_PORTALS
+  qhandle_t	redBFG;
+  qhandle_t	blueBFG;
+#endif
 	qhandle_t	bloodExplosionShader;
 
 	// special effects models
@@ -1082,6 +1100,10 @@ typedef struct {
 
 	int				scores1, scores2;		// from configstrings
 	int				redflag, blueflag;		// flag status from configstrings
+#if defined(USE_ADVANCED_TEAMS)
+	int				scores3, scores4;		// from configstrings
+	int				greenflag, goldflag;		// flag status from configstrings
+#endif
 	int				flagStatus;
 
 	qboolean  newHud;

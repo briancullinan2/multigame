@@ -225,11 +225,19 @@ void CG_SetConfigValues( void ) {
 
 	cgs.scores1 = atoi( CG_ConfigString( CS_SCORES1 ) );
 	cgs.scores2 = atoi( CG_ConfigString( CS_SCORES2 ) );
+#if defined(USE_ADVANCED_TEAMS)
+	cgs.scores3 = atoi( CG_ConfigString( CS_SCORES3 ) );
+	cgs.scores4 = atoi( CG_ConfigString( CS_SCORES4 ) );
+#endif
 	cgs.levelStartTime = atoi( CG_ConfigString( CS_LEVEL_START_TIME ) );
 	if( cgs.gametype == GT_CTF ) {
 		s = CG_ConfigString( CS_FLAGSTATUS );
 		cgs.redflag = s[0] - '0';
 		cgs.blueflag = s[1] - '0';
+#if defined(USE_ADVANCED_TEAMS)
+		cgs.goldflag = s[2] - '0';
+		cgs.greenflag = s[3] - '0';
+#endif
 	}
 #ifdef MISSIONPACK
 	else if( cgs.gametype == GT_1FCTF ) {
@@ -314,6 +322,12 @@ static void CG_ConfigStringModified( void ) {
 		cgs.scores1 = atoi( str );
 	} else if ( num == CS_SCORES2 ) {
 		cgs.scores2 = atoi( str );
+#if defined(USE_ADVANCED_TEAMS)
+	} else if ( num == CS_SCORES3 ) {
+		cgs.scores3 = atoi( str );
+	} else if ( num == CS_SCORES4 ) {
+		cgs.scores4 = atoi( str );
+#endif
 	} else if ( num == CS_LEVEL_START_TIME ) {
 		cgs.levelStartTime = atoi( str );
 	} else if ( num == CS_VOTE_TIME ) {
@@ -360,6 +374,10 @@ static void CG_ConfigStringModified( void ) {
 			// format is rb where its red/blue, 0 is at base, 1 is taken, 2 is dropped
 			cgs.redflag = str[0] - '0';
 			cgs.blueflag = str[1] - '0';
+#if defined(USE_ADVANCED_TEAMS)
+			cgs.goldflag = str[2] - '0';
+			cgs.greenflag = str[3] - '0';
+#endif
 		}
 #ifdef MISSIONPACK
 		else if( cgs.gametype == GT_1FCTF ) {

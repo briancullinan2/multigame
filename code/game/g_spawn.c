@@ -166,6 +166,15 @@ void SP_team_CTF_blueplayer( gentity_t *ent );
 void SP_team_CTF_redspawn( gentity_t *ent );
 void SP_team_CTF_bluespawn( gentity_t *ent );
 
+#if defined(USE_ADVANCED_TEAMS)
+void SP_team_CTF_goldplayer( gentity_t *ent );
+void SP_team_CTF_greenplayer( gentity_t *ent );
+
+void SP_team_CTF_goldspawn( gentity_t *ent );
+void SP_team_CTF_greenspawn( gentity_t *ent );
+
+#endif
+
 #ifdef MISSIONPACK
 void SP_team_blueobelisk( gentity_t *ent );
 void SP_team_redobelisk( gentity_t *ent );
@@ -238,6 +247,14 @@ spawn_t	spawns[] = {
 
 	{"team_CTF_redspawn", SP_team_CTF_redspawn},
 	{"team_CTF_bluespawn", SP_team_CTF_bluespawn},
+
+#if defined(USE_ADVANCED_TEAMS)
+	{"team_CTF_goldplayer", SP_team_CTF_goldplayer},
+	{"team_CTF_greenplayer", SP_team_CTF_greenplayer},
+
+	{"team_CTF_goldspawn", SP_team_CTF_goldspawn},
+	{"team_CTF_greenspawn", SP_team_CTF_greenspawn},
+#endif
 
 #ifdef MISSIONPACK
 	{"team_redobelisk", SP_team_redobelisk},
