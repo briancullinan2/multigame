@@ -57,7 +57,7 @@ function getQueryCommands() {
 		//'+set', 'r_deluxeMapping', '0',
 		//'+set', 'r_normalMapping', '0',
 		//'+set', 'r_specularMapping', '0',
-		'+map', '14gate_xt',
+		'+map', '14gate_xt', '+set', 'g_gametype', '4'
 	]
 	startup.push.apply(startup, window.preStart)
 	// TODO: full screen by default? I suppose someone might 
