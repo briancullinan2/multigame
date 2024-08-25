@@ -718,7 +718,7 @@ function CL_Download(cmd, name, auto) {
           }
         }
 
-        Com_DL_Perform(gamedir + '/' + nameStr, gamedir + '/' + newFilename, responseData)
+        Com_DL_Perform(gamedir + '/pak0.pk3dir/' + nameStr, gamedir + '/' + newFilename, responseData)
   
         let responseData2 = (await Promise.all([
           await Com_DL_Begin(localName + '.aas', remoteURL + '.aas'),
@@ -726,7 +726,7 @@ function CL_Download(cmd, name, auto) {
           await Com_DL_Begin(localName + '.aas', gamedir + '/pak0.pk3dir/maps/' + localName + '.aas'),
         ])).filter(f => f)[0]
 
-        Com_DL_Perform(gamedir + '/maps/' + localName + '.aas', gamedir + '/' + localName, responseData2)
+        Com_DL_Perform(gamedir + '/pak0.pk3dir/maps/' + localName + '.aas', gamedir + '/' + localName, responseData2)
 
 
       //} else {

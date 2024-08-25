@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const GAME_DIRECTORY = 'fourflag'
-const WEB_DIRECTORY = path.resolve(__dirname + '/../../../docs')
-const ASSETS_DIRECTORY = path.resolve(__dirname + '/../../../docs/' + GAME_DIRECTORY + '/pak0.pk3dir/')
-const BUILD_DIRECTORY = path.resolve(__dirname + '/../../../build/')
+const WEB_DIRECTORY = path.resolve(__dirname + '/..')
+const ASSETS_DIRECTORY = path.resolve(__dirname + '/../' + GAME_DIRECTORY + '/pak0.pk3dir/')
+const BUILD_DIRECTORY = path.resolve(__dirname + '/../../build/')
 const ALLOWED_DIRECTORIES = [
   WEB_DIRECTORY,
   ASSETS_DIRECTORY,
