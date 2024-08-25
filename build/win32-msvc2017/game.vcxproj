@@ -285,8 +285,6 @@
     <ClCompile Include="..\..\code\game\g_utils.c" />
     <ClCompile Include="..\..\code\game\g_portal.c" />
     <ClCompile Include="..\..\code\game\g_weapon.c" />
-    <ClCompile Include="..\..\code\game\g_weapon2.c" />
-    <ClCompile Include="..\..\code\game\g_telefrag.c" />
     <ClCompile Include="..\..\code\game\q_math.c" />
     <ClCompile Include="..\..\code\game\q_shared.c" />
   </ItemGroup>
