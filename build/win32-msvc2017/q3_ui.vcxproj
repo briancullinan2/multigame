@@ -297,21 +297,6 @@
     <ClCompile Include="..\..\code\q3_ui\ui_video.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\code\ui\sui_main.c">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/%(RelativeDir)/</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\code\ui\sui_atoms.c">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/%(RelativeDir)/</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\code\ui\sui_gameinfo.c">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/%(RelativeDir)/</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\code\ui\sui_players.c">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)/%(RelativeDir)/</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\code\ui\ui_shared.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\code\game\bg_lib.h" />
     <ClInclude Include="..\..\code\game\bg_public.h" />
     <ClInclude Include="..\..\code\q3_ui\keycodes.h" />
